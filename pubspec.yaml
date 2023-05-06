@@ -1,0 +1,47 @@
+name: stoxhero
+description: A new Flutter project.
+version: 1.0.0+2
+publish_to: "none"
+
+environment:
+  sdk: ">=2.19.6 <3.0.0"
+
+dependencies:
+  dio: ^5.1.1
+  flutter:
+    sdk: flutter
+  get: ^4.6.5
+  get_storage: ^2.1.1
+
+dev_dependencies:
+  flutter_launcher_icons: any
+  change_app_package_name: ^1.1.0
+
+flutter_launcher_icons:
+  ios: true
+  android: "launcher_icon"
+  adaptive_icon_background: "#FFFFFF"
+  image_path: "assets/icons/app_icon.png"
+  image_path_ios: "assets/icons/app_icon.png"
+  adaptive_icon_foreground: "assets/icons/app_icon.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/images/
+
+  fonts:
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Rubik-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Rubik-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Rubik-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Rubik-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Rubik-Bold.ttf
+          weight: 700
