@@ -13,17 +13,17 @@ class AppPages {
     GetPage(
       name: AppRoutes.signin,
       page: () => SigninView(),
-      binding: SigninBinding(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.signup,
       page: () => SignupView(),
-      binding: SignupBinding(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.otp,
       page: () => OtpView(),
-      binding: OtpBinding(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.home,
@@ -33,6 +33,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.profile,
       page: () => ProfileView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.profileDetails,
+      page: () => ProfileDetailsView(),
       binding: ProfileBinding(),
     ),
   ];

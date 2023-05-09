@@ -99,9 +99,11 @@ class HomeView extends GetView<HomeController> {
                   'Hello,',
                   style: AppStyles.tsGreyRegular12,
                 ),
-                Text(
-                  'Jhon Doe',
-                  style: AppStyles.tsWhiteMedium16,
+                Obx(
+                  () => Text(
+                    controller.userDetailsData.firstName?.capitalizeFirst ?? '-',
+                    style: AppStyles.tsWhiteMedium16,
+                  ),
                 ),
               ],
             ),
@@ -139,6 +141,72 @@ class HomeView extends GetView<HomeController> {
               ),
             )
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        onPressed: () {},
+        child: Icon(
+          Icons.home,
+          color: AppColors.white,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.netural,
+        shape: CircularNotchedRectangle(),
+        notchMargin: 4,
+        child: Container(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: MaterialButton(
+                  minWidth: 40,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [Icon(Icons.bar_chart_rounded), Text('Trading')],
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+              Expanded(
+                child: MaterialButton(
+                  minWidth: 40,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [Icon(Icons.analytics_rounded), Text('Analytics')],
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+              SizedBox(width: 36),
+              Expanded(
+                child: MaterialButton(
+                  minWidth: 40,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [Icon(Icons.account_balance_wallet_rounded), Text('Wallet')],
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+              Expanded(
+                child: MaterialButton(
+                  minWidth: 40,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.groups),
+                      Text('Referrals'),
+                    ],
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

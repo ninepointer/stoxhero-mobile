@@ -1,17 +1,21 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../core/core.dart';
 import '../data.dart';
 
 class NetworkService {
   late Dio _dio;
+  late Dio _authDio;
   late Dio _formDio;
 
   NetworkService() {
     prepareRequest();
+    prepareAuthRequest();
     prepareFormRequest();
   }
   static final NetworkService shared = NetworkService();
@@ -21,14 +25,34 @@ class NetworkService {
       baseUrl: AppUrls.baseURL,
       contentType: Headers.jsonContentType,
       responseType: ResponseType.json,
-      headers: {'Accept': Headers.jsonContentType},
+      headers: {
+        'Accept': Headers.jsonContentType,
+      },
     );
 
     _dio = Dio(dioOptions);
 
     _dio.interceptors.clear();
 
-    _dio.interceptors.add(LogInterceptor(
+    _dio.interceptors.add(
+      PrettyDioLogger(
+        error: true,
+        request: true,
+        requestBody: true,
+        requestHeader: true,
+        responseBody: true,
+        responseHeader: true,
+        compact: false,
+      ),
+    );
+  }
+
+  void prepareAuthRequest() {
+    _authDio = Dio();
+
+    _authDio.interceptors.clear();
+
+    _authDio.interceptors.add(LogInterceptor(
       error: true,
       request: true,
       requestBody: true,
@@ -62,6 +86,44 @@ class NetworkService {
   }
 
   _printLog(Object object) => log(object.toString());
+
+  Future<dynamic> getAuth({
+    required String path,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? data,
+    String? token,
+  }) async {
+    try {
+      final authDio = Dio();
+
+      authDio.interceptors.clear();
+
+      authDio.interceptors.add(
+        PrettyDioLogger(
+          error: true,
+          request: true,
+          requestBody: true,
+          requestHeader: true,
+          responseBody: true,
+          responseHeader: true,
+          compact: false,
+        ),
+      );
+
+      final headers = {
+        'Authorization': 'Bearer ${AppStorage.getToken()}',
+      };
+
+      final response = await authDio.get(
+        AppUrls.loginDetails,
+        options: Options(headers: headers),
+      );
+
+      return response.data;
+    } on Exception catch (error) {
+      return ExceptionHandler.handleError(error);
+    }
+  }
 
   Future<dynamic> get({
     required String path,

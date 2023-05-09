@@ -1,3 +1,4 @@
-export 'signin/signin_index.dart';
-export 'signup/signup_index.dart';
-export 'otp/otp_index.dart';
+export 'views/otp_view.dart';
+export 'views/signin_view.dart';
+export 'views/signup_view.dart';
+export 'controllers/auth_controller.dart';

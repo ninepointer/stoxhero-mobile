@@ -21,9 +21,13 @@ class ExceptionHandler {
         case DioErrorType.connectionTimeout:
           return APIException(message: ErrorMessages.connectionTimeout);
         case DioErrorType.badResponse:
-          return APIException(message: ErrorResponse.fromJson(error.response?.data).message);
+          return APIException(
+            message: ErrorResponse.fromJson(error.response?.data).message ?? ErrorMessages.somethingWentWrong,
+          );
         case DioErrorType.unknown:
-          return APIException(message: ErrorResponse.fromJson(error.response?.data).message);
+          return APIException(
+            message: ErrorResponse.fromJson(error.response?.data).message ?? ErrorMessages.somethingWentWrong,
+          );
         default:
           return APIException(message: ErrorMessages.networkGeneral);
       }

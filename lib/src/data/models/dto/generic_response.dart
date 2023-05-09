@@ -1,5 +1,5 @@
 class GenericResponse {
-  bool? status;
+  String? status;
   String? message;
   dynamic data;
 
@@ -12,7 +12,6 @@ class GenericResponse {
   GenericResponse.fromJson(dynamic json) {
     status = json['status'];
     message = json['message'];
-    if (message == null) message = json['msg'];
     data = json['data'];
   }
 

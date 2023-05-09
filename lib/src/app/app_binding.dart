@@ -7,8 +7,10 @@ class AppBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(NetworkService(), permanent: true);
+    Get.put(AuthRepository(), permanent: true);
 
-    Get.put(SigninController(), permanent: true);
-    Get.put(SignupController(), permanent: true);
+    Get.put(AuthController(), permanent: true);
+    Get.put(HomeController(), permanent: true);
+    Get.put(ProfileController(), permanent: true);
   }
 }

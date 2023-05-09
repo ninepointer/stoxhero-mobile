@@ -8,8 +8,8 @@ class AppColors {
   static final MaterialColor black = Color(0xFF222222).toMaterialColor();
   static final MaterialColor white = Color(0xFFFFFFFF).toMaterialColor();
 
-  static final MaterialColor info = Color(0xFF2E90FA).toMaterialColor();
-  static final MaterialColor success = Color(0xFF16B364).toMaterialColor();
-  static final MaterialColor warning = Color(0xFFF79009).toMaterialColor();
-  static final MaterialColor danger = Color(0xFFF04438).toMaterialColor();
+  static final MaterialColor info = Color(0xFF0052CC).toMaterialColor();
+  static final MaterialColor success = Color(0xFF36B37E).toMaterialColor();
+  static final MaterialColor warning = Color(0xFFFFAB00).toMaterialColor();
+  static final MaterialColor danger = Color(0xFFFF5630).toMaterialColor();
 }

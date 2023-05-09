@@ -10,7 +10,39 @@ class SplashView extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppLogoWidget(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppLogoWidget(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 56,
+                    vertical: 24,
+                  ),
+                  child: LinearProgressIndicator(
+                    backgroundColor: AppColors.netural,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Obx(
+                () => Text(
+                  controller.appVersion,
+                  style: AppStyles.tsGreyRegular14,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

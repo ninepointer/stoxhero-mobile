@@ -13,25 +13,28 @@ class AppLogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: Image.asset(
-              AppImages.appLogo,
-              height: logoSize ?? 150,
-              width: logoSize ?? 150,
+    return Hero(
+      tag: AppConstants.appName,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.asset(
+                AppImages.appLogo,
+                height: logoSize ?? 150,
+                width: logoSize ?? 150,
+              ),
             ),
-          ),
-          if (hasLabel) SizedBox(height: 16),
-          if (hasLabel)
-            Text(
-              AppConstants.appName,
-              style: AppStyles.tsWhiteMedium20,
-            )
-        ],
+            if (hasLabel) SizedBox(height: 16),
+            if (hasLabel)
+              Text(
+                AppConstants.appName,
+                style: AppStyles.tsWhiteMedium20,
+              )
+          ],
+        ),
       ),
     );
   }

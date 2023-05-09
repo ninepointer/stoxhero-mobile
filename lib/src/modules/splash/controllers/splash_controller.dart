@@ -1,13 +1,20 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
 
 class SplashBinding implements Bindings {
   @override
-  void dependencies() => Get.put(SplashController());
+  void dependencies() => Get.lazyPut(() => SplashController());
 }
 
 class SplashController extends GetxController {
+  final _appVersion = ''.obs;
+  String get appVersion => _appVersion.value;
+
   @override
   void onInit() {
     _startOnBoarding();
@@ -15,7 +22,24 @@ class SplashController extends GetxController {
   }
 
   void _startOnBoarding() async {
-    await Future.delayed(Duration(seconds: 3));
-    Get.offAllNamed(AppRoutes.signin);
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    String version = packageInfo.version;
+    String build = packageInfo.buildNumber;
+
+    _appVersion('v $version+$build');
+
+    String? token = AppStorage.getToken();
+    await Future.delayed(Duration(seconds: 1));
+    try {
+      if (token == null || token.isEmpty) {
+        Get.offAllNamed(AppRoutes.signin);
+      } else {
+        await Get.find<AuthController>().getUserDetails();
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 }

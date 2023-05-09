@@ -5,4 +5,5 @@ class AppRoutes {
   static const String otp = '/auth/otp';
   static const String home = '/home';
   static const String profile = '/profile';
+  static const String profileDetails = '/profile/profile_details';
 }
