@@ -4,39 +4,46 @@ import '../core.dart';
 
 class AppTheme {
   static final String fontFamily = 'Rubik';
-  static final ThemeData themeData = ThemeData(
-    fontFamily: fontFamily,
-    brightness: Brightness.dark,
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    scaffoldBackgroundColor: AppColors.netural.shade900,
-    primarySwatch: AppColors.primary,
-    primaryTextTheme: Typography().white,
-    textTheme: Typography().white,
-    cardColor: AppColors.netural.shade700,
-    cardTheme: CardTheme(
-      color: AppColors.netural.shade700,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+
+  static ThemeData themeData(BuildContext context) {
+    return ThemeData(
+      fontFamily: fontFamily,
+      brightness: Brightness.dark,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      scaffoldBackgroundColor: AppColors.netural.shade900,
+      primarySwatch: AppColors.primary,
+      primaryTextTheme: Typography().white,
+      textTheme: Theme.of(context).textTheme.apply(
+            fontFamily: fontFamily,
+            bodyColor: Colors.white,
+            displayColor: Colors.white,
+          ),
+      cardColor: AppColors.netural.shade700,
+      cardTheme: CardTheme(
+        color: AppColors.netural.shade700,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
       ),
-    ),
-    appBarTheme: AppBarTheme(
-      elevation: 0,
-      centerTitle: true,
-      color: AppColors.netural,
-      iconTheme: IconThemeData(
-        color: AppColors.primary,
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        centerTitle: true,
+        color: AppColors.netural,
+        iconTheme: IconThemeData(
+          color: AppColors.primary,
+        ),
+        toolbarTextStyle: TextStyle(
+          color: AppColors.white,
+          fontFamily: fontFamily,
+        ),
+        titleTextStyle: TextStyle(
+          color: AppColors.white,
+          fontFamily: fontFamily,
+          fontSize: 18,
+        ),
       ),
-      toolbarTextStyle: TextStyle(
-        color: AppColors.white,
-        fontFamily: fontFamily,
-      ),
-      titleTextStyle: TextStyle(
-        color: AppColors.white,
-        fontFamily: fontFamily,
-        fontSize: 18,
-      ),
-    ),
-  );
+    );
+  }
 }
 
 extension ColorConversion on Color {

@@ -1,82 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stoxhero/src/core/core.dart';
 
-import '../home_index.dart';
+import '../../../core/core.dart';
+import '../../modules.dart';
+import 'analytics_tab_view.dart';
+import 'tenx_trading_tab_view.dart';
+import 'trading_tab_view.dart';
 
-class HomeView extends GetView<HomeController> {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
-  Widget buildInfoCard() {
-    return Expanded(
-      child: Card(
-        elevation: 0,
-        margin: EdgeInsets.only(top: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: AppColors.netural.shade400,
-                    ),
-                    child: Icon(
-                      Icons.trending_up_rounded,
-                      size: 20,
-                      color: AppColors.white,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'NIFTY 50',
-                        style: AppStyles.tsGreyMedium10,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        '₹ 12,500.90',
-                        style: AppStyles.tsWhiteSemiBold14,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    'Today',
-                    style: AppStyles.tsGreyRegular12,
-                  ),
-                  Spacer(),
-                  Text(
-                    '₹ 125.87',
-                    style: AppStyles.tsWhiteMedium12,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '(+ 0.25%)',
-                    style: AppStyles.tsWhiteMedium12.copyWith(
-                      color: AppColors.success,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  late HomeController controller;
+
+  int _selectedIndex = 2;
+
+  List<Widget> _tabs = [
+    TradingTabView(),
+    AnalyticsTabView(),
+    TenxTradingTabView(),
+    WalletView(),
+    ReferralsView(),
+  ];
+
+  @override
+  void initState() {
+    controller = Get.find<HomeController>();
+    super.initState();
+  }
+
+  void _updateTab(int index) {
+    _selectedIndex = index;
+
+    switch (index) {
+      case 0:
+        break;
+      case 1:
+        break;
+      case 2:
+        controller.getTenxTradingActiveSubs();
+        break;
+      case 3:
+        Get.find<WalletController>().loadData();
+        break;
+      case 4:
+        Get.find<ReferralsController>().loadData();
+        break;
+      default:
+    }
+    setState(() {});
   }
 
   @override
@@ -117,37 +93,12 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  buildInfoCard(),
-                  SizedBox(width: 8),
-                  buildInfoCard(),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  buildInfoCard(),
-                  SizedBox(width: 8),
-                  buildInfoCard(),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+      body: _tabs[_selectedIndex],
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
-        onPressed: () {},
+        onPressed: () => _updateTab(2),
         child: Icon(
-          Icons.home,
+          Icons.currency_rupee_rounded,
           color: AppColors.white,
         ),
       ),
@@ -166,9 +117,16 @@ class HomeView extends GetView<HomeController> {
                   minWidth: 40,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(Icons.bar_chart_rounded), Text('Trading')],
+                    children: [
+                      Icon(Icons.bar_chart_rounded),
+                      SizedBox(height: 4),
+                      Text(
+                        'Trading',
+                        style: AppStyles.tsWhiteRegular12,
+                      )
+                    ],
                   ),
-                  onPressed: () {},
+                  onPressed: () => _updateTab(0),
                 ),
               ),
               Expanded(
@@ -176,20 +134,34 @@ class HomeView extends GetView<HomeController> {
                   minWidth: 40,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(Icons.analytics_rounded), Text('Analytics')],
+                    children: [
+                      Icon(Icons.analytics_rounded),
+                      SizedBox(height: 4),
+                      Text(
+                        'Analytics',
+                        style: AppStyles.tsWhiteRegular12,
+                      )
+                    ],
                   ),
-                  onPressed: () {},
+                  onPressed: () => _updateTab(1),
                 ),
               ),
-              SizedBox(width: 36),
+              SizedBox(width: 42),
               Expanded(
                 child: MaterialButton(
                   minWidth: 40,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(Icons.account_balance_wallet_rounded), Text('Wallet')],
+                    children: [
+                      Icon(Icons.account_balance_wallet_rounded),
+                      SizedBox(height: 4),
+                      Text(
+                        'Wallet',
+                        style: AppStyles.tsWhiteRegular12,
+                      )
+                    ],
                   ),
-                  onPressed: () {},
+                  onPressed: () => _updateTab(3),
                 ),
               ),
               Expanded(
@@ -199,10 +171,14 @@ class HomeView extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.groups),
-                      Text('Referrals'),
+                      SizedBox(height: 4),
+                      Text(
+                        'Referrals',
+                        style: AppStyles.tsWhiteRegular12,
+                      ),
                     ],
                   ),
-                  onPressed: () {},
+                  onPressed: () => _updateTab(4),
                 ),
               ),
             ],

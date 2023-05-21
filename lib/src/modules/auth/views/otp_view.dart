@@ -21,12 +21,12 @@ class OtpView extends GetView<AuthController> {
                 child: Container(
                   padding: EdgeInsets.all(16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppLogoWidget(logoSize: 80),
                       SizedBox(height: 50),
                       Text(
                         'Please enter your verification code!',
+                        textAlign: TextAlign.center,
                         style: AppStyles.tsWhiteMedium20.copyWith(
                           fontSize: 28,
                         ),
@@ -34,6 +34,7 @@ class OtpView extends GetView<AuthController> {
                       SizedBox(height: 50),
                       Text(
                         'We have sent a six digit verification code to \n+91 ${controller.mobileTextController.text}',
+                        textAlign: TextAlign.center,
                         style: AppStyles.tsGreyRegular16,
                       ),
                       SizedBox(height: 24),

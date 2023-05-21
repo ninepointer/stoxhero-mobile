@@ -40,5 +40,15 @@ class AppPages {
       page: () => ProfileDetailsView(),
       binding: ProfileBinding(),
     ),
+    GetPage(
+      name: AppRoutes.portfolio,
+      page: () => PortfolioView(),
+      binding: PortfolioBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.orders,
+      page: () => OrdersView(),
+      binding: OrdersBinding(),
+    ),
   ];
 }

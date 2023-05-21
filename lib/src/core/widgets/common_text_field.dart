@@ -15,6 +15,7 @@ class CommonTextField extends StatelessWidget {
   final bool? obscureText;
   final int? maxLines;
   final bool hasLabel;
+  final bool isDisabled;
   const CommonTextField({
     Key? key,
     this.padding,
@@ -28,6 +29,7 @@ class CommonTextField extends StatelessWidget {
     this.obscureText,
     this.maxLines,
     this.hasLabel = false,
+    this.isDisabled = false,
   }) : super(key: key);
 
   @override
@@ -43,47 +45,50 @@ class CommonTextField extends StatelessWidget {
               style: AppStyles.tsPrimaryRegular14,
             ),
           if (hasLabel) SizedBox(height: 4),
-          TextFormField(
-            controller: controller,
-            validator: validator,
-            inputFormatters: inputFormatters,
-            keyboardType: keyboardType,
-            obscureText: obscureText ?? false,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            style: AppStyles.tsWhiteRegular16,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(16),
-              filled: true,
-              fillColor: AppColors.netural.shade700,
-              hintText: hintText,
-              hintStyle: AppStyles.tsGreyRegular14,
-              suffixIcon: suffixIcon,
-              prefixIcon: prefixIcon,
-              errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                color: AppColors.danger.shade700,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-                borderSide: BorderSide(
-                  width: 2,
+          AbsorbPointer(
+            absorbing: isDisabled,
+            child: TextFormField(
+              controller: controller,
+              validator: validator,
+              inputFormatters: inputFormatters,
+              keyboardType: keyboardType,
+              obscureText: obscureText ?? false,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              style: AppStyles.tsWhiteRegular16,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(16),
+                filled: true,
+                fillColor: AppColors.netural.shade700,
+                hintText: hintText,
+                hintStyle: AppStyles.tsGreyRegular14,
+                suffixIcon: suffixIcon,
+                prefixIcon: prefixIcon,
+                errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                  color: AppColors.danger.shade700,
                 ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-                borderSide: BorderSide(
-                  width: 2,
-                  color: AppColors.primary,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(
+                    width: 2,
+                  ),
                 ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-                borderSide: BorderSide(
-                  width: 2,
-                  color: AppColors.danger,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: AppColors.primary,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: AppColors.danger,
+                  ),
                 ),
               ),
             ),

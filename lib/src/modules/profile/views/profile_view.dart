@@ -1,38 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/modules/modules.dart';
+import 'package:stoxhero/src/modules/profile/widgets/profile_list_tile.dart';
 
 import '../../../core/core.dart';
-import '../profile_index.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
-
-  Widget _buildProfileTile(String label, {Function()? onTap}) {
-    return Card(
-      elevation: 0,
-      margin: EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListTile(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        minLeadingWidth: 0,
-        leading: Icon(
-          Icons.circle,
-          size: 36,
-          color: AppColors.netural.shade400,
-        ),
-        title: Text(
-          label,
-          style: AppStyles.tsWhiteRegular16,
-        ),
-        trailing: Icon(Icons.chevron_right_rounded),
-        onTap: onTap,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,36 +49,42 @@ class ProfileView extends GetView<ProfileController> {
                   style: AppStyles.tsWhiteMedium20,
                 ),
                 subtitle: Text(
-                  'Referal Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
+                  'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
                   style: AppStyles.tsPrimaryRegular14,
                 ),
               ),
             ),
-            _buildProfileTile(
-              'My Profile',
+            ProfileListTile(
+              label: 'My Profile',
               onTap: () {
                 controller.loadProfileDetails();
                 Get.toNamed(AppRoutes.profileDetails);
               },
             ),
-            _buildProfileTile(
-              'Orders',
+            ProfileListTile(
+              label: 'Orders',
+              onTap: () {
+                Get.find<OrdersController>().loadData();
+                Get.toNamed(AppRoutes.orders);
+              },
+            ),
+            ProfileListTile(
+              label: 'Portfolio',
+              onTap: () {
+                Get.find<PortfolioController>().loadData();
+                Get.toNamed(AppRoutes.portfolio);
+              },
+            ),
+            ProfileListTile(
+              label: 'Message',
               onTap: () {},
             ),
-            _buildProfileTile(
-              'Portfolio',
+            ProfileListTile(
+              label: 'Settings',
               onTap: () {},
             ),
-            _buildProfileTile(
-              'Message',
-              onTap: () {},
-            ),
-            _buildProfileTile(
-              'Settings',
-              onTap: () {},
-            ),
-            _buildProfileTile(
-              'FAQs',
+            ProfileListTile(
+              label: 'FAQs',
               onTap: () {},
             ),
           ],

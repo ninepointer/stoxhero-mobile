@@ -35,12 +35,12 @@ class _SigninViewState extends State<SigninView> {
                 child: Container(
                   padding: EdgeInsets.all(16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppLogoWidget(logoSize: 80),
                       SizedBox(height: 50),
                       Text(
                         'Let\'s get started with Stock trading!',
+                        textAlign: TextAlign.center,
                         style: AppStyles.tsWhiteMedium20.copyWith(
                           fontSize: 28,
                         ),
@@ -48,6 +48,7 @@ class _SigninViewState extends State<SigninView> {
                       SizedBox(height: 50),
                       Text(
                         'Please provide your mobile number, a six digit OTP will be send for verification.',
+                        textAlign: TextAlign.center,
                         style: AppStyles.tsGreyRegular16,
                       ),
                       SizedBox(height: 24),

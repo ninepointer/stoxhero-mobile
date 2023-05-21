@@ -113,6 +113,116 @@ class AppStyles {
     fontSize: 20,
   );
 
+  static TextStyle tsSecondaryRegular10 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w400,
+    fontSize: 10,
+  );
+  static TextStyle tsSecondaryRegular12 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
+  );
+  static TextStyle tsSecondaryRegular14 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+  );
+  static TextStyle tsSecondaryRegular16 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+  );
+  static TextStyle tsSecondaryRegular18 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w400,
+    fontSize: 18,
+  );
+  static TextStyle tsSecondaryRegular20 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w400,
+    fontSize: 20,
+  );
+  static TextStyle tsSecondaryMedium10 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 10,
+  );
+  static TextStyle tsSecondaryMedium12 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
+  static TextStyle tsSecondaryMedium14 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+  );
+  static TextStyle tsSecondaryMedium16 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+  );
+  static TextStyle tsSecondaryMedium18 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+  );
+  static TextStyle tsSecondaryMedium20 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+  );
+
+  static TextStyle tsSecondarySemiBold10 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 10,
+  );
+  static TextStyle tsSecondarySemiBold12 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 12,
+  );
+  static TextStyle tsSecondarySemiBold14 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
+  );
+  static TextStyle tsSecondarySemiBold16 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 16,
+  );
+  static TextStyle tsSecondarySemiBold18 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 18,
+  );
+  static TextStyle tsSecondarySemiBold20 = TextStyle(
+    color: AppColors.secondary,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 20,
+  );
+
   static TextStyle tsWhiteRegular10 = TextStyle(
     color: AppColors.white,
     fontFamily: AppTheme.fontFamily,

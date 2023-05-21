@@ -43,6 +43,7 @@ class _SignupViewState extends State<SignupView> {
                         SizedBox(height: 50),
                         Text(
                           'Join us now to learn and earn from the Stock Market!',
+                          textAlign: TextAlign.center,
                           style: AppStyles.tsWhiteMedium20.copyWith(
                             fontSize: 24,
                           ),
@@ -50,6 +51,7 @@ class _SignupViewState extends State<SignupView> {
                         SizedBox(height: 50),
                         Text(
                           'Please provide your details, confirmation will be send on the given email.',
+                          textAlign: TextAlign.center,
                           style: AppStyles.tsGreyRegular16,
                         ),
                         SizedBox(height: 24),

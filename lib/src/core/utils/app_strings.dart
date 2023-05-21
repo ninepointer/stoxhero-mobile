@@ -1,4 +1,6 @@
-class AppStrings {}
+class AppStrings {
+  static const String rupeeSign = "₹";
+}
 
 class ErrorMessages {
   static String required = '*Required';

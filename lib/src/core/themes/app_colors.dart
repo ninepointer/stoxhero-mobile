@@ -3,6 +3,7 @@ import 'package:stoxhero/src/core/core.dart';
 
 class AppColors {
   static final MaterialColor primary = Color(0xFF6842FF).toMaterialColor();
+  static final MaterialColor secondary = Color(0xFFEFA600).toMaterialColor();
   static final MaterialColor netural = Color(0xFF312E41).toMaterialColor();
 
   static final MaterialColor black = Color(0xFF222222).toMaterialColor();

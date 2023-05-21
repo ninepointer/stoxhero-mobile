@@ -1,21 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:stoxhero/main.dart';
 
 import '../../core/core.dart';
 import '../data.dart';
 
 class NetworkService {
   late Dio _dio;
-  late Dio _authDio;
   late Dio _formDio;
 
   NetworkService() {
     prepareRequest();
-    prepareAuthRequest();
     prepareFormRequest();
   }
   static final NetworkService shared = NetworkService();
@@ -45,22 +43,6 @@ class NetworkService {
         compact: false,
       ),
     );
-  }
-
-  void prepareAuthRequest() {
-    _authDio = Dio();
-
-    _authDio.interceptors.clear();
-
-    _authDio.interceptors.add(LogInterceptor(
-      error: true,
-      request: true,
-      requestBody: true,
-      requestHeader: true,
-      responseBody: true,
-      responseHeader: false,
-      logPrint: _printLog,
-    ));
   }
 
   void prepareFormRequest() {
@@ -105,17 +87,17 @@ class NetworkService {
           requestBody: true,
           requestHeader: true,
           responseBody: true,
-          responseHeader: true,
+          responseHeader: false,
           compact: false,
         ),
       );
 
       final headers = {
-        'Authorization': 'Bearer ${AppStorage.getToken()}',
+        'Authorization': isProd ? 'Bearer ${AppStorage.getToken()}' : 'Bearer ${AppConstants.token}',
       };
 
       final response = await authDio.get(
-        AppUrls.loginDetails,
+        path,
         options: Options(headers: headers),
       );
 
@@ -203,6 +185,91 @@ class NetworkService {
         path,
         queryParameters: query,
         data: jsonEncode(data),
+      );
+      return response.data;
+    } on Exception catch (error) {
+      return ExceptionHandler.handleError(error);
+    }
+  }
+
+  Future<dynamic> postAuthFormData({
+    required String path,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? data,
+  }) async {
+    Dio _authFormDio = Dio();
+
+    BaseOptions dioOptions = BaseOptions(
+      baseUrl: AppUrls.baseURL,
+      contentType: "multipart/form-data",
+      responseType: ResponseType.json,
+    );
+
+    _authFormDio = Dio(dioOptions);
+
+    _authFormDio.interceptors.clear();
+
+    _authFormDio.interceptors.add(PrettyDioLogger(
+      error: true,
+      request: true,
+      requestBody: true,
+      requestHeader: true,
+      responseBody: true,
+      responseHeader: true,
+      compact: false,
+    ));
+    try {
+      final response = await _authFormDio.post(
+        path,
+        queryParameters: query,
+        data: FormData.fromMap(data!),
+      );
+      return response.data;
+    } on Exception catch (error) {
+      return ExceptionHandler.handleError(error);
+    }
+  }
+
+  Future<dynamic> patchAuthFormData({
+    required String path,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? data,
+  }) async {
+    Dio _authFormDio = Dio();
+
+    final headers = {
+      'Authorization': 'Bearer ${AppStorage.getToken()}',
+    };
+
+    BaseOptions dioOptions = BaseOptions(
+      baseUrl: AppUrls.baseURL,
+      contentType: "multipart/form-data",
+      responseType: ResponseType.json,
+    );
+
+    _authFormDio = Dio(dioOptions);
+
+    _authFormDio.interceptors.clear();
+
+    _authFormDio.interceptors.add(
+      PrettyDioLogger(
+        error: true,
+        request: true,
+        requestBody: true,
+        requestHeader: true,
+        responseBody: true,
+        responseHeader: true,
+        compact: false,
+      ),
+    );
+    try {
+      final response = await _authFormDio.patch(
+        path,
+        queryParameters: query,
+        data: FormData.fromMap(data!),
+        options: Options(
+          headers: headers,
+        ),
       );
       return response.data;
     } on Exception catch (error) {

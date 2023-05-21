@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class LoginDetailsResponse {
   UserImageDetails? aadhaarCardFrontImage;
   UserImageDetails? aadhaarCardBackImage;
@@ -26,6 +27,7 @@ class LoginDetailsResponse {
   String? lastName;
   String? lastOccupation;
   String? location;
+  String? pincode;
   String? mobile;
   String? myReferralCode;
   String? name;
@@ -52,7 +54,7 @@ class LoginDetailsResponse {
   bool? isAlgoTrader;
   List<String>? watchlistInstruments;
   List<String>? contests;
-  List<Portfolio>? portfolio;
+  List<ProfilePortfolio>? portfolio;
   List<Referrals>? referrals;
 
   LoginDetailsResponse({
@@ -83,6 +85,7 @@ class LoginDetailsResponse {
     this.lastName,
     this.lastOccupation,
     this.location,
+    this.pincode,
     this.mobile,
     this.myReferralCode,
     this.name,
@@ -165,6 +168,7 @@ class LoginDetailsResponse {
     lastName = json['last_name'];
     lastOccupation = json['last_occupation'];
     location = json['location'];
+    pincode = json['pincode'];
     mobile = json['mobile'];
     myReferralCode = json['myReferralCode'];
     name = json['name'];
@@ -192,9 +196,9 @@ class LoginDetailsResponse {
     watchlistInstruments = json['watchlistInstruments'].cast<String>();
     contests = json['contests'].cast<String>();
     if (json['portfolio'] != null) {
-      portfolio = <Portfolio>[];
+      portfolio = <ProfilePortfolio>[];
       json['portfolio'].forEach((v) {
-        portfolio!.add(new Portfolio.fromJson(v));
+        portfolio!.add(new ProfilePortfolio.fromJson(v));
       });
     }
     if (json['referrals'] != null) {
@@ -246,6 +250,7 @@ class LoginDetailsResponse {
     data['last_name'] = this.lastName;
     data['last_occupation'] = this.lastOccupation;
     data['location'] = this.location;
+    data['pincode'] = this.pincode;
     data['mobile'] = this.mobile;
     data['myReferralCode'] = this.myReferralCode;
     data['name'] = this.name;
@@ -280,6 +285,124 @@ class LoginDetailsResponse {
     }
     return data;
   }
+
+  LoginDetailsResponse copyWith({
+    UserImageDetails? aadhaarCardFrontImage,
+    UserImageDetails? aadhaarCardBackImage,
+    UserImageDetails? panCardFrontImage,
+    UserImageDetails? passportPhoto,
+    UserImageDetails? addressProofDocument,
+    UserImageDetails? profilePhoto,
+    String? sId,
+    String? kYCStatus,
+    int? iV,
+    String? address,
+    String? city,
+    String? cohort,
+    String? country,
+    String? createdBy,
+    String? degree,
+    String? designation,
+    String? dob,
+    String? email,
+    String? employeeid,
+    String? firstName,
+    num? fund,
+    String? gender,
+    String? joiningDate,
+    String? lastModified,
+    String? lastName,
+    String? lastOccupation,
+    String? location,
+    String? pincode,
+    String? mobile,
+    String? myReferralCode,
+    String? name,
+    String? password,
+    String? resetPasswordOTP,
+    String? state,
+    String? status,
+    String? tradingExp,
+    String? uId,
+    String? whatsAppNumber,
+    String? aadhaarNumber,
+    String? panNumber,
+    String? drivingLicenseNumber,
+    String? passportNumber,
+    String? accountNumber,
+    String? bankName,
+    String? googlePayNumber,
+    String? ifscCode,
+    String? nameAsPerBankAccount,
+    String? payTMNumber,
+    String? phonePeNumber,
+    String? upiId,
+    String? mobileOtp,
+    bool? isAlgoTrader,
+    List<String>? watchlistInstruments,
+    List<String>? contests,
+    List<ProfilePortfolio>? portfolio,
+    List<Referrals>? referrals,
+  }) {
+    return LoginDetailsResponse(
+      aadhaarCardFrontImage: aadhaarCardFrontImage ?? this.aadhaarCardFrontImage,
+      aadhaarCardBackImage: aadhaarCardBackImage ?? this.aadhaarCardBackImage,
+      panCardFrontImage: panCardFrontImage ?? this.panCardFrontImage,
+      passportPhoto: passportPhoto ?? this.passportPhoto,
+      addressProofDocument: addressProofDocument ?? this.addressProofDocument,
+      profilePhoto: profilePhoto ?? this.profilePhoto,
+      sId: sId ?? this.sId,
+      kYCStatus: kYCStatus ?? this.kYCStatus,
+      iV: iV ?? this.iV,
+      address: address ?? this.address,
+      city: city ?? this.city,
+      cohort: cohort ?? this.cohort,
+      country: country ?? this.country,
+      createdBy: createdBy ?? this.createdBy,
+      degree: degree ?? this.degree,
+      designation: designation ?? this.designation,
+      dob: dob ?? this.dob,
+      email: email ?? this.email,
+      employeeid: employeeid ?? this.employeeid,
+      firstName: firstName ?? this.firstName,
+      fund: fund ?? this.fund,
+      gender: gender ?? this.gender,
+      joiningDate: joiningDate ?? this.joiningDate,
+      lastModified: lastModified ?? this.lastModified,
+      lastName: lastName ?? this.lastName,
+      lastOccupation: lastOccupation ?? this.lastOccupation,
+      location: location ?? this.location,
+      pincode: pincode ?? this.pincode,
+      mobile: mobile ?? this.mobile,
+      myReferralCode: myReferralCode ?? this.myReferralCode,
+      name: name ?? this.name,
+      password: password ?? this.password,
+      resetPasswordOTP: resetPasswordOTP ?? this.resetPasswordOTP,
+      state: state ?? this.state,
+      status: status ?? this.status,
+      tradingExp: tradingExp ?? this.tradingExp,
+      uId: uId ?? this.uId,
+      whatsAppNumber: whatsAppNumber ?? this.whatsAppNumber,
+      aadhaarNumber: aadhaarNumber ?? this.aadhaarNumber,
+      panNumber: panNumber ?? this.panNumber,
+      drivingLicenseNumber: drivingLicenseNumber ?? this.drivingLicenseNumber,
+      passportNumber: passportNumber ?? this.passportNumber,
+      accountNumber: accountNumber ?? this.accountNumber,
+      bankName: bankName ?? this.bankName,
+      googlePayNumber: googlePayNumber ?? this.googlePayNumber,
+      ifscCode: ifscCode ?? this.ifscCode,
+      nameAsPerBankAccount: nameAsPerBankAccount ?? this.nameAsPerBankAccount,
+      payTMNumber: payTMNumber ?? this.payTMNumber,
+      phonePeNumber: phonePeNumber ?? this.phonePeNumber,
+      upiId: upiId ?? this.upiId,
+      mobileOtp: mobileOtp ?? this.mobileOtp,
+      isAlgoTrader: isAlgoTrader ?? this.isAlgoTrader,
+      watchlistInstruments: watchlistInstruments ?? this.watchlistInstruments,
+      contests: contests ?? this.contests,
+      portfolio: portfolio ?? this.portfolio,
+      referrals: referrals ?? this.referrals,
+    );
+  }
 }
 
 class UserImageDetails {
@@ -304,18 +427,18 @@ class UserImageDetails {
   }
 }
 
-class Portfolio {
+class ProfilePortfolio {
   String? activationDate;
   String? portfolioId;
   String? sId;
 
-  Portfolio({
+  ProfilePortfolio({
     this.activationDate,
     this.portfolioId,
     this.sId,
   });
 
-  Portfolio.fromJson(Map<String, dynamic> json) {
+  ProfilePortfolio.fromJson(Map<String, dynamic> json) {
     activationDate = json['activationDate'];
     portfolioId = json['portfolioId'];
     sId = json['_id'];

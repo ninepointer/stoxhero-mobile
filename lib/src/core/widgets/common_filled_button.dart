@@ -47,7 +47,13 @@ class CommonFilledButton extends StatelessWidget {
               )
             : Text(
                 label ?? 'Label',
-                style: AppStyles.tsWhiteRegular16,
+                style: AppStyles.tsWhiteRegular16.copyWith(
+                  fontSize: height == null
+                      ? 16
+                      : (height! < 36)
+                          ? 14
+                          : 16,
+                ),
               ),
         onPressed: isLoading ? null : onPressed,
       ),

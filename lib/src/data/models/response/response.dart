@@ -1,2 +1,10 @@
 export 'login_details_response.dart';
 export 'verify_phone_login_response.dart';
+export 'portfolio_reponse.dart';
+export 'active_referral_response.dart';
+export 'referrals_leaderboard_response.dart';
+export 'tenx_trading_active_response.dart';
+export 'inifinity_trade_response.dart';
+export 'tenx_trade_orders_list_response.dart';
+export 'virtual_trade_orders_list_response.dart';
+export 'wallet_transactions_list_response.dart';
