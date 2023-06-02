@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "774524262451",
+    "project_id": "stoxhero-app",
+    "storage_bucket": "stoxhero-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774524262451:android:34e74446d0789a8513eb46",
+        "android_client_info": {
+          "package_name": "com.stoxhero.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "774524262451-k0jfn65m2rb0u7uncsuqcf9tv5drgmfs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjHo78BCDKtvnJAgqm7XTuT--X4lhX9qQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "774524262451-k0jfn65m2rb0u7uncsuqcf9tv5drgmfs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

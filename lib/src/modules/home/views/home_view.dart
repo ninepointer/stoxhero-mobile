@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
-import 'analytics_tab_view.dart';
 import 'tenx_trading_tab_view.dart';
 import 'trading_tab_view.dart';
 
@@ -21,7 +20,7 @@ class _HomeViewState extends State<HomeView> {
 
   List<Widget> _tabs = [
     TradingTabView(),
-    AnalyticsTabView(),
+    AnalyticsView(),
     TenxTradingTabView(),
     WalletView(),
     ReferralsView(),
@@ -40,6 +39,7 @@ class _HomeViewState extends State<HomeView> {
       case 0:
         break;
       case 1:
+        Get.find<AnalyticsController>().loadData();
         break;
       case 2:
         controller.getTenxTradingActiveSubs();

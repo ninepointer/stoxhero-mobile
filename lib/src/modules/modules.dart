@@ -6,3 +6,4 @@ export 'portfolio/portoflio_index.dart';
 export 'referrals/referrals_index.dart';
 export 'orders/orders_index.dart';
 export 'wallet/wallet_index.dart';
+export 'analytics/analytics_index.dart';

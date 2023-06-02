@@ -98,6 +98,7 @@ class NetworkService {
 
       final response = await authDio.get(
         path,
+        queryParameters: query,
         options: Options(headers: headers),
       );
 
@@ -238,7 +239,7 @@ class NetworkService {
     Dio _authFormDio = Dio();
 
     final headers = {
-      'Authorization': 'Bearer ${AppStorage.getToken()}',
+      'Cookie': isProd ? 'jwtoken=${AppStorage.getToken()}' : 'jwtoken=${AppConstants.token}',
     };
 
     BaseOptions dioOptions = BaseOptions(
@@ -262,6 +263,7 @@ class NetworkService {
         compact: false,
       ),
     );
+
     try {
       final response = await _authFormDio.patch(
         path,

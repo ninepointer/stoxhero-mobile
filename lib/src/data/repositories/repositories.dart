@@ -5,3 +5,4 @@ export 'profile_repository.dart';
 export 'tenx_repository.dart';
 export 'orders_repository.dart';
 export 'wallet_repository.dart';
+export 'analtyics_respository.dart';

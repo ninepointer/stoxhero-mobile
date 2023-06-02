@@ -4,7 +4,9 @@ class FormatHelper {
   static String formatNumbers(dynamic value, {bool isNegative = false}) {
     if (value != null) {
       num number = value is int || value is double
-          ? value.abs()
+          ? isNegative
+              ? value.abs()
+              : value
           : isNegative
               ? num.parse(value).abs()
               : num.parse(value);
@@ -12,6 +14,7 @@ class FormatHelper {
         locale: 'en_IN',
         symbol: '₹ ',
       );
+
       String formattedAmount = currencyFormat.format(number);
       return formattedAmount;
     } else {

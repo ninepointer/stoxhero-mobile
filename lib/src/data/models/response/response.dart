@@ -8,3 +8,5 @@ export 'inifinity_trade_response.dart';
 export 'tenx_trade_orders_list_response.dart';
 export 'virtual_trade_orders_list_response.dart';
 export 'wallet_transactions_list_response.dart';
+export 'analytics_overview_details_response.dart';
+export 'analytics_date_wise_details_response.dart';

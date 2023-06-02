@@ -10,7 +10,7 @@ class ProfileView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.loadUserDetails();
+    controller.loadData();
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
@@ -57,7 +57,7 @@ class ProfileView extends GetView<ProfileController> {
             ProfileListTile(
               label: 'My Profile',
               onTap: () {
-                controller.loadProfileDetails();
+                controller.loadData();
                 Get.toNamed(AppRoutes.profileDetails);
               },
             ),

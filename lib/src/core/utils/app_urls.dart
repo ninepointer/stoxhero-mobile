@@ -26,4 +26,12 @@ class AppUrls {
   static const String paperTradeAllOrders = "$baseURL/paperTrade/my/historyorders";
 
   static const String userWalletTransactions = "$baseURL/userwallet/my";
+
+  static const String virtualTradingAnalyticsOverView = "$baseURL/analytics/papertrade/myoverview";
+  static const String tenxTradingAnalyticsOverView = "$baseURL/analytics/stoxhero/myoverview";
+  static const String infinityTradingAnalyticsOverView = "$baseURL/analytics/infinity/myoverview";
+
+  static const String virtualTradingDateWiseAnalytics = "$baseURL/analytics/papertrade/mystats";
+  static const String tenxTradingDateWiseAnalytics = "$baseURL/analytics/stoxhero/mystats";
+  static const String infinityTradingDateWiseAnalytics = "$baseURL/analytics/infinity/mystats";
 }

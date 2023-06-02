@@ -83,7 +83,10 @@ class PortfolioCard extends GetView<PortfolioController> {
                       children: [
                         PortfolioCardTile(
                           label: 'Invested Amount',
-                          value: FormatHelper.formatNumbers(portfolio.investedAmount),
+                          value: FormatHelper.formatNumbers(
+                            portfolio.investedAmount,
+                            isNegative: true,
+                          ),
                         ),
                         PortfolioCardTile(
                           isRightAlign: true,

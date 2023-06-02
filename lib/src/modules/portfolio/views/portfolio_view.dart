@@ -28,7 +28,7 @@ class PortfolioView extends GetView<PortfolioController> {
                   color: AppColors.netural.shade800,
                 ),
                 child: Text(
-                  "Virtual Trading Porfolio",
+                  "Virtual Trading Portfolio",
                   style: AppStyles.tsPrimaryRegular18,
                 ),
               ),
@@ -47,7 +47,7 @@ class PortfolioView extends GetView<PortfolioController> {
                   color: AppColors.netural.shade800,
                 ),
                 child: Text(
-                  "TenX Trading Porfolio's",
+                  "TenX Trading Portfolio",
                   style: AppStyles.tsPrimaryRegular18,
                 ),
               ),

@@ -36,8 +36,8 @@ class ProfileController extends BaseController<ProfileRepository> {
   final stateTextController = TextEditingController();
   final countryTextController = TextEditingController();
 
-  void loadUserDetails() {
-    userDetails(AppStorage.getUserDetails());
+  void loadData() {
+    loadProfileDetails();
   }
 
   String formatDate(String? value) {
@@ -51,6 +51,7 @@ class ProfileController extends BaseController<ProfileRepository> {
   }
 
   void loadProfileDetails() {
+    userDetails(AppStorage.getUserDetails());
     userNameTextController.text = userDetails.value.employeeid ?? '';
     positionTextController.text = userDetails.value.designation ?? '';
     firstNameTextController.text = userDetails.value.firstName ?? '';
@@ -93,7 +94,9 @@ class ProfileController extends BaseController<ProfileRepository> {
     try {
       final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
       if (response.data != null) {
-        await AppStorage.setUserDetails(response.data?.data ?? LoginDetailsResponse());
+        await AppStorage.setUserDetails(
+          LoginDetailsResponse.fromJson(response.data?.data),
+        );
         log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         SnackbarHelper.showSnackbar(response.data?.message);
       } else {

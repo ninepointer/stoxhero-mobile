@@ -35,21 +35,22 @@ class Portfolio {
   String? sId;
   String? portfolioName;
   String? status;
-  int? portfolioValue;
+  num? portfolioValue;
   String? portfolioAccount;
   String? portfolioType;
-  int? investedAmount;
-  int? cashBalance;
+  num? investedAmount;
+  num? cashBalance;
 
-  Portfolio(
-      {this.sId,
-      this.portfolioName,
-      this.status,
-      this.portfolioValue,
-      this.portfolioAccount,
-      this.portfolioType,
-      this.investedAmount,
-      this.cashBalance});
+  Portfolio({
+    this.sId,
+    this.portfolioName,
+    this.status,
+    this.portfolioValue,
+    this.portfolioAccount,
+    this.portfolioType,
+    this.investedAmount,
+    this.cashBalance,
+  });
 
   Portfolio.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
