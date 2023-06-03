@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
-import 'tenx_trading_tab_view.dart';
 import 'trading_tab_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -21,7 +20,7 @@ class _HomeViewState extends State<HomeView> {
   List<Widget> _tabs = [
     TradingTabView(),
     AnalyticsView(),
-    TenxTradingTabView(),
+    TenxTradingView(),
     WalletView(),
     ReferralsView(),
   ];
@@ -42,7 +41,7 @@ class _HomeViewState extends State<HomeView> {
         Get.find<AnalyticsController>().loadData();
         break;
       case 2:
-        controller.getTenxTradingActiveSubs();
+        Get.find<TenxTradingController>().getTenxTradingActiveSubs();
         break;
       case 3:
         Get.find<WalletController>().loadData();

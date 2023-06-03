@@ -11,13 +11,14 @@ class AppBinding extends Bindings {
     Get.put(ProfileRepository(), permanent: true);
     Get.put(PortfolioRepository(), permanent: true);
     Get.put(ReferralsRepository(), permanent: true);
-    Get.put(TenxRepository(), permanent: true);
+    Get.put(TenxTradingRepository(), permanent: true);
     Get.put(OrdersRepository(), permanent: true);
     Get.put(WalletRepository(), permanent: true);
     Get.put(AnalyticsRepository(), permanent: true);
 
     Get.put(AuthController(), permanent: true);
     Get.put(HomeController(), permanent: true);
+    Get.put(TenxTradingController(), permanent: true);
     Get.put(ProfileController(), permanent: true);
     Get.put(PortfolioController(), permanent: true);
     Get.put(ReferralsController(), permanent: true);

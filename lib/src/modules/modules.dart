@@ -7,3 +7,4 @@ export 'referrals/referrals_index.dart';
 export 'orders/orders_index.dart';
 export 'wallet/wallet_index.dart';
 export 'analytics/analytics_index.dart';
+export 'tenx_trading/tenx_trading_index.dart';
