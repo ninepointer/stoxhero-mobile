@@ -31,7 +31,7 @@ class CommonCard extends StatelessWidget {
           side: BorderSide(
             color: AppColors.netural.shade400,
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(4),
         ),
         child: Container(
           padding: padding ?? EdgeInsets.all(12),

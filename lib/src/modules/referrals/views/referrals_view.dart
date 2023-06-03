@@ -43,7 +43,7 @@ class ReferralsView extends GetView<ReferralsController> {
                       side: BorderSide(
                         color: AppColors.netural.shade400,
                       ),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                     child: Container(
                       margin: EdgeInsets.all(14),
@@ -80,7 +80,7 @@ class ReferralsView extends GetView<ReferralsController> {
                             color: AppColors.netural,
                             margin: EdgeInsets.zero,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(4),
                             ),
                             child: Container(
                               margin: EdgeInsets.all(14),
@@ -143,7 +143,7 @@ class ReferralsView extends GetView<ReferralsController> {
                             side: BorderSide(
                               color: AppColors.netural.shade400,
                             ),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(4),
                           ),
                           child: Container(
                             margin: EdgeInsets.all(14),
@@ -193,7 +193,7 @@ class ReferralsView extends GetView<ReferralsController> {
                             side: BorderSide(
                               color: AppColors.netural.shade400,
                             ),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(4),
                           ),
                           child: Container(
                             margin: EdgeInsets.all(14),
@@ -246,7 +246,7 @@ class ReferralsView extends GetView<ReferralsController> {
                       side: BorderSide(
                         color: AppColors.netural.shade400,
                       ),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                     child: Container(
                       margin: EdgeInsets.all(14),

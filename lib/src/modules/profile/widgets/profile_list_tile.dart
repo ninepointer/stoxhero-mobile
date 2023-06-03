@@ -18,11 +18,11 @@ class ProfileListTile extends StatelessWidget {
       elevation: 0,
       margin: EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: ListTile(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(4),
         ),
         minLeadingWidth: 0,
         leading: Container(

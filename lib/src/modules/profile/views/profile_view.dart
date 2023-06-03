@@ -33,7 +33,7 @@ class ProfileView extends GetView<ProfileController> {
               elevation: 0,
               margin: EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(4),
               ),
               child: ListTile(
                 leading: Container(

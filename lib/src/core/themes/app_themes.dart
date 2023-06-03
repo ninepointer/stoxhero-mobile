@@ -22,7 +22,7 @@ class AppTheme {
       cardTheme: CardTheme(
         color: AppColors.netural.shade700,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(4),
         ),
       ),
       appBarTheme: AppBarTheme(

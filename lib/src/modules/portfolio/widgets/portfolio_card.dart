@@ -21,7 +21,7 @@ class PortfolioCard extends GetView<PortfolioController> {
           side: BorderSide(
             color: AppColors.netural.shade400,
           ),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(4),
         ),
         child: Container(
           width: double.infinity,

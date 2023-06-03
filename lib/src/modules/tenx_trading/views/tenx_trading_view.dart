@@ -28,7 +28,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
         elevation: 0,
         margin: EdgeInsets.only(top: 8),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(4),
         ),
         child: Container(
           padding: EdgeInsets.all(12),
@@ -40,7 +40,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                   Container(
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                       color: AppColors.netural.shade400,
                     ),
                     child: Icon(

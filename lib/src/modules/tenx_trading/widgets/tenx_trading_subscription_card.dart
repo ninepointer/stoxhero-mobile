@@ -39,8 +39,13 @@ class TenxTradingSubscriptionCard extends StatelessWidget {
             label: subscription.features?[index].description ?? '-',
           ),
         ),
+        Divider(
+          thickness: 1,
+          height: 0,
+        ),
         ListTile(
           visualDensity: VisualDensity.compact,
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           title: RichText(
             text: TextSpan(
               children: [
@@ -57,16 +62,16 @@ class TenxTradingSubscriptionCard extends StatelessWidget {
                 ),
                 TextSpan(
                   text: '₹${subscription.discountedPrice}',
-                  style: AppStyles.tsPrimaryMedium20,
+                  style: AppStyles.tsSecondarySemiBold20,
                 ),
               ],
             ),
           ),
           trailing: CommonFilledButton(
-            width: 100,
+            width: 150,
             height: 32,
             onPressed: () {},
-            label: 'Unlock',
+            label: 'Start Trading',
           ),
         ),
       ],
@@ -122,7 +127,10 @@ class TenxTradingCardTile extends StatelessWidget {
       dense: true,
       minLeadingWidth: 0,
       visualDensity: VisualDensity.compact,
-      leading: Icon(Icons.check_circle_rounded),
+      leading: Icon(
+        Icons.check_circle_rounded,
+        size: 16,
+      ),
       title: Text(
         label,
         style: AppStyles.tsWhiteRegular14,
