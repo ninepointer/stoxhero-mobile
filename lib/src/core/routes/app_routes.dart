@@ -9,4 +9,6 @@ class AppRoutes {
   static const String orders = '/orders';
   static const String funds = '/funds';
   static const String portfolio = '/portfolio';
+  static const String tenxDashboard = '/tenx_dashboard';
+  static const String tenxSearchSymbol = '/tenx_search_symbol';
 }

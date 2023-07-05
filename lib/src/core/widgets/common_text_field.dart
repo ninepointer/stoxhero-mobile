@@ -16,6 +16,8 @@ class CommonTextField extends StatelessWidget {
   final int? maxLines;
   final bool hasLabel;
   final bool isDisabled;
+  final FocusNode? focusNode;
+  final Function(String?)? onChanged;
   const CommonTextField({
     Key? key,
     this.padding,
@@ -30,6 +32,8 @@ class CommonTextField extends StatelessWidget {
     this.maxLines,
     this.hasLabel = false,
     this.isDisabled = false,
+    this.focusNode,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -49,7 +53,9 @@ class CommonTextField extends StatelessWidget {
             absorbing: isDisabled,
             child: TextFormField(
               controller: controller,
+              focusNode: focusNode,
               validator: validator,
+              onChanged: onChanged,
               inputFormatters: inputFormatters,
               keyboardType: keyboardType,
               obscureText: obscureText ?? false,

@@ -93,13 +93,106 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': isProd ? 'Bearer ${AppStorage.getToken()}' : 'Bearer ${AppConstants.token}',
+        'Authorization': 'Bearer ${isProd ? AppStorage.getToken() : AppConstants.token}',
       };
 
       final response = await authDio.get(
         path,
+        data: data,
         queryParameters: query,
-        options: Options(headers: headers),
+        options: Options(
+          headers: headers,
+          contentType: "application/json",
+          responseType: ResponseType.json,
+        ),
+      );
+
+      return response.data;
+    } on Exception catch (error) {
+      return ExceptionHandler.handleError(error);
+    }
+  }
+
+  Future<dynamic> postAuth({
+    required String path,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? data,
+    String? token,
+  }) async {
+    try {
+      final authDio = Dio();
+
+      authDio.interceptors.clear();
+
+      authDio.interceptors.add(
+        PrettyDioLogger(
+          error: true,
+          request: true,
+          requestBody: true,
+          requestHeader: true,
+          responseBody: true,
+          responseHeader: false,
+          compact: false,
+        ),
+      );
+
+      final headers = {
+        'Authorization': 'Bearer ${isProd ? AppStorage.getToken() : AppConstants.token}',
+      };
+
+      final response = await authDio.post(
+        path,
+        data: data,
+        queryParameters: query,
+        options: Options(
+          headers: headers,
+          contentType: "application/json",
+          responseType: ResponseType.json,
+        ),
+      );
+
+      return response.data;
+    } on Exception catch (error) {
+      return ExceptionHandler.handleError(error);
+    }
+  }
+
+  Future<dynamic> patchAuth({
+    required String path,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? data,
+    String? token,
+  }) async {
+    try {
+      final authDio = Dio();
+
+      authDio.interceptors.clear();
+
+      authDio.interceptors.add(
+        PrettyDioLogger(
+          error: true,
+          request: true,
+          requestBody: true,
+          requestHeader: true,
+          responseBody: true,
+          responseHeader: false,
+          compact: false,
+        ),
+      );
+
+      final headers = {
+        'Authorization': 'Bearer ${isProd ? AppStorage.getToken() : AppConstants.token}',
+      };
+
+      final response = await authDio.patch(
+        path,
+        data: data,
+        queryParameters: query,
+        options: Options(
+          headers: headers,
+          contentType: "application/json",
+          responseType: ResponseType.json,
+        ),
       );
 
       return response.data;

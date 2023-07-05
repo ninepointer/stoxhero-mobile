@@ -50,5 +50,15 @@ class AppPages {
       page: () => OrdersView(),
       binding: OrdersBinding(),
     ),
+    GetPage(
+      name: AppRoutes.tenxDashboard,
+      page: () => TenxDashboardView(),
+      binding: TenxTradingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.tenxSearchSymbol,
+      page: () => TenxSearchSymbolView(),
+      binding: TenxTradingBinding(),
+    ),
   ];
 }

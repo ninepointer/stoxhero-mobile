@@ -9,6 +9,7 @@ class CommonFilledButton extends StatelessWidget {
   final EdgeInsets? margin;
   final VoidCallback? onPressed;
   final bool isLoading;
+  final Color? bgColor;
 
   const CommonFilledButton({
     Key? key,
@@ -18,6 +19,7 @@ class CommonFilledButton extends StatelessWidget {
     this.width,
     this.onPressed,
     this.isLoading = false,
+    this.bgColor,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class CommonFilledButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
+          backgroundColor: bgColor ?? AppColors.primary,
           shadowColor: AppColors.primary.shade100,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),

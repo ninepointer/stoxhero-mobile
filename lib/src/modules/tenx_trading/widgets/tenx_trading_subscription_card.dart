@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../core/core.dart';
 import '../../../data/data.dart';
+import '../../modules.dart';
 
-class TenxTradingSubscriptionCard extends StatelessWidget {
+class TenxTradingSubscriptionCard extends GetView<TenxTradingController> {
   final TenxActiveSubscription subscription;
+  final bool isActive;
 
   const TenxTradingSubscriptionCard({
     super.key,
     required this.subscription,
+    required this.isActive,
   });
 
   @override
@@ -70,8 +74,24 @@ class TenxTradingSubscriptionCard extends StatelessWidget {
           trailing: CommonFilledButton(
             width: 150,
             height: 32,
-            onPressed: () {},
-            label: 'Start Trading',
+            onPressed: isActive
+                ? () {
+                    controller.selectedSubscriptionId(subscription.sId);
+                    controller.selectedSubscription(subscription);
+                    controller.loadData();
+                    Get.toNamed(AppRoutes.tenxDashboard);
+                  }
+                : () {
+                    controller.selectedSubscriptionId(subscription.sId);
+                    controller.selectedSubscription(subscription);
+                    controller.purchaseIntent();
+                    controller.calculateUserWalletAmount();
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => TenxBuySubscriptionBottomSheet(),
+                    );
+                  },
+            label: isActive ? 'Start Trading' : 'Unlock',
           ),
         ),
       ],

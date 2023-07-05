@@ -15,6 +15,8 @@ class WalletController extends BaseController<WalletRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
+  final totalCashAmount = RxNum(0);
+
   final walletTransactionsList = <WalletTransaction>[].obs;
 
   void loadData() async {
@@ -26,7 +28,11 @@ class WalletController extends BaseController<WalletRepository> {
     try {
       final RepoResponse<WalletTransactionsListResponse> response = await repository.getWalletTransactionsList();
       if (response.data != null) {
+        totalCashAmount(0);
         walletTransactionsList((response.data?.data?.transactions ?? []));
+        walletTransactionsList.forEach((element) {
+          totalCashAmount.value += element.amount ?? 0;
+        });
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

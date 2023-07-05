@@ -16,25 +16,25 @@ class WalletView extends GetView<WalletController> {
             child: Column(
               children: [
                 WalletCard(
-                  label: 'Deposite',
-                  value: '₹ 500',
+                  label: 'Deposit',
+                  value: '₹ 0.00',
                   iconData: Icons.account_balance_wallet_rounded,
                   buttonLabel: 'Add Money',
-                  onPressed: () {},
+                  onPressed: null,
                 ),
                 WalletCard(
                   label: 'Cash',
-                  value: '₹ 250',
+                  value: FormatHelper.formatNumbers(controller.totalCashAmount.value),
                   iconData: Icons.payments_rounded,
-                  buttonLabel: 'Withdraw',
-                  onPressed: () {},
+                  buttonLabel: 'Withdrawal',
+                  onPressed: null,
                 ),
                 WalletCard(
-                  label: 'Bouns',
-                  value: '₹ 3,500',
+                  label: 'Bonus',
+                  value: '₹ 0.00',
                   iconData: Icons.redeem_rounded,
                   buttonLabel: 'Redeem',
-                  onPressed: () {},
+                  onPressed: null,
                 ),
                 SizedBox(height: 16),
                 if (controller.walletTransactionsList.isNotEmpty)
@@ -56,7 +56,7 @@ class WalletView extends GetView<WalletController> {
                         label: trans.title,
                         subtitle: trans.description,
                         dateTime: FormatHelper.formatDate(trans.transactionDate),
-                        amount: FormatHelper.formatNumbers(trans.amount),
+                        amount: trans.amount,
                       );
                     },
                   ),

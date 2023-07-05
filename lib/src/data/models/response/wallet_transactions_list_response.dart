@@ -23,14 +23,14 @@ class WalletTransactionsListResponse {
 }
 
 class WalletDetails {
-  String? sId;
+  String? id;
   UserId? userId;
   List<WalletTransaction>? transactions;
   String? createdOn;
   String? createdBy;
 
   WalletDetails({
-    this.sId,
+    this.id,
     this.userId,
     this.transactions,
     this.createdOn,
@@ -38,7 +38,7 @@ class WalletDetails {
   });
 
   WalletDetails.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     userId = json['userId'] != null ? new UserId.fromJson(json['userId']) : null;
     if (json['transactions'] != null) {
       transactions = <WalletTransaction>[];
@@ -52,7 +52,7 @@ class WalletDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     if (this.userId != null) {
       data['userId'] = this.userId!.toJson();
     }
@@ -66,21 +66,21 @@ class WalletDetails {
 }
 
 class UserId {
-  String? sId;
+  String? id;
   String? firstName;
   String? lastName;
 
-  UserId({this.sId, this.firstName, this.lastName});
+  UserId({this.id, this.firstName, this.lastName});
 
   UserId.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
     return data;
@@ -91,19 +91,20 @@ class WalletTransaction {
   String? title;
   String? description;
   String? transactionDate;
-  int? amount;
+  num? amount;
   String? transactionId;
   String? transactionType;
-  String? sId;
+  String? id;
 
-  WalletTransaction(
-      {this.title,
-      this.description,
-      this.transactionDate,
-      this.amount,
-      this.transactionId,
-      this.transactionType,
-      this.sId});
+  WalletTransaction({
+    this.title,
+    this.description,
+    this.transactionDate,
+    this.amount,
+    this.transactionId,
+    this.transactionType,
+    this.id,
+  });
 
   WalletTransaction.fromJson(Map<String, dynamic> json) {
     title = json['title'];
@@ -112,7 +113,7 @@ class WalletTransaction {
     amount = json['amount'];
     transactionId = json['transactionId'];
     transactionType = json['transactionType'];
-    sId = json['_id'];
+    id = json['_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -123,7 +124,7 @@ class WalletTransaction {
     data['amount'] = this.amount;
     data['transactionId'] = this.transactionId;
     data['transactionType'] = this.transactionType;
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     return data;
   }
 }

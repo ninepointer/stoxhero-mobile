@@ -1,7 +1,13 @@
 import 'package:intl/intl.dart';
 
 class FormatHelper {
-  static String formatNumbers(dynamic value, {bool isNegative = false}) {
+  static String formatNumbers(
+    dynamic value, {
+    bool isNegative = false,
+    bool showSymbol = true,
+    int decimal = 2,
+  }) {
+    if (value == null || value.toString().isEmpty) return '0';
     if (value != null) {
       num number = value is int || value is double
           ? isNegative
@@ -12,13 +18,14 @@ class FormatHelper {
               : num.parse(value);
       final currencyFormat = NumberFormat.currency(
         locale: 'en_IN',
-        symbol: '₹ ',
+        symbol: showSymbol ? '₹ ' : '',
+        decimalDigits: decimal,
       );
 
       String formattedAmount = currencyFormat.format(number);
       return formattedAmount;
     } else {
-      return '-';
+      return '0';
     }
   }
 
@@ -26,6 +33,32 @@ class FormatHelper {
     if (value != null) {
       DateTime dateTime = DateTime.parse(value);
       String formattedString = DateFormat('dd/MM/yyyy').format(dateTime);
+      return formattedString;
+    } else {
+      return '-';
+    }
+  }
+
+  static String formatDateByMonth(String? value) {
+    if (value != null) {
+      final parsedDate = DateTime.parse(value);
+      final dayFormatter = DateFormat('d');
+      final day = dayFormatter.format(parsedDate);
+
+      String dayWithSuffix;
+      if (day.endsWith('1') && day != '11')
+        dayWithSuffix = '${day}st';
+      else if (day.endsWith('2') && day != '12')
+        dayWithSuffix = '${day}nd';
+      else if (day.endsWith('3') && day != '13')
+        dayWithSuffix = '${day}rd';
+      else
+        dayWithSuffix = '${day}th';
+
+      final monthFormatter = DateFormat('MMMM');
+      final month = monthFormatter.format(parsedDate);
+
+      final formattedString = '$dayWithSuffix $month';
       return formattedString;
     } else {
       return '-';

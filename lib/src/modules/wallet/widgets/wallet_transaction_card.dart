@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import '../../../core/core.dart';
@@ -7,7 +6,7 @@ class WalletTransactionCard extends StatelessWidget {
   final String? label;
   final String? dateTime;
   final String? subtitle;
-  final String? amount;
+  final dynamic amount;
 
   const WalletTransactionCard({
     Key? key,
@@ -58,9 +57,9 @@ class WalletTransactionCard extends StatelessWidget {
             ),
             SizedBox(width: 8),
             Text(
-              amount ?? '-',
+              FormatHelper.formatNumbers(amount),
               style: AppStyles.tsPrimaryMedium20.copyWith(
-                color: AppColors.success,
+                color: amount > 0 ? AppColors.success : AppColors.danger,
               ),
             )
           ],

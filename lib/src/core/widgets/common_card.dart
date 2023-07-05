@@ -6,6 +6,7 @@ class CommonCard extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
+  final bool hasBorder;
   final Function()? onTap;
 
   const CommonCard({
@@ -13,6 +14,7 @@ class CommonCard extends StatelessWidget {
     required this.children,
     this.padding,
     this.margin,
+    this.hasBorder = true,
     this.onTap,
   });
   @override
@@ -27,12 +29,14 @@ class CommonCard extends StatelessWidget {
               top: 16,
             ),
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: AppColors.netural.shade400,
-          ),
-          borderRadius: BorderRadius.circular(4),
-        ),
+        shape: hasBorder
+            ? RoundedRectangleBorder(
+                side: BorderSide(
+                  color: AppColors.netural.shade400,
+                ),
+                borderRadius: BorderRadius.circular(4),
+              )
+            : null,
         child: Container(
           padding: padding ?? EdgeInsets.all(12),
           width: double.infinity,

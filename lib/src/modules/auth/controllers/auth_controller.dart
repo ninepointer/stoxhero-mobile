@@ -158,7 +158,7 @@ class AuthController extends BaseController<AuthRepository> {
     isLoading(false);
   }
 
-  Future getUserDetails() async {
+  Future getUserDetails({bool navigate = true}) async {
     isLoading(true);
     try {
       final response = await repository.loginDetails();
@@ -166,9 +166,9 @@ class AuthController extends BaseController<AuthRepository> {
         await AppStorage.setUserDetails(response.data ?? LoginDetailsResponse());
         log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         Get.find<HomeController>().loadUserDetails();
-        Get.offAllNamed(AppRoutes.home);
+        if (navigate) Get.offAllNamed(AppRoutes.home);
       } else {
-        Get.offAllNamed(AppRoutes.signin);
+        if (navigate) Get.offAllNamed(AppRoutes.signin);
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {

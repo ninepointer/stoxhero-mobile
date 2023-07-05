@@ -100,74 +100,80 @@ class _TenxTradingViewState extends State<TenxTradingView> {
       () => Visibility(
         visible: !controller.isLoadingStatus,
         replacement: CommonLoader(),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 8),
-              //   child: Row(
-              //     children: [
-              //       buildInfoCard(),
-              //       SizedBox(width: 8),
-              //       buildInfoCard(),
-              //     ],
-              //   ),
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 8),
-              //   child: Row(
-              //     children: [
-              //       buildInfoCard(),
-              //       SizedBox(width: 8),
-              //       buildInfoCard(),
-              //     ],
-              //   ),
-              // )
-              CommonCard(
-                onTap: () => setState(() => isExpanded = !isExpanded),
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'What is TenX Trading / TenX ट्रेडिंग क्या है?',
-                        style: AppStyles.tsSecondaryRegular16,
-                      ),
-                      Icon(
-                        isExpanded ? Icons.expand_more_rounded : Icons.expand_less_rounded,
-                      ),
-                    ],
-                  ),
-                  if (isExpanded)
-                    Column(
+        child: RefreshIndicator(
+          onRefresh: controller.loadData,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 8),
+                //   child: Row(
+                //     children: [
+                //       buildInfoCard(),
+                //       SizedBox(width: 8),
+                //       buildInfoCard(),
+                //     ],
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 8),
+                //   child: Row(
+                //     children: [
+                //       buildInfoCard(),
+                //       SizedBox(width: 8),
+                //       buildInfoCard(),
+                //     ],
+                //   ),
+                // )
+                CommonCard(
+                  onTap: () => setState(() => isExpanded = !isExpanded),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(height: 16),
                         Text(
-                          AppData.tenxInfoEnglish,
-                          style: AppStyles.tsWhiteRegular14,
+                          'What is TenX Trading / TenX ट्रेडिंग क्या है?',
+                          style: AppStyles.tsSecondaryRegular16,
                         ),
-                        SizedBox(height: 16),
-                        Text(
-                          AppData.tenxInfoHindi,
-                          style: AppStyles.tsWhiteRegular14,
+                        Icon(
+                          isExpanded ? Icons.expand_more_rounded : Icons.expand_less_rounded,
                         ),
                       ],
                     ),
-                ],
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.tenxActiveSub.length,
-                itemBuilder: (context, index) {
-                  var sub = controller.tenxActiveSub[index];
-                  return TenxTradingSubscriptionCard(
-                    subscription: sub,
-                  );
-                },
-              ),
-              SizedBox(height: 36),
-            ],
+                    if (isExpanded)
+                      Column(
+                        children: [
+                          SizedBox(height: 16),
+                          Text(
+                            AppData.tenxInfoEnglish,
+                            style: AppStyles.tsWhiteRegular14,
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            AppData.tenxInfoHindi,
+                            style: AppStyles.tsWhiteRegular14,
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.tenxActiveSub.length,
+                  itemBuilder: (context, index) {
+                    var sub = controller.tenxActiveSub[index];
+                    return Obx(
+                      () => TenxTradingSubscriptionCard(
+                        subscription: sub,
+                        isActive: controller.userSubscriptionsIds.contains(sub.sId),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: 36),
+              ],
+            ),
           ),
         ),
       ),

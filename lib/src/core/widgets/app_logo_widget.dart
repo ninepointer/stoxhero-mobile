@@ -29,9 +29,12 @@ class AppLogoWidget extends StatelessWidget {
             ),
             if (hasLabel) SizedBox(height: 16),
             if (hasLabel)
-              Text(
-                AppConstants.appName,
-                style: AppStyles.tsWhiteMedium20,
+              Material(
+                color: Colors.transparent,
+                child: Text(
+                  AppConstants.appName,
+                  style: AppStyles.tsWhiteMedium20,
+                ),
               )
           ],
         ),

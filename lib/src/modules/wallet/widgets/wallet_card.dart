@@ -7,7 +7,7 @@ class WalletCard extends StatelessWidget {
   final String value;
   final IconData iconData;
   final String buttonLabel;
-  final Function() onPressed;
+  final Function()? onPressed;
 
   const WalletCard({
     super.key,

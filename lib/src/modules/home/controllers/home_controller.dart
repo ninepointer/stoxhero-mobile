@@ -18,6 +18,7 @@ class HomeController extends GetxController {
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
+    Get.find<TenxTradingController>().loadUserDetails();
     Get.find<TenxTradingController>().getTenxTradingActiveSubs();
   }
 }

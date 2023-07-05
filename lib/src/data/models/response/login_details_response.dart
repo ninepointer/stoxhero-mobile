@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class LoginDetailsResponse {
   UserImageDetails? aadhaarCardFrontImage;
   UserImageDetails? aadhaarCardBackImage;
@@ -56,6 +55,7 @@ class LoginDetailsResponse {
   List<String>? contests;
   List<ProfilePortfolio>? portfolio;
   List<Referrals>? referrals;
+  List<Subscription>? subscription;
 
   LoginDetailsResponse({
     this.aadhaarCardFrontImage,
@@ -114,6 +114,7 @@ class LoginDetailsResponse {
     this.contests,
     this.portfolio,
     this.referrals,
+    this.subscription,
   });
 
   LoginDetailsResponse.fromJson(Map<String, dynamic> json) {
@@ -207,6 +208,12 @@ class LoginDetailsResponse {
         referrals!.add(new Referrals.fromJson(v));
       });
     }
+    if (json['subscription'] != null) {
+      subscription = <Subscription>[];
+      json['subscription'].forEach((v) {
+        subscription!.add(new Subscription.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -282,6 +289,9 @@ class LoginDetailsResponse {
     }
     if (this.referrals != null) {
       data['referrals'] = this.referrals!.map((v) => v.toJson()).toList();
+    }
+    if (this.subscription != null) {
+      data['subscription'] = this.subscription!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -428,27 +438,59 @@ class UserImageDetails {
 }
 
 class ProfilePortfolio {
-  String? activationDate;
-  String? portfolioId;
   String? sId;
+  String? activationDate;
+  PortfolioId? portfolioId;
 
-  ProfilePortfolio({
-    this.activationDate,
-    this.portfolioId,
-    this.sId,
-  });
+  ProfilePortfolio({this.sId, this.activationDate, this.portfolioId});
 
   ProfilePortfolio.fromJson(Map<String, dynamic> json) {
-    activationDate = json['activationDate'];
-    portfolioId = json['portfolioId'];
     sId = json['_id'];
+    activationDate = json['activationDate'];
+    portfolioId = json['portfolioId'] != null ? new PortfolioId.fromJson(json['portfolioId']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['activationDate'] = this.activationDate;
-    data['portfolioId'] = this.portfolioId;
     data['_id'] = this.sId;
+    data['activationDate'] = this.activationDate;
+    if (this.portfolioId != null) {
+      data['portfolioId'] = this.portfolioId!.toJson();
+    }
+    return data;
+  }
+}
+
+class PortfolioId {
+  String? sId;
+  String? portfolioAccount;
+  String? portfolioName;
+  String? portfolioType;
+  int? portfolioValue;
+
+  PortfolioId({
+    this.sId,
+    this.portfolioAccount,
+    this.portfolioName,
+    this.portfolioType,
+    this.portfolioValue,
+  });
+
+  PortfolioId.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    portfolioAccount = json['portfolioAccount'];
+    portfolioName = json['portfolioName'];
+    portfolioType = json['portfolioType'];
+    portfolioValue = json['portfolioValue'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['portfolioAccount'] = this.portfolioAccount;
+    data['portfolioName'] = this.portfolioName;
+    data['portfolioType'] = this.portfolioType;
+    data['portfolioValue'] = this.portfolioValue;
     return data;
   }
 }
@@ -483,6 +525,96 @@ class Referrals {
     data['referralProgram'] = this.referralProgram;
     data['referralCurrency'] = this.referralCurrency;
     data['_id'] = this.sId;
+    return data;
+  }
+}
+
+class Subscription {
+  SubscriptionId? subscriptionId;
+  String? subscribedOn;
+  String? status;
+  String? sId;
+
+  Subscription({
+    this.subscriptionId,
+    this.subscribedOn,
+    this.status,
+    this.sId,
+  });
+
+  Subscription.fromJson(Map<String, dynamic> json) {
+    subscriptionId = json['subscriptionId'] != null ? new SubscriptionId.fromJson(json['subscriptionId']) : null;
+    subscribedOn = json['subscribedOn'];
+    status = json['status'];
+    sId = json['_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.subscriptionId != null) {
+      data['subscriptionId'] = this.subscriptionId!.toJson();
+    }
+    data['subscribedOn'] = this.subscribedOn;
+    data['status'] = this.status;
+    data['_id'] = this.sId;
+    return data;
+  }
+}
+
+class SubscriptionId {
+  String? sId;
+  PortfolioDetails? portfolio;
+
+  SubscriptionId({
+    this.sId,
+    this.portfolio,
+  });
+
+  SubscriptionId.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    portfolio = json['portfolio'] != null ? new PortfolioDetails.fromJson(json['portfolio']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    if (this.portfolio != null) {
+      data['portfolio'] = this.portfolio!.toJson();
+    }
+    return data;
+  }
+}
+
+class PortfolioDetails {
+  String? sId;
+  String? portfolioAccount;
+  String? portfolioName;
+  String? portfolioType;
+  int? portfolioValue;
+
+  PortfolioDetails({
+    this.sId,
+    this.portfolioAccount,
+    this.portfolioName,
+    this.portfolioType,
+    this.portfolioValue,
+  });
+
+  PortfolioDetails.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    portfolioAccount = json['portfolioAccount'];
+    portfolioName = json['portfolioName'];
+    portfolioType = json['portfolioType'];
+    portfolioValue = json['portfolioValue'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['portfolioAccount'] = this.portfolioAccount;
+    data['portfolioName'] = this.portfolioName;
+    data['portfolioType'] = this.portfolioType;
+    data['portfolioValue'] = this.portfolioValue;
     return data;
   }
 }

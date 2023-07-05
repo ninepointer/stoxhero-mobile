@@ -6,3 +6,4 @@ export 'common_card.dart';
 export 'common_card_tile.dart';
 export 'common_loader.dart';
 export 'no_data_found.dart';
+export 'custom_tile.dart';
