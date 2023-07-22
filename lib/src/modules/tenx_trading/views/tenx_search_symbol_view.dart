@@ -11,12 +11,15 @@ class TenxSearchSymbolView extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
+        appBar: AppBar(
+          title: Text('Start Trading'),
+        ),
         body: SafeArea(
           bottom: false,
           child: Container(
             child: Column(
               children: [
-                SizedBox(height: 16),
+                SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: CommonTextField(
@@ -26,7 +29,7 @@ class TenxSearchSymbolView extends GetView<TenxTradingController> {
                     prefixIcon: Icon(Icons.search),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.close),
-                      onPressed: Get.back,
+                      onPressed: controller.searchTextController.clear,
                     ),
                     onChanged: controller.searchInstruments,
                   ),

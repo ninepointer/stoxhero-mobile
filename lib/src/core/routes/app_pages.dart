@@ -46,6 +46,11 @@ class AppPages {
       binding: PortfolioBinding(),
     ),
     GetPage(
+      name: AppRoutes.referrals,
+      page: () => ReferralsView(),
+      binding: ReferralsBinding(),
+    ),
+    GetPage(
       name: AppRoutes.orders,
       page: () => OrdersView(),
       binding: OrdersBinding(),
@@ -59,6 +64,11 @@ class AppPages {
       name: AppRoutes.tenxSearchSymbol,
       page: () => TenxSearchSymbolView(),
       binding: TenxTradingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contest,
+      page: () => ContestView(),
+      binding: ContestBinding(),
     ),
   ];
 }

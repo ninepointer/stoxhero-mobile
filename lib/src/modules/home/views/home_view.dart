@@ -22,7 +22,7 @@ class _HomeViewState extends State<HomeView> {
     AnalyticsView(),
     TenxTradingView(),
     WalletView(),
-    ReferralsView(),
+    ContestView(),
   ];
 
   @override
@@ -47,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
         Get.find<WalletController>().loadData();
         break;
       case 4:
-        Get.find<ReferralsController>().loadData();
+        Get.find<ContestController>().loadData();
         break;
       default:
     }
@@ -172,7 +172,7 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.groups),
                       SizedBox(height: 4),
                       Text(
-                        'Referrals',
+                        'Contest',
                         style: AppStyles.tsWhiteRegular12,
                       ),
                     ],

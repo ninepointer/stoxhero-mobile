@@ -16,3 +16,5 @@ export 'tenx_trading_instrument_trade_details_list_response.dart';
 export 'tenx_trading_position_list_response.dart';
 export 'instrument_live_price_list_response.dart';
 export 'tenx_trading_portfolio__details_response.dart';
+export 'upcoming_contest_list_response.dart';
+export 'completed_contest_list_response.dart';

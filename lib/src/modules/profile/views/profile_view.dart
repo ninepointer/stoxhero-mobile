@@ -62,17 +62,24 @@ class ProfileView extends GetView<ProfileController> {
               },
             ),
             ProfileListTile(
+              label: 'Referrals',
+              onTap: () {
+                Get.toNamed(AppRoutes.referrals);
+                Get.find<ReferralsController>().loadData();
+              },
+            ),
+            ProfileListTile(
               label: 'Orders',
               onTap: () {
-                Get.find<OrdersController>().loadData();
                 Get.toNamed(AppRoutes.orders);
+                Get.find<OrdersController>().loadData();
               },
             ),
             ProfileListTile(
               label: 'Portfolio',
               onTap: () {
-                Get.find<PortfolioController>().loadData();
                 Get.toNamed(AppRoutes.portfolio);
+                Get.find<PortfolioController>().loadData();
               },
             ),
             ProfileListTile(

@@ -119,8 +119,8 @@ class _TenxTradeOrdersTabViewState extends State<TenxTradeOrdersTabView> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 OrderCardTile(
-                                  label: 'Order ID',
-                                  value: order.orderId,
+                                  label: 'Date & Time',
+                                  value: FormatHelper.formatDateTime(order.tradeTime),
                                 ),
                                 OrderCardTile(
                                   isRightAlign: true,
@@ -136,8 +136,8 @@ class _TenxTradeOrdersTabViewState extends State<TenxTradeOrdersTabView> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 OrderCardTile(
-                                  label: 'Time',
-                                  value: FormatHelper.formatDateTime(order.tradeTime),
+                                  label: 'Order ID',
+                                  value: order.orderId,
                                 ),
                               ],
                             )

@@ -28,7 +28,6 @@ class PortfolioController extends BaseController<PortfolioRepository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           portfoliList(response.data?.data ?? []);
-          Get.toNamed(AppRoutes.portfolio);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

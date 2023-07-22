@@ -82,7 +82,7 @@ class PortfolioCard extends GetView<PortfolioController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         PortfolioCardTile(
-                          label: 'Invested Amount',
+                          label: 'Opening Balance',
                           value: FormatHelper.formatNumbers(
                             portfolio.investedAmount,
                             isNegative: true,
@@ -90,7 +90,7 @@ class PortfolioCard extends GetView<PortfolioController> {
                         ),
                         PortfolioCardTile(
                           isRightAlign: true,
-                          label: 'Cash Balance',
+                          label: 'Available Margin',
                           value: FormatHelper.formatNumbers(portfolio.cashBalance),
                         ),
                       ],
@@ -117,7 +117,7 @@ class PortfolioCard extends GetView<PortfolioController> {
             ],
           ),
         ),
-      ),
+      )
     );
   }
 }

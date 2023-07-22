@@ -1,6 +1,7 @@
+import '../../../main.dart';
+
 class AppUrls {
-  static const String baseURL = 'https://stoxhero.com';
-  // static const String baseURL = 'http://43.204.7.180';
+  static const String baseURL = isTesting ? 'http://43.204.7.180' : 'https://stoxhero.com';
   static const String apiURL = '$baseURL/api/v1';
 
   static const String tenx = '$apiURL/tenX';
@@ -48,4 +49,7 @@ class AppUrls {
   static const String inActiveInstrument = "$apiURL/inactiveInstrument";
   static const String purchaseIntent = "$tenx/capturepurchaseintent";
   static const String purchaseSubscription = "$apiURL/userwallet/deduct";
+
+  static const String upComingContests = "$apiURL/dailycontest/contests/upcoming";
+  static const String completedContests = "$apiURL/dailycontest/contests/completed";
 }

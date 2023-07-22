@@ -15,6 +15,7 @@ class AppBinding extends Bindings {
     Get.put(OrdersRepository(), permanent: true);
     Get.put(WalletRepository(), permanent: true);
     Get.put(AnalyticsRepository(), permanent: true);
+    Get.put(ContestRepository(), permanent: true);
 
     Get.put(AuthController(), permanent: true);
     Get.put(HomeController(), permanent: true);
@@ -25,5 +26,6 @@ class AppBinding extends Bindings {
     Get.put(OrdersController(), permanent: true);
     Get.put(WalletController(), permanent: true);
     Get.put(AnalyticsController(), permanent: true);
+    Get.put(ContestController(), permanent: true);
   }
 }

@@ -31,12 +31,13 @@ class SplashController extends GetxController {
 
     String? token = AppStorage.getToken();
     await Future.delayed(Duration(seconds: 1));
+    await Get.find<AuthController>().getUserDetails();
     try {
-      if (token == null || token.isEmpty) {
-        Get.offAllNamed(AppRoutes.signin);
-      } else {
-        await Get.find<AuthController>().getUserDetails();
-      }
+      // if (token == null || token.isEmpty) {
+      //   Get.offAllNamed(AppRoutes.signin);
+      // } else {
+      //   await Get.find<AuthController>().getUserDetails();
+      // }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

@@ -346,11 +346,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         data.toJson(),
       );
       log(response.data.toString());
-      log(response.data!.message.toString());
+      log(response.error!.message.toString());
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successfull');
         await getTenxPositionsList();
         await getTenxTradingPortfolioDetails();
+      } else if (response.data?.status == "Failed") {
+        log(response.error!.message!.toString());
+        SnackbarHelper.showSnackbar(response.error?.message);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
