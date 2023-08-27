@@ -36,16 +36,20 @@ class _SigninViewState extends State<SigninView> {
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      AppLogoWidget(logoSize: 80),
-                      SizedBox(height: 50),
+                      Image.asset(
+                        'assets/images/signin.png',
+                        width: 200,
+                        height: 200,
+                      ),
+                      SizedBox(height: 42),
                       Text(
                         'Let\'s get started with Stock trading!',
                         textAlign: TextAlign.center,
-                        style: AppStyles.tsWhiteMedium20.copyWith(
-                          fontSize: 28,
+                        style: AppStyles.tsGreyMedium20.copyWith(
+                          fontSize: 24,
                         ),
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height: 42),
                       Text(
                         'Please provide your mobile number, a six digit OTP will be send for verification.',
                         textAlign: TextAlign.center,
@@ -64,7 +68,7 @@ class _SigninViewState extends State<SigninView> {
                           ],
                           prefixIcon: Icon(
                             Icons.phone,
-                            color: AppColors.netural.shade100,
+                            color: AppColors.netural.shade400,
                           ),
                           validator: (value) {
                             RegExp regExp = RegExp(r'^[6-9]\d{9}$');
@@ -92,7 +96,7 @@ class _SigninViewState extends State<SigninView> {
                       Center(
                         child: Text(
                           'Learn and earn from stock market trading.\nClaim your free account now!',
-                          style: AppStyles.tsWhiteRegular16,
+                          style: AppStyles.tsGreyRegular16,
                           textAlign: TextAlign.center,
                         ),
                       ),

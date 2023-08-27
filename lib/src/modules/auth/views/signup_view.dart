@@ -35,20 +35,24 @@ class _SignupViewState extends State<SignupView> {
                 SliverFillRemaining(
                   hasScrollBody: false,
                   child: Container(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AppLogoWidget(logoSize: 80),
-                        SizedBox(height: 50),
+                        Image.asset(
+                          'assets/images/signup.png',
+                          width: 200,
+                          height: 200,
+                        ),
+                        SizedBox(height: 32),
                         Text(
                           'Join us now to learn and earn from the Stock Market!',
                           textAlign: TextAlign.center,
-                          style: AppStyles.tsWhiteMedium20.copyWith(
-                            fontSize: 24,
+                          style: AppStyles.tsGreyMedium20.copyWith(
+                            fontSize: 20,
                           ),
                         ),
-                        SizedBox(height: 50),
+                        SizedBox(height: 18),
                         Text(
                           'Please provide your details, confirmation will be send on the given email.',
                           textAlign: TextAlign.center,
@@ -136,7 +140,7 @@ class _SignupViewState extends State<SignupView> {
                         Center(
                           child: Text(
                             'Already have an account?',
-                            style: AppStyles.tsWhiteRegular16,
+                            style: AppStyles.tsGreyRegular16,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -145,6 +149,7 @@ class _SignupViewState extends State<SignupView> {
                           label: 'Sign In',
                           onPressed: () => Get.toNamed(AppRoutes.signin),
                         ),
+                        SizedBox(height: 24),
                       ],
                     ),
                   ),

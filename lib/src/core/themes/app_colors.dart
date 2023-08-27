@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:stoxhero/src/core/core.dart';
 
 class AppColors {
-  static final MaterialColor primary = Color(0xFF6842FF).toMaterialColor();
-  static final MaterialColor secondary = Color(0xFFEFA600).toMaterialColor();
-  static final MaterialColor netural = Color(0xFF312E41).toMaterialColor();
+  static final MaterialColor primary = Color(0xFF5634D0).toMaterialColor();
+  static final MaterialColor secondary = Color(0xFFFCBE69).toMaterialColor();
+  static final MaterialColor netural = Color(0xFF070625).toMaterialColor();
 
   static final MaterialColor black = Color(0xFF222222).toMaterialColor();
   static final MaterialColor white = Color(0xFFFFFFFF).toMaterialColor();

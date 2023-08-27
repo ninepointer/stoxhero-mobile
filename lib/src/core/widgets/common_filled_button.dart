@@ -32,7 +32,7 @@ class CommonFilledButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           backgroundColor: bgColor ?? AppColors.primary,
-          shadowColor: AppColors.primary.shade100,
+          shadowColor: AppColors.primary.shade500,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
           ),

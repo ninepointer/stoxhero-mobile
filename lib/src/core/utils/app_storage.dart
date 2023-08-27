@@ -6,6 +6,14 @@ class AppStorage {
 
   static final _box = GetStorage();
 
+  static Future setNewUserStatus(bool data) async {
+    await _box.write(AppStorageKeys.newUser, data);
+  }
+
+  static bool getNewUserStatus() {
+    return _box.read(AppStorageKeys.newUser) ?? true;
+  }
+
   static Future setToken(String? data) async {
     await _box.write(AppStorageKeys.token, data);
   }
@@ -30,4 +38,5 @@ class AppStorage {
 class AppStorageKeys {
   static const String token = 'token';
   static const String userDetails = 'userDetails';
+  static const String newUser = 'newUser';
 }

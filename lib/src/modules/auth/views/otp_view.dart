@@ -22,16 +22,18 @@ class OtpView extends GetView<AuthController> {
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      AppLogoWidget(logoSize: 80),
-                      SizedBox(height: 50),
+                      Image.asset(
+                        'assets/images/otp.png',
+                        width: 200,
+                        height: 200,
+                      ),
+                      SizedBox(height: 40),
                       Text(
                         'Please enter your verification code!',
                         textAlign: TextAlign.center,
-                        style: AppStyles.tsWhiteMedium20.copyWith(
-                          fontSize: 28,
-                        ),
+                        style: AppStyles.tsGreyMedium24,
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height: 34),
                       Text(
                         'We have sent a six digit verification code to \n+91 ${controller.mobileTextController.text}',
                         textAlign: TextAlign.center,
@@ -54,10 +56,13 @@ class OtpView extends GetView<AuthController> {
                             defaultPinTheme: PinTheme(
                               width: 64,
                               height: 64,
-                              textStyle: AppStyles.tsWhiteSemiBold22,
+                              textStyle: AppStyles.tsGreySemiBold20,
                               decoration: BoxDecoration(
-                                color: AppColors.netural.shade700,
                                 borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: AppColors.netural.shade50,
+                                  width: 2,
+                                ),
                               ),
                             ),
                             focusedPinTheme: PinTheme(
@@ -65,7 +70,6 @@ class OtpView extends GetView<AuthController> {
                               height: 64,
                               textStyle: AppStyles.tsWhiteSemiBold22,
                               decoration: BoxDecoration(
-                                color: AppColors.netural.shade700,
                                 borderRadius: BorderRadius.circular(4),
                                 border: Border.all(
                                   color: AppColors.primary,
@@ -76,9 +80,8 @@ class OtpView extends GetView<AuthController> {
                             errorPinTheme: PinTheme(
                               width: 64,
                               height: 64,
-                              textStyle: AppStyles.tsWhiteSemiBold22,
+                              textStyle: AppStyles.tsPrimarySemiBold20,
                               decoration: BoxDecoration(
-                                color: AppColors.netural.shade700,
                                 borderRadius: BorderRadius.circular(4),
                                 border: Border.all(
                                   color: AppColors.danger.shade900,

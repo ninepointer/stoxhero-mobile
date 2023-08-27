@@ -46,7 +46,7 @@ class CommonTextField extends StatelessWidget {
           if (hasLabel)
             Text(
               hintText,
-              style: AppStyles.tsPrimaryRegular14,
+              style: AppStyles.tsGreyRegular14,
             ),
           if (hasLabel) SizedBox(height: 4),
           AbsorbPointer(
@@ -60,10 +60,10 @@ class CommonTextField extends StatelessWidget {
               keyboardType: keyboardType,
               obscureText: obscureText ?? false,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              style: AppStyles.tsWhiteRegular16,
+              style: AppStyles.tsPrimaryRegular16,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(16),
-                filled: true,
+                filled: false,
                 fillColor: AppColors.netural.shade700,
                 hintText: hintText,
                 hintStyle: AppStyles.tsGreyRegular14,
@@ -80,7 +80,9 @@ class CommonTextField extends StatelessWidget {
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
-                  borderSide: BorderSide.none,
+                  borderSide: BorderSide(
+                    color: AppColors.netural.shade50,
+                  ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),

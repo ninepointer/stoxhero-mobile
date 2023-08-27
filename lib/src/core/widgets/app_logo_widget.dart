@@ -27,13 +27,13 @@ class AppLogoWidget extends StatelessWidget {
                 width: logoSize ?? 150,
               ),
             ),
-            if (hasLabel) SizedBox(height: 16),
+            if (hasLabel) SizedBox(height: 24),
             if (hasLabel)
               Material(
                 color: Colors.transparent,
                 child: Text(
                   AppConstants.appName,
-                  style: AppStyles.tsWhiteMedium20,
+                  style: AppStyles.tsGreyMedium24,
                 ),
               )
           ],
