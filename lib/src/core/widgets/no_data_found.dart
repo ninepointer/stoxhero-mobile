@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:stoxhero/src/core/core.dart';
 
 class NoDataFound extends StatelessWidget {
-  const NoDataFound({Key? key}) : super(key: key);
+  final String? label;
+  const NoDataFound({
+    Key? key,
+    this.label,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,7 @@ class NoDataFound extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text(
-            'No Data Found!',
+            label ?? 'No Data Found!',
             style: AppStyles.tsWhiteRegular16,
           ),
         ],

@@ -16,9 +16,11 @@ class AppUrls {
   static const String updateUserDetails = "$apiURL/userdetail/me";
   static const String myPortfolio = "$apiURL/portfolio/myPortfolio";
 
+  static const String earnings = "$apiURL/earnings";
   static const String referralsActive = "$apiURL/referrals/active";
   static const String referralsLeaderboard = "$apiURL/referrals/leaderboard";
   static const String referralsMyRank = "$apiURL/referrals/myrank";
+  static const String myReferrals = "$apiURL/myreferrals";
   static const String tenxActive = "$apiURL/tenx/active";
 
   static const String infinityTradeTodaysOrders = "$apiURL/infinityTrade/my/todayorders";
@@ -52,4 +54,5 @@ class AppUrls {
 
   static const String upComingContests = "$apiURL/dailycontest/contests/upcoming";
   static const String completedContests = "$apiURL/dailycontest/contests/completed";
+  static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
 }

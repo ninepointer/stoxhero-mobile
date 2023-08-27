@@ -18,13 +18,14 @@ class SplashView extends GetView<SplashController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AppLogoWidget(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 56,
-                    vertical: 24,
-                  ),
-                  child: LinearProgressIndicator(
-                    backgroundColor: AppColors.netural,
+                SizedBox(height: 16),
+                Container(
+                  width: 100,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: LinearProgressIndicator(
+                      backgroundColor: AppColors.netural,
+                    ),
                   ),
                 ),
               ],
@@ -40,7 +41,7 @@ class SplashView extends GetView<SplashController> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

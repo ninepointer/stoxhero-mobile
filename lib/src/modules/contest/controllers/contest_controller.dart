@@ -18,11 +18,14 @@ class ContestController extends BaseController<ContestRepository> {
   final upComingContestList = <UpComingContest>[].obs;
   final premiumContestList = <UpComingContest>[].obs;
   final freeContestList = <UpComingContest>[].obs;
+  final tempCompletedContestList = <CompletedContest>[].obs;
   final completedContestList = <CompletedContest>[].obs;
+  final completedContestPnlList = <CompletedContestPnl>[].obs;
 
   Future loadData() async {
     await getUpComingContestList();
     await getCompletedContestList();
+    await getCompletedContestPnlList();
   }
 
   Future getUpComingContestList() async {
@@ -41,9 +44,6 @@ class ContestController extends BaseController<ContestRepository> {
                 : premiumContestList.add(contest);
           });
         }
-
-        log('freeContestList : ${freeContestList.length}');
-        log('premiumContestList : ${premiumContestList.length}');
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -59,7 +59,33 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       final RepoResponse<CompletedContestListResponse> response = await repository.getCompletedContestList();
       if (response.data != null) {
-        completedContestList(response.data?.data ?? []);
+        tempCompletedContestList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getCompletedContestPnlList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<CompletedContestPnlListResponse> response = await repository.getCompletedContestPnlList();
+      if (response.data != null) {
+        List<CompletedContest> tempList = [];
+        completedContestPnlList(response.data?.data ?? []);
+        if (tempCompletedContestList.isNotEmpty && completedContestPnlList.isNotEmpty) {
+          for (var pnl in completedContestPnlList) {
+            for (var contest in tempCompletedContestList) {
+              if (pnl.contestId == contest.id) tempList.add(contest);
+            }
+          }
+        }
+        completedContestList(tempList);
+        log('tempCompletedContestList : ${completedContestList.length.toString()}');
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

@@ -13,4 +13,5 @@ class AppRoutes {
   static const String tenxDashboard = '/tenx_dashboard';
   static const String tenxSearchSymbol = '/tenx_search_symbol';
   static const String contest = '/contest';
+  static const String pastContest = '/contest/past_contest';
 }

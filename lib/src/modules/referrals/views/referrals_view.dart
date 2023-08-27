@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+import '../../../data/data.dart';
 
 class ReferralsView extends GetView<ReferralsController> {
+  String getReferralMessage() {
+    return "AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR Join me at StoxHero - Options Trading and Investment Platform 🤝 👉 Get 10,00,000 virtual currency in your account to start option trading using my referral code 👉 Join the community of ace traders and learn real-time options trading 👉 Participate in TenX Trading and earn 10% real cash on the profit you will make on the platform 📲 Visit https://www.stoxhero.com/signup?referral=${controller.userDetailsData.myReferralCode} Use my below invitation code 👇 and get INR ₹10,00,000 in your wallet and start trading My Referral Code to join the StoxHero: ${controller.userDetailsData.myReferralCode}";
+  }
+
+  num getTotalUserReferralEarning(List<Referrals> referrals) {
+    num amount = 0;
+    for (var item in referrals) {
+      amount += item.referralEarning ?? 0;
+    }
+    return amount;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,18 +43,6 @@ class ReferralsView extends GetView<ReferralsController> {
                       style: AppStyles.tsSecondaryRegular20,
                     ),
                   ),
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 16),
-                  //   child: Center(
-                  //     child: ClipRRect(
-                  //       borderRadius: BorderRadius.circular(16),
-                  //       child: Image.asset(
-                  //         'assets/images/referrals.png',
-                  //         width: 250,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Card(
@@ -57,7 +62,7 @@ class ReferralsView extends GetView<ReferralsController> {
                             if (controller.activeReferrals.value != null)
                               Text(
                                 'Get ${controller.activeReferrals.value?.currency ?? ''} ${controller.activeReferrals.value?.rewardPerReferral ?? ''} for every referral in\nyour StoxHero wallet',
-                                style: AppStyles.tsPrimaryRegular14,
+                                style: AppStyles.tsPrimaryRegular16,
                                 textAlign: TextAlign.center,
                               ),
                             if (controller.activeReferrals.value != null) SizedBox(height: 8),
@@ -104,7 +109,9 @@ class ReferralsView extends GetView<ReferralsController> {
                                           visualDensity: VisualDensity.compact,
                                           splashRadius: 24,
                                           padding: EdgeInsets.zero,
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Clipboard.setData(ClipboardData(text: getReferralMessage()));
+                                          },
                                           icon: Icon(
                                             Icons.copy,
                                             size: 20,
@@ -116,7 +123,9 @@ class ReferralsView extends GetView<ReferralsController> {
                                           visualDensity: VisualDensity.compact,
                                           splashRadius: 24,
                                           padding: EdgeInsets.zero,
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Share.share(getReferralMessage());
+                                          },
                                           icon: Icon(
                                             Icons.share,
                                             size: 20,
@@ -177,7 +186,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                           ),
                                           SizedBox(height: 2),
                                           Text(
-                                            '00',
+                                            controller.earnings.value.joined?.toString() ?? '0',
                                             style: AppStyles.tsWhiteMedium16,
                                           ),
                                         ],
@@ -228,7 +237,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                           ),
                                           SizedBox(height: 2),
                                           Text(
-                                            '00',
+                                            controller.earnings.value.earnings?.toString() ?? '0',
                                             style: AppStyles.tsWhiteMedium16,
                                           ),
                                         ],
@@ -278,42 +287,28 @@ class ReferralsView extends GetView<ReferralsController> {
                                 Spacer(),
                                 Icon(
                                   Icons.qr_code_2_rounded,
-                                  size: 50,
+                                  size: 42,
                                 )
                               ],
-                            )
+                            ),
+                            SizedBox(height: 16),
+                            QrImage(
+                              data:
+                                  'https://www.stoxhero.com/signup?referral=${controller.userDetailsData.myReferralCode}',
+                              version: QrVersions.auto,
+                              foregroundColor: AppColors.primary,
+                              size: 200,
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  ListTile(
-                    tileColor: AppColors.netural.shade600,
-                    title: Text(
-                      'Friends Leaderboard',
-                      style: AppStyles.tsPrimaryRegular18,
-                    ),
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 1,
-                    padding: EdgeInsets.zero,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return ReferralsLeaderboardCard();
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  ListTile(
-                    tileColor: AppColors.netural.shade600,
-                    title: Text(
-                      'Referral Leaderboard',
-                      style: AppStyles.tsPrimaryRegular18,
-                    ),
-                  ),
+                  CustomTile(label: 'Referral Leaderboard'),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: controller.referralsLeaderboardList.length,
+                    padding: EdgeInsets.zero,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       var user = controller.referralsLeaderboardList[index];
@@ -325,7 +320,24 @@ class ReferralsView extends GetView<ReferralsController> {
                       );
                     },
                   ),
-                  SizedBox(height: 36),
+                  SizedBox(height: 16),
+                  CustomTile(label: 'Friends Leaderboard'),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: controller.myReferralsList.length,
+                    padding: EdgeInsets.zero,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      var user = controller.myReferralsList[index];
+                      return ReferralsLeaderboardCard(
+                        rank: '#${index + 1}',
+                        name: '${user.firstName!.capitalizeFirst} ${user.lastName!.capitalizeFirst}',
+                        count: user.referrals != null ? (user.referrals!.length).toString() : '0',
+                        earnings: getTotalUserReferralEarning(user.referrals ?? []),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 16),
                 ],
               ),
             ),

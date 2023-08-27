@@ -3,9 +3,9 @@ import 'package:stoxhero/src/data/data.dart';
 
 import '../../../core/core.dart';
 
-class ContestCard extends StatelessWidget {
-  final UpComingContest? contestDetails;
-  const ContestCard({
+class CompletedContestCard extends StatelessWidget {
+  final CompletedContest? contestDetails;
+  const CompletedContestCard({
     Key? key,
     this.contestDetails,
   }) : super(key: key);
@@ -28,34 +28,34 @@ class ContestCard extends StatelessWidget {
                 contestDetails?.contestName ?? '-',
                 style: AppStyles.tsSecondaryMedium16,
               ),
-              Spacer(),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.warning.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  'NIFTY',
-                  style: AppStyles.tsPrimaryMedium14.copyWith(
-                    color: AppColors.warning,
-                  ),
-                ),
-              ),
-              SizedBox(width: 12),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.info.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  'DAY',
-                  style: AppStyles.tsPrimaryMedium14.copyWith(
-                    color: AppColors.info,
-                  ),
-                ),
-              ),
+              // Spacer(),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              //   decoration: BoxDecoration(
+              //     color: AppColors.warning.withOpacity(0.1),
+              //     borderRadius: BorderRadius.circular(4),
+              //   ),
+              //   child: Text(
+              //     'NIFTY',
+              //     style: AppStyles.tsPrimaryMedium14.copyWith(
+              //       color: AppColors.warning,
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(width: 12),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              //   decoration: BoxDecoration(
+              //     color: AppColors.info.withOpacity(0.1),
+              //     borderRadius: BorderRadius.circular(4),
+              //   ),
+              //   child: Text(
+              //     'DAY',
+              //     style: AppStyles.tsPrimaryMedium14.copyWith(
+              //       color: AppColors.info,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -76,8 +76,8 @@ class ContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        '10 July, 10:00 AM',
-                        style: AppStyles.tsWhiteRegular14,
+                        FormatHelper.formatDateTimeToIST(contestDetails?.contestStartTime),
+                        style: AppStyles.tsWhiteMedium12,
                       ),
                     ],
                   ),
@@ -91,7 +91,7 @@ class ContestCard extends StatelessWidget {
                       SizedBox(height: 2),
                       Text(
                         '10 July, 3:20 PM',
-                        style: AppStyles.tsWhiteRegular14,
+                        style: AppStyles.tsWhiteMedium12,
                       ),
                     ],
                   ),
@@ -165,69 +165,26 @@ class ContestCard extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          color: AppColors.netural.shade700,
-          child: Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.info.withOpacity(0.1),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(4),
-                      ),
-                    ),
-                    child: Text(
-                      'Get Notified',
-                      style: AppStyles.tsPrimaryMedium14.copyWith(
-                        color: AppColors.info,
-                      ),
+        Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary.withOpacity(0.1),
+                  ),
+                  child: Text(
+                    'View Orders',
+                    style: AppStyles.tsPrimaryMedium14.copyWith(
+                      color: AppColors.secondary,
                     ),
                   ),
                 ),
               ),
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withOpacity(0.1),
-                    ),
-                    child: Text(
-                      'Start Trading',
-                      style: AppStyles.tsPrimaryMedium14.copyWith(
-                        color: AppColors.secondary,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.cyan.withOpacity(0.1),
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(4),
-                      ),
-                    ),
-                    child: Text(
-                      'Share',
-                      style: AppStyles.tsPrimaryMedium14.copyWith(
-                        color: AppColors.cyan,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );

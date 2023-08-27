@@ -19,6 +19,7 @@ class ContestView extends GetView<ContestController> {
             child: Column(
               children: [
                 CommonCard(
+                  onTap: () => Get.toNamed(AppRoutes.pastContest),
                   children: [
                     Row(
                       children: [
@@ -32,44 +33,38 @@ class ContestView extends GetView<ContestController> {
                     )
                   ],
                 ),
-                SizedBox(height: 16),
-                ListTile(
-                  tileColor: AppColors.netural.shade600,
-                  title: Text(
-                    'Premium Contest\'s',
-                    style: AppStyles.tsPrimaryRegular18,
+                SizedBox(height: 8),
+                if (controller.premiumContestList.isEmpty && controller.freeContestList.isEmpty)
+                  NoDataFound(
+                    label: 'No Upcoming Contest!',
                   ),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.premiumContestList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ContestCard(
-                      contestDetails: controller.premiumContestList[index],
-                    );
-                  },
-                ),
-                SizedBox(height: 16),
-                ListTile(
-                  tileColor: AppColors.netural.shade600,
-                  title: Text(
-                    'Free Contest\'s',
-                    style: AppStyles.tsPrimaryRegular18,
+                if (controller.premiumContestList.isNotEmpty) CustomTile(label: 'Premium Contest\'s'),
+                if (controller.premiumContestList.isNotEmpty)
+                  ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: controller.premiumContestList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return UpComingContestCard(
+                        contestDetails: controller.premiumContestList[index],
+                      );
+                    },
                   ),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.freeContestList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ContestCard(
-                      contestDetails: controller.freeContestList[index],
-                    );
-                  },
-                ),
+                SizedBox(height: 8),
+                if (controller.freeContestList.isNotEmpty) CustomTile(label: 'Free Contest\'s'),
+                if (controller.freeContestList.isNotEmpty)
+                  ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: controller.freeContestList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return UpComingContestCard(
+                        contestDetails: controller.freeContestList[index],
+                      );
+                    },
+                  ),
                 SizedBox(height: 36)
               ],
             ),

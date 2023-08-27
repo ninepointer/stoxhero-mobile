@@ -70,5 +70,11 @@ class AppPages {
       page: () => ContestView(),
       binding: ContestBinding(),
     ),
+    GetPage(
+      name: AppRoutes.pastContest,
+      page: () => PastContestView(),
+      binding: ContestBinding(),
+    ),
   ];
 }
+

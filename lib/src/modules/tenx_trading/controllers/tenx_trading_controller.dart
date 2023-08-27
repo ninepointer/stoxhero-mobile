@@ -119,15 +119,16 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       int index = tenxInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      if (index == -1) return FormatHelper.formatNumbers('00');
       String? price = tenxInstrumentTradeDetailsList[index].change?.toString();
-      return '${FormatHelper.formatNumbers(price, showSymbol: false)}%';
+      return FormatHelper.formatNumbers(price);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
     }
   }
 
   Future socketConnection() async {
+    List<TenxTradingInstrumentTradeDetails>? tempList = [];
     try {
       IO.Socket socket;
 
@@ -141,13 +142,25 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         socket.emit('userId', userDetails.value.sId);
         socket.emit('user-ticks', userDetails.value.sId);
       });
+      socket.on('index-tick', (data) {
+        print(data);
+        log('Socket : index-tick $data');
+      });
       socket.on('tick-room', (data) {
         // log('Socket : tick-room $data');
-        tenxInstrumentTradeDetailsList(
-          TenxTradingInstrumentTradeDetailsListResponse.fromJson(data).data,
-        );
+        tempList = TenxTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+        tempList?.forEach((element) {
+          if (tenxInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            int index = tenxInstrumentTradeDetailsList.indexWhere(
+              (stock) => stock.instrumentToken == element.instrumentToken,
+            );
+            tenxInstrumentTradeDetailsList.removeAt(index);
+            tenxInstrumentTradeDetailsList.insert(index, element);
+          } else {
+            tenxInstrumentTradeDetailsList.add(element);
+          }
+        });
       });
-
       socket.onDisconnect((_) => log('Socket : Disconnect'));
       socket.onConnectError((err) => log(err));
       socket.onError((err) => log(err));
@@ -346,7 +359,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         data.toJson(),
       );
       log(response.data.toString());
-      log(response.error!.message.toString());
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successfull');
         await getTenxPositionsList();

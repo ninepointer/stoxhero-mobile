@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class PastContestView extends StatelessWidget {
+import '../../../core/core.dart';
+import '../../modules.dart';
+
+class PastContestView extends GetView<ContestController> {
   const PastContestView({Key? key}) : super(key: key);
 
   @override
@@ -9,7 +13,30 @@ class PastContestView extends StatelessWidget {
       appBar: AppBar(
         title: Text('Past Contest'),
       ),
-      body: Container(),
+      body: Obx(
+        () => SingleChildScrollView(
+          child: Column(
+            children: [
+              if (controller.completedContestList.isEmpty)
+                NoDataFound(
+                  label: 'No Past Contest!',
+                ),
+              if (controller.completedContestList.isNotEmpty)
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.completedContestList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return CompletedContestCard(
+                      contestDetails: controller.completedContestList[index],
+                    );
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -18,3 +18,6 @@ export 'instrument_live_price_list_response.dart';
 export 'tenx_trading_portfolio__details_response.dart';
 export 'upcoming_contest_list_response.dart';
 export 'completed_contest_list_response.dart';
+export 'completed_contest_pnl_list_response.dart';
+export 'earning_response.dart';
+export 'my_referrals_response.dart';
