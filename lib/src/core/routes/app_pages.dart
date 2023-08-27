@@ -11,6 +11,10 @@ class AppPages {
       binding: SplashBinding(),
     ),
     GetPage(
+      name: AppRoutes.onBoarding,
+      page: () => OnBoardingView(),
+    ),
+    GetPage(
       name: AppRoutes.signin,
       page: () => SigninView(),
       binding: AuthBinding(),
