@@ -4,12 +4,14 @@ import '../../../core/core.dart';
 
 class ProfileListTile extends StatelessWidget {
   final String label;
+  final IconData? icon;
   final Function() onTap;
 
   const ProfileListTile({
     super.key,
     required this.label,
     required this.onTap,
+    this.icon,
   });
 
   @override
@@ -32,7 +34,7 @@ class ProfileListTile extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Icon(
-            Icons.now_widgets_rounded,
+            icon,
             color: AppColors.secondary,
             size: 20,
           ),
@@ -41,7 +43,10 @@ class ProfileListTile extends StatelessWidget {
           label,
           style: Theme.of(context).textTheme.tsRegular16,
         ),
-        trailing: Icon(Icons.chevron_right_rounded),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: AppColors.netural.shade50,
+        ),
         onTap: onTap,
       ),
     );

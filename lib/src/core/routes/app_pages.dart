@@ -45,6 +45,16 @@ class AppPages {
       binding: ProfileBinding(),
     ),
     GetPage(
+      name: AppRoutes.bankDetails,
+      page: () => BankDetailsView(),
+      binding: BankBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.kycDetails,
+      page: () => KycDetailsView(),
+      // binding: BankBinding(),
+    ),
+    GetPage(
       name: AppRoutes.portfolio,
       page: () => PortfolioView(),
       binding: PortfolioBinding(),
@@ -78,6 +88,20 @@ class AppPages {
       name: AppRoutes.pastContest,
       page: () => PastContestView(),
       binding: ContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.faq,
+      page: () => FaqView(),
+    ),
+    GetPage(
+      name: AppRoutes.tutorial,
+      page: () => TutorialView(),
+      binding: TutorialBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.careers,
+      page: () => CareerView(),
+      // binding: TutorialBinding(),
     ),
   ];
 }
