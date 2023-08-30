@@ -27,7 +27,7 @@ class WalletView extends GetView<WalletController> {
                   value: FormatHelper.formatNumbers(controller.totalCashAmount.value),
                   iconData: Icons.payments_rounded,
                   buttonLabel: 'Withdrawal',
-                  onPressed: null,
+                  onPressed: () => showBottomModalSheet(context),
                 ),
                 WalletCard(
                   label: 'Bonus',

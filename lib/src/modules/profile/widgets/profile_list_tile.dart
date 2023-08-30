@@ -4,19 +4,22 @@ import '../../../core/core.dart';
 
 class ProfileListTile extends StatelessWidget {
   final String label;
+  final IconData? icon;
   final Function() onTap;
 
   const ProfileListTile({
     super.key,
     required this.label,
     required this.onTap,
+    this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      margin: EdgeInsets.only(bottom: 16),
+      color: AppColors.white,
+      margin: EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
@@ -32,16 +35,19 @@ class ProfileListTile extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Icon(
-            Icons.now_widgets_rounded,
+            icon,
             color: AppColors.secondary,
             size: 20,
           ),
         ),
         title: Text(
           label,
-          style: AppStyles.tsWhiteRegular16,
+          style: AppStyles.tsGreyRegular16,
         ),
-        trailing: Icon(Icons.chevron_right_rounded),
+        trailing: Icon(
+          Icons.chevron_right_rounded,
+          color: AppColors.netural.shade50,
+        ),
         onTap: onTap,
       ),
     );

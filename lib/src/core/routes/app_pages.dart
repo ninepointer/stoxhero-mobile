@@ -1,4 +1,6 @@
 import 'package:get/route_manager.dart';
+import 'package:stoxhero/src/modules/faq/faq_index.dart';
+import 'package:stoxhero/src/modules/tutorial/tutorial_index.dart';
 
 import '../../modules/modules.dart';
 import 'routes.dart';
@@ -45,6 +47,16 @@ class AppPages {
       binding: ProfileBinding(),
     ),
     GetPage(
+      name: AppRoutes.bankDetails,
+      page: () => BankDetailsView(),
+      binding: BankBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.kycDetails,
+      page: () => KycDetailsView(),
+      // binding: BankBinding(),
+    ),
+    GetPage(
       name: AppRoutes.portfolio,
       page: () => PortfolioView(),
       binding: PortfolioBinding(),
@@ -73,6 +85,20 @@ class AppPages {
       name: AppRoutes.contest,
       page: () => ContestView(),
       binding: ContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.faq,
+      page: () => FaqView(),
+    ),
+    GetPage(
+      name: AppRoutes.tutorial,
+      page: () => TutorialView(),
+      binding: TutorialBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.careers,
+      page: () => CareerView(),
+      // binding: TutorialBinding(),
     ),
   ];
 }

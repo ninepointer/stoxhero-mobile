@@ -10,7 +10,7 @@ class CommonFilledButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
   final Color? bgColor;
-
+  final OutlinedBorder? shape;
   const CommonFilledButton({
     Key? key,
     this.label,
@@ -20,6 +20,7 @@ class CommonFilledButton extends StatelessWidget {
     this.onPressed,
     this.isLoading = false,
     this.bgColor,
+    this.shape,
   }) : super(key: key);
 
   @override
@@ -33,9 +34,10 @@ class CommonFilledButton extends StatelessWidget {
           elevation: 0,
           backgroundColor: bgColor ?? AppColors.primary,
           shadowColor: AppColors.primary.shade500,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
+          shape: shape ??
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
         ),
         child: isLoading
             ? Center(

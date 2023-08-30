@@ -18,7 +18,8 @@ class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 2;
 
   List<Widget> _tabs = [
-    TradingTabView(),
+    // TradingTabView(),
+    DashboardView(),
     AnalyticsView(),
     TenxTradingView(),
     WalletView(),
@@ -57,16 +58,17 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomDrawer(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            AppLogoWidget(
-              logoSize: 32,
-              hasLabel: false,
-            ),
-            SizedBox(width: 8),
+            // AppLogoWidget(
+            //   logoSize: 32,
+            //   hasLabel: false,
+            // ),
+            // SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -91,6 +93,20 @@ class _HomeViewState extends State<HomeView> {
             onPressed: () => Get.toNamed(AppRoutes.profile),
           ),
         ],
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.white,
+                size: 24,
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
       ),
       body: _tabs[_selectedIndex],
       floatingActionButton: FloatingActionButton(

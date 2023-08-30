@@ -9,3 +9,7 @@ export 'wallet/wallet_index.dart';
 export 'analytics/analytics_index.dart';
 export 'tenx_trading/tenx_trading_index.dart';
 export 'contest/contest_index.dart';
+export 'bank/bank_index.dart';
+export 'tutorial/tutorial_index.dart';
+export 'faq/faq_index.dart';
+export 'careers/careers_index.dart';
