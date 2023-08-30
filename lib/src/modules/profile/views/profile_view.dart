@@ -33,7 +33,7 @@ class ProfileView extends GetView<ProfileController> {
               elevation: 0,
               margin: EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: ListTile(
                 leading: Container(
@@ -46,7 +46,7 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 title: Text(
                   controller.getUserFullName(),
-                  style: AppStyles.tsWhiteMedium20,
+                  style: Theme.of(context).textTheme.tsMedium20,
                 ),
                 subtitle: Text(
                   'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
@@ -81,6 +81,10 @@ class ProfileView extends GetView<ProfileController> {
                 Get.toNamed(AppRoutes.portfolio);
                 Get.find<PortfolioController>().loadData();
               },
+            ),
+            ProfileListTile(
+              label: 'Dark Mode',
+              onTap: () => ThemeService().switchTheme(),
             ),
             ProfileListTile(
               label: 'Message',

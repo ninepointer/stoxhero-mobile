@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../core/core.dart';
@@ -58,7 +59,6 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         automaticallyImplyLeading: false,
         title: Row(
           children: [
@@ -77,7 +77,7 @@ class _HomeViewState extends State<HomeView> {
                 Obx(
                   () => Text(
                     controller.userDetailsData.firstName?.capitalizeFirst ?? '-',
-                    style: AppStyles.tsWhiteMedium16,
+                    style: Theme.of(context).textTheme.tsMedium16,
                   ),
                 ),
               ],
@@ -103,7 +103,6 @@ class _HomeViewState extends State<HomeView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: AppColors.netural,
         shape: CircularNotchedRectangle(),
         notchMargin: 4,
         child: Container(
@@ -121,7 +120,7 @@ class _HomeViewState extends State<HomeView> {
                       SizedBox(height: 4),
                       Text(
                         'Trading',
-                        style: AppStyles.tsWhiteRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],
                   ),
@@ -138,7 +137,7 @@ class _HomeViewState extends State<HomeView> {
                       SizedBox(height: 4),
                       Text(
                         'Analytics',
-                        style: AppStyles.tsWhiteRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],
                   ),
@@ -156,7 +155,7 @@ class _HomeViewState extends State<HomeView> {
                       SizedBox(height: 4),
                       Text(
                         'Wallet',
-                        style: AppStyles.tsWhiteRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],
                   ),
@@ -173,7 +172,7 @@ class _HomeViewState extends State<HomeView> {
                       SizedBox(height: 4),
                       Text(
                         'Contest',
-                        style: AppStyles.tsWhiteRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                       ),
                     ],
                   ),

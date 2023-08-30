@@ -72,8 +72,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   void calculateTotalPositionValues() {
     num totalLots = 0;
     num totalBrokerage = 0;
-    num totalGross = 0;
-    num totalNet = 0;
 
     for (var data in tenxPositionsList) {
       log('data : ${data.toJson()}');

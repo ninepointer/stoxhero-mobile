@@ -7,13 +7,13 @@ import '../../../core/core.dart';
 class TenxDashboardView extends GetView<TenxTradingController> {
   const TenxDashboardView({Key? key}) : super(key: key);
 
-  Widget buildInfoCard({required String label}) {
+  Widget buildInfoCard(BuildContext context, {required String label}) {
     return Expanded(
       child: Card(
         elevation: 0,
         margin: EdgeInsets.only(top: 8),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Container(
           padding: EdgeInsets.all(12),
@@ -25,8 +25,8 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   Container(
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: AppColors.netural.shade400,
+                      borderRadius: BorderRadius.circular(8),
+                      color: AppColors.grey.shade400,
                     ),
                     child: Icon(
                       Icons.trending_up_rounded,
@@ -61,14 +61,14 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   Spacer(),
                   Text(
                     '₹ 125.87',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: Theme.of(context).textTheme.tsMedium12,
                   ),
                   SizedBox(width: 4),
                   Text(
                     '(+ 0.25%)',
-                    style: AppStyles.tsWhiteMedium12.copyWith(
-                      color: AppColors.success,
-                    ),
+                    style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                          color: AppColors.success,
+                        ),
                   ),
                 ],
               )
@@ -104,9 +104,9 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
-                        buildInfoCard(label: "NIFTY 50"),
+                        buildInfoCard(context, label: "NIFTY 50"),
                         SizedBox(width: 8),
-                        buildInfoCard(label: "BANK NIFTY"),
+                        buildInfoCard(context, label: "BANK NIFTY"),
                       ],
                     ),
                   ),
@@ -114,9 +114,9 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
-                        buildInfoCard(label: "Margin"),
+                        buildInfoCard(context, label: "Margin"),
                         SizedBox(width: 8),
-                        buildInfoCard(label: "NET P&L"),
+                        buildInfoCard(context, label: "NET P&L"),
                       ],
                     ),
                   ),

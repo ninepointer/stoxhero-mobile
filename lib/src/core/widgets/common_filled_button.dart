@@ -33,8 +33,9 @@ class CommonFilledButton extends StatelessWidget {
           elevation: 0,
           backgroundColor: bgColor ?? AppColors.primary,
           shadowColor: AppColors.primary.shade500,
+          enableFeedback: false,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
         child: isLoading
@@ -50,13 +51,13 @@ class CommonFilledButton extends StatelessWidget {
               )
             : Text(
                 label ?? 'Label',
-                style: AppStyles.tsWhiteRegular16.copyWith(
-                  fontSize: height == null
-                      ? 16
-                      : (height! < 36)
-                          ? 14
-                          : 16,
-                ),
+                style: Theme.of(context).textTheme.tsWhiteRegular16.copyWith(
+                      fontSize: height == null
+                          ? 16
+                          : (height! < 36)
+                              ? 14
+                              : 16,
+                    ),
               ),
         onPressed: isLoading ? null : onPressed,
       ),

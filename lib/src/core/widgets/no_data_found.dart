@@ -16,12 +16,12 @@ class NoDataFound extends StatelessWidget {
           Icon(
             Icons.error_outline_rounded,
             size: 36,
-            color: AppColors.netural.shade100,
+            color: AppColors.grey.shade100,
           ),
           SizedBox(height: 8),
           Text(
             label ?? 'No Data Found!',
-            style: AppStyles.tsWhiteRegular16,
+            style: Theme.of(context).textTheme.tsRegular16,
           ),
         ],
       ),

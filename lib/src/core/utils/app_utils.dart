@@ -10,10 +10,8 @@ class LoadingUtils {
     if (!isLoading) {
       Get.dialog(
         barrierDismissible: false,
-        WillPopScope(
-          onWillPop: () {
-            return Future.value(false);
-          },
+        PopScope(
+          canPop: false,
           child: Center(
             child: CircularProgressIndicator(),
           ),

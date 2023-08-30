@@ -26,7 +26,7 @@ class PortfolioCardTile extends StatelessWidget {
         SizedBox(height: 4),
         Text(
           value ?? '-',
-          style: AppStyles.tsWhiteRegular16,
+          style: Theme.of(context).textTheme.tsRegular16,
         ),
       ],
     );

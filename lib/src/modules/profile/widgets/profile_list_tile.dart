@@ -18,17 +18,17 @@ class ProfileListTile extends StatelessWidget {
       elevation: 0,
       margin: EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(8),
         ),
         minLeadingWidth: 0,
         leading: Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppColors.secondary.shade900.withOpacity(0.25),
+            color: AppColors.secondary.withOpacity(0.25),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -39,7 +39,7 @@ class ProfileListTile extends StatelessWidget {
         ),
         title: Text(
           label,
-          style: AppStyles.tsWhiteRegular16,
+          style: Theme.of(context).textTheme.tsRegular16,
         ),
         trailing: Icon(Icons.chevron_right_rounded),
         onTap: onTap,

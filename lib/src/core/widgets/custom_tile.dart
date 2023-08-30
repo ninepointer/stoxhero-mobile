@@ -11,7 +11,7 @@ class CustomTile extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      color: AppColors.netural.shade600,
+      color: Theme.of(context).cardColor,
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

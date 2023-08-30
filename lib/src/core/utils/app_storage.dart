@@ -6,6 +6,14 @@ class AppStorage {
 
   static final _box = GetStorage();
 
+  static Future setDarkModeStatus(bool data) async {
+    await _box.write(AppStorageKeys.darkMode, data);
+  }
+
+  static bool getDarkModeStatus() {
+    return _box.read(AppStorageKeys.darkMode) ?? false;
+  }
+
   static Future setNewUserStatus(bool data) async {
     await _box.write(AppStorageKeys.newUser, data);
   }
@@ -36,6 +44,7 @@ class AppStorage {
 }
 
 class AppStorageKeys {
+  static const String darkMode = 'darkMode';
   static const String token = 'token';
   static const String userDetails = 'userDetails';
   static const String newUser = 'newUser';

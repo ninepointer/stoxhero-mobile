@@ -33,7 +33,7 @@ class AppLogoWidget extends StatelessWidget {
                 color: Colors.transparent,
                 child: Text(
                   AppConstants.appName,
-                  style: AppStyles.tsGreyMedium24,
+                  style: Theme.of(context).textTheme.tsMedium20,
                 ),
               )
           ],

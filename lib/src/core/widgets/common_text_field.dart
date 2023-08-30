@@ -60,39 +60,32 @@ class CommonTextField extends StatelessWidget {
               keyboardType: keyboardType,
               obscureText: obscureText ?? false,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              style: AppStyles.tsPrimaryRegular16,
+              style: Theme.of(context).textTheme.tsRegular16,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(16),
-                filled: false,
-                fillColor: AppColors.netural.shade700,
+                contentPadding: EdgeInsets.all(14),
+                filled: true,
+                fillColor: AppColors.grey.withOpacity(.1),
                 hintText: hintText,
-                hintStyle: AppStyles.tsGreyRegular14,
+                hintStyle: AppStyles.tsGreyRegular16,
                 suffixIcon: suffixIcon,
                 prefixIcon: prefixIcon,
                 errorStyle: AppStyles.tsGreyRegular12.copyWith(
                   color: AppColors.danger.shade700,
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  borderSide: BorderSide(
-                    width: 2,
-                  ),
-                ),
+                border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  borderSide: BorderSide(
-                    color: AppColors.netural.shade50,
-                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(
                     width: 2,
                     color: AppColors.primary,
                   ),
                 ),
                 errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(
                     width: 2,
                     color: AppColors.danger,

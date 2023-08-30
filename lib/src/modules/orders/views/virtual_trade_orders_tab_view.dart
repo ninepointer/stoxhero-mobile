@@ -36,14 +36,14 @@ class _VirtualTradeOrdersTabViewState extends State<VirtualTradeOrdersTabView> {
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Text(
                 'Today\'s Order\'s',
-                style: AppStyles.tsWhiteRegular16,
+                style: Theme.of(context).textTheme.tsRegular16,
               ),
             ),
             1: Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Text(
                 'All Order\'s',
-                style: AppStyles.tsWhiteRegular16,
+                style: Theme.of(context).textTheme.tsRegular16,
               ),
             ),
           },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 
 import '../core.dart';
 
@@ -30,9 +32,9 @@ class CommonCardTile extends StatelessWidget {
         SizedBox(height: 4),
         Text(
           isValueNumber ? FormatHelper.formatNumbers(value) : value ?? '-',
-          style: AppStyles.tsWhiteMedium16.copyWith(
-            color: valueColor ?? AppColors.white,
-          ),
+          style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                color: valueColor,
+              ),
         ),
       ],
     );

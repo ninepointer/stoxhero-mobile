@@ -28,10 +28,10 @@ class AnalyticsView extends GetView<AnalyticsController> {
                     width: 1,
                     color: AppColors.primary,
                   ),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(8),
                   child: TabBar(
                     indicator: BoxDecoration(
                       color: AppColors.primary,
@@ -40,9 +40,8 @@ class AnalyticsView extends GetView<AnalyticsController> {
                         color: AppColors.primary,
                       ),
                     ),
-                    labelStyle: TextStyle(
-                      fontFamily: AppTheme.fontFamily,
-                    ),
+                    labelStyle: Theme.of(context).textTheme.tsWhiteMedium14,
+                    unselectedLabelStyle: Theme.of(context).textTheme.tsMedium14,
                     tabs: [
                       controller.userDetailsData.designation == AppConstants.equityTraderType
                           ? Tab(text: 'Infinity Trading')
@@ -113,7 +112,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 16),
                         padding: EdgeInsets.all(16),
-                        color: AppColors.netural,
+                        color: Theme.of(context).cardColor,
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +121,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                               'Select Date Range',
                               style: AppStyles.tsSecondaryRegular18,
                             ),
-                            SizedBox(height: 16),
+                            Divider(thickness: 1, height: 24),
                             Row(
                               children: [
                                 Expanded(
@@ -135,7 +134,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                       hintText: 'Start Date',
                                       suffixIcon: Icon(
                                         Icons.calendar_month,
-                                        color: AppColors.netural.shade100,
+                                        color: AppColors.grey,
                                       ),
                                     ),
                                   ),
@@ -154,7 +153,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                       hintText: 'End Date',
                                       suffixIcon: Icon(
                                         Icons.calendar_month,
-                                        color: AppColors.netural.shade100,
+                                        color: AppColors.grey,
                                       ),
                                     ),
                                   ),
@@ -187,7 +186,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 children: [
                                   Text(
                                     'Gross',
-                                    style: AppStyles.tsWhiteRegular14,
+                                    style: Theme.of(context).textTheme.tsRegular14,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
@@ -212,7 +211,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 children: [
                                   Text(
                                     'Net',
-                                    style: AppStyles.tsWhiteRegular14,
+                                    style: Theme.of(context).textTheme.tsRegular14,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
@@ -237,7 +236,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 children: [
                                   Text(
                                     'Brokerage',
-                                    style: AppStyles.tsWhiteRegular14,
+                                    style: Theme.of(context).textTheme.tsRegular14,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
@@ -274,7 +273,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                     children: [
                                       Text(
                                         'Orders',
-                                        style: AppStyles.tsWhiteRegular14,
+                                        style: Theme.of(context).textTheme.tsRegular14,
                                       ),
                                       SizedBox(height: 2),
                                       Text(
@@ -298,7 +297,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                     children: [
                                       Text(
                                         'Trading Days',
-                                        style: AppStyles.tsWhiteRegular14,
+                                        style: Theme.of(context).textTheme.tsRegular14,
                                       ),
                                       SizedBox(height: 2),
                                       Text(
@@ -328,7 +327,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                     children: [
                                       Text(
                                         'Green Days',
-                                        style: AppStyles.tsWhiteRegular12,
+                                        style: Theme.of(context).textTheme.tsRegular12,
                                       ),
                                       SizedBox(height: 2),
                                       Text(
@@ -352,7 +351,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                     children: [
                                       Text(
                                         'Red Days',
-                                        style: AppStyles.tsWhiteRegular12,
+                                        style: Theme.of(context).textTheme.tsRegular12,
                                       ),
                                       SizedBox(height: 2),
                                       Text(

@@ -28,7 +28,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
         elevation: 0,
         margin: EdgeInsets.only(top: 8),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Container(
           padding: EdgeInsets.all(12),
@@ -40,8 +40,8 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                   Container(
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: AppColors.netural.shade400,
+                      borderRadius: BorderRadius.circular(8),
+                      color: AppColors.grey.shade400,
                     ),
                     child: Icon(
                       Icons.trending_up_rounded,
@@ -76,14 +76,14 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                   Spacer(),
                   Text(
                     '₹ 125.87',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: Theme.of(context).textTheme.tsMedium12,
                   ),
                   SizedBox(width: 4),
                   Text(
                     '(+ 0.25%)',
-                    style: AppStyles.tsWhiteMedium12.copyWith(
-                      color: AppColors.success,
-                    ),
+                    style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                          color: AppColors.success,
+                        ),
                   ),
                 ],
               )
@@ -146,12 +146,12 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                           SizedBox(height: 16),
                           Text(
                             AppData.tenxInfoEnglish,
-                            style: AppStyles.tsWhiteRegular14,
+                            style: Theme.of(context).textTheme.tsRegular14,
                           ),
                           SizedBox(height: 16),
                           Text(
                             AppData.tenxInfoHindi,
-                            style: AppStyles.tsWhiteRegular14,
+                            style: Theme.of(context).textTheme.tsRegular14,
                           ),
                         ],
                       ),

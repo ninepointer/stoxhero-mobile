@@ -24,7 +24,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
         Container(
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.netural,
+            color: AppColors.grey,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(4),
               topRight: Radius.circular(4),
@@ -51,7 +51,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
               Divider(
                 thickness: 1,
                 height: 36,
-                color: AppColors.netural.shade50.withOpacity(0.5),
+                color: AppColors.grey.shade50.withOpacity(0.5),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,30 +104,30 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     contentPadding: EdgeInsets.all(16),
                     filled: true,
                     hintText: 'Quantity',
-                    fillColor: AppColors.netural.shade700,
+                    fillColor: AppColors.grey.shade700,
                     hintStyle: AppStyles.tsGreyRegular14,
                     errorStyle: AppStyles.tsGreyRegular12.copyWith(
                       color: AppColors.danger.shade700,
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
                         width: 2,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide.none,
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
                         width: 2,
                         color: AppColors.primary,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
                         width: 2,
                         color: AppColors.danger,
@@ -262,10 +262,10 @@ class CustomRadioButtonTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: AppColors.netural.shade50.withOpacity(0.5),
+            color: AppColors.grey.shade50.withOpacity(0.5),
             width: 1,
           ),
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
@@ -278,7 +278,7 @@ class CustomRadioButtonTile extends StatelessWidget {
             ),
             Text(
               label,
-              style: AppStyles.tsWhiteRegular14,
+              style: Theme.of(context).textTheme.tsRegular14,
             ),
           ],
         ),

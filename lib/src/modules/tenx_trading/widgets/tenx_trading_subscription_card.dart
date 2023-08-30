@@ -30,11 +30,7 @@ class TenxTradingSubscriptionCard extends GetView<TenxTradingController> {
                       ? AppColors.danger
                       : AppColors.primary,
         ),
-        Divider(
-          thickness: 1,
-          height: 0,
-          color: AppColors.netural,
-        ),
+        Divider(thickness: 1, height: 0),
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -55,9 +51,9 @@ class TenxTradingSubscriptionCard extends GetView<TenxTradingController> {
               children: [
                 TextSpan(
                   text: '₹${subscription.actualPrice}',
-                  style: AppStyles.tsWhiteRegular16.copyWith(
-                    decoration: TextDecoration.lineThrough,
-                  ),
+                  style: Theme.of(context).textTheme.tsRegular16.copyWith(
+                        decoration: TextDecoration.lineThrough,
+                      ),
                 ),
                 WidgetSpan(
                   alignment: PlaceholderAlignment.baseline,
@@ -153,7 +149,7 @@ class TenxTradingCardTile extends StatelessWidget {
       ),
       title: Text(
         label,
-        style: AppStyles.tsWhiteRegular14,
+        style: Theme.of(context).textTheme.tsRegular14,
       ),
     );
   }

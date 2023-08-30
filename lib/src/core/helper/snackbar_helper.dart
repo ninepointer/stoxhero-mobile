@@ -7,6 +7,8 @@ class SnackbarHelper {
     return Get.showSnackbar(
       GetSnackBar(
         message: message ?? "Message",
+        margin: EdgeInsets.all(16),
+        borderRadius: 8,
         duration: Duration(seconds: 3),
         backgroundColor: backgroundColor ?? AppColors.black,
       ),

@@ -25,7 +25,7 @@ class WalletTransactionCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.netural.shade400,
+                color: AppColors.grey.shade400,
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -40,7 +40,7 @@ class WalletTransactionCard extends StatelessWidget {
                 children: [
                   Text(
                     label ?? '-',
-                    style: AppStyles.tsWhiteMedium16,
+                    style: Theme.of(context).textTheme.tsMedium16,
                   ),
                   SizedBox(height: 4),
                   Text(
@@ -58,7 +58,7 @@ class WalletTransactionCard extends StatelessWidget {
             SizedBox(width: 8),
             Text(
               FormatHelper.formatNumbers(amount),
-              style: AppStyles.tsPrimaryMedium20.copyWith(
+              style: AppStyles.tsPrimaryMedium18.copyWith(
                 color: amount > 0 ? AppColors.success : AppColors.danger,
               ),
             )

@@ -62,7 +62,7 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                           isRightAlign: true,
                           label: 'Instrument',
                           value: FormatHelper.formatDateByMonth(widget.data.contractDate),
-                          valueColor: AppColors.netural.shade100,
+                          valueColor: AppColors.grey.shade100,
                         ),
                         TenxWatchlistCardTile(
                           label: 'LTP',
@@ -98,7 +98,7 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
           ),
           if (controller.selectedWatchlistIndex.value == widget.index)
             Container(
-              color: AppColors.netural.shade700,
+              color: AppColors.grey.shade700,
               child: Row(
                 children: [
                   Expanded(
@@ -238,9 +238,9 @@ class TenxWatchlistCardTile extends StatelessWidget {
       children: [
         Text(
           value ?? '-',
-          style: AppStyles.tsWhiteRegular14.copyWith(
-            color: valueColor ?? AppColors.white,
-          ),
+          style: Theme.of(context).textTheme.tsRegular14.copyWith(
+                color: valueColor ?? AppColors.white,
+              ),
         ),
       ],
     );

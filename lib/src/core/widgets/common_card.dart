@@ -32,9 +32,9 @@ class CommonCard extends StatelessWidget {
         shape: hasBorder
             ? RoundedRectangleBorder(
                 side: BorderSide(
-                  color: AppColors.netural.shade400,
+                  color: AppColors.grey.withOpacity(.25),
                 ),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(8),
               )
             : null,
         child: Container(

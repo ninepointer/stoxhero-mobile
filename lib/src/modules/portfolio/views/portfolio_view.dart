@@ -25,7 +25,7 @@ class PortfolioView extends GetView<PortfolioController> {
                 width: double.infinity,
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.netural.shade800,
+                  color: AppColors.grey.shade800,
                 ),
                 child: Text(
                   "Virtual Trading Portfolio",
@@ -44,7 +44,7 @@ class PortfolioView extends GetView<PortfolioController> {
                 width: double.infinity,
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.netural.shade800,
+                  color: AppColors.grey.shade800,
                 ),
                 child: Text(
                   "TenX Trading Portfolio",

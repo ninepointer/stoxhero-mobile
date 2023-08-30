@@ -19,9 +19,6 @@ class CompletedContestCard extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.all(12),
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppColors.netural.shade900,
-          ),
           child: Row(
             children: [
               Text(
@@ -33,7 +30,7 @@ class CompletedContestCard extends StatelessWidget {
               //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               //   decoration: BoxDecoration(
               //     color: AppColors.warning.withOpacity(0.1),
-              //     borderRadius: BorderRadius.circular(4),
+              //     borderRadius: BorderRadius.circular(8),
               //   ),
               //   child: Text(
               //     'NIFTY',
@@ -47,7 +44,7 @@ class CompletedContestCard extends StatelessWidget {
               //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               //   decoration: BoxDecoration(
               //     color: AppColors.info.withOpacity(0.1),
-              //     borderRadius: BorderRadius.circular(4),
+              //     borderRadius: BorderRadius.circular(8),
               //   ),
               //   child: Text(
               //     'DAY',
@@ -59,6 +56,7 @@ class CompletedContestCard extends StatelessWidget {
             ],
           ),
         ),
+        Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -77,7 +75,7 @@ class CompletedContestCard extends StatelessWidget {
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(contestDetails?.contestStartTime),
-                        style: AppStyles.tsWhiteMedium12,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -91,7 +89,7 @@ class CompletedContestCard extends StatelessWidget {
                       SizedBox(height: 2),
                       Text(
                         '10 July, 3:20 PM',
-                        style: AppStyles.tsWhiteMedium12,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -111,7 +109,7 @@ class CompletedContestCard extends StatelessWidget {
                       SizedBox(height: 2),
                       Text(
                         'Free',
-                        style: AppStyles.tsWhiteRegular14,
+                        style: Theme.of(context).textTheme.tsRegular14,
                       ),
                     ],
                   ),
@@ -125,7 +123,7 @@ class CompletedContestCard extends StatelessWidget {
                       SizedBox(height: 2),
                       Text(
                         '₹ 5,00,000',
-                        style: AppStyles.tsWhiteRegular14,
+                        style: Theme.of(context).textTheme.tsRegular14,
                       ),
                     ],
                   ),

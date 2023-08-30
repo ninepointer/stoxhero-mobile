@@ -24,21 +24,21 @@ class OrdersView extends GetView<OrdersController> {
                   ? Tab(
                       child: Text(
                         'Infinity Trade\nOrders',
-                        style: AppStyles.tsWhiteRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                         textAlign: TextAlign.center,
                       ),
                     )
                   : Tab(
                       child: Text(
                         'TenX Trade\nOrders',
-                        style: AppStyles.tsWhiteRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                         textAlign: TextAlign.center,
                       ),
                     ),
               Tab(
                 child: Text(
                   'Virtual Trade\nOrders',
-                  style: AppStyles.tsWhiteRegular12,
+                  style: Theme.of(context).textTheme.tsRegular12,
                   textAlign: TextAlign.center,
                 ),
               ),

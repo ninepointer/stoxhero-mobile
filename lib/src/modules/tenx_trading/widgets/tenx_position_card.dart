@@ -234,9 +234,9 @@ class TenxPositionCardTile extends StatelessWidget {
         SizedBox(height: 2),
         Text(
           value ?? '-',
-          style: AppStyles.tsWhiteRegular14.copyWith(
-            color: valueColor ?? AppColors.white,
-          ),
+          style: Theme.of(context).textTheme.tsRegular14.copyWith(
+                color: valueColor ?? AppColors.white,
+              ),
         ),
       ],
     );

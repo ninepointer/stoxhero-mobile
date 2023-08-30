@@ -24,7 +24,7 @@ class TenxPositionDetailsCard extends StatelessWidget {
             children: [
               Text(
                 label ?? '-',
-                style: AppStyles.tsWhiteRegular12,
+                style: Theme.of(context).textTheme.tsRegular12,
               ),
               Text(
                 FormatHelper.formatNumbers(
@@ -32,9 +32,9 @@ class TenxPositionDetailsCard extends StatelessWidget {
                   showSymbol: !isNum,
                   decimal: isNum ? 0 : 2,
                 ),
-                style: AppStyles.tsWhiteMedium14.copyWith(
-                  color: AppColors.secondary,
-                ),
+                style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                      color: AppColors.secondary,
+                    ),
               ),
             ],
           ),

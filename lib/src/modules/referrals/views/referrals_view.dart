@@ -50,9 +50,9 @@ class ReferralsView extends GetView<ReferralsController> {
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
-                          color: AppColors.netural.shade400,
+                          color: AppColors.grey.withOpacity(.25),
                         ),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: Container(
                         margin: EdgeInsets.all(14),
@@ -86,10 +86,10 @@ class ReferralsView extends GetView<ReferralsController> {
                             SizedBox(height: 16),
                             Card(
                               elevation: 0,
-                              color: AppColors.netural,
+                              color: AppColors.grey.withOpacity(.25),
                               margin: EdgeInsets.zero,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               child: Container(
                                 margin: EdgeInsets.all(14),
@@ -100,9 +100,9 @@ class ReferralsView extends GetView<ReferralsController> {
                                       children: [
                                         Text(
                                           controller.userDetailsData.myReferralCode ?? '-',
-                                          style: AppStyles.tsWhiteRegular20.copyWith(
-                                            fontSize: 24,
-                                          ),
+                                          style: Theme.of(context).textTheme.tsRegular20.copyWith(
+                                                fontSize: 24,
+                                              ),
                                         ),
                                         Spacer(),
                                         IconButton(
@@ -154,9 +154,9 @@ class ReferralsView extends GetView<ReferralsController> {
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: AppColors.netural.shade400,
+                                color: AppColors.grey.withOpacity(.25),
                               ),
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: Container(
                               margin: EdgeInsets.all(14),
@@ -168,7 +168,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                       Container(
                                         padding: EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: AppColors.netural,
+                                          color: AppColors.grey.withOpacity(.25),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
@@ -187,7 +187,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                           SizedBox(height: 2),
                                           Text(
                                             controller.earnings.value.joined?.toString() ?? '0',
-                                            style: AppStyles.tsWhiteMedium16,
+                                            style: Theme.of(context).textTheme.tsMedium16,
                                           ),
                                         ],
                                       )
@@ -205,9 +205,9 @@ class ReferralsView extends GetView<ReferralsController> {
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color: AppColors.netural.shade400,
+                                color: AppColors.grey.withOpacity(.25),
                               ),
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: Container(
                               margin: EdgeInsets.all(14),
@@ -219,7 +219,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                       Container(
                                         padding: EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: AppColors.netural,
+                                          color: AppColors.grey.withOpacity(.25),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
@@ -238,7 +238,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                           SizedBox(height: 2),
                                           Text(
                                             controller.earnings.value.earnings?.toString() ?? '0',
-                                            style: AppStyles.tsWhiteMedium16,
+                                            style: Theme.of(context).textTheme.tsMedium16,
                                           ),
                                         ],
                                       )
@@ -259,9 +259,9 @@ class ReferralsView extends GetView<ReferralsController> {
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
-                          color: AppColors.netural.shade400,
+                          color: AppColors.grey.withOpacity(.25),
                         ),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: Container(
                         margin: EdgeInsets.all(14),
@@ -280,14 +280,14 @@ class ReferralsView extends GetView<ReferralsController> {
                                     SizedBox(height: 4),
                                     Text(
                                       controller.userDetailsData.myReferralCode ?? '-',
-                                      style: AppStyles.tsWhiteMedium18,
+                                      style: Theme.of(context).textTheme.tsMedium18,
                                     ),
                                   ],
                                 ),
                                 Spacer(),
                                 Icon(
                                   Icons.qr_code_2_rounded,
-                                  size: 42,
+                                  size: 36,
                                 )
                               ],
                             ),
@@ -363,14 +363,14 @@ class ReferralDetailsCardTile extends StatelessWidget {
     return ListTile(
       title: Text(
         label,
-        style: AppStyles.tsWhiteRegular16,
+        style: Theme.of(context).textTheme.tsRegular16,
       ),
       minLeadingWidth: 0,
       contentPadding: EdgeInsets.zero,
       leading: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.netural,
+          color: AppColors.grey.withOpacity(.25),
           shape: BoxShape.circle,
         ),
         child: Icon(

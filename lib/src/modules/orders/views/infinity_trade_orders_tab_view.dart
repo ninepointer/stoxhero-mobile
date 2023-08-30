@@ -47,14 +47,14 @@ class _InfinityTradeOrdersTabViewState extends State<InfinityTradeOrdersTabView>
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Text(
                 'Today\'s Order\'s',
-                style: AppStyles.tsWhiteRegular16,
+                style: Theme.of(context).textTheme.tsRegular16,
               ),
             ),
             1: Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Text(
                 'All Order\'s',
-                style: AppStyles.tsWhiteRegular16,
+                style: Theme.of(context).textTheme.tsRegular16,
               ),
             ),
           },
@@ -80,9 +80,9 @@ class _InfinityTradeOrdersTabViewState extends State<InfinityTradeOrdersTabView>
             // Container(
             //   margin: EdgeInsets.symmetric(horizontal: 16),
             //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(4),
+            //     borderRadius: BorderRadius.circular(8),
             //     border: Border.all(
-            //       color: AppColors.netural.shade400,
+            //       color: AppColors.grey.shade400,
             //     ),
             //   ),
             //   child: Row(
@@ -94,7 +94,7 @@ class _InfinityTradeOrdersTabViewState extends State<InfinityTradeOrdersTabView>
             //           activeColor: AppColors.secondary,
             //           title: Text(
             //             'Buy',
-            //             style: AppStyles.tsWhiteMedium16,
+            //             style: Theme.of(context).textTheme.tsMedium16,
             //           ),
             //           value: 0,
             //           groupValue: grouValue,
@@ -108,7 +108,7 @@ class _InfinityTradeOrdersTabViewState extends State<InfinityTradeOrdersTabView>
             //           activeColor: AppColors.secondary,
             //           title: Text(
             //             'Sell',
-            //             style: AppStyles.tsWhiteMedium16,
+            //             style: Theme.of(context).textTheme.tsMedium16,
             //           ),
             //           value: 1,
             //           groupValue: grouValue,

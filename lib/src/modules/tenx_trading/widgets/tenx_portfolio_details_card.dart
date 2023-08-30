@@ -28,7 +28,7 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
                   children: [
                     Text(
                       label ?? '-',
-                      style: AppStyles.tsWhiteRegular14,
+                      style: Theme.of(context).textTheme.tsRegular14,
                     ),
                     SizedBox(height: 2),
                     Text(

@@ -27,7 +27,7 @@ class WalletCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.netural.shade400,
+                color: AppColors.grey.shade400,
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -42,7 +42,7 @@ class WalletCard extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: AppStyles.tsWhiteRegular12,
+                    style: Theme.of(context).textTheme.tsRegular12,
                   ),
                   SizedBox(height: 2),
                   Text(

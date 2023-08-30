@@ -64,16 +64,17 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                   ),
                   child: Column(
                     children: [
+                      SizedBox(height: 16),
                       Image.asset(
                         item.image,
                         width: 250,
                         height: 250,
                       ),
-                      SizedBox(height: 56),
+                      Spacer(),
                       Text(
                         item.title,
                         textAlign: TextAlign.center,
-                        style: AppStyles.tsGreyMedium24,
+                        style: Theme.of(context).textTheme.tsMedium20,
                       ),
                       SizedBox(height: 24),
                       Text(
@@ -98,12 +99,29 @@ class _OnBoardingViewState extends State<OnBoardingView> {
             ),
           ),
           SizedBox(height: 36),
-          CommonFilledButton(
-            label: (currentIndex == contents.length - 1 ? 'Get Started' : 'Next'),
-            bgColor: AppColors.primary,
-            width: 250,
-            onPressed: navigateToNextScreen,
-          ),
+          if (currentIndex == contents.length - 1)
+            CommonFilledButton(
+              width: 250,
+              height: 52,
+              label: (currentIndex == contents.length - 1 ? 'Get Started' : 'Next'),
+              bgColor: AppColors.primary,
+              onPressed: navigateToNextScreen,
+            )
+          else
+            SizedBox(
+              height: 52,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  elevation: 0,
+                  backgroundColor: AppColors.primary,
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.white,
+                  ),
+                  onPressed: navigateToNextScreen,
+                ),
+              ),
+            ),
           SizedBox(height: 42),
           TextButton(
             onPressed: navigateToSignin,
@@ -112,7 +130,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               style: AppStyles.tsGreyMedium16,
             ),
           ),
-          SizedBox(height: 42),
+          SizedBox(height: 36),
         ],
       ),
     );
@@ -125,7 +143,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
       width: currentIndex == index ? 24 : 8,
       margin: EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
-        color: currentIndex == index ? AppColors.secondary : AppColors.netural.withOpacity(.25),
+        color: currentIndex == index ? AppColors.secondary : AppColors.grey.withOpacity(.25),
         borderRadius: BorderRadius.circular(50),
       ),
     );
@@ -153,14 +171,12 @@ List<OnBoardingContent> contents = [
   OnBoardingContent(
     image: 'assets/images/onboarding2.png',
     title: 'Battle Ground',
-    description:
-        'Enter trading battles, show your skills, and win \n exciting gifts and cash prizes!',
+    description: 'Enter trading battles, show your skills, and win \n exciting gifts and cash prizes!',
   ),
   OnBoardingContent(
     image: 'assets/images/onboarding3.png',
     title: 'Contests',
-    description:
-        "Trade in our virtual contest, earn real cash \n rewards based on your portfolio's value!",
+    description: "Trade in our virtual contest, earn real cash \n rewards based on your portfolio's value!",
   ),
   OnBoardingContent(
     image: 'assets/images/onboarding4.png',

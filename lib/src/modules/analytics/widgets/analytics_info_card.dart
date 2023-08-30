@@ -16,28 +16,30 @@ class AnalyticsInfoCard extends StatelessWidget {
   });
 
   Widget _buildListTile(
+    BuildContext context,
     String label,
     num? value,
   ) {
-    return Padding(
+    return Container(
+      width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: AppStyles.tsWhiteRegular14,
+            style: Theme.of(context).textTheme.tsRegular14,
           ),
           SizedBox(height: 2),
           Text(
             FormatHelper.formatNumbers(value),
-            style: AppStyles.tsWhiteMedium16.copyWith(
-              color: value == null || value == 0
-                  ? AppColors.info
-                  : value < 0
-                      ? AppColors.danger
-                      : AppColors.success,
-            ),
+            style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                  color: value == null || value == 0
+                      ? AppColors.info
+                      : value < 0
+                          ? AppColors.danger
+                          : AppColors.success,
+                ),
           ),
         ],
       ),
@@ -52,14 +54,14 @@ class AnalyticsInfoCard extends StatelessWidget {
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          color: AppColors.netural.shade800,
+          color: Theme.of(context).cardColor,
           child: Row(
             children: [
               Container(
                 padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.shade900.withOpacity(0.5),
+                  color: AppColors.secondary.withOpacity(0.25),
                 ),
                 child: Icon(
                   Icons.auto_graph_rounded,
@@ -75,18 +77,22 @@ class AnalyticsInfoCard extends StatelessWidget {
             ],
           ),
         ),
+        Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         _buildListTile(
+          context,
           "Gross P & L",
           grossValue,
         ),
         SizedBox(height: 8),
         _buildListTile(
+          context,
           "Net P & L",
           netValue,
         ),
         SizedBox(height: 8),
         _buildListTile(
+          context,
           "Brokerage",
           brokeValue,
         ),

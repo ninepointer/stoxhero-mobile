@@ -37,14 +37,7 @@ class WalletView extends GetView<WalletController> {
                   onPressed: null,
                 ),
                 SizedBox(height: 16),
-                if (controller.walletTransactionsList.isNotEmpty)
-                  ListTile(
-                    tileColor: AppColors.netural.shade600,
-                    title: Text(
-                      'Recent Transactions',
-                      style: AppStyles.tsPrimaryRegular18,
-                    ),
-                  ),
+                if (controller.walletTransactionsList.isNotEmpty) CustomTile(label: 'Recent Transactions'),
                 if (controller.walletTransactionsList.isNotEmpty)
                   ListView.builder(
                     shrinkWrap: true,

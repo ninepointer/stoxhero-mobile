@@ -15,7 +15,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
             width: double.infinity,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.netural,
+              color: AppColors.grey,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(4),
                 topRight: Radius.circular(4),
@@ -56,7 +56,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                       children: [
                         Text(
                           'StoxHero Wallet',
-                          style: AppStyles.tsWhiteRegular16,
+                          style: Theme.of(context).textTheme.tsRegular16,
                         ),
                         Spacer(),
                         Text(
@@ -64,7 +64,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                             controller.walletBalance.value,
                             decimal: 0,
                           ),
-                          style: AppStyles.tsWhiteMedium20,
+                          style: Theme.of(context).textTheme.tsMedium20,
                         ),
                       ],
                     ),
@@ -87,7 +87,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                       Text(
                         'Your wallet balance is low kindly refer more users on this platform to buy this subscription.',
                         textAlign: TextAlign.center,
-                        style: AppStyles.tsWhiteRegular14,
+                        style: Theme.of(context).textTheme.tsRegular14,
                       ),
                       SizedBox(height: 24),
                       CommonCard(
@@ -98,9 +98,9 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                             children: [
                               Text(
                                 controller.userDetailsData.myReferralCode ?? '-',
-                                style: AppStyles.tsWhiteRegular20.copyWith(
-                                  fontSize: 24,
-                                ),
+                                style: Theme.of(context).textTheme.tsRegular20.copyWith(
+                                      fontSize: 24,
+                                    ),
                               ),
                               Spacer(),
                               IconButton(

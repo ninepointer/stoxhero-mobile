@@ -17,6 +17,7 @@ class AppBinding extends Bindings {
     Get.put(AnalyticsRepository(), permanent: true);
     Get.put(ContestRepository(), permanent: true);
 
+    Get.put(AppController(), permanent: true);
     Get.put(AuthController(), permanent: true);
     Get.put(HomeController(), permanent: true);
     Get.put(TenxTradingController(), permanent: true);
