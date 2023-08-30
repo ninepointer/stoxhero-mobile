@@ -18,15 +18,12 @@ class ProfileListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      margin: EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      margin: EdgeInsets.only(bottom: 8),
       child: ListTile(
+        minLeadingWidth: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        minLeadingWidth: 0,
         leading: Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
@@ -34,7 +31,7 @@ class ProfileListTile extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Icon(
-            icon,
+            icon ?? Icons.widgets,
             color: AppColors.secondary,
             size: 20,
           ),
@@ -45,7 +42,7 @@ class ProfileListTile extends StatelessWidget {
         ),
         trailing: Icon(
           Icons.chevron_right_rounded,
-          color: AppColors.netural.shade50,
+          color: AppColors.grey,
         ),
         onTap: onTap,
       ),

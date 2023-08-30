@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/core/core.dart';
 
-class CustomDropdown extends StatefulWidget {
-  const CustomDropdown({Key? key}) : super(key: key);
+class CommonDropdown extends StatefulWidget {
+  const CommonDropdown({Key? key}) : super(key: key);
 
   @override
-  _CustomDropdownState createState() => _CustomDropdownState();
+  _CommonDropdownState createState() => _CommonDropdownState();
 }
 
-class _CustomDropdownState extends State<CustomDropdown> {
+class _CommonDropdownState extends State<CommonDropdown> {
   bool isExpanded = false;
   String selectOption = 'College Name';
   List<String> collegeList = [
@@ -33,7 +33,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(
-                color: AppColors.netural.shade50,
+                color: AppColors.grey.withOpacity(.25),
               ),
               borderRadius: BorderRadius.circular(4),
             ),
@@ -48,7 +48,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   ),
                   Icon(
                     isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                    color: AppColors.netural.shade100,
+                    color: AppColors.grey,
                   ),
                 ],
               ),

@@ -304,7 +304,7 @@ class ReferralsView extends GetView<ReferralsController> {
                       ),
                     ),
                   ),
-                  CustomTile(label: 'Referral Leaderboard'),
+                  CommonTile(label: 'Referral Leaderboard'),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: controller.referralsLeaderboardList.length,
@@ -321,7 +321,7 @@ class ReferralsView extends GetView<ReferralsController> {
                     },
                   ),
                   SizedBox(height: 16),
-                  CustomTile(label: 'Friends Leaderboard'),
+                  CommonTile(label: 'Friends Leaderboard'),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: controller.myReferralsList.length,

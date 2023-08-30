@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../core.dart';
 
-class CustomTile extends StatelessWidget {
+class CommonTile extends StatelessWidget {
   final String label;
 
-  const CustomTile({super.key, this.label = 'Label'});
+  const CommonTile({super.key, this.label = 'Label'});
   @override
   Widget build(BuildContext context) {
     return Container(

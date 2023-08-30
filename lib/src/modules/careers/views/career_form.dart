@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stoxhero/src/core/core.dart';
 
-import '../../../core/widgets/custom_dropdown.dart';
+import '../../../core/widgets/common_dropdown.dart';
 
 class CareerForm extends StatelessWidget {
   const CareerForm({Key? key}) : super(key: key);
@@ -58,7 +58,7 @@ class CareerForm extends StatelessWidget {
                   FilteringTextInputFormatter.digitsOnly,
                 ],
               ),
-              CustomDropdown(),
+              CommonDropdown(),
               SizedBox(height: 12),
               Row(
                 children: [
@@ -79,7 +79,7 @@ class CareerForm extends StatelessWidget {
                         hintText: 'Date of Birth',
                         suffixIcon: Icon(
                           Icons.calendar_month,
-                          color: AppColors.netural.shade100,
+                          color: AppColors.grey,
                         ),
                       ),
                     ),

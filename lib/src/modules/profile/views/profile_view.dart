@@ -26,125 +26,126 @@ class ProfileView extends GetView<ProfileController> {
           ),
         ],
       ),
-      body: Container(
-        // padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: EdgeInsets.all(16),
-
-        child: Column(
-          children: [
-            // Card(
-            //   elevation: 0,
-            //   margin: EdgeInsets.symmetric(vertical: 16),
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(8),
-            //   ),
-            //   child: ListTile(
-            //     leading: Container(
-            //       height: 50,
-            //       width: 50,
-            //       child: ClipRRect(
-            //         borderRadius: BorderRadius.circular(100),
-            //         child: Image.asset(AppImages.appLogo),
-            //       ),
-            //     ),
-            //     title: Text(
-            //       controller.getUserFullName(),
-            //       style: Theme.of(context).textTheme.tsMedium20,
-            //     ),
-            //     subtitle: Text(
-            //       'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
-            //       style: AppStyles.tsPrimaryRegular14,
-            //     ),
-            //   ),
-            // ),
-            Container(
-              height: 80,
-              width: 80,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.asset(AppImages.appLogo),
+      body: SingleChildScrollView(
+        child: Container(
+          // padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              // Card(
+              //   elevation: 0,
+              //   margin: EdgeInsets.symmetric(vertical: 16),
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(8),
+              //   ),
+              //   child: ListTile(
+              //     leading: Container(
+              //       height: 50,
+              //       width: 50,
+              //       child: ClipRRect(
+              //         borderRadius: BorderRadius.circular(100),
+              //         child: Image.asset(AppImages.appLogo),
+              //       ),
+              //     ),
+              //     title: Text(
+              //       controller.getUserFullName(),
+              //       style: Theme.of(context).textTheme.tsMedium20,
+              //     ),
+              //     subtitle: Text(
+              //       'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
+              //       style: AppStyles.tsPrimaryRegular14,
+              //     ),
+              //   ),
+              // ),
+              Container(
+                height: 80,
+                width: 80,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset(AppImages.appLogo),
+                ),
               ),
-            ),
-            SizedBox(height: 12),
-            Text(
-              controller.getUserFullName(),
-              style: AppStyles.tsWhiteMedium20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 48),
-                  child: Text(
-                    'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
-                    style: AppStyles.tsPrimaryRegular14,
+              SizedBox(height: 12),
+              Text(
+                controller.getUserFullName(),
+                style: Theme.of(context).textTheme.tsMedium18,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 42),
+                    child: Text(
+                      'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
+                      style: AppStyles.tsPrimaryRegular14,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    String referralCode = controller.userDetailsData.myReferralCode ?? '-';
-                    Clipboard.setData(ClipboardData(text: referralCode));
+                  IconButton(
+                    onPressed: () {
+                      String referralCode = controller.userDetailsData.myReferralCode ?? '-';
+                      Clipboard.setData(ClipboardData(text: referralCode));
 
-                    final snackBar = SnackBar(
-                      content: Text('Referral code copied to clipboard'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
-                  icon: Icon(Icons.copy),
-                  iconSize: 16,
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            ProfileListTile(
-              icon: Icons.person,
-              label: 'My Profile',
-              onTap: () {
-                controller.loadData();
-                Get.toNamed(AppRoutes.profileDetails);
-              },
-            ),
-            ProfileListTile(
-              icon: Icons.account_balance,
-              label: 'Bank Details',
-              onTap: () {
-                Get.toNamed(AppRoutes.bankDetails);
-              },
-            ),
-            ProfileListTile(
-              icon: Icons.account_balance,
-              label: 'KYC Details',
-              onTap: () {
-                Get.toNamed(AppRoutes.kycDetails);
-              },
-            ),
-            ProfileListTile(
-              label: 'Orders',
-              onTap: () {
-                Get.toNamed(AppRoutes.orders);
-                Get.find<OrdersController>().loadData();
-              },
-            ),
-            ProfileListTile(
-              label: 'Portfolio',
-              onTap: () {
-                Get.toNamed(AppRoutes.portfolio);
-                Get.find<PortfolioController>().loadData();
-              },
-            ),
-            ProfileListTile(
-              label: 'Dark Mode',
-              onTap: () => ThemeService().switchTheme(),
-            ),
-            ProfileListTile(
-              label: 'Message',
-              onTap: () {},
-            ),
-            ProfileListTile(
-              label: 'Settings',
-              onTap: () {},
-            ),
-          ],
+                      final snackBar = SnackBar(
+                        content: Text('Referral code copied to clipboard'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    icon: Icon(Icons.copy),
+                    iconSize: 16,
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              ProfileListTile(
+                icon: Icons.person,
+                label: 'My Profile',
+                onTap: () {
+                  controller.loadData();
+                  Get.toNamed(AppRoutes.profileDetails);
+                },
+              ),
+              ProfileListTile(
+                icon: Icons.account_balance,
+                label: 'Bank Details',
+                onTap: () {
+                  Get.toNamed(AppRoutes.bankDetails);
+                },
+              ),
+              ProfileListTile(
+                icon: Icons.account_balance,
+                label: 'KYC Details',
+                onTap: () {
+                  Get.toNamed(AppRoutes.kycDetails);
+                },
+              ),
+              ProfileListTile(
+                label: 'Orders',
+                onTap: () {
+                  Get.toNamed(AppRoutes.orders);
+                  Get.find<OrdersController>().loadData();
+                },
+              ),
+              ProfileListTile(
+                label: 'Portfolio',
+                onTap: () {
+                  Get.toNamed(AppRoutes.portfolio);
+                  Get.find<PortfolioController>().loadData();
+                },
+              ),
+              ProfileListTile(
+                label: 'Dark Mode',
+                onTap: () => ThemeService().switchTheme(),
+              ),
+              ProfileListTile(
+                label: 'Message',
+                onTap: () {},
+              ),
+              ProfileListTile(
+                label: 'Settings',
+                onTap: () {},
+              ),
+            ],
+          ),
         ),
       ),
     );

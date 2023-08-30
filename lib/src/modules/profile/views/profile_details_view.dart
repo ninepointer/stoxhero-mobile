@@ -105,7 +105,7 @@ class ProfileDetailsView extends GetView<ProfileController> {
                               hintText: 'Date of Birth',
                               suffixIcon: Icon(
                                 Icons.calendar_month,
-                                color: AppColors.netural.shade100,
+                                color: AppColors.grey,
                               ),
                             ),
                           ),

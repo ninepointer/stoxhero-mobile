@@ -42,7 +42,7 @@ class _AnalyticsChartState extends State<AnalyticsChart> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomTile(label: widget.title),
+        CommonTile(label: widget.title),
         AspectRatio(
           aspectRatio: 1.5,
           child: Container(

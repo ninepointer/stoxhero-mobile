@@ -38,7 +38,7 @@ class ContestView extends GetView<ContestController> {
                   NoDataFound(
                     label: 'No Upcoming Contest!',
                   ),
-                if (controller.premiumContestList.isNotEmpty) CustomTile(label: 'Premium Contest\'s'),
+                if (controller.premiumContestList.isNotEmpty) CommonTile(label: 'Premium Contest\'s'),
                 if (controller.premiumContestList.isNotEmpty)
                   ListView.builder(
                     shrinkWrap: true,
@@ -52,7 +52,7 @@ class ContestView extends GetView<ContestController> {
                     },
                   ),
                 SizedBox(height: 8),
-                if (controller.freeContestList.isNotEmpty) CustomTile(label: 'Free Contest\'s'),
+                if (controller.freeContestList.isNotEmpty) CommonTile(label: 'Free Contest\'s'),
                 if (controller.freeContestList.isNotEmpty)
                   ListView.builder(
                     shrinkWrap: true,

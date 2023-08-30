@@ -35,14 +35,14 @@ class SplashController extends GetxController {
         Get.offAllNamed(AppRoutes.onBoarding);
         AppStorage.setNewUserStatus(false);
       } else {
-        String? token = AppStorage.getToken();
         // await Future.delayed(Duration(seconds: 1));
-        // await Get.find<AuthController>().getUserDetails();
-        if (token == null || token.isEmpty) {
-          Get.offAllNamed(AppRoutes.signin);
-        } else {
-          await Get.find<AuthController>().getUserDetails();
-        }
+        await Get.find<AuthController>().getUserDetails();
+        String? token = AppStorage.getToken();
+        // if (token == null || token.isEmpty) {
+        //   Get.offAllNamed(AppRoutes.signin);
+        // } else {
+        //   await Get.find<AuthController>().getUserDetails();
+        // }
       }
     } catch (e) {
       log(e.toString());

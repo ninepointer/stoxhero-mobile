@@ -120,7 +120,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                       ],
                     ),
                   ),
-                  CustomTile(label: 'My Watchlist'),
+                  CommonTile(label: 'My Watchlist'),
                   controller.tenxWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
@@ -137,7 +137,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             },
                           ),
                         ),
-                  if (controller.tenxPositionsList.isNotEmpty) CustomTile(label: 'My Position Details'),
+                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.tenxPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -174,7 +174,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ],
                       ),
                     ),
-                  CustomTile(label: 'My Position'),
+                  CommonTile(label: 'My Position'),
                   controller.tenxPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.separated(
@@ -189,7 +189,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             );
                           },
                         ),
-                  CustomTile(label: 'Portfolio Details'),
+                  CommonTile(label: 'Portfolio Details'),
                   TenxPortfolioDetailsCard(
                     label: 'Portfolio Value',
                     info: 'Total funds added by StoxHero in your Account',

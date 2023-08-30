@@ -23,7 +23,6 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
             Divider(
               thickness: 1,
               height: 36,
-              color: AppColors.netural.shade50.withOpacity(0.5),
             ),
             Text(
               "KYC required for withdrawals. Daily limit: ₹200 to ₹1000",

@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/modules/contest/contest_index.dart';
 
 import '../../../core/core.dart';
 
@@ -33,9 +32,7 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             Row(
               children: [
-                buildInfoCard(
-                  label: 'Nifty 50',
-                ),
+                buildInfoCard(label: 'Nifty 50'),
                 buildInfoCard(label: 'Bank Nifty'),
                 buildInfoCard(label: 'Finnifty'),
               ],
@@ -80,7 +77,6 @@ class _DashboardViewState extends State<DashboardView> {
                 ],
               ),
             ),
-            ContestCard(),
             SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -98,7 +94,6 @@ class _DashboardViewState extends State<DashboardView> {
                 ],
               ),
             ),
-            ContestCard(),
             SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -169,7 +164,6 @@ class _DashboardViewState extends State<DashboardView> {
     return Expanded(
       child: Card(
         elevation: 0,
-        color: AppColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -197,20 +191,22 @@ class _DashboardViewState extends State<DashboardView> {
                 ],
               ),
               SizedBox(height: 6),
-              Row(
-                children: [
-                  Text(
-                    '₹ 125.87',
-                    style: AppStyles.tsWhiteMedium12,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '(+ 0.25%)',
-                    style: AppStyles.tsWhiteMedium10.copyWith(
-                      color: AppColors.success,
+              FittedBox(
+                child: Row(
+                  children: [
+                    Text(
+                      '₹ 125.87',
+                      style: AppStyles.tsWhiteMedium12,
                     ),
-                  ),
-                ],
+                    SizedBox(width: 2),
+                    Text(
+                      '(+ 0.25%)',
+                      style: AppStyles.tsWhiteMedium10.copyWith(
+                        color: AppColors.success,
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
           ),
@@ -220,26 +216,13 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   Widget customCard({required String label, required String percent}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Card(
-        // color: AppColors.primary,
-        elevation: 0,
-        margin: EdgeInsets.only(bottom: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-          side: BorderSide(
-            color: AppColors.netural.shade50,
-            width: 1,
-          ),
-        ),
-        child: ListTile(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
+    return CommonCard(
+      padding: EdgeInsets.zero,
+      margin: EdgeInsets.all(16).copyWith(top: 0),
+      children: [
+        ListTile(
           minLeadingWidth: 0,
           leading: Container(
-            padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: AppColors.secondary.shade900.withOpacity(0.25),
               shape: BoxShape.circle,
@@ -259,7 +242,7 @@ class _DashboardViewState extends State<DashboardView> {
             style: AppStyles.tsWhiteRegular16,
           ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -287,7 +270,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
       padding: EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         border: Border.all(
-          color: AppColors.netural.shade50,
+          color: AppColors.grey.withOpacity(.25),
         ),
         borderRadius: BorderRadius.circular(4),
       ),
