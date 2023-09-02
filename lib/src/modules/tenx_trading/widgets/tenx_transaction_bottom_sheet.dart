@@ -90,7 +90,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
               AbsorbPointer(
                 absorbing: type == TransactionType.exit,
                 child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
+                  value: controller.selectedQuantity.value == 0
+                      ? null
+                      : controller.selectedQuantity.value,
                   onChanged: (value) => controller.selectedQuantity(value),
                   menuMaxHeight: 250,
                   isDense: true,
@@ -233,7 +235,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     : type == TransactionType.buy
                         ? 'Buy'
                         : 'Sell',
-                onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
+                onPressed: () =>
+                    Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
               ),
             ],
           ),

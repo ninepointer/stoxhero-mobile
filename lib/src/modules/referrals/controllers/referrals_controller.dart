@@ -14,6 +14,7 @@ class ReferralsBinding implements Bindings {
 class ReferralsController extends BaseController<ReferralsRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+  final segmentedControlValue = 0.obs;
 
   final Rx<ActiveReferral?> activeReferrals = ActiveReferral().obs;
   final referralsLeaderboardList = <LeaderboardUserDetails>[].obs;
@@ -33,6 +34,10 @@ class ReferralsController extends BaseController<ReferralsRepository> {
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
+  }
+
+  void changeSegment(int val) {
+    segmentedControlValue.value = val;
   }
 
   Future getMyEarnings() async {
@@ -71,7 +76,8 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     isLoading(true);
     try {
       var userDetails = AppStorage.getUserDetails();
-      final RepoResponse<MyReferralsResponse> response = await repository.getMyReferrals(userDetails.sId ?? '');
+      final RepoResponse<MyReferralsResponse> response =
+          await repository.getMyReferrals(userDetails.sId ?? '');
       if (response.data != null) {
         myReferralsList(response.data?.data ?? []);
       } else {
@@ -87,7 +93,8 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   Future getReferralsLeaderboard() async {
     isLoading(true);
     try {
-      final RepoResponse<ReferralsLeaderboardResponse> response = await repository.getReferralsLeaderboard();
+      final RepoResponse<ReferralsLeaderboardResponse> response =
+          await repository.getReferralsLeaderboard();
       if (response.data != null) {
         referralsLeaderboardList(response.data?.data ?? []);
       } else {

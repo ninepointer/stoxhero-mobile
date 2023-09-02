@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/core/core.dart';
-import 'package:stoxhero/src/modules/careers/views/career_form.dart';
+import 'package:stoxhero/src/modules/careers/views/workshop_view.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 class CareerView extends StatelessWidget {
@@ -14,23 +14,33 @@ class CareerView extends StatelessWidget {
         title: Text('Careers'),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             children: [
               customCard(
+                context: context,
                 title: 'Internship',
                 image: AppImages.internship,
+                onPressed: () {
+                  Get.to(() => InternshipView());
+                },
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 12),
               customCard(
+                context: context,
                 title: 'Workshop',
                 image: AppImages.workshop,
+                onPressed: () {
+                  Get.to(() => WorkshopView());
+                },
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 12),
               customCard(
+                context: context,
                 title: 'Jobs',
                 image: AppImages.job,
+                onPressed: () {},
               ),
             ],
           ),
@@ -39,41 +49,44 @@ class CareerView extends StatelessWidget {
     );
   }
 
-  Widget customCard({required String title, required String image}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+  Widget customCard({
+    required String title,
+    required String image,
+    required VoidCallback onPressed,
+    required BuildContext context,
+  }) {
+    return CommonCard(
+      margin: EdgeInsets.zero,
+      padding: EdgeInsets.zero,
+      color: AppColors.white,
       children: [
-        Text(
-          title,
-          style: AppStyles.tsPrimaryMedium18,
-        ),
-        SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Column(
-            children: [
-              Image.asset(
-                image,
-                height: 150,
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(
+                title,
+                // style: Theme.of(context).textTheme.tsMedium18,
+                style: AppStyles.tsBlackMedium18,
               ),
-              CommonFilledButton(
-                label: 'Click here to Apply!',
-                height: 40,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(4),
-                    bottomRight: Radius.circular(4),
-                  ),
+            ),
+            Image.asset(
+              image,
+              height: 120,
+            ),
+            SizedBox(height: 8),
+            CommonFilledButton(
+              label: 'Click here to Apply!',
+              height: 40,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
                 ),
-                onPressed: () {
-                  Get.to(() => InternshipView());
-                },
               ),
-            ],
-          ),
+              onPressed: onPressed,
+            ),
+          ],
         ),
       ],
     );

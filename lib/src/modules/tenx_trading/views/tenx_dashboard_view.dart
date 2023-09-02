@@ -7,78 +7,6 @@ import '../../../core/core.dart';
 class TenxDashboardView extends GetView<TenxTradingController> {
   const TenxDashboardView({Key? key}) : super(key: key);
 
-  Widget buildInfoCard(BuildContext context, {required String label}) {
-    return Expanded(
-      child: Card(
-        elevation: 0,
-        margin: EdgeInsets.only(top: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: AppColors.grey.shade400,
-                    ),
-                    child: Icon(
-                      Icons.trending_up_rounded,
-                      size: 20,
-                      color: AppColors.white,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: AppStyles.tsSecondaryMedium10,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        '₹ 12,500.90',
-                        style: AppStyles.tsWhiteSemiBold14,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    'Today',
-                    style: AppStyles.tsPrimaryRegular12,
-                  ),
-                  Spacer(),
-                  Text(
-                    '₹ 125.87',
-                    style: Theme.of(context).textTheme.tsMedium12,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '(+ 0.25%)',
-                    style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                          color: AppColors.success,
-                        ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,31 +28,51 @@ class TenxDashboardView extends GetView<TenxTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
-                      children: [
-                        buildInfoCard(context, label: "NIFTY 50"),
-                        SizedBox(width: 8),
-                        buildInfoCard(context, label: "BANK NIFTY"),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      CommonStockInfo(
+                        label: 'Nifty 50',
+                        stockPrice: '₹ 12,500.90',
+                        stockLTP: '₹ 183.15',
+                        stockChange: '(+ 34.42%)',
+                      ),
+                      CommonStockInfo(
+                        label: 'Bank Nifty',
+                        stockPrice: '₹ 12,500.90',
+                        stockLTP: '₹ 183.15',
+                        stockChange: '(+ 34.42%)',
+                      ),
+                      CommonStockInfo(
+                        label: 'Finnifty',
+                        stockPrice: '₹ 12,500.90',
+                        stockLTP: '₹ 183.15',
+                        stockChange: '(+ 34.42%)',
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
-                      children: [
-                        buildInfoCard(context, label: "Margin"),
-                        SizedBox(width: 8),
-                        buildInfoCard(context, label: "NET P&L"),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      CommonStockInfo(
+                        label: 'Margin',
+                        stockPrice: '₹ 19,454.09',
+                        stockLTP: '₹ 183.15',
+                        stockChange: '(+ 34.42%)',
+                      ),
+                      CommonStockInfo(
+                        label: 'Net P&L',
+                        stockPrice: '₹ 19,454.98',
+                        stockLTP: '₹ 183.15',
+                        stockChange: '(+ 34.42%)',
+                      ),
+                    ],
                   ),
                   CommonTile(label: 'My Watchlist'),
                   controller.tenxWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tenxWatchlist.length >= 5 ? 300 : controller.tenxWatchlist.length * 60,
+                          height: controller.tenxWatchlist.length >= 5
+                              ? 300
+                              : controller.tenxWatchlist.length * 76,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -137,7 +85,32 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             },
                           ),
                         ),
-                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  CommonTile(label: 'My Rank'),
+                  CommonRankCard(
+                    rank: '#1000',
+                    name: 'Ritik Prajapat',
+                    netPnl: '+ ₹12,02.69',
+                  ),
+                  CommonTile(label: 'Top Rank'),
+                  CommonRankCard(
+                    rank: '#1000',
+                    name: 'Ritik Prajapat',
+                    netPnl: '+ ₹12,02.69',
+                  ),
+                  SizedBox(height: 4),
+                  CommonRankCard(
+                    rank: '#1000',
+                    name: 'Ritik Prajapat',
+                    netPnl: '+ ₹12,02.69',
+                  ),
+                  SizedBox(height: 4),
+                  CommonRankCard(
+                    rank: '#1000',
+                    name: 'Ritik Prajapat',
+                    netPnl: '+ ₹12,02.69',
+                  ),
+                  if (controller.tenxPositionsList.isNotEmpty)
+                    CommonTile(label: 'My Position Details'),
                   if (controller.tenxPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),

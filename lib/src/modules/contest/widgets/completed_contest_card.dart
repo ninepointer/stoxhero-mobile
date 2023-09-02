@@ -5,9 +5,11 @@ import '../../../core/core.dart';
 
 class CompletedContestCard extends StatelessWidget {
   final CompletedContest? contestDetails;
+  final CompletedContestPnl? contestPnl;
   const CompletedContestCard({
     Key? key,
     this.contestDetails,
+    this.contestPnl,
   }) : super(key: key);
 
   @override
@@ -21,47 +23,92 @@ class CompletedContestCard extends StatelessWidget {
           alignment: Alignment.center,
           child: Row(
             children: [
-              Text(
-                contestDetails?.contestName ?? '-',
-                style: AppStyles.tsSecondaryMedium16,
+              Expanded(
+                child: Text(
+                  contestDetails?.contestName ?? '-',
+                  style: AppStyles.tsSecondaryMedium16,
+                ),
               ),
-              // Spacer(),
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              //   decoration: BoxDecoration(
-              //     color: AppColors.warning.withOpacity(0.1),
-              //     borderRadius: BorderRadius.circular(8),
-              //   ),
-              //   child: Text(
-              //     'NIFTY',
-              //     style: AppStyles.tsPrimaryMedium14.copyWith(
-              //       color: AppColors.warning,
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(width: 12),
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              //   decoration: BoxDecoration(
-              //     color: AppColors.info.withOpacity(0.1),
-              //     borderRadius: BorderRadius.circular(8),
-              //   ),
-              //   child: Text(
-              //     'DAY',
-              //     style: AppStyles.tsPrimaryMedium14.copyWith(
-              //       color: AppColors.info,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.success,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  'Nifty',
+                  style: AppStyles.tsWhiteMedium12,
+                ),
+              ),
+              SizedBox(width: 4),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.secondary,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  'Bank Nifty',
+                  style: AppStyles.tsWhiteMedium12,
+                ),
+              ),
+              SizedBox(width: 4),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.danger,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  'Day',
+                  style: AppStyles.tsWhiteMedium12,
+                ),
+              ),
+              SizedBox(width: 4),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  'Contest Completed',
+                  textAlign: TextAlign.center,
+                  style: AppStyles.tsWhiteMedium12,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 12),
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
+              SizedBox(height: 6),
+              Image.asset(
+                AppImages.contestTrophy,
+                width: 40,
+              ),
+              SizedBox(height: 4),
+              Text(
+                'Reward',
+                style: Theme.of(context).textTheme.tsRegular12,
+              ),
+              Text(
+                '${contestDetails?.payoutPercentage}% of the net P&L',
+                style: Theme.of(context).textTheme.tsMedium14,
+              ),
+              SizedBox(height: 14),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -70,12 +117,12 @@ class CompletedContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Start Date & Time',
-                        style: AppStyles.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(height: 4),
                       Text(
                         FormatHelper.formatDateTimeToIST(contestDetails?.contestStartTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
+                        style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
                   ),
@@ -84,18 +131,18 @@ class CompletedContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'End Date & Time',
-                        style: AppStyles.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(height: 4),
                       Text(
-                        '10 July, 3:20 PM',
-                        style: Theme.of(context).textTheme.tsMedium12,
+                        FormatHelper.formatDateTimeToIST(contestDetails?.contestEndTime),
+                        style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 14),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -104,12 +151,13 @@ class CompletedContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Entry Fees',
-                        style: AppStyles.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(height: 4),
                       Text(
-                        'Free',
-                        style: Theme.of(context).textTheme.tsRegular14,
+                        // "₹ 49",
+                        '₹ ${contestDetails?.entryFee}',
+                        style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
                   ),
@@ -118,46 +166,61 @@ class CompletedContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Portfolio',
-                        style: AppStyles.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(height: 4),
                       Text(
-                        '₹ 5,00,000',
-                        style: Theme.of(context).textTheme.tsRegular14,
+                        // "₹ 50,00,00",
+                        '₹ ${contestPnl?.portfolioValue}',
+                        style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 16),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      AppImages.contestTrophy,
-                      height: 24,
+              SizedBox(height: 14),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Net P&L',
+                          style: Theme.of(context).textTheme.tsRegular12,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          // '+₹456',
+                          '${contestPnl?.npnl}',
+                          style: Theme.of(context).textTheme.tsMedium14,
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Reward',
-                      style: AppStyles.tsPrimaryMedium14.copyWith(
-                        color: AppColors.success,
-                      ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [],
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Payout',
+                          style: Theme.of(context).textTheme.tsRegular12,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          // '₹0',
+                          '₹ ${contestPnl?.payoutAmount}',
+                          style: Theme.of(context).textTheme.tsMedium14,
+                        ),
+                      ],
                     ),
-                    Spacer(),
-                    Text(
-                      '0.5% of the net P&L',
-                      style: AppStyles.tsPrimaryMedium14.copyWith(
-                        color: AppColors.success,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               SizedBox(height: 12),
             ],
@@ -171,13 +234,15 @@ class CompletedContestCard extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.secondary.withOpacity(0.1),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    ),
+                    color: AppColors.secondary.shade400,
                   ),
                   child: Text(
                     'View Orders',
-                    style: AppStyles.tsPrimaryMedium14.copyWith(
-                      color: AppColors.secondary,
-                    ),
+                    style: AppStyles.tsWhiteMedium14,
                   ),
                 ),
               ),

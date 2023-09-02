@@ -21,13 +21,9 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     return CommonCard(
       hasBorder: false,
-      margin: EdgeInsets.zero,
+      margin: EdgeInsets.symmetric(horizontal: 12),
       padding: EdgeInsets.zero,
       children: [
-        Divider(
-          thickness: 1,
-          height: 0,
-        ),
         Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -37,11 +33,11 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                 children: [
                   Text(
                     data.name ?? '-',
-                    style: AppStyles.tsSecondaryMedium14,
+                    style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
                     FormatHelper.formatDateByMonth(data.expiry),
-                    style: AppStyles.tsSecondaryMedium14,
+                    style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
               ),
@@ -49,16 +45,18 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(data.tradingsymbol ?? '-'),
-                  Text(data.exchange ?? '-'),
+                  Text(
+                    data.tradingsymbol ?? '-',
+                    style: Theme.of(context).textTheme.tsRegular14,
+                  ),
+                  Text(
+                    data.exchange ?? '-',
+                    style: Theme.of(context).textTheme.tsRegular14,
+                  ),
                 ],
               ),
             ],
           ),
-        ),
-        Divider(
-          thickness: 1,
-          height: 0,
         ),
         Row(
           children: [
@@ -77,18 +75,16 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.1),
+                    color: AppColors.success,
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(4),
+                      bottomLeft: Radius.circular(8),
                     ),
                   ),
                   child: Text(
                     'BUY',
-                    style: AppStyles.tsPrimaryMedium14.copyWith(
-                      color: AppColors.success,
-                    ),
+                    style: AppStyles.tsWhiteMedium14,
                   ),
                 ),
               ),
@@ -108,15 +104,13 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.danger.withOpacity(0.1),
+                    color: AppColors.danger.shade300,
                   ),
                   child: Text(
                     'SELL',
-                    style: AppStyles.tsPrimaryMedium14.copyWith(
-                      color: AppColors.danger,
-                    ),
+                    style: AppStyles.tsWhiteMedium14,
                   ),
                 ),
               ),
@@ -128,27 +122,21 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                     : () => Get.find<TenxTradingController>().addInstrument(data),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isAdded ? AppColors.warning.withOpacity(0.1) : AppColors.info.withOpacity(0.1),
+                    color: isAdded ? AppColors.info : AppColors.secondary,
                     borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(4),
+                      bottomRight: Radius.circular(8),
                     ),
                   ),
                   child: Text(
                     isAdded ? 'REMOVE' : 'ADD',
-                    style: AppStyles.tsPrimaryMedium14.copyWith(
-                      color: isAdded ? AppColors.warning : AppColors.info,
-                    ),
+                    style: AppStyles.tsWhiteMedium14,
                   ),
                 ),
               ),
             ),
           ],
-        ),
-        Divider(
-          thickness: 1,
-          height: 0,
         ),
       ],
     );

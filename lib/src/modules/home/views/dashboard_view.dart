@@ -1,7 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
+import 'package:stoxhero/src/core/widgets/common_stock_info.dart';
 
 import '../../../core/core.dart';
+import '../../contest/contest_index.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({Key? key}) : super(key: key);
@@ -32,9 +36,24 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             Row(
               children: [
-                buildInfoCard(label: 'Nifty 50'),
-                buildInfoCard(label: 'Bank Nifty'),
-                buildInfoCard(label: 'Finnifty'),
+                CommonStockInfo(
+                  label: 'Nifty 50',
+                  stockPrice: '₹19,454',
+                  stockLTP: '₹183.15',
+                  stockChange: '(+34.42%)',
+                ),
+                CommonStockInfo(
+                  label: 'Bank Nifty',
+                  stockPrice: '₹19,454',
+                  stockLTP: '₹183.15',
+                  stockChange: '(+34.42%)',
+                ),
+                CommonStockInfo(
+                  label: 'Finnifty',
+                  stockPrice: '₹19,454',
+                  stockLTP: '₹183.15',
+                  stockChange: '(+34.42%)',
+                ),
               ],
             ),
             SizedBox(height: 24),
@@ -54,8 +73,6 @@ class _DashboardViewState extends State<DashboardView> {
                 options: CarouselOptions(
                   height: 180,
                   autoPlay: true,
-                  // enlargeCenterPage: true,
-                  // enlargeStrategy: CenterPageEnlargeStrategy.height,
                   autoPlayInterval: const Duration(seconds: 6),
                 ),
               ),
@@ -68,15 +85,21 @@ class _DashboardViewState extends State<DashboardView> {
                 children: [
                   Text(
                     'Upcoming Contest',
-                    style: AppStyles.tsWhiteMedium16,
+                    style: Theme.of(context).textTheme.tsMedium16,
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.find<ContestController>().loadData();
+                      Get.to(
+                        () => ContestListView(),
+                      );
+                    },
                     child: Text('See All'),
                   ),
                 ],
               ),
             ),
+            UpComingContestCard(),
             SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -85,7 +108,7 @@ class _DashboardViewState extends State<DashboardView> {
                 children: [
                   Text(
                     'Ongoing Contest',
-                    style: AppStyles.tsWhiteMedium16,
+                    style: Theme.of(context).textTheme.tsMedium16,
                   ),
                   TextButton(
                     onPressed: () {},
@@ -94,12 +117,13 @@ class _DashboardViewState extends State<DashboardView> {
                 ],
               ),
             ),
+            OnGoingContestCard(),
             SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Return Summary',
-                style: AppStyles.tsWhiteMedium16,
+                style: Theme.of(context).textTheme.tsMedium16,
               ),
             ),
             SizedBox(height: 12),
@@ -110,7 +134,7 @@ class _DashboardViewState extends State<DashboardView> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 'Performance',
-                style: AppStyles.tsWhiteMedium16,
+                style: Theme.of(context).textTheme.tsMedium16,
               ),
             ),
             SizedBox(height: 12),
@@ -160,62 +184,10 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget buildInfoCard({required String label}) {
-    return Expanded(
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: AppStyles.tsSecondaryMedium14,
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        '₹ 12,500.90',
-                        style: AppStyles.tsWhiteSemiBold12,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 6),
-              FittedBox(
-                child: Row(
-                  children: [
-                    Text(
-                      '₹ 125.87',
-                      style: AppStyles.tsWhiteMedium12,
-                    ),
-                    SizedBox(width: 2),
-                    Text(
-                      '(+ 0.25%)',
-                      style: AppStyles.tsWhiteMedium10.copyWith(
-                        color: AppColors.success,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget customCard({required String label, required String percent}) {
+  Widget customCard({
+    required String label,
+    required String percent,
+  }) {
     return CommonCard(
       padding: EdgeInsets.zero,
       margin: EdgeInsets.all(16).copyWith(top: 0),
@@ -224,22 +196,270 @@ class _DashboardViewState extends State<DashboardView> {
           minLeadingWidth: 0,
           leading: Container(
             decoration: BoxDecoration(
-              color: AppColors.secondary.shade900.withOpacity(0.25),
+              color: AppColors.grey.withOpacity(.25),
               shape: BoxShape.circle,
             ),
             child: Image.asset(
               AppImages.contestReward,
-              width: 20,
-              height: 20,
+              width: 30,
+              height: 30,
             ),
           ),
           title: Text(
             label,
-            style: AppStyles.tsWhiteRegular16,
+            style: Theme.of(context).textTheme.tsRegular16,
           ),
           trailing: Text(
             percent,
-            style: AppStyles.tsWhiteRegular16,
+            style: Theme.of(context).textTheme.tsMedium16,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget contestCard() {
+    return CommonCard(
+      padding: EdgeInsets.zero,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(12),
+          alignment: Alignment.center,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  // contestDetails?.contestName ?? '-',
+                  'Tuesday Wars',
+                  style: AppStyles.tsSecondaryMedium16,
+                ),
+              ),
+              Spacer(),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.success,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  'Nifty',
+                  style: AppStyles.tsWhiteMedium12,
+                ),
+              ),
+              SizedBox(width: 4),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.secondary,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  'Bank Nifty',
+                  style: AppStyles.tsWhiteMedium12,
+                ),
+              ),
+              SizedBox(width: 4),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.danger,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  'Day',
+                  style: AppStyles.tsWhiteMedium12,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Divider(thickness: 1, height: 0),
+        SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'No. of Seats left',
+                          style: Theme.of(context).textTheme.tsRegular14,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          '23',
+                          style: Theme.of(context).textTheme.tsMedium16,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Image.asset(
+                        AppImages.contestTrophy,
+                        width: 40,
+                      ),
+                      Text(
+                        'Reward',
+                        style: Theme.of(context).textTheme.tsRegular14,
+                      ),
+                      Text(
+                        '0.5% of the net P&L',
+                        style: Theme.of(context).textTheme.tsMedium14,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Remaining',
+                          style: Theme.of(context).textTheme.tsRegular14,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          '00:00:00',
+                          style: Theme.of(context).textTheme.tsMedium16,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Start Date & Time',
+                        style: Theme.of(context).textTheme.tsRegular14,
+                      ),
+                      SizedBox(height: 4),
+                      // Text(
+                      //   FormatHelper.formatDateTimeToIST(contestDetails?.contestStartTime),
+                      //  style: Theme.of(context).textTheme.tsMedium16,
+                      // ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'End Date & Time',
+                        style: Theme.of(context).textTheme.tsRegular14,
+                      ),
+                      SizedBox(height: 4),
+                      // Text(
+                      //   FormatHelper.formatDateTimeToIST(contestDetails?.contestEndTime),
+                      // style: Theme.of(context).textTheme.tsMedium16,
+
+                      // ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Entry Fees',
+                        style: Theme.of(context).textTheme.tsRegular14,
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Free',
+                        style: Theme.of(context).textTheme.tsMedium16,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Portfolio',
+                        style: Theme.of(context).textTheme.tsRegular14,
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        '₹ 5,00,000',
+                        style: Theme.of(context).textTheme.tsMedium16,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 12),
+            ],
+          ),
+        ),
+        Container(
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Get Notified',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.success,
+                    ),
+                    child: Text(
+                      'Start Trading',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Share',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],

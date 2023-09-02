@@ -37,7 +37,8 @@ class WalletView extends GetView<WalletController> {
                   onPressed: null,
                 ),
                 SizedBox(height: 16),
-                if (controller.walletTransactionsList.isNotEmpty) CommonTile(label: 'Recent Transactions'),
+                if (controller.walletTransactionsList.isNotEmpty)
+                  CommonTile(label: 'Recent Transactions'),
                 if (controller.walletTransactionsList.isNotEmpty)
                   ListView.builder(
                     shrinkWrap: true,

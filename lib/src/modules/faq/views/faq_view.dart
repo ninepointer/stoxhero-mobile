@@ -32,7 +32,7 @@ class _FaqViewState extends State<FaqView> {
             SizedBox(height: 12),
             Text(
               'How does this work ?',
-              style: AppStyles.tsGreyMedium20,
+              style: Theme.of(context).textTheme.tsMedium18,
             ),
             SizedBox(height: 12),
             buildExpandableCard(0, 'About Stoxhero', ''),
@@ -45,7 +45,7 @@ class _FaqViewState extends State<FaqView> {
             Text(
               'For any additional queries,\n drop us an email: team@stoxhero.com',
               textAlign: TextAlign.center,
-              style: AppStyles.tsGreyMedium18,
+              style: AppStyles.tsGreyRegular16,
             ),
           ],
         ),
@@ -53,12 +53,16 @@ class _FaqViewState extends State<FaqView> {
     );
   }
 
-  Widget buildExpandableCard(int index, String title, String content) {
+  Widget buildExpandableCard(
+    int index,
+    String title,
+    String content,
+  ) {
     return CommonCard(
       onTap: () {
         setState(() {
           if (expandedIndex == index) {
-            expandedIndex = -1; 
+            expandedIndex = -1;
           } else {
             expandedIndex = index;
           }
@@ -74,6 +78,7 @@ class _FaqViewState extends State<FaqView> {
             ),
             Icon(
               expandedIndex == index ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+              color: AppColors.grey,
             ),
           ],
         ),

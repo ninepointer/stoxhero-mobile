@@ -111,7 +111,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(0.1),
                         borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(4),
+                          bottomLeft: Radius.circular(8),
                         ),
                       ),
                       child: Text(
@@ -183,7 +183,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       decoration: BoxDecoration(
                         color: AppColors.warning.withOpacity(0.1),
                         borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(4),
+                          bottomLeft: Radius.circular(8),
                         ),
                       ),
                       child: Text(

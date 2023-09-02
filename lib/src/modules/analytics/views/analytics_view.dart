@@ -40,7 +40,9 @@ class AnalyticsView extends GetView<AnalyticsController> {
                         color: AppColors.primary,
                       ),
                     ),
-                    labelStyle: Theme.of(context).textTheme.tsWhiteMedium14,
+                    labelStyle: Theme.of(context).textTheme.tsMedium14.copyWith(
+                          color: AppColors.white,
+                        ),
                     unselectedLabelStyle: Theme.of(context).textTheme.tsMedium14,
                     tabs: [
                       controller.userDetailsData.designation == AppConstants.equityTraderType
@@ -164,7 +166,8 @@ class AnalyticsView extends GetView<AnalyticsController> {
                               label: 'Show Details',
                               onPressed: () {
                                 if (controller.selectedTab.value == 0) {
-                                  controller.userDetailsData.designation == AppConstants.equityTraderType
+                                  controller.userDetailsData.designation ==
+                                          AppConstants.equityTraderType
                                       ? controller.getInfinityTradingDateWiseDetails()
                                       : controller.getTenxTradingDateWiseDetails();
                                 } else {

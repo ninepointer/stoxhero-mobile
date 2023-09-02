@@ -14,6 +14,7 @@ class ContestBinding implements Bindings {
 class ContestController extends BaseController<ContestRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+  final segmentedControlValue = 0.obs;
 
   final upComingContestList = <UpComingContest>[].obs;
   final premiumContestList = <UpComingContest>[].obs;
@@ -28,10 +29,19 @@ class ContestController extends BaseController<ContestRepository> {
     await getCompletedContestPnlList();
   }
 
+  void handleSegmentChange(int val) {
+    changeSegment(val);
+  }
+
+  void changeSegment(int val) {
+    segmentedControlValue.value = val;
+  }
+
   Future getUpComingContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<UpComingContestListResponse> response = await repository.getUpComingContestList();
+      final RepoResponse<UpComingContestListResponse> response =
+          await repository.getUpComingContestList();
       if (response.data != null) {
         upComingContestList(response.data?.data ?? []);
         if (upComingContestList.isNotEmpty) {
@@ -57,7 +67,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestListResponse> response = await repository.getCompletedContestList();
+      final RepoResponse<CompletedContestListResponse> response =
+          await repository.getCompletedContestList();
       if (response.data != null) {
         tempCompletedContestList(response.data?.data ?? []);
       } else {
@@ -73,7 +84,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestPnlList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestPnlListResponse> response = await repository.getCompletedContestPnlList();
+      final RepoResponse<CompletedContestPnlListResponse> response =
+          await repository.getCompletedContestPnlList();
       if (response.data != null) {
         List<CompletedContest> tempList = [];
         completedContestPnlList(response.data?.data ?? []);

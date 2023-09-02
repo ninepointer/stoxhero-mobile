@@ -18,7 +18,7 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
           children: [
             Text(
               'Withdraw from wallet to bank account',
-              style: AppStyles.tsWhiteRegular18,
+              style: Theme.of(context).textTheme.tsMedium18,
             ),
             Divider(
               thickness: 1,
@@ -26,11 +26,12 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
             ),
             Text(
               "KYC required for withdrawals. Daily limit: ₹200 to ₹1000",
-              style: AppStyles.tsWhiteRegular16,
+              style: Theme.of(context).textTheme.tsRegular16,
             ),
             SizedBox(height: 16),
             Text(
               "Your wallet balance: ${FormatHelper.formatNumbers(controller.totalCashAmount.value)}",
+              style: Theme.of(context).textTheme.tsRegular16,
             ),
             SizedBox(height: 16),
             CommonTextField(
@@ -45,7 +46,7 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
                   onPressed: controller.onCancel,
                   child: Text(
                     'Cancel',
-                    style: AppStyles.tsWhiteRegular14,
+                    style: Theme.of(context).textTheme.tsRegular16,
                   ),
                 ),
                 SizedBox(width: 8),

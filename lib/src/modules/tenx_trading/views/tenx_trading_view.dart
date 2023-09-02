@@ -136,7 +136,8 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                           style: AppStyles.tsSecondaryRegular16,
                         ),
                         Icon(
-                          isExpanded ? Icons.expand_more_rounded : Icons.expand_less_rounded,
+                          isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                          color: AppColors.grey,
                         ),
                       ],
                     ),

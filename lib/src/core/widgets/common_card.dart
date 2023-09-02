@@ -7,6 +7,7 @@ class CommonCard extends StatelessWidget {
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final bool hasBorder;
+  final Color? color;
   final Function()? onTap;
 
   const CommonCard({
@@ -16,12 +17,14 @@ class CommonCard extends StatelessWidget {
     this.margin,
     this.hasBorder = true,
     this.onTap,
+    this.color,
   });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        color: color,
         margin: margin ??
             EdgeInsets.only(
               left: 16,

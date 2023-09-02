@@ -25,12 +25,13 @@ class WalletTransactionCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.grey.shade400,
+                color: AppColors.secondary.withOpacity(.25),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.currency_rupee_rounded,
                 size: 20,
+                color: AppColors.secondary,
               ),
             ),
             SizedBox(width: 12),

@@ -19,7 +19,7 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
       children: [
         CommonCard(
           hasBorder: false,
-          margin: EdgeInsets.zero,
+          margin: EdgeInsets.symmetric(horizontal: 8),
           children: [
             Row(
               children: [
@@ -51,10 +51,7 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
             ),
           ],
         ),
-        Divider(
-          thickness: 1,
-          height: 0,
-        ),
+        SizedBox(height: 4),
       ],
     );
   }

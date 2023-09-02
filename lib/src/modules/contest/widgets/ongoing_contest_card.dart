@@ -3,9 +3,9 @@ import 'package:stoxhero/src/data/data.dart';
 
 import '../../../core/core.dart';
 
-class UpComingContestCard extends StatelessWidget {
+class OnGoingContestCard extends StatelessWidget {
   final UpComingContest? contestDetails;
-  const UpComingContestCard({
+  const OnGoingContestCard({
     Key? key,
     this.contestDetails,
   }) : super(key: key);
@@ -91,8 +91,8 @@ class UpComingContestCard extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '23',
-                          // '${contestDetails?.maxParticipants}',
+                          // '23',
+                          '${contestDetails?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -119,16 +119,16 @@ class UpComingContestCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          'Remaining',
-                          style: Theme.of(context).textTheme.tsRegular12,
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          // "00:00:00",
-                          '${contestDetails?.contestEndTime}',
-                          style: Theme.of(context).textTheme.tsMedium14,
-                        ),
+                        // Text(
+                        //   'Remaining',
+                        //   style: Theme.of(context).textTheme.tsRegular12,
+                        // ),
+                        // SizedBox(height: 4),
+                        // Text(
+                        //   "00:00:00",
+                        //   // '${contestDetails?.contestEndTime}',
+                        //   style: Theme.of(context).textTheme.tsMedium14,
+                        // ),
                       ],
                     ),
                   ),
@@ -147,7 +147,6 @@ class UpComingContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // '23 Aug 2023 09:20 AM',
                         FormatHelper.formatDateTimeToIST(contestDetails?.contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
@@ -162,7 +161,6 @@ class UpComingContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // '23 Aug 2023 03:20 PM',
                         FormatHelper.formatDateTimeToIST(contestDetails?.contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
@@ -183,7 +181,7 @@ class UpComingContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // '₹99',
+                        // 'Free',
                         '₹ ${contestDetails?.entryFee}',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
@@ -198,8 +196,7 @@ class UpComingContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // '₹ 50,00,00',
-                        '₹ ${contestDetails?.contestEndTime}',
+                        '₹ ${contestDetails?.portfolio?.portfolioValue}',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -218,24 +215,9 @@ class UpComingContestCard extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primary,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
-                  ),
-                  child: Text(
-                    'Get Notified',
-                    style: AppStyles.tsWhiteMedium14,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
                     color: AppColors.success,
                   ),
                   child: Text(
@@ -251,10 +233,10 @@ class UpComingContestCard extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.secondary,
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),
+                    color: AppColors.secondary,
                   ),
                   child: Text(
                     'Share',
