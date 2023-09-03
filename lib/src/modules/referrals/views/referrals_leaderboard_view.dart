@@ -22,114 +22,32 @@ class ReferralsLeaderboardView extends GetView<ReferralsController> {
       child: Column(
         children: [
           CommonTile(label: 'Referral Leaderboard'),
-           Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Card(
-                          margin: EdgeInsets.zero,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: AppColors.grey.withOpacity(.25),
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(14),
-                            width: double.infinity,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.grey.withOpacity(.25),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        Icons.groups_rounded,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Friends Joined',
-                                          style: AppStyles.tsGreyRegular12,
-                                        ),
-                                        SizedBox(height: 2),
-                                        Text(
-                                          controller.earnings.value.joined?.toString() ?? '0',
-                                          style: Theme.of(context).textTheme.tsMedium16,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: Card(
-                          margin: EdgeInsets.zero,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: AppColors.grey.withOpacity(.25),
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(14),
-                            width: double.infinity,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.grey.withOpacity(.25),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        Icons.currency_rupee_rounded,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Total Earnings',
-                                          style: AppStyles.tsGreyRegular12,
-                                        ),
-                                        SizedBox(height: 2),
-                                        Text(
-                                          controller.earnings.value.earnings?.toString() ?? '0',
-                                          style: Theme.of(context).textTheme.tsMedium16,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: customCard(
+                  context,
+                  label: 'Friend Joined',
+                  earning: controller.earnings.value.joined?.toString() ?? '0',
                 ),
+              ),
+              Expanded(
+                child: customCard(
+                  context,
+                  label: 'Total Earnings',
+                  earning: "₹ ${controller.earnings.value.earnings?.toString() ?? '0'}",
+                  valueColor: AppColors.success,
+                ),
+              ),
+              Expanded(
+                child: customCard(
+                  context,
+                  label: 'My Rank',
+                  earning: '00',
+                ),
+              ),
+            ],
+          ),
           ListView.builder(
             shrinkWrap: true,
             itemCount: controller.referralsLeaderboardList.length,
@@ -165,6 +83,37 @@ class ReferralsLeaderboardView extends GetView<ReferralsController> {
           SizedBox(height: 16),
         ],
       ),
+    );
+  }
+
+  Widget customCard(
+    BuildContext context, {
+    required String label,
+    required String earning,
+    Color? valueColor,
+  }) {
+    return CommonCard(
+      margin: EdgeInsets.symmetric(horizontal: 2),
+      children: [
+        Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.tsRegular16,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              earning,
+              style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                    color: valueColor,
+                  ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

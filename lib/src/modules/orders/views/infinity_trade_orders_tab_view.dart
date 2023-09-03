@@ -24,8 +24,6 @@ class _InfinityTradeOrdersTabViewState extends State<InfinityTradeOrdersTabView>
     super.initState();
   }
 
-  int segmentedControlValue = 0;
-
   void updateSelecteBuySell(int? value) {
     if (grouValue == value) {
       grouValue = null;
@@ -35,48 +33,24 @@ class _InfinityTradeOrdersTabViewState extends State<InfinityTradeOrdersTabView>
     setState(() {});
   }
 
-  Widget _segmentedControl() => Container(
-        width: double.infinity,
-        margin: EdgeInsets.symmetric(vertical: 16),
-        child: CupertinoSegmentedControl<int>(
-          selectedColor: AppColors.primary,
-          borderColor: AppColors.primary,
-          unselectedColor: Colors.transparent,
-          children: {
-            0: Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                'Today\'s Order\'s',
-                style: Theme.of(context).textTheme.tsRegular16,
-              ),
-            ),
-            1: Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                'All Order\'s',
-                style: Theme.of(context).textTheme.tsRegular16,
-              ),
-            ),
-          },
-          onValueChanged: (int val) {
-            setState(() {
-              segmentedControlValue = val;
-            });
-          },
-          groupValue: segmentedControlValue,
-        ),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        var ordersList = segmentedControlValue == 0
+        var ordersList = controller.segmentedControlValue.value == 0
             ? controller.infinityTradeTodaysOrdersList
             : controller.infinityTradeAllOrdersList;
         return Column(
           children: [
-            _segmentedControl(),
+            CommonSegmentedControl(
+              segments: {
+                0: 'Today\'s Orders',
+                1: 'All Orders',
+              },
+              selectedSegment: controller.segmentedControlValue.value,
+              onValueChanged: controller.handleSegmentChange,
+            ),
+
             // Container(
             //   margin: EdgeInsets.symmetric(horizontal: 16),
             //   decoration: BoxDecoration(
@@ -118,87 +92,90 @@ class _InfinityTradeOrdersTabViewState extends State<InfinityTradeOrdersTabView>
             //     ],
             //   ),
             // ),
-            ordersList.isEmpty
-                ? NoDataFound()
-                : Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: ordersList.length,
-                      itemBuilder: (context, index) {
-                        var order = ordersList[index];
-                        return CommonCard(
+            if (ordersList.isEmpty)
+              NoDataFound()
+            else
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: ordersList.length,
+                  itemBuilder: (context, index) {
+                    var order = ordersList[index];
+                    return CommonCard(
+                      children: [
+                        OrderCardTile(
+                          label: 'Contract',
+                          value: order.symbol,
+                        ),
+                        SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OrderCardTile(
-                              label: 'Contract',
-                              value: order.symbol,
+                              label: 'Quantity',
+                              value: order.quantity.toString(),
                             ),
-                            SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                OrderCardTile(
-                                  label: 'Quantity',
-                                  value: order.quantity.toString(),
-                                ),
-                                OrderCardTile(
-                                  isRightAlign: true,
-                                  label: 'Price',
-                                  value: FormatHelper.formatNumbers(order.averagePrice),
-                                ),
-                              ],
+                            OrderCardTile(
+                              isRightAlign: true,
+                              label: 'Price',
+                              value: FormatHelper.formatNumbers(order.averagePrice),
                             ),
-                            SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                OrderCardTile(
-                                  label: 'Amount',
-                                  value: FormatHelper.formatNumbers(
-                                    order.amount,
-                                    isNegative: true,
-                                  ),
-                                ),
-                                OrderCardTile(
-                                  isRightAlign: true,
-                                  label: 'Type',
-                                  value: order.buyOrSell,
-                                  valueColor:
-                                      order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                OrderCardTile(
-                                  label: 'Order ID',
-                                  value: order.orderId,
-                                ),
-                                OrderCardTile(
-                                  isRightAlign: true,
-                                  label: 'Status',
-                                  value: order.status,
-                                  valueColor:
-                                      order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                OrderCardTile(
-                                  label: 'Time',
-                                  value: FormatHelper.formatDateTime(order.tradeTime),
-                                ),
-                              ],
-                            )
                           ],
-                        );
-                      },
-                    ),
-                  )
+                        ),
+                        SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OrderCardTile(
+                              label: 'Amount',
+                              value: FormatHelper.formatNumbers(
+                                order.amount,
+                                isNegative: true,
+                              ),
+                            ),
+                            OrderCardTile(
+                              isRightAlign: true,
+                              label: 'Type',
+                              value: order.buyOrSell,
+                              valueColor: order.buyOrSell == AppConstants.buy
+                                  ? AppColors.success
+                                  : AppColors.danger,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OrderCardTile(
+                              label: 'Order ID',
+                              value: order.orderId,
+                            ),
+                            OrderCardTile(
+                              isRightAlign: true,
+                              label: 'Status',
+                              value: order.status,
+                              valueColor: order.status == AppConstants.complete
+                                  ? AppColors.success
+                                  : AppColors.danger,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OrderCardTile(
+                              label: 'Time',
+                              value: FormatHelper.formatDateTime(order.tradeTime),
+                            ),
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                ),
+              )
           ],
         );
       },

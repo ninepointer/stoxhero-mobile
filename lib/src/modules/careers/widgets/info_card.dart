@@ -17,7 +17,6 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommonCard(
       padding: EdgeInsets.zero,
-      // color: AppColors.white,
       children: [
         Padding(
           padding: const EdgeInsets.all(16),
@@ -51,7 +50,7 @@ class InfoCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'Lead virtual trading program, guiding participants in stock market simulations. Foster collaborative learning, refining financial strategies in a risk-free space. Empower growth in practical trading skills as Virtual Trading.',
-            style: Theme.of(context).textTheme.tsRegular14,
+            style: AppStyles.tsGreyRegular14,
           ),
         ),
         SizedBox(height: 12),
@@ -87,17 +86,13 @@ class InfoCard extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 12),
-        CommonFilledButton(
-          label: 'Click here to Apply!',
-          height: 40,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(8),
-              bottomRight: Radius.circular(8),
-            ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: CommonFilledButton(
+            label: 'Click here to Apply!',
+            height: 48,
+            onPressed: onPressed,
           ),
-          onPressed: onPressed,
         ),
       ],
     );

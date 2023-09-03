@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:stoxhero/src/core/core.dart';
+import 'package:stoxhero/src/modules/careers/controllers/career_controller.dart';
 
 import '../../../core/widgets/common_dropdown.dart';
 
-class CareerForm extends StatelessWidget {
+class CareerForm extends GetView<CareerController> {
   const CareerForm({Key? key}) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class CareerForm extends StatelessWidget {
                   Expanded(
                     child: CommonTextField(
                       prefixIcon: Icon(Icons.person),
-                      // controller: controller.firstNameTextController,
+                      controller: controller.firstNameTextController,
                       hintText: 'First Name',
                     ),
                   ),
@@ -37,7 +39,7 @@ class CareerForm extends StatelessWidget {
                   Expanded(
                     child: CommonTextField(
                       prefixIcon: Icon(Icons.person),
-                      // controller: controller.lastNameTextController,
+                      controller: controller.lastNameTextController,
                       hintText: 'Last Name',
                     ),
                   ),
@@ -45,11 +47,11 @@ class CareerForm extends StatelessWidget {
               ),
               CommonTextField(
                 prefixIcon: Icon(Icons.mail),
-                // controller: controller.lastNameTextController,
+                controller: controller.lastNameTextController,
                 hintText: 'Email',
               ),
               CommonTextField(
-                // controller: controller.mobileTextController,
+                controller: controller.mobileTextController,
                 prefixIcon: Icon(Icons.phone),
                 hintText: 'Mobile',
                 keyboardType: TextInputType.number,
@@ -65,17 +67,16 @@ class CareerForm extends StatelessWidget {
                   Expanded(
                     child: CommonTextField(
                       prefixIcon: Icon(Icons.person),
-                      // controller: controller.firstNameTextController,
                       hintText: 'Trading Exp',
                     ),
                   ),
                   SizedBox(width: 12),
                   Expanded(
                     child: GestureDetector(
-                      // onTap: () => controller.showDateRangePicker(context),
+                      onTap: () => controller.showDateRangePicker(context),
                       child: CommonTextField(
                         isDisabled: true,
-                        // controller: controller.dobTextController,
+                        controller: controller.dobTextController,
                         hintText: 'Date of Birth',
                         suffixIcon: Icon(
                           Icons.calendar_month,
@@ -87,17 +88,14 @@ class CareerForm extends StatelessWidget {
                 ],
               ),
               CommonTextField(
-                // controller: controller.lastNameTextController,
                 hintText: 'From where you hear about us ?',
               ),
               CommonTextField(
                 prefixIcon: Icon(Icons.mail),
-                // controller: controller.lastNameTextController,
                 hintText: 'LinkedIn Profile Link',
               ),
               CommonTextField(
                 prefixIcon: Icon(Icons.password),
-                // controller: controller.lastNameTextController,
                 hintText: 'OTP',
               ),
               CommonFilledButton(

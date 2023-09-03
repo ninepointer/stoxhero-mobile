@@ -20,18 +20,7 @@ class PortfolioView extends GetView<PortfolioController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.grey.shade800,
-                ),
-                child: Text(
-                  "Virtual Trading Portfolio",
-                  style: AppStyles.tsPrimaryRegular18,
-                ),
-              ),
+              CommonTile(label: 'Virtual Trading Portfolio'),
               ListView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
@@ -40,15 +29,13 @@ class PortfolioView extends GetView<PortfolioController> {
                   portfolio: controller.portfoliList[index],
                 ),
               ),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.grey.shade800,
-                ),
-                child: Text(
-                  "TenX Trading Portfolio",
-                  style: AppStyles.tsPrimaryRegular18,
+              CommonTile(label: 'TenX Trading Portfolio'),
+              ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                itemCount: controller.portfoliList.length,
+                itemBuilder: (context, index) => PortfolioCard(
+                  portfolio: controller.portfoliList[index],
                 ),
               ),
             ],

@@ -13,14 +13,6 @@ class InviteView extends GetView<ReferralsController> {
     return "AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR Join me at StoxHero - Options Trading and Investment Platform 🤝 👉 Get 10,00,000 virtual currency in your account to start option trading using my referral code 👉 Join the community of ace traders and learn real-time options trading 👉 Participate in TenX Trading and earn 10% real cash on the profit you will make on the platform 📲 Visit https://www.stoxhero.com/signup?referral=${controller.userDetailsData.myReferralCode} Use my below invitation code 👇 and get INR ₹10,00,000 in your wallet and start trading My Referral Code to join the StoxHero: ${controller.userDetailsData.myReferralCode}";
   }
 
-  // num getTotalUserReferralEarning(List<Referrals> referrals) {
-  //   num amount = 0;
-  //   for (var item in referrals) {
-  //     amount += item.referralEarning ?? 0;
-  //   }
-  //   return amount;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -35,7 +27,6 @@ class InviteView extends GetView<ReferralsController> {
                   AppImages.referral,
                   height: 200,
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Text(
@@ -148,114 +139,6 @@ class InviteView extends GetView<ReferralsController> {
                 ),
                 SizedBox(height: 16),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Card(
-                          margin: EdgeInsets.zero,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: AppColors.grey.withOpacity(.25),
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(14),
-                            width: double.infinity,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.grey.withOpacity(.25),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        Icons.groups_rounded,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Friends Joined',
-                                          style: AppStyles.tsGreyRegular12,
-                                        ),
-                                        SizedBox(height: 2),
-                                        Text(
-                                          controller.earnings.value.joined?.toString() ?? '0',
-                                          style: Theme.of(context).textTheme.tsMedium16,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: Card(
-                          margin: EdgeInsets.zero,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: AppColors.grey.withOpacity(.25),
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(14),
-                            width: double.infinity,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.grey.withOpacity(.25),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        Icons.currency_rupee_rounded,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Total Earnings',
-                                          style: AppStyles.tsGreyRegular12,
-                                        ),
-                                        SizedBox(height: 2),
-                                        Text(
-                                          controller.earnings.value.earnings?.toString() ?? '0',
-                                          style: Theme.of(context).textTheme.tsMedium16,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.all(16),
                   child: Card(
                     margin: EdgeInsets.zero,
@@ -307,42 +190,6 @@ class InviteView extends GetView<ReferralsController> {
                     ),
                   ),
                 ),
-                // CommonTile(label: 'Referral Leaderboard'),
-                // ListView.builder(
-                //   shrinkWrap: true,
-                //   itemCount: controller.referralsLeaderboardList.length,
-                //   padding: EdgeInsets.zero,
-                //   physics: NeverScrollableScrollPhysics(),
-                //   itemBuilder: (context, index) {
-                //     var user = controller.referralsLeaderboardList[index];
-                //     return ReferralsLeaderboardCard(
-                //       rank: '#${index + 1}',
-                //       name:
-                //           '${user.firstName!.capitalizeFirst} ${user.lastName!.capitalizeFirst}',
-                //       count: user.referralCount,
-                //       earnings: user.earnings,
-                //     );
-                //   },
-                // ),
-                // SizedBox(height: 16),
-                // CommonTile(label: 'Friends Leaderboard'),
-                // ListView.builder(
-                //   shrinkWrap: true,
-                //   itemCount: controller.myReferralsList.length,
-                //   padding: EdgeInsets.zero,
-                //   physics: NeverScrollableScrollPhysics(),
-                //   itemBuilder: (context, index) {
-                //     var user = controller.myReferralsList[index];
-                //     return ReferralsLeaderboardCard(
-                //       rank: '#${index + 1}',
-                //       name:
-                //           '${user.firstName!.capitalizeFirst} ${user.lastName!.capitalizeFirst}',
-                //       count: user.referrals != null ? (user.referrals!.length).toString() : '0',
-                //       earnings: getTotalUserReferralEarning(user.referrals ?? []),
-                //     );
-                //   },
-                // ),
-                // SizedBox(height: 16),
               ],
             ),
           ),

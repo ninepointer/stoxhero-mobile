@@ -3,22 +3,7 @@ import 'package:get/get.dart';
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
-import '../../../data/data.dart';
-
 class ReferralsView extends GetView<ReferralsController> {
-  num getTotalUserReferralEarning(List<Referrals> referrals) {
-    num amount = 0;
-    for (var item in referrals) {
-      amount += item.referralEarning ?? 0;
-    }
-    return amount;
-  }
-
-  void handleSegmentChange(int val) {
-    controller.changeSegment(val);
-    // Get.find<ReferralsController>().loadData();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +24,11 @@ class ReferralsView extends GetView<ReferralsController> {
                       1: 'Referrals',
                     },
                     selectedSegment: controller.segmentedControlValue.value,
-                    onValueChanged: handleSegmentChange,
+                    onValueChanged: controller.handleSegmentChange,
                   ),
                   if (controller.segmentedControlValue.value == 0)
                     InviteView()
-                  else if (controller.segmentedControlValue.value == 2)
+                  else if (controller.segmentedControlValue.value == 1)
                     ReferralsLeaderboardView()
                 ],
               ),
