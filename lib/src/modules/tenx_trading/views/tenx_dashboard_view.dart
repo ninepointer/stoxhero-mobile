@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/data/data.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
@@ -48,6 +49,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         stockLTP: '₹ 183.15',
                         stockChange: '(+ 34.42%)',
                       ),
+                      SizedBox(width: 8),
                     ],
                   ),
                   Row(
@@ -64,15 +66,14 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         stockLTP: '₹ 183.15',
                         stockChange: '(+ 34.42%)',
                       ),
+                      SizedBox(width: 8),
                     ],
                   ),
                   CommonTile(label: 'My Watchlist'),
                   controller.tenxWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tenxWatchlist.length >= 5
-                              ? 300
-                              : controller.tenxWatchlist.length * 76,
+                          height: controller.tenxWatchlist.length >= 5 ? 300 : controller.tenxWatchlist.length * 76,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -97,20 +98,19 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                     name: 'Ritik Prajapat',
                     netPnl: '+ ₹12,02.69',
                   ),
-                  SizedBox(height: 4),
+                  SizedBox(height: 8),
                   CommonRankCard(
                     rank: '#1000',
                     name: 'Ritik Prajapat',
                     netPnl: '+ ₹12,02.69',
                   ),
-                  SizedBox(height: 4),
+                  SizedBox(height: 8),
                   CommonRankCard(
                     rank: '#1000',
                     name: 'Ritik Prajapat',
                     netPnl: '+ ₹12,02.69',
                   ),
-                  if (controller.tenxPositionsList.isNotEmpty)
-                    CommonTile(label: 'My Position Details'),
+                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.tenxPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -150,16 +150,14 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   CommonTile(label: 'My Position'),
                   controller.tenxPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.separated(
+                      : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.tenxPositionsList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
-                            return TenxPositionCard(
-                              data: controller.tenxPositionsList[index],
-                            );
+                            var item = controller.tenxPositionsList[index];
+                            return TenxPositionCard(data: item);
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),

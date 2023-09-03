@@ -15,20 +15,9 @@ class ProfileView extends GetView<ProfileController> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
-        actions: [
-          IconButton(
-            splashRadius: 24,
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              AppStorage.clearStorage();
-              Get.offAllNamed(AppRoutes.signin);
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Container(
-          // padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           padding: EdgeInsets.all(16),
           child: Column(
             children: [
@@ -131,10 +120,6 @@ class ProfileView extends GetView<ProfileController> {
                   Get.toNamed(AppRoutes.portfolio);
                   Get.find<PortfolioController>().loadData();
                 },
-              ),
-              ProfileListTile(
-                label: 'Dark Mode',
-                onTap: () => ThemeService().switchTheme(),
               ),
               ProfileListTile(
                 label: 'Message',

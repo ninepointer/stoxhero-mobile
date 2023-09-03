@@ -43,10 +43,8 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
     return Obx(
       () => Column(
         children: [
-          if (controller.selectedWatchlistIndex.value == widget.index) SizedBox(height: 8),
           CommonCard(
-            hasBorder: false,
-            margin: EdgeInsets.symmetric(horizontal: 8),
+            margin: EdgeInsets.all(8).copyWith(top: 8, bottom: 0),
             padding: EdgeInsets.zero,
             onTap: _updateWatchlistIndex,
             children: [
@@ -70,6 +68,7 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                             widget.data.instrumentToken!,
                             widget.data.exchangeInstrumentToken!,
                           ),
+                          valueColor: AppColors.info,
                         ),
                       ],
                     ),
@@ -82,7 +81,6 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                           label: 'Symbol',
                           value: widget.data.symbol,
                         ),
-                        SizedBox(height: 4),
                         TenxWatchlistCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
@@ -122,16 +120,18 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: AppColors.success,
+                              color: AppColors.success.withOpacity(.1),
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(8),
                               ),
                             ),
                             child: Text(
                               'BUY',
-                              style: AppStyles.tsWhiteMedium14,
+                              style: AppStyles.tsWhiteMedium14.copyWith(
+                                color: AppColors.success,
+                              ),
                             ),
                           ),
                         ),
@@ -157,13 +157,15 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: AppColors.danger.shade300,
+                              color: AppColors.danger.withOpacity(.1),
                             ),
                             child: Text(
                               'SELL',
-                              style: AppStyles.tsWhiteMedium14,
+                              style: AppStyles.tsWhiteMedium14.copyWith(
+                                color: AppColors.danger,
+                              ),
                             ),
                           ),
                         ),
@@ -173,16 +175,18 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                           onTap: () => controller.removeInstrument(widget.data.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: AppColors.info,
+                              color: AppColors.info.withOpacity(.1),
                               borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(8),
                               ),
                             ),
                             child: Text(
                               'REMOVE',
-                              style: AppStyles.tsWhiteMedium14,
+                              style: AppStyles.tsWhiteMedium14.copyWith(
+                                color: AppColors.info,
+                              ),
                             ),
                           ),
                         ),
@@ -192,21 +196,21 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                 ),
             ],
           ),
-          if (controller.selectedWatchlistIndex.value == widget.index)
-            Column(
-              children: [
-                // Divider(
-                //   thickness: 1,
-                //   height: 0,
-                // ),
-                SizedBox(height: 8),
-              ],
-            ),
-          if (controller.selectedWatchlistIndex.value != widget.index) SizedBox(height: 4),
-          // Divider(
-          //   thickness: 1,
-          //   height: 0,
-          // ),
+          // // if (controller.selectedWatchlistIndex.value == widget.index)
+          // //   Column(
+          // //     children: [
+          // //       // Divider(
+          // //       //   thickness: 1,
+          // //       //   height: 0,
+          // //       // ),
+          // //       SizedBox(height: 8),
+          // //     ],
+          // //   ),
+          // if (controller.selectedWatchlistIndex.value != widget.index) SizedBox(height: 4),
+          // // Divider(
+          // //   thickness: 1,
+          // //   height: 0,
+          // // ),
         ],
       ),
     );
@@ -234,12 +238,14 @@ class TenxWatchlistCardTile extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.tsMedium14,
+          style: Theme.of(context).textTheme.tsGreyRegular12,
         ),
         SizedBox(height: 2),
         Text(
           value ?? '-',
-          style: Theme.of(context).textTheme.tsRegular14,
+          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
+              ),
         ),
       ],
     );

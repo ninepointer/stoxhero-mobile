@@ -1,8 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
-import 'package:stoxhero/src/core/widgets/common_stock_info.dart';
 
 import '../../../core/core.dart';
 import '../../contest/contest_index.dart';

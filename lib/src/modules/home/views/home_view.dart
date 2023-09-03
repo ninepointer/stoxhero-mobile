@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
-import 'trading_tab_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

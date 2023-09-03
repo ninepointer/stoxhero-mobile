@@ -22,9 +22,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
     return Wrap(
       children: [
         Container(
-          padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.grey,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(4),
               topRight: Radius.circular(4),
@@ -34,209 +33,218 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
             children: [
               GestureDetector(
                 onTap: Get.back,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Regular',
-                      style: AppStyles.tsPrimaryRegular20,
-                    ),
-                    Icon(
-                      Icons.cancel,
-                      color: AppColors.primary,
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Regular',
+                        style: AppStyles.tsSecondaryRegular18,
+                      ),
+                      Icon(
+                        Icons.cancel,
+                        color: AppColors.primary,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Divider(
                 thickness: 1,
-                height: 36,
-                color: AppColors.grey.shade50.withOpacity(0.5),
+                height: 0,
+                color: AppColors.grey.shade50.withOpacity(0.25),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    data.name ?? '-',
-                    style: AppStyles.tsSecondaryMedium18,
-                  ),
-                  Text(
-                    '₹ 0.00',
-                    style: AppStyles.tsSecondaryMedium18,
-                  ),
-                ],
-              ),
-              SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 2,
-                      groupValue: 1,
-                      label: 'Interaday (MIS)',
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          data.name ?? '-',
+                          style: AppStyles.tsSecondaryMedium18,
+                        ),
+                        Text(
+                          '₹ 0.00',
+                          style: AppStyles.tsSecondaryMedium18,
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 1,
-                      groupValue: 1,
-                      label: 'Overnight (NRML)',
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              AbsorbPointer(
-                absorbing: type == TransactionType.exit,
-                child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0
-                      ? null
-                      : controller.selectedQuantity.value,
-                  onChanged: (value) => controller.selectedQuantity(value),
-                  menuMaxHeight: 250,
-                  isDense: true,
-                  items: AppConstants.instrumentsQuantity.map((int number) {
-                    return DropdownMenuItem<int>(
-                      value: number,
-                      child: Text(number.toString()),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(16),
-                    filled: true,
-                    hintText: 'Quantity',
-                    fillColor: AppColors.grey.shade700,
-                    hintStyle: AppStyles.tsGreyRegular14,
-                    errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                      color: AppColors.danger.shade700,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
+                    SizedBox(height: 16),
+                    AbsorbPointer(
+                      absorbing: type == TransactionType.exit,
+                      child: DropdownButtonFormField<int>(
+                        value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
+                        onChanged: (value) => controller.selectedQuantity(value),
+                        menuMaxHeight: 250,
+                        isDense: true,
+                        items: AppConstants.instrumentsQuantity.map((int number) {
+                          return DropdownMenuItem<int>(
+                            value: number,
+                            child: Text(number.toString()),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(16),
+                          filled: true,
+                          hintText: 'Quantity',
+                          fillColor: AppColors.grey.withOpacity(.1),
+                          hintStyle: AppStyles.tsGreyRegular14,
+                          errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                            color: AppColors.danger.shade700,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              width: 2,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: AppColors.danger,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CommonTextField(
+                            isDisabled: true,
+                            hintText: 'Price',
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: CommonTextField(
+                            isDisabled: true,
+                            hintText: 'Trigger',
+                          ),
+                        ),
+                      ],
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.primary,
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 2,
+                            groupValue: 2,
+                            label: 'MARKET',
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 1,
+                            groupValue: 2,
+                            label: 'LIMIT',
+                          ),
+                        ),
+                      ],
                     ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.danger,
-                      ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 2,
+                            groupValue: 1,
+                            label: 'Interaday (MIS)',
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 1,
+                            groupValue: 1,
+                            label: 'Overnight (NRML)',
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 3,
+                            groupValue: 2,
+                            label: 'SL',
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 4,
+                            groupValue: 2,
+                            label: 'SL-M',
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 3,
+                            groupValue: 3,
+                            label: 'Day',
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 4,
+                            groupValue: 3,
+                            label: 'Immediate',
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CustomRadioButtonTile(
+                            value: 1,
+                            groupValue: 3,
+                            label: 'Minutes',
+                          ),
+                        ),
+                      ],
+                    ),
+                    CommonFilledButton(
+                      backgroundColor: type == TransactionType.exit
+                          ? AppColors.warning
+                          : type == TransactionType.buy
+                              ? AppColors.success.shade400
+                              : AppColors.danger.shade400,
+                      margin: EdgeInsets.symmetric(vertical: 24),
+                      label: type == TransactionType.exit
+                          ? 'Exit'
+                          : type == TransactionType.buy
+                              ? 'Buy'
+                              : 'Sell',
+                      onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
+                    ),
+                    SizedBox(height: 56),
+                  ],
                 ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: CommonTextField(
-                      isDisabled: true,
-                      hintText: 'Price',
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: CommonTextField(
-                      isDisabled: true,
-                      hintText: 'Trigger',
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 2,
-                      groupValue: 2,
-                      label: 'MARKET',
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 1,
-                      groupValue: 2,
-                      label: 'LIMIT',
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 3,
-                      groupValue: 2,
-                      label: 'SL',
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 4,
-                      groupValue: 2,
-                      label: 'SL-M',
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 3,
-                      groupValue: 3,
-                      label: 'Day',
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 4,
-                      groupValue: 3,
-                      label: 'Immediate',
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: CustomRadioButtonTile(
-                      value: 1,
-                      groupValue: 3,
-                      label: 'Minutes',
-                    ),
-                  ),
-                ],
-              ),
-              CommonFilledButton(
-                bgColor: type == TransactionType.exit
-                    ? AppColors.warning
-                    : type == TransactionType.buy
-                        ? AppColors.success
-                        : AppColors.danger,
-                margin: EdgeInsets.symmetric(vertical: 24),
-                label: type == TransactionType.exit
-                    ? 'Exit'
-                    : type == TransactionType.buy
-                        ? 'Buy'
-                        : 'Sell',
-                onPressed: () =>
-                    Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
               ),
             ],
           ),
@@ -265,7 +273,7 @@ class CustomRadioButtonTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: AppColors.grey.shade50.withOpacity(0.5),
+            color: AppColors.grey.withOpacity(0.25),
             width: 1,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -279,10 +287,13 @@ class CustomRadioButtonTile extends StatelessWidget {
               activeColor: AppColors.secondary,
               onChanged: (value) {},
             ),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.tsRegular14,
+            Expanded(
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.tsMedium12,
+              ),
             ),
+            SizedBox(width: 8),
           ],
         ),
       ),

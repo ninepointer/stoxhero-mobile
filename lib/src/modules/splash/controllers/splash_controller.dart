@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:stoxhero/main.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
@@ -35,13 +36,16 @@ class SplashController extends GetxController {
         Get.offAllNamed(AppRoutes.onBoarding);
         AppStorage.setNewUserStatus(false);
       } else {
-        // await Get.find<AuthController>().getUserDetails();
         String? token = AppStorage.getToken();
         await Future.delayed(Duration(seconds: 1));
-        if (token == null || token.isEmpty) {
-          Get.offAllNamed(AppRoutes.signin);
-        } else {
+        if (useTestToken) {
           await Get.find<AuthController>().getUserDetails();
+        } else {
+          if (token == null || token.isEmpty) {
+            Get.offAllNamed(AppRoutes.signin);
+          } else {
+            await Get.find<AuthController>().getUserDetails();
+          }
         }
       }
     } catch (e) {

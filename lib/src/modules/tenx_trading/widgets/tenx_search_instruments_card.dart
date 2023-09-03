@@ -77,7 +77,7 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.success,
+                    color: AppColors.success.shade400,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
@@ -106,7 +106,7 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.danger.shade300,
+                    color: AppColors.danger.shade400,
                   ),
                   child: Text(
                     'SELL',
@@ -124,7 +124,7 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isAdded ? AppColors.info : AppColors.secondary,
+                    color: isAdded ? AppColors.info.shade400 : AppColors.secondary.shade400,
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

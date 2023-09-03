@@ -32,7 +32,7 @@ class CommonRankCard extends StatelessWidget {
                   SizedBox(height: 4),
                   Text(
                     name,
-                    style: Theme.of(context).textTheme.tsMedium16,
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                 ],
               ),
@@ -43,7 +43,7 @@ class CommonRankCard extends StatelessWidget {
                 children: [
                   Text(
                     'Net P&L',
-                    style: Theme.of(context).textTheme.tsMedium14,
+                    style: Theme.of(context).textTheme.tsGreyRegular12,
                   ),
                   SizedBox(height: 4),
                   Text(

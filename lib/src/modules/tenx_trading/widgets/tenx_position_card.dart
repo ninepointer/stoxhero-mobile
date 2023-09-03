@@ -17,14 +17,11 @@ class TenxPositionCard extends GetView<TenxTradingController> {
     return Column(
       children: [
         CommonCard(
-          hasBorder: false,
-          margin: EdgeInsets.zero,
+          margin: EdgeInsets.all(8).copyWith(
+            bottom: 0,
+          ),
           padding: EdgeInsets.zero,
           children: [
-            Divider(
-              thickness: 1,
-              height: 0,
-            ),
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -199,10 +196,6 @@ class TenxPositionCard extends GetView<TenxTradingController> {
             )
           ],
         ),
-        Divider(
-          thickness: 1,
-          height: 0,
-        ),
       ],
     );
   }
@@ -229,13 +222,13 @@ class TenxPositionCardTile extends StatelessWidget {
       children: [
         Text(
           label ?? '-',
-          style: AppStyles.tsGreyRegular10,
+          style: AppStyles.tsGreyRegular12,
         ),
         SizedBox(height: 2),
         Text(
           value ?? '-',
-          style: Theme.of(context).textTheme.tsRegular14.copyWith(
-                color: valueColor ?? AppColors.white,
+          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
               ),
         ),
       ],

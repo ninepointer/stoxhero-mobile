@@ -10,20 +10,23 @@ class NoDataFound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Icon(
-            Icons.error_outline_rounded,
-            size: 36,
-            color: AppColors.grey.shade100,
-          ),
-          SizedBox(height: 8),
-          Text(
-            label ?? 'No Data Found!',
-            style: Theme.of(context).textTheme.tsRegular16,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Center(
+        child: Column(
+          children: [
+            Icon(
+              Icons.error_outline_rounded,
+              size: 36,
+              color: AppColors.grey.shade100,
+            ),
+            SizedBox(height: 8),
+            Text(
+              label ?? 'No Data Found!',
+              style: Theme.of(context).textTheme.tsRegular16,
+            ),
+          ],
+        ),
       ),
     );
   }

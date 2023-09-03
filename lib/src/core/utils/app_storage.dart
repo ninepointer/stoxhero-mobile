@@ -38,6 +38,10 @@ class AppStorage {
     return LoginDetailsResponse.fromJson(_box.read(AppStorageKeys.userDetails));
   }
 
+  static void clearLoginDetails() {
+    _box.remove(AppStorageKeys.token);
+  }
+
   static void clearStorage() {
     _box.erase();
   }

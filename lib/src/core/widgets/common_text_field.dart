@@ -88,7 +88,7 @@ class CommonTextField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(
                     width: 2,
-                    color: AppColors.danger,
+                    color: AppColors.danger.shade700,
                   ),
                 ),
               ),

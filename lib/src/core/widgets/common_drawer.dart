@@ -50,6 +50,13 @@ class _CommonDrawerState extends State<CommonDrawer> {
       case 5:
         Get.toNamed(AppRoutes.tutorial);
         break;
+      case 6:
+        ThemeService().switchTheme();
+        break;
+      case 7:
+        AppStorage.clearLoginDetails();
+        Get.offAllNamed(AppRoutes.signin);
+        break;
       default:
     }
   }
@@ -88,7 +95,62 @@ class _CommonDrawerState extends State<CommonDrawer> {
               ),
             ),
             Divider(thickness: 1, height: 0),
-            Expanded(child: menuItem()),
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                padding: EdgeInsets.zero,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        ProfileListTile(
+                          icon: Icons.analytics,
+                          label: 'Analytics',
+                          onTap: () => selectedItem(context, 0),
+                        ),
+                        ProfileListTile(
+                          icon: Icons.person,
+                          label: 'Portfolio',
+                          onTap: () => selectedItem(context, 1),
+                        ),
+                        ProfileListTile(
+                          icon: Icons.diversity_3_rounded,
+                          label: 'Referrals',
+                          onTap: () => selectedItem(context, 2),
+                        ),
+                        ProfileListTile(
+                          icon: Icons.school,
+                          label: 'Careers',
+                          onTap: () => selectedItem(context, 3),
+                        ),
+                        ProfileListTile(
+                          icon: Icons.help,
+                          label: 'FAQs',
+                          onTap: () => selectedItem(context, 4),
+                        ),
+                        ProfileListTile(
+                          icon: Icons.smart_display_rounded,
+                          label: 'Tutorials',
+                          onTap: () => selectedItem(context, 5),
+                        ),
+                        ProfileListTile(
+                          icon: Icons.dark_mode,
+                          label: 'Dark Mode',
+                          onTap: () => selectedItem(context, 6),
+                        ),
+                        ProfileListTile(
+                          icon: Icons.logout,
+                          label: 'Logout',
+                          onTap: () => selectedItem(context, 7),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: Text(
@@ -100,58 +162,6 @@ class _CommonDrawerState extends State<CommonDrawer> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget menuItem() {
-    return ListView(
-      shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
-      padding: EdgeInsets.zero,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              ProfileListTile(
-                icon: Icons.analytics,
-                label: 'Analytics',
-                onTap: () => selectedItem(context, 0),
-              ),
-              ProfileListTile(
-                icon: Icons.person,
-                label: 'Portfolio',
-                onTap: () => selectedItem(context, 1),
-              ),
-              ProfileListTile(
-                icon: Icons.widgets,
-                label: 'Referrals',
-                onTap: () => selectedItem(context, 2),
-              ),
-              ProfileListTile(
-                icon: Icons.school,
-                label: 'Careers',
-                onTap: () => selectedItem(context, 3),
-              ),
-              ProfileListTile(
-                icon: Icons.help,
-                label: 'FAQs',
-                onTap: () => selectedItem(context, 4),
-              ),
-              ProfileListTile(
-                icon: Icons.cast_for_education,
-                label: 'Tutorials',
-                onTap: () => selectedItem(context, 5),
-              ),
-              ProfileListTile(
-                icon: Icons.logout,
-                label: 'Logout',
-                onTap: () => selectedItem(context, 6),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

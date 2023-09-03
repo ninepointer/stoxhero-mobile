@@ -44,6 +44,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).cardColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -104,7 +105,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               width: 250,
               height: 52,
               label: (currentIndex == contents.length - 1 ? 'Get Started' : 'Next'),
-              bgColor: AppColors.primary,
+              backgroundColor: AppColors.primary,
               onPressed: navigateToNextScreen,
             )
           else

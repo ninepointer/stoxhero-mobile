@@ -93,7 +93,7 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${isProd ? AppStorage.getToken() : AppConstants.token}',
+        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.get(
@@ -137,7 +137,7 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${isProd ? AppStorage.getToken() : AppConstants.token}',
+        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.post(
@@ -181,7 +181,7 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${isProd ? AppStorage.getToken() : AppConstants.token}',
+        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.patch(
@@ -332,7 +332,7 @@ class NetworkService {
     Dio _authFormDio = Dio();
 
     final headers = {
-      'Cookie': isProd ? 'jwtoken=${AppStorage.getToken()}' : 'jwtoken=${AppConstants.token}',
+      'Cookie': useTestToken ? 'jwtoken=${AppConstants.token}' : 'jwtoken=${AppStorage.getToken()}',
     };
 
     BaseOptions dioOptions = BaseOptions(

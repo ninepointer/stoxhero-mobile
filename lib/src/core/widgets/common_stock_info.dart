@@ -18,55 +18,58 @@ class CommonStockInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+      child: CommonCard(
+        margin: EdgeInsets.all(8).copyWith(
+          bottom: 0,
+          right: 0,
         ),
-        child: Container(
-          padding: EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: AppStyles.tsSecondaryMedium16,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        stockPrice,
-                        style: Theme.of(context).textTheme.tsSemiBold14,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 6),
-              FittedBox(
-                child: Row(
+        padding: EdgeInsets.zero,
+        children: [
+          Container(
+            padding: EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    Text(
-                      stockLTP,
-                      style: Theme.of(context).textTheme.tsMedium12,
-                    ),
-                    SizedBox(width: 2),
-                    Text(
-                      stockChange,
-                      style: AppStyles.tsWhiteMedium10.copyWith(
-                        color: AppColors.success,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          style: AppStyles.tsSecondaryMedium16,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          stockPrice,
+                          style: Theme.of(context).textTheme.tsMedium14,
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              )
-            ],
+                SizedBox(height: 6),
+                FittedBox(
+                  child: Row(
+                    children: [
+                      Text(
+                        stockLTP,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        stockChange,
+                        style: AppStyles.tsWhiteMedium10.copyWith(
+                          color: AppColors.success,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
