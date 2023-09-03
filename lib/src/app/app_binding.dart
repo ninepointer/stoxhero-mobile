@@ -31,5 +31,6 @@ class AppBinding extends Bindings {
     Get.put(AnalyticsController(), permanent: true);
     Get.put(ContestController(), permanent: true);
     Get.put(TutorialController(), permanent: true);
+    Get.put(CareerController(), permanent: true);
   }
 }

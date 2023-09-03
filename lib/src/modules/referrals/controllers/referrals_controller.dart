@@ -40,6 +40,10 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     segmentedControlValue.value = val;
   }
 
+  void handleSegmentChange(int val) {
+    changeSegment(val);
+  }
+
   Future getMyEarnings() async {
     isLoading(true);
     try {

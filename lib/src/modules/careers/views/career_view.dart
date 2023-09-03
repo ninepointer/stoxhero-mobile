@@ -58,35 +58,47 @@ class CareerView extends StatelessWidget {
     return CommonCard(
       margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
-      color: AppColors.white,
       children: [
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(
-                title,
-                // style: Theme.of(context).textTheme.tsMedium18,
-                style: AppStyles.tsBlackMedium18,
-              ),
-            ),
-            Image.asset(
-              image,
-              height: 120,
-            ),
-            SizedBox(height: 8),
-            CommonFilledButton(
-              label: 'Click here to Apply!',
-              height: 40,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                height: 160,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Image.asset(
+                  image,
+                  height: 140,
                 ),
               ),
-              onPressed: onPressed,
-            ),
-          ],
+              SizedBox(height: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.tsMedium18,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'loremEu nisi ut aute anim est. Ea nulla dolore enim ea enim proident minim cupidatat fugiat. ',
+                    style: Theme.of(context).textTheme.tsGreyRegular14,
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              CommonFilledButton(
+                label: 'Click here to Apply!',
+                height: 48,
+                onPressed: onPressed,
+              ),
+            ],
+          ),
         ),
       ],
     );

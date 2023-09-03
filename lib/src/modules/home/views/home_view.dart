@@ -41,10 +41,9 @@ class _HomeViewState extends State<HomeView> {
         Get.find<AnalyticsController>().loadData();
         break;
       case 2:
-        Get.find<TenxTradingController>().getTenxTradingActiveSubs();
         break;
       case 3:
-        Get.find<WalletController>().loadData();
+        Get.find<TenxTradingController>().getTenxTradingActiveSubs();
         break;
       case 4:
         Get.find<ContestController>().loadData();
@@ -81,6 +80,14 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           IconButton(
             splashRadius: 24,
+            icon: Icon(Icons.account_balance_wallet_rounded),
+            onPressed: () {
+              Get.find<WalletController>().loadData();
+              Get.toNamed(AppRoutes.wallet);
+            },
+          ),
+          IconButton(
+            splashRadius: 24,
             icon: Icon(Icons.person),
             onPressed: () => Get.toNamed(AppRoutes.profile),
           ),
@@ -113,7 +120,7 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.bar_chart_rounded),
                       SizedBox(height: 4),
                       Text(
-                        'Trading',
+                        'Home',
                         style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],
@@ -130,7 +137,7 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.analytics_rounded),
                       SizedBox(height: 4),
                       Text(
-                        'Analytics',
+                        'Virtual',
                         style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],
@@ -145,10 +152,10 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.account_balance_wallet_rounded),
+                      Icon(Icons.trending_up_rounded),
                       SizedBox(height: 4),
                       Text(
-                        'Wallet',
+                        'TenX',
                         style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],

@@ -16,9 +16,13 @@ class CommonTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: AppStyles.tsSecondaryRegular16,
+          Row(
+            children: [
+              Text(
+                label,
+                style: AppStyles.tsSecondaryRegular16,
+              ),
+            ],
           ),
         ],
       ),

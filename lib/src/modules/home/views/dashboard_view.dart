@@ -117,25 +117,11 @@ class _DashboardViewState extends State<DashboardView> {
             ),
             OnGoingContestCard(),
             SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Return Summary',
-                style: Theme.of(context).textTheme.tsMedium16,
-              ),
-            ),
-            SizedBox(height: 12),
+            CommonTile(label: 'Return Summary'),
             customCard(label: 'Virtual Trading', percent: '0.0%'),
             customCard(label: 'Contest Trading', percent: '0.0%'),
             customCard(label: 'TenX Trading', percent: '0.0%'),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Performance',
-                style: Theme.of(context).textTheme.tsMedium16,
-              ),
-            ),
-            SizedBox(height: 12),
+            CommonTile(label: 'Performance'),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: CustomDropdown(
@@ -187,278 +173,40 @@ class _DashboardViewState extends State<DashboardView> {
     required String percent,
   }) {
     return CommonCard(
-      padding: EdgeInsets.zero,
-      margin: EdgeInsets.all(16).copyWith(top: 0),
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       children: [
-        ListTile(
-          minLeadingWidth: 0,
-          leading: Container(
-            decoration: BoxDecoration(
-              color: AppColors.grey.withOpacity(.25),
-              shape: BoxShape.circle,
+        Row(
+          children: [
+            Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: AppColors.secondary.withOpacity(.25),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.trending_up_rounded,
+                color: AppColors.secondary,
+                size: 18,
+              ),
             ),
-            child: Image.asset(
-              AppImages.contestReward,
-              width: 30,
-              height: 30,
-            ),
-          ),
-          title: Text(
-            label,
-            style: Theme.of(context).textTheme.tsRegular16,
-          ),
-          trailing: Text(
-            percent,
-            style: Theme.of(context).textTheme.tsMedium16,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget contestCard() {
-    return CommonCard(
-      padding: EdgeInsets.zero,
-      children: [
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(12),
-          alignment: Alignment.center,
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  // contestDetails?.contestName ?? '-',
-                  'Tuesday Wars',
-                  style: AppStyles.tsSecondaryMedium16,
-                ),
-              ),
-              Spacer(),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.success,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Text(
-                  'Nifty',
-                  style: AppStyles.tsWhiteMedium12,
-                ),
-              ),
-              SizedBox(width: 4),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.secondary,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Text(
-                  'Bank Nifty',
-                  style: AppStyles.tsWhiteMedium12,
-                ),
-              ),
-              SizedBox(width: 4),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.danger,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Text(
-                  'Day',
-                  style: AppStyles.tsWhiteMedium12,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Divider(thickness: 1, height: 0),
-        SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'No. of Seats left',
-                          style: Theme.of(context).textTheme.tsRegular14,
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '23',
-                          style: Theme.of(context).textTheme.tsMedium16,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Image.asset(
-                        AppImages.contestTrophy,
-                        width: 40,
-                      ),
-                      Text(
-                        'Reward',
-                        style: Theme.of(context).textTheme.tsRegular14,
-                      ),
-                      Text(
-                        '0.5% of the net P&L',
-                        style: Theme.of(context).textTheme.tsMedium14,
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Remaining',
-                          style: Theme.of(context).textTheme.tsRegular14,
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '00:00:00',
-                          style: Theme.of(context).textTheme.tsMedium16,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
+            SizedBox(width: 12),
+            Expanded(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Start Date & Time',
-                        style: Theme.of(context).textTheme.tsRegular14,
-                      ),
-                      SizedBox(height: 4),
-                      // Text(
-                      //   FormatHelper.formatDateTimeToIST(contestDetails?.contestStartTime),
-                      //  style: Theme.of(context).textTheme.tsMedium16,
-                      // ),
-                    ],
+                  Text(
+                    label,
+                    style: Theme.of(context).textTheme.tsRegular16,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'End Date & Time',
-                        style: Theme.of(context).textTheme.tsRegular14,
-                      ),
-                      SizedBox(height: 4),
-                      // Text(
-                      //   FormatHelper.formatDateTimeToIST(contestDetails?.contestEndTime),
-                      // style: Theme.of(context).textTheme.tsMedium16,
-
-                      // ),
-                    ],
+                  Text(
+                    percent,
+                    style: Theme.of(context).textTheme.tsMedium16,
                   ),
                 ],
               ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Entry Fees',
-                        style: Theme.of(context).textTheme.tsRegular14,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Free',
-                        style: Theme.of(context).textTheme.tsMedium16,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Portfolio',
-                        style: Theme.of(context).textTheme.tsRegular14,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        '₹ 5,00,000',
-                        style: Theme.of(context).textTheme.tsMedium16,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 12),
-            ],
-          ),
-        ),
-        Container(
-          child: Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      'Get Notified',
-                      style: AppStyles.tsWhiteMedium12,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.success,
-                    ),
-                    child: Text(
-                      'Start Trading',
-                      style: AppStyles.tsWhiteMedium12,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      'Share',
-                      style: AppStyles.tsWhiteMedium12,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );

@@ -6,12 +6,14 @@ class PortfolioCardTile extends StatelessWidget {
   final String? label;
   final String? value;
   final bool isRightAlign;
+  final Color? valueColor;
 
   const PortfolioCardTile({
     super.key,
     this.label,
     this.value,
     this.isRightAlign = false,
+    this.valueColor,
   });
 
   @override
@@ -26,7 +28,9 @@ class PortfolioCardTile extends StatelessWidget {
         SizedBox(height: 4),
         Text(
           value ?? '-',
-          style: Theme.of(context).textTheme.tsRegular16,
+          style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                color: valueColor,
+              ),
         ),
       ],
     );

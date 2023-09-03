@@ -101,7 +101,12 @@ class AppPages {
     GetPage(
       name: AppRoutes.careers,
       page: () => CareerView(),
-      // binding: TutorialBinding(),
+      binding: CareerBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.wallet,
+      page: () => WalletView(),
+      binding: WalletBinding(),
     ),
   ];
 }

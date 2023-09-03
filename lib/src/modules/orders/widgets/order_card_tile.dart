@@ -28,8 +28,8 @@ class OrderCardTile extends StatelessWidget {
         SizedBox(height: 4),
         Text(
           value ?? '-',
-          style: Theme.of(context).textTheme.tsRegular16.copyWith(
-                color: valueColor ?? AppColors.white,
+          style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                color: valueColor,
               ),
         ),
       ],

@@ -40,7 +40,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                         color: AppColors.primary,
                       ),
                     ),
-                    labelStyle: Theme.of(context).textTheme.tsMedium14.copyWith(
+                    labelStyle: Theme.of(context).textTheme.tsWhiteMedium14.copyWith(
                           color: AppColors.white,
                         ),
                     unselectedLabelStyle: Theme.of(context).textTheme.tsMedium14,
@@ -330,12 +330,12 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                     children: [
                                       Text(
                                         'Green Days',
-                                        style: Theme.of(context).textTheme.tsRegular12,
+                                        style: Theme.of(context).textTheme.tsRegular14,
                                       ),
                                       SizedBox(height: 2),
                                       Text(
                                         controller.rangeTotalGreenDays.value.toString(),
-                                        style: AppStyles.tsPrimaryMedium16.copyWith(
+                                        style: AppStyles.tsPrimaryMedium18.copyWith(
                                           color: AppColors.success,
                                         ),
                                       ),
@@ -354,12 +354,12 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                     children: [
                                       Text(
                                         'Red Days',
-                                        style: Theme.of(context).textTheme.tsRegular12,
+                                        style: Theme.of(context).textTheme.tsRegular14,
                                       ),
                                       SizedBox(height: 2),
                                       Text(
                                         controller.rangeTotalRedDays.value.toString(),
-                                        style: AppStyles.tsPrimaryMedium16.copyWith(
+                                        style: AppStyles.tsPrimaryMedium18.copyWith(
                                           color: AppColors.danger,
                                         ),
                                       ),
@@ -391,6 +391,12 @@ class AnalyticsView extends GetView<AnalyticsController> {
                       ),
                       AnalyticsChart(
                         title: 'Orders',
+                        barGroups: controller.getOrdersChartsData(
+                          barColor: AppColors.cyan,
+                        ),
+                      ),
+                      AnalyticsChart(
+                        title: 'Risk Reward Ratio',
                         barGroups: controller.getOrdersChartsData(
                           barColor: AppColors.cyan,
                         ),
