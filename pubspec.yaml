@@ -25,6 +25,8 @@ dependencies:
   image_picker: ^1.0.2
   carousel_slider: ^4.2.1
   dropdown_button2: ^2.3.9
+  youtube_player_flutter: ^8.1.2
+  number_paginator: ^0.3.2
 
 dev_dependencies:
   flutter_launcher_icons: any

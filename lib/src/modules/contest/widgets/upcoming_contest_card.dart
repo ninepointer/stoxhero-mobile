@@ -1,13 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:stoxhero/src/data/data.dart';
+import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
 
-class UpComingContestCard extends StatelessWidget {
-  final UpComingContest? contestDetails;
+class UpComingContestCard extends GetView<ContestController> {
+  final String? contestName;
+  final String? contestStartTime;
+  final String? contestEndTime;
+  final String? contestType;
+  final String? contestStatus;
+  final int? entryFee;
+  final num? payoutPercentage;
+  final ContestPortfolio? portfolio;
+  final int? maxParticipants;
+  final String? contestExpiry;
+  final bool? isNifty;
+  final bool? isBankNifty;
+  final bool? isFinNifty;
+
   const UpComingContestCard({
     Key? key,
-    this.contestDetails,
+    this.contestName,
+    this.contestStartTime,
+    this.contestEndTime,
+    this.contestType,
+    this.entryFee,
+    this.payoutPercentage,
+    this.portfolio,
+    this.maxParticipants,
+    this.contestExpiry,
+    this.isNifty,
+    this.isBankNifty,
+    this.isFinNifty,
+    this.contestStatus,
   }) : super(key: key);
 
   @override
@@ -23,7 +50,7 @@ class UpComingContestCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  contestDetails?.contestName ?? '-',
+                  contestName ?? '-',
                   style: AppStyles.tsSecondaryMedium16,
                 ),
               ),
@@ -34,27 +61,48 @@ class UpComingContestCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.success,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Text(
-                  'Nifty',
-                  style: AppStyles.tsWhiteMedium12,
+              Visibility(
+                visible: isNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.success,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'Nifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
               ),
               SizedBox(width: 4),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.secondary,
-                  borderRadius: BorderRadius.circular(100),
+              Visibility(
+                visible: isBankNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'Bank Nifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
-                child: Text(
-                  'Bank Nifty',
-                  style: AppStyles.tsWhiteMedium12,
+              ),
+              SizedBox(width: 4),
+              Visibility(
+                visible: isFinNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.info,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'FinNifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
               ),
               SizedBox(width: 4),
@@ -65,7 +113,7 @@ class UpComingContestCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  'Day',
+                  contestExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -87,12 +135,11 @@ class UpComingContestCard extends StatelessWidget {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: Theme.of(context).textTheme.tsRegular12,
+                          style: AppStyles.tsGreyRegular12,
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '23',
-                          // '${contestDetails?.maxParticipants}',
+                          '$maxParticipants',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -106,11 +153,10 @@ class UpComingContestCard extends StatelessWidget {
                       ),
                       Text(
                         'Reward',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       Text(
-                        '${contestDetails?.payoutPercentage}% of the net P&L',
-                        // '0.5% of the net P&L',
+                        '$payoutPercentage % of the net P&L',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -121,12 +167,11 @@ class UpComingContestCard extends StatelessWidget {
                       children: [
                         Text(
                           'Remaining',
-                          style: Theme.of(context).textTheme.tsRegular12,
+                          style: AppStyles.tsGreyRegular12,
                         ),
                         SizedBox(height: 4),
                         Text(
-                          // "00:00:00",
-                          '${contestDetails?.contestEndTime}',
+                          "00:00:00",
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -143,12 +188,11 @@ class UpComingContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Start Date & Time',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // '23 Aug 2023 09:20 AM',
-                        FormatHelper.formatDateTimeToIST(contestDetails?.contestStartTime),
+                        FormatHelper.formatDateTimeToIST(contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -158,12 +202,11 @@ class UpComingContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'End Date & Time',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // '23 Aug 2023 03:20 PM',
-                        FormatHelper.formatDateTimeToIST(contestDetails?.contestEndTime),
+                        FormatHelper.formatDateTimeToIST(contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -179,12 +222,11 @@ class UpComingContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Entry Fees',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // '₹99',
-                        '₹ ${contestDetails?.entryFee}',
+                        entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -194,12 +236,11 @@ class UpComingContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Portfolio',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // '₹ 50,00,00',
-                        '₹ ${contestDetails?.contestEndTime}',
+                        FormatHelper.formatNumbers(portfolio?.portfolioValue, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -230,21 +271,31 @@ class UpComingContestCard extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.success,
-                  ),
-                  child: Text(
-                    'Start Trading',
-                    style: AppStyles.tsWhiteMedium14,
+            if (entryFee! > 0)
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    controller.calculateUserWalletAmount();
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => ContestBuySubscriptionBottomSheet(),
+                    );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.success,
+                    ),
+                    child: Text(
+                      'Pay Now',
+                      style: AppStyles.tsWhiteMedium14,
+                    ),
                   ),
                 ),
-              ),
-            ),
+              )
+            else
+              SizedBox(),
             Expanded(
               child: GestureDetector(
                 child: Container(

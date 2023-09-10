@@ -4,8 +4,19 @@ import '../core.dart';
 
 class CommonTile extends StatelessWidget {
   final String label;
+  final bool showSeeAllButton;
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  final bool showIconButton;
+  const CommonTile({
+    Key? key,
+    this.label = 'Label',
+    this.showSeeAllButton = false,
+    this.onPressed,
+    this.icon,
+    this.showIconButton = false,
+  }) : super(key: key);
 
-  const CommonTile({super.key, this.label = 'Label'});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,14 +25,28 @@ class CommonTile extends StatelessWidget {
       color: Theme.of(context).cardColor,
       width: double.infinity,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 label,
                 style: AppStyles.tsSecondaryRegular16,
               ),
+              if (showSeeAllButton)
+                GestureDetector(
+                  onTap: onPressed,
+                  child: Text(
+                    'See All',
+                    style: AppStyles.tsPrimaryMedium14,
+                  ),
+                )
+              else if (showIconButton)
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: onPressed,
+                  icon: Icon(icon),
+                ),
             ],
           ),
         ],

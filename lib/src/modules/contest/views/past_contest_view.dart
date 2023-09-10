@@ -29,8 +29,8 @@ class PastContestView extends GetView<ContestController> {
                   itemCount: controller.completedContestList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return CompletedContestCard(
-                      contestDetails: controller.completedContestList[index],
-                    );
+                        // contestDetails: controller.completedContestList[index],
+                        );
                   },
                 ),
             ],

@@ -1,13 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/data/data.dart';
 
 import '../../../core/core.dart';
+import '../../../data/models/response/live_contest_list_response.dart';
 
-class OnGoingContestCard extends StatelessWidget {
-  final UpComingContest? contestDetails;
-  const OnGoingContestCard({
+class LiveContestCard extends StatelessWidget {
+  final String? contestName;
+  final String? contestStartTime;
+  final String? contestEndTime;
+  final String? contestType;
+  final String? contestStatus;
+  final int? entryFee;
+  final num? payoutPercentage;
+  final LiveContestPortfolio? portfolio;
+  final int? maxParticipants;
+  final String? contestExpiry;
+  final bool? isNifty;
+  final bool? isBankNifty;
+  final bool? isFinNifty;
+  const LiveContestCard({
     Key? key,
-    this.contestDetails,
+    this.contestName,
+    this.contestStartTime,
+    this.contestEndTime,
+    this.contestType,
+    this.contestStatus,
+    this.entryFee,
+    this.payoutPercentage,
+    this.portfolio,
+    this.maxParticipants,
+    this.contestExpiry,
+    this.isNifty,
+    this.isBankNifty,
+    this.isFinNifty,
   }) : super(key: key);
 
   @override
@@ -23,7 +47,7 @@ class OnGoingContestCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  contestDetails?.contestName ?? '-',
+                  contestName ?? '-',
                   style: AppStyles.tsSecondaryMedium16,
                 ),
               ),
@@ -34,27 +58,48 @@ class OnGoingContestCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.success,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Text(
-                  'Nifty',
-                  style: AppStyles.tsWhiteMedium12,
+              Visibility(
+                visible: isNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.success,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'Nifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
               ),
               SizedBox(width: 4),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.secondary,
-                  borderRadius: BorderRadius.circular(100),
+              Visibility(
+                visible: isBankNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'Bank Nifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
-                child: Text(
-                  'Bank Nifty',
-                  style: AppStyles.tsWhiteMedium12,
+              ),
+              SizedBox(width: 4),
+              Visibility(
+                visible: isFinNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.info,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'FinNifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
               ),
               SizedBox(width: 4),
@@ -65,7 +110,19 @@ class OnGoingContestCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  'Day',
+                  contestExpiry ?? '',
+                  style: AppStyles.tsWhiteMedium12,
+                ),
+              ),
+              SizedBox(width: 4),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  contestStatus ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -91,8 +148,7 @@ class OnGoingContestCard extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          // '23',
-                          '${contestDetails?.maxParticipants}',
+                          '$maxParticipants',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -109,7 +165,7 @@ class OnGoingContestCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.tsRegular12,
                       ),
                       Text(
-                        '${contestDetails?.payoutPercentage}% of the net P&L',
+                        '$payoutPercentage % of the net P&L',
                         // '0.5% of the net P&L',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
@@ -126,7 +182,7 @@ class OnGoingContestCard extends StatelessWidget {
                         // SizedBox(height: 4),
                         // Text(
                         //   "00:00:00",
-                        //   // '${contestDetails?.contestEndTime}',
+                        //   // '${contestEndTime}',
                         //   style: Theme.of(context).textTheme.tsMedium14,
                         // ),
                       ],
@@ -147,7 +203,7 @@ class OnGoingContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(contestDetails?.contestStartTime),
+                        FormatHelper.formatDateTimeToIST(contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -161,7 +217,7 @@ class OnGoingContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(contestDetails?.contestEndTime),
+                        FormatHelper.formatDateTimeToIST(contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -181,8 +237,7 @@ class OnGoingContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        // 'Free',
-                        '₹ ${contestDetails?.entryFee}',
+                        entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -196,7 +251,7 @@ class OnGoingContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        '₹ ${contestDetails?.portfolio?.portfolioValue}',
+                        FormatHelper.formatNumbers(portfolio?.portfolioValue, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],

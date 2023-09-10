@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
@@ -15,10 +15,10 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
             width: double.infinity,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.grey,
+              color: AppColors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(4),
-                topRight: Radius.circular(4),
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
               ),
             ),
             child: Column(
@@ -28,11 +28,11 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                   height: 56,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.secondary.withOpacity(0.25),
                   ),
                   child: Icon(
                     Icons.lock,
-                    color: AppColors.primary,
+                    color: AppColors.secondary,
                   ),
                 ),
                 SizedBox(height: 24),
@@ -70,7 +70,8 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                     ),
                   ],
                 ),
-                if (controller.selectedSubscription.value.discountedPrice! <= controller.walletBalance.value)
+                if (controller.selectedSubscription.value.discountedPrice! <=
+                    controller.walletBalance.value)
                   Column(
                     children: [
                       SizedBox(height: 24),
@@ -80,7 +81,8 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                       ),
                     ],
                   ),
-                if (!(controller.selectedSubscription.value.discountedPrice! <= controller.walletBalance.value))
+                if (!(controller.selectedSubscription.value.discountedPrice! <=
+                    controller.walletBalance.value))
                   Column(
                     children: [
                       SizedBox(height: 24),

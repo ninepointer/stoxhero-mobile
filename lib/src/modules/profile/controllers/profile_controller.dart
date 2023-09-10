@@ -23,7 +23,8 @@ class ProfileController extends BaseController<ProfileRepository> {
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
-
+  String? selectedValue;
+  List<String> dropdownItems = ['Male', 'Female', 'Other'];
   final isEditEnabled = false.obs;
 
   final userNameTextController = TextEditingController();
@@ -132,7 +133,7 @@ class ProfileController extends BaseController<ProfileRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log(e.toString());
+      log('Save: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
 

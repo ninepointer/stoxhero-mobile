@@ -137,7 +137,6 @@ class InviteView extends GetView<ReferralsController> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Card(

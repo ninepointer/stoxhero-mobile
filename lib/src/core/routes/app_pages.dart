@@ -108,5 +108,10 @@ class AppPages {
       page: () => WalletView(),
       binding: WalletBinding(),
     ),
+    GetPage(
+      name: AppRoutes.marginx,
+      page: () => MarginxView(),
+      binding: MarginxBinding(),
+    ),
   ];
 }

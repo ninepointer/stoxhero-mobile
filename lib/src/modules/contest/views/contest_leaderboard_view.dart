@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stoxhero/src/modules/contest/widgets/contest_leaderboard_card.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
@@ -31,7 +30,42 @@ class ContestLeaderboardView extends GetView<ContestController> {
                     selectedSegment: controller.segmentedControlValue.value,
                     onValueChanged: controller.handleSegmentChange,
                   ),
-                  ContestLeaderboardCard(),
+                  if (controller.segmentedControlValue.value == 0)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.contestLeaderboardList.length,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        var user = controller.contestLeaderboardList[index];
+                        return ContestLeaderboardCard(
+                          name:
+                              '${user.traderFirstName!.capitalizeFirst} ${user.traderLastName!.capitalizeFirst}',
+                          strikeRate: user.strikeRate,
+                          contestParticipated: user.contestParticipated,
+                          contestWon: user.contestWon,
+                          totalPayout: user.totalPayout,
+                        );
+                      },
+                    )
+                  else if (controller.segmentedControlValue.value == 1)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.collegeContestLeaderboardList.length,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        var user = controller.collegeContestLeaderboardList[index];
+                        return ContestLeaderboardCard(
+                          name:
+                              '${user.traderFirstName!.capitalizeFirst} ${user.traderLastName!.capitalizeFirst}',
+                          strikeRate: user.strikeRate,
+                          contestParticipated: user.contestParticipated,
+                          contestWon: user.contestWon,
+                          totalPayout: user.totalPayout,
+                        );
+                      },
+                    ),
                 ],
               ),
             ),

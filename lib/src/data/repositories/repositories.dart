@@ -7,3 +7,6 @@ export 'orders_repository.dart';
 export 'wallet_repository.dart';
 export 'analtyics_respository.dart';
 export 'contest_repository.dart';
+export 'dashboard_respository.dart';
+export 'tutorial_respository.dart';
+export 'marginx_respository.dart';

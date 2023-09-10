@@ -17,11 +17,10 @@ class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 2;
 
   List<Widget> _tabs = [
-    // TradingTabView(),
     DashboardView(),
-    AnalyticsView(),
+    TradingView(),
     TenxTradingView(),
-    WalletView(),
+    MarginxView(),
     ContestView(),
   ];
 
@@ -38,15 +37,14 @@ class _HomeViewState extends State<HomeView> {
       case 0:
         break;
       case 1:
-        Get.find<AnalyticsController>().loadData();
         break;
       case 2:
-        break;
-      case 3:
         Get.find<TenxTradingController>().getTenxTradingActiveSubs();
         break;
+      case 3:
+        Get.find<MarginxController>().loadData();
+        break;
       case 4:
-        Get.find<ContestController>().loadData();
         break;
       default:
     }
@@ -155,7 +153,7 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.trending_up_rounded),
                       SizedBox(height: 4),
                       Text(
-                        'TenX',
+                        'MarginX',
                         style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],

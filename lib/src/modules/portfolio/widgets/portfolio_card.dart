@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
-import '../../../data/data.dart';
 
-class PortfolioCard extends GetView<PortfolioController> {
-  final Portfolio portfolio;
-
-  const PortfolioCard({super.key, required this.portfolio});
+class PortfolioCard extends StatelessWidget {
+  final String? portfolioName;
+  final String? portfolioValue;
+  final num? cashBalance;
+  final num? investedAmount;
+  final String? portfolioType;
+  final String? portfolioAccount;
+  const PortfolioCard({
+    super.key,
+    this.portfolioName,
+    this.portfolioValue,
+    this.cashBalance,
+    this.investedAmount,
+    this.portfolioType,
+    this.portfolioAccount,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.symmetric(horizontal: 12),
+      margin: EdgeInsets.only(left: 12, right: 12, bottom: 8),
       padding: EdgeInsets.zero,
       children: [
         Padding(
@@ -21,8 +31,8 @@ class PortfolioCard extends GetView<PortfolioController> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              portfolio.portfolioName ?? '',
-              style: AppStyles.tsSecondaryMedium16,
+              portfolioName ?? '',
+              style: Theme.of(context).textTheme.tsMedium16,
               textAlign: TextAlign.center,
             ),
           ),
@@ -37,21 +47,7 @@ class PortfolioCard extends GetView<PortfolioController> {
             children: [
               Row(
                 children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withOpacity(.25),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.account_balance,
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                  SizedBox(width: 16),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Portfolio Value',
@@ -59,7 +55,7 @@ class PortfolioCard extends GetView<PortfolioController> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        '${FormatHelper.formatNumbers(portfolio.portfolioValue)}',
+                        '${FormatHelper.formatNumbers(portfolioValue)}',
                         style: AppStyles.tsPrimaryMedium20.copyWith(
                           color: AppColors.info,
                         ),
@@ -75,7 +71,7 @@ class PortfolioCard extends GetView<PortfolioController> {
                   PortfolioCardTile(
                     label: 'Opening Balance',
                     value: FormatHelper.formatNumbers(
-                      portfolio.investedAmount,
+                      cashBalance,
                       isNegative: true,
                     ),
                     valueColor: AppColors.danger,
@@ -84,7 +80,7 @@ class PortfolioCard extends GetView<PortfolioController> {
                     isRightAlign: true,
                     label: 'Available Margin',
                     value: FormatHelper.formatNumbers(
-                      portfolio.cashBalance,
+                      investedAmount,
                     ),
                     valueColor: AppColors.success,
                   ),
@@ -93,17 +89,15 @@ class PortfolioCard extends GetView<PortfolioController> {
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: [ 
                   PortfolioCardTile(
                     label: 'Portfolio Type',
-                    value: portfolio.portfolioType,
-                    valueColor: AppColors.primary,
+                    value: portfolioType,
                   ),
                   PortfolioCardTile(
                     isRightAlign: true,
-                    label: 'Cash Balance',
-                    value: portfolio.portfolioAccount,
-                    valueColor: AppColors.info,
+                    label: 'Portfolio Account',
+                    value: portfolioAccount,
                   ),
                 ],
               ),

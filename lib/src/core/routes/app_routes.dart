@@ -21,4 +21,5 @@ class AppRoutes {
   static const String tutorial = '/tutorial';
   static const String careers = '/careers';
   static const String wallet = '/wallet';
+  static const String marginx = '/marginx';
 }
