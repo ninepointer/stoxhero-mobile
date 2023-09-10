@@ -15,6 +15,8 @@ class AppUrls {
   static const String loginDetails = "$apiURL/loginDetail";
   static const String updateUserDetails = "$apiURL/userdetail/me";
   static const String myPortfolio = "$apiURL/portfolio/myPortfolio";
+  static const String myTenx = "$apiURL/portfolio/myTenx";
+  static const String virtualTradingPortfolio = "$apiURL/paperTrade/margin";
 
   static const String earnings = "$apiURL/earnings";
   static const String referralsActive = "$apiURL/referrals/active";
@@ -52,7 +54,22 @@ class AppUrls {
   static const String purchaseIntent = "$tenx/capturepurchaseintent";
   static const String purchaseSubscription = "$apiURL/userwallet/deduct";
 
+  static const String liveContests = "$apiURL/dailycontest/contests/userlive";
   static const String upComingContests = "$apiURL/dailycontest/contests/upcoming";
   static const String completedContests = "$apiURL/dailycontest/contests/completed";
   static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
+  static const String contestLeaderboard = "$apiURL/contestscoreboard/scoreboard";
+  static const String collegeContestLeaderboard = "$apiURL/contestscoreboard/collegescoreboard";
+  static const String completedCollegeContests = "$apiURL/dailycontest/contests/collegecompleted";
+  static const String contestTodaysOrders =
+      "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
+
+  static const String returnSummary = "$apiURL/userdashboard/summary";
+  static const String performance = "$apiURL/userdashboard";
+  static const String dashboardCarousel = "$apiURL/carousels/home";
+
+  static const String tutorial = "$apiURL/tutorialcategory/";
+  static const String upComingMarginX = "$apiURL/marginx/userupcoming";
+  static const String liveMarginx = "$apiURL/marginx/userlive";
+  static const String completedMarginx = "$apiURL/marginx/usercompleted";
 }

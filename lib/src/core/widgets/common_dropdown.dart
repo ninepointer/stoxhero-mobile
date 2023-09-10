@@ -1,91 +1,80 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/core/core.dart';
 
-class CommonDropdown extends StatefulWidget {
-  const CommonDropdown({Key? key}) : super(key: key);
-
-  @override
-  _CommonDropdownState createState() => _CommonDropdownState();
-}
-
-class _CommonDropdownState extends State<CommonDropdown> {
-  bool isExpanded = false;
-  String selectOption = 'College Name';
-  List<String> collegeList = [
-    'VIVA',
-    'KJ',
-    'DJ',
-    'NMIS',
-  ];
+class CommonDropdown extends StatelessWidget {
+  final String hint;
+  final String? value;
+  final List<String> dropdownItems;
+  final Color? color;
+  final ValueChanged<String?>? onChanged;
+  const CommonDropdown({
+    Key? key,
+    required this.hint,
+    required this.value,
+    required this.dropdownItems,
+    required this.onChanged,
+    this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              isExpanded = !isExpanded;
-            });
-          },
-          child: Container(
-            height: 48,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: AppColors.grey.withOpacity(.25),
+    return Container(
+      width: double.infinity,
+      child: DropdownButtonHideUnderline(
+        child: Container(
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DropdownButton2<String>(
+            hint: Container(
+              child: Text(
+                hint,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
-              borderRadius: BorderRadius.circular(4),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    selectOption,
-                    style: AppStyles.tsGreyMedium14,
+            value: value,
+            onChanged: onChanged,
+            items: dropdownItems.map<DropdownMenuItem<String>>(
+              (String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: Theme.of(context).textTheme.tsRegular14,
                   ),
-                  Icon(
-                    isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                    color: AppColors.grey,
-                  ),
-                ],
+                );
+              },
+            ).toList(),
+            dropdownStyleData: DropdownStyleData(
+              elevation: 0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            buttonStyleData: ButtonStyleData(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: EdgeInsets.only(right: 12),
+            ),
+            iconStyleData: IconStyleData(
+              openMenuIcon: Icon(
+                Icons.expand_less_rounded,
+              ),
+              icon: Icon(
+                Icons.expand_more_rounded,
               ),
             ),
           ),
         ),
-        if (isExpanded)
-          Container(
-            height: 160,
-            child: ListView.builder(
-              itemCount: collegeList.length,
-              itemBuilder: (context, index) {
-                final context = collegeList[index];
-                return Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          selectOption = context;
-                          isExpanded = false;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          context,
-                          style: AppStyles.tsGreyMedium14,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-      ],
+      ),
     );
   }
 }

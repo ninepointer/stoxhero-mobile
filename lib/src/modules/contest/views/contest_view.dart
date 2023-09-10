@@ -91,6 +91,7 @@ class ContestView extends StatelessWidget {
               image: AppImages.contest,
               buttonLabel: 'Join Contest!',
               onPressed: () {
+                Get.find<ContestController>().loadData();
                 Get.to(() => ContestListView());
               },
             ),
@@ -101,6 +102,7 @@ class ContestView extends StatelessWidget {
               image: AppImages.collegeContest,
               buttonLabel: 'Join College Contest!',
               onPressed: () {
+                Get.find<ContestController>().loadData();
                 Get.to(() => CollegeContestView());
               },
             ),
@@ -111,6 +113,7 @@ class ContestView extends StatelessWidget {
               image: AppImages.contestLeaderboard,
               buttonLabel: 'See Contest Leaderboard!',
               onPressed: () {
+                Get.find<ContestController>().loadData();
                 Get.to(() => ContestLeaderboardView());
               },
             ),

@@ -37,74 +37,144 @@ class ContestListView extends GetView<ContestController> {
                       NoDataFound(
                         label: 'No Upcoming Contest!',
                       ),
+                    if (controller.premiumContestList.isNotEmpty)
+                      CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.upComingContestList.length,
+                      itemCount: controller.premiumContestList.length,
                       itemBuilder: (BuildContext context, int index) {
+                        var upComing = controller.premiumContestList[index];
                         return UpComingContestCard(
-                          contestDetails: controller.upComingContestList[index],
+                          contestName: upComing.contestName,
+                          isNifty: upComing.isNifty,
+                          isBankNifty: upComing.isBankNifty,
+                          isFinNifty: upComing.isFinNifty,
+                          contestExpiry: upComing.contestExpiry,
+                          contestStatus: upComing.contestStatus,
+                          maxParticipants: upComing.maxParticipants,
+                          contestStartTime: upComing.contestStartTime,
+                          contestEndTime: upComing.contestEndTime,
+                          payoutPercentage: upComing.payoutPercentage,
+                          entryFee: upComing.entryFee,
+                          portfolio: upComing.portfolio,
                         );
                       },
                     ),
-                  ],
-                  if (controller.segmentedControlValue.value == 1) ...[
-                    if (controller.premiumContestList.isEmpty && controller.freeContestList.isEmpty)
+                    SizedBox(height: 8),
+                    if (controller.freeContestList.isNotEmpty) CommonTile(label: 'Free Contest\'s'),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.freeContestList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var upComing = controller.freeContestList[index];
+                        return UpComingContestCard(
+                          contestName: upComing.contestName,
+                          isNifty: upComing.isNifty,
+                          isBankNifty: upComing.isBankNifty,
+                          isFinNifty: upComing.isFinNifty,
+                          contestExpiry: upComing.contestExpiry,
+                          contestStatus: upComing.contestStatus,
+                          maxParticipants: upComing.maxParticipants,
+                          contestStartTime: upComing.contestStartTime,
+                          contestEndTime: upComing.contestEndTime,
+                          payoutPercentage: upComing.payoutPercentage,
+                          entryFee: upComing.entryFee,
+                          portfolio: upComing.portfolio,
+                        );
+                      },
+                    )
+                  ] else if (controller.segmentedControlValue.value == 1) ...[
+                    if (controller.liveContestList.isEmpty)
                       NoDataFound(
                         label: 'No Live Contest!',
-                      ),
-                  ],
-                  if (controller.segmentedControlValue.value == 2 &&
-                      controller.completedContestList.isNotEmpty)
+                      )
+                    else
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.liveContestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var live = controller.liveContestList[index];
+                          return LiveContestCard(
+                            contestName: live.contestName,
+                            isNifty: live.isNifty,
+                            isBankNifty: live.isBankNifty,
+                            isFinNifty: live.isFinNifty,
+                            contestExpiry: live.contestExpiry,
+                            contestStatus: live.contestStatus,
+                            maxParticipants: live.maxParticipants,
+                            contestStartTime: live.contestStartTime,
+                            contestEndTime: live.contestEndTime,
+                            payoutPercentage: live.payoutPercentage,
+                            entryFee: live.entryFee,
+                            portfolio: live.portfolio,
+                          );
+                        },
+                      )
+                  ] else if (controller.segmentedControlValue.value == 2) ...[
+                    if (controller.premiumCompletedContestList.isNotEmpty)
+                      CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.completedContestList.length,
+                      itemCount: controller.premiumCompletedContestList.length,
                       itemBuilder: (BuildContext context, int index) {
+                        var completed = controller.premiumCompletedContestList[index];
+                        var contestPnl = controller.completedContestPnlList[index];
                         return CompletedContestCard(
-                          contestDetails: controller.completedContestList[index],
+                          contestName: completed.contestName,
+                          isNifty: completed.isNifty,
+                          isBankNifty: completed.isBankNifty,
+                          isFinNifty: completed.isFinNifty,
+                          isAllIndex: completed.isAllIndex,
+                          contestStartTime: completed.contestStartTime,
+                          contestEndTime: completed.contestEndTime,
+                          contestStatus: completed.contestStatus,
+                          entryFee: completed.entryFee,
+                          payoutPercentage: completed.payoutPercentage,
+                          contestExpiry: completed.contestExpiry,
+                          portfolio: contestPnl.portfolioValue,
+                          npnl: contestPnl.npnl,
+                          payoutAmount: contestPnl.payoutAmount,
                         );
                       },
                     ),
-                  if (controller.premiumContestList.isNotEmpty) ...[
-                    Column(
-                      children: [
-                        CommonTile(label: 'Premium Contests'),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.premiumContestList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return OnGoingContestCard(
-                              contestDetails: controller.premiumContestList[index],
-                            );
-                          },
-                        ),
-                        SizedBox(height: 8),
-                      ],
+                    SizedBox(height: 8),
+                    if (controller.freeCompletedContestList.isNotEmpty)
+                      CommonTile(label: 'Free Contest\'s'),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.freeCompletedContestList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var completed = controller.freeCompletedContestList[index];
+                        var contestPnl = controller.completedContestPnlList[index];
+                        return CompletedContestCard(
+                          contestName: completed.contestName,
+                          isNifty: completed.isNifty,
+                          isBankNifty: completed.isBankNifty,
+                          isFinNifty: completed.isFinNifty,
+                          isAllIndex: completed.isAllIndex,
+                          contestStartTime: completed.contestStartTime,
+                          contestEndTime: completed.contestEndTime,
+                          contestStatus: completed.contestStatus,
+                          entryFee: completed.entryFee,
+                          payoutPercentage: completed.payoutPercentage,
+                          contestExpiry: completed.contestExpiry,
+                          portfolio: contestPnl.portfolioValue,
+                          npnl: contestPnl.npnl,
+                          payoutAmount: contestPnl.payoutAmount,
+                        );
+                      },
                     ),
-                  ],
-                  if (controller.freeContestList.isNotEmpty) ...[
-                    Column(
-                      children: [
-                        CommonTile(label: 'Free Contests'),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.freeContestList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return OnGoingContestCard(
-                              contestDetails: controller.freeContestList[index],
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                  ]
                 ],
               ),
             ),

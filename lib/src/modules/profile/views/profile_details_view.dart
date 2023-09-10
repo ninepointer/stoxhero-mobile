@@ -5,8 +5,21 @@ import 'package:stoxhero/src/core/core.dart';
 
 import '../../modules.dart';
 
-class ProfileDetailsView extends GetView<ProfileController> {
+class ProfileDetailsView extends StatefulWidget {
   const ProfileDetailsView({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileDetailsView> createState() => _ProfileDetailsViewState();
+}
+
+class _ProfileDetailsViewState extends State<ProfileDetailsView> {
+  late ProfileController controller;
+  @override
+  void initState() {
+    controller = Get.find<ProfileController>();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +102,12 @@ class ProfileDetailsView extends GetView<ProfileController> {
                     Row(
                       children: [
                         Expanded(
-                          child: CommonTextField(
-                            prefixIcon: Icon(Icons.man),
-                            controller: controller.genderTextController,
-                            hintText: 'Gender',
+                          child: CommonDropdown(
+                            color: AppColors.grey.withOpacity(0.1),
+                            hint: 'Gender',
+                            value: controller.selectedValue,
+                            dropdownItems: controller.dropdownItems,
+                            onChanged: (value) => setState(() => controller.selectedValue = value!),
                           ),
                         ),
                         SizedBox(width: 12),
@@ -100,6 +115,7 @@ class ProfileDetailsView extends GetView<ProfileController> {
                           child: GestureDetector(
                             onTap: () => controller.showDateRangePicker(context),
                             child: CommonTextField(
+                              padding: EdgeInsets.zero,
                               isDisabled: true,
                               controller: controller.dobTextController,
                               hintText: 'Date of Birth',
@@ -112,6 +128,7 @@ class ProfileDetailsView extends GetView<ProfileController> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 12),
                     Text(
                       'Location',
                       textAlign: TextAlign.start,

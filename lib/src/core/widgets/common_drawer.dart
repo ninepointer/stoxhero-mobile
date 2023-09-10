@@ -49,6 +49,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
         break;
       case 5:
         Get.toNamed(AppRoutes.tutorial);
+        Get.find<TutorialController>().loadData();
         break;
       case 6:
         ThemeService().switchTheme();

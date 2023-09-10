@@ -16,9 +16,13 @@ class PortfolioController extends BaseController<PortfolioRepository> {
   bool get isLoadingStatus => isLoading.value;
 
   final portfoliList = <Portfolio>[].obs;
+  final myTenxPortfolioList = <MyTenxPortfolio>[].obs;
+  final virtualPortfolioList = <VirtualTradingPortfolio>[].obs;
 
   void loadData() {
     getPortfolioList();
+    getMyTenxPortfolioList();
+    getVirtualTradingPortfolioList();
   }
 
   void getPortfolioList() async {
@@ -29,6 +33,44 @@ class PortfolioController extends BaseController<PortfolioRepository> {
         if (response.data?.status?.toLowerCase() == "success") {
           portfoliList(response.data?.data ?? []);
         }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  void getMyTenxPortfolioList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<MyTenxPortfolioResponse> response =
+          await repository.getMyTenxPortfolioList();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          myTenxPortfolioList(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  void getVirtualTradingPortfolioList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<VirtualTradingPortfolioResponse> response =
+          await repository.getVirtualTradingPortfolioList();
+      if (response.data != null) {
+        // if (response.data?.status?.toLowerCase() == "success") {
+        //   virtualPortfolioList(response.data?.data ?? []);
+        // }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

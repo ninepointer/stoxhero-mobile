@@ -1,29 +1,36 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/core.dart';
-import '../../contest/contest_index.dart';
+import '../../../data/data.dart';
+import '../../modules.dart';
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({Key? key}) : super(key: key);
+  const DashboardView({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _DashboardViewState createState() => _DashboardViewState();
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  final urlImages = [
-    'https://dmt-trade.s3.ap-south-1.amazonaws.com/carousels/Hiring%20Interns/photos/1691157992025Blue%20Yellow%20Simple%20Internship%20Program%20Recruitment%20Instagram%20Post.png',
-    'https://dmt-trade.s3.ap-south-1.amazonaws.com/carousels/Virtual%20Trading/photos/1688140457985Carousel%203.png',
-    'https://dmt-trade.s3.ap-south-1.amazonaws.com/carousels/Daily%20Trading%20Contest%20/photos/1688140620115Carousel%204.png',
-    'https://dmt-trade.s3.ap-south-1.amazonaws.com/carousels/Hiring%20Interns/photos/1691157992025Blue%20Yellow%20Simple%20Internship%20Program%20Recruitment%20Instagram%20Post.png',
-  ];
-  String selectedValue1 = 'Virtual Trading';
-  String selectedValue2 = 'Aug 23';
+  late HomeController controller;
+  Dashboard? dashboard;
+  String? selectedValue1;
+  String? selectedValue2;
 
   List<String> dropdownItems1 = ['Virtual Trading', 'Contest Trading', 'TenX Trading'];
   List<String> dropdownItems2 = ['Aug 23', 'July 23', 'Lifetime'];
+
+  @override
+  void initState() {
+    controller = Get.find<HomeController>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +64,14 @@ class _DashboardViewState extends State<DashboardView> {
             SizedBox(height: 24),
             Container(
               child: CarouselSlider.builder(
-                itemCount: urlImages.length,
-                itemBuilder: (context, index, realIndex) {
-                  final urlImage = urlImages[index];
+                itemCount: controller.dashboardCarouselList.length,
+                itemBuilder: (context, int index, realIndex) {
+                  // var urlImage = controller.dashboardCarouselList[index];
+                  log('Image: ${controller.dashboardCarouselList[index]}');
                   return Container(
                     color: AppColors.white,
                     child: Image.network(
-                      urlImage,
+                      "${controller.dashboardCarouselList[index].carouselImage}",
                       fit: BoxFit.cover,
                     ),
                   );
@@ -76,90 +84,72 @@ class _DashboardViewState extends State<DashboardView> {
               ),
             ),
             SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Upcoming Contest',
-                    style: Theme.of(context).textTheme.tsMedium16,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.find<ContestController>().loadData();
-                      Get.to(
-                        () => ContestListView(),
-                      );
-                    },
-                    child: Text('See All'),
-                  ),
-                ],
-              ),
+            CommonTile(
+              label: 'Upcoming Contest',
+              showSeeAllButton: true,
+              onPressed: () {
+                Get.to(() => ContestListView());
+              },
             ),
             UpComingContestCard(),
             SizedBox(height: 12),
+            CommonTile(
+              label: 'Ongoing Contest',
+              showSeeAllButton: true,
+              onPressed: () {
+                Get.to(() => ContestListView());
+              },
+            ),
+            LiveContestCard(),
+            SizedBox(height: 12),
+            CommonTile(label: 'Return Summary'),
+            customCard(label: 'Virtual Trading', percent: ''),
+            customCard(label: 'Contest Trading', percent: ''),
+            customCard(label: 'TenX Trading', percent: '0.0%'),
+            CommonTile(label: 'Performance'),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Ongoing Contest',
-                    style: Theme.of(context).textTheme.tsMedium16,
+                  Expanded(
+                    child: CommonDropdown(
+                      color: Theme.of(context).cardColor,
+                      hint: 'Trading',
+                      value: selectedValue1,
+                      dropdownItems: dropdownItems1,
+                      onChanged: (String? value) => setState(
+                        () => selectedValue1 = value!,
+                      ),
+                    ),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text('See All'),
+                  SizedBox(width: 4),
+                  Expanded(
+                    child: CommonDropdown(
+                      color: Theme.of(context).cardColor,
+                      hint: 'Date',
+                      value: selectedValue2,
+                      dropdownItems: dropdownItems2,
+                      onChanged: (String? value) => setState(
+                        () => selectedValue2 = value!,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-            OnGoingContestCard(),
-            SizedBox(height: 12),
-            CommonTile(label: 'Return Summary'),
-            customCard(label: 'Virtual Trading', percent: '0.0%'),
-            customCard(label: 'Contest Trading', percent: '0.0%'),
-            customCard(label: 'TenX Trading', percent: '0.0%'),
-            CommonTile(label: 'Performance'),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: CustomDropdown(
-                items: dropdownItems1,
-                selectedValue: selectedValue1,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedValue1 = newValue!;
-                  });
-                },
-              ),
-            ),
-            SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: CustomDropdown(
-                items: dropdownItems2,
-                selectedValue: selectedValue2,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedValue2 = newValue!;
-                  });
-                },
-              ),
-            ),
-            SizedBox(height: 12),
+            SizedBox(height: 8),
             Column(
               children: [
-                customCard(label: 'Market Days ', percent: '4'),
-                customCard(label: 'Trading Days ', percent: '4'),
-                customCard(label: 'Profit & Loss ', percent: '4'),
-                customCard(label: 'Portfolio ', percent: '4'),
-                customCard(label: 'Max Profit', percent: '4'),
-                customCard(label: 'Max Loss', percent: '4'),
-                customCard(label: 'Wins ', percent: '4'),
-                customCard(label: 'Loss ', percent: '4'),
-                customCard(label: 'Avg. Profit ', percent: '4'),
-                customCard(label: 'Avg. Loss ', percent: '4'),
+                customCard(label: 'Market Days ', percent: '${dashboard?.totalMarketDays}'),
+                customCard(label: 'Trading Days ', percent: '${dashboard?.totalTradingDays}'),
+                customCard(label: 'Profit & Loss ', percent: '${dashboard?.profitDays}'),
+                customCard(label: 'Portfolio ', percent: '${dashboard?.portfolio}'),
+                customCard(label: 'Max Profit', percent: '${dashboard?.maxProfit}'),
+                customCard(label: 'Max Loss', percent: '${dashboard?.maxLoss}'),
+                customCard(label: 'Wins ', percent: '${dashboard?.maxProfitDay}'),
+                customCard(label: 'Loss ', percent: '${dashboard?.maxLossDay}'),
+                customCard(label: 'Avg. Profit ', percent: '${dashboard?.averageProfit}'),
+                customCard(label: 'Avg. Loss ', percent: '${dashboard?.averageLoss}'),
               ],
             ),
           ],
@@ -209,51 +199,6 @@ class _DashboardViewState extends State<DashboardView> {
           ],
         ),
       ],
-    );
-  }
-}
-
-class CustomDropdown extends StatefulWidget {
-  final List<String> items;
-  final String selectedValue;
-  final void Function(String?) onChanged;
-
-  CustomDropdown({
-    required this.items,
-    required this.selectedValue,
-    required this.onChanged,
-  });
-
-  @override
-  _CustomDropdownState createState() => _CustomDropdownState();
-}
-
-class _CustomDropdownState extends State<CustomDropdown> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColors.grey.withOpacity(.25),
-        ),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: widget.selectedValue,
-          onChanged: widget.onChanged,
-          items: widget.items.map<DropdownMenuItem<String>>(
-            (String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            },
-          ).toList(),
-        ),
-      ),
     );
   }
 }

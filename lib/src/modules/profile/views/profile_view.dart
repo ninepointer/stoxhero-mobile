@@ -73,11 +73,7 @@ class ProfileView extends GetView<ProfileController> {
                     onPressed: () {
                       String referralCode = controller.userDetailsData.myReferralCode ?? '-';
                       Clipboard.setData(ClipboardData(text: referralCode));
-
-                      final snackBar = SnackBar(
-                        content: Text('Referral code copied to clipboard'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      SnackbarHelper.showSnackbar('Referral code copied to clipboard');
                     },
                     icon: Icon(Icons.copy),
                     iconSize: 16,

@@ -2,12 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:stoxhero/src/core/core.dart';
 
 class ContestLeaderboardCard extends StatelessWidget {
-  const ContestLeaderboardCard({Key? key}) : super(key: key);
+  final String? name;
+  final num? strikeRate;
+  final num? contestParticipated;
+  final num? contestWon;
+  final num? totalPayout;
+  const ContestLeaderboardCard({
+    Key? key,
+    this.name,
+    this.strikeRate,
+    this.contestParticipated,
+    this.contestWon,
+    this.totalPayout,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: CommonCard(
+        margin: EdgeInsets.only(
+          left: 12,
+          right: 12,
+          bottom: 4,
+        ),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -18,11 +35,11 @@ class ContestLeaderboardCard extends StatelessWidget {
                   children: [
                     Text(
                       'Trader Name',
-                      style: Theme.of(context).textTheme.tsRegular14,
+                      style: AppStyles.tsGreyRegular14,
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Anvesh Shetty',
+                      name ?? '-',
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                   ],
@@ -34,11 +51,11 @@ class ContestLeaderboardCard extends StatelessWidget {
                   children: [
                     Text(
                       'Strike Rate',
-                      style: Theme.of(context).textTheme.tsRegular14,
+                      style: AppStyles.tsGreyRegular14,
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '49.35%',
+                      '${FormatHelper.formatNumbers(strikeRate, showSymbol: false)}%',
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                   ],
@@ -46,7 +63,7 @@ class ContestLeaderboardCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -55,12 +72,16 @@ class ContestLeaderboardCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Contest Participated',
-                      style: Theme.of(context).textTheme.tsRegular14,
+                      'Contests Participated',
+                      style: AppStyles.tsGreyRegular14,
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '77',
+                      '${FormatHelper.formatNumbers(
+                        contestParticipated,
+                        showSymbol: false,
+                        decimal: 0,
+                      )}',
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                   ],
@@ -71,12 +92,16 @@ class ContestLeaderboardCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'Contest Won',
-                      style: Theme.of(context).textTheme.tsRegular14,
+                      'Contests Won',
+                      style: AppStyles.tsGreyRegular14,
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '38',
+                      '${FormatHelper.formatNumbers(
+                        contestWon,
+                        showSymbol: false,
+                        decimal: 0,
+                      )}',
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                   ],
@@ -84,16 +109,19 @@ class ContestLeaderboardCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Cash Earned',
-                style: Theme.of(context).textTheme.tsRegular14,
+                style: AppStyles.tsGreyRegular14,
               ),
               Text(
-                '₹39,295',
+                '${FormatHelper.formatNumbers(
+                  totalPayout,
+                  decimal: 0,
+                )}',
                 style: Theme.of(context).textTheme.tsMedium16.copyWith(
                       color: AppColors.success,
                     ),

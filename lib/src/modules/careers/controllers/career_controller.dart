@@ -29,4 +29,18 @@ class CareerController extends BaseController {
       dobTextController.text = date;
     }
   }
+
+  String? selectedValue1;
+  String? selectedValue2;
+
+  final List<String> dropdownItems1 = ['Yes', 'No'];
+  final List<String> dropdownItems2 = [
+    'LinkedIn',
+    'Facebook',
+    'Instagram',
+    'Twitter',
+    'Google',
+    'Friend',
+    'Others'
+  ];
 }
