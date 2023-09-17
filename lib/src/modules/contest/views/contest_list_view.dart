@@ -37,8 +37,7 @@ class ContestListView extends GetView<ContestController> {
                       NoDataFound(
                         label: 'No Upcoming Contest!',
                       ),
-                    if (controller.premiumContestList.isNotEmpty)
-                      CommonTile(label: 'Premium Contest\'s'),
+                    if (controller.premiumContestList.isNotEmpty) CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -117,8 +116,7 @@ class ContestListView extends GetView<ContestController> {
                         },
                       )
                   ] else if (controller.segmentedControlValue.value == 2) ...[
-                    if (controller.premiumCompletedContestList.isNotEmpty)
-                      CommonTile(label: 'Premium Contest\'s'),
+                    if (controller.premiumCompletedContestList.isNotEmpty) CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -128,6 +126,7 @@ class ContestListView extends GetView<ContestController> {
                         var completed = controller.premiumCompletedContestList[index];
                         var contestPnl = controller.completedContestPnlList[index];
                         return CompletedContestCard(
+                          id: completed.id,
                           contestName: completed.contestName,
                           isNifty: completed.isNifty,
                           isBankNifty: completed.isBankNifty,
@@ -146,8 +145,7 @@ class ContestListView extends GetView<ContestController> {
                       },
                     ),
                     SizedBox(height: 8),
-                    if (controller.freeCompletedContestList.isNotEmpty)
-                      CommonTile(label: 'Free Contest\'s'),
+                    if (controller.freeCompletedContestList.isNotEmpty) CommonTile(label: 'Free Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,

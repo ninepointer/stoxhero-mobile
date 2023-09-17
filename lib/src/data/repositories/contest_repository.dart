@@ -68,4 +68,12 @@ class ContestRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: CompletedCollegeContestListResponse.fromJson(response));
   }
+
+  Future<RepoResponse<CompletedContestOrdersResponse>> getCompletedContestOrders(String? id) async {
+    String apiURL = AppUrls.completedContestOrders(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: CompletedContestOrdersResponse.fromJson(response));
+  }
 }

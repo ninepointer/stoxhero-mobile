@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../core/core.dart';
 
-class InfoCard extends StatelessWidget {
+class CareerInfoCard extends StatelessWidget {
   final String label;
   final bool isInternship;
   final VoidCallback onPressed;
 
-  const InfoCard({
+  const CareerInfoCard({
     Key? key,
     required this.label,
     required this.isInternship,
@@ -90,7 +90,7 @@ class InfoCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: CommonFilledButton(
             label: 'Click here to Apply!',
-            height: 48,
+            height: 42,
             onPressed: onPressed,
           ),
         ),

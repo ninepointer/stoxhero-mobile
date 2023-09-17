@@ -65,7 +65,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                   ),
                   child: Column(
                     children: [
-                      SizedBox(height: 16),
+                      SizedBox(height: 36),
                       Image.asset(
                         item.image,
                         width: 250,

@@ -35,6 +35,8 @@ class _HomeViewState extends State<HomeView> {
 
     switch (index) {
       case 0:
+        Get.find<HomeController>().loadData();
+        Get.find<ContestController>().getUpComingContestList();
         break;
       case 1:
         break;
@@ -93,6 +95,8 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: _tabs[_selectedIndex],
       floatingActionButton: FloatingActionButton(
+        elevation: 0,
+        highlightElevation: 0,
         backgroundColor: AppColors.primary,
         onPressed: () => _updateTab(2),
         child: Icon(
@@ -102,6 +106,7 @@ class _HomeViewState extends State<HomeView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
+        elevation: 0,
         shape: CircularNotchedRectangle(),
         notchMargin: 4,
         child: Container(
@@ -112,6 +117,7 @@ class _HomeViewState extends State<HomeView> {
               Expanded(
                 child: MaterialButton(
                   minWidth: 40,
+                  shape: CircleBorder(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -129,6 +135,7 @@ class _HomeViewState extends State<HomeView> {
               Expanded(
                 child: MaterialButton(
                   minWidth: 40,
+                  shape: CircleBorder(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -147,6 +154,7 @@ class _HomeViewState extends State<HomeView> {
               Expanded(
                 child: MaterialButton(
                   minWidth: 40,
+                  shape: CircleBorder(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -164,6 +172,7 @@ class _HomeViewState extends State<HomeView> {
               Expanded(
                 child: MaterialButton(
                   minWidth: 40,
+                  shape: CircleBorder(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

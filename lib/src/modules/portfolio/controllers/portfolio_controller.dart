@@ -13,19 +13,19 @@ class PortfolioBinding implements Bindings {
 
 class PortfolioController extends BaseController<PortfolioRepository> {
   final isLoading = false.obs;
-  bool get isLoadingStatus => isLoading.value;
 
   final portfoliList = <Portfolio>[].obs;
   final myTenxPortfolioList = <MyTenxPortfolio>[].obs;
-  final virtualPortfolioList = <VirtualTradingPortfolio>[].obs;
+  final virtualPortfolio = VirtualTradingPortfolio().obs;
 
-  void loadData() {
-    getPortfolioList();
-    getMyTenxPortfolioList();
-    getVirtualTradingPortfolioList();
+  Future loadData() async {
+    isLoading(true);
+    await getMyTenxPortfolioList();
+    await getVirtualTradingPortfolioList();
+    isLoading(false);
   }
 
-  void getPortfolioList() async {
+  Future getPortfolioList() async {
     isLoading(true);
     try {
       final RepoResponse<PortfolioResponse> response = await repository.getPortfolioList();
@@ -43,11 +43,10 @@ class PortfolioController extends BaseController<PortfolioRepository> {
     isLoading(false);
   }
 
-  void getMyTenxPortfolioList() async {
+  Future getMyTenxPortfolioList() async {
     isLoading(true);
     try {
-      final RepoResponse<MyTenxPortfolioResponse> response =
-          await repository.getMyTenxPortfolioList();
+      final RepoResponse<MyTenxPortfolioResponse> response = await repository.getMyTenxPortfolioList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           myTenxPortfolioList(response.data?.data ?? []);
@@ -62,15 +61,12 @@ class PortfolioController extends BaseController<PortfolioRepository> {
     isLoading(false);
   }
 
-  void getVirtualTradingPortfolioList() async {
+  Future getVirtualTradingPortfolioList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingPortfolioResponse> response =
-          await repository.getVirtualTradingPortfolioList();
+      final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolioList();
       if (response.data != null) {
-        // if (response.data?.status?.toLowerCase() == "success") {
-        //   virtualPortfolioList(response.data?.data ?? []);
-        // }
+        virtualPortfolio(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

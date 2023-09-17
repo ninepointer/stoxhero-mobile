@@ -44,21 +44,21 @@ class _InternshipViewState extends State<InternshipView> {
                 if (isExpanded) bulletPoint(),
               ],
             ),
-            InfoCard(
+            CareerInfoCard(
               label: 'Campus Head',
               isInternship: true,
               onPressed: () => Get.to(
                 () => CareerForm(),
               ),
             ),
-            InfoCard(
+            CareerInfoCard(
               label: 'Campus Head',
               isInternship: true,
               onPressed: () => Get.to(
                 () => CareerForm(),
               ),
             ),
-            InfoCard(
+            CareerInfoCard(
               label: 'Campus Head',
               isInternship: true,
               onPressed: () => Get.to(

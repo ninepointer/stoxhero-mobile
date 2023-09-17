@@ -5,6 +5,7 @@ import 'package:stoxhero/src/modules/modules.dart';
 import '../../../core/core.dart';
 
 class CompletedContestCard extends StatelessWidget {
+  final String? id;
   final String? contestName;
   final bool? isNifty;
   final bool? isBankNifty;
@@ -21,6 +22,7 @@ class CompletedContestCard extends StatelessWidget {
   final num? npnl;
   const CompletedContestCard({
     Key? key,
+    this.id,
     this.contestName,
     this.isNifty,
     this.isBankNifty,
@@ -277,8 +279,8 @@ class CompletedContestCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  // Get.find<OrdersController>().loadData();
-                  Get.to(() => OrderCard());
+                  Get.find<ContestController>().getCompletedContestOrders(id);
+                  Get.to(() => CompletedContestOrdersListView());
                 },
                 child: Container(
                   alignment: Alignment.center,

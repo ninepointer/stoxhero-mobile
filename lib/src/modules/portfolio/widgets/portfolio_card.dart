@@ -44,10 +44,12 @@ class PortfolioCard extends StatelessWidget {
             vertical: 8,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Portfolio Value',
@@ -89,7 +91,7 @@ class PortfolioCard extends StatelessWidget {
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [ 
+                children: [
                   PortfolioCardTile(
                     label: 'Portfolio Type',
                     value: portfolioType,

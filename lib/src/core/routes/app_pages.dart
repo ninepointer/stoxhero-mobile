@@ -60,6 +60,11 @@ class AppPages {
       binding: PortfolioBinding(),
     ),
     GetPage(
+      name: AppRoutes.analytics,
+      page: () => AnalyticsView(),
+      binding: AnalyticsBinding(),
+    ),
+    GetPage(
       name: AppRoutes.referrals,
       page: () => ReferralsView(),
       binding: ReferralsBinding(),

@@ -40,13 +40,12 @@ class WalletView extends GetView<WalletController> {
                     buttonLabel: 'Redeem',
                     onPressed: null,
                   ),
-                  SizedBox(height: 16),
-                  if (controller.walletTransactionsList.isNotEmpty)
-                    CommonTile(label: 'Recent Transactions'),
+                  if (controller.walletTransactionsList.isNotEmpty) CommonTile(label: 'Recent Transactions'),
                   if (controller.walletTransactionsList.isNotEmpty)
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
                       itemCount: controller.walletTransactionsList.length,
                       itemBuilder: (context, index) {
                         var trans = controller.walletTransactionsList[index];

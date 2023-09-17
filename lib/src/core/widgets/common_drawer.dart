@@ -31,7 +31,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
     Get.back();
     switch (index) {
       case 0:
-        // Get.toNamed();
+        Get.toNamed(AppRoutes.analytics);
+        Get.find<AnalyticsController>().loadData();
         break;
       case 1:
         Get.toNamed(AppRoutes.portfolio);

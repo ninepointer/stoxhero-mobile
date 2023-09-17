@@ -46,7 +46,7 @@ class _WorkshopViewState extends State<WorkshopView> {
             CommonTile(
               label: "Registered Workshop(s)",
             ),
-            InfoCard(
+            CareerInfoCard(
               label: 'Basics of Options Trading: Workshop',
               isInternship: false,
               onPressed: () {},

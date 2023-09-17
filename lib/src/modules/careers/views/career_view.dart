@@ -21,6 +21,7 @@ class CareerView extends StatelessWidget {
               customCard(
                 context: context,
                 title: 'Internship',
+                buttonLabel: 'View Opening',
                 image: AppImages.internship,
                 onPressed: () {
                   Get.to(() => InternshipView());
@@ -30,6 +31,7 @@ class CareerView extends StatelessWidget {
               customCard(
                 context: context,
                 title: 'Workshop',
+                buttonLabel: 'View Opening',
                 image: AppImages.workshop,
                 onPressed: () {
                   Get.to(() => WorkshopView());
@@ -39,6 +41,7 @@ class CareerView extends StatelessWidget {
               customCard(
                 context: context,
                 title: 'Jobs',
+                buttonLabel: 'View Opening',
                 image: AppImages.job,
                 onPressed: () {},
               ),
@@ -51,6 +54,7 @@ class CareerView extends StatelessWidget {
 
   Widget customCard({
     required String title,
+    required String buttonLabel,
     required String image,
     required VoidCallback onPressed,
     required BuildContext context,
@@ -59,46 +63,55 @@ class CareerView extends StatelessWidget {
       margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Image.asset(
-                  image,
-                  height: 140,
-                ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 16),
+              margin: EdgeInsets.all(16).copyWith(
+                bottom: 0,
               ),
-              SizedBox(height: 8),
-              Column(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              child: Image.asset(
+                image,
+                height: 120,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
                     style: Theme.of(context).textTheme.tsMedium18,
+                    // style: AppStyles.tsBlackMedium18,
                   ),
-                  SizedBox(height: 8),
                   Text(
-                    'loremEu nisi ut aute anim est. Ea nulla dolore enim ea enim proident minim cupidatat fugiat. ',
-                    style: Theme.of(context).textTheme.tsGreyRegular14,
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                    style: Theme.of(context).textTheme.tsGreyRegular12,
+                    // style: AppStyles.tsBlackMedium18,
                   ),
                 ],
               ),
-              SizedBox(height: 8),
-              CommonFilledButton(
-                label: 'Click here to Apply!',
-                height: 48,
+            ),
+            Container(
+              margin: EdgeInsets.all(16).copyWith(
+                top: 0,
+              ),
+              alignment: Alignment.bottomRight,
+              child: CommonFilledButton(
+                label: buttonLabel,
+                height: 42,
                 onPressed: onPressed,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );

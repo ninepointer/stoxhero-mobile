@@ -33,6 +33,7 @@ class ContestController extends BaseController<ContestRepository> {
   final collegeContestLeaderboardList = <CollegeContestLeaderboard>[].obs;
   final completedCollegeContestList = <CompletedCollegeContest>[].obs;
   final contestTodaysOrdersList = <ContestOrderList>[].obs;
+  final completedContestOrdersList = <CompletedContestOrder>[].obs;
   final liveContestList = <LiveContest>[].obs;
   final walletBalance = RxNum(0);
 
@@ -67,8 +68,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getUpComingContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<UpComingContestListResponse> response =
-          await repository.getUpComingContestList();
+      final RepoResponse<UpComingContestListResponse> response = await repository.getUpComingContestList();
       if (response.data != null) {
         upComingContestList(response.data?.data ?? []);
         if (upComingContestList.isNotEmpty) {
@@ -94,8 +94,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestListResponse> response =
-          await repository.getCompletedContestList();
+      final RepoResponse<CompletedContestListResponse> response = await repository.getCompletedContestList();
       if (response.data != null) {
         tempCompletedContestList(response.data?.data ?? []);
         if (tempCompletedContestList.isNotEmpty) {
@@ -121,8 +120,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestPnlList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestPnlListResponse> response =
-          await repository.getCompletedContestPnlList();
+      final RepoResponse<CompletedContestPnlListResponse> response = await repository.getCompletedContestPnlList();
       if (response.data != null) {
         List<CompletedContest> tempList = [];
         completedContestPnlList(response.data?.data ?? []);
@@ -148,8 +146,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestLeaderboardList() async {
     isLoading(true);
     try {
-      final RepoResponse<ContestLeaderboardResponse> response =
-          await repository.getContestLeaderboardList();
+      final RepoResponse<ContestLeaderboardResponse> response = await repository.getContestLeaderboardList();
       if (response.data != null) {
         contestLeaderboardList(response.data?.data ?? []);
       } else {
@@ -218,6 +215,24 @@ class ContestController extends BaseController<ContestRepository> {
       final RepoResponse<LiveContestListResponse> response = await repository.getLiveContestList();
       if (response.data != null) {
         liveContestList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getCompletedContestOrders(String? id) async {
+    isLoading(true);
+    try {
+      final RepoResponse<CompletedContestOrdersResponse> response = await repository.getCompletedContestOrders(
+        id,
+      );
+      if (response.data != null) {
+        completedContestOrdersList(response.data?.data ?? []);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

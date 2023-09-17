@@ -73,7 +73,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   controller.tenxWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tenxWatchlist.length >= 5 ? 300 : controller.tenxWatchlist.length * 76,
+                          height: controller.tenxWatchlist.length >= 3 ? 340 : controller.tenxWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,

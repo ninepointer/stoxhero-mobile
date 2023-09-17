@@ -59,10 +59,12 @@ class AppUrls {
   static const String completedContests = "$apiURL/dailycontest/contests/completed";
   static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
   static const String contestLeaderboard = "$apiURL/contestscoreboard/scoreboard";
-  static const String collegeContestLeaderboard = "$apiURL/contestscoreboard/collegescoreboard";
+  static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
+
+  static const String liveCollageContests = "$apiURL/dailycontest/collagecontest/userlive";
+  static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
   static const String completedCollegeContests = "$apiURL/dailycontest/contests/collegecompleted";
-  static const String contestTodaysOrders =
-      "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
+  static const String collegeContestLeaderboard = "$apiURL/contestscoreboard/collegescoreboard";
 
   static const String returnSummary = "$apiURL/userdashboard/summary";
   static const String performance = "$apiURL/userdashboard";
@@ -72,4 +74,6 @@ class AppUrls {
   static const String upComingMarginX = "$apiURL/marginx/userupcoming";
   static const String liveMarginx = "$apiURL/marginx/userlive";
   static const String completedMarginx = "$apiURL/marginx/usercompleted";
+
+  static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
 }

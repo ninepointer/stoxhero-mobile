@@ -51,7 +51,7 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
                 ),
                 SizedBox(width: 8),
                 CommonFilledButton(
-                  height: 40,
+                  height: 42,
                   width: 120,
                   label: 'Confirm',
                   onPressed: controller.onConfirm,

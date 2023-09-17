@@ -26,24 +26,24 @@ class DashboardResponse {
 }
 
 class Dashboard {
-  double? totalGPNL;
-  double? totalBrokerage;
-  double? totalNPNL;
-  int? totalTrades;
-  Null? maxProfit;
-  Null? maxProfitDay;
-  double? maxLoss;
+  num? totalGPNL;
+  num? totalBrokerage;
+  num? totalNPNL;
+  num? totalTrades;
+  num? maxProfit;
+  num? maxProfitDay;
+  num? maxLoss;
   String? maxLossDay;
-  int? profitDays;
-  int? lossDays;
-  int? totalTradingDays;
-  int? totalMarketDays;
-  int? maxProfitStreak;
-  int? maxLossStreak;
-  int? averageProfit;
-  double? averageLoss;
-  int? portfolio;
-  Null? maxProfitDayProfitPercent;
+  num? profitDays;
+  num? lossDays;
+  num? totalTradingDays;
+  num? totalMarketDays;
+  num? maxProfitStreak;
+  num? maxLossStreak;
+  num? averageProfit;
+  num? averageLoss;
+  num? portfolio;
+  num? maxProfitDayProfitPercent;
   double? maxLossDayLossPercent;
 
   Dashboard(

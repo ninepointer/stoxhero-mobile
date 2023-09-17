@@ -32,3 +32,4 @@ export 'wallet_transactions_list_response.dart';
 // export 'dashboard_return_summary_response.dart';
 export 'stock_index_response.dart';
 export 'completed_marginx_list_response.dart';
+export 'completed_contest_orders_response.dart';
