@@ -1,28 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/data/data.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
 
 class ViewCard extends StatefulWidget {
-  const ViewCard({Key? key}) : super(key: key);
+  final UpcomingMarginX? viewMarginx;
+  final CompletedMarginX? completedMarginx;
+
+  ViewCard({
+    Key? key,
+    this.viewMarginx,
+    this.completedMarginx,
+  }) : super(key: key);
 
   @override
   State<ViewCard> createState() => _ViewCardState();
 }
 
 class _ViewCardState extends State<ViewCard> {
-  late MarginxController controller;
-
+  late MarginXController controller;
   bool isExpanded = false;
+
   @override
   void initState() {
-    controller = Get.find<MarginxController>();
+    controller = Get.find<MarginXController>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final isUpcoming = widget.viewMarginx != null;
+
     return Scaffold(
       appBar: AppBar(title: Text('View')),
       body: Obx(
@@ -40,7 +50,6 @@ class _ViewCardState extends State<ViewCard> {
                       children: [
                         Expanded(
                           child: Text(
-                            // 'Introducing MarginX: Your Gateway to Realistic Trading',
                             'Introducing MarginX',
                             style: AppStyles.tsSecondaryRegular16,
                           ),
@@ -113,8 +122,9 @@ class _ViewCardState extends State<ViewCard> {
                         children: [
                           Expanded(
                             child: Text(
-                              'MarginX Beginner',
-                              // contestDetails?.contestName ?? '-',
+                              isUpcoming
+                                  ? widget.viewMarginx!.marginXName ?? ''
+                                  : widget.completedMarginx!.marginxName ?? '',
                               style: AppStyles.tsSecondaryMedium16,
                               textAlign: TextAlign.center,
                             ),
@@ -136,11 +146,11 @@ class _ViewCardState extends State<ViewCard> {
                                   children: [
                                     Text(
                                       'Total Seats',
-                                      style: Theme.of(context).textTheme.tsRegular12,
+                                      style: AppStyles.tsGreyRegular12,
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      '23',
+                                      '${isUpcoming ? widget.viewMarginx?.maxParticipants : widget.completedMarginx?.maxParticipants}',
                                       style: Theme.of(context).textTheme.tsMedium14,
                                     ),
                                   ],
@@ -152,7 +162,7 @@ class _ViewCardState extends State<ViewCard> {
                                   children: [
                                     Text(
                                       'Available Seats',
-                                      style: Theme.of(context).textTheme.tsRegular12,
+                                      style: AppStyles.tsGreyRegular12,
                                     ),
                                     SizedBox(height: 4),
                                     Text(
@@ -173,11 +183,15 @@ class _ViewCardState extends State<ViewCard> {
                                 children: [
                                   Text(
                                     'Start Date & Time',
-                                    style: Theme.of(context).textTheme.tsRegular12,
+                                    style: AppStyles.tsGreyRegular12,
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    '23 Aug 2023 09:20 AM',
+                                    FormatHelper.formatDateTimeToIST(
+                                      isUpcoming
+                                          ? widget.viewMarginx?.startTime
+                                          : widget.completedMarginx?.startTime,
+                                    ),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
                                 ],
@@ -187,11 +201,15 @@ class _ViewCardState extends State<ViewCard> {
                                 children: [
                                   Text(
                                     'End Date & Time',
-                                    style: Theme.of(context).textTheme.tsRegular12,
+                                    style: AppStyles.tsGreyRegular12,
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    '23 Aug 2023 03:20 PM',
+                                    FormatHelper.formatDateTimeToIST(
+                                      isUpcoming
+                                          ? widget.viewMarginx?.endTime
+                                          : widget.completedMarginx?.endTime,
+                                    ),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
                                 ],
@@ -207,11 +225,15 @@ class _ViewCardState extends State<ViewCard> {
                                 children: [
                                   Text(
                                     'Investment',
-                                    style: Theme.of(context).textTheme.tsRegular12,
+                                    style: AppStyles.tsGreyRegular12,
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    '₹ 99',
+                                    FormatHelper.formatNumbers(
+                                        isUpcoming
+                                            ? widget.viewMarginx?.marginXTemplate?.entryFee
+                                            : widget.completedMarginx?.entryFee,
+                                        decimal: 0),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
                                 ],
@@ -221,18 +243,66 @@ class _ViewCardState extends State<ViewCard> {
                                 children: [
                                   Text(
                                     'Portfolio',
-                                    style: Theme.of(context).textTheme.tsRegular12,
+                                    style: AppStyles.tsGreyRegular12,
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    '₹ 50,00,00',
+                                    FormatHelper.formatNumbers(
+                                        isUpcoming
+                                            ? widget.viewMarginx?.marginXTemplate?.portfolioValue
+                                            : widget.completedMarginx?.portfolioValue,
+                                        decimal: 0),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          SizedBox(height: 12),
+                          SizedBox(height: 16),
+                          if (!isUpcoming)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Payout',
+                                      style: AppStyles.tsGreyRegular12,
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      FormatHelper.formatNumbers(
+                                          widget.completedMarginx?.earning ?? 0),
+                                      style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                                            color: (widget.completedMarginx?.earning ?? 0) >= 0
+                                                ? AppColors.success
+                                                : AppColors.danger,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Payout %',
+                                      style: AppStyles.tsGreyRegular12,
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      FormatHelper.formatNumbers(
+                                          isUpcoming
+                                              ? widget.viewMarginx?.marginXTemplate?.portfolioValue
+                                              : widget.completedMarginx?.portfolioValue,
+                                          decimal: 0),
+                                      style: Theme.of(context).textTheme.tsMedium14,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          if (!isUpcoming) SizedBox(height: 16),
                         ],
                       ),
                     ),

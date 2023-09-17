@@ -31,7 +31,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
     Get.back();
     switch (index) {
       case 0:
-        // Get.toNamed();
+        Get.to(() => AnalyticsView());
+        Get.find<AnalyticsController>().loadData();
         break;
       case 1:
         Get.toNamed(AppRoutes.portfolio);
@@ -50,6 +51,13 @@ class _CommonDrawerState extends State<CommonDrawer> {
       case 5:
         Get.toNamed(AppRoutes.tutorial);
         Get.find<TutorialController>().loadData();
+        break;
+      case 6:
+        ThemeService().switchTheme();
+        break;
+      case 7:
+        AppStorage.clearStorage();
+        Get.offAllNamed(AppRoutes.signin);
         break;
       default:
     }
@@ -145,9 +153,14 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 5),
               ),
               ProfileListTile(
+                icon: Icons.dark_mode,
+                label: 'Dark Mode',
+                onTap: () => selectedItem(context, 6),
+              ),
+              ProfileListTile(
                 icon: Icons.logout,
                 label: 'Logout',
-                onTap: () => selectedItem(context, 6),
+                onTap: () => selectedItem(context, 7),
               ),
             ],
           ),

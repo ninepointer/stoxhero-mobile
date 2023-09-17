@@ -30,17 +30,33 @@ class TutorialView extends GetView<TutorialController> {
                     onValueChanged: controller.handleSegmentChange,
                   ),
                   if (controller.segmentedControlValue.value == 0) ...[
-                    // ListView.builder(
-                    //   shrinkWrap: true,
-                    //   padding: EdgeInsets.zero,
-                    //   itemCount: controller.tutorialList.length,
-                    //   itemBuilder: (context, index) => AppTutorialCard(
-                    //     tutorial: controller.tutorialList[index],
-                    //   ),
-                    // )
-                    AppTutorialCard()
+                    ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemCount: controller.tutorialList.length,
+                      physics: ClampingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final tutorial = controller.tutorialList[index];
+                        if (tutorial.sId == controller.tutorialList[0].sId) {
+                          return AppTutorialCard(tutorial: tutorial);
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
                   ] else if (controller.segmentedControlValue.value == 1)
-                    OptionTradingCard()
+                    ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemCount: controller.tutorialList.length,
+                      itemBuilder: (context, index) {
+                        final tutorial = controller.tutorialList[index];
+                        if (tutorial.sId == controller.tutorialList[1].sId) {
+                          return OptionTradingCard(tutorial: tutorial);
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+                  SizedBox(height: 24)
                 ],
               ),
             ),

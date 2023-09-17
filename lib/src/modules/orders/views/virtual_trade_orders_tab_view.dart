@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
-import '../widgets/order_card_tile.dart';
-
 class VirtualTradeOrdersTabView extends GetView<OrdersController> {
   const VirtualTradeOrdersTabView({Key? key}) : super(key: key);
 

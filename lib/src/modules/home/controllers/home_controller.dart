@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:stoxhero/src/data/models/response/dashboard_return_summary_response.dart';
 
 import '../../../base/base.dart';
 import '../../../core/core.dart';
@@ -20,10 +19,11 @@ class HomeController extends BaseController<DashboardRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
-  final userDashboard = <Dashboard>[].obs;
-  final userDashboardReturnSummary = <DashboardReturnSummary>[].obs;
+  final userDashboard = DashboardTradeSummary().obs;
+  final userDashboardReturnSummary = DashboardReturnSummary().obs;
   final dashboardCarouselList = <DashboardCarousel>[].obs;
-
+  String selectedTradeType = 'virtual';
+  String selectedTimeFrame = 'lifetime';
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
     Get.find<TenxTradingController>().loadUserDetails();
@@ -33,8 +33,8 @@ class HomeController extends BaseController<DashboardRepository> {
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getDashboardReturnSummary();
-    await getDashboard();
     await getDashboardCarousel();
+    await getDashboard(selectedTradeType, selectedTimeFrame);
   }
 
   Future getDashboardReturnSummary() async {
@@ -44,31 +44,32 @@ class HomeController extends BaseController<DashboardRepository> {
           await repository.getDashboardReturnSummary();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          // userDashboardReturnSummary(response.data?.data ?? []);
+          userDashboardReturnSummary(response.data?.data);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log(e.toString());
+      log('return ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
   }
 
-  Future getDashboard() async {
+  Future getDashboard(String? tradeType, String? timeFame) async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardResponse> response = await repository.getDashboard();
+      final RepoResponse<DashboardTradeSummaryResponse> response =
+          await repository.getDashboard(tradeType, timeFame);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          userDashboard(response.data?.data ?? []);
+          userDashboard(response.data?.data);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log(e.toString());
+      log('trade ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -87,7 +88,7 @@ class HomeController extends BaseController<DashboardRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log(e.toString());
+      log('car ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

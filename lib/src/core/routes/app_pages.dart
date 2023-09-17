@@ -110,8 +110,23 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.marginx,
-      page: () => MarginxView(),
-      binding: MarginxBinding(),
+      page: () => MarginXView(),
+      binding: MarginXBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.collegeContest,
+      page: () => CollegeContestView(),
+      binding: CollegeContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.virtualTrading,
+      page: () => VirtualTradingView(),
+      binding: VirtualTradingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.virtualSearchSymbol,
+      page: () => VirtualSearchSymbolView(),
+      binding: VirtualTradingBinding(),
     ),
   ];
 }

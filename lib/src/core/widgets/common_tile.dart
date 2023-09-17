@@ -8,6 +8,8 @@ class CommonTile extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData? icon;
   final bool showIconButton;
+  final EdgeInsets? margin;
+  final EdgeInsets? padding;
   const CommonTile({
     Key? key,
     this.label = 'Label',
@@ -15,13 +17,15 @@ class CommonTile extends StatelessWidget {
     this.onPressed,
     this.icon,
     this.showIconButton = false,
+    this.margin,
+    this.padding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: margin ?? EdgeInsets.symmetric(vertical: 8),
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       color: Theme.of(context).cardColor,
       width: double.infinity,
       child: Column(

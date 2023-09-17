@@ -24,7 +24,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
         Container(
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.grey,
+            color: AppColors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(4),
               topRight: Radius.circular(4),
@@ -70,7 +70,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
               Row(
                 children: [
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 2,
                       groupValue: 1,
                       label: 'Interaday (MIS)',
@@ -78,7 +78,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   ),
                   SizedBox(width: 8),
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 1,
                       groupValue: 1,
                       label: 'Overnight (NRML)',
@@ -159,7 +159,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
               Row(
                 children: [
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 2,
                       groupValue: 2,
                       label: 'MARKET',
@@ -167,7 +167,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   ),
                   SizedBox(width: 8),
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 1,
                       groupValue: 2,
                       label: 'LIMIT',
@@ -179,7 +179,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
               Row(
                 children: [
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 3,
                       groupValue: 2,
                       label: 'SL',
@@ -187,7 +187,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   ),
                   SizedBox(width: 8),
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 4,
                       groupValue: 2,
                       label: 'SL-M',
@@ -199,7 +199,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
               Row(
                 children: [
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 3,
                       groupValue: 3,
                       label: 'Day',
@@ -207,7 +207,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   ),
                   SizedBox(width: 8),
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 4,
                       groupValue: 3,
                       label: 'Immediate',
@@ -215,7 +215,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   ),
                   SizedBox(width: 8),
                   Expanded(
-                    child: CustomRadioButtonTile(
+                    child: CommonRadioButtonTile(
                       value: 1,
                       groupValue: 3,
                       label: 'Minutes',
@@ -242,50 +242,6 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class CustomRadioButtonTile extends StatelessWidget {
-  final String label;
-  final int value;
-  final int groupValue;
-
-  const CustomRadioButtonTile({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.groupValue,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: AppColors.grey.shade50.withOpacity(0.5),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            Radio(
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              value: value,
-              groupValue: groupValue,
-              activeColor: AppColors.secondary,
-              onChanged: (value) {},
-            ),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.tsRegular14,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

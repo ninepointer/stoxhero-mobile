@@ -1,5 +1,3 @@
-import 'package:stoxhero/src/data/models/response/dashboard_return_summary_response.dart';
-
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
@@ -13,12 +11,13 @@ class DashboardRepository extends BaseRepository {
         : RepoResponse(data: DashboardReturnSummaryResponse.fromJson(response));
   }
 
-  Future<RepoResponse<DashboardResponse>> getDashboard() async {
-    String apiURL = AppUrls.performance;
+  Future<RepoResponse<DashboardTradeSummaryResponse>> getDashboard(
+      String? tradeType, String? timeFame) async {
+    String apiURL = AppUrls.performance(tradeType, timeFame);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: DashboardResponse.fromJson(response));
+        : RepoResponse(data: DashboardTradeSummaryResponse.fromJson(response));
   }
 
   Future<RepoResponse<DashboardCarouselResponse>> getDashboardCarousel() async {

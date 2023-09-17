@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/modules/college_contest/widgets/college_contest_leaderboard_card.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
 
-class ContestLeaderboardView extends GetView<ContestController> {
-  const ContestLeaderboardView({Key? key}) : super(key: key);
+class ContestLeaderboardView extends StatelessWidget {
+  final ContestController contestController;
+  final CollegeContestController collegeContestController;
+  const ContestLeaderboardView({
+    Key? key,
+    required this.contestController,
+    required this.collegeContestController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +22,10 @@ class ContestLeaderboardView extends GetView<ContestController> {
       ),
       body: Obx(
         () => Visibility(
-          visible: !controller.isLoadingStatus,
+          visible: !contestController.isLoadingStatus,
           replacement: CommonLoader(),
           child: RefreshIndicator(
-            onRefresh: controller.loadData,
+            onRefresh: contestController.loadData,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -27,42 +34,31 @@ class ContestLeaderboardView extends GetView<ContestController> {
                       0: 'StoxHero Contest',
                       1: 'College Contest',
                     },
-                    selectedSegment: controller.segmentedControlValue.value,
-                    onValueChanged: controller.handleSegmentChange,
+                    selectedSegment: contestController.segmentedControlValue.value,
+                    onValueChanged: contestController.handleSegmentChange,
                   ),
-                  if (controller.segmentedControlValue.value == 0)
+                  if (contestController.segmentedControlValue.value == 0)
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: controller.contestLeaderboardList.length,
+                      itemCount: contestController.contestLeaderboardList.length,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        var user = controller.contestLeaderboardList[index];
                         return ContestLeaderboardCard(
-                          name:
-                              '${user.traderFirstName!.capitalizeFirst} ${user.traderLastName!.capitalizeFirst}',
-                          strikeRate: user.strikeRate,
-                          contestParticipated: user.contestParticipated,
-                          contestWon: user.contestWon,
-                          totalPayout: user.totalPayout,
+                          contestLeaderboard: contestController.contestLeaderboardList[index],
                         );
                       },
                     )
-                  else if (controller.segmentedControlValue.value == 1)
+                  else if (contestController.segmentedControlValue.value == 1)
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: controller.collegeContestLeaderboardList.length,
+                      itemCount: collegeContestController.collegeContestLeaderboardList.length,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        var user = controller.collegeContestLeaderboardList[index];
-                        return ContestLeaderboardCard(
-                          name:
-                              '${user.traderFirstName!.capitalizeFirst} ${user.traderLastName!.capitalizeFirst}',
-                          strikeRate: user.strikeRate,
-                          contestParticipated: user.contestParticipated,
-                          contestWon: user.contestWon,
-                          totalPayout: user.totalPayout,
+                        return CollegeContestLeaderboardCard(
+                          contestLeaderboard:
+                              collegeContestController.collegeContestLeaderboardList[index],
                         );
                       },
                     ),

@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../../../core/core.dart';
 import '../../modules.dart';
 
-class MarginxView extends GetView<MarginxController> {
-  const MarginxView({Key? key}) : super(key: key);
+class MarginXView extends GetView<MarginXController> {
+  const MarginXView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,43 +40,29 @@ class MarginxView extends GetView<MarginxController> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: controller.upComingMarginXList.length,
                         itemBuilder: (BuildContext context, int index) {
-                          var marginx = controller.upComingMarginXList[index];
                           return UpcomingMarginxCard(
-                            marginXName: marginx.marginXName,
-                            isNifty: marginx.isNifty,
-                            isBankNifty: marginx.isBankNifty,
-                            isFinNifty: marginx.isFinNifty,
-                            marginXExpiry: marginx.marginXExpiry,
-                            marginXStatus: marginx.status,
-                            maxParticipants: marginx.maxParticipants,
-                            startTime: marginx.startTime,
-                            endTime: marginx.endTime,
-                            entryFee: marginx.marginXTemplate?.entryFee,
-                            portfolio: marginx.marginXTemplate?.portfolioValue,
+                            upComingMarginx: controller.upComingMarginXList[index],
                           );
                         },
                       ),
+                    SizedBox(height: 32),
                   ] else if (controller.segmentedControlValue.value == 1) ...[
-                    NoDataFound(
-                      label: 'No Live MarginX!',
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.liveMarginXList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var marginx = controller.liveMarginXList[index];
-                        return LiveMarginxCard(
-                          marginXName: marginx.marginXName,
-                          startTime: marginx.startTime,
-                          endTime: marginx.endTime,
-                          entryFee: marginx.marginXTemplate?.entryFee,
-                          maxParticipants: marginx.maxParticipants,
-                          portfolio: marginx.marginXTemplate?.portfolioValue,
-                        );
-                      },
-                    ),
+                    controller.liveMarginXList.isEmpty
+                        ? NoDataFound(
+                            label: 'No Live MarginX!',
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.liveMarginXList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return LiveMarginxCard(
+                                liveMarginx: controller.liveMarginXList[index],
+                              );
+                            },
+                          ),
+                    SizedBox(height: 32),
                   ] else if (controller.segmentedControlValue.value == 2) ...[
                     ListView.builder(
                       shrinkWrap: true,
@@ -84,22 +70,12 @@ class MarginxView extends GetView<MarginxController> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: controller.completedMarginXList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var marginx = controller.completedMarginXList[index];
                         return CompletedMarginxCard(
-                          marginxName: marginx.marginxName,
-                          isNifty: marginx.isNifty,
-                          isBankNifty: marginx.isBankNifty,
-                          isFinNifty: marginx.isFinNifty,
-                          marginxExpiry: marginx.marginxExpiry,
-                          startTime: marginx.startTime,
-                          endTime: marginx.endTime,
-                          entryFee: marginx.entryFee,
-                          portfolioValue: marginx.portfolioValue,
-                          npnl: marginx.npnl,
-                          earning: marginx.earning,
+                          completedMarginx: controller.completedMarginXList[index],
                         );
                       },
                     ),
+                    SizedBox(height: 32),
                   ]
                 ],
               ),

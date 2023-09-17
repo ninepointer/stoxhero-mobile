@@ -2,7 +2,7 @@ import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
 import '../models/response/completed_college_contest_list_response.dart';
-import '../models/response/live_contest_list_response.dart';
+import '../models/response/upcoming_college_contest_list_response.dart';
 
 class ContestRepository extends BaseRepository {
   Future<RepoResponse<UpComingContestListResponse>> getUpComingContestList() async {
@@ -45,8 +45,8 @@ class ContestRepository extends BaseRepository {
         : RepoResponse(data: ContestLeaderboardResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestOrderResponse>> getContestOrderList() async {
-    String apiURL = AppUrls.contestTodaysOrders;
+  Future<RepoResponse<ContestOrderResponse>> getContestOrderList(String? id) async {
+    String apiURL = AppUrls.completedContestOrders(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
@@ -67,5 +67,45 @@ class ContestRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: CompletedCollegeContestListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<UpComingCollegeContestListResponse>> getUpComingCollegeContestList() async {
+    String apiURL = AppUrls.upComingCollegeContests;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: UpComingCollegeContestListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<LiveCollegeContestListResponse>> getLiveCollegeContestList() async {
+    String apiURL = AppUrls.liveCollegeContests;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: LiveCollegeContestListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ContestPortfolioResponse>> getContestPortfolio() async {
+    String apiURL = AppUrls.contestCreditData;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: ContestPortfolioResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ContestWatchListResponse>> getContestWatchList() async {
+    String apiURL = AppUrls.contestWatchList;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: ContestWatchListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ContestPositionListResponse>> getContestPositions() async {
+    String apiURL = AppUrls.contestPosition;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: ContestPositionListResponse.fromJson(response));
   }
 }

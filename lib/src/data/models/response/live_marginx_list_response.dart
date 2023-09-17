@@ -1,15 +1,15 @@
 class LiveMarginxListResponse {
   String? status;
-  List<LiveMarginx>? data;
+  List<LiveMarginX>? data;
 
   LiveMarginxListResponse({this.status, this.data});
 
   LiveMarginxListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <LiveMarginx>[];
+      data = <LiveMarginX>[];
       json['data'].forEach((v) {
-        data!.add(new LiveMarginx.fromJson(v));
+        data!.add(new LiveMarginX.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class LiveMarginxListResponse {
   }
 }
 
-class LiveMarginx {
+class LiveMarginX {
   String? sId;
   String? marginXName;
   String? startTime;
@@ -40,14 +40,14 @@ class LiveMarginx {
   bool? isNifty;
   bool? isBankNifty;
   bool? isFinNifty;
-  List<Participants>? participants;
+  List<Participantss>? participants;
   List<Null>? sharedBy;
-  List<PurchaseIntent>? purchaseIntent;
+  List<PurchaseIntents>? purchaseIntents;
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
 
-  LiveMarginx(
+  LiveMarginX(
       {this.sId,
       this.marginXName,
       this.startTime,
@@ -65,12 +65,12 @@ class LiveMarginx {
       this.isFinNifty,
       this.participants,
       this.sharedBy,
-      this.purchaseIntent,
+      this.purchaseIntents,
       this.createdOn,
       this.lastModifiedOn,
       this.iV});
 
-  LiveMarginx.fromJson(Map<String, dynamic> json) {
+  LiveMarginX.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     marginXName = json['marginXName'];
     startTime = json['startTime'];
@@ -94,9 +94,9 @@ class LiveMarginx {
     isBankNifty = json['isBankNifty'];
     isFinNifty = json['isFinNifty'];
     if (json['participants'] != null) {
-      participants = <Participants>[];
+      participants = <Participantss>[];
       json['participants'].forEach((v) {
-        participants!.add(new Participants.fromJson(v));
+        participants!.add(new Participantss.fromJson(v));
       });
     }
     if (json['sharedBy'] != null) {
@@ -106,9 +106,9 @@ class LiveMarginx {
       });
     }
     if (json['purchaseIntent'] != null) {
-      purchaseIntent = <PurchaseIntent>[];
+      purchaseIntents = <PurchaseIntents>[];
       json['purchaseIntent'].forEach((v) {
-        purchaseIntent!.add(new PurchaseIntent.fromJson(v));
+        purchaseIntents!.add(new PurchaseIntents.fromJson(v));
       });
     }
     createdOn = json['createdOn'];
@@ -143,8 +143,8 @@ class LiveMarginx {
     if (this.sharedBy != null) {
       // data['sharedBy'] = this.sharedBy!.map((v) => v.toJson()).toList();
     }
-    if (this.purchaseIntent != null) {
-      data['purchaseIntent'] = this.purchaseIntent!.map((v) => v.toJson()).toList();
+    if (this.purchaseIntents != null) {
+      data['purchaseIntent'] = this.purchaseIntents!.map((v) => v.toJson()).toList();
     }
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
@@ -178,14 +178,14 @@ class MarginXTemplate {
   }
 }
 
-class Participants {
+class Participantss {
   String? userId;
   String? boughtAt;
   String? sId;
 
-  Participants({this.userId, this.boughtAt, this.sId});
+  Participantss({this.userId, this.boughtAt, this.sId});
 
-  Participants.fromJson(Map<String, dynamic> json) {
+  Participantss.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     boughtAt = json['boughtAt'];
     sId = json['_id'];
@@ -200,14 +200,14 @@ class Participants {
   }
 }
 
-class PurchaseIntent {
+class PurchaseIntents {
   String? userId;
   String? date;
   String? sId;
 
-  PurchaseIntent({this.userId, this.date, this.sId});
+  PurchaseIntents({this.userId, this.date, this.sId});
 
-  PurchaseIntent.fromJson(Map<String, dynamic> json) {
+  PurchaseIntents.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     date = json['date'];
     sId = json['_id'];

@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stoxhero/src/modules/careers/views/career_form.dart';
+import 'package:stoxhero/src/modules/careers/careers_index.dart';
 
 import '../../../core/core.dart';
-import '../careers_index.dart';
 
 class InternshipView extends StatefulWidget {
-  const InternshipView({Key? key}) : super(key: key);
-
   @override
   State<InternshipView> createState() => _InternshipViewState();
 }
 
 class _InternshipViewState extends State<InternshipView> {
+  late CareerController controller;
   bool isExpanded = false;
+
+  @override
+  void initState() {
+    controller = Get.find<CareerController>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,51 +25,51 @@ class _InternshipViewState extends State<InternshipView> {
       appBar: AppBar(
         title: Text('Internship'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            CommonCard(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              onTap: () => setState(() => isExpanded = !isExpanded),
+      body: Obx(
+        () => Visibility(
+          visible: !controller.isLoadingStatus,
+          replacement: CommonLoader(),
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                CommonCard(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  onTap: () => setState(() => isExpanded = !isExpanded),
                   children: [
-                    Text(
-                      'What is stoxHero Internship Program ?',
-                      style: Theme.of(context).textTheme.tsMedium16,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'What is stoxHero Internship Program ?',
+                          style: Theme.of(context).textTheme.tsMedium16,
+                        ),
+                        Icon(
+                          isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                          color: AppColors.grey,
+                        ),
+                      ],
                     ),
-                    Icon(
-                      isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                      color: AppColors.grey,
-                    ),
+                    if (isExpanded) bulletPoint(),
                   ],
                 ),
-                if (isExpanded) bulletPoint(),
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.careerList.length,
+                  itemBuilder: (BuildContext context, index) {
+                    if (controller.careerList[index].listingType == 'Job') {
+                      return InfoCard(
+                        career: controller.careerList[index],
+                      );
+                    } else {
+                      return NoDataFound(label: 'No Internship');
+                    }
+                  },
+                ),
               ],
             ),
-            InfoCard(
-              label: 'Campus Head',
-              isInternship: true,
-              onPressed: () => Get.to(
-                () => CareerForm(),
-              ),
-            ),
-            InfoCard(
-              label: 'Campus Head',
-              isInternship: true,
-              onPressed: () => Get.to(
-                () => CareerForm(),
-              ),
-            ),
-            InfoCard(
-              label: 'Campus Head',
-              isInternship: true,
-              onPressed: () => Get.to(
-                () => CareerForm(),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

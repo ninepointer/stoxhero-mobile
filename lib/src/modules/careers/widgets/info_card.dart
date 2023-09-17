@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stoxhero/src/data/data.dart';
 import '../../../core/core.dart';
+import '../../modules.dart';
 
 class InfoCard extends StatelessWidget {
-  final String label;
-  final bool isInternship;
-  final VoidCallback onPressed;
-
+  final CareerList? career;
   const InfoCard({
     Key? key,
-    required this.label,
-    required this.isInternship,
-    required this.onPressed,
+    this.career,
   }) : super(key: key);
 
   @override
@@ -37,7 +35,7 @@ class InfoCard extends StatelessWidget {
               SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  label,
+                  career?.jobTitle ?? '',
                   style: Theme.of(context).textTheme.tsMedium18,
                 ),
               ),
@@ -49,7 +47,7 @@ class InfoCard extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'Lead virtual trading program, guiding participants in stock market simulations. Foster collaborative learning, refining financial strategies in a risk-free space. Empower growth in practical trading skills as Virtual Trading.',
+            career?.jobDescription ?? '',
             style: AppStyles.tsGreyRegular14,
           ),
         ),
@@ -61,11 +59,11 @@ class InfoCard extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: isInternship ? AppColors.success : AppColors.success,
+                  color: AppColors.success,
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  isInternship ? 'Internship' : 'Workshop',
+                  career?.jobType != '' ? 'Internship' : 'Workshop',
                   textAlign: TextAlign.center,
                   style: AppStyles.tsWhiteMedium12,
                 ),
@@ -78,7 +76,7 @@ class InfoCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  'Work from home',
+                  career?.jobLocation ?? '',
                   textAlign: TextAlign.center,
                   style: AppStyles.tsWhiteMedium12,
                 ),
@@ -91,7 +89,9 @@ class InfoCard extends StatelessWidget {
           child: CommonFilledButton(
             label: 'Click here to Apply!',
             height: 48,
-            onPressed: onPressed,
+            onPressed: () {
+              Get.to(() => ResponsibilitiesView());
+            },
           ),
         ),
       ],

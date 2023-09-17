@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stoxhero/src/core/core.dart';
+import 'package:stoxhero/src/data/data.dart';
 
 class ContestLeaderboardCard extends StatelessWidget {
-  final String? name;
-  final num? strikeRate;
-  final num? contestParticipated;
-  final num? contestWon;
-  final num? totalPayout;
+  final ContestLeaderboard? contestLeaderboard;
   const ContestLeaderboardCard({
     Key? key,
-    this.name,
-    this.strikeRate,
-    this.contestParticipated,
-    this.contestWon,
-    this.totalPayout,
+    this.contestLeaderboard,
   }) : super(key: key);
 
   @override
@@ -39,7 +33,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      name ?? '-',
+                      '${contestLeaderboard?.traderFirstName!.capitalizeFirst} ${contestLeaderboard?.traderLastName!.capitalizeFirst}',
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                   ],
@@ -55,7 +49,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '${FormatHelper.formatNumbers(strikeRate, showSymbol: false)}%',
+                      '${FormatHelper.formatNumbers(contestLeaderboard?.strikeRate, showSymbol: false)}%',
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                   ],
@@ -78,7 +72,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                     SizedBox(height: 4),
                     Text(
                       '${FormatHelper.formatNumbers(
-                        contestParticipated,
+                        contestLeaderboard?.contestParticipated,
                         showSymbol: false,
                         decimal: 0,
                       )}',
@@ -98,7 +92,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                     SizedBox(height: 4),
                     Text(
                       '${FormatHelper.formatNumbers(
-                        contestWon,
+                        contestLeaderboard?.contestWon,
                         showSymbol: false,
                         decimal: 0,
                       )}',
@@ -119,7 +113,7 @@ class ContestLeaderboardCard extends StatelessWidget {
               ),
               Text(
                 '${FormatHelper.formatNumbers(
-                  totalPayout,
+                  contestLeaderboard?.totalPayout,
                   decimal: 0,
                 )}',
                 style: Theme.of(context).textTheme.tsMedium16.copyWith(

@@ -33,10 +33,7 @@ class CommonDropdown extends StatelessWidget {
                 hint,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).hintColor,
-                ),
+                style: AppStyles.tsGreyRegular16,
               ),
             ),
             value: value,
@@ -65,6 +62,7 @@ class CommonDropdown extends StatelessWidget {
               padding: EdgeInsets.only(right: 12),
             ),
             iconStyleData: IconStyleData(
+              iconEnabledColor: AppColors.grey,
               openMenuIcon: Icon(
                 Icons.expand_less_rounded,
               ),

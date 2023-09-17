@@ -1,19 +1,20 @@
 class TutorialResponse {
   String? status;
-  List<Tutorials>? data;
-  int? results;
+  List<TutorialList>? data;
 
-  TutorialResponse({this.status, this.data, this.results});
+  TutorialResponse({
+    this.status,
+    this.data,
+  });
 
   TutorialResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <Tutorials>[];
+      data = <TutorialList>[];
       json['data'].forEach((v) {
-        data!.add(new Tutorials.fromJson(v));
+        data!.add(new TutorialList.fromJson(v));
       });
     }
-    results = json['results'];
   }
 
   Map<String, dynamic> toJson() {
@@ -22,12 +23,11 @@ class TutorialResponse {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['results'] = this.results;
     return data;
   }
 }
 
-class Tutorials {
+class TutorialList {
   String? sId;
   String? categoryName;
   String? description;
@@ -40,20 +40,21 @@ class Tutorials {
   List<CategoryVideos>? categoryVideos;
   int? iV;
 
-  Tutorials(
-      {this.sId,
-      this.categoryName,
-      this.description,
-      this.status,
-      this.isDeleted,
-      this.createdOn,
-      this.lastModifiedOn,
-      this.createdBy,
-      this.lastModifiedBy,
-      this.categoryVideos,
-      this.iV});
+  TutorialList({
+    this.sId,
+    this.categoryName,
+    this.description,
+    this.status,
+    this.isDeleted,
+    this.createdOn,
+    this.lastModifiedOn,
+    this.createdBy,
+    this.lastModifiedBy,
+    this.categoryVideos,
+    this.iV,
+  });
 
-  Tutorials.fromJson(Map<String, dynamic> json) {
+  TutorialList.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     categoryName = json['categoryName'];
     description = json['description'];

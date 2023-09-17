@@ -1,48 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/core/core.dart';
-import 'package:stoxhero/src/modules/careers/views/workshop_view.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
-class CareerView extends StatelessWidget {
-  const CareerView({Key? key}) : super(key: key);
-
+class CareerView extends GetView<CareerController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Careers'),
       ),
-      body: Container(
-        padding: EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              customCard(
-                context: context,
-                title: 'Internship',
-                image: AppImages.internship,
-                onPressed: () {
-                  Get.to(() => InternshipView());
-                },
+      body: Obx(
+        () => Visibility(
+          visible: !controller.isLoadingStatus,
+          replacement: CommonLoader(),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: 12),
+                  customCard(
+                    context: context,
+                    title: 'Internship',
+                    image: AppImages.internship,
+                    onPressed: () {
+                      controller.getCareerList('Job');
+                      if (controller.careerList.isNotEmpty &&
+                          controller.careerList[0].listingType == 'Job') {
+                        Get.to(() => InternshipView());
+                      }
+                    },
+                  ),
+                  SizedBox(height: 12),
+                  customCard(
+                    context: context,
+                    title: 'Workshop',
+                    image: AppImages.workshop,
+                    onPressed: () {
+                      controller.getCareerList('Workshop');
+                      if (controller.careerList.isNotEmpty &&
+                          controller.careerList[0].listingType == 'Workshop') {
+                        Get.to(() => WorkshopView());
+                      }
+                    },
+                  ),
+                  SizedBox(height: 12),
+                  customCard(
+                    context: context,
+                    title: 'Jobs',
+                    image: AppImages.job,
+                    onPressed: () {},
+                  ),
+                  SizedBox(height: 24),
+                ],
               ),
-              SizedBox(height: 12),
-              customCard(
-                context: context,
-                title: 'Workshop',
-                image: AppImages.workshop,
-                onPressed: () {
-                  Get.to(() => WorkshopView());
-                },
-              ),
-              SizedBox(height: 12),
-              customCard(
-                context: context,
-                title: 'Jobs',
-                image: AppImages.job,
-                onPressed: () {},
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -86,7 +99,7 @@ class CareerView extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'loremEu nisi ut aute anim est. Ea nulla dolore enim ea enim proident minim cupidatat fugiat. ',
+                    'Join the StoxHero Derivatives Internship & Workshop for expertise and success',
                     style: Theme.of(context).textTheme.tsGreyRegular14,
                   ),
                 ],

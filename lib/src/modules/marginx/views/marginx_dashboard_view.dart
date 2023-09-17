@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
-import '../../modules.dart';
 
-class TradingView extends GetView<TradingController> {
-  const TradingView({Key? key}) : super(key: key);
+class MarginxDashboardView extends GetView<MarginXController> {
+  const MarginxDashboardView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('MarginX Trading'),
+      ),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
@@ -61,22 +64,23 @@ class TradingView extends GetView<TradingController> {
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
-                    onPressed: controller.gotoSearchInstrument,
+                    // onPressed: controller.gotoSearchInstrument,
+                    padding: EdgeInsets.only(left: 16),
                   ),
-                  // controller.tenxWatchlist.isEmpty
+                  // controller.contestWatchList.isEmpty
                   //     ? NoDataFound()
                   //     : SizedBox(
-                  //         height: controller.tenxWatchlist.length >= 5
+                  //         height: controller.contestWatchList.length >= 5
                   //             ? 300
-                  //             : controller.tenxWatchlist.length * 76,
+                  //             : controller.contestWatchList.length * 76,
                   //         child: ListView.builder(
                   //           shrinkWrap: true,
                   //           padding: EdgeInsets.zero,
-                  //           itemCount: controller.tenxWatchlist.length,
+                  //           itemCount: controller.contestWatchList.length,
                   //           itemBuilder: (context, index) {
-                  //             return TenxWatchlistCard(
+                  //             return ContestWatchlistCard(
                   //               index: index,
-                  //               data: controller.tenxWatchlist[index],
+                  //               contestWatchList: controller.contestWatchList[index],
                   //             );
                   //           },
                   //         ),
@@ -105,76 +109,70 @@ class TradingView extends GetView<TradingController> {
                     name: 'Ritik Prajapat',
                     netPnl: '+ ₹12,02.69',
                   ),
-                  // if (controller.tenxPositionsList.isNotEmpty)
+                  // if (controller.contestPositionsList.isNotEmpty)
                   //   CommonTile(label: 'My Position Details'),
-                  // if (controller.tenxPositionsList.isNotEmpty)
+                  // if (controller.contestPositionsList.isNotEmpty)
                   //   Padding(
                   //     padding: const EdgeInsets.symmetric(horizontal: 8),
                   //     child: Column(
                   //       children: [
                   //         Row(
                   //           children: [
-                  //             TenxPositionDetailsCard(
+                  //             ContestPositionDetailsCard(
                   //               isNum: true,
                   //               label: 'Running Lots',
-                  //               value: controller.tenxTotalPositionDetails.value.lots,
+                  //               value: controller.contestPositionsList[0].lots,
                   //             ),
                   //             SizedBox(width: 8),
-                  //             TenxPositionDetailsCard(
+                  //             ContestPositionDetailsCard(
                   //               label: 'Brokerage',
-                  //               value: controller.tenxTotalPositionDetails.value.brokerage,
+                  //               value: controller.contestPositionsList[0].brokerage,
                   //             ),
                   //           ],
                   //         ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      TenxPositionDetailsCard(
-                        label: 'Gross P&L',
-                        value: '0',
-                      ),
-                      SizedBox(width: 8),
-                      TenxPositionDetailsCard(
-                        label: 'Net P&L',
-                        value: '0',
-                      ),
-                    ],
-                  ),
+                  //         SizedBox(height: 8),
+                  //         Row(
+                  //           children: [
+                  //             ContestPositionDetailsCard(
+                  //               label: 'Gross P&L',
+                  //               value: controller.contestPositionsList[0].amount,
+                  //             ),
+                  //             SizedBox(width: 8),
+                  //             ContestPositionDetailsCard(
+                  //               label: 'Net P&L',
+                  //               value: controller.contestPositionsList[0].lastaverageprice,
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
                   CommonTile(label: 'My Position'),
-                  // controller.tenxPositionsList.isEmpty
+                  // controller.contestPositionsList.isEmpty
                   //     ? NoDataFound()
                   //     : ListView.separated(
                   //         shrinkWrap: true,
                   //         padding: EdgeInsets.zero,
                   //         physics: NeverScrollableScrollPhysics(),
-                  //         itemCount: controller.tenxPositionsList.length,
+                  //         itemCount: controller.contestPositionsList.length,
                   //         separatorBuilder: (_, __) => SizedBox(height: 8),
                   //         itemBuilder: (context, index) {
-                  //           return TenxPositionCard(
-                  //             data: controller.tenxPositionsList[index],
+                  //           return ContestPositionCard(
+                  //             position: controller.contestPositionsList[index],
                   //           );
                   //         },
                   //       ),
                   CommonTile(label: 'Portfolio Details'),
-                  TenxPortfolioDetailsCard(
+                  MarginXPortfolioDetailsCard(
                     label: 'Portfolio Value',
-                    info: 'Total funds added by StoxHero in your Account',
-                    // value: controller.tenxPortfolioDetails.value.totalFund,
+                    // value: controller.contestPortfolio.value.totalFund,
                   ),
-                  TenxPortfolioDetailsCard(
+                  MarginXPortfolioDetailsCard(
                     label: 'Available Margin',
-                    info: 'Funds that you can used to trade today',
-                    value: '0',
+                    // value: controller.virtualPortfolio.value.openingBalance,
                   ),
-                  TenxPortfolioDetailsCard(
+                  MarginXPortfolioDetailsCard(
                     label: 'Used Margin',
-                    info: 'Net funds utilized for your executed trades',
-                    // value: controller.tenxTotalPositionDetails.value.brokerage,
-                  ),
-                  TenxPortfolioDetailsCard(
-                    label: 'Opening Balance',
-                    info: 'Cash available at the beginning of the day',
-                    // value: controller.tenxPortfolioDetails.value.openingBalance,
                   ),
                   SizedBox(height: 56),
                 ],

@@ -53,6 +53,7 @@ class TenxTradingSubscriptionCard extends GetView<TenxTradingController> {
                   text: '₹${subscription.actualPrice}',
                   style: Theme.of(context).textTheme.tsRegular16.copyWith(
                         decoration: TextDecoration.lineThrough,
+                        color: AppColors.grey,
                       ),
                 ),
                 WidgetSpan(

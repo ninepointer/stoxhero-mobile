@@ -11,12 +11,12 @@ class TutorialBinding implements Bindings {
   void dependencies() => Get.put(TutorialController());
 }
 
-class TutorialController extends BaseController {
+class TutorialController extends BaseController<TutorialRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
   final segmentedControlValue = 0.obs;
 
-  final tutorialList = <Tutorials>[].obs;
+  final tutorialList = <TutorialList>[].obs;
   Future loadData() async {
     await getTutorialList();
   }

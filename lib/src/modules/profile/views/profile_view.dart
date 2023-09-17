@@ -121,23 +121,18 @@ class ProfileView extends GetView<ProfileController> {
                   Get.find<OrdersController>().loadData();
                 },
               ),
+              // ProfileListTile(
+              //   label: 'Dark Mode',
+              //   onTap: () => ThemeService().switchTheme(),
+              // ),
               ProfileListTile(
-                label: 'Portfolio',
-                onTap: () {
-                  Get.toNamed(AppRoutes.portfolio);
-                  Get.find<PortfolioController>().loadData();
-                },
-              ),
-              ProfileListTile(
-                label: 'Dark Mode',
-                onTap: () => ThemeService().switchTheme(),
-              ),
-              ProfileListTile(
-                label: 'Message',
+                label: 'Messages',
+                icon: Icons.message,
                 onTap: () {},
               ),
               ProfileListTile(
                 label: 'Settings',
+                icon: Icons.settings,
                 onTap: () {},
               ),
             ],

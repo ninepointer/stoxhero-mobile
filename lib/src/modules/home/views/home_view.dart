@@ -18,9 +18,9 @@ class _HomeViewState extends State<HomeView> {
 
   List<Widget> _tabs = [
     DashboardView(),
-    TradingView(),
+    VirtualTradingView(),
     TenxTradingView(),
-    MarginxView(),
+    MarginXView(),
     ContestView(),
   ];
 
@@ -35,14 +35,18 @@ class _HomeViewState extends State<HomeView> {
 
     switch (index) {
       case 0:
+        Get.find<HomeController>().loadData();
+        Get.find<ContestController>().getUpComingContestList();
+        Get.find<ContestController>().getLiveContestList();
         break;
       case 1:
+        Get.find<VirtualTradingController>().loadData();
         break;
       case 2:
         Get.find<TenxTradingController>().getTenxTradingActiveSubs();
         break;
       case 3:
-        Get.find<MarginxController>().loadData();
+        Get.find<MarginXController>().loadData();
         break;
       case 4:
         break;

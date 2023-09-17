@@ -1,15 +1,15 @@
 class CompletedMarginxListResponse {
   String? status;
-  List<CompletedMarginx>? data;
+  List<CompletedMarginX>? data;
 
   CompletedMarginxListResponse({this.status, this.data});
 
   CompletedMarginxListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <CompletedMarginx>[];
+      data = <CompletedMarginX>[];
       json['data'].forEach((v) {
-        data!.add(new CompletedMarginx.fromJson(v));
+        data!.add(new CompletedMarginX.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class CompletedMarginxListResponse {
   }
 }
 
-class CompletedMarginx {
+class CompletedMarginX {
   String? marginxId;
   num? npnl;
   int? portfolioValue;
@@ -39,7 +39,7 @@ class CompletedMarginx {
   int? maxParticipants;
   num? earning;
 
-  CompletedMarginx({
+  CompletedMarginX({
     this.marginxId,
     this.npnl,
     this.portfolioValue,
@@ -55,7 +55,7 @@ class CompletedMarginx {
     this.earning,
   });
 
-  CompletedMarginx.fromJson(Map<String, dynamic> json) {
+  CompletedMarginX.fromJson(Map<String, dynamic> json) {
     marginxId = json['marginxId'];
     npnl = json['npnl'];
     portfolioValue = json['portfolioValue'];
@@ -68,7 +68,7 @@ class CompletedMarginx {
     isFinNifty = json['isFinNifty'];
     marginxExpiry = json['marginxExpiry'];
     maxParticipants = json['maxParticipants'];
-    earning = json['earning'];
+    earning = json['return'];
   }
 
   Map<String, dynamic> toJson() {
@@ -85,7 +85,7 @@ class CompletedMarginx {
     data['isFinNifty'] = this.isFinNifty;
     data['marginxExpiry'] = this.marginxExpiry;
     data['maxParticipants'] = this.maxParticipants;
-    data['earning'] = this.earning;
+    data['return'] = this.earning;
     return data;
   }
 }

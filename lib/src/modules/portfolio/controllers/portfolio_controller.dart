@@ -17,7 +17,7 @@ class PortfolioController extends BaseController<PortfolioRepository> {
 
   final portfoliList = <Portfolio>[].obs;
   final myTenxPortfolioList = <MyTenxPortfolio>[].obs;
-  final virtualPortfolioList = <VirtualTradingPortfolio>[].obs;
+  final virtualPortfolioList = VirtualTradingPortfolio().obs;
 
   void loadData() {
     getPortfolioList();
@@ -68,9 +68,7 @@ class PortfolioController extends BaseController<PortfolioRepository> {
       final RepoResponse<VirtualTradingPortfolioResponse> response =
           await repository.getVirtualTradingPortfolioList();
       if (response.data != null) {
-        // if (response.data?.status?.toLowerCase() == "success") {
-        //   virtualPortfolioList(response.data?.data ?? []);
-        // }
+        virtualPortfolioList(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
