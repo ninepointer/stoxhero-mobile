@@ -16,6 +16,8 @@ class AppRoutes {
   static const String referrals = '/referrals';
   static const String tenxDashboard = '/tenx_dashboard';
   static const String tenxSearchSymbol = '/tenx_search_symbol';
+  static const String virtualSearchSymbol = '/virtual_search_symbol';
+  static const String virtualTrading = '/virtual_trading';
   static const String contest = '/contest';
   static const String pastContest = '/contest/past_contest';
   static const String faq = '/faq';
@@ -23,4 +25,7 @@ class AppRoutes {
   static const String careers = '/careers';
   static const String wallet = '/wallet';
   static const String marginx = '/marginx';
+  static const String collegeContest = '/college_contest';
+  static const String internship = '/careers/internship';
+  static const String workshop = '/careers/workshop';
 }

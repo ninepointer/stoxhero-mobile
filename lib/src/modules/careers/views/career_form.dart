@@ -34,7 +34,7 @@ class _CareerFormState extends State<CareerForm> {
             children: [
               Text(
                 'Personal Information',
-                style: Theme.of(context).textTheme.tsMedium14,
+                style: AppStyles.tsGreyMedium16,
               ),
               SizedBox(height: 12),
               Row(
@@ -74,8 +74,8 @@ class _CareerFormState extends State<CareerForm> {
               CommonDropdown(
                 color: AppColors.grey.withOpacity(0.1),
                 hint: 'College Name',
-                value: controller.selectedValue1,
-                dropdownItems: controller.dropdownItems1,
+                value: controller.selectedValue3,
+                dropdownItems: controller.dropdownItems3,
                 onChanged: (value) => setState(() => controller.selectedValue1 = value!),
               ),
               SizedBox(height: 12),

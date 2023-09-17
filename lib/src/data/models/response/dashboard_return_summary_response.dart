@@ -58,15 +58,15 @@ class DashboardReturnSummary {
 }
 
 class TenxData {
-  Id? iId;
+  TId? iId;
   String? date;
-  double? npnl;
+  num? npnl;
   int? portfolio;
 
   TenxData({this.iId, this.date, this.npnl, this.portfolio});
 
   TenxData.fromJson(Map<String, dynamic> json) {
-    iId = json['_id'] != null ? new Id.fromJson(json['_id']) : null;
+    iId = json['_id'] != null ? new TId.fromJson(json['_id']) : null;
     date = json['date'];
     npnl = json['npnl'];
     portfolio = json['portfolio'];
@@ -84,13 +84,13 @@ class TenxData {
   }
 }
 
-class Id {
+class TId {
   String? tradeTime;
   String? subscriptionId;
 
-  Id({this.tradeTime, this.subscriptionId});
+  TId({this.tradeTime, this.subscriptionId});
 
-  Id.fromJson(Map<String, dynamic> json) {
+  TId.fromJson(Map<String, dynamic> json) {
     tradeTime = json['trade_time'];
     subscriptionId = json['subscriptionId'];
   }
@@ -104,12 +104,12 @@ class Id {
 }
 
 class VirtualData {
-  Null? nId;
-  double? totalGpnl;
-  double? totalBrokerage;
+  String? nId;
+  num? totalGpnl;
+  num? totalBrokerage;
   int? numberOfTrades;
-  Null? portfolio;
-  double? npnl;
+  String? portfolio;
+  num? npnl;
 
   VirtualData(
       {this.nId,

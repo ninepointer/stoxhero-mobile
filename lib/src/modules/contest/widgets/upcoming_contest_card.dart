@@ -1,41 +1,68 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 import 'package:stoxhero/src/data/data.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+import 'package:stoxhero/src/modules/contest/contest_index.dart';
 
 import '../../../core/core.dart';
 
-class UpComingContestCard extends GetView<ContestController> {
-  final String? contestName;
-  final String? contestStartTime;
-  final String? contestEndTime;
-  final String? contestType;
-  final String? contestStatus;
-  final int? entryFee;
-  final num? payoutPercentage;
-  final ContestPortfolio? portfolio;
-  final int? maxParticipants;
-  final String? contestExpiry;
-  final bool? isNifty;
-  final bool? isBankNifty;
-  final bool? isFinNifty;
+class UpComingContestCard extends StatefulWidget {
+  final UpComingContest? upComingContest;
 
   const UpComingContestCard({
     Key? key,
-    this.contestName,
-    this.contestStartTime,
-    this.contestEndTime,
-    this.contestType,
-    this.entryFee,
-    this.payoutPercentage,
-    this.portfolio,
-    this.maxParticipants,
-    this.contestExpiry,
-    this.isNifty,
-    this.isBankNifty,
-    this.isFinNifty,
-    this.contestStatus,
+    this.upComingContest,
   }) : super(key: key);
+
+  @override
+  State<UpComingContestCard> createState() => _UpComingContestCardState();
+}
+
+class _UpComingContestCardState extends State<UpComingContestCard> {
+  late DateTime startTimeDateTime;
+  late Duration remainingTime;
+  late ContestController controller;
+  late Timer timer;
+
+  @override
+  void initState() {
+    controller = Get.find<ContestController>();
+    updateRemainingTime();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  void updateRemainingTime() {
+    DateTime currentTime = DateTime.now();
+    startTimeDateTime = DateTime.parse(widget.upComingContest?.contestStartTime ?? '');
+
+    setState(() {
+      remainingTime = startTimeDateTime.isAfter(currentTime)
+          ? startTimeDateTime.difference(currentTime)
+          : Duration.zero;
+    });
+
+    timer = Timer.periodic(
+      Duration(seconds: 1),
+      (_) {
+        if (mounted) {
+          setState(
+            () {
+              remainingTime = startTimeDateTime.isAfter(DateTime.now())
+                  ? startTimeDateTime.difference(DateTime.now())
+                  : Duration.zero;
+            },
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +77,7 @@ class UpComingContestCard extends GetView<ContestController> {
             children: [
               Expanded(
                 child: Text(
-                  contestName ?? '-',
+                  widget.upComingContest?.contestName ?? '-',
                   style: AppStyles.tsSecondaryMedium16,
                 ),
               ),
@@ -62,7 +89,7 @@ class UpComingContestCard extends GetView<ContestController> {
           child: Row(
             children: [
               Visibility(
-                visible: isNifty == true,
+                visible: widget.upComingContest?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -77,7 +104,7 @@ class UpComingContestCard extends GetView<ContestController> {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: isBankNifty == true,
+                visible: widget.upComingContest?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -92,7 +119,7 @@ class UpComingContestCard extends GetView<ContestController> {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: isFinNifty == true,
+                visible: widget.upComingContest?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -113,7 +140,7 @@ class UpComingContestCard extends GetView<ContestController> {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  contestExpiry ?? '',
+                  widget.upComingContest?.contestExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -128,6 +155,7 @@ class UpComingContestCard extends GetView<ContestController> {
           child: Column(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
@@ -139,7 +167,7 @@ class UpComingContestCard extends GetView<ContestController> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '$maxParticipants',
+                          '${widget.upComingContest?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -156,7 +184,7 @@ class UpComingContestCard extends GetView<ContestController> {
                         style: AppStyles.tsGreyRegular12,
                       ),
                       Text(
-                        '$payoutPercentage % of the net P&L',
+                        '${widget.upComingContest?.payoutPercentage} % of the net P&L',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -171,8 +199,9 @@ class UpComingContestCard extends GetView<ContestController> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          "00:00:00",
+                          '${remainingTime.inDays} days \n${remainingTime.inHours.remainder(24)} hrs \n${remainingTime.inMinutes.remainder(60)} mins \n${remainingTime.inSeconds.remainder(60)} secs',
                           style: Theme.of(context).textTheme.tsMedium14,
+                          textAlign: TextAlign.end,
                         ),
                       ],
                     ),
@@ -192,7 +221,7 @@ class UpComingContestCard extends GetView<ContestController> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(contestStartTime),
+                        FormatHelper.formatDateTimeToIST(widget.upComingContest?.contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -206,7 +235,7 @@ class UpComingContestCard extends GetView<ContestController> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(contestEndTime),
+                        FormatHelper.formatDateTimeToIST(widget.upComingContest?.contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -226,7 +255,10 @@ class UpComingContestCard extends GetView<ContestController> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(entryFee, decimal: 0),
+                        widget.upComingContest?.entryFee == 0
+                            ? 'Free'
+                            : FormatHelper.formatNumbers(widget.upComingContest?.entryFee,
+                                decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -240,7 +272,9 @@ class UpComingContestCard extends GetView<ContestController> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatNumbers(portfolio?.portfolioValue, decimal: 0),
+                        FormatHelper.formatNumbers(
+                            widget.upComingContest?.portfolio?.portfolioValue,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -259,57 +293,82 @@ class UpComingContestCard extends GetView<ContestController> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primary,
+                    color: AppColors.primary.withOpacity(0.2),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
                   ),
                   child: Text(
                     'Get Notified',
-                    style: AppStyles.tsWhiteMedium14,
+                    style: AppStyles.tsPrimaryMedium14,
                   ),
                 ),
               ),
             ),
-            if (entryFee! > 0)
+            if (widget.upComingContest?.entryFee != 0)
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    controller.calculateUserWalletAmount();
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => ContestBuySubscriptionBottomSheet(),
-                    );
+                    // controller.calculateUserWalletAmount();
+                    // showModalBottomSheet(
+                    //   context: context,
+                    //   builder: (context) => ContestBuySubscriptionBottomSheet(),
+                    // );
                   },
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.success,
+                      color: AppColors.success.withOpacity(0.2),
                     ),
                     child: Text(
                       'Pay Now',
-                      style: AppStyles.tsWhiteMedium14,
+                      style: AppStyles.tsWhiteMedium14.copyWith(
+                        color: AppColors.success,
+                      ),
                     ),
                   ),
                 ),
               )
             else
-              SizedBox(),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    // controller.calculateUserWalletAmount();
+                    // showModalBottomSheet(
+                    //   context: context,
+                    //   builder: (context) => ContestBuySubscriptionBottomSheet(),
+                    // );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withOpacity(0.2),
+                    ),
+                    child: Text(
+                      'Start Trading',
+                      style: AppStyles.tsWhiteMedium14.copyWith(
+                        color: AppColors.success,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             Expanded(
               child: GestureDetector(
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.secondary,
+                    color: AppColors.secondary.withOpacity(0.2),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),
                   ),
                   child: Text(
                     'Share',
-                    style: AppStyles.tsWhiteMedium14,
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                 ),
               ),

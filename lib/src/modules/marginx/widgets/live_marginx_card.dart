@@ -1,35 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/data/models/response/upcoming_marginx_list_response.dart';
+import 'package:get/get.dart';
 
 import '../../../core/core.dart';
+import '../../../data/models/response/live_marginx_list_response.dart';
+import '../../../data/models/response/upcoming_marginx_list_response.dart';
 import '../../modules.dart';
 
 class LiveMarginxCard extends StatelessWidget {
-  final String? marginXName;
-  final String? startTime;
-  final String? endTime;
-  final String? liveTime;
-  final MarginXTemplate? marginXTemplate;
-  final int? maxParticipants;
-  final bool? isNifty;
-  final bool? isBankNifty;
-  final bool? isFinNifty;
-  final int? entryFee;
-  final int? portfolio;
+  final LiveMarginX? liveMarginx;
+  final UpcomingMarginX? upComingMarginx;
 
-  const LiveMarginxCard({
+  LiveMarginxCard({
     Key? key,
-    this.marginXName,
-    this.startTime,
-    this.endTime,
-    this.liveTime,
-    this.marginXTemplate,
-    this.maxParticipants,
-    this.isNifty,
-    this.isBankNifty,
-    this.isFinNifty,
-    this.entryFee,
-    this.portfolio,
+    this.liveMarginx,
+    this.upComingMarginx,
   }) : super(key: key);
 
   @override
@@ -44,7 +28,7 @@ class LiveMarginxCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
-                    marginXName ?? '-',
+                    liveMarginx?.marginXName ?? '',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ),
@@ -137,7 +121,7 @@ class LiveMarginxCard extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '$maxParticipants',
+                          '${liveMarginx?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -190,7 +174,7 @@ class LiveMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(startTime),
+                        FormatHelper.formatDateTimeToIST(liveMarginx?.startTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -204,7 +188,7 @@ class LiveMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(endTime),
+                        FormatHelper.formatDateTimeToIST(liveMarginx?.endTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -224,7 +208,8 @@ class LiveMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        '${marginXTemplate?.entryFee}',
+                        FormatHelper.formatNumbers(liveMarginx?.marginXTemplate?.entryFee,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -238,7 +223,8 @@ class LiveMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        '${marginXTemplate?.portfolioValue}',
+                        FormatHelper.formatNumbers(liveMarginx?.marginXTemplate?.portfolioValue,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -253,7 +239,11 @@ class LiveMarginxCard extends StatelessWidget {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.to(
+                    () => ViewCard(),
+                  );
+                },
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
@@ -281,7 +271,7 @@ class LiveMarginxCard extends StatelessWidget {
                     color: AppColors.success.withOpacity(0.25),
                   ),
                   child: Text(
-                    'Start',
+                    'Buy',
                     style: AppStyles.tsWhiteMedium14.copyWith(
                       color: AppColors.success,
                     ),

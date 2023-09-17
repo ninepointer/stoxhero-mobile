@@ -393,7 +393,18 @@ class AnalyticsView extends GetView<AnalyticsController> {
                           ),
                         ),
                         AnalyticsChart(
-                          title: 'Orders',
+                          title: 'Orders',barGroups: controller.getOrdersChartsData(
+                            barColor: AppColors.cyan,
+                          ),
+                        ),
+                        AnalyticsChart(
+                          title: 'Expected Avg P & L',
+                          barGroups: controller.getOrdersChartsData(
+                            barColor: AppColors.cyan,
+                          ),
+                        ),
+                        AnalyticsChart(
+                          title: 'Expected P&L',
                           barGroups: controller.getOrdersChartsData(
                             barColor: AppColors.cyan,
                           ),
@@ -401,6 +412,11 @@ class AnalyticsView extends GetView<AnalyticsController> {
                         AnalyticsChart(
                           title: 'Risk Reward Ratio',
                           barGroups: controller.getOrdersChartsData(
+                            barColor: AppColors.cyan,
+                          ),
+                        ),
+                        AnalyticsChart(
+                          title: 'Month Wise P&L',barGroups: controller.getOrdersChartsData(
                             barColor: AppColors.cyan,
                           ),
                         ),

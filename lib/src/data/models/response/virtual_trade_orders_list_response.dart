@@ -1,12 +1,10 @@
 class VirtualTradeOrdersListResponse {
   String? status;
   List<VirtualTradeOrder>? data;
-  num? count;
 
   VirtualTradeOrdersListResponse({
     this.status,
     this.data,
-    this.count,
   });
 
   VirtualTradeOrdersListResponse.fromJson(Map<String, dynamic> json) {
@@ -17,7 +15,6 @@ class VirtualTradeOrdersListResponse {
         data!.add(new VirtualTradeOrder.fromJson(v));
       });
     }
-    count = json['count'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,7 +23,6 @@ class VirtualTradeOrdersListResponse {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['count'] = this.count;
     return data;
   }
 }

@@ -33,6 +33,7 @@ class AppUrls {
 
   static const String paperTradeTodaysOrders = "$apiURL/paperTrade/my/todayorders";
   static const String paperTradeAllOrders = "$apiURL/paperTrade/my/historyorders";
+  static const String paperTradePosition = "$apiURL/paperTrade/pnl";
 
   static const String userWalletTransactions = "$apiURL/userwallet/my";
 
@@ -65,15 +66,33 @@ class AppUrls {
   static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
   static const String completedCollegeContests = "$apiURL/dailycontest/contests/collegecompleted";
   static const String collegeContestLeaderboard = "$apiURL/contestscoreboard/collegescoreboard";
+  static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
+  static const String liveCollegeContests = "$apiURL/dailycontest/collegecontests/userlive";
+  static const String contestWatchList =
+      "$apiURL/instrumentDetails?isBankNifty=true&dailyContest=true";
+  static const String contestCreditData =
+      "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/myPnlandCreditData";
+  static const String contestPosition = "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/pnl";
 
   static const String returnSummary = "$apiURL/userdashboard/summary";
-  static const String performance = "$apiURL/userdashboard";
   static const String dashboardCarousel = "$apiURL/carousels/home";
-
   static const String tutorial = "$apiURL/tutorialcategory/";
+
   static const String upComingMarginX = "$apiURL/marginx/userupcoming";
   static const String liveMarginx = "$apiURL/marginx/userlive";
   static const String completedMarginx = "$apiURL/marginx/usercompleted";
 
   static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
+
+  static const String stockIndex = "$apiURL/stockindex";
+
+  static String completedContestOrders(String? id) =>
+      "$apiURL/dailycontest/trade/$id/my/todayorders";
+
+  static String performance(String? tradeType, String? timeFrame) =>
+      "$apiURL/userdashboard/stats?tradeType=$tradeType&timeframe=$timeFrame";
+
+  static String careers(String? type) => "$apiURL/career?type=$type";
+
+  static String completedMarginXOrders(String? id) => "$apiURL/marginxtrade/$id/my/allorders";
 }

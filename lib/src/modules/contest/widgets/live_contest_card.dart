@@ -1,37 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../core/core.dart';
-import '../../../data/models/response/live_contest_list_response.dart';
+import '../../../data/data.dart';
+import '../../modules.dart';
 
 class LiveContestCard extends StatelessWidget {
-  final String? contestName;
-  final String? contestStartTime;
-  final String? contestEndTime;
-  final String? contestType;
-  final String? contestStatus;
-  final int? entryFee;
-  final num? payoutPercentage;
-  final LiveContestPortfolio? portfolio;
-  final int? maxParticipants;
-  final String? contestExpiry;
-  final bool? isNifty;
-  final bool? isBankNifty;
-  final bool? isFinNifty;
+  final LiveContest? liveContest;
   const LiveContestCard({
     Key? key,
-    this.contestName,
-    this.contestStartTime,
-    this.contestEndTime,
-    this.contestType,
-    this.contestStatus,
-    this.entryFee,
-    this.payoutPercentage,
-    this.portfolio,
-    this.maxParticipants,
-    this.contestExpiry,
-    this.isNifty,
-    this.isBankNifty,
-    this.isFinNifty,
+    this.liveContest,
   }) : super(key: key);
 
   @override
@@ -47,7 +25,7 @@ class LiveContestCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  contestName ?? '-',
+                  liveContest?.contestName ?? '-',
                   style: AppStyles.tsSecondaryMedium16,
                 ),
               ),
@@ -59,7 +37,7 @@ class LiveContestCard extends StatelessWidget {
           child: Row(
             children: [
               Visibility(
-                visible: isNifty == true,
+                visible: liveContest?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -74,7 +52,7 @@ class LiveContestCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: isBankNifty == true,
+                visible: liveContest?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -89,7 +67,7 @@ class LiveContestCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: isFinNifty == true,
+                visible: liveContest?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -110,7 +88,7 @@ class LiveContestCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  contestExpiry ?? '',
+                  liveContest?.contestExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -122,7 +100,7 @@ class LiveContestCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  contestStatus ?? '',
+                  liveContest?.contestStatus ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -148,7 +126,7 @@ class LiveContestCard extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '$maxParticipants',
+                          '${liveContest?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -165,8 +143,7 @@ class LiveContestCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.tsRegular12,
                       ),
                       Text(
-                        '$payoutPercentage % of the net P&L',
-                        // '0.5% of the net P&L',
+                        '${liveContest?.payoutPercentage} % of the net P&L',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -203,7 +180,7 @@ class LiveContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(contestStartTime),
+                        FormatHelper.formatDateTimeToIST(liveContest?.contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -217,7 +194,7 @@ class LiveContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(contestEndTime),
+                        FormatHelper.formatDateTimeToIST(liveContest?.contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -237,7 +214,9 @@ class LiveContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(entryFee, decimal: 0),
+                        liveContest?.entryFee == 0
+                            ? 'Free'
+                            : FormatHelper.formatNumbers(liveContest?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -251,7 +230,10 @@ class LiveContestCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatNumbers(portfolio?.portfolioValue, decimal: 0),
+                        FormatHelper.formatNumbers(
+                          liveContest?.portfolio?.portfolioValue,
+                          decimal: 0,
+                        ),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -266,18 +248,24 @@ class LiveContestCard extends StatelessWidget {
           children: [
             Expanded(
               child: GestureDetector(
+                onTap: () {
+                  Get.find<ContestController>().loadTradingData();
+                  Get.to(() => ContestDashboardView());
+                },
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
+                    color: AppColors.success.withOpacity(0.2),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
-                    color: AppColors.success,
                   ),
                   child: Text(
                     'Start Trading',
-                    style: AppStyles.tsWhiteMedium14,
+                    style: AppStyles.tsWhiteMedium14.copyWith(
+                      color: AppColors.success,
+                    ),
                   ),
                 ),
               ),
@@ -288,14 +276,14 @@ class LiveContestCard extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
+                    color: AppColors.secondary.withOpacity(0.2),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),
-                    color: AppColors.secondary,
                   ),
                   child: Text(
                     'Share',
-                    style: AppStyles.tsWhiteMedium14,
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                 ),
               ),

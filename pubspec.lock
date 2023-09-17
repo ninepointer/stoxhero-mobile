@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "0c8368c9b3f0abbc193b9d6133649a614204b528982bebc7026372d61677ce3a"
+      sha256: e0902a06f0e00414e4e3438a084580161279f137aeb862274710f29ec10cf01e
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.7"
+    version: "3.3.9"
   args:
     dependency: transitive
     description:
@@ -189,10 +189,10 @@ packages:
     dependency: "direct main"
     description:
       name: fl_chart
-      sha256: "48a1b69be9544e2b03d9a8e843affd89e43f3194c9248776222efcb4206bb1ec"
+      sha256: c1e26c7e48496be85104c16c040950b0436674cdf0737f3f6e95511b2529b592
       url: "https://pub.dev"
     source: hosted
-    version: "0.62.0"
+    version: "0.63.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -231,10 +231,10 @@ packages:
     dependency: "direct main"
     description:
       name: get
-      sha256: "2ba20a47c8f1f233bed775ba2dd0d3ac97b4cf32fc17731b3dfc672b06b0e92a"
+      sha256: e4e7335ede17452b391ed3b2ede016545706c01a02292a6c97619705e7d2a85e
       url: "https://pub.dev"
     source: hosted
-    version: "4.6.5"
+    version: "4.6.6"
   get_storage:
     dependency: "direct main"
     description:
@@ -279,10 +279,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: d32a997bcc4ee135aebca8e272b7c517927aa65a74b9c60a81a2764ef1a0462d
+      sha256: "47da2161c2e9f8f8a9cbbd89d466d174333fbdd769aeed848912e0b16d9cb369"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.7+5"
+    version: "0.8.8"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -479,10 +479,10 @@ packages:
     dependency: "direct main"
     description:
       name: pinput
-      sha256: "543da5bfdefd9e06914a12100f8c9156f84cef3efc14bca507c49e966c5b813b"
+      sha256: a92b55ecf9c25d1b9e100af45905385d5bc34fc9b6b04177a9e82cb88fe4d805
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "3.0.1"
   platform:
     dependency: transitive
     description:

@@ -44,20 +44,8 @@ class ContestListView extends GetView<ContestController> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: controller.premiumContestList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var upComing = controller.premiumContestList[index];
                         return UpComingContestCard(
-                          contestName: upComing.contestName,
-                          isNifty: upComing.isNifty,
-                          isBankNifty: upComing.isBankNifty,
-                          isFinNifty: upComing.isFinNifty,
-                          contestExpiry: upComing.contestExpiry,
-                          contestStatus: upComing.contestStatus,
-                          maxParticipants: upComing.maxParticipants,
-                          contestStartTime: upComing.contestStartTime,
-                          contestEndTime: upComing.contestEndTime,
-                          payoutPercentage: upComing.payoutPercentage,
-                          entryFee: upComing.entryFee,
-                          portfolio: upComing.portfolio,
+                          upComingContest: controller.premiumContestList[index],
                         );
                       },
                     ),
@@ -69,52 +57,45 @@ class ContestListView extends GetView<ContestController> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: controller.freeContestList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var upComing = controller.freeContestList[index];
                         return UpComingContestCard(
-                          contestName: upComing.contestName,
-                          isNifty: upComing.isNifty,
-                          isBankNifty: upComing.isBankNifty,
-                          isFinNifty: upComing.isFinNifty,
-                          contestExpiry: upComing.contestExpiry,
-                          contestStatus: upComing.contestStatus,
-                          maxParticipants: upComing.maxParticipants,
-                          contestStartTime: upComing.contestStartTime,
-                          contestEndTime: upComing.contestEndTime,
-                          payoutPercentage: upComing.payoutPercentage,
-                          entryFee: upComing.entryFee,
-                          portfolio: upComing.portfolio,
+                          upComingContest: controller.freeContestList[index],
                         );
                       },
                     )
                   ] else if (controller.segmentedControlValue.value == 1) ...[
-                    if (controller.liveContestList.isEmpty)
+                    if (controller.livePremiumContestList.isEmpty &&
+                        controller.liveFreeContestList.isEmpty)
                       NoDataFound(
                         label: 'No Live Contest!',
-                      )
-                    else
-                      ListView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: controller.liveContestList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          var live = controller.liveContestList[index];
-                          return LiveContestCard(
-                            contestName: live.contestName,
-                            isNifty: live.isNifty,
-                            isBankNifty: live.isBankNifty,
-                            isFinNifty: live.isFinNifty,
-                            contestExpiry: live.contestExpiry,
-                            contestStatus: live.contestStatus,
-                            maxParticipants: live.maxParticipants,
-                            contestStartTime: live.contestStartTime,
-                            contestEndTime: live.contestEndTime,
-                            payoutPercentage: live.payoutPercentage,
-                            entryFee: live.entryFee,
-                            portfolio: live.portfolio,
-                          );
-                        },
-                      )
+                      ),
+                    if (controller.livePremiumContestList.isNotEmpty)
+                      CommonTile(label: 'Premium Contest\'s'),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.livePremiumContestList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return LiveContestCard(
+                          liveContest: controller.livePremiumContestList[index],
+                        );
+                      },
+                    ),
+                    SizedBox(height: 8),
+                    if (controller.liveFreeContestList.isNotEmpty)
+                      CommonTile(label: 'Free Contest\'s'),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.liveFreeContestList.length,
+                      itemBuilder: (BuildContext context, index) {
+                        return LiveContestCard(
+                          liveContest: controller.liveFreeContestList[index],
+                        );
+                      },
+                    ),
+                    SizedBox(height: 12),
                   ] else if (controller.segmentedControlValue.value == 2) ...[
                     if (controller.premiumCompletedContestList.isNotEmpty) CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
@@ -123,24 +104,9 @@ class ContestListView extends GetView<ContestController> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: controller.premiumCompletedContestList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var completed = controller.premiumCompletedContestList[index];
-                        var contestPnl = controller.completedContestPnlList[index];
                         return CompletedContestCard(
-                          id: completed.id,
-                          contestName: completed.contestName,
-                          isNifty: completed.isNifty,
-                          isBankNifty: completed.isBankNifty,
-                          isFinNifty: completed.isFinNifty,
-                          isAllIndex: completed.isAllIndex,
-                          contestStartTime: completed.contestStartTime,
-                          contestEndTime: completed.contestEndTime,
-                          contestStatus: completed.contestStatus,
-                          entryFee: completed.entryFee,
-                          payoutPercentage: completed.payoutPercentage,
-                          contestExpiry: completed.contestExpiry,
-                          portfolio: contestPnl.portfolioValue,
-                          npnl: contestPnl.npnl,
-                          payoutAmount: contestPnl.payoutAmount,
+                          completedContest: controller.premiumCompletedContestList[index],
+                          completedContestPnl: controller.completedContestPnlList[index],
                         );
                       },
                     ),
@@ -152,23 +118,9 @@ class ContestListView extends GetView<ContestController> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: controller.freeCompletedContestList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var completed = controller.freeCompletedContestList[index];
-                        var contestPnl = controller.completedContestPnlList[index];
                         return CompletedContestCard(
-                          contestName: completed.contestName,
-                          isNifty: completed.isNifty,
-                          isBankNifty: completed.isBankNifty,
-                          isFinNifty: completed.isFinNifty,
-                          isAllIndex: completed.isAllIndex,
-                          contestStartTime: completed.contestStartTime,
-                          contestEndTime: completed.contestEndTime,
-                          contestStatus: completed.contestStatus,
-                          entryFee: completed.entryFee,
-                          payoutPercentage: completed.payoutPercentage,
-                          contestExpiry: completed.contestExpiry,
-                          portfolio: contestPnl.portfolioValue,
-                          npnl: contestPnl.npnl,
-                          payoutAmount: contestPnl.payoutAmount,
+                          completedContest: controller.freeCompletedContestList[index],
+                          // completedContestPnl: controller.completedContestPnlList[index],
                         );
                       },
                     ),

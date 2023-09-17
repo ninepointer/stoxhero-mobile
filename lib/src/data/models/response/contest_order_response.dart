@@ -31,12 +31,12 @@ class ContestOrderList {
   String? sId;
   String? orderId;
   String? status;
-  double? averagePrice;
+  num? averagePrice;
   int? quantity;
   String? product;
   String? buyOrSell;
   String? symbol;
-  double? amount;
+  num? amount;
   String? tradeTime;
 
   ContestOrderList(

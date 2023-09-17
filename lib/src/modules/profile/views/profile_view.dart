@@ -118,11 +118,13 @@ class ProfileView extends GetView<ProfileController> {
                 },
               ),
               ProfileListTile(
-                label: 'Message',
+                label: 'Messages',
+                icon: Icons.message,
                 onTap: () {},
               ),
               ProfileListTile(
                 label: 'Settings',
+                icon: Icons.settings,
                 onTap: () {},
               ),
             ],

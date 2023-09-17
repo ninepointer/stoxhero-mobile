@@ -1,6 +1,3 @@
-import 'package:stoxhero/src/data/models/response/live_marginx_list_response.dart';
-import 'package:stoxhero/src/data/models/response/upcoming_marginx_list_response.dart';
-
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
@@ -28,5 +25,13 @@ class MarginXRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: CompletedMarginxListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<CompletedMarginXOrdersResponse>> getCompletedMarginXOrders(String? id) async {
+    String apiURL = AppUrls.completedMarginXOrders(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: CompletedMarginXOrdersResponse.fromJson(response));
   }
 }

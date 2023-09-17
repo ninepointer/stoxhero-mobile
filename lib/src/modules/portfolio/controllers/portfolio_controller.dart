@@ -66,7 +66,7 @@ class PortfolioController extends BaseController<PortfolioRepository> {
     try {
       final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolioList();
       if (response.data != null) {
-        virtualPortfolio(response.data?.data);
+        virtualPortfolioList(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

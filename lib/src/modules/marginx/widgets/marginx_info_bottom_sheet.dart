@@ -7,16 +7,19 @@ class MarginxInfoBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.all(16.0),
+    return Container(
+      height: 500,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Introducing MarginX: Your Gateway to Realistic Trading',
-              style: Theme.of(context).textTheme.tsMedium16,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                'Introducing MarginX: Your Gateway to Realistic Trading',
+                style: Theme.of(context).textTheme.tsMedium16,
+              ),
             ),
             Divider(
               thickness: 1,

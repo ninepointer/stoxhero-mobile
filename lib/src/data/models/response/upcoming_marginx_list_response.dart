@@ -30,7 +30,7 @@ class UpcomingMarginX {
   String? startTime;
   String? endTime;
   String? liveTime;
-  MarginXTemplate? marginXTemplate;
+  UMarginXTemplate? marginXTemplate;
   List<Null>? potentialParticipants;
   int? maxParticipants;
   String? status;
@@ -40,9 +40,9 @@ class UpcomingMarginX {
   bool? isNifty;
   bool? isBankNifty;
   bool? isFinNifty;
-  List<Participants>? participants;
+  List<MParticipants>? participants;
   List<Null>? sharedBy;
-  List<PurchaseIntent>? purchaseIntent;
+  List<MPurchaseIntent>? purchaseIntent;
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
@@ -77,7 +77,7 @@ class UpcomingMarginX {
     endTime = json['endTime'];
     liveTime = json['liveTime'];
     marginXTemplate = json['marginXTemplate'] != null
-        ? new MarginXTemplate.fromJson(json['marginXTemplate'])
+        ? new UMarginXTemplate.fromJson(json['marginXTemplate'])
         : null;
     if (json['potentialParticipants'] != null) {
       potentialParticipants = <Null>[];
@@ -94,9 +94,9 @@ class UpcomingMarginX {
     isBankNifty = json['isBankNifty'];
     isFinNifty = json['isFinNifty'];
     if (json['participants'] != null) {
-      participants = <Participants>[];
+      participants = <MParticipants>[];
       json['participants'].forEach((v) {
-        participants!.add(new Participants.fromJson(v));
+        participants!.add(new MParticipants.fromJson(v));
       });
     }
     if (json['sharedBy'] != null) {
@@ -106,9 +106,9 @@ class UpcomingMarginX {
       });
     }
     if (json['purchaseIntent'] != null) {
-      purchaseIntent = <PurchaseIntent>[];
+      purchaseIntent = <MPurchaseIntent>[];
       json['purchaseIntent'].forEach((v) {
-        purchaseIntent!.add(new PurchaseIntent.fromJson(v));
+        purchaseIntent!.add(new MPurchaseIntent.fromJson(v));
       });
     }
     createdOn = json['createdOn'];
@@ -153,15 +153,15 @@ class UpcomingMarginX {
   }
 }
 
-class MarginXTemplate {
+class UMarginXTemplate {
   String? sId;
   String? templateName;
   int? portfolioValue;
   int? entryFee;
 
-  MarginXTemplate({this.sId, this.templateName, this.portfolioValue, this.entryFee});
+  UMarginXTemplate({this.sId, this.templateName, this.portfolioValue, this.entryFee});
 
-  MarginXTemplate.fromJson(Map<String, dynamic> json) {
+  UMarginXTemplate.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     templateName = json['templateName'];
     portfolioValue = json['portfolioValue'];
@@ -178,14 +178,14 @@ class MarginXTemplate {
   }
 }
 
-class Participants {
+class MParticipants {
   String? userId;
   String? boughtAt;
   String? sId;
 
-  Participants({this.userId, this.boughtAt, this.sId});
+  MParticipants({this.userId, this.boughtAt, this.sId});
 
-  Participants.fromJson(Map<String, dynamic> json) {
+  MParticipants.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     boughtAt = json['boughtAt'];
     sId = json['_id'];
@@ -200,14 +200,14 @@ class Participants {
   }
 }
 
-class PurchaseIntent {
+class MPurchaseIntent {
   String? userId;
   String? date;
   String? sId;
 
-  PurchaseIntent({this.userId, this.date, this.sId});
+  MPurchaseIntent({this.userId, this.date, this.sId});
 
-  PurchaseIntent.fromJson(Map<String, dynamic> json) {
+  MPurchaseIntent.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     date = json['date'];
     sId = json['_id'];

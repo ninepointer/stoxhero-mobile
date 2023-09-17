@@ -57,7 +57,7 @@ class PortfolioCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        '${FormatHelper.formatNumbers(portfolioValue)}',
+                        FormatHelper.formatNumbers(portfolioValue),
                         style: AppStyles.tsPrimaryMedium20.copyWith(
                           color: AppColors.info,
                         ),

@@ -1,40 +1,66 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../data/models/response/upcoming_marginx_list_response.dart';
 
-class UpcomingMarginxCard extends StatelessWidget {
-  final String? marginXName;
-  final String? startTime;
-  final String? endTime;
-  final int? maxParticipants;
-  final bool? isNifty;
-  final bool? isBankNifty;
-  final bool? isFinNifty;
-  final MarginXTemplate? marginXTemplate;
-  final int? portfolio;
-  final int? entryFee;
-  final String? marginXExpiry;
-  final String? marginXStatus;
-
-  const UpcomingMarginxCard({
+class UpcomingMarginxCard extends StatefulWidget {
+  final UpcomingMarginX? upComingMarginx;
+  UpcomingMarginxCard({
     Key? key,
-    this.marginXName,
-    this.startTime,
-    this.endTime,
-    this.maxParticipants,
-    this.isNifty,
-    this.isBankNifty,
-    this.isFinNifty,
-    this.marginXTemplate,
-    this.portfolio,
-    this.entryFee,
-    this.marginXExpiry,
-    this.marginXStatus,
+    this.upComingMarginx,
   }) : super(key: key);
+
+  @override
+  State<UpcomingMarginxCard> createState() => _UpcomingMarginxCardState();
+}
+
+class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
+  late DateTime startTimeDateTime;
+  late Duration remainingTime;
+  late MarginXController controller;
+  late Timer timer;
+  @override
+  void initState() {
+    controller = Get.find<MarginXController>();
+    updateRemainingTime();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  void updateRemainingTime() {
+    DateTime currentTime = DateTime.now();
+    startTimeDateTime = DateTime.parse(widget.upComingMarginx?.startTime ?? '');
+
+    setState(() {
+      remainingTime = startTimeDateTime.isAfter(currentTime)
+          ? startTimeDateTime.difference(currentTime)
+          : Duration.zero;
+    });
+    timer = Timer.periodic(
+      Duration(seconds: 1),
+      (_) {
+        if (mounted) {
+          setState(
+            () {
+              remainingTime = startTimeDateTime.isAfter(DateTime.now())
+                  ? startTimeDateTime.difference(DateTime.now())
+                  : Duration.zero;
+            },
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +74,7 @@ class UpcomingMarginxCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
-                    marginXName ?? '-',
+                    widget.upComingMarginx?.marginXName ?? '-',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ),
@@ -73,7 +99,7 @@ class UpcomingMarginxCard extends StatelessWidget {
           child: Row(
             children: [
               Visibility(
-                visible: isNifty == true,
+                visible: widget.upComingMarginx?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -88,7 +114,7 @@ class UpcomingMarginxCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: isBankNifty == true,
+                visible: widget.upComingMarginx?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -103,7 +129,7 @@ class UpcomingMarginxCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: isFinNifty == true,
+                visible: widget.upComingMarginx?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -124,7 +150,7 @@ class UpcomingMarginxCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  marginXExpiry ?? '',
+                  widget.upComingMarginx?.marginXExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -139,6 +165,7 @@ class UpcomingMarginxCard extends StatelessWidget {
           child: Column(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
@@ -150,7 +177,7 @@ class UpcomingMarginxCard extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '$maxParticipants',
+                          '${widget.upComingMarginx?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -182,8 +209,9 @@ class UpcomingMarginxCard extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          "00:00:00",
+                          '${remainingTime.inDays} days \n${remainingTime.inHours.remainder(24)} hrs \n${remainingTime.inMinutes.remainder(60)} mins \n${remainingTime.inSeconds.remainder(60)} secs',
                           style: Theme.of(context).textTheme.tsMedium14,
+                          textAlign: TextAlign.end,
                         ),
                       ],
                     ),
@@ -203,7 +231,7 @@ class UpcomingMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(startTime),
+                        FormatHelper.formatDateTimeToIST(widget.upComingMarginx?.startTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -217,7 +245,7 @@ class UpcomingMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(endTime),
+                        FormatHelper.formatDateTimeToIST(widget.upComingMarginx?.endTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -237,7 +265,9 @@ class UpcomingMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatNumbers(entryFee, decimal: 0),
+                        FormatHelper.formatNumbers(
+                            widget.upComingMarginx?.marginXTemplate?.entryFee,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -251,7 +281,9 @@ class UpcomingMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatNumbers(portfolio, decimal: 0),
+                        FormatHelper.formatNumbers(
+                            widget.upComingMarginx?.marginXTemplate?.portfolioValue,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -267,7 +299,9 @@ class UpcomingMarginxCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  Get.to(ViewCard());
+                  Get.to(
+                    () => ViewCard(viewMarginx: widget.upComingMarginx),
+                  );
                 },
                 child: Container(
                   alignment: Alignment.center,

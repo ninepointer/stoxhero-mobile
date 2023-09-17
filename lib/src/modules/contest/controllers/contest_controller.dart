@@ -1,8 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stoxhero/src/data/models/response/completed_college_contest_list_response.dart';
-import 'package:stoxhero/src/data/models/response/live_contest_list_response.dart';
 
 import '../../../base/base.dart';
 import '../../../core/core.dart';
@@ -30,11 +29,18 @@ class ContestController extends BaseController<ContestRepository> {
   final completedContestList = <CompletedContest>[].obs;
   final completedContestPnlList = <CompletedContestPnl>[].obs;
   final contestLeaderboardList = <ContestLeaderboard>[].obs;
-  final collegeContestLeaderboardList = <CollegeContestLeaderboard>[].obs;
-  final completedCollegeContestList = <CompletedCollegeContest>[].obs;
   final contestTodaysOrdersList = <ContestOrderList>[].obs;
   final completedContestOrdersList = <CompletedContestOrder>[].obs;
   final liveContestList = <LiveContest>[].obs;
+  final livePremiumContestList = <LiveContest>[].obs;
+  final liveFreeContestList = <LiveContest>[].obs;
+  final contestWatchList = <ContestWatchList>[].obs;
+  final contestPositionsList = <ContestPositionList>[].obs;
+  final contestPortfolio = ContestCreditData().obs;
+
+  final selectedQuantity = 50.obs;
+  final contestWatchlistIds = <int>[].obs;
+  final selectedWatchlistIndex = RxInt(-1);
   final walletBalance = RxNum(0);
 
   Future loadData() async {
@@ -42,11 +48,14 @@ class ContestController extends BaseController<ContestRepository> {
     await getUpComingContestList();
     await getCompletedContestList();
     await getCompletedContestPnlList();
-    await getContestLeaderboardList();
-    await getCollegeContestLeaderboardList();
-    await getCompletedCollegeContestList();
-    await getContestOrderList();
+    // await getContestLeaderboardList();
     await getLiveContestList();
+  }
+
+  Future loadTradingData() async {
+    await getContestWatchList();
+    await getContestPositions();
+    await getContestPortfolio();
   }
 
   void calculateUserWalletAmount() async {
@@ -55,6 +64,20 @@ class ContestController extends BaseController<ContestRepository> {
     var list = response.data?.data?.transactions ?? [];
     for (var e in list) amount += e.amount ?? 0;
     walletBalance(amount);
+  }
+
+  Color getValueColor(dynamic value) {
+    if (value != null) {
+      num number = value is int || value is double ? value : num.parse(value);
+      if (number > 0) {
+        return AppColors.success;
+      } else if (number < 0) {
+        return AppColors.danger;
+      } else if (number == 0) {
+        return AppColors.white;
+      }
+    }
+    return AppColors.white;
   }
 
   void handleSegmentChange(int val) {
@@ -159,44 +182,10 @@ class ContestController extends BaseController<ContestRepository> {
     isLoading(false);
   }
 
-  Future getCollegeContestLeaderboardList() async {
+  Future getContestOrderList(String? id) async {
     isLoading(true);
     try {
-      final RepoResponse<CollegeContestLeaderboardResponse> response =
-          await repository.getCollegeContestLeaderboardList();
-      if (response.data != null) {
-        collegeContestLeaderboardList(response.data?.data ?? []);
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log('College Leaderboard: ${e.toString()}');
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
-  }
-
-  Future getCompletedCollegeContestList() async {
-    isLoading(true);
-    try {
-      final RepoResponse<CompletedCollegeContestListResponse> response =
-          await repository.getCompletedCollegeContestList();
-      if (response.data != null) {
-        completedCollegeContestList(response.data?.data ?? []);
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log('Completed college contest: ${e.toString()}');
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
-  }
-
-  Future getContestOrderList() async {
-    isLoading(true);
-    try {
-      final RepoResponse<ContestOrderResponse> response = await repository.getContestOrderList();
+      final RepoResponse<ContestOrderResponse> response = await repository.getContestOrderList(id);
       if (response.data != null) {
         contestTodaysOrdersList(response.data?.data ?? []);
       } else {
@@ -215,6 +204,78 @@ class ContestController extends BaseController<ContestRepository> {
       final RepoResponse<LiveContestListResponse> response = await repository.getLiveContestList();
       if (response.data != null) {
         liveContestList(response.data?.data ?? []);
+        if (liveContestList.isNotEmpty) {
+          liveFreeContestList.clear();
+          livePremiumContestList.clear();
+
+          liveContestList.forEach((contest) {
+            (contest.entryFee == null || contest.entryFee == 0)
+                ? liveFreeContestList.add(contest)
+                : livePremiumContestList.add(contest);
+          });
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getContestPortfolio() async {
+    isLoading(true);
+    try {
+      final RepoResponse<ContestPortfolioResponse> response =
+          await repository.getContestPortfolio();
+      if (response.data != null) {
+        contestPortfolio(response.data?.data);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log("port ${e.toString()}");
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getContestWatchList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<ContestWatchListResponse> response =
+          await repository.getContestWatchList();
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          contestWatchList.clear();
+          contestWatchlistIds.clear();
+          contestWatchList(response.data?.data ?? []);
+          for (var element in contestWatchList) {
+            contestWatchlistIds
+                .add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+          }
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log("watch ${e.toString()}");
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getContestPositions() async {
+    isLoading(true);
+    try {
+      final RepoResponse<ContestPositionListResponse> response =
+          await repository.getContestPositions();
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          contestPositionsList(response.data?.data ?? []);
+          // calculateTotalPositionValues();
+        }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

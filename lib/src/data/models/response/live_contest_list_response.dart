@@ -191,7 +191,7 @@ class LiveContestPortfolio {
 }
 
 class LiveInterestedUsers {
-  UserId? userId;
+  UserIdc? userId;
   String? registeredOn;
   String? status;
   String? sId;
@@ -199,7 +199,7 @@ class LiveInterestedUsers {
   LiveInterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
 
   LiveInterestedUsers.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new UserId.fromJson(json['userId']) : null;
+    userId = json['userId'] != null ? new UserIdc.fromJson(json['userId']) : null;
     registeredOn = json['registeredOn'];
     status = json['status'];
     sId = json['_id'];
@@ -217,7 +217,7 @@ class LiveInterestedUsers {
   }
 }
 
-class UserId {
+class UserIdc {
   String? sId;
   String? firstName;
   String? lastName;
@@ -225,9 +225,9 @@ class UserId {
   String? mobile;
   String? creationProcess;
 
-  UserId({this.sId, this.firstName, this.lastName, this.email, this.mobile, this.creationProcess});
+  UserIdc({this.sId, this.firstName, this.lastName, this.email, this.mobile, this.creationProcess});
 
-  UserId.fromJson(Map<String, dynamic> json) {
+  UserIdc.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
@@ -249,7 +249,7 @@ class UserId {
 }
 
 class Participants {
-  UserId? userId;
+  UserIdc? userId;
   String? participatedOn;
   bool? isLive;
   String? sId;
@@ -257,7 +257,7 @@ class Participants {
   Participants({this.userId, this.participatedOn, this.isLive, this.sId});
 
   Participants.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new UserId.fromJson(json['userId']) : null;
+    userId = json['userId'] != null ? new UserIdc.fromJson(json['userId']) : null;
     participatedOn = json['participatedOn'];
     isLive = json['isLive'];
     sId = json['_id'];
