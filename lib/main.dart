@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 import 'src/app/app.dart';
 
-const bool isProd = true;
+const bool isProd = false;
 const bool useTestToken = true;
 
 void main() async {

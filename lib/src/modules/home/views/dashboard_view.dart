@@ -374,251 +374,6 @@ class _DashboardViewState extends State<DashboardView> {
               ],
             ),
           ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CommonStockInfo(
-                  label: 'Nifty 50',
-                  stockPrice: '₹19,454',
-                  stockLTP: '₹183.15',
-                  stockChange: '(+34.42%)',
-                ),
-                CommonStockInfo(
-                  label: 'Bank Nifty',
-                  stockPrice: '₹19,454',
-                  stockLTP: '₹183.15',
-                  stockChange: '(+34.42%)',
-                ),
-                CommonStockInfo(
-                  label: 'Finnifty',
-                  stockPrice: '₹19,454',
-                  stockLTP: '₹183.15',
-                  stockChange: '(+34.42%)',
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Obx(
-              () => Container(
-                child: controller.dashboardCarouselList.isEmpty
-                    ? NoDataFound()
-                    : CarouselSlider.builder(
-                        itemCount: controller.dashboardCarouselList.length,
-                        itemBuilder: (context, int index, realIndex) {
-                          // var urlImage = controller.dashboardCarouselList[index];
-                          log('Image: ${controller.dashboardCarouselList[index]}');
-                          return Container(
-                            height: 180,
-                            width: double.infinity,
-                            padding: EdgeInsets.all(8),
-                            margin: EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Image.network(
-                              "${controller.dashboardCarouselList[index].carouselImage}",
-                              fit: BoxFit.contain,
-                            ),
-                          );
-                        },
-                        options: CarouselOptions(
-                          height: 180,
-                          autoPlay: true,
-                          autoPlayInterval: const Duration(seconds: 6),
-                        ),
-                      ),
-              ),
-            ),
-            CommonTile(
-              label: 'Upcoming Contest',
-              showSeeAllButton: true,
-              onPressed: () {
-                Get.to(() => ContestListView());
-              },
-            ),
-            UpComingContestCard(),
-            SizedBox(height: 12),
-            CommonTile(
-              label: 'Ongoing Contest',
-              showSeeAllButton: true,
-              onPressed: () {
-                Get.to(() => ContestListView());
-              },
-            ),
-            LiveContestCard(),
-            SizedBox(height: 12),
-            CommonTile(label: 'Return Summary'),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: customCard(
-                          label: 'Virtual Trading',
-                          percent: '-',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: customCard(
-                          label: 'Contest Trading',
-                          percent: '-',
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: customCard(
-                          label: 'TenX Trading',
-                          percent: '0.0%',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: customCard(
-                          label: 'MarginX Trading',
-                          percent: '0.0%',
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            CommonTile(label: 'Performance'),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CommonDropdown(
-                      color: Theme.of(context).cardColor,
-                      hint: 'Trading',
-                      value: selectedValue1,
-                      dropdownItems: dropdownItems1,
-                      onChanged: (String? value) => setState(
-                        () => selectedValue1 = value!,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 4),
-                  Expanded(
-                    child: CommonDropdown(
-                      color: Theme.of(context).cardColor,
-                      hint: 'Date',
-                      value: selectedValue2,
-                      dropdownItems: dropdownItems2,
-                      onChanged: (String? value) => setState(
-                        () => selectedValue2 = value!,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: customCard(
-                          label: 'Market Days',
-                          percent: '${dashboard?.totalMarketDays ?? '-'}',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: customCard(
-                          label: 'Trading Days',
-                          percent: '${dashboard?.totalTradingDays ?? '-'}',
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: customCard(
-                          label: 'Profit & Loss',
-                          percent: '${dashboard?.profitDays ?? '-'}',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: customCard(
-                          label: 'Portfolio',
-                          percent: '${dashboard?.portfolio ?? '-'}',
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: customCard(
-                          label: 'Max Profit',
-                          percent: '${dashboard?.maxProfit ?? '-'}',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: customCard(
-                          label: 'Max Loss',
-                          percent: '${dashboard?.maxLoss ?? '-'}',
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: customCard(
-                          label: 'Wins',
-                          percent: '${dashboard?.maxProfitDay ?? '-'}',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: customCard(
-                          label: 'Loss',
-                          percent: '${dashboard?.maxLossDay ?? '-'}',
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: customCard(
-                          label: 'Avg. Profit',
-                          percent: '${dashboard?.averageProfit ?? '-'}',
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: customCard(
-                          label: 'Avg. Loss',
-                          percent: '${dashboard?.averageLoss ?? '-'}',
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 56),
-          ],
         ),
       ),
     );
@@ -626,7 +381,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   Widget customCard({
     required String label,
-    required String? percent,
+    required String percent,
     Color? valueColor,
   }) {
     return CommonCard(
@@ -660,8 +415,7 @@ class _DashboardViewState extends State<DashboardView> {
                   Text(
                     percent,
                     style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                          color: valueColor ??
-                              (percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                          color: valueColor ?? (percent.startsWith('-') ? AppColors.danger : AppColors.success),
                         ),
                   )
                 ],
@@ -707,9 +461,11 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    percent??'-',
-                    style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                        color: percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                    percent,
+                    style: Theme.of(context)
+                        .textTheme
+                        .tsMedium16
+                        .copyWith(color: percent.startsWith('-') ? AppColors.danger : AppColors.success),
                   ),
                 ],
               ),

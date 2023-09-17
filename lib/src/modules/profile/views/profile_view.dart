@@ -17,118 +17,101 @@ class ProfileView extends GetView<ProfileController> {
         title: Text('Profile'),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              // Card(
-              //   elevation: 0,
-              //   margin: EdgeInsets.symmetric(vertical: 16),
-              //   shape: RoundedRectangleBorder(
-              //     borderRadius: BorderRadius.circular(8),
-              //   ),
-              //   child: ListTile(
-              //     leading: Container(
-              //       height: 50,
-              //       width: 50,
-              //       child: ClipRRect(
-              //         borderRadius: BorderRadius.circular(100),
-              //         child: Image.asset(AppImages.appLogo),
-              //       ),
-              //     ),
-              //     title: Text(
-              //       controller.getUserFullName(),
-              //       style: Theme.of(context).textTheme.tsMedium20,
-              //     ),
-              //     subtitle: Text(
-              //       'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
-              //       style: AppStyles.tsPrimaryRegular14,
-              //     ),
-              //   ),
-              // ),
-              Container(
-                height: 80,
-                width: 80,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.asset(AppImages.appLogo),
+        padding: EdgeInsets.all(16).copyWith(
+          bottom: 156,
+        ),
+        child: Column(
+          children: [
+            Container(
+              height: 80,
+              width: 80,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Image.asset(AppImages.appLogo),
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              controller.getUserFullName(),
+              style: Theme.of(context).textTheme.tsMedium18,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 42),
+                  child: Text(
+                    'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
+                    style: AppStyles.tsPrimaryRegular14,
+                  ),
                 ),
-              ),
-              SizedBox(height: 12),
-              Text(
-                controller.getUserFullName(),
-                style: Theme.of(context).textTheme.tsMedium18,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 42),
-                    child: Text(
-                      'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
-                      style: AppStyles.tsPrimaryRegular14,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      String referralCode = controller.userDetailsData.myReferralCode ?? '-';
-                      Clipboard.setData(ClipboardData(text: referralCode));
-                      SnackbarHelper.showSnackbar('Referral code copied to clipboard');
-                    },
-                    icon: Icon(Icons.copy),
-                    iconSize: 16,
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              ProfileListTile(
-                icon: Icons.person,
-                label: 'My Profile',
-                onTap: () {
-                  controller.loadData();
-                  Get.toNamed(AppRoutes.profileDetails);
-                },
-              ),
-              ProfileListTile(
-                icon: Icons.account_balance,
-                label: 'Bank Details',
-                onTap: () {
-                  Get.toNamed(AppRoutes.bankDetails);
-                },
-              ),
-              ProfileListTile(
-                icon: Icons.account_balance,
-                label: 'KYC Details',
-                onTap: () {
-                  Get.toNamed(AppRoutes.kycDetails);
-                },
-              ),
-              ProfileListTile(
-                label: 'Orders',
-                onTap: () {
-                  Get.toNamed(AppRoutes.orders);
-                  Get.find<OrdersController>().loadData();
-                },
-              ),
-              ProfileListTile(
-                label: 'Portfolio',
-                onTap: () {
-                  Get.toNamed(AppRoutes.portfolio);
-                  Get.find<PortfolioController>().loadData();
-                },
-              ),
-              ProfileListTile(
-                label: 'Messages',
-                icon: Icons.message,
-                onTap: () {},
-              ),
-              ProfileListTile(
-                label: 'Settings',
-                icon: Icons.settings,
-                onTap: () {},
-              ),
-            ],
-          ),
+                IconButton(
+                  onPressed: () {
+                    String referralCode = controller.userDetailsData.myReferralCode ?? '-';
+                    Clipboard.setData(ClipboardData(text: referralCode));
+                    SnackbarHelper.showSnackbar('Referral code copied to clipboard');
+                  },
+                  icon: Icon(Icons.copy),
+                  iconSize: 16,
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            ProfileListTile(
+              icon: Icons.person,
+              label: 'My Profile',
+              onTap: () {
+                controller.loadData();
+                Get.toNamed(AppRoutes.profileDetails);
+              },
+            ),
+            ProfileListTile(
+              icon: Icons.account_balance,
+              label: 'Bank Details',
+              onTap: () => Get.toNamed(AppRoutes.bankDetails),
+            ),
+            ProfileListTile(
+              icon: Icons.account_balance,
+              label: 'KYC Details',
+              onTap: () => Get.toNamed(AppRoutes.kycDetails),
+            ),
+            ProfileListTile(
+              icon: Icons.school,
+              label: 'Careers',
+              onTap: () => Get.toNamed(AppRoutes.careers),
+            ),
+            ProfileListTile(
+              icon: Icons.wallet_giftcard_rounded,
+              label: 'Referrals',
+              onTap: () {
+                Get.toNamed(AppRoutes.referrals);
+                Get.find<ReferralsController>().loadData();
+              },
+            ),
+            ProfileListTile(
+              icon: Icons.help,
+              label: 'FAQ\'s',
+              onTap: () => Get.toNamed(AppRoutes.faq),
+            ),
+            ProfileListTile(
+              icon: Icons.cast_for_education,
+              label: 'Tutorials',
+              onTap: () {
+                Get.toNamed(AppRoutes.tutorial);
+                Get.find<TutorialController>().loadData();
+              },
+            ),
+            ProfileListTile(
+              label: 'Messages',
+              icon: Icons.message,
+              onTap: () {},
+            ),
+            ProfileListTile(
+              label: 'Settings',
+              icon: Icons.settings,
+              onTap: () {},
+            ),
+          ],
         ),
       ),
     );

@@ -4,9 +4,9 @@ import 'package:stoxhero/src/data/data.dart';
 import '../../../core/core.dart';
 import '../../modules.dart';
 
-class CareerInfoCard extends StatelessWidget {
+class InfoCard extends StatelessWidget {
   final CareerList? career;
-  const CareerInfoCard({
+  const InfoCard({
     Key? key,
     this.career,
   }) : super(key: key);
@@ -88,7 +88,7 @@ class CareerInfoCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: CommonFilledButton(
             label: 'Click here to Apply!',
-            height: 42,
+            height: 48,
             onPressed: () {
               Get.to(() => ResponsibilitiesView());
             },

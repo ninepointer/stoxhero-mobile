@@ -66,12 +66,9 @@ class AppUrls {
   static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
   static const String completedCollegeContests = "$apiURL/dailycontest/contests/collegecompleted";
   static const String collegeContestLeaderboard = "$apiURL/contestscoreboard/collegescoreboard";
-  static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
   static const String liveCollegeContests = "$apiURL/dailycontest/collegecontests/userlive";
-  static const String contestWatchList =
-      "$apiURL/instrumentDetails?isBankNifty=true&dailyContest=true";
-  static const String contestCreditData =
-      "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/myPnlandCreditData";
+  static const String contestWatchList = "$apiURL/instrumentDetails?isBankNifty=true&dailyContest=true";
+  static const String contestCreditData = "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/myPnlandCreditData";
   static const String contestPosition = "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/pnl";
 
   static const String returnSummary = "$apiURL/userdashboard/summary";
@@ -85,9 +82,6 @@ class AppUrls {
   static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
 
   static const String stockIndex = "$apiURL/stockindex";
-
-  static String completedContestOrders(String? id) =>
-      "$apiURL/dailycontest/trade/$id/my/todayorders";
 
   static String performance(String? tradeType, String? timeFrame) =>
       "$apiURL/userdashboard/stats?tradeType=$tradeType&timeframe=$timeFrame";

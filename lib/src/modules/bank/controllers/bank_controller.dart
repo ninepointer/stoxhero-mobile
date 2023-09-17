@@ -44,14 +44,14 @@ class BankController extends BaseController {
   Future saveUserBankDetails() async {
     isLoading(true);
 
-    Map<String, dynamic> data = {
-      'upiId': upiIdTextController.text,
-      'googlePay_number': googlePayNumberTextController.text,
-      'phonePe_number': phonePeNumberTextController.text,
-      'paytm_number': paytmNumberTextController.text,
-      'nameAsPerBankAccount': nameAsPerBankAccountTextController.text,
-      'accountNumber': accountNumberTextController.text,
-      'ifscCode': ifscCodeTextController.text,
-    };
+    // Map<String, dynamic> data = {
+    //   'upiId': upiIdTextController.text,
+    //   'googlePay_number': googlePayNumberTextController.text,
+    //   'phonePe_number': phonePeNumberTextController.text,
+    //   'paytm_number': paytmNumberTextController.text,
+    //   'nameAsPerBankAccount': nameAsPerBankAccountTextController.text,
+    //   'accountNumber': accountNumberTextController.text,
+    //   'ifscCode': ifscCodeTextController.text,
+    // };
   }
 }

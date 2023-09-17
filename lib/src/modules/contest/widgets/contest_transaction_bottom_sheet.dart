@@ -92,9 +92,7 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
               AbsorbPointer(
                 absorbing: type == ContestTransactionType.exit,
                 child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0
-                      ? null
-                      : controller.selectedQuantity.value,
+                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
                   onChanged: (value) => controller.selectedQuantity(value),
                   menuMaxHeight: 250,
                   isDense: true,
@@ -226,7 +224,7 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 ],
               ),
               CommonFilledButton(
-                  bgColor: type == ContestTransactionType.exit
+                  backgroundColor: type == ContestTransactionType.exit
                       ? AppColors.warning
                       : type == ContestTransactionType.buy
                           ? AppColors.success

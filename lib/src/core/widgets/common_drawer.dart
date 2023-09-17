@@ -31,8 +31,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
     Get.back();
     switch (index) {
       case 0:
-        Get.to(() => AnalyticsView());
-        Get.find<AnalyticsController>().loadData(AppRoutes.analytics);
+        Get.toNamed(AppRoutes.analytics);
         Get.find<AnalyticsController>().loadData();
         break;
       case 1:
@@ -44,14 +43,11 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<ReferralsController>().loadData();
         break;
       case 3:
-        Get.toNamed(AppRoutes.careers);
+       
         break;
       case 4:
-        Get.toNamed(AppRoutes.faq);
         break;
       case 5:
-        Get.toNamed(AppRoutes.tutorial);
-        Get.find<TutorialController>().loadData();
         break;
       case 6:
         ThemeService().switchTheme();
@@ -141,106 +137,26 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 1),
               ),
               ProfileListTile(
-                icon: Icons.widgets,
-                label: 'Referrals',
-                onTap: () => selectedItem(context, 2),
-              ),
-              ProfileListTile(
-                icon: Icons.school,
-                label: 'Careers',
-                onTap: () => selectedItem(context, 3),
-              ),
-              ProfileListTile(
-                icon: Icons.help,
-                label: 'FAQs',
-                onTap: () => selectedItem(context, 4),
-              ),
-              ProfileListTile(
-                icon: Icons.cast_for_education,
-                label: 'Tutorials',
-                onTap: () => selectedItem(context, 5),
+                label: 'Orders',
+                onTap: () {
+                  Get.toNamed(AppRoutes.orders);
+                  Get.find<OrdersController>().loadData();
+                },
               ),
               ProfileListTile(
                 icon: Icons.dark_mode,
                 label: 'Dark Mode',
                 onTap: () => selectedItem(context, 6),
               ),
-              ProfileListTile(
-                icon: Icons.logout,
-                label: 'Logout',
-                onTap: () => selectedItem(context, 7),
-              ),
+              // ProfileListTile(
+              //   icon: Icons.logout,
+              //   label: 'Logout',
+              //   onTap: () => selectedItem(context, 7),
+              // ),
             ],
           ),
         ),
       ],
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                padding: EdgeInsets.zero,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        ProfileListTile(
-                          icon: Icons.analytics,
-                          label: 'Analytics',
-                          onTap: () => selectedItem(context, 0),
-                        ),
-                        ProfileListTile(
-                          icon: Icons.person,
-                          label: 'Portfolio',
-                          onTap: () => selectedItem(context, 1),
-                        ),
-                        ProfileListTile(
-                          icon: Icons.diversity_3_rounded,
-                          label: 'Referrals',
-                          onTap: () => selectedItem(context, 2),
-                        ),
-                        ProfileListTile(
-                          icon: Icons.school,
-                          label: 'Careers',
-                          onTap: () => selectedItem(context, 3),
-                        ),
-                        ProfileListTile(
-                          icon: Icons.help,
-                          label: 'FAQs',
-                          onTap: () => selectedItem(context, 4),
-                        ),
-                        ProfileListTile(
-                          icon: Icons.smart_display_rounded,
-                          label: 'Tutorials',
-                          onTap: () => selectedItem(context, 5),
-                        ),
-                        ProfileListTile(
-                          icon: Icons.dark_mode,
-                          label: 'Dark Mode',
-                          onTap: () => selectedItem(context, 6),
-                        ),
-                        ProfileListTile(
-                          icon: Icons.logout,
-                          label: 'Logout',
-                          onTap: () => selectedItem(context, 7),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Text(
-                '© 2023,\n made with ❤️ by StoxHero \n for a better trading experience.',
-                textAlign: TextAlign.center,
-                style: AppStyles.tsGreyRegular12,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

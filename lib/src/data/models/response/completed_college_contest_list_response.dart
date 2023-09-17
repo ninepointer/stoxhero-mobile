@@ -36,7 +36,7 @@ class CompletedCollegeContest {
   String? contestType;
   String? contestFor;
   String? collegeCode;
-  double? payoutPercentage;
+  num? payoutPercentage;
   String? portfolio;
   String? college;
   List<String>? potentialParticipants;

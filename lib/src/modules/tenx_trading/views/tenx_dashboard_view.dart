@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stoxhero/src/data/data.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';

@@ -31,7 +31,7 @@ class ContestView extends StatelessWidget {
               image: AppImages.collegeContest,
               buttonLabel: 'Join College Contest!',
               onPressed: () {
-                Get.find<CollegeContestController>().getCompletedCollegeContestList();
+                Get.find<CollegeContestController>().loadData();
                 Get.to(() => CollegeContestView());
               },
             ),
@@ -43,8 +43,7 @@ class ContestView extends StatelessWidget {
               buttonLabel: 'See Contest Leaderboard!',
               onPressed: () {
                 ContestController contestController = Get.find<ContestController>();
-                CollegeContestController collegeContestController =
-                    Get.find<CollegeContestController>();
+                CollegeContestController collegeContestController = Get.find<CollegeContestController>();
                 contestController.getContestLeaderboardList();
                 collegeContestController.getCollegeContestLeaderboardList();
                 Get.to(
@@ -105,63 +104,15 @@ class ContestView extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 16),
               CommonFilledButton(
                 label: buttonLabel,
                 height: 48,
                 onPressed: onPressed,
               ),
+              SizedBox(height: 8),
             ],
           ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16),
-              margin: EdgeInsets.all(16).copyWith(
-                bottom: 0,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
-              child: Image.asset(
-                image,
-                height: 120,
-                fit: BoxFit.fitHeight,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.tsMedium18,
-                    // style: AppStyles.tsBlackMedium18,
-                  ),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                    style: Theme.of(context).textTheme.tsGreyRegular12,
-                    // style: AppStyles.tsBlackMedium18,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.all(16).copyWith(
-                top: 0,
-              ),
-              alignment: Alignment.bottomRight,
-              child: CommonFilledButton(
-                label: buttonLabel,
-                height: 42,
-                onPressed: onPressed,
-              ),
-            ),
-          ],
         ),
       ],
     );

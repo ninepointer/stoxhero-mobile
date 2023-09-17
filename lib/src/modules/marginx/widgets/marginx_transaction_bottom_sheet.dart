@@ -92,9 +92,7 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
               AbsorbPointer(
                 absorbing: type == MarginXTransactionType.exit,
                 child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0
-                      ? null
-                      : controller.selectedQuantity.value,
+                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
                   onChanged: (value) => controller.selectedQuantity(value),
                   menuMaxHeight: 250,
                   isDense: true,
@@ -226,7 +224,7 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                 ],
               ),
               CommonFilledButton(
-                  bgColor: type == MarginXTransactionType.exit
+                  backgroundColor: type == MarginXTransactionType.exit
                       ? AppColors.warning
                       : type == MarginXTransactionType.buy
                           ? AppColors.success

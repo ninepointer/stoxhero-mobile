@@ -269,8 +269,8 @@ class LiveCollegeContestCard extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
-                  color: AppColors.secondary.withOpacity(0.2),
                   decoration: BoxDecoration(
+                    color: AppColors.secondary.withOpacity(0.2),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

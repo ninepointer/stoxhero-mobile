@@ -103,8 +103,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualTradingPortfolio() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingPortfolioResponse> response =
-          await repository.getVirtualTradingPortfolio();
+      final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolio();
       if (response.data != null) {
         virtualPortfolio(response.data?.data);
       } else {
@@ -120,16 +119,14 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualTradingWatchlist() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingWatchListResponse> response =
-          await repository.getVirtualTradingWatchlist();
+      final RepoResponse<VirtualTradingWatchListResponse> response = await repository.getVirtualTradingWatchlist();
       if (response.data != null) {
         if (response.data?.data! != null) {
           virtualWatchList.clear();
           virtualWatchlistIds.clear();
           virtualWatchList(response.data?.data ?? []);
           for (var element in virtualWatchList) {
-            virtualWatchlistIds
-                .add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+            virtualWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
           }
         }
       } else {
@@ -145,8 +142,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualPositionsList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingPositionListResponse> response =
-          await repository.getVirtualPositions();
+      final RepoResponse<VirtualTradingPositionListResponse> response = await repository.getVirtualPositions();
       if (response.data != null) {
         if (response.data?.data! != null) {
           virtualPositionsList(response.data?.data ?? []);
@@ -181,8 +177,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future searchInstruments(String? value) async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingInstrumentListResponse> response =
-          await repository.searchInstruments(value);
+      final RepoResponse<VirtualTradingInstrumentListResponse> response = await repository.searchInstruments(value);
       if (response.data != null) {
         if (response.data?.data! != null) {
           virtualInstruments.clear();
@@ -238,9 +233,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future removeInstrument(int? instToken) async {
     isLoading(true);
     try {
-      final RepoResponse<GenericResponse> response = await repository.removeInstrument(
-        instToken ?? 0,
-      );
+      await repository.removeInstrument(instToken ?? 0);
       // if (response.data != null) {
       selectedWatchlistIndex(-1);
       virtualWatchList.clear();

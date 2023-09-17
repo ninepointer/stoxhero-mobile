@@ -5,6 +5,7 @@ import 'package:stoxhero/src/modules/college_contest/widgets/completed_college_c
 import 'package:stoxhero/src/modules/college_contest/widgets/upcoming_college_contest_card.dart';
 
 import '../../../core/core.dart';
+import '../widgets/live_college_contest_card.dart';
 
 class CollegeContestView extends GetView<CollegeContestController> {
   const CollegeContestView({Key? key}) : super(key: key);
@@ -38,8 +39,7 @@ class CollegeContestView extends GetView<CollegeContestController> {
                       NoDataFound(
                         label: 'No Upcoming College Contest!',
                       ),
-                    if (controller.premiumContestList.isNotEmpty)
-                      CommonTile(label: 'Premium Contest\'s'),
+                    if (controller.premiumContestList.isNotEmpty) CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -64,28 +64,25 @@ class CollegeContestView extends GetView<CollegeContestController> {
                         );
                       },
                     )
-                  ]
-                  // else if (controller.segmentedControlValue.value == 1) ...[
-                  //   if (controller.liveContestList.isEmpty)
-                  //     NoDataFound(
-                  //       label: 'No Live Contest!',
-                  //     )
-                  //   else
-                  //     ListView.builder(
-                  //       shrinkWrap: true,
-                  //       padding: EdgeInsets.zero,
-                  //       physics: NeverScrollableScrollPhysics(),
-                  //       itemCount: controller.liveContestList.length,
-                  //       itemBuilder: (BuildContext context, int index) {
-                  //         return LiveContestCard(
-                  //           liveContest: controller.liveContestList[index],
-                  //         );
-                  //       },
-                  //     )
-                  // ]
-                  else if (controller.segmentedControlValue.value == 2) ...[
-                    if (controller.premiumCompletedContestList.isNotEmpty)
-                      CommonTile(label: 'Premium Contest\'s'),
+                  ] else if (controller.segmentedControlValue.value == 1) ...[
+                    if (controller.liveCollegeContestList.isEmpty)
+                      NoDataFound(
+                        label: 'No Live Contest!',
+                      )
+                    else
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.liveCollegeContestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return LiveCollegeContestCard(
+                            liveCollegeContest: controller.liveCollegeContestList[index],
+                          );
+                        },
+                      )
+                  ] else if (controller.segmentedControlValue.value == 2) ...[
+                    if (controller.premiumCompletedContestList.isNotEmpty) CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -99,8 +96,7 @@ class CollegeContestView extends GetView<CollegeContestController> {
                       },
                     ),
                     SizedBox(height: 8),
-                    if (controller.freeCompletedContestList.isNotEmpty)
-                      CommonTile(label: 'Free Contest\'s'),
+                    if (controller.freeCompletedContestList.isNotEmpty) CommonTile(label: 'Free Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,

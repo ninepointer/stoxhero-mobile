@@ -15,5 +15,4 @@ export 'widgets/contest_transaction_bottom_sheet.dart';
 export 'widgets/contest_watchlist_card.dart';
 export 'widgets/contest_watchlist_card_tile.dart';
 export 'widgets/live_contest_card.dart';
-export 'views/completed_contest_orders_list_view.dart';
 export 'widgets/upcoming_contest_card.dart';

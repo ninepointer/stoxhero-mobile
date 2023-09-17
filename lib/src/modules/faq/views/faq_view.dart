@@ -15,7 +15,7 @@ class _FaqViewState extends State<FaqView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FAQs'),
+        title: Text('FAQ\'s'),
       ),
       body: SingleChildScrollView(
         child: Column(

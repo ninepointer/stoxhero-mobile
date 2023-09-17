@@ -90,9 +90,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
               AbsorbPointer(
                 absorbing: type == VirtualTransactionType.exit,
                 child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0
-                      ? null
-                      : controller.selectedQuantity.value,
+                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
                   onChanged: (value) => controller.selectedQuantity(value),
                   menuMaxHeight: 250,
                   isDense: true,
@@ -224,7 +222,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 ],
               ),
               CommonFilledButton(
-                  bgColor: type == VirtualTransactionType.exit
+                  backgroundColor: type == VirtualTransactionType.exit
                       ? AppColors.warning
                       : type == VirtualTransactionType.buy
                           ? AppColors.success

@@ -37,7 +37,7 @@ class LiveCollegeContest {
   String? currentLiveStatus;
   String? contestFor;
   int? entryFee;
-  double? payoutPercentage;
+  num? payoutPercentage;
   LiveCollegeContestPortfolio? portfolio;
   int? maxParticipants;
   String? contestStatus;
@@ -94,9 +94,7 @@ class LiveCollegeContest {
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
-    portfolio = json['portfolio'] != null
-        ? new LiveCollegeContestPortfolio.fromJson(json['portfolio'])
-        : null;
+    portfolio = json['portfolio'] != null ? new LiveCollegeContestPortfolio.fromJson(json['portfolio']) : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
