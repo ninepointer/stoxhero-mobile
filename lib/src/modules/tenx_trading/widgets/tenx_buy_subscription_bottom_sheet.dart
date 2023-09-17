@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
@@ -15,10 +15,10 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
             width: double.infinity,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.netural,
+              color: AppColors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(4),
-                topRight: Radius.circular(4),
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
               ),
             ),
             child: Column(
@@ -28,11 +28,11 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                   height: 56,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.secondary.withOpacity(0.25),
                   ),
                   child: Icon(
                     Icons.lock,
-                    color: AppColors.primary,
+                    color: AppColors.secondary,
                   ),
                 ),
                 SizedBox(height: 24),
@@ -56,7 +56,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                       children: [
                         Text(
                           'StoxHero Wallet',
-                          style: AppStyles.tsWhiteRegular16,
+                          style: Theme.of(context).textTheme.tsRegular16,
                         ),
                         Spacer(),
                         Text(
@@ -64,13 +64,14 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                             controller.walletBalance.value,
                             decimal: 0,
                           ),
-                          style: AppStyles.tsWhiteMedium20,
+                          style: Theme.of(context).textTheme.tsMedium20,
                         ),
                       ],
                     ),
                   ],
                 ),
-                if (controller.selectedSubscription.value.discountedPrice! <= controller.walletBalance.value)
+                if (controller.selectedSubscription.value.discountedPrice! <=
+                    controller.walletBalance.value)
                   Column(
                     children: [
                       SizedBox(height: 24),
@@ -80,14 +81,15 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                       ),
                     ],
                   ),
-                if (!(controller.selectedSubscription.value.discountedPrice! <= controller.walletBalance.value))
+                if (!(controller.selectedSubscription.value.discountedPrice! <=
+                    controller.walletBalance.value))
                   Column(
                     children: [
                       SizedBox(height: 24),
                       Text(
                         'Your wallet balance is low kindly refer more users on this platform to buy this subscription.',
                         textAlign: TextAlign.center,
-                        style: AppStyles.tsWhiteRegular14,
+                        style: Theme.of(context).textTheme.tsRegular14,
                       ),
                       SizedBox(height: 24),
                       CommonCard(
@@ -98,9 +100,9 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                             children: [
                               Text(
                                 controller.userDetailsData.myReferralCode ?? '-',
-                                style: AppStyles.tsWhiteRegular20.copyWith(
-                                  fontSize: 24,
-                                ),
+                                style: Theme.of(context).textTheme.tsRegular20.copyWith(
+                                      fontSize: 24,
+                                    ),
                               ),
                               Spacer(),
                               IconButton(

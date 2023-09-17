@@ -9,8 +9,9 @@ class CommonFilledButton extends StatelessWidget {
   final EdgeInsets? margin;
   final VoidCallback? onPressed;
   final bool isLoading;
-  final Color? bgColor;
-
+  final Color? backgroundColor;
+  final Color? labelColor;
+  final OutlinedBorder? shape;
   const CommonFilledButton({
     Key? key,
     this.label,
@@ -19,7 +20,9 @@ class CommonFilledButton extends StatelessWidget {
     this.width,
     this.onPressed,
     this.isLoading = false,
-    this.bgColor,
+    this.backgroundColor,
+    this.labelColor,
+    this.shape,
   }) : super(key: key);
 
   @override
@@ -28,15 +31,15 @@ class CommonFilledButton extends StatelessWidget {
       height: height ?? 52,
       width: width ?? double.infinity,
       margin: margin ?? EdgeInsets.zero,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          backgroundColor: bgColor ?? AppColors.primary,
-          shadowColor: AppColors.primary.shade100,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
+      child: MaterialButton(
+        elevation: 0,
+        focusElevation: 0,
+        highlightElevation: 0,
+        color: backgroundColor ?? AppColors.primary,
+        shape: shape ??
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
         child: isLoading
             ? Center(
                 child: SizedBox(
@@ -50,13 +53,14 @@ class CommonFilledButton extends StatelessWidget {
               )
             : Text(
                 label ?? 'Label',
-                style: AppStyles.tsWhiteRegular16.copyWith(
-                  fontSize: height == null
-                      ? 16
-                      : (height! < 36)
-                          ? 14
-                          : 16,
-                ),
+                style: Theme.of(context).textTheme.tsWhiteRegular16.copyWith(
+                      color: labelColor ?? AppColors.white,
+                      fontSize: height == null
+                          ? 16
+                          : (height! < 36)
+                              ? 14
+                              : 16,
+                    ),
               ),
         onPressed: isLoading ? null : onPressed,
       ),

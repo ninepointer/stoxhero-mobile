@@ -42,21 +42,7 @@ class _AnalyticsChartState extends State<AnalyticsChart> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 16),
-          padding: EdgeInsets.all(16),
-          color: AppColors.netural,
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.title,
-                style: AppStyles.tsPrimaryRegular18,
-              ),
-            ],
-          ),
-        ),
+        CommonTile(label: widget.title),
         AspectRatio(
           aspectRatio: 1.5,
           child: Container(

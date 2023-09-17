@@ -11,6 +11,10 @@ class AppPages {
       binding: SplashBinding(),
     ),
     GetPage(
+      name: AppRoutes.onBoarding,
+      page: () => OnBoardingView(),
+    ),
+    GetPage(
       name: AppRoutes.signin,
       page: () => SigninView(),
       binding: AuthBinding(),
@@ -41,9 +45,29 @@ class AppPages {
       binding: ProfileBinding(),
     ),
     GetPage(
+      name: AppRoutes.bankDetails,
+      page: () => BankDetailsView(),
+      binding: BankBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.kycDetails,
+      page: () => KycDetailsView(),
+      // binding: BankBinding(),
+    ),
+    GetPage(
       name: AppRoutes.portfolio,
       page: () => PortfolioView(),
       binding: PortfolioBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.analytics,
+      page: () => AnalyticsView(),
+      binding: AnalyticsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.referrals,
+      page: () => ReferralsView(),
+      binding: ReferralsBinding(),
     ),
     GetPage(
       name: AppRoutes.orders,
@@ -59,6 +83,55 @@ class AppPages {
       name: AppRoutes.tenxSearchSymbol,
       page: () => TenxSearchSymbolView(),
       binding: TenxTradingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contest,
+      page: () => ContestView(),
+      binding: ContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.pastContest,
+      page: () => PastContestView(),
+      binding: ContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.faq,
+      page: () => FaqView(),
+    ),
+    GetPage(
+      name: AppRoutes.tutorial,
+      page: () => TutorialView(),
+      binding: TutorialBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.careers,
+      page: () => CareerView(),
+      binding: CareerBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.wallet,
+      page: () => WalletView(),
+      binding: WalletBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.marginx,
+      page: () => MarginXView(),
+      binding: MarginXBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.collegeContest,
+      page: () => CollegeContestView(),
+      binding: CollegeContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.virtualTrading,
+      page: () => VirtualTradingView(),
+      binding: VirtualTradingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.virtualSearchSymbol,
+      page: () => VirtualSearchSymbolView(),
+      binding: VirtualTradingBinding(),
     ),
   ];
 }

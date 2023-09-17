@@ -1,5 +1,3 @@
-import 'package:stoxhero/src/data/models/response/analytics_date_wise_details_response.dart';
-
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';

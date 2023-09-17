@@ -72,8 +72,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   void calculateTotalPositionValues() {
     num totalLots = 0;
     num totalBrokerage = 0;
-    num totalGross = 0;
-    num totalNet = 0;
 
     for (var data in tenxPositionsList) {
       log('data : ${data.toJson()}');
@@ -119,15 +117,16 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       int index = tenxInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      if (index == -1) return FormatHelper.formatNumbers('00');
       String? price = tenxInstrumentTradeDetailsList[index].change?.toString();
-      return '${FormatHelper.formatNumbers(price, showSymbol: false)}%';
+      return FormatHelper.formatNumbers(price);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
     }
   }
 
   Future socketConnection() async {
+    List<TenxTradingInstrumentTradeDetails>? tempList = [];
     try {
       IO.Socket socket;
 
@@ -141,13 +140,25 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         socket.emit('userId', userDetails.value.sId);
         socket.emit('user-ticks', userDetails.value.sId);
       });
+      socket.on('index-tick', (data) {
+        print(data);
+        log('Socket : index-tick $data');
+      });
       socket.on('tick-room', (data) {
         // log('Socket : tick-room $data');
-        tenxInstrumentTradeDetailsList(
-          TenxTradingInstrumentTradeDetailsListResponse.fromJson(data).data,
-        );
+        tempList = TenxTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+        tempList?.forEach((element) {
+          if (tenxInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            int index = tenxInstrumentTradeDetailsList.indexWhere(
+              (stock) => stock.instrumentToken == element.instrumentToken,
+            );
+            tenxInstrumentTradeDetailsList.removeAt(index);
+            tenxInstrumentTradeDetailsList.insert(index, element);
+          } else {
+            tenxInstrumentTradeDetailsList.add(element);
+          }
+        });
       });
-
       socket.onDisconnect((_) => log('Socket : Disconnect'));
       socket.onConnectError((err) => log(err));
       socket.onError((err) => log(err));
@@ -346,11 +357,13 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         data.toJson(),
       );
       log(response.data.toString());
-      log(response.data!.message.toString());
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successfull');
         await getTenxPositionsList();
         await getTenxTradingPortfolioDetails();
+      } else if (response.data?.status == "Failed") {
+        log(response.error!.message!.toString());
+        SnackbarHelper.showSnackbar(response.error?.message);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -380,9 +393,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
     log('addInstrument : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.addInstrument(
-        data.toJson(),
-      );
+      await repository.addInstrument(data.toJson());
       // if (response.data?.message == "Instrument Added") {
       tenxWatchlist.clear();
       tenxInstruments.clear();
@@ -401,9 +412,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future removeInstrument(int? instToken) async {
     isLoading(true);
     try {
-      final RepoResponse<GenericResponse> response = await repository.removeInstrument(
-        instToken ?? 0,
-      );
+      await repository.removeInstrument(instToken ?? 0);
       // if (response.data != null) {
       selectedWatchlistIndex(-1);
       tenxWatchlist.clear();

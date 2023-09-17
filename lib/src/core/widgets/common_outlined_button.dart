@@ -29,7 +29,7 @@ class CommonOutlinedButton extends StatelessWidget {
             color: AppColors.primary,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
         child: Text(

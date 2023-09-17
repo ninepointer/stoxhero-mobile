@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
-import 'package:stoxhero/src/modules/orders/views/infinity_trade_orders_tab_view.dart';
-import 'package:stoxhero/src/modules/orders/views/tenx_trade_orders_tab_view.dart';
 
-import 'virtual_trade_orders_tab_view.dart';
 
 class OrdersView extends GetView<OrdersController> {
   const OrdersView({Key? key}) : super(key: key);
@@ -24,21 +21,21 @@ class OrdersView extends GetView<OrdersController> {
                   ? Tab(
                       child: Text(
                         'Infinity Trade\nOrders',
-                        style: AppStyles.tsWhiteRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                         textAlign: TextAlign.center,
                       ),
                     )
                   : Tab(
                       child: Text(
                         'TenX Trade\nOrders',
-                        style: AppStyles.tsWhiteRegular12,
+                        style: Theme.of(context).textTheme.tsRegular12,
                         textAlign: TextAlign.center,
                       ),
                     ),
               Tab(
                 child: Text(
                   'Virtual Trade\nOrders',
-                  style: AppStyles.tsWhiteRegular12,
+                  style: Theme.of(context).textTheme.tsRegular12,
                   textAlign: TextAlign.center,
                 ),
               ),

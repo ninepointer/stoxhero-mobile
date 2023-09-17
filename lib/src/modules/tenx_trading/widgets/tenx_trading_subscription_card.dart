@@ -30,11 +30,7 @@ class TenxTradingSubscriptionCard extends GetView<TenxTradingController> {
                       ? AppColors.danger
                       : AppColors.primary,
         ),
-        Divider(
-          thickness: 1,
-          height: 0,
-          color: AppColors.netural,
-        ),
+        Divider(thickness: 1, height: 0),
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -50,26 +46,42 @@ class TenxTradingSubscriptionCard extends GetView<TenxTradingController> {
         ListTile(
           visualDensity: VisualDensity.compact,
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          title: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: '₹${subscription.actualPrice}',
-                  style: AppStyles.tsWhiteRegular16.copyWith(
-                    decoration: TextDecoration.lineThrough,
-                  ),
-                ),
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.baseline,
-                  baseline: TextBaseline.alphabetic,
-                  child: SizedBox(width: 8),
-                ),
-                TextSpan(
-                  text: '₹${subscription.discountedPrice}',
-                  style: AppStyles.tsSecondarySemiBold20,
-                ),
-              ],
-            ),
+          // title: RichText(
+          //   text: TextSpan(
+          //     children: [
+          //       TextSpan(
+          //         text: '₹${subscription.actualPrice}',
+          //         style: Theme.of(context).textTheme.tsRegular16.copyWith(
+          //               decoration: TextDecoration.lineThrough,
+          //               color: AppColors.grey,
+          //             ),
+          //       ),
+          //       WidgetSpan(
+          //         alignment: PlaceholderAlignment.baseline,
+          //         baseline: TextBaseline.alphabetic,
+          //         child: SizedBox(width: 8),
+          //       ),
+          //       TextSpan(
+          //         text: '₹${subscription.discountedPrice}',
+          //         style: AppStyles.tsSecondarySemiBold20,
+          //       ),
+          //     ],
+          //   ),
+          title: Row(
+            children: [
+              Text(
+                '₹${subscription.actualPrice}',
+                style: Theme.of(context).textTheme.tsRegular18.copyWith(
+                      decoration: TextDecoration.lineThrough,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
+              ),
+              SizedBox(width: 16),
+              Text(
+                '₹${subscription.discountedPrice}',
+                style: AppStyles.tsSecondarySemiBold20,
+              ),
+            ],
           ),
           trailing: CommonFilledButton(
             width: 150,
@@ -150,10 +162,11 @@ class TenxTradingCardTile extends StatelessWidget {
       leading: Icon(
         Icons.check_circle_rounded,
         size: 16,
+        color: AppColors.grey.withOpacity(.5),
       ),
       title: Text(
         label,
-        style: AppStyles.tsWhiteRegular14,
+        style: Theme.of(context).textTheme.tsRegular14,
       ),
     );
   }

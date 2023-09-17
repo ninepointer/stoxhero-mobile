@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+import 'package:stoxhero/main.dart';
 
 import '../../../core/core.dart';
+import '../../modules.dart';
 
 class SplashBinding implements Bindings {
   @override
@@ -28,14 +29,24 @@ class SplashController extends GetxController {
     String build = packageInfo.buildNumber;
 
     _appVersion('v $version+$build');
-
-    String? token = AppStorage.getToken();
-    await Future.delayed(Duration(seconds: 1));
+    bool isNewUser = AppStorage.getNewUserStatus();
+    await Future.delayed(Duration(seconds: 3));
     try {
-      if (token == null || token.isEmpty) {
-        Get.offAllNamed(AppRoutes.signin);
+      if (isNewUser) {
+        Get.offAllNamed(AppRoutes.onBoarding);
+        AppStorage.setNewUserStatus(false);
       } else {
-        await Get.find<AuthController>().getUserDetails();
+        String? token = AppStorage.getToken();
+        await Future.delayed(Duration(seconds: 1));
+        if (useTestToken) {
+          await Get.find<AuthController>().getUserDetails();
+        } else {
+          if (token == null || token.isEmpty) {
+            Get.offAllNamed(AppRoutes.signin);
+          } else {
+            await Get.find<AuthController>().getUserDetails();
+          }
+        }
       }
     } catch (e) {
       log(e.toString());

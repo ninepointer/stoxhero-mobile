@@ -22,93 +22,104 @@ class OtpView extends GetView<AuthController> {
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      AppLogoWidget(logoSize: 80),
-                      SizedBox(height: 50),
-                      Text(
-                        'Please enter your verification code!',
-                        textAlign: TextAlign.center,
-                        style: AppStyles.tsWhiteMedium20.copyWith(
-                          fontSize: 28,
-                        ),
-                      ),
-                      SizedBox(height: 50),
-                      Text(
-                        'We have sent a six digit verification code to \n+91 ${controller.mobileTextController.text}',
-                        textAlign: TextAlign.center,
-                        style: AppStyles.tsGreyRegular16,
-                      ),
                       SizedBox(height: 24),
-                      Form(
-                        key: controller.otpFormKey,
-                        child: Center(
-                          child: Pinput(
-                            length: 6,
-                            controller: controller.otpTextController,
-                            pinAnimationType: PinAnimationType.fade,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                            onCompleted: (value) => controller.verifyOtp(),
-                            defaultPinTheme: PinTheme(
-                              width: 64,
-                              height: 64,
-                              textStyle: AppStyles.tsWhiteSemiBold22,
-                              decoration: BoxDecoration(
-                                color: AppColors.netural.shade700,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            focusedPinTheme: PinTheme(
-                              width: 64,
-                              height: 64,
-                              textStyle: AppStyles.tsWhiteSemiBold22,
-                              decoration: BoxDecoration(
-                                color: AppColors.netural.shade700,
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(
-                                  color: AppColors.primary,
-                                  width: 2,
-                                ),
-                              ),
-                            ),
-                            errorPinTheme: PinTheme(
-                              width: 64,
-                              height: 64,
-                              textStyle: AppStyles.tsWhiteSemiBold22,
-                              decoration: BoxDecoration(
-                                color: AppColors.netural.shade700,
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(
-                                  color: AppColors.danger.shade900,
-                                  width: 2,
-                                ),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return ErrorMessages.required;
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
+                      Image.asset(
+                        'assets/images/otp.png',
+                        width: 120,
+                        height: 120,
                       ),
-                      SizedBox(height: 16),
-                      Obx(
-                        () => CommonFilledButton(
-                          label: 'Verify',
-                          onPressed: controller.verifyOtp,
-                          isLoading: controller.isLoadingStatus,
-                        ),
+                      SizedBox(height: 36),
+                      CommonCard(
+                        padding: EdgeInsets.all(16),
+                        margin: EdgeInsets.zero,
+                        children: [
+                          Align(
+                            child: Text(
+                              'Please enter your\nverification code!',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.tsMedium20,
+                            ),
+                          ),
+                          SizedBox(height: 24),
+                          Align(
+                            child: Text(
+                              'We have sent a six digit verification\ncode to +91 ${controller.mobileTextController.text}',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.tsGreyRegular16,
+                            ),
+                          ),
+                          SizedBox(height: 24),
+                          Form(
+                            key: controller.otpFormKey,
+                            child: Center(
+                              child: Pinput(
+                                length: 6,
+                                controller: controller.otpTextController,
+                                pinAnimationType: PinAnimationType.fade,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                                onCompleted: (value) => controller.verifyOtp(),
+                                defaultPinTheme: PinTheme(
+                                  width: 64,
+                                  height: 64,
+                                  textStyle: Theme.of(context).textTheme.tsSemiBold20,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.grey.withOpacity(.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                focusedPinTheme: PinTheme(
+                                  width: 64,
+                                  height: 64,
+                                  textStyle: Theme.of(context).textTheme.tsWhiteSemiBold22,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: AppColors.primary,
+                                      width: 2,
+                                    ),
+                                  ),
+                                ),
+                                errorPinTheme: PinTheme(
+                                  width: 64,
+                                  height: 64,
+                                  textStyle: Theme.of(context).textTheme.tsPrimarySemiBold20,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: AppColors.danger.shade900,
+                                      width: 2,
+                                    ),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return ErrorMessages.required;
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Obx(
+                            () => CommonFilledButton(
+                              label: 'Verify',
+                              onPressed: controller.verifyOtp,
+                              isLoading: controller.isLoadingStatus,
+                            ),
+                          ),
+                        ],
                       ),
                       Spacer(),
                       SizedBox(height: 24),
                       Center(
                         child: Text(
                           'Didn\'t received the code?',
-                          style: AppStyles.tsWhiteRegular16,
+                          style: Theme.of(context).textTheme.tsRegular16,
                           textAlign: TextAlign.center,
                         ),
                       ),

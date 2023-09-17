@@ -1,123 +1,113 @@
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
-import '../../../data/data.dart';
 
-class PortfolioCard extends GetView<PortfolioController> {
-  final Portfolio portfolio;
-
-  const PortfolioCard({super.key, required this.portfolio});
+class PortfolioCard extends StatelessWidget {
+  final String? portfolioName;
+  final String? portfolioValue;
+  final num? cashBalance;
+  final num? investedAmount;
+  final String? portfolioType;
+  final String? portfolioAccount;
+  const PortfolioCard({
+    super.key,
+    this.portfolioName,
+    this.portfolioValue,
+    this.cashBalance,
+    this.investedAmount,
+    this.portfolioType,
+    this.portfolioAccount,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Card(
-        margin: EdgeInsets.zero,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: AppColors.netural.shade400,
+    return CommonCard(
+      margin: EdgeInsets.only(left: 12, right: 12, bottom: 8),
+      padding: EdgeInsets.zero,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              portfolioName ?? '',
+              style: Theme.of(context).textTheme.tsMedium16,
+              textAlign: TextAlign.center,
+            ),
           ),
-          borderRadius: BorderRadius.circular(4),
         ),
-        child: Container(
-          width: double.infinity,
+        Divider(thickness: 1, height: 0),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.netural.shade800,
-                ),
-                child: Text(
-                  portfolio.portfolioName ?? '',
-                  style: AppStyles.tsSecondaryMedium16,
-                  textAlign: TextAlign.center,
-                ),
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Portfolio Value',
+                        style: AppStyles.tsGreyRegular16,
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        FormatHelper.formatNumbers(portfolioValue),
+                        style: AppStyles.tsPrimaryMedium20.copyWith(
+                          color: AppColors.info,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  PortfolioCardTile(
+                    label: 'Opening Balance',
+                    value: FormatHelper.formatNumbers(
+                      cashBalance,
+                      isNegative: true,
+                    ),
+                    valueColor: AppColors.danger,
+                  ),
+                  PortfolioCardTile(
+                    isRightAlign: true,
+                    label: 'Available Margin',
+                    value: FormatHelper.formatNumbers(
+                      investedAmount,
+                    ),
+                    valueColor: AppColors.success,
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  PortfolioCardTile(
+                    label: 'Portfolio Type',
+                    value: portfolioType,
+                  ),
+                  PortfolioCardTile(
+                    isRightAlign: true,
+                    label: 'Portfolio Account',
+                    value: portfolioAccount,
+                  ),
+                ],
               ),
               SizedBox(height: 12),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            color: AppColors.netural.shade400,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(Icons.account_balance),
-                        ),
-                        SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Portofolio Value',
-                              style: AppStyles.tsGreyRegular16,
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              '${FormatHelper.formatNumbers(portfolio.portfolioValue)}',
-                              style: AppStyles.tsPrimaryMedium20.copyWith(
-                                color: AppColors.success,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        PortfolioCardTile(
-                          label: 'Invested Amount',
-                          value: FormatHelper.formatNumbers(
-                            portfolio.investedAmount,
-                            isNegative: true,
-                          ),
-                        ),
-                        PortfolioCardTile(
-                          isRightAlign: true,
-                          label: 'Cash Balance',
-                          value: FormatHelper.formatNumbers(portfolio.cashBalance),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        PortfolioCardTile(
-                          label: 'Portfolio Type',
-                          value: portfolio.portfolioType,
-                        ),
-                        PortfolioCardTile(
-                          isRightAlign: true,
-                          label: 'Cash Balance',
-                          value: portfolio.portfolioAccount,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 }

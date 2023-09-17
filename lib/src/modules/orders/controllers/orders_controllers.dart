@@ -17,6 +17,7 @@ class OrdersController extends BaseController<OrdersRepository> {
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+  final segmentedControlValue = 0.obs;
 
   final infinityTradeTodaysOrdersList = <InfinityTradeOrder>[].obs;
   final infinityTradeAllOrdersList = <InfinityTradeOrder>[].obs;
@@ -29,6 +30,14 @@ class OrdersController extends BaseController<OrdersRepository> {
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
+  }
+
+  void changeSegment(int val) {
+    segmentedControlValue.value = val;
+  }
+
+  void handleSegmentChange(int val) {
+    changeSegment(val);
   }
 
   void loadData() async {
@@ -67,7 +76,8 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getInfinityTradeAllOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<InfinityTradeOrdersListResponse> response = await repository.getInfinityTradeAllOrdersList();
+      final RepoResponse<InfinityTradeOrdersListResponse> response =
+          await repository.getInfinityTradeAllOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           infinityTradeAllOrdersList(response.data?.data ?? []);
@@ -85,7 +95,8 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getTenxTradeTodaysOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeTodaysOrdersList();
+      final RepoResponse<TenxTradeOrdersListResponse> response =
+          await repository.getTenxTradeTodaysOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           tenxTradeTodaysOrdersList(response.data?.data ?? []);
@@ -103,7 +114,8 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getTenxTradeAllOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeAllOrdersList();
+      final RepoResponse<TenxTradeOrdersListResponse> response =
+          await repository.getTenxTradeAllOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           tenxTradeAllOrdersList(response.data?.data ?? []);
@@ -121,7 +133,8 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getVirtualTradeTodaysOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradeOrdersListResponse> response = await repository.getVirtualTradeTodaysOrdersList();
+      final RepoResponse<VirtualTradeOrdersListResponse> response =
+          await repository.getVirtualTradeTodaysOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           virtualTradeTodaysOrdersList(response.data?.data ?? []);
@@ -139,7 +152,8 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getVirtualTradeAllOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradeOrdersListResponse> response = await repository.getVirtualTradeAllOrdersList();
+      final RepoResponse<VirtualTradeOrdersListResponse> response =
+          await repository.getVirtualTradeAllOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           virtualTradeAllOrdersList(response.data?.data ?? []);

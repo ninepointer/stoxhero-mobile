@@ -6,6 +6,22 @@ class AppStorage {
 
   static final _box = GetStorage();
 
+  static Future setDarkModeStatus(bool data) async {
+    await _box.write(AppStorageKeys.darkMode, data);
+  }
+
+  static bool getDarkModeStatus() {
+    return _box.read(AppStorageKeys.darkMode) ?? false;
+  }
+
+  static Future setNewUserStatus(bool data) async {
+    await _box.write(AppStorageKeys.newUser, data);
+  }
+
+  static bool getNewUserStatus() {
+    return _box.read(AppStorageKeys.newUser) ?? true;
+  }
+
   static Future setToken(String? data) async {
     await _box.write(AppStorageKeys.token, data);
   }
@@ -22,12 +38,18 @@ class AppStorage {
     return LoginDetailsResponse.fromJson(_box.read(AppStorageKeys.userDetails));
   }
 
+  static void clearLoginDetails() {
+    _box.remove(AppStorageKeys.token);
+  }
+
   static void clearStorage() {
     _box.erase();
   }
 }
 
 class AppStorageKeys {
+  static const String darkMode = 'darkMode';
   static const String token = 'token';
   static const String userDetails = 'userDetails';
+  static const String newUser = 'newUser';
 }

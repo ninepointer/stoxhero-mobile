@@ -7,6 +7,7 @@ class CommonCard extends StatelessWidget {
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final bool hasBorder;
+  final Color? color;
   final Function()? onTap;
 
   const CommonCard({
@@ -16,12 +17,14 @@ class CommonCard extends StatelessWidget {
     this.margin,
     this.hasBorder = true,
     this.onTap,
+    this.color,
   });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Card(
+        color: color,
         margin: margin ??
             EdgeInsets.only(
               left: 16,
@@ -32,15 +35,16 @@ class CommonCard extends StatelessWidget {
         shape: hasBorder
             ? RoundedRectangleBorder(
                 side: BorderSide(
-                  color: AppColors.netural.shade400,
+                  color: AppColors.grey.withOpacity(.25),
                 ),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(8),
               )
             : null,
         child: Container(
           padding: padding ?? EdgeInsets.all(12),
           width: double.infinity,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: children,
           ),

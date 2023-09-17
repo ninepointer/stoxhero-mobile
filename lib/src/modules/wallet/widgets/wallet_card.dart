@@ -21,18 +21,23 @@ class WalletCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      margin: EdgeInsets.all(16).copyWith(
+        top: 8,
+        bottom: 0,
+      ),
       children: [
         Row(
           children: [
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.netural.shade400,
+                color: AppColors.secondary.withOpacity(.25),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 iconData,
                 size: 20,
+                color: AppColors.secondary,
               ),
             ),
             SizedBox(width: 12),
@@ -42,7 +47,7 @@ class WalletCard extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: AppStyles.tsWhiteRegular12,
+                    style: Theme.of(context).textTheme.tsRegular12,
                   ),
                   SizedBox(height: 2),
                   Text(

@@ -23,14 +23,14 @@ class OrderCardTile extends StatelessWidget {
       children: [
         Text(
           label ?? '-',
-          style: AppStyles.tsGreyRegular14,
+          style: AppStyles.tsGreyMedium14,
         ),
         SizedBox(height: 4),
         Text(
           value ?? '-',
-          style: AppStyles.tsWhiteRegular16.copyWith(
-            color: valueColor ?? AppColors.white,
-          ),
+          style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                color: valueColor,
+              ),
         ),
       ],
     );

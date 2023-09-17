@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
-import 'trading_tab_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -18,11 +17,11 @@ class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 2;
 
   List<Widget> _tabs = [
-    TradingTabView(),
-    AnalyticsView(),
+    DashboardView(),
+    VirtualTradingView(),
     TenxTradingView(),
-    WalletView(),
-    ReferralsView(),
+    MarginXView(),
+    ContestView(),
   ];
 
   @override
@@ -36,18 +35,20 @@ class _HomeViewState extends State<HomeView> {
 
     switch (index) {
       case 0:
+        Get.find<HomeController>().loadData();
+        Get.find<ContestController>().getUpComingContestList();
+        Get.find<ContestController>().getLiveContestList();
         break;
       case 1:
-        Get.find<AnalyticsController>().loadData();
+        Get.find<VirtualTradingController>().loadData();
         break;
       case 2:
         Get.find<TenxTradingController>().getTenxTradingActiveSubs();
         break;
       case 3:
-        Get.find<WalletController>().loadData();
+        Get.find<MarginXController>().loadData();
         break;
       case 4:
-        Get.find<ReferralsController>().loadData();
         break;
       default:
     }
@@ -57,16 +58,10 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CommonDrawer(),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        automaticallyImplyLeading: false,
         title: Row(
           children: [
-            AppLogoWidget(
-              logoSize: 32,
-              hasLabel: false,
-            ),
-            SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -77,7 +72,7 @@ class _HomeViewState extends State<HomeView> {
                 Obx(
                   () => Text(
                     controller.userDetailsData.firstName?.capitalizeFirst ?? '-',
-                    style: AppStyles.tsWhiteMedium16,
+                    style: Theme.of(context).textTheme.tsMedium16,
                   ),
                 ),
               ],
@@ -85,6 +80,14 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
         actions: [
+          IconButton(
+            splashRadius: 24,
+            icon: Icon(Icons.account_balance_wallet_rounded),
+            onPressed: () {
+              Get.find<WalletController>().loadData();
+              Get.toNamed(AppRoutes.wallet);
+            },
+          ),
           IconButton(
             splashRadius: 24,
             icon: Icon(Icons.person),
@@ -103,7 +106,6 @@ class _HomeViewState extends State<HomeView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        color: AppColors.netural,
         shape: CircularNotchedRectangle(),
         notchMargin: 4,
         child: Container(
@@ -120,8 +122,8 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.bar_chart_rounded),
                       SizedBox(height: 4),
                       Text(
-                        'Trading',
-                        style: AppStyles.tsWhiteRegular12,
+                        'Home',
+                        style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],
                   ),
@@ -137,8 +139,8 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.analytics_rounded),
                       SizedBox(height: 4),
                       Text(
-                        'Analytics',
-                        style: AppStyles.tsWhiteRegular12,
+                        'Virtual',
+                        style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],
                   ),
@@ -152,11 +154,11 @@ class _HomeViewState extends State<HomeView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.account_balance_wallet_rounded),
+                      Icon(Icons.trending_up_rounded),
                       SizedBox(height: 4),
                       Text(
-                        'Wallet',
-                        style: AppStyles.tsWhiteRegular12,
+                        'MarginX',
+                        style: Theme.of(context).textTheme.tsRegular12,
                       )
                     ],
                   ),
@@ -172,8 +174,8 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.groups),
                       SizedBox(height: 4),
                       Text(
-                        'Referrals',
-                        style: AppStyles.tsWhiteRegular12,
+                        'Contest',
+                        style: Theme.of(context).textTheme.tsRegular12,
                       ),
                     ],
                   ),

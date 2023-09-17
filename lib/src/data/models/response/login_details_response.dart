@@ -4,7 +4,7 @@ class LoginDetailsResponse {
   UserImageDetails? panCardFrontImage;
   UserImageDetails? passportPhoto;
   UserImageDetails? addressProofDocument;
-  UserImageDetails? profilePhoto;
+  String? profilePhoto;
   String? sId;
   String? kYCStatus;
   int? iV;
@@ -143,11 +143,7 @@ class LoginDetailsResponse {
             json['addressProofDocument'],
           )
         : null;
-    profilePhoto = json['profilePhoto'] != null
-        ? new UserImageDetails.fromJson(
-            json['profilePhoto'],
-          )
-        : null;
+    profilePhoto = json['profilePhoto'];
     sId = json['_id'];
     kYCStatus = json['KYCStatus'];
     iV = json['__v'];
@@ -234,7 +230,7 @@ class LoginDetailsResponse {
       data['addressProofDocument'] = this.addressProofDocument!.toJson();
     }
     if (this.profilePhoto != null) {
-      data['profilePhoto'] = this.profilePhoto!.toJson();
+      data['profilePhoto'] = this.profilePhoto;
     }
     data['_id'] = this.sId;
     data['KYCStatus'] = this.kYCStatus;
@@ -302,7 +298,7 @@ class LoginDetailsResponse {
     UserImageDetails? panCardFrontImage,
     UserImageDetails? passportPhoto,
     UserImageDetails? addressProofDocument,
-    UserImageDetails? profilePhoto,
+    String? profilePhoto,
     String? sId,
     String? kYCStatus,
     int? iV,

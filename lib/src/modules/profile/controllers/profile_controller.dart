@@ -1,7 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:stoxhero/src/base/base.dart';
 import 'package:stoxhero/src/data/data.dart';
@@ -14,12 +17,14 @@ class ProfileBinding implements Bindings {
 }
 
 class ProfileController extends BaseController<ProfileRepository> {
+  File? image;
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
-
+  String? selectedValue;
+  List<String> dropdownItems = ['Male', 'Female', 'Other'];
   final isEditEnabled = false.obs;
 
   final userNameTextController = TextEditingController();
@@ -74,6 +79,31 @@ class ProfileController extends BaseController<ProfileRepository> {
     return fullName.capitalize!;
   }
 
+  void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2050),
+    );
+
+    if (pickedDate != null) {
+      String date = DateFormat("dd-MM-yyyy").format(pickedDate);
+      dobTextController.text = date;
+    }
+  }
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      this.image = imageTemporary;
+    } on PlatformException catch (e) {
+      print('Failed to pick Image $e');
+    }
+  }
+
   Future saveUserProfileDetails() async {
     isLoading(true);
 
@@ -103,7 +133,7 @@ class ProfileController extends BaseController<ProfileRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log(e.toString());
+      log('Save: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
 

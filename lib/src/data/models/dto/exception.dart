@@ -14,17 +14,17 @@ class ExceptionHandler {
   ExceptionHandler._privateConstructor();
 
   static APIException handleError(Exception error) {
-    if (error is DioError) {
+    if (error is DioException) {
       switch (error.type) {
-        case DioErrorType.sendTimeout:
+        case DioExceptionType.sendTimeout:
           return APIException(message: ErrorMessages.noInternet);
-        case DioErrorType.connectionTimeout:
+        case DioExceptionType.connectionTimeout:
           return APIException(message: ErrorMessages.connectionTimeout);
-        case DioErrorType.badResponse:
+        case DioExceptionType.badResponse:
           return APIException(
             message: ErrorResponse.fromJson(error.response?.data).message ?? ErrorMessages.somethingWentWrong,
           );
-        case DioErrorType.unknown:
+        case DioExceptionType.unknown:
           return APIException(
             message: ErrorResponse.fromJson(error.response?.data).message ?? ErrorMessages.somethingWentWrong,
           );

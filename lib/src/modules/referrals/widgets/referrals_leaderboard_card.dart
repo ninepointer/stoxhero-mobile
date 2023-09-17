@@ -23,13 +23,13 @@ class ReferralsLeaderboardCard extends StatelessWidget {
           children: [
             Text(
               name ?? '-',
-              style: AppStyles.tsWhiteRegular18,
+              style: Theme.of(context).textTheme.tsRegular18,
             ),
             SizedBox(width: 8),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(8),
                 color: AppColors.secondary.shade900.withOpacity(0.25),
               ),
               child: Text(
@@ -46,6 +46,7 @@ class ReferralsLeaderboardCard extends StatelessWidget {
             CommonCardTile(
               label: "Total Referral's",
               value: count ?? '-',
+              valueColor: Theme.of(context).textTheme.tsRegular10.color,
             ),
             CommonCardTile(
               isRightAlign: true,

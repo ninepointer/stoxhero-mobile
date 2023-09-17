@@ -35,109 +35,122 @@ class _SignupViewState extends State<SignupView> {
                 SliverFillRemaining(
                   hasScrollBody: false,
                   child: Container(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AppLogoWidget(logoSize: 80),
-                        SizedBox(height: 50),
-                        Text(
-                          'Join us now to learn and earn from the Stock Market!',
-                          textAlign: TextAlign.center,
-                          style: AppStyles.tsWhiteMedium20.copyWith(
-                            fontSize: 24,
-                          ),
-                        ),
-                        SizedBox(height: 50),
-                        Text(
-                          'Please provide your details, confirmation will be send on the given email.',
-                          textAlign: TextAlign.center,
-                          style: AppStyles.tsGreyRegular16,
+                        SizedBox(height: 24),
+                        Image.asset(
+                          'assets/images/signup.png',
+                          width: 120,
+                          height: 120,
                         ),
                         SizedBox(height: 24),
-                        CommonTextField(
-                          controller: controller.firstNameTextController,
-                          hintText: 'Enter your first name',
-                          prefixIcon: Icon(
-                            Icons.person,
-                            color: AppColors.netural.shade100,
-                          ),
-                          keyboardType: TextInputType.name,
-                          validator: (value) {
-                            if (value == null || value.isEmpty || value.length == 0) {
-                              return 'This field is required!';
-                            }
-                            return null;
-                          },
-                        ),
-                        CommonTextField(
-                          controller: controller.lastNameTextController,
-                          hintText: 'Enter your last name',
-                          prefixIcon: Icon(
-                            Icons.person,
-                            color: AppColors.netural.shade100,
-                          ),
-                          keyboardType: TextInputType.name,
-                          validator: (value) {
-                            if (value == null || value.isEmpty || value.length == 0) {
-                              return 'This field is required!';
-                            }
-                            return null;
-                          },
-                        ),
-                        CommonTextField(
-                          controller: controller.emailTextController,
-                          hintText: 'Enter your email',
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: AppColors.netural.shade100,
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.isEmpty || value.length == 0) {
-                              return 'This field is required!';
-                            } else if (!value.isEmail) {
-                              return 'Please enter valid email';
-                            }
-                            return null;
-                          },
-                        ),
-                        CommonTextField(
-                          controller: controller.mobileTextController,
-                          hintText: 'Enter your mobile number',
-                          prefixIcon: Icon(
-                            Icons.phone,
-                            color: AppColors.netural.shade100,
-                          ),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(10),
-                            FilteringTextInputFormatter.digitsOnly,
+                        CommonCard(
+                          padding: EdgeInsets.all(16),
+                          margin: EdgeInsets.zero,
+                          children: [
+                            Align(
+                              child: Text(
+                                'Join us now to learn and earn\nfrom the Stock Market!',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.tsMedium20,
+                              ),
+                            ),
+                            SizedBox(height: 36),
+                            Align(
+                              child: Text(
+                                'Please provide your details, confirmation will be send on the given email.',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.tsGreyRegular16,
+                              ),
+                            ),
+                            SizedBox(height: 24),
+                            CommonTextField(
+                              controller: controller.firstNameTextController,
+                              hintText: 'Enter your first name',
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: AppColors.grey,
+                              ),
+                              keyboardType: TextInputType.name,
+                              validator: (value) {
+                                if (value == null || value.isEmpty || value.length == 0) {
+                                  return 'This field is required!';
+                                }
+                                return null;
+                              },
+                            ),
+                            CommonTextField(
+                              controller: controller.lastNameTextController,
+                              hintText: 'Enter your last name',
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: AppColors.grey,
+                              ),
+                              keyboardType: TextInputType.name,
+                              validator: (value) {
+                                if (value == null || value.isEmpty || value.length == 0) {
+                                  return 'This field is required!';
+                                }
+                                return null;
+                              },
+                            ),
+                            CommonTextField(
+                              controller: controller.emailTextController,
+                              hintText: 'Enter your email',
+                              prefixIcon: Icon(
+                                Icons.email,
+                                color: AppColors.grey,
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.isEmpty || value.length == 0) {
+                                  return 'This field is required!';
+                                } else if (!value.isEmail) {
+                                  return 'Please enter valid email';
+                                }
+                                return null;
+                              },
+                            ),
+                            CommonTextField(
+                              controller: controller.mobileTextController,
+                              hintText: 'Enter your mobile number',
+                              prefixIcon: Icon(
+                                Icons.phone,
+                                color: AppColors.grey,
+                              ),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(10),
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              validator: (value) {
+                                RegExp regExp = RegExp(r'^[6-9]\d{9}$');
+                                if (value == null || value.isEmpty || value.length == 0) {
+                                  return 'This field is required!';
+                                } else if (value.length == 10) if (!regExp.hasMatch(value)) {
+                                  return 'Please enter valid mobile number!';
+                                }
+                                return null;
+                              },
+                            ),
+                            CommonFilledButton(
+                              label: 'Create account',
+                              onPressed: () {
+                                bool isValid = formKey.currentState?.validate() ?? false;
+                                if (isValid) controller.userSignup();
+                              },
+                            ),
                           ],
-                          validator: (value) {
-                            RegExp regExp = RegExp(r'^[6-9]\d{9}$');
-                            if (value == null || value.isEmpty || value.length == 0) {
-                              return 'This field is required!';
-                            } else if (value.length == 10) if (!regExp.hasMatch(value)) {
-                              return 'Please enter valid mobile number!';
-                            }
-                            return null;
-                          },
-                        ),
-                        CommonFilledButton(
-                          label: 'Create account',
-                          onPressed: () {
-                            bool isValid = formKey.currentState?.validate() ?? false;
-                            if (isValid) controller.userSignup();
-                          },
                         ),
                         Spacer(),
-                        SizedBox(height: 24),
+                        SizedBox(height: 36),
                         Center(
                           child: Text(
                             'Already have an account?',
-                            style: AppStyles.tsWhiteRegular16,
                             textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.tsRegular16,
                           ),
                         ),
                         SizedBox(height: 24),
@@ -145,6 +158,7 @@ class _SignupViewState extends State<SignupView> {
                           label: 'Sign In',
                           onPressed: () => Get.toNamed(AppRoutes.signin),
                         ),
+                        SizedBox(height: 24),
                       ],
                     ),
                   ),

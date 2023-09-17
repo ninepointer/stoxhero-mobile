@@ -15,45 +15,38 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return CommonCard(
+      margin: EdgeInsets.all(8).copyWith(bottom: 0),
       children: [
-        CommonCard(
-          hasBorder: false,
-          margin: EdgeInsets.zero,
+        Row(
           children: [
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label ?? '-',
-                      style: AppStyles.tsWhiteRegular14,
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      info ?? '-',
-                      style: AppStyles.tsGreyRegular12,
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Text(
-                  FormatHelper.formatNumbers(
-                    value,
-                    decimal: 0,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label ?? '-',
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
-                  style: AppStyles.tsPrimarySemiBold16.copyWith(
-                    color: AppColors.success,
+                  SizedBox(height: 2),
+                  Text(
+                    info ?? '-',
+                    style: AppStyles.tsGreyRegular12,
                   ),
-                )
-              ],
+                ],
+              ),
             ),
+            SizedBox(width: 4),
+            Text(
+              FormatHelper.formatNumbers(
+                value,
+                decimal: 0,
+              ),
+              style: AppStyles.tsPrimarySemiBold16.copyWith(
+                color: AppColors.success,
+              ),
+            )
           ],
-        ),
-        Divider(
-          thickness: 1,
-          height: 0,
         ),
       ],
     );

@@ -19,6 +19,16 @@ class WalletController extends BaseController<WalletRepository> {
 
   final walletTransactionsList = <WalletTransaction>[].obs;
 
+  void onConfirm() {
+    print('Confirmed');
+    Get.back();
+  }
+
+  void onCancel() {
+    print('Cancelled');
+    Get.back();
+  }
+
   void loadData() async {
     getWalletTransactionsList();
   }
@@ -26,7 +36,8 @@ class WalletController extends BaseController<WalletRepository> {
   Future getWalletTransactionsList() async {
     isLoading(true);
     try {
-      final RepoResponse<WalletTransactionsListResponse> response = await repository.getWalletTransactionsList();
+      final RepoResponse<WalletTransactionsListResponse> response =
+          await repository.getWalletTransactionsList();
       if (response.data != null) {
         totalCashAmount(0);
         walletTransactionsList((response.data?.data?.transactions ?? []));

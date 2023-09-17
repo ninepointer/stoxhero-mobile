@@ -19,18 +19,23 @@ class WalletTransactionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      margin: EdgeInsets.all(16).copyWith(
+        top: 8,
+        bottom: 0,
+      ),
       children: [
         Row(
           children: [
             Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.netural.shade400,
+                color: AppColors.secondary.withOpacity(.25),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.currency_rupee_rounded,
                 size: 20,
+                color: AppColors.secondary,
               ),
             ),
             SizedBox(width: 12),
@@ -40,7 +45,7 @@ class WalletTransactionCard extends StatelessWidget {
                 children: [
                   Text(
                     label ?? '-',
-                    style: AppStyles.tsWhiteMedium16,
+                    style: Theme.of(context).textTheme.tsMedium16,
                   ),
                   SizedBox(height: 4),
                   Text(
@@ -58,7 +63,7 @@ class WalletTransactionCard extends StatelessWidget {
             SizedBox(width: 8),
             Text(
               FormatHelper.formatNumbers(amount),
-              style: AppStyles.tsPrimaryMedium20.copyWith(
+              style: AppStyles.tsPrimaryMedium18.copyWith(
                 color: amount > 0 ? AppColors.success : AppColors.danger,
               ),
             )
