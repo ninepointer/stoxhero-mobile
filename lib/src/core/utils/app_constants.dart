@@ -9,6 +9,7 @@ class AppConstants {
   static const String complete = "COMPLETE";
 
   static const List<int> instrumentsQuantity = [
+    15,
     25,
     50,
     75,
@@ -47,3 +48,5 @@ class AppConstants {
     900,
   ];
 }
+
+enum TransactionType { buy, sell, exit }

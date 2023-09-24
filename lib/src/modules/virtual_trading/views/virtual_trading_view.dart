@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/modules/modules.dart';
+import 'package:stoxhero/src/modules/virtual_trading/widgets/stock_card.dart';
 
 import '../../../core/core.dart';
 
@@ -19,28 +20,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Nifty 50',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Bank Nifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Finnifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                    ],
-                  ),
+                  StockCard(),
                   Row(
                     children: [
                       CommonStockInfo(
@@ -94,12 +74,12 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               VirtualPositionDetailsCard(
                                 isNum: true,
                                 label: 'Running Lots',
-                                value: controller.virtualPositionsList[0].lots,
+                                value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
                               VirtualPositionDetailsCard(
                                 label: 'Brokerage',
-                                value: controller.virtualPositionsList[0].brokerage,
+                                value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
                             ],
                           ),
@@ -108,12 +88,24 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             children: [
                               VirtualPositionDetailsCard(
                                 label: 'Gross P&L',
-                                value: controller.virtualPositionsList[0].amount,
+                                // value:
                               ),
                               SizedBox(width: 8),
                               VirtualPositionDetailsCard(
                                 label: 'Net P&L',
-                                value: controller.virtualPositionsList[0].lastaverageprice,
+                                // value: FormatHelper.formatNumbers(
+                                //   controller.calculateNetPNL(
+                                //     controller.getInstrumentLastPrice(
+                                //       controller.virtualPosition.value.iId!.instrumentToken!,
+                                //       controller
+                                //           .virtualPosition.value.iId!.exchangeInstrumentToken!,
+                                //     ),
+                                //     controller.virtualPosition.value.lastaverageprice,
+                                //     controller.virtualPosition.value.lots,
+                                //     controller.tenxTotalPositionDetails.value.brokerage,
+                                //   ),
+                                // ),
+                                value: '0',
                               ),
                             ],
                           ),

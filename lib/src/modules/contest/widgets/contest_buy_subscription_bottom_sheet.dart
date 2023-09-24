@@ -70,19 +70,17 @@ class ContestBuySubscriptionBottomSheet extends GetView<ContestController> {
                     ),
                   ],
                 ),
-                // if (controller.selectedSubscription.value.discountedPrice! <=
-                //     controller.walletBalance.value)
+                // if (controller.selectedContest.value.entryFee <= controller.walletBalance.value)
                 Column(
                   children: [
                     SizedBox(height: 24),
                     CommonFilledButton(
                       label: 'Proceed',
-                      // onPressed: controller.purchaseSubscription,
+                      onPressed: () {},
                     ),
                   ],
                 ),
-                // if (!(controller.selectedSubscription.value.discountedPrice! <=
-                //     controller.walletBalance.value))
+                // if ((controller.selectedContest.value.entryFee <= controller.walletBalance.value))
                 Column(
                   children: [
                     SizedBox(height: 24),

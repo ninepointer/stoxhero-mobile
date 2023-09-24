@@ -38,7 +38,7 @@ class UpComingCollegeContest {
   String? contestFor;
   String? collegeCode;
   int? entryFee;
-  double? payoutPercentage;
+  num? payoutPercentage;
   Portfolio? portfolio;
   String? college;
   int? maxParticipants;

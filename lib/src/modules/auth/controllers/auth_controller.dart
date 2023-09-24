@@ -167,9 +167,12 @@ class AuthController extends BaseController<AuthRepository> {
         log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         Get.find<HomeController>().loadUserDetails();
         if (navigate) Get.offAllNamed(AppRoutes.home);
+        log('App ${AppStorage.getToken()}');
       } else {
         if (navigate) Get.offAllNamed(AppRoutes.signin);
         SnackbarHelper.showSnackbar(response.error?.message);
+        log('App ${AppStorage.getToken()}');
+        log('App ${AppStorage.getUserDetails().toJson()}');
       }
     } catch (e) {
       log(e.toString());

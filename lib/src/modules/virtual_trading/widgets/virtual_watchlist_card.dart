@@ -37,6 +37,33 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
     }
   }
 
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    log('data: ${widget.data.toJson()}');
+    FocusScope.of(context).unfocus();
+
+    num lastPrice = controller.getInstrumentLastPrice(
+      widget.data.instrumentToken!,
+      widget.data.exchangeInstrumentToken!,
+    );
+    controller.generateLotsList(type: widget.data.instrument);
+    log(controller.lotsValueList.toString());
+    showBottomSheet(
+      context: context,
+      builder: (context) => VirtualTransactionBottomSheet(
+        type: type,
+        data: VirtualTradingInstrument(
+          name: widget.data.symbol,
+          instrumentType: widget.data.instrument,
+          exchange: widget.data.exchange,
+          tradingsymbol: widget.data.symbol,
+          exchangeToken: widget.data.exchangeInstrumentToken,
+          instrumentToken: widget.data.instrumentToken,
+          lastPrice: lastPrice,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -65,10 +92,15 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                         VirtualWatchListCardTile(
                           isRightAlign: true,
                           label: 'LTP',
-                          value: controller.getInstrumentLastPrice(
-                            widget.data.instrumentToken!,
-                            widget.data.exchangeInstrumentToken!,
+                          value: FormatHelper.formatNumbers(
+                            controller
+                                .getInstrumentLastPrice(
+                                  widget.data.instrumentToken!,
+                                  widget.data.exchangeInstrumentToken!,
+                                )
+                                .toString(),
                           ),
+                          valueColor: controller.getValueColor(widget.data.instrumentToken),
                         ),
                       ],
                     ),
@@ -89,6 +121,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                             widget.data.instrumentToken!,
                             widget.data.exchangeInstrumentToken!,
                           ),
+                          valueColor: controller.getValueColor(widget.data.instrumentToken),
                         ),
                       ],
                     ),
@@ -102,23 +135,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                     children: [
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            log('instrument : ${widget.data.toJson()}');
-                            FocusScope.of(context).unfocus();
-                            showBottomSheet(
-                              context: context,
-                              builder: (context) => VirtualTransactionBottomSheet(
-                                type: VirtualTransactionType.buy,
-                                data: VirtualTradingInstrument(
-                                  name: widget.data.symbol,
-                                  exchange: widget.data.exchange,
-                                  tradingsymbol: widget.data.symbol,
-                                  exchangeToken: widget.data.exchangeInstrumentToken,
-                                  instrumentToken: widget.data.instrumentToken,
-                                ),
-                              ),
-                            );
-                          },
+                          onTap: () => openBottomSheet(context, TransactionType.buy),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -130,32 +147,14 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                             ),
                             child: Text(
                               'BUY',
-                              style: AppStyles.tsWhiteMedium14.copyWith(
-                                color: AppColors.success,
-                              ),
+                              style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.success),
                             ),
                           ),
                         ),
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            log('instrument : ${widget.data.toJson()}');
-                            FocusScope.of(context).unfocus();
-                            showBottomSheet(
-                              context: context,
-                              builder: (context) => VirtualTransactionBottomSheet(
-                                type: VirtualTransactionType.sell,
-                                data: VirtualTradingInstrument(
-                                  name: widget.data.symbol,
-                                  exchange: widget.data.exchange,
-                                  tradingsymbol: widget.data.symbol,
-                                  exchangeToken: widget.data.exchangeInstrumentToken,
-                                  instrumentToken: widget.data.instrumentToken,
-                                ),
-                              ),
-                            );
-                          },
+                          onTap: () => openBottomSheet(context, TransactionType.sell),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -164,9 +163,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                             ),
                             child: Text(
                               'SELL',
-                              style: AppStyles.tsWhiteMedium14.copyWith(
-                                color: AppColors.danger,
-                              ),
+                              style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.danger),
                             ),
                           ),
                         ),
@@ -185,9 +182,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                             ),
                             child: Text(
                               'REMOVE',
-                              style: AppStyles.tsWhiteMedium14.copyWith(
-                                color: AppColors.info,
-                              ),
+                              style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.info),
                             ),
                           ),
                         ),
@@ -214,6 +209,41 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
           // ),
         ],
       ),
+    );
+  }
+}
+
+class VirtualWatchListCardTile extends StatelessWidget {
+  final String? label;
+  final String? value;
+  final bool isRightAlign;
+  final Color? valueColor;
+
+  const VirtualWatchListCardTile({
+    super.key,
+    required this.label,
+    this.value,
+    this.isRightAlign = false,
+    this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Text(
+          label ?? '-',
+          style: AppStyles.tsGreyMedium12,
+        ),
+        SizedBox(height: 2),
+        Text(
+          value ?? '-',
+          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                color: valueColor,
+              ),
+        ),
+      ],
     );
   }
 }

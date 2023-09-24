@@ -37,7 +37,8 @@ class ContestListView extends GetView<ContestController> {
                       NoDataFound(
                         label: 'No Upcoming Contest!',
                       ),
-                    if (controller.premiumContestList.isNotEmpty) CommonTile(label: 'Premium Contest\'s'),
+                    if (controller.premiumContestList.isNotEmpty)
+                      CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -97,7 +98,8 @@ class ContestListView extends GetView<ContestController> {
                     ),
                     SizedBox(height: 12),
                   ] else if (controller.segmentedControlValue.value == 2) ...[
-                    if (controller.premiumCompletedContestList.isNotEmpty) CommonTile(label: 'Premium Contest\'s'),
+                    if (controller.premiumCompletedContestList.isNotEmpty)
+                      CommonTile(label: 'Premium Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -111,19 +113,21 @@ class ContestListView extends GetView<ContestController> {
                       },
                     ),
                     SizedBox(height: 8),
-                    if (controller.freeCompletedContestList.isNotEmpty) CommonTile(label: 'Free Contest\'s'),
+                    if (controller.freeCompletedContestList.isNotEmpty)
+                      CommonTile(label: 'Free Contest\'s'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.freeCompletedContestList.length,
+                      itemCount: controller.completedContestList.length,
                       itemBuilder: (BuildContext context, int index) {
                         return CompletedContestCard(
                           completedContest: controller.freeCompletedContestList[index],
-                          // completedContestPnl: controller.completedContestPnlList[index],
+                          completedContestPnl: controller.completedContestPnlList[index],
                         );
                       },
                     ),
+                    SizedBox(height: 48)
                   ]
                 ],
               ),

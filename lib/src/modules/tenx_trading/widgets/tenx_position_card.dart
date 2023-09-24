@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +12,29 @@ class TenxPositionCard extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
+    void openBottomSheet(BuildContext context, TransactionType type) {
+      // log('instrument Details: ${position.toJson()}');
+      FocusScope.of(context).unfocus();
+      num lastPrice = controller.getInstrumentLastPrice(
+        data.id?.instrumentToken ?? 0,
+        data.id?.exchangeInstrumentToken ?? 0,
+      );
+      showBottomSheet(
+        context: context,
+        builder: (context) => VirtualTransactionBottomSheet(
+          type: type,
+          data: VirtualTradingInstrument(
+            name: data.id!.symbol,
+            exchange: data.id!.exchange,
+            tradingsymbol: data.id!.symbol,
+            exchangeToken: data.id!.exchangeInstrumentToken,
+            instrumentToken: data.id!.instrumentToken,
+            lastPrice: lastPrice,
+          ),
+        ),
+      );
+    }
+
     return Column(
       children: [
         CommonCard(
@@ -39,8 +60,17 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                         TenxPositionCardTile(
                           isRightAlign: true,
                           label: 'Gross P&L',
-                          valueColor: controller.getValueColor(00),
-                          value: '₹ 0.00',
+                          valueColor: controller.getValueColor(data.amount),
+                          value: FormatHelper.formatNumbers(
+                            controller.calculateGrossPNL(
+                              controller.getInstrumentLastPrice(
+                                data.id!.instrumentToken!,
+                                data.id!.exchangeInstrumentToken!,
+                              ),
+                              data.lastaverageprice ?? 0,
+                              data.lots!.toInt(),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -51,14 +81,15 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TenxPositionCardTile(
-                          label: 'Quantity',
-                          value: data.lots.toString(),
-                        ),
-                        TenxPositionCardTile(
                           isRightAlign: true,
                           label: 'Avg. Price',
-                          valueColor: controller.getValueColor(data.amount),
-                          value: FormatHelper.formatNumbers(data.amount),
+                          valueColor: AppColors.black,
+                          value: FormatHelper.formatNumbers(data.lastaverageprice),
+                        ),
+                        TenxPositionCardTile(
+                          label: 'LTP',
+                          valueColor: controller.getValueColor(data.lastaverageprice),
+                          value: FormatHelper.formatNumbers(data.lastaverageprice),
                         ),
                       ],
                     ),
@@ -67,14 +98,19 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TenxPositionCardTile(
-                        label: 'LTP',
-                        valueColor: controller.getValueColor(data.lastaverageprice),
-                        value: FormatHelper.formatNumbers(data.lastaverageprice),
+                        label: 'Quantity',
+                        value: data.lots.toString(),
                       ),
                       TenxPositionCardTile(
                         isRightAlign: true,
                         label: 'Changes(%)',
-                        value: '0.00%',
+                        value: controller.getInstrumentChanges(
+                          data.id!.instrumentToken!,
+                          data.id!.exchangeInstrumentToken!,
+                        ),
+                        valueColor: controller.getValueColor(
+                          data.id!.instrumentToken!,
+                        ),
                       ),
                     ],
                   ),
@@ -85,23 +121,24 @@ class TenxPositionCard extends GetView<TenxTradingController> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      log('instrument : ${data.toJson()}');
-                      FocusScope.of(context).unfocus();
-                      showBottomSheet(
-                        context: context,
-                        builder: (context) => TenxTransactionBottomSheet(
-                          type: TransactionType.buy,
-                          data: TenxTradingInstrument(
-                            name: data.id!.symbol,
-                            exchange: data.id!.exchange,
-                            tradingsymbol: data.id!.symbol,
-                            exchangeToken: data.id!.exchangeInstrumentToken,
-                            instrumentToken: data.id!.instrumentToken,
-                          ),
-                        ),
-                      );
-                    },
+                    // onTap: () {
+                    //   log('instrument : ${data.toJson()}');
+                    //   FocusScope.of(context).unfocus();
+                    //   showBottomSheet(
+                    //     context: context,
+                    //     builder: (context) => TenxTransactionBottomSheet(
+                    //       type: TransactionType.buy,
+                    //       data: TenxTradingInstrument(
+                    //         name: data.id!.symbol,
+                    //         exchange: data.id!.exchange,
+                    //         tradingsymbol: data.id!.symbol,
+                    //         exchangeToken: data.id!.exchangeInstrumentToken,
+                    //         instrumentToken: data.id!.instrumentToken,
+                    //       ),
+                    //     ),
+                    //   );
+                    // },
+                    onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
@@ -122,23 +159,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      log('instrument : ${data.toJson()}');
-                      FocusScope.of(context).unfocus();
-                      showBottomSheet(
-                        context: context,
-                        builder: (context) => TenxTransactionBottomSheet(
-                          type: TransactionType.sell,
-                          data: TenxTradingInstrument(
-                            name: data.id!.symbol,
-                            exchange: data.id!.exchange,
-                            tradingsymbol: data.id!.symbol,
-                            exchangeToken: data.id!.exchangeInstrumentToken,
-                            instrumentToken: data.id!.instrumentToken,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
@@ -156,24 +177,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      log('instrument : ${data.toJson()}');
-                      FocusScope.of(context).unfocus();
-                      controller.selectedQuantity(data.lots);
-                      showBottomSheet(
-                        context: context,
-                        builder: (context) => TenxTransactionBottomSheet(
-                          type: TransactionType.exit,
-                          data: TenxTradingInstrument(
-                            name: data.id!.symbol,
-                            exchange: data.id!.exchange,
-                            tradingsymbol: data.id!.symbol,
-                            exchangeToken: data.id!.exchangeInstrumentToken,
-                            instrumentToken: data.id!.instrumentToken,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => openBottomSheet(context, TransactionType.exit),
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
@@ -228,7 +232,7 @@ class TenxPositionCardTile extends StatelessWidget {
         Text(
           value ?? '-',
           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
+                color: valueColor,
               ),
         ),
       ],

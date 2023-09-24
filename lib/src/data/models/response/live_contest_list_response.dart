@@ -37,7 +37,7 @@ class LiveContest {
   String? currentLiveStatus;
   String? contestFor;
   int? entryFee;
-  double? payoutPercentage;
+  num? payoutPercentage;
   LiveContestPortfolio? portfolio;
   int? maxParticipants;
   String? contestStatus;

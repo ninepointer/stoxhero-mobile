@@ -1,24 +1,26 @@
+import 'dart:developer';
+
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/core.dart';
+import '../../../data/models/response/contest_instrument_list_response.dart';
 import '../../modules.dart';
 
-enum ContestTransactionType { buy, sell, exit }
-
 class ContestTransactionBottomSheet extends GetView<ContestController> {
-  final ContestTransactionType type;
-  // final ContestInstrument data;
+  final ContestInstrument data;
+  final TransactionType type;
 
   const ContestTransactionBottomSheet({
     super.key,
+    required this.data,
     required this.type,
-    required contestWatchList,
-    // required this.data,
   });
 
   @override
   Widget build(BuildContext context) {
+    log(data.toJson().toString());
     return Wrap(
       children: [
         Container(
@@ -57,13 +59,11 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '',
-                    // data.name ?? '-',
+                    data.name ?? '',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    '',
-                    // FormatHelper.formatNumbers(data.lastPrice),
+                    FormatHelper.formatNumbers(data.lastPrice),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
@@ -89,50 +89,53 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 ],
               ),
               SizedBox(height: 16),
-              AbsorbPointer(
-                absorbing: type == ContestTransactionType.exit,
-                child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
-                  onChanged: (value) => controller.selectedQuantity(value),
-                  menuMaxHeight: 250,
-                  isDense: true,
-                  items: AppConstants.instrumentsQuantity.map((int number) {
-                    return DropdownMenuItem<int>(
-                      value: number,
-                      child: Text(number.toString()),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(16),
-                    // filled: true,
-                    hintText: 'Quantity',
-                    // fillColor: AppColors.grey.shade700,
-                    hintStyle: AppStyles.tsGreyRegular14,
-                    errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                      color: AppColors.danger.shade700,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
+              Obx(
+                () => AbsorbPointer(
+                  absorbing: type == TransactionType.exit,
+                  child: DropdownButtonFormField2<int>(
+                    value: controller.selectedQuantity.value == 0
+                        ? null
+                        : controller.selectedQuantity.value,
+                    onChanged: (value) => controller.selectedQuantity(value),
+                    isDense: true,
+                    items: controller.lotsValueList.map((int number) {
+                      return DropdownMenuItem<int>(
+                        value: number,
+                        child: Text(number.toString()),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(16),
+                      filled: true,
+                      fillColor: AppColors.grey.withOpacity(.1),
+                      hintText: 'Quantity',
+                      hintStyle: AppStyles.tsGreyRegular14,
+                      errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                        color: AppColors.danger.shade700,
                       ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                        ),
                       ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.danger,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.danger,
+                        ),
                       ),
                     ),
                   ),
@@ -224,20 +227,24 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 ],
               ),
               CommonFilledButton(
-                  backgroundColor: type == ContestTransactionType.exit
-                      ? AppColors.warning
-                      : type == ContestTransactionType.buy
-                          ? AppColors.success
-                          : AppColors.danger,
-                  margin: EdgeInsets.symmetric(vertical: 24),
-                  label: type == ContestTransactionType.exit
-                      ? 'Exit'
-                      : type == ContestTransactionType.buy
-                          ? 'Buy'
-                          : 'Sell',
-                  onPressed: () =>
-                      // Get.find<VirtualTradingController>().placeTenxTradingOrder(type, data),
-                      ''),
+                backgroundColor: type == TransactionType.exit
+                    ? AppColors.warning
+                    : type == TransactionType.buy
+                        ? AppColors.success
+                        : AppColors.danger,
+                margin: EdgeInsets.symmetric(vertical: 24),
+                label: type == TransactionType.exit
+                    ? 'Exit'
+                    : type == TransactionType.buy
+                        ? 'Buy'
+                        : 'Sell',
+                onPressed: () {
+                  Get.find<ContestController>().placeContestOrder(
+                    type,
+                    data,
+                  );
+                },
+              ),
             ],
           ),
         ),

@@ -11,13 +11,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trading'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: controller.gotoSearchInstrument,
-          ),
-        ],
+        title: const Text(' Tenx Trading'),
       ),
       body: Obx(
         () => Visibility(
@@ -28,51 +22,59 @@ class TenxDashboardView extends GetView<TenxTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Nifty 50',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Bank Nifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Finnifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      SizedBox(width: 8),
-                    ],
+                  // Row(
+                  //   children: [
+                  //     CommonStockInfo(
+                  //       label: 'Nifty 50',
+                  //       stockPrice: '₹ 12,500.90',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //     CommonStockInfo(
+                  //       label: 'Bank Nifty',
+                  //       stockPrice: '₹ 12,500.90',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //     CommonStockInfo(
+                  //       label: 'Finnifty',
+                  //       stockPrice: '₹ 12,500.90',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //     SizedBox(width: 8),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   children: [
+                  //     CommonStockInfo(
+                  //       label: 'Margin',
+                  //       stockPrice: '₹ 19,454.09',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //     CommonStockInfo(
+                  //       label: 'Net P&L',
+                  //       stockPrice: '₹ 19,454.98',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //     SizedBox(width: 8),
+                  //   ],
+                  // ),
+                  CommonTile(
+                    label: 'My Watchlist',
+                    showIconButton: true,
+                    icon: Icons.add,
+                    onPressed: controller.gotoSearchInstrument,
+                    padding: EdgeInsets.only(left: 16),
                   ),
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Margin',
-                        stockPrice: '₹ 19,454.09',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Net P&L',
-                        stockPrice: '₹ 19,454.98',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      SizedBox(width: 8),
-                    ],
-                  ),
-                  CommonTile(label: 'My Watchlist'),
                   controller.tenxWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tenxWatchlist.length >= 3 ? 340 : controller.tenxWatchlist.length * 120,
+                          height: controller.tenxWatchlist.length >= 3
+                              ? 340
+                              : controller.tenxWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -85,31 +87,8 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             },
                           ),
                         ),
-                  CommonTile(label: 'My Rank'),
-                  CommonRankCard(
-                    rank: '#1000',
-                    name: 'Ritik Prajapat',
-                    netPnl: '+ ₹12,02.69',
-                  ),
-                  CommonTile(label: 'Top Rank'),
-                  CommonRankCard(
-                    rank: '#1000',
-                    name: 'Ritik Prajapat',
-                    netPnl: '+ ₹12,02.69',
-                  ),
-                  SizedBox(height: 8),
-                  CommonRankCard(
-                    rank: '#1000',
-                    name: 'Ritik Prajapat',
-                    netPnl: '+ ₹12,02.69',
-                  ),
-                  SizedBox(height: 8),
-                  CommonRankCard(
-                    rank: '#1000',
-                    name: 'Ritik Prajapat',
-                    netPnl: '+ ₹12,02.69',
-                  ),
-                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.tenxPositionsList.isNotEmpty)
+                    CommonTile(label: 'My Position Details'),
                   if (controller.tenxPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),

@@ -293,7 +293,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
+                    color: AppColors.primary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
@@ -309,17 +309,17 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    // controller.calculateUserWalletAmount();
-                    // showModalBottomSheet(
-                    //   context: context,
-                    //   builder: (context) => ContestBuySubscriptionBottomSheet(),
-                    // );
+                    controller.calculateUserWalletAmount();
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => ContestBuySubscriptionBottomSheet(),
+                    );
                   },
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(0.2),
+                      color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
                       'Pay Now',
@@ -339,12 +339,13 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     //   context: context,
                     //   builder: (context) => ContestBuySubscriptionBottomSheet(),
                     // );
+                    // Get.to(() => ContestDashboardView());
                   },
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(0.2),
+                      color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
                       'Start Trading',
@@ -361,7 +362,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.secondary.withOpacity(0.2),
+                    color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

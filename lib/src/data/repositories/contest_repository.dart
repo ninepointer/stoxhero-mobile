@@ -1,3 +1,5 @@
+import 'package:stoxhero/src/data/models/response/contest_instrument_list_response.dart';
+
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
@@ -85,24 +87,25 @@ class ContestRepository extends BaseRepository {
         : RepoResponse(data: LiveCollegeContestListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestPortfolioResponse>> getContestPortfolio() async {
-    String apiURL = AppUrls.contestCreditData;
+  Future<RepoResponse<ContestPortfolioResponse>> getContestPortfolio(String? id) async {
+    String apiURL = AppUrls.contestCreditData(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: ContestPortfolioResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestWatchListResponse>> getContestWatchList() async {
-    String apiURL = AppUrls.contestWatchList;
+  Future<RepoResponse<ContestWatchListResponse>> getContestWatchList(
+      bool? isNifty, bool? isBankNifty, bool? isFinNifty) async {
+    String apiURL = AppUrls.contestWatchList(isNifty, isBankNifty, isFinNifty);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: ContestWatchListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestPositionListResponse>> getContestPositions() async {
-    String apiURL = AppUrls.contestPosition;
+  Future<RepoResponse<ContestPositionListResponse>> getContestPositions(String? id) async {
+    String apiURL = AppUrls.contestPosition(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
@@ -115,5 +118,30 @@ class ContestRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: CompletedContestOrdersResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> placeOrder(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.contestPlacingOrder;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ContestInstrumentListResponse>> searchInstruments(String? value) async {
+    String apiURL = AppUrls.tenxTradingSearchInstruments;
+    var query = {'search': value, 'page': 1, 'size': 20};
+    var response = await service.getAuth(path: apiURL, query: query);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: ContestInstrumentListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> removeInstrument(int id) async {
+    String apiURL = '${AppUrls.inActiveInstrument}/$id';
+    var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
   }
 }

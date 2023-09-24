@@ -275,13 +275,16 @@ class CompletedCollegeContestCard extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.secondary.withOpacity(0.2),
+                    color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                       bottomLeft: Radius.circular(8),
                     ),
                   ),
-                  child: Text('View Orders', style: AppStyles.tsSecondaryMedium14),
+                  child: Text(
+                    'View Orders',
+                    style: AppStyles.tsSecondaryMedium14,
+                  ),
                 ),
               ),
             ),

@@ -1,13 +1,26 @@
-class IndexTradeDetailsList {
+class StockIndexInstrumentDetailsListResponse {
+  List<StockIndexInstrumentDetailsList>? data;
+
+  StockIndexInstrumentDetailsListResponse({this.data});
+
+  StockIndexInstrumentDetailsListResponse.fromJson(List? json) {
+    if (json != null) {
+      data = <StockIndexInstrumentDetailsList>[];
+      data = json.map((data) => StockIndexInstrumentDetailsList.fromJson(data)).toList();
+    }
+  }
+}
+
+class StockIndexInstrumentDetailsList {
   bool? tradable;
   String? mode;
   int? instrumentToken;
   num? lastPrice;
-  Ohlc? ohlc;
+  SOhlc? ohlc;
   num? change;
   String? exchangeTimestamp;
 
-  IndexTradeDetailsList({
+  StockIndexInstrumentDetailsList({
     this.tradable,
     this.mode,
     this.instrumentToken,
@@ -17,12 +30,12 @@ class IndexTradeDetailsList {
     this.exchangeTimestamp,
   });
 
-  IndexTradeDetailsList.fromJson(Map<String, dynamic> json) {
+  StockIndexInstrumentDetailsList.fromJson(Map<String, dynamic> json) {
     tradable = json['tradable'];
     mode = json['mode'];
     instrumentToken = json['instrument_token'];
     lastPrice = json['last_price'];
-    ohlc = json['ohlc'] != null ? new Ohlc.fromJson(json['ohlc']) : null;
+    ohlc = json['ohlc'] != null ? new SOhlc.fromJson(json['ohlc']) : null;
     change = json['change'];
     exchangeTimestamp = json['exchange_timestamp'];
   }
@@ -42,20 +55,15 @@ class IndexTradeDetailsList {
   }
 }
 
-class Ohlc {
+class SOhlc {
   num? high;
   num? low;
   num? open;
   num? close;
 
-  Ohlc({
-    this.high,
-    this.low,
-    this.open,
-    this.close,
-  });
+  SOhlc({this.high, this.low, this.open, this.close});
 
-  Ohlc.fromJson(Map<String, dynamic> json) {
+  SOhlc.fromJson(Map<String, dynamic> json) {
     high = json['high'];
     low = json['low'];
     open = json['open'];

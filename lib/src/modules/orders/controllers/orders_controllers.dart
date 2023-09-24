@@ -124,7 +124,7 @@ class OrdersController extends BaseController<OrdersRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log(e.toString());
+      log("Tenx: ${e.toString()}");
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

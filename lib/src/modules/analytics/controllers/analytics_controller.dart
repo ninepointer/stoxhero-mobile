@@ -41,6 +41,12 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
   final tenxTadingDateWiseList = <AnalyticsDateWiseDetails>[].obs;
   final infinityTadingDateWiseList = <AnalyticsDateWiseDetails>[].obs;
 
+  final virtualTadingExpectedPnlList = <AnalyticsExpectedPnLOverviewDetails>[].obs;
+  final tenxTadingExpectedPnlList = <AnalyticsExpectedPnLOverviewDetails>[].obs;
+  final infinityTadingExpectedPnlList = <AnalyticsExpectedPnLOverviewDetails>[].obs;
+
+  final virtualTadingMonthlyPnlList = <AnalyticsMonthlyPnLOverviewDetails>[].obs;
+
   final rangeGrossAmount = 0.0.obs;
   final rangeNetAmount = 0.0.obs;
   final rangeBrokerageAmount = 0.0.obs;
@@ -88,12 +94,16 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     if (userDetailsData.designation == AppConstants.equityTraderType) {
       await getInfinityTradingOverviewDetails();
       await getInfinityTradingDateWiseDetails();
+      await getInfinityAnalyticsExpectedPnLOverviewDetails();
     } else {
       await getTenxTradingOverviewDetails();
       await getTenxTradingOverviewDetails();
+      await getTenXAnalyticsExpectedPnLOverviewDetails();
     }
     await getVirtualTradingOverviewDetails();
     await getVirtualTradingDateWiseDetails();
+    await getVirtualAnalyticsExpectedPnLOverviewDetails();
+    await getVirtualAnalyticsMonthlyPnLOverviewDetails();
 
     rangeCalculation();
   }
@@ -107,6 +117,40 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
 
     var date = DateFormat("dd MMM").format(
       DateFormat('yyyy-MM-dd').parse(dataList[value.toInt() - 1].date!),
+    );
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      angle: 55,
+      child: Text(
+        date,
+        style: AppStyles.tsGreyRegular10,
+      ),
+    );
+  }
+
+  Widget bottomTitless(double value, TitleMeta meta) {
+    List<AnalyticsExpectedPnLOverviewDetails> dataList = selectedTab.value == 0
+        ? userDetailsData.designation == AppConstants.equityTraderType
+            ? infinityTadingExpectedPnlList
+            : tenxTadingExpectedPnlList
+        : virtualTadingExpectedPnlList;
+
+    var date = DateFormat("dd MMM").format(
+      DateFormat('yyyy-MM-dd').parse(dataList[value.toInt() - 1].sId!),
+    );
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      angle: 55,
+      child: Text(
+        date,
+        style: AppStyles.tsGreyRegular10,
+      ),
+    );
+  }
+
+  Widget bottomTitlesMonthly(double value, TitleMeta meta) {
+    var date = DateFormat("dd MMM").format(
+      DateFormat('yyyy-MM-dd').parse(virtualTadingMonthlyPnlList[value.toInt()].date!),
     );
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -286,6 +330,147 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     return barGroups;
   }
 
+  List<BarChartGroupData> getExpectedAvgProfitChartData({required Color barColor}) {
+    List<BarChartGroupData> barGroups = [];
+
+    List<AnalyticsExpectedPnLOverviewDetails> dataList = selectedTab.value == 0
+        ? userDetailsData.designation == AppConstants.equityTraderType
+            ? infinityTadingExpectedPnlList
+            : tenxTadingExpectedPnlList
+        : virtualTadingExpectedPnlList;
+
+    for (var i = 0; i < dataList.length; i++) {
+      var data = dataList[i];
+      barGroups.add(
+        BarChartGroupData(
+          x: i + 1,
+          barRods: [
+            BarChartRodData(
+              fromY: 0,
+              toY: data.expectedAvgProfit?.toDouble() ?? 0,
+              width: 4,
+              color: barColor,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return barGroups;
+  }
+
+  List<BarChartGroupData> getExpectedAvgLossChartData({required Color barColor}) {
+    List<BarChartGroupData> barGroups = [];
+
+    List<AnalyticsExpectedPnLOverviewDetails> dataList = selectedTab.value == 0
+        ? userDetailsData.designation == AppConstants.equityTraderType
+            ? infinityTadingExpectedPnlList
+            : tenxTadingExpectedPnlList
+        : virtualTadingExpectedPnlList;
+
+    for (var i = 0; i < dataList.length; i++) {
+      var data = dataList[i];
+      barGroups.add(
+        BarChartGroupData(
+          x: i + 1,
+          barRods: [
+            BarChartRodData(
+              fromY: 0,
+              toY: data.expectedAvgLoss?.toDouble() ?? 0,
+              width: 4,
+              color: barColor,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return barGroups;
+  }
+
+  List<BarChartGroupData> getExpectedPnLChartData({required Color barColor}) {
+    List<BarChartGroupData> barGroups = [];
+
+    List<AnalyticsExpectedPnLOverviewDetails> dataList = selectedTab.value == 0
+        ? userDetailsData.designation == AppConstants.equityTraderType
+            ? infinityTadingExpectedPnlList
+            : tenxTadingExpectedPnlList
+        : virtualTadingExpectedPnlList;
+
+    for (var i = 0; i < dataList.length; i++) {
+      var data = dataList[i];
+      barGroups.add(
+        BarChartGroupData(
+          x: i + 1,
+          barRods: [
+            BarChartRodData(
+              fromY: 0,
+              toY: data.expectedPnl?.toDouble() ?? 0,
+              width: 4,
+              color: barColor,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return barGroups;
+  }
+
+  List<BarChartGroupData> getRiskRewardChartData({required Color barColor}) {
+    List<BarChartGroupData> barGroups = [];
+
+    List<AnalyticsExpectedPnLOverviewDetails> dataList = selectedTab.value == 0
+        ? userDetailsData.designation == AppConstants.equityTraderType
+            ? infinityTadingExpectedPnlList
+            : tenxTadingExpectedPnlList
+        : virtualTadingExpectedPnlList;
+
+    for (var i = 0; i < dataList.length; i++) {
+      var data = dataList[i];
+      barGroups.add(
+        BarChartGroupData(
+          x: i + 1,
+          barRods: [
+            BarChartRodData(
+              fromY: 0,
+              toY: data.riskRewardRatio?.toDouble() ?? 0,
+              width: 4,
+              color: barColor,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return barGroups;
+  }
+
+  List<BarChartGroupData> getMonthlyGPnLChartData({required Color barColor}) {
+    List<BarChartGroupData> barGroups = [];
+
+    List<AnalyticsMonthlyPnLOverviewDetails> dataList = virtualTadingMonthlyPnlList;
+
+    for (var i = 0; i < dataList.length; i++) {
+      var data = dataList[i];
+      barGroups.add(
+        BarChartGroupData(
+          x: i + 1,
+          barRods: [
+            BarChartRodData(
+              fromY: 0,
+              toY: data.gpnl?.toDouble() ?? 0,
+              width: 4,
+              color: barColor,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return barGroups;
+  }
+
   void rangeCalculation() {
     rangeGrossAmount(0.0);
     rangeNetAmount(0.0);
@@ -339,7 +524,12 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
           await repository.getTenxTradingAnalyticsOverviewDetails();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          tenxTadingOverviewDetails(response.data?.data?[0] ?? AnalyticsOverviewDetails());
+          final data = response.data?.data;
+          if (data != null && data.isNotEmpty) {
+            tenxTadingOverviewDetails(data[0]);
+          } else {
+            SnackbarHelper.showSnackbar("No data available.");
+          }
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -347,8 +537,9 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isLoading(false);
     }
-    isLoading(false);
   }
 
   Future getInfinityTradingOverviewDetails() async {
@@ -445,6 +636,82 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
         if (response.data?.status?.toLowerCase() == "success") {
           infinityTadingDateWiseList.value = response.data?.data ?? [];
           rangeCalculation();
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getVirtualAnalyticsExpectedPnLOverviewDetails() async {
+    isLoading(true);
+    try {
+      final RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse> response =
+          await repository.getVirtualAnalyticsExpectedPnLOverviewDetails();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          virtualTadingExpectedPnlList(response.data?.data);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getTenXAnalyticsExpectedPnLOverviewDetails() async {
+    isLoading(true);
+    try {
+      final RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse> response =
+          await repository.getTenXAnalyticsExpectedPnLOverviewDetails();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          tenxTadingExpectedPnlList(response.data?.data);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getInfinityAnalyticsExpectedPnLOverviewDetails() async {
+    isLoading(true);
+    try {
+      final RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse> response =
+          await repository.getInfinityAnalyticsExpectedPnLOverviewDetails();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          infinityTadingExpectedPnlList(response.data?.data);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getVirtualAnalyticsMonthlyPnLOverviewDetails() async {
+    isLoading(true);
+    try {
+      final RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse> response =
+          await repository.getVirtualAnalyticsMonthlyPnLOverviewDetails();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          virtualTadingMonthlyPnlList(response.data?.data);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

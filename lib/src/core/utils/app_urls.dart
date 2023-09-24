@@ -24,7 +24,7 @@ class AppUrls {
   static const String referralsMyRank = "$apiURL/referrals/myrank";
   static const String myReferrals = "$apiURL/myreferrals";
   static const String tenxActive = "$apiURL/tenx/active";
-
+  static const String stockIndex = "$apiURL/stockindex";
   static const String infinityTradeTodaysOrders = "$apiURL/infinityTrade/my/todayorders";
   static const String infinityTradeAllOrders = "$apiURL/infinityTrade/my/historyorders";
 
@@ -34,12 +34,17 @@ class AppUrls {
   static const String paperTradeTodaysOrders = "$apiURL/paperTrade/my/todayorders";
   static const String paperTradeAllOrders = "$apiURL/paperTrade/my/historyorders";
   static const String paperTradePosition = "$apiURL/paperTrade/pnl";
+  static const String paperTradePlacingOrder = "$apiURL/paperTrade";
 
   static const String userWalletTransactions = "$apiURL/userwallet/my";
 
   static const String virtualTradingAnalyticsOverView = "$apiURL/analytics/papertrade/myoverview";
   static const String tenxTradingAnalyticsOverView = "$apiURL/analytics/stoxhero/myoverview";
   static const String infinityTradingAnalyticsOverView = "$apiURL/analytics/infinity/myoverview";
+  // static String analyticsExpectedPnL(String? trade) =>
+  //     "$apiURL/userdashboard/expectedpnl?tradeType=$trade";
+  static const String analyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=virtual";
+  static const String analyticsVirtualMonthlyPnL = "$apiURL/analytics/papertrade/mymonthlypnl";
 
   static const String virtualTradingDateWiseAnalytics = "$apiURL/analytics/papertrade/mystats";
   static const String tenxTradingDateWiseAnalytics = "$apiURL/analytics/stoxhero/mystats";
@@ -60,16 +65,20 @@ class AppUrls {
   static const String completedContests = "$apiURL/dailycontest/contests/completed";
   static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
   static const String contestLeaderboard = "$apiURL/contestscoreboard/scoreboard";
-  static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
+  static const String contestTodaysOrders =
+      "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
 
   static const String liveCollageContests = "$apiURL/dailycontest/collagecontest/userlive";
   static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
   static const String completedCollegeContests = "$apiURL/dailycontest/contests/collegecompleted";
   static const String collegeContestLeaderboard = "$apiURL/contestscoreboard/collegescoreboard";
   static const String liveCollegeContests = "$apiURL/dailycontest/collegecontests/userlive";
-  static const String contestWatchList = "$apiURL/instrumentDetails?isBankNifty=true&dailyContest=true";
-  static const String contestCreditData = "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/myPnlandCreditData";
-  static const String contestPosition = "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/pnl";
+  static String contestWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
+      "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
+  static String contestCreditData(String? id) =>
+      "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
+  static String contestPosition(String? id) => "$apiURL/dailycontest/trade/$id/pnl";
+  static const String contestPlacingOrder = "$apiURL/placingOrderDailyContest";
 
   static const String returnSummary = "$apiURL/userdashboard/summary";
   static const String dashboardCarousel = "$apiURL/carousels/home";
@@ -79,9 +88,8 @@ class AppUrls {
   static const String liveMarginx = "$apiURL/marginx/userlive";
   static const String completedMarginx = "$apiURL/marginx/usercompleted";
 
-  static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
-
-  static const String stockIndex = "$apiURL/stockindex";
+  static String completedContestOrders(String? id) =>
+      '$apiURL/dailycontest/trade/$id/my/todayorders';
 
   static String performance(String? tradeType, String? timeFrame) =>
       "$apiURL/userdashboard/stats?tradeType=$tradeType&timeframe=$timeFrame";

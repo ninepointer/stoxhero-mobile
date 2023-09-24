@@ -7,9 +7,13 @@ import '../../modules.dart';
 
 class LiveContestCard extends StatelessWidget {
   final LiveContest? liveContest;
+  final ContestPosition? contestPositionList;
+  final ContestCreditData? contestPortfolio;
   const LiveContestCard({
     Key? key,
     this.liveContest,
+    this.contestPositionList,
+    this.contestPortfolio,
   }) : super(key: key);
 
   @override
@@ -250,13 +254,17 @@ class LiveContestCard extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   Get.find<ContestController>().loadTradingData();
+                  Get.find<ContestController>().getContestPositions(liveContest?.sId);
+                  Get.find<ContestController>().getContestPortfolio(liveContest?.sId);
+                  Get.find<ContestController>().getContestWatchList(
+                      liveContest?.isNifty, liveContest?.isBankNifty, liveContest?.isFinNifty);
                   Get.to(() => ContestDashboardView());
                 },
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.2),
+                    color: AppColors.success.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
@@ -276,7 +284,7 @@ class LiveContestCard extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.secondary.withOpacity(0.2),
+                    color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

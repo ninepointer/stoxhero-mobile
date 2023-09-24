@@ -225,9 +225,9 @@ class CompletedContestCard extends StatelessWidget {
                         Text(
                           FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0),
                           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                              // color: (completedContestPnl?.npnl ?? 0) >= 0
-                              //     ? AppColors.success
-                              //     : AppColors.danger,
+                                color: (completedContestPnl?.npnl ?? 0) >= 0
+                                    ? AppColors.success
+                                    : AppColors.danger,
                               ),
                         ),
                       ],
@@ -249,9 +249,9 @@ class CompletedContestCard extends StatelessWidget {
                         Text(
                           FormatHelper.formatNumbers(completedContestPnl?.payoutAmount),
                           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                              // color: (completedContestPnl?.payoutAmount ?? 0) >= 0
-                              //     ? AppColors.success
-                              //     : AppColors.danger,
+                                color: (completedContestPnl?.payoutAmount ?? 0) >= 0
+                                    ? AppColors.success
+                                    : AppColors.danger,
                               ),
                         ),
                       ],
@@ -279,7 +279,7 @@ class CompletedContestCard extends StatelessWidget {
                       bottomRight: Radius.circular(8),
                       bottomLeft: Radius.circular(8),
                     ),
-                    color: AppColors.secondary.withOpacity(0.2),
+                    color: AppColors.secondary.withOpacity(.25),
                   ),
                   child: Text(
                     'View Orders',

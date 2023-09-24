@@ -22,44 +22,44 @@ class MarginxDashboardView extends GetView<MarginXController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Nifty 50',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Bank Nifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Finnifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Margin',
-                        stockPrice: '₹ 19,454.09',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Net P&L',
-                        stockPrice: '₹ 19,454.98',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     CommonStockInfo(
+                  //       label: 'Nifty 50',
+                  //       stockPrice: '₹ 12,500.90',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //     CommonStockInfo(
+                  //       label: 'Bank Nifty',
+                  //       stockPrice: '₹ 12,500.90',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //     CommonStockInfo(
+                  //       label: 'Finnifty',
+                  //       stockPrice: '₹ 12,500.90',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   children: [
+                  //     CommonStockInfo(
+                  //       label: 'Margin',
+                  //       stockPrice: '₹ 19,454.09',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //     CommonStockInfo(
+                  //       label: 'Net P&L',
+                  //       stockPrice: '₹ 19,454.98',
+                  //       stockLTP: '₹ 183.15',
+                  //       stockChange: '(+ 34.42%)',
+                  //     ),
+                  //   ],
+                  // ),
                   CommonTile(
                     label: 'My Watchlist',
                     showIconButton: true,

@@ -261,7 +261,7 @@ class Participants {
   String? userId;
   String? participatedOn;
   String? sId;
-  double? payout;
+  num? payout;
 
   Participants({this.userId, this.participatedOn, this.sId, this.payout});
 

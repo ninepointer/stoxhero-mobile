@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/data/data.dart';
 
+import '../../data/models/response/stock_index_instrument_list_response.dart';
 import '../core.dart';
 
 class CommonStockInfo extends StatelessWidget {
-  final String label;
-  final String stockPrice;
-  final String stockLTP;
-  final String stockChange;
+  final String? label;
+  final String? stockPrice;
+  final dynamic stockLTP;
+  final dynamic stockChange;
+  final StockIndexInstrumentDetailsList? stockList;
+  final StockIndexInstrument? stock;
   const CommonStockInfo({
     Key? key,
     required this.label,
     required this.stockPrice,
     required this.stockLTP,
     required this.stockChange,
+    this.stockList,
+    this.stock,
   }) : super(key: key);
 
   @override
@@ -36,12 +42,12 @@ class CommonStockInfo extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          label,
+                          label ?? '-',
                           style: AppStyles.tsSecondaryMedium16,
                         ),
                         SizedBox(height: 4),
                         Text(
-                          stockPrice,
+                          stockPrice ?? '-',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],

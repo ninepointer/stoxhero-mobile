@@ -1,6 +1,7 @@
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
+import '../models/response/stock_index_instrument_list_response.dart';
 
 class VirtualTradingRepository extends BaseRepository {
   Future<RepoResponse<VirtualTradingPortfolioResponse>> getVirtualTradingPortfolio() async {
@@ -19,12 +20,12 @@ class VirtualTradingRepository extends BaseRepository {
         : RepoResponse(data: VirtualTradingWatchListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<StockIndexResponse>> getStockIndex() async {
+  Future<RepoResponse<StockIndexInstrumentListResponse>> getStockIndex() async {
     String apiURL = AppUrls.stockIndex;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: StockIndexResponse.fromJson(response));
+        : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
   }
 
   Future<RepoResponse<VirtualTradingPositionListResponse>> getVirtualPositions() async {
@@ -56,6 +57,14 @@ class VirtualTradingRepository extends BaseRepository {
   Future<RepoResponse<GenericResponse>> removeInstrument(int id) async {
     String apiURL = '${AppUrls.inActiveInstrument}/$id';
     var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> paperPlaceOrder(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.paperTradePlacingOrder;
+    var response = await service.postAuth(path: apiURL, data: data);
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));

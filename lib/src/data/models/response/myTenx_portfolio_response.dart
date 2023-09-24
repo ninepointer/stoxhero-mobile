@@ -30,8 +30,8 @@ class MyTenxPortfolio {
   String? portfolioType;
   String? portfolioName;
   String? portfolioAccount;
-  double? investedAmount;
-  double? cashBalance;
+  num? investedAmount;
+  num? cashBalance;
 
   MyTenxPortfolio(
       {this.subscriptionId,

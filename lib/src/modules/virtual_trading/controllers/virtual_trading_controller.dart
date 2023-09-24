@@ -2,11 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:uuid/uuid.dart';
 
 import '../../../base/base.dart';
 import '../../../core/core.dart';
 import '../../../data/data.dart';
+import '../../../data/models/response/stock_index_instrument_list_response.dart';
 
 class VirtualTradingBinding implements Bindings {
   @override
@@ -24,173 +26,124 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final virtualWatchList = <VirtualTradingWatchList>[].obs;
   final virtualInstruments = <VirtualTradingInstrument>[].obs;
   final virtualPositionsList = <VirtualTradingPosition>[].obs;
-
-  final selectedQuantity = 50.obs;
+  final virtualPosition = VirtualTradingPosition().obs;
+  final virtualInstrumentTradeDetails = <VirtualTradingInstrumentTradeDetails>[].obs;
+  final stockIndexInstrumentDetails = <StockIndexInstrumentDetailsList>[].obs;
+  final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
+  final stockIndexInstrument = <StockIndexInstrument>[].obs;
   final virtualWatchlistIds = <int>[].obs;
   final selectedWatchlistIndex = RxInt(-1);
-  final stockIndex = StockIndexResponse().obs;
+  final selectedQuantity = 0.obs;
+  final lotsValueList = <int>[0].obs;
+
+  Future loadData() async {
+    userDetails.value = AppStorage.getUserDetails();
+    await getVirtualTradingPortfolio();
+    await getVirtualTradingWatchlist();
+    await getVirtualPositionsList();
+    await socketConnection();
+    await socketIndexConnection();
+  }
+
+  num calculateGrossPNL(num ltp, num avg, int lots) {
+    num position = ltp - avg;
+    num grossPNL = position * lots;
+    return grossPNL;
+  }
+
+  num calculateNetPNL(num ltp, num avg, int lots, num brokerage) {
+    num position = ltp - avg;
+    num grossPNL = position * lots;
+    num netPNL = grossPNL * brokerage;
+    return netPNL;
+  }
+
+  List<int> generateLotsList({String? type}) {
+    List<int> result = [];
+    switch (type) {
+      case 'NIFTY50':
+        for (int i = 50; i <= 1800; i += 50) result.add(i);
+        break;
+      case 'BANKNIFTY':
+        for (int i = 15; i <= 900; i += 15) result.add(i);
+        break;
+      case 'FINNIFTY':
+        for (int i = 40; i <= 880; i += 40) result.add(i);
+        break;
+    }
+    selectedQuantity.value = result[0];
+    lotsValueList.assignAll(result);
+    return result;
+  }
+
+  Color getValueColor(dynamic value) {
+    if (value != null) {
+      num number = value is int || value is double ? value : num.parse(value);
+      if (number < 0) {
+        return AppColors.success;
+      } else if (number > 0) {
+        return AppColors.danger;
+      } else if (number == 0) {
+        return AppColors.black;
+      }
+    }
+    return AppColors.white;
+  }
 
   void gotoSearchInstrument() {
     searchTextController.text = 'Nifty';
     Get.toNamed(AppRoutes.virtualSearchSymbol);
   }
 
-  // void calculateTotalPositionValues() {
-  //   num totalLots = 0;
-  //   num totalBrokerage = 0;
+  void calculateTotalPositionValues() {
+    int totalLots = 0;
+    num totalBrokerage = 0;
+    num totalGross = 0;
+    num totalNet = 0;
 
-  //   for (var position in virtualPositionsList) {
-  //     log('postion : ${position.toJson()}');
-  //     totalLots += position.lots ?? 0;
-  //     totalBrokerage += position.brokerage ?? 0;
-  //   }
-
-  //   virtualPositionsList.forEach((element) {
-  //     element.lots = totalLots;
-  //     element.brokerage = totalBrokerage;
-  //   });
-
-  //   log('virtualPositionsList : ${virtualPositionsList.toJson()}');
-  // }
-
-  Future loadData() async {
-    await getVirtualTradingPortfolio();
-    await getVirtualTradingWatchlist();
-    await getVirtualPositionsList();
-    // getStockIndex();
-  }
-
-  Color getValueColor(dynamic value) {
-    if (value != null) {
-      num number = value is int || value is double ? value : num.parse(value);
-      if (number > 0) {
-        return AppColors.success;
-      } else if (number < 0) {
-        return AppColors.danger;
-      } else if (number == 0) {
-        return AppColors.white;
-      }
+    for (var position in virtualPositionsList) {
+      log('postion : ${position.toJson()}');
+      totalLots += position.lots ?? 0;
+      totalBrokerage += position.brokerage ?? 0;
+      totalGross += position.amount ?? 0;
+      totalNet += position.amount ?? 0;
     }
-    return AppColors.white;
+
+    tenxTotalPositionDetails(
+      TenxTotalPositionDetails(
+        lots: totalLots,
+        brokerage: totalBrokerage,
+        gross: totalGross,
+        net: totalNet,
+      ),
+    );
   }
 
-  String getInstrumentLastPrice(int instID, int exchID) {
-    if (virtualInstruments.isNotEmpty) {
-      int index = virtualInstruments.indexWhere(
+  num getInstrumentLastPrice(int instID, int exchID) {
+    if (virtualInstrumentTradeDetails.isNotEmpty) {
+      int index = virtualInstrumentTradeDetails.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price = virtualInstruments[index].lastPrice?.toString();
-      return FormatHelper.formatNumbers(price);
+      if (index == -1) return 0;
+      num price = virtualInstrumentTradeDetails[index].lastPrice ?? 0;
+
+      return price;
     } else {
-      return FormatHelper.formatNumbers('00');
+      return 0;
     }
   }
 
   String getInstrumentChanges(int instID, int exchID) {
-    if (virtualInstruments.isNotEmpty) {
-      int index = virtualInstruments.indexWhere(
+    if (virtualInstrumentTradeDetails.isNotEmpty) {
+      int index = virtualInstrumentTradeDetails.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price = virtualInstruments[index].exchange?.toString();
+      String? price = virtualInstrumentTradeDetails[index].change?.toString();
       return FormatHelper.formatNumbers(price);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
     }
-  }
-
-  Future getVirtualTradingPortfolio() async {
-    isLoading(true);
-    try {
-      final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolio();
-      if (response.data != null) {
-        virtualPortfolio(response.data?.data);
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log("port ${e.toString()}");
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
-  }
-
-  Future getVirtualTradingWatchlist() async {
-    isLoading(true);
-    try {
-      final RepoResponse<VirtualTradingWatchListResponse> response = await repository.getVirtualTradingWatchlist();
-      if (response.data != null) {
-        if (response.data?.data! != null) {
-          virtualWatchList.clear();
-          virtualWatchlistIds.clear();
-          virtualWatchList(response.data?.data ?? []);
-          for (var element in virtualWatchList) {
-            virtualWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
-          }
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log("watch ${e.toString()}");
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
-  }
-
-  Future getVirtualPositionsList() async {
-    isLoading(true);
-    try {
-      final RepoResponse<VirtualTradingPositionListResponse> response = await repository.getVirtualPositions();
-      if (response.data != null) {
-        if (response.data?.data! != null) {
-          virtualPositionsList(response.data?.data ?? []);
-          // calculateTotalPositionValues();
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
-  }
-
-  // Future getStockIndex() async {
-  //   isLoading(true);
-  //   try {
-  //     final RepoResponse<StockIndexResponse> response = await repository.getStockIndex();
-  //     if (response.data != null) {
-  //       stockIndex();
-  //     } else {
-  //       SnackbarHelper.showSnackbar(response.error?.message);
-  //     }
-  //   } catch (e) {
-  //     log("stock ${e.toString()}");
-  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-  //   }
-  //   isLoading(false);
-  // }
-
-  Future searchInstruments(String? value) async {
-    isLoading(true);
-    try {
-      final RepoResponse<VirtualTradingInstrumentListResponse> response = await repository.searchInstruments(value);
-      if (response.data != null) {
-        if (response.data?.data! != null) {
-          virtualInstruments.clear();
-          virtualInstruments(response.data?.data ?? []);
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
   }
 
   Future addInstrument(VirtualTradingInstrument inst) async {
@@ -200,11 +153,11 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       exchange: inst.exchange,
       status: inst.status,
       symbol: inst.tradingsymbol,
-      lotSize: 25,
+      lotSize: inst.lotSize,
       instrumentToken: inst.instrumentToken,
       uId: Uuid().v4(),
       contractDate: inst.expiry,
-      maxLot: 900,
+      // maxLot: 1800,
       // from: "TenX Trader",
       exchangeSegment: inst.segment,
       exchangeInstrumentToken: inst.exchangeToken,
@@ -212,16 +165,16 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
     log('addInstrument : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.addInstrument(
-        data.toJson(),
-      );
+      // final RepoResponse<GenericResponse> response = await repository.addInstrument(
+      //   data.toJson(),
+      // );
       // if (response.data?.message == "Instrument Added") {
       virtualWatchList.clear();
       virtualInstruments.clear();
       await getVirtualTradingWatchlist();
       await searchInstruments(searchTextController.text);
       // } else {
-      SnackbarHelper.showSnackbar(response.error?.message);
+      SnackbarHelper.showSnackbar("Instrument Added");
       // }
     } catch (e) {
       log(e.toString());
@@ -249,5 +202,240 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future socketConnection() async {
+    List<VirtualTradingInstrumentTradeDetails>? tempList = [];
+    try {
+      IO.Socket socket;
+      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+        'autoConnect': false,
+        'transports': ['websocket'],
+      });
+      socket.connect();
+      socket.onConnect((_) {
+        log('Socket : Connected');
+        socket.emit('userId', userDetails.value.sId);
+        socket.emit('user-ticks', userDetails.value.sId);
+      });
+      socket.on('index-tick', (data) {
+        // print(data);
+        // log('Socket : index-tick $data');
+      });
+      socket.on(
+        'tick-room',
+        (data) {
+          // log('Socket : tick-room $data');
+          tempList = VirtualTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+          tempList?.forEach((element) {
+            if (virtualInstrumentTradeDetails
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+              int index = virtualInstrumentTradeDetails.indexWhere(
+                (stock) => stock.instrumentToken == element.instrumentToken,
+              );
+              virtualInstrumentTradeDetails.removeAt(index);
+              virtualInstrumentTradeDetails.insert(index, element);
+            } else {
+              virtualInstrumentTradeDetails.add(element);
+            }
+          });
+        },
+      );
+      socket.onDisconnect((_) => log('Socket : Disconnect'));
+      socket.onConnectError((err) => log(err));
+      socket.onError((err) => log(err));
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future placeVirtualTradingOrder(TransactionType type, VirtualTradingInstrument inst) async {
+    Get.back();
+    isLoading(true);
+    TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
+      exchange: inst.exchange,
+      symbol: inst.tradingsymbol,
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      quantity: selectedQuantity.value,
+      price: "",
+      product: "NRML",
+      orderType: "MARKET",
+      triggerPrice: "",
+      stopLoss: "",
+      uId: Uuid().v4(),
+      exchangeInstrumentToken: inst.exchangeToken,
+      validity: "DAY",
+      variety: "regular",
+      createdBy: userDetailsData.name,
+      orderId: Uuid().v4(),
+      userId: userDetailsData.email,
+      instrumentToken: inst.instrumentToken,
+      trader: userDetailsData.sId,
+      paperTrade: true,
+      tenxTraderPath: false,
+    );
+    log('placeVirtualTradingOrder : ${data.toJson()}');
+    try {
+      final RepoResponse<GenericResponse> response = await repository.paperPlaceOrder(
+        data.toJson(),
+      );
+      log(response.data.toString());
+      if (response.data?.status == "Complete") {
+        SnackbarHelper.showSnackbar('Trade Successfull');
+        await getVirtualPositionsList();
+        await getVirtualTradingPortfolio();
+      } else if (response.data?.status == "Failed") {
+        log(response.error!.message!.toString());
+        SnackbarHelper.showSnackbar(response.error?.message);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getVirtualTradingPortfolio() async {
+    isLoading(true);
+    try {
+      final RepoResponse<VirtualTradingPortfolioResponse> response =
+          await repository.getVirtualTradingPortfolio();
+      if (response.data != null) {
+        virtualPortfolio(response.data?.data);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log("port ${e.toString()}");
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getVirtualTradingWatchlist() async {
+    isLoading(true);
+    try {
+      final RepoResponse<VirtualTradingWatchListResponse> response =
+          await repository.getVirtualTradingWatchlist();
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          virtualWatchList.clear();
+          virtualWatchlistIds.clear();
+          virtualWatchList(response.data?.data ?? []);
+          for (var element in virtualWatchList) {
+            virtualWatchlistIds
+                .add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+          }
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log("watch ${e.toString()}");
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getVirtualPositionsList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<VirtualTradingPositionListResponse> response =
+          await repository.getVirtualPositions();
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          virtualPositionsList(response.data?.data ?? []);
+          calculateTotalPositionValues();
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future searchInstruments(String? value) async {
+    isLoading(true);
+    try {
+      final RepoResponse<VirtualTradingInstrumentListResponse> response =
+          await repository.searchInstruments(value);
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          virtualInstruments.clear();
+          virtualInstruments(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  String getStockInstrumentLastPrice(int instID) {
+    if (stockIndexInstrumentDetails.isNotEmpty) {
+      int index = stockIndexInstrumentDetails.indexWhere(
+        (stock) => stock.instrumentToken == instID,
+      );
+      if (index == -1) return FormatHelper.formatNumbers('00');
+      String? price = stockIndexInstrumentDetails[index].lastPrice?.toString();
+      log('Price ${stockIndexInstrumentDetails[index].lastPrice!.toString()}');
+
+      return FormatHelper.formatNumbers(price);
+    } else {
+      return FormatHelper.formatNumbers('00');
+    }
+  }
+
+  Future socketIndexConnection() async {
+    List<StockIndexInstrumentDetailsList>? stockTemp = [];
+    try {
+      IO.Socket socket;
+      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+        'autoConnect': false,
+        'transports': ['websocket'],
+      });
+      socket.connect();
+      socket.onConnect((_) {
+        log('Stock Socket : Connected');
+        //   socket.emit('userId', userDetails.value.sId);
+        //   socket.emit('user-ticks', userDetails.value.sId);
+      });
+      socket.on('index-tick', (data) {
+        log(data);
+        // log('Socket : index-tick $data');
+      });
+      socket.on(
+        'index-tick',
+        (data) {
+          log('Stock Socket : index-tick $data');
+          stockTemp = StockIndexInstrumentDetailsListResponse.fromJson(data).data ?? [];
+          stockTemp?.forEach((element) {
+            if (stockIndexInstrumentDetails
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+              int index = stockIndexInstrumentDetails.indexWhere(
+                (stock) => stock.instrumentToken == element.instrumentToken,
+              );
+              stockIndexInstrumentDetails.removeAt(index);
+              stockIndexInstrumentDetails.insert(index, element);
+            } else {
+              stockIndexInstrumentDetails.add(element);
+            }
+          });
+        },
+      );
+      socket.onDisconnect((_) => log('Socket : Disconnect'));
+      socket.onConnectError((err) => log(err));
+      socket.onError((err) => log(err));
+    } on Exception catch (e) {
+      log(e.toString());
+    }
   }
 }

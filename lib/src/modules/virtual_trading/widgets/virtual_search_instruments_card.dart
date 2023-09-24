@@ -10,12 +10,37 @@ import '../../modules.dart';
 class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
   final VirtualTradingInstrument data;
   final bool isAdded;
-
   const VirtualSearchInstrumentsCard({
     super.key,
     required this.data,
     required this.isAdded,
   });
+
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    log('data: ${data.toJson()}');
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      data.instrumentToken!,
+      data.exchangeToken!,
+    );
+    // controller.generateLotsList(type: data.instrumentType);
+    log(controller.lotsValueList.toString());
+    showBottomSheet(
+      context: context,
+      builder: (context) => VirtualTransactionBottomSheet(
+        type: type,
+        data: VirtualTradingInstrument(
+          name: data.tradingsymbol,
+          instrumentType: data.instrumentType,
+          exchange: data.exchange,
+          tradingsymbol: data.tradingsymbol,
+          exchangeToken: data.exchangeToken,
+          instrumentToken: data.instrumentToken,
+          lastPrice: lastPrice,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,22 +87,12 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  log('instrument : ${data.toJson()}');
-                  FocusScope.of(context).unfocus();
-                  showBottomSheet(
-                    context: context,
-                    builder: (context) => VirtualTransactionBottomSheet(
-                      type: VirtualTransactionType.buy,
-                      data: data,
-                    ),
-                  );
-                },
+                onTap: () => openBottomSheet(context, TransactionType.buy),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.2),
+                    color: AppColors.success.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
@@ -93,22 +108,12 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  log('instrument : ${data.toJson()}');
-                  FocusScope.of(context).unfocus();
-                  showBottomSheet(
-                    context: context,
-                    builder: (context) => VirtualTransactionBottomSheet(
-                      type: VirtualTransactionType.sell,
-                      data: data,
-                    ),
-                  );
-                },
+                onTap: () => openBottomSheet(context, TransactionType.sell),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.danger.withOpacity(0.2),
+                    color: AppColors.danger.withOpacity(.25),
                   ),
                   child: Text(
                     'SELL',
@@ -130,8 +135,8 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: isAdded
-                        ? AppColors.info.withOpacity(0.2)
-                        : AppColors.secondary.withOpacity(0.2),
+                        ? AppColors.info.withOpacity(.25)
+                        : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

@@ -28,10 +28,16 @@ class VirtualTradingPosition {
   IdDetail? iId;
   num? amount;
   num? brokerage;
-  num? lots;
+  int? lots;
   num? lastaverageprice;
 
-  VirtualTradingPosition({this.iId, this.amount, this.brokerage, this.lots, this.lastaverageprice});
+  VirtualTradingPosition({
+    this.iId,
+    this.amount,
+    this.brokerage,
+    this.lots,
+    this.lastaverageprice,
+  });
 
   VirtualTradingPosition.fromJson(Map<String, dynamic> json) {
     iId = json['_id'] != null ? new IdDetail.fromJson(json['_id']) : null;

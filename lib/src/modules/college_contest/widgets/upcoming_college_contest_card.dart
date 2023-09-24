@@ -293,7 +293,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
+                    color: AppColors.primary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
@@ -318,7 +318,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(12),
-                    color: AppColors.success.withOpacity(0.2),
+                    color: AppColors.success.withOpacity(.25),
                     child: Text(
                       'Pay Now',
                       style: AppStyles.tsWhiteMedium14.copyWith(
@@ -341,7 +341,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(12),
-                    color: AppColors.success.withOpacity(0.2),
+                    color: AppColors.success.withOpacity(.25),
                     child: Text(
                       'Start Trading',
                       style: AppStyles.tsWhiteMedium14.copyWith(
@@ -357,7 +357,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.secondary.withOpacity(0.2),
+                    color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

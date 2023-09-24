@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AppUtils {}
@@ -8,15 +7,15 @@ class LoadingUtils {
 
   static void showLoader() {
     if (!isLoading) {
-      Get.dialog(
-        barrierDismissible: false,
-        PopScope(
-          canPop: false,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
+      // Get.dialog(
+      //   barrierDismissible: false,
+      //   PopScope(
+      //     canPop: false,
+      //     child: Center(
+      //       child: CircularProgressIndicator(),
+      //     ),
+      //   ),
+      // );
       isLoading = true;
     }
   }

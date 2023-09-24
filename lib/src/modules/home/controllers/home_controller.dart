@@ -22,8 +22,12 @@ class HomeController extends BaseController<DashboardRepository> {
   final userDashboard = DashboardTradeSummary().obs;
   final userDashboardReturnSummary = DashboardReturnSummary().obs;
   final dashboardCarouselList = <DashboardCarousel>[].obs;
+
   String selectedTradeType = 'virtual';
-  String selectedTimeFrame = 'lifetime';
+  String selectedTimeFrame = 'this month';
+  List<String> tradeTypes = ['virtual', 'contest', 'tenx'];
+  List<String> timeFrames = ['this month', 'last month', 'lifetime'];
+
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
     Get.find<TenxTradingController>().loadUserDetails();

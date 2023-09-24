@@ -1,17 +1,16 @@
-class VirtualTradingInstrumentListResponse {
-  List<VirtualTradingInstrument>? data;
+class ContestInstrumentListResponse {
+  List<ContestInstrument>? data;
+  ContestInstrumentListResponse({this.data});
 
-  VirtualTradingInstrumentListResponse({this.data});
-
-  VirtualTradingInstrumentListResponse.fromJson(List? json) {
+  ContestInstrumentListResponse.fromJson(List? json) {
     if (json != null) {
-      data = <VirtualTradingInstrument>[];
-      data = json.map((data) => VirtualTradingInstrument.fromJson(data)).toList();
+      data = <ContestInstrument>[];
+      data = json.map((data) => ContestInstrument.fromJson(data)).toList();
     }
   }
 }
 
-class VirtualTradingInstrument {
+class ContestInstrument {
   String? sId;
   int? instrumentToken;
   int? exchangeToken;
@@ -35,7 +34,7 @@ class VirtualTradingInstrument {
   bool? earlySubscription;
   bool? infinityVisibility;
 
-  VirtualTradingInstrument(
+  ContestInstrument(
       {this.sId,
       this.instrumentToken,
       this.exchangeToken,
@@ -57,10 +56,9 @@ class VirtualTradingInstrument {
       this.createdOn,
       this.iV,
       this.earlySubscription,
-      this.infinityVisibility,
-      num? lastaverageprice});
+      this.infinityVisibility});
 
-  VirtualTradingInstrument.fromJson(Map<String, dynamic> json) {
+  ContestInstrument.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     instrumentToken = json['instrument_token'];
     exchangeToken = json['exchange_token'];

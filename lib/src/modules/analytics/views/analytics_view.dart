@@ -170,7 +170,8 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 label: 'Show Details',
                                 onPressed: () {
                                   if (controller.selectedTab.value == 0) {
-                                    controller.userDetailsData.designation == AppConstants.equityTraderType
+                                    controller.userDetailsData.designation ==
+                                            AppConstants.equityTraderType
                                         ? controller.getInfinityTradingDateWiseDetails()
                                         : controller.getTenxTradingDateWiseDetails();
                                   } else {
@@ -284,7 +285,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                         SizedBox(height: 2),
                                         Text(
                                           controller.rangeTotalOrders.value.toString(),
-                                          style: AppStyles.tsPrimaryMedium18.copyWith(
+                                          style: AppStyles.tsPrimaryMedium14.copyWith(
                                             color: AppColors.info,
                                           ),
                                         ),
@@ -308,7 +309,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                         SizedBox(height: 2),
                                         Text(
                                           controller.rangeTotalTradingDays.value.toString(),
-                                          style: AppStyles.tsPrimaryMedium18.copyWith(
+                                          style: AppStyles.tsPrimaryMedium14.copyWith(
                                             color: AppColors.info,
                                           ),
                                         ),
@@ -338,7 +339,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                         SizedBox(height: 2),
                                         Text(
                                           controller.rangeTotalGreenDays.value.toString(),
-                                          style: AppStyles.tsPrimaryMedium18.copyWith(
+                                          style: AppStyles.tsPrimaryMedium14.copyWith(
                                             color: AppColors.success,
                                           ),
                                         ),
@@ -362,7 +363,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                         SizedBox(height: 2),
                                         Text(
                                           controller.rangeTotalRedDays.value.toString(),
-                                          style: AppStyles.tsPrimaryMedium18.copyWith(
+                                          style: AppStyles.tsPrimaryMedium14.copyWith(
                                             color: AppColors.danger,
                                           ),
                                         ),
@@ -393,33 +394,41 @@ class AnalyticsView extends GetView<AnalyticsController> {
                           ),
                         ),
                         AnalyticsChart(
-                          title: 'Orders',barGroups: controller.getOrdersChartsData(
-                            barColor: AppColors.cyan,
-                          ),
-                        ),
-                        AnalyticsChart(
-                          title: 'Expected Avg P & L',
+                          title: 'Orders',
                           barGroups: controller.getOrdersChartsData(
                             barColor: AppColors.cyan,
                           ),
                         ),
-                        AnalyticsChart(
+                        ExpectedAnalyticsChart(
+                          title: 'Expected Avg Profit',
+                          barGroups: controller.getExpectedAvgProfitChartData(
+                            barColor: AppColors.cyan,
+                          ),
+                        ),
+                        ExpectedAnalyticsChart(
+                          title: 'Expected Avg Loss',
+                          barGroups: controller.getExpectedAvgLossChartData(
+                            barColor: AppColors.cyan,
+                          ),
+                        ),
+                        ExpectedAnalyticsChart(
                           title: 'Expected P&L',
-                          barGroups: controller.getOrdersChartsData(
+                          barGroups: controller.getExpectedPnLChartData(
                             barColor: AppColors.cyan,
                           ),
                         ),
-                        AnalyticsChart(
+                        ExpectedAnalyticsChart(
                           title: 'Risk Reward Ratio',
-                          barGroups: controller.getOrdersChartsData(
-                            barColor: AppColors.cyan,
+                          barGroups: controller.getRiskRewardChartData(
+                            barColor: AppColors.danger,
                           ),
                         ),
-                        AnalyticsChart(
-                          title: 'Month Wise P&L',barGroups: controller.getOrdersChartsData(
-                            barColor: AppColors.cyan,
-                          ),
-                        ),
+                        // MonthlyAnalyticsChart(
+                        //   title: 'Monthly Gross P&L',
+                        //   barGroups: controller.getMonthlyGPnLChartData(
+                        //     barColor: AppColors.danger,
+                        //   ),
+                        // ),
                         SizedBox(height: 36),
                       ],
                     ),

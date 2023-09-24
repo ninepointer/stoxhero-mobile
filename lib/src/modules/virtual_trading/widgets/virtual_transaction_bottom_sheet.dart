@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -5,12 +8,9 @@ import '../../../core/core.dart';
 import '../../../data/data.dart';
 import '../../modules.dart';
 
-enum VirtualTransactionType { buy, sell, exit }
-
 class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
-  final VirtualTransactionType type;
   final VirtualTradingInstrument data;
-
+  final TransactionType type;
   const VirtualTransactionBottomSheet({
     super.key,
     required this.type,
@@ -19,6 +19,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
 
   @override
   Widget build(BuildContext context) {
+    log(data.toJson().toString());
     return Wrap(
       children: [
         Container(
@@ -57,7 +58,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.name ?? '-',
+                    data.name ?? '',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
@@ -87,50 +88,53 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 ],
               ),
               SizedBox(height: 16),
-              AbsorbPointer(
-                absorbing: type == VirtualTransactionType.exit,
-                child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
-                  onChanged: (value) => controller.selectedQuantity(value),
-                  menuMaxHeight: 250,
-                  isDense: true,
-                  items: AppConstants.instrumentsQuantity.map((int number) {
-                    return DropdownMenuItem<int>(
-                      value: number,
-                      child: Text(number.toString()),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(16),
-                    // filled: true,
-                    hintText: 'Quantity',
-                    // fillColor: AppColors.grey.shade700,
-                    hintStyle: AppStyles.tsGreyRegular14,
-                    errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                      color: AppColors.danger.shade700,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
+              Obx(
+                () => AbsorbPointer(
+                  absorbing: type == TransactionType.exit,
+                  child: DropdownButtonFormField2<int>(
+                    value: controller.selectedQuantity.value == 0
+                        ? null
+                        : controller.selectedQuantity.value,
+                    onChanged: (value) => controller.selectedQuantity(value),
+                    isDense: true,
+                    items: controller.lotsValueList.map((int number) {
+                      return DropdownMenuItem<int>(
+                        value: number,
+                        child: Text(number.toString()),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(16),
+                      filled: true,
+                      fillColor: AppColors.grey.withOpacity(.1),
+                      hintText: 'Quantity',
+                      hintStyle: AppStyles.tsGreyRegular14,
+                      errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                        color: AppColors.danger.shade700,
                       ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                        ),
                       ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.danger,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.danger,
+                        ),
                       ),
                     ),
                   ),
@@ -222,20 +226,24 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 ],
               ),
               CommonFilledButton(
-                  backgroundColor: type == VirtualTransactionType.exit
-                      ? AppColors.warning
-                      : type == VirtualTransactionType.buy
-                          ? AppColors.success
-                          : AppColors.danger,
-                  margin: EdgeInsets.symmetric(vertical: 24),
-                  label: type == VirtualTransactionType.exit
-                      ? 'Exit'
-                      : type == VirtualTransactionType.buy
-                          ? 'Buy'
-                          : 'Sell',
-                  onPressed: () =>
-                      // Get.find<VirtualTradingController>().placeTenxTradingOrder(type, data),
-                      ''),
+                backgroundColor: type == TransactionType.exit
+                    ? AppColors.warning
+                    : type == TransactionType.buy
+                        ? AppColors.success
+                        : AppColors.danger,
+                margin: EdgeInsets.symmetric(vertical: 24),
+                label: type == TransactionType.exit
+                    ? 'Exit'
+                    : type == TransactionType.buy
+                        ? 'Buy'
+                        : 'Sell',
+                onPressed: () {
+                  Get.find<VirtualTradingController>().placeVirtualTradingOrder(
+                    type,
+                    data,
+                  );
+                },
+              ),
             ],
           ),
         ),

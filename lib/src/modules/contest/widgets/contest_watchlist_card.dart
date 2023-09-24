@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/data/models/response/contest_instrument_list_response.dart';
 import 'package:stoxhero/src/data/models/response/contest_watchlist_response.dart';
 import 'package:stoxhero/src/modules/contest/contest_index.dart';
 
@@ -9,11 +10,11 @@ import '../../../core/core.dart';
 
 class ContestWatchlistCard extends StatefulWidget {
   final int index;
-  final ContestWatchList contestWatchList;
+  final ContestWatchList data;
   const ContestWatchlistCard({
     Key? key,
-    required this.contestWatchList,
     required this.index,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -35,6 +36,33 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
     } else {
       controller.selectedWatchlistIndex(widget.index);
     }
+  }
+
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    log('data: ${widget.data.toJson()}');
+    FocusScope.of(context).unfocus();
+
+    num lastPrice = controller.getInstrumentLastPrice(
+      widget.data.instrumentToken!,
+      widget.data.exchangeInstrumentToken!,
+    );
+    controller.generateLotsList(type: widget.data.instrument);
+    log(controller.lotsValueList.toString());
+    showBottomSheet(
+      context: context,
+      builder: (context) => ContestTransactionBottomSheet(
+        type: type,
+        data: ContestInstrument(
+          name: widget.data.symbol,
+          instrumentType: widget.data.instrument,
+          exchange: widget.data.exchange,
+          tradingsymbol: widget.data.symbol,
+          exchangeToken: widget.data.exchangeInstrumentToken,
+          instrumentToken: widget.data.instrumentToken,
+          lastPrice: lastPrice,
+        ),
+      ),
+    );
   }
 
   @override
@@ -60,16 +88,20 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
-                          value:
-                              FormatHelper.formatDateByMonth(widget.contestWatchList.contractDate),
+                          value: FormatHelper.formatDateByMonth(widget.data.contractDate),
                         ),
                         ContestWatchListCardTile(
                           isRightAlign: true,
                           label: 'LTP',
-                          // value: controller.getInstrumentLastPrice(
-                          //   widget.contestWatchList.instrumentToken!,
-                          //   widget.contestWatchList.exchangeInstrumentToken!,
-                          // ),
+                          value: FormatHelper.formatNumbers(
+                            controller
+                                .getInstrumentLastPrice(
+                                  widget.data.instrumentToken!,
+                                  widget.data.exchangeInstrumentToken!,
+                                )
+                                .toString(),
+                          ),
+                          valueColor: controller.getValueColor(widget.data.instrumentToken),
                         ),
                       ],
                     ),
@@ -80,16 +112,17 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Symbol',
-                          value: widget.contestWatchList.symbol,
+                          value: widget.data.symbol,
                         ),
                         SizedBox(height: 4),
                         ContestWatchListCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
-                          // value: controller.getInstrumentChanges(
-                          //   widget.contestWatchList.instrumentToken!,
-                          //   widget.contestWatchList.exchangeInstrumentToken!,
-                          // ),
+                          value: controller.getInstrumentChanges(
+                            widget.data.instrumentToken!,
+                            widget.data.exchangeInstrumentToken!,
+                          ),
+                          valueColor: controller.getValueColor(widget.data.instrumentToken),
                         ),
                       ],
                     ),
@@ -103,23 +136,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                     children: [
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            log('instrument : ${widget.contestWatchList.toJson()}');
-                            FocusScope.of(context).unfocus();
-                            // showBottomSheet(
-                            //   context: context,
-                            //   builder: (context) => ContestTransactionBottomSheet(
-                            //     type: ContestTransactionType.buy,
-                            //     contestWatchList: VirtualTradingInstrument(
-                            //       name: widget.contestWatchList.symbol,
-                            //       exchange: widget.contestWatchList.exchange,
-                            //       tradingsymbol: widget.contestWatchList.symbol,
-                            //       exchangeToken: widget.contestWatchList.exchangeInstrumentToken,
-                            //       instrumentToken: widget.contestWatchList.instrumentToken,
-                            //     ),
-                            //   ),
-                            // );
-                          },
+                          onTap: () => openBottomSheet(context, TransactionType.buy),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -140,23 +157,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            log('instrument : ${widget.contestWatchList.toJson()}');
-                            FocusScope.of(context).unfocus();
-                            // showBottomSheet(
-                            //   context: context,
-                            //   builder: (context) => VirtualTransactionBottomSheet(
-                            //     type: VirtualTransactionType.sell,
-                            //     data: VirtualTradingInstrument(
-                            //       name: widget.data.symbol,
-                            //       exchange: widget.data.exchange,
-                            //       tradingsymbol: widget.data.symbol,
-                            //       exchangeToken: widget.data.exchangeInstrumentToken,
-                            //       instrumentToken: widget.data.instrumentToken,
-                            //     ),
-                            //   ),
-                            // );
-                          },
+                          onTap: () => openBottomSheet(context, TransactionType.sell),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -174,7 +175,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          // onTap: () => controller.removeInstrument(widget.data.instrumentToken),
+                          onTap: () => controller.removeInstrument(widget.data.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -215,6 +216,41 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
           // // ),
         ],
       ),
+    );
+  }
+}
+
+class ContestWatchListCardTile extends StatelessWidget {
+  final String? label;
+  final String? value;
+  final bool isRightAlign;
+  final Color? valueColor;
+
+  const ContestWatchListCardTile({
+    super.key,
+    required this.label,
+    this.value,
+    this.isRightAlign = false,
+    this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Text(
+          label ?? '-',
+          style: AppStyles.tsGreyMedium12,
+        ),
+        SizedBox(height: 2),
+        Text(
+          value ?? '-',
+          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                color: valueColor,
+              ),
+        ),
+      ],
     );
   }
 }

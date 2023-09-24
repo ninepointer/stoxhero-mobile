@@ -44,7 +44,7 @@ class Dashboard {
   num? averageLoss;
   num? portfolio;
   num? maxProfitDayProfitPercent;
-  double? maxLossDayLossPercent;
+  num? maxLossDayLossPercent;
 
   Dashboard(
       {this.totalGPNL,

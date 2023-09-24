@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
@@ -13,23 +14,32 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   late HomeController controller;
   late ContestController contestController;
+  late List<String> monthsList;
 
-  String? selectedValue1;
-  String? selectedValue2;
-
-  List<String> dropdownItems1 = ['Virtual Trading', 'Contest Trading', 'TenX Trading'];
-  List<String> dropdownItems2 = ['Aug 23', 'July 23', 'Lifetime'];
+  String? selectedValue2 = '';
 
   @override
   void initState() {
     controller = Get.find<HomeController>();
     contestController = Get.find<ContestController>();
+    DateTime now = DateTime.now();
+    String currentMonth = DateFormat('MMMM yyyy').format(now);
+    String previousMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+    String nextMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month + 1));
+
+    monthsList = [
+      previousMonth,
+      currentMonth,
+      nextMonth,
+    ];
+    selectedValue2 = currentMonth;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
+
     return Scaffold(
       body: Obx(
         () => Visibility(
@@ -66,16 +76,19 @@ class _DashboardViewState extends State<DashboardView> {
                   child: CarouselSlider.builder(
                     itemCount: controller.dashboardCarouselList.length,
                     itemBuilder: (context, int index, realIndex) {
+                      print('dash: ${controller.dashboardCarouselList[index].carouselImage}');
                       return Container(
+                        width: double.infinity,
                         color: AppColors.white,
                         child: Image.network(
                           "${controller.dashboardCarouselList[index].carouselImage}",
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
+                          width: double.infinity,
                         ),
                       );
                     },
                     options: CarouselOptions(
-                      height: 180,
+                      viewportFraction: 1,
                       autoPlay: true,
                       autoPlayInterval: const Duration(seconds: 6),
                     ),
@@ -132,26 +145,52 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                 SizedBox(height: 12),
                 CommonTile(label: 'Return Summary'),
-                summaryCard(
-                  label: 'Virtual Trading',
-                  percent: '${FormatHelper.formatNumbers(
-                    controller.userDashboardReturnSummary.value.tenxReturn,
-                    showSymbol: false,
-                  )} %',
-                ),
-                summaryCard(
-                  label: 'Contest Trading',
-                  percent: '${FormatHelper.formatNumbers(
-                    controller.userDashboardReturnSummary.value.contestReturn,
-                    showSymbol: false,
-                  )} %',
-                ),
-                summaryCard(
-                  label: 'TenX Trading',
-                  percent: '${FormatHelper.formatNumbers(
-                    controller.userDashboardReturnSummary.value.tenxReturn,
-                    showSymbol: false,
-                  )} %',
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: summaryCard(
+                              label: 'Virtual\nTrading',
+                              percent:
+                                  '${(controller.userDashboardReturnSummary.value.virtualData!.npnl! / 10000).toStringAsFixed(2)} %',
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: summaryCard(
+                              label: 'Contest\nTrading',
+                              percent:
+                                  '${(controller.userDashboardReturnSummary.value.contestReturn! * 100).toStringAsFixed(2)} %',
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: summaryCard(
+                              label: 'TenX Trading',
+                              percent:
+                                  '${(controller.userDashboardReturnSummary.value.tenxReturn! * 100).toStringAsFixed(2)} %',
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: summaryCard(
+                              label: 'Trading',
+                              percent: '${FormatHelper.formatNumbers(
+                                controller.userDashboardReturnSummary.value.tenxReturn,
+                                showSymbol: false,
+                              )} %',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 CommonTile(label: 'Performance'),
                 Padding(
@@ -162,11 +201,15 @@ class _DashboardViewState extends State<DashboardView> {
                         child: CommonDropdown(
                           color: Theme.of(context).cardColor,
                           hint: 'Trading',
-                          value: selectedValue1,
-                          dropdownItems: dropdownItems1,
-                          onChanged: (String? value) => setState(() {
-                            selectedValue1 = value!;
-                          }),
+                          value: controller.selectedTradeType,
+                          dropdownItems: controller.tradeTypes,
+                          onChanged: (String? value) {
+                            setState(
+                              () {
+                                controller.selectedTradeType = value!;
+                              },
+                            );
+                          },
                         ),
                       ),
                       SizedBox(width: 4),
@@ -174,11 +217,17 @@ class _DashboardViewState extends State<DashboardView> {
                         child: CommonDropdown(
                           color: Theme.of(context).cardColor,
                           hint: 'Date',
-                          value: selectedValue2,
-                          dropdownItems: dropdownItems2,
-                          onChanged: (String? value) => setState(
-                            () => selectedValue2 = value!,
-                          ),
+                          value: controller.selectedTimeFrame,
+                          dropdownItems: controller.timeFrames,
+                          onChanged: (String? value) {
+                            setState(
+                              () {
+                                controller.selectedTimeFrame = value!;
+                                controller.getDashboard(
+                                    controller.selectedTradeType, controller.selectedTimeFrame);
+                              },
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -192,29 +241,52 @@ class _DashboardViewState extends State<DashboardView> {
                       Row(
                         children: [
                           Expanded(
-                            child: customCard(
-                              label: 'Market Days',
-                              percent: userDashboard.totalMarketDays != null
-                                  ? FormatHelper.formatNumbers(
-                                      userDashboard.totalMarketDays,
-                                      decimal: 0,
-                                      showSymbol: false,
-                                    )
-                                  : 'null',
-                            ),
+                            child: controller.selectedTradeType == 'virtual'
+                                ? customCard(
+                                    label: 'Market Days',
+                                    percent: userDashboard.totalMarketDays != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.totalMarketDays,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : 'null',
+                                  )
+                                : customCard(
+                                    label: 'Total \nContests',
+                                    percent: userDashboard.totalContests != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.totalContests,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : 'null',
+                                  ),
                           ),
                           SizedBox(width: 4),
                           Expanded(
-                            child: customCard(
-                              label: 'Trading Days',
-                              percent: userDashboard.totalTradingDays != null
-                                  ? FormatHelper.formatNumbers(
-                                      userDashboard.totalTradingDays,
-                                      decimal: 0,
-                                      showSymbol: false,
-                                    )
-                                  : 'null',
-                            ),
+                            child: controller.selectedTradeType == 'virtual'
+                                ? customCard(
+                                    label: 'Trading Days',
+                                    percent: userDashboard.totalTradingDays != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.totalTradingDays,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : 'null',
+                                  )
+                                : customCard(
+                                    label: 'Contests Participated',
+                                    percent: userDashboard.participatedContests != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.participatedContests,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : 'null',
+                                    valueColor: AppColors.danger,
+                                  ),
                           ),
                         ],
                       ),
@@ -415,7 +487,8 @@ class _DashboardViewState extends State<DashboardView> {
                   Text(
                     percent,
                     style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                          color: valueColor ?? (percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                          color: valueColor ??
+                              (percent.startsWith('-') ? AppColors.danger : AppColors.success),
                         ),
                   )
                 ],
@@ -433,7 +506,7 @@ class _DashboardViewState extends State<DashboardView> {
   }) {
     return CommonCard(
       margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8).copyWith(right: 4),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       children: [
         Row(
           children: [
@@ -451,21 +524,19 @@ class _DashboardViewState extends State<DashboardView> {
             ),
             SizedBox(width: 12),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.tsGreyRegular12,
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: Theme.of(context).textTheme.tsRegular14,
+                    ),
                   ),
-                  SizedBox(height: 2),
                   Text(
                     percent,
-                    style: Theme.of(context)
-                        .textTheme
-                        .tsMedium16
-                        .copyWith(color: percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                    style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                        color: percent.startsWith('-') ? AppColors.danger : AppColors.success),
                   ),
                 ],
               ),

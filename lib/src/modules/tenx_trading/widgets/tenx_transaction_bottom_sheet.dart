@@ -6,8 +6,6 @@ import '../../../core/core.dart';
 import '../../../data/data.dart';
 import '../../modules.dart';
 
-enum TransactionType { buy, sell, exit }
-
 class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
   final TransactionType type;
   final TenxTradingInstrument data;
@@ -40,11 +38,11 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   children: [
                     Text(
                       'Regular',
-                      style: AppStyles.tsPrimaryRegular20,
+                      style: Theme.of(context).textTheme.tsMedium18,
                     ),
                     Icon(
                       Icons.cancel,
-                      color: AppColors.primary,
+                      color: AppColors.secondary,
                     ),
                   ],
                 ),
@@ -59,11 +57,11 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 children: [
                   Text(
                     data.name ?? '-',
-                    style: AppStyles.tsSecondaryMedium18,
+                    style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    '₹ 0.00',
-                    style: AppStyles.tsSecondaryMedium18,
+                    FormatHelper.formatNumbers(data.lastPrice),
+                    style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
               ),
@@ -88,49 +86,53 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 ],
               ),
               SizedBox(height: 16),
-              AbsorbPointer(
-                absorbing: type == TransactionType.exit,
-                child: DropdownButtonFormField2<int>(
-                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
-                  onChanged: (value) => controller.selectedQuantity(value),
-                  isDense: true,
-                  items: AppConstants.instrumentsQuantity.map((int number) {
-                    return DropdownMenuItem<int>(
-                      value: number,
-                      child: Text(number.toString()),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(16),
-                    filled: true,
-                    fillColor: AppColors.grey.withOpacity(.1),
-                    hintText: 'Quantity',
-                    hintStyle: AppStyles.tsGreyRegular14,
-                    errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                      color: AppColors.danger.shade700,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
+              Obx(
+                () => AbsorbPointer(
+                  absorbing: type == TransactionType.exit,
+                  child: DropdownButtonFormField2<int>(
+                    value: controller.selectedQuantity.value == 0
+                        ? null
+                        : controller.selectedQuantity.value,
+                    onChanged: (value) => controller.selectedQuantity(value),
+                    isDense: true,
+                    items: controller.lotsValueList.map((int number) {
+                      return DropdownMenuItem<int>(
+                        value: number,
+                        child: Text(number.toString()),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(16),
+                      filled: true,
+                      fillColor: AppColors.grey.withOpacity(.1),
+                      hintText: 'Quantity',
+                      hintStyle: AppStyles.tsGreyRegular14,
+                      errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                        color: AppColors.danger.shade700,
                       ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.primary,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                        ),
                       ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.danger,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.danger,
+                        ),
                       ),
                     ),
                   ),
@@ -233,7 +235,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     : type == TransactionType.buy
                         ? 'Buy'
                         : 'Sell',
-                onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
+                onPressed: () =>
+                    Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
               ),
             ],
           ),

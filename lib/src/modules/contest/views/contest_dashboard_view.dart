@@ -18,7 +18,7 @@ class ContestDashboardView extends GetView<ContestController> {
           visible: !controller.isLoadingStatus,
           replacement: CommonLoader(),
           child: RefreshIndicator(
-            onRefresh: controller.loadData,
+            onRefresh: controller.loadTradingData,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -64,7 +64,7 @@ class ContestDashboardView extends GetView<ContestController> {
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
-                    // onPressed: controller.gotoSearchInstrument,
+                    onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
                   ),
                   controller.contestWatchList.isEmpty
@@ -80,7 +80,7 @@ class ContestDashboardView extends GetView<ContestController> {
                             itemBuilder: (context, index) {
                               return ContestWatchlistCard(
                                 index: index,
-                                contestWatchList: controller.contestWatchList[index],
+                                data: controller.contestWatchList[index],
                               );
                             },
                           ),
@@ -121,12 +121,12 @@ class ContestDashboardView extends GetView<ContestController> {
                               ContestPositionDetailsCard(
                                 isNum: true,
                                 label: 'Running Lots',
-                                value: controller.contestPositionsList[0].lots,
+                                value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
                               ContestPositionDetailsCard(
                                 label: 'Brokerage',
-                                value: controller.contestPositionsList[0].brokerage,
+                                value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
                             ],
                           ),
@@ -135,7 +135,7 @@ class ContestDashboardView extends GetView<ContestController> {
                             children: [
                               ContestPositionDetailsCard(
                                 label: 'Gross P&L',
-                                value: controller.contestPositionsList[0].amount,
+                                value: controller.tenxTotalPositionDetails.value.gross,
                               ),
                               SizedBox(width: 8),
                               ContestPositionDetailsCard(

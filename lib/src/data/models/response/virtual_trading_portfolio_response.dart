@@ -23,8 +23,8 @@ class VirtualTradingPortfolio {
   String? portfolioId;
   String? portfolioName;
   int? totalFund;
-  double? npnl;
-  double? openingBalance;
+  num? npnl;
+  num? openingBalance;
 
   VirtualTradingPortfolio({
     this.portfolioId,

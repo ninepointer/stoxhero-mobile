@@ -31,7 +31,7 @@ class ContestLeaderboard {
   Id? iId;
   int? contestParticipated;
   int? contestWon;
-  double? totalPayout;
+  num? totalPayout;
   String? traderFirstName;
   String? traderLastName;
   String? traderProfilePhoto;

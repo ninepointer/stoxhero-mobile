@@ -8,7 +8,7 @@ import '../../../data/data.dart';
 import '../../modules.dart';
 
 class MarginXPositionCard extends GetView<MarginXController> {
-  final ContestPositionList position;
+  final ContestPosition position;
 
   const MarginXPositionCard({super.key, required this.position});
 

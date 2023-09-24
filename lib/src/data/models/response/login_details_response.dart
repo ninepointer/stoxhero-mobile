@@ -143,7 +143,7 @@ class LoginDetailsResponse {
             json['addressProofDocument'],
           )
         : null;
-    profilePhoto = json['profilePhoto'];
+    profilePhoto = json['profilePhoto'].toString();
     sId = json['_id'];
     kYCStatus = json['KYCStatus'];
     iV = json['__v'];
@@ -230,7 +230,7 @@ class LoginDetailsResponse {
       data['addressProofDocument'] = this.addressProofDocument!.toJson();
     }
     if (this.profilePhoto != null) {
-      data['profilePhoto'] = this.profilePhoto;
+      data['profilePhoto'] = this.profilePhoto.toString();
     }
     data['_id'] = this.sId;
     data['KYCStatus'] = this.kYCStatus;
@@ -443,7 +443,8 @@ class ProfilePortfolio {
   ProfilePortfolio.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     activationDate = json['activationDate'];
-    portfolioId = json['portfolioId'] != null ? new PortfolioId.fromJson(json['portfolioId']) : null;
+    portfolioId =
+        json['portfolioId'] != null ? new PortfolioId.fromJson(json['portfolioId']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -539,7 +540,8 @@ class Subscription {
   });
 
   Subscription.fromJson(Map<String, dynamic> json) {
-    subscriptionId = json['subscriptionId'] != null ? new SubscriptionId.fromJson(json['subscriptionId']) : null;
+    subscriptionId =
+        json['subscriptionId'] != null ? new SubscriptionId.fromJson(json['subscriptionId']) : null;
     subscribedOn = json['subscribedOn'];
     status = json['status'];
     sId = json['_id'];

@@ -39,6 +39,8 @@ class DashboardTradeSummary {
   int? portfolio;
   num? maxProfitDayProfitPercent;
   num? maxLossDayLossPercent;
+  int? totalContests;
+  int? participatedContests;
 
   DashboardTradeSummary(
       {this.totalGPNL,
@@ -59,7 +61,9 @@ class DashboardTradeSummary {
       this.averageLoss,
       this.portfolio,
       this.maxProfitDayProfitPercent,
-      this.maxLossDayLossPercent});
+      this.maxLossDayLossPercent,
+      this.totalContests,
+      this.participatedContests});
 
   DashboardTradeSummary.fromJson(Map<String, dynamic> json) {
     totalGPNL = json['totalGPNL'];
@@ -81,6 +85,8 @@ class DashboardTradeSummary {
     portfolio = json['portfolio'];
     maxProfitDayProfitPercent = json['maxProfitDayProfitPercent'];
     maxLossDayLossPercent = json['maxLossDayLossPercent'];
+    totalContests = json['totalContests'];
+    participatedContests = json['participatedContests'];
   }
 
   Map<String, dynamic> toJson() {
@@ -104,6 +110,8 @@ class DashboardTradeSummary {
     data['portfolio'] = this.portfolio;
     data['maxProfitDayProfitPercent'] = this.maxProfitDayProfitPercent;
     data['maxLossDayLossPercent'] = this.maxLossDayLossPercent;
+    data['totalContests'] = this.totalContests;
+    data['participatedContests'] = this.participatedContests;
     return data;
   }
 }

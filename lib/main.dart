@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
 
 import 'src/app/app.dart';
 
-const bool isProd = false;
-const bool useTestToken = true;
+const bool isProd = true;
+const bool useTestToken = false;
 
 void main() async {
   await GetStorage.init();
