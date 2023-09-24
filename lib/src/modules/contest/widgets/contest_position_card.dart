@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../../core/core.dart';
 import '../../../data/data.dart';
-import '../../../data/models/response/contest_instrument_list_response.dart';
 import '../../modules.dart';
 
 class ContestPositionCard extends GetView<ContestController> {
@@ -24,7 +23,7 @@ class ContestPositionCard extends GetView<ContestController> {
       context: context,
       builder: (context) => ContestTransactionBottomSheet(
         type: type,
-        data: ContestInstrument(
+        data: TradingInstrument(
           name: position.iId!.symbol,
           exchange: position.iId!.exchange,
           tradingsymbol: position.iId!.symbol,

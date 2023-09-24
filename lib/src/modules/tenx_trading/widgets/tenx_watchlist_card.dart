@@ -9,7 +9,7 @@ import '../../modules.dart';
 
 class TenxWatchlistCard extends StatefulWidget {
   final int index;
-  final TenxTradingWatchlist data;
+  final TradingWatchlist data;
 
   const TenxWatchlistCard({
     super.key,

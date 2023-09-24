@@ -11,13 +11,13 @@ class TenxTradingRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxTradingInstrumentListResponse>> searchInstruments(String? value) async {
-    String apiURL = AppUrls.tenxTradingSearchInstruments;
+  Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(String? value) async {
+    String apiURL = AppUrls.tradingInstruments;
     var query = {'search': value, 'page': 1, 'size': 20};
     var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: TenxTradingInstrumentListResponse.fromJson(response));
+        : RepoResponse(data: TradingInstrumentListResponse.fromJson(response));
   }
 
   Future<RepoResponse<TenxTradingActiveResponse>> getTenxActiveSubscriptions() async {
@@ -28,12 +28,12 @@ class TenxTradingRepository extends BaseRepository {
         : RepoResponse(data: TenxTradingActiveResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxTradingWatchlistResponse>> getTenxWatchlist() async {
-    String apiURL = AppUrls.tenxTradingWatchlist;
+  Future<RepoResponse<TradingWatchlistResponse>> getTenxWatchlist() async {
+    String apiURL = AppUrls.tradingInstrumentWatchlist;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: TenxTradingWatchlistResponse.fromJson(response));
+        : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
   Future<RepoResponse<TenxTradingPositionListResponse>> getTenxPositions(String id) async {

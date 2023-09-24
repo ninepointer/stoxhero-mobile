@@ -11,8 +11,7 @@ class DashboardRepository extends BaseRepository {
         : RepoResponse(data: DashboardReturnSummaryResponse.fromJson(response));
   }
 
-  Future<RepoResponse<DashboardTradeSummaryResponse>> getDashboard(
-      String? tradeType, String? timeFame) async {
+  Future<RepoResponse<DashboardTradeSummaryResponse>> getDashboard(String? tradeType, String? timeFame) async {
     String apiURL = AppUrls.performance(tradeType, timeFame);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -26,5 +25,13 @@ class DashboardRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: DashboardCarouselResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StockIndexInstrumentListResponse>> getStockIndexInstrumentsList() async {
+    String apiURL = AppUrls.stockIndex;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../base/base.dart';
 import '../../../core/core.dart';
@@ -23,6 +24,9 @@ class HomeController extends BaseController<DashboardRepository> {
   final userDashboardReturnSummary = DashboardReturnSummary().obs;
   final dashboardCarouselList = <DashboardCarousel>[].obs;
 
+  final stockIndexDetailsList = <StockIndexDetails>[].obs;
+  final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
+
   String selectedTradeType = 'virtual';
   String selectedTimeFrame = 'this month';
   List<String> tradeTypes = ['virtual', 'contest', 'tenx'];
@@ -36,16 +40,31 @@ class HomeController extends BaseController<DashboardRepository> {
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
+    await socketIndexConnection();
+    await getStockIndexInstrumentsList();
     await getDashboardReturnSummary();
     await getDashboardCarousel();
     await getDashboard(selectedTradeType, selectedTimeFrame);
   }
 
+  String getStockIndexName(int instId) {
+    log('instToken : $instId');
+    int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
+    return stockIndexInstrumentList[index].displayName ?? '-';
+  }
+
+  String getProductName(String? lable) {
+    String name = '';
+    if (lable == 'virtual') name = 'Virtual Trading';
+    if (lable == 'tenx') name = 'TenX Trading';
+    if (lable == 'contest') name = 'Contest Trading';
+    return name;
+  }
+
   Future getDashboardReturnSummary() async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardReturnSummaryResponse> response =
-          await repository.getDashboardReturnSummary();
+      final RepoResponse<DashboardReturnSummaryResponse> response = await repository.getDashboardReturnSummary();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userDashboardReturnSummary(response.data?.data);
@@ -63,8 +82,7 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboard(String? tradeType, String? timeFame) async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardTradeSummaryResponse> response =
-          await repository.getDashboard(tradeType, timeFame);
+      final RepoResponse<DashboardTradeSummaryResponse> response = await repository.getDashboard(tradeType, timeFame);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userDashboard(response.data?.data);
@@ -82,8 +100,7 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboardCarousel() async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardCarouselResponse> response =
-          await repository.getDashboardCarousel();
+      final RepoResponse<DashboardCarouselResponse> response = await repository.getDashboardCarousel();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           dashboardCarouselList(response.data?.data ?? []);
@@ -96,5 +113,63 @@ class HomeController extends BaseController<DashboardRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getStockIndexInstrumentsList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
+      if (response.data != null) {
+        stockIndexInstrumentList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('car ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future socketIndexConnection() async {
+    List<StockIndexDetails>? stockTemp = [];
+    try {
+      IO.Socket socket;
+      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+        'autoConnect': false,
+        'transports': ['websocket'],
+      });
+      socket.connect();
+      socket.onConnect((_) {
+        log('Socket : Connected');
+        socket.emit('userId', userDetails.value.sId);
+        socket.emit('user-ticks', userDetails.value.sId);
+      });
+      socket.on(
+        'index-tick',
+        (data) {
+          log('Stock Socket : index-tick $data');
+          stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
+          for (var element in stockTemp ?? []) {
+            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+              int index = stockIndexDetailsList.indexWhere(
+                (stock) => stock.instrumentToken == element.instrumentToken,
+              );
+              stockIndexDetailsList.removeAt(index);
+              stockIndexDetailsList.insert(index, element);
+            } else {
+              stockIndexDetailsList.add(element);
+            }
+          }
+
+          log('Socket : ${stockIndexDetailsList.length}');
+        },
+      );
+      socket.onDisconnect((_) => log('Socket : Disconnect'));
+      socket.onConnectError((err) => log(err));
+      socket.onError((err) => log(err));
+    } on Exception catch (e) {
+      log(e.toString());
+    }
   }
 }

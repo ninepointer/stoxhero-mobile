@@ -41,13 +41,13 @@ class TenxSearchSymbolView extends GetView<TenxTradingController> {
                     replacement: CommonLoader(),
                     child: ListView.separated(
                       shrinkWrap: true,
-                      itemCount: controller.tenxInstruments.length,
+                      itemCount: controller.tradingInstruments.length,
                       separatorBuilder: (_, __) => SizedBox(height: 8),
                       itemBuilder: (context, index) {
-                        var data = controller.tenxInstruments[index];
+                        var data = controller.tradingInstruments[index];
                         return TenxSearchInstrumentsCard(
                           data: data,
-                          isAdded: controller.tenxWatchlistIds.contains(
+                          isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),
                         );

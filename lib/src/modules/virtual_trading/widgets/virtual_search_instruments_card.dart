@@ -8,7 +8,7 @@ import '../../../data/data.dart';
 import '../../modules.dart';
 
 class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
-  final VirtualTradingInstrument data;
+  final TradingInstrument data;
   final bool isAdded;
   const VirtualSearchInstrumentsCard({
     super.key,
@@ -23,8 +23,6 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
       data.instrumentToken!,
       data.exchangeToken!,
     );
-    // controller.generateLotsList(type: data.instrumentType);
-    log(controller.lotsValueList.toString());
     showBottomSheet(
       context: context,
       builder: (context) => VirtualTransactionBottomSheet(
@@ -127,16 +125,13 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () =>
-                        Get.find<VirtualTradingController>().removeInstrument(data.instrumentToken)
+                    ? () => Get.find<VirtualTradingController>().removeInstrument(data.instrumentToken)
                     : () => Get.find<VirtualTradingController>().addInstrument(data),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isAdded
-                        ? AppColors.info.withOpacity(.25)
-                        : AppColors.secondary.withOpacity(.25),
+                    color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

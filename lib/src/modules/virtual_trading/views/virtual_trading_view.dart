@@ -44,26 +44,24 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
                   ),
-                  controller.virtualWatchList.isEmpty
+                  controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.virtualWatchList.length >= 5
-                              ? 300
-                              : controller.virtualWatchList.length * 76,
+                          height:
+                              controller.tradingWatchlist.length >= 5 ? 300 : controller.tradingWatchlist.length * 76,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.virtualWatchList.length,
+                            itemCount: controller.tradingWatchlist.length,
                             itemBuilder: (context, index) {
                               return VirtualWatchListCard(
                                 index: index,
-                                data: controller.virtualWatchList[index],
+                                data: controller.tradingWatchlist[index],
                               );
                             },
                           ),
                         ),
-                  if (controller.virtualPositionsList.isNotEmpty)
-                    CommonTile(label: 'My Position Details'),
+                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),

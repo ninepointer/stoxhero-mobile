@@ -50,8 +50,8 @@ class AppUrls {
   static const String tenxTradingDateWiseAnalytics = "$apiURL/analytics/stoxhero/mystats";
   static const String infinityTradingDateWiseAnalytics = "$apiURL/analytics/infinity/mystats";
 
-  static const String tenxTradingSearchInstruments = "$apiURL/tradableInstruments";
-  static const String tenxTradingWatchlist = "$apiURL/instrumentDetails";
+  static const String tradingInstruments = "$apiURL/tradableInstruments";
+  static const String tradingInstrumentWatchlist = "$apiURL/instrumentDetails";
   static const String getliveprice = "$apiURL/getliveprice";
 
   static const String tenxTradingPlacingOrder = "$apiURL/tenxPlacingOrder";
@@ -65,8 +65,7 @@ class AppUrls {
   static const String completedContests = "$apiURL/dailycontest/contests/completed";
   static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
   static const String contestLeaderboard = "$apiURL/contestscoreboard/scoreboard";
-  static const String contestTodaysOrders =
-      "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
+  static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
 
   static const String liveCollageContests = "$apiURL/dailycontest/collagecontest/userlive";
   static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
@@ -75,8 +74,7 @@ class AppUrls {
   static const String liveCollegeContests = "$apiURL/dailycontest/collegecontests/userlive";
   static String contestWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
-  static String contestCreditData(String? id) =>
-      "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
+  static String contestCreditData(String? id) => "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
   static String contestPosition(String? id) => "$apiURL/dailycontest/trade/$id/pnl";
   static const String contestPlacingOrder = "$apiURL/placingOrderDailyContest";
 
@@ -88,8 +86,7 @@ class AppUrls {
   static const String liveMarginx = "$apiURL/marginx/userlive";
   static const String completedMarginx = "$apiURL/marginx/usercompleted";
 
-  static String completedContestOrders(String? id) =>
-      '$apiURL/dailycontest/trade/$id/my/todayorders';
+  static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
 
   static String performance(String? tradeType, String? timeFrame) =>
       "$apiURL/userdashboard/stats?tradeType=$tradeType&timeframe=$timeFrame";

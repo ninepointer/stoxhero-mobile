@@ -1,17 +1,17 @@
-class StockIndexInstrumentDetailsListResponse {
-  List<StockIndexInstrumentDetailsList>? data;
+class StockIndexDetailsListResponse {
+  List<StockIndexDetails>? data;
 
-  StockIndexInstrumentDetailsListResponse({this.data});
+  StockIndexDetailsListResponse({this.data});
 
-  StockIndexInstrumentDetailsListResponse.fromJson(List? json) {
+  StockIndexDetailsListResponse.fromJson(List? json) {
     if (json != null) {
-      data = <StockIndexInstrumentDetailsList>[];
-      data = json.map((data) => StockIndexInstrumentDetailsList.fromJson(data)).toList();
+      data = <StockIndexDetails>[];
+      data = json.map((data) => StockIndexDetails.fromJson(data)).toList();
     }
   }
 }
 
-class StockIndexInstrumentDetailsList {
+class StockIndexDetails {
   bool? tradable;
   String? mode;
   int? instrumentToken;
@@ -20,7 +20,7 @@ class StockIndexInstrumentDetailsList {
   num? change;
   String? exchangeTimestamp;
 
-  StockIndexInstrumentDetailsList({
+  StockIndexDetails({
     this.tradable,
     this.mode,
     this.instrumentToken,
@@ -30,7 +30,7 @@ class StockIndexInstrumentDetailsList {
     this.exchangeTimestamp,
   });
 
-  StockIndexInstrumentDetailsList.fromJson(Map<String, dynamic> json) {
+  StockIndexDetails.fromJson(Map<String, dynamic> json) {
     tradable = json['tradable'];
     mode = json['mode'];
     instrumentToken = json['instrument_token'];

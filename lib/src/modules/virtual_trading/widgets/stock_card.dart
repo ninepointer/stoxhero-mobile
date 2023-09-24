@@ -3,14 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/data/data.dart';
-import 'package:stoxhero/src/data/models/response/stock_index_instrument_list_response.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
 
 class StockCard extends GetView<VirtualTradingController> {
   final StockIndexInstrument? stockIndexInstrument;
-  final StockIndexInstrumentDetailsList? stockIndexInstrumentDetailsList;
+  final StockIndexDetails? stockIndexInstrumentDetailsList;
   const StockCard({
     Key? key,
     this.stockIndexInstrumentDetailsList,
@@ -24,17 +23,17 @@ class StockCard extends GetView<VirtualTradingController> {
       children: [
         CommonStockInfo(
           label: 'Nifty 50',
-          stockPrice: controller.getStockInstrumentLastPrice(
-            stockIndexInstrumentDetailsList?.lastPrice?.toInt() ?? 0,
-          ),
+          // stockPrice: controller.getStockInstrumentLastPrice(
+          //   stockIndexInstrumentDetailsList?.lastPrice?.toInt() ?? 0,
+          // ),
           stockLTP: '₹ 183.15',
           stockChange: '(+ 34.42%)',
         ),
         CommonStockInfo(
           label: 'Bank Nifty',
-          stockPrice: controller.getStockInstrumentLastPrice(
-            stockIndexInstrument?.instrumentToken ?? 0,
-          ),
+          // stockPrice: controller.getStockInstrumentLastPrice(
+          //   stockIndexInstrument?.instrumentToken ?? 0,
+          // ),
           stockLTP: '₹ 183.15',
           stockChange: '(+ 34.42%)',
         ),

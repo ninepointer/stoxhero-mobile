@@ -1,4 +1,3 @@
-export '../app/app.dart';
 export 'analytics/analytics_index.dart';
 export 'auth/auth_index.dart';
 export 'bank/bank_index.dart';

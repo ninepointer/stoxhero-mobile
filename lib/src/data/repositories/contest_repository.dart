@@ -1,5 +1,3 @@
-import 'package:stoxhero/src/data/models/response/contest_instrument_list_response.dart';
-
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
@@ -128,13 +126,13 @@ class ContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestInstrumentListResponse>> searchInstruments(String? value) async {
-    String apiURL = AppUrls.tenxTradingSearchInstruments;
+  Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(String? value) async {
+    String apiURL = AppUrls.tradingInstruments;
     var query = {'search': value, 'page': 1, 'size': 20};
     var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: ContestInstrumentListResponse.fromJson(response));
+        : RepoResponse(data: TradingInstrumentListResponse.fromJson(response));
   }
 
   Future<RepoResponse<GenericResponse>> removeInstrument(int id) async {

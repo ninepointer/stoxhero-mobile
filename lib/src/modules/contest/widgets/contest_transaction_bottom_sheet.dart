@@ -3,19 +3,21 @@ import 'dart:developer';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/data/data.dart';
 
 import '../../../core/core.dart';
-import '../../../data/models/response/contest_instrument_list_response.dart';
 import '../../modules.dart';
 
 class ContestTransactionBottomSheet extends GetView<ContestController> {
-  final ContestInstrument data;
+  final TradingInstrument data;
   final TransactionType type;
+  final String? contestId;
 
   const ContestTransactionBottomSheet({
     super.key,
     required this.data,
     required this.type,
+    this.contestId,
   });
 
   @override
@@ -93,9 +95,7 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 () => AbsorbPointer(
                   absorbing: type == TransactionType.exit,
                   child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value == 0
-                        ? null
-                        : controller.selectedQuantity.value,
+                    value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
                     onChanged: (value) => controller.selectedQuantity(value),
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {

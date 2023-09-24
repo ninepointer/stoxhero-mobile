@@ -1,7 +1,6 @@
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
-import '../models/response/stock_index_instrument_list_response.dart';
 
 class VirtualTradingRepository extends BaseRepository {
   Future<RepoResponse<VirtualTradingPortfolioResponse>> getVirtualTradingPortfolio() async {
@@ -12,12 +11,12 @@ class VirtualTradingRepository extends BaseRepository {
         : RepoResponse(data: VirtualTradingPortfolioResponse.fromJson(response));
   }
 
-  Future<RepoResponse<VirtualTradingWatchListResponse>> getVirtualTradingWatchlist() async {
-    String apiURL = AppUrls.tenxTradingWatchlist;
+  Future<RepoResponse<TradingWatchlistResponse>> getVirtualTradingWatchlist() async {
+    String apiURL = AppUrls.tradingInstrumentWatchlist;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: VirtualTradingWatchListResponse.fromJson(response));
+        : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
   Future<RepoResponse<StockIndexInstrumentListResponse>> getStockIndex() async {
@@ -36,14 +35,13 @@ class VirtualTradingRepository extends BaseRepository {
         : RepoResponse(data: VirtualTradingPositionListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<VirtualTradingInstrumentListResponse>> searchInstruments(
-      String? value) async {
-    String apiURL = AppUrls.tenxTradingSearchInstruments;
+  Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(String? value) async {
+    String apiURL = AppUrls.tradingInstruments;
     var query = {'search': value, 'page': 1, 'size': 20};
     var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: VirtualTradingInstrumentListResponse.fromJson(response));
+        : RepoResponse(data: TradingInstrumentListResponse.fromJson(response));
   }
 
   Future<RepoResponse<GenericResponse>> addInstrument(Map<String, dynamic> data) async {

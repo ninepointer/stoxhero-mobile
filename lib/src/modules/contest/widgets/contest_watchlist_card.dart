@@ -2,11 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stoxhero/src/data/models/response/contest_instrument_list_response.dart';
-import 'package:stoxhero/src/data/models/response/contest_watchlist_response.dart';
-import 'package:stoxhero/src/modules/contest/contest_index.dart';
 
 import '../../../core/core.dart';
+import '../../../data/data.dart';
+import '../../modules.dart';
 
 class ContestWatchlistCard extends StatefulWidget {
   final int index;
@@ -52,7 +51,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
       context: context,
       builder: (context) => ContestTransactionBottomSheet(
         type: type,
-        data: ContestInstrument(
+        data: TradingInstrument(
           name: widget.data.symbol,
           instrumentType: widget.data.instrument,
           exchange: widget.data.exchange,
@@ -73,7 +72,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
           if (controller.selectedWatchlistIndex.value == widget.index) SizedBox(height: 8),
           CommonCard(
             hasBorder: false,
-            margin: EdgeInsets.symmetric(horizontal: 8),
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             padding: EdgeInsets.zero,
             onTap: _updateWatchlistIndex,
             children: [

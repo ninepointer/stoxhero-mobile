@@ -9,7 +9,7 @@ import '../../modules.dart';
 
 class VirtualWatchListCard extends StatefulWidget {
   final int index;
-  final VirtualTradingWatchList data;
+  final TradingWatchlist data;
   const VirtualWatchListCard({
     super.key,
     required this.index,

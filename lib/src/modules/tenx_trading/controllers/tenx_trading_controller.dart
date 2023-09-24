@@ -29,13 +29,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedWatchlistIndex = RxInt(-1);
   final isLivePriceLoaded = false.obs;
 
+  final tradingInstruments = <TradingInstrument>[].obs;
+  final tradingWatchlistIds = <int>[].obs;
+
   final tenxActiveSub = <TenxActiveSubscription>[].obs;
-  final tenxWatchlist = <TenxTradingWatchlist>[].obs;
-  final tenxInstruments = <TenxTradingInstrument>[].obs;
+  final tenxWatchlist = <TradingWatchlist>[].obs;
   final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
   final tenxPositionsList = <TenxTradingPosition>[].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
-  final tenxWatchlistIds = <int>[].obs;
   final tenxPortfolioDetails = TenxTradingPortfolioDetails().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final userSubscriptionsIds = <String>[].obs;
@@ -187,8 +188,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         // log('Socket : tick-room $data');
         tempList = TenxTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
-          if (tenxInstrumentTradeDetailsList
-              .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+          if (tenxInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
             int index = tenxInstrumentTradeDetailsList.indexWhere(
               (stock) => stock.instrumentToken == element.instrumentToken,
             );
@@ -223,8 +223,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getTenxTradingActiveSubs() async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradingActiveResponse> response =
-          await repository.getTenxActiveSubscriptions();
+      final RepoResponse<TenxTradingActiveResponse> response = await repository.getTenxActiveSubscriptions();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           tenxActiveSub.clear();
@@ -249,15 +248,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getTenxTradingWatclist() async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradingWatchlistResponse> response =
-          await repository.getTenxWatchlist();
+      final RepoResponse<TradingWatchlistResponse> response = await repository.getTenxWatchlist();
       if (response.data != null) {
         if (response.data?.data! != null) {
           tenxWatchlist.clear();
-          tenxWatchlistIds.clear();
+          tradingWatchlistIds.clear();
           tenxWatchlist(response.data?.data ?? []);
           for (var element in tenxWatchlist) {
-            tenxWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+            tradingWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
           }
         }
       } else {
@@ -273,12 +271,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future searchInstruments(String? value) async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradingInstrumentListResponse> response =
-          await repository.searchInstruments(value);
+      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
       if (response.data != null) {
         if (response.data?.data! != null) {
-          tenxInstruments.clear();
-          tenxInstruments(response.data?.data ?? []);
+          tradingInstruments.clear();
+          tradingInstruments(response.data?.data ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -293,8 +290,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getTenxPositionsList() async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradingPositionListResponse> response =
-          await repository.getTenxPositions(
+      final RepoResponse<TenxTradingPositionListResponse> response = await repository.getTenxPositions(
         selectedSubscriptionId.value,
       );
       if (response.data != null) {
@@ -315,8 +311,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getInstrumentLivePriceList() async {
     isLoading(true);
     try {
-      final RepoResponse<InstrumentLivePriceListResponse> response =
-          await repository.getInstrumentLivePrices();
+      final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
           isLivePriceLoaded(true);
@@ -335,8 +330,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getTenxTradingPortfolioDetails() async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradingPortfolioDetailsResponse> response =
-          await repository.getTenxPortfolioDetails(
+      final RepoResponse<TenxTradingPortfolioDetailsResponse> response = await repository.getTenxPortfolioDetails(
         selectedSubscriptionId.value,
       );
       if (response.data?.data != null) {
@@ -355,8 +349,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getUserWalletTransactionsList() async {
     isLoading(true);
     try {
-      final RepoResponse<InstrumentLivePriceListResponse> response =
-          await repository.getInstrumentLivePrices();
+      final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
           isLivePriceLoaded(true);
@@ -372,7 +365,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isLoading(false);
   }
 
-  Future placeTenxTradingOrder(TransactionType type, TenxTradingInstrument inst) async {
+  Future placeTenxTradingOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
     TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
@@ -421,14 +414,15 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isLoading(false);
   }
 
-  Future addInstrument(TenxTradingInstrument inst) async {
+  Future addInstrument(TradingInstrument inst) async {
     isLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
+      chartInstrument: inst.chartInstrument,
       instrument: inst.name,
       exchange: inst.exchange,
       status: inst.status,
       symbol: inst.tradingsymbol,
-      lotSize: 25,
+      lotSize: inst.lotSize,
       instrumentToken: inst.instrumentToken,
       uId: Uuid().v4(),
       contractDate: inst.expiry,
@@ -443,7 +437,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       await repository.addInstrument(data.toJson());
       // if (response.data?.message == "Instrument Added") {
       tenxWatchlist.clear();
-      tenxInstruments.clear();
+      tradingInstruments.clear();
       await getTenxTradingWatclist();
       await searchInstruments(searchTextController.text);
       // } else {
@@ -463,7 +457,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       // if (response.data != null) {
       selectedWatchlistIndex(-1);
       tenxWatchlist.clear();
-      tenxInstruments.clear();
+      tradingInstruments.clear();
       await getTenxTradingWatclist();
       await searchInstruments(searchTextController.text);
       log('getTenxTradingWatclist : ${tenxWatchlist.length}');

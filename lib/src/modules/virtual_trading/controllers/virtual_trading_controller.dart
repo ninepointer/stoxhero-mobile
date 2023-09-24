@@ -8,7 +8,6 @@ import 'package:uuid/uuid.dart';
 import '../../../base/base.dart';
 import '../../../core/core.dart';
 import '../../../data/data.dart';
-import '../../../data/models/response/stock_index_instrument_list_response.dart';
 
 class VirtualTradingBinding implements Bindings {
   @override
@@ -23,15 +22,16 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   bool get isLoadingStatus => isLoading.value;
   final searchTextController = TextEditingController();
   final virtualPortfolio = VirtualTradingPortfolio().obs;
-  final virtualWatchList = <VirtualTradingWatchList>[].obs;
-  final virtualInstruments = <VirtualTradingInstrument>[].obs;
+
+  final tradingInstruments = <TradingInstrument>[].obs;
+  final tradingWatchlist = <TradingWatchlist>[].obs;
+  final tradingWatchlistIds = <int>[].obs;
+
   final virtualPositionsList = <VirtualTradingPosition>[].obs;
   final virtualPosition = VirtualTradingPosition().obs;
   final virtualInstrumentTradeDetails = <VirtualTradingInstrumentTradeDetails>[].obs;
-  final stockIndexInstrumentDetails = <StockIndexInstrumentDetailsList>[].obs;
+
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
-  final stockIndexInstrument = <StockIndexInstrument>[].obs;
-  final virtualWatchlistIds = <int>[].obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
   final lotsValueList = <int>[0].obs;
@@ -42,7 +42,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
     await socketConnection();
-    await socketIndexConnection();
   }
 
   num calculateGrossPNL(num ltp, num avg, int lots) {
@@ -92,6 +91,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
   void gotoSearchInstrument() {
     searchTextController.text = 'Nifty';
+    searchInstruments(searchTextController.text);
     Get.toNamed(AppRoutes.virtualSearchSymbol);
   }
 
@@ -146,7 +146,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     }
   }
 
-  Future addInstrument(VirtualTradingInstrument inst) async {
+  Future addInstrument(TradingInstrument inst) async {
     isLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
       instrument: inst.name,
@@ -157,25 +157,26 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       instrumentToken: inst.instrumentToken,
       uId: Uuid().v4(),
       contractDate: inst.expiry,
-      // maxLot: 1800,
-      // from: "TenX Trader",
+      maxLot: 1800,
+      from: "paperTrade",
+      chartInstrument: inst.chartInstrument,
       exchangeSegment: inst.segment,
       exchangeInstrumentToken: inst.exchangeToken,
     );
 
     log('addInstrument : ${data.toJson()}');
+
     try {
-      // final RepoResponse<GenericResponse> response = await repository.addInstrument(
-      //   data.toJson(),
-      // );
-      // if (response.data?.message == "Instrument Added") {
-      virtualWatchList.clear();
-      virtualInstruments.clear();
-      await getVirtualTradingWatchlist();
-      await searchInstruments(searchTextController.text);
-      // } else {
-      SnackbarHelper.showSnackbar("Instrument Added");
-      // }
+      final RepoResponse<GenericResponse> response = await repository.addInstrument(
+        data.toJson(),
+      );
+      if (response.data?.message == "Instrument Added") {
+        tradingWatchlist.clear();
+        tradingInstruments.clear();
+        await getVirtualTradingWatchlist();
+        await searchInstruments(searchTextController.text);
+        SnackbarHelper.showSnackbar("Instrument Added");
+      }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -189,11 +190,11 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       await repository.removeInstrument(instToken ?? 0);
       // if (response.data != null) {
       selectedWatchlistIndex(-1);
-      virtualWatchList.clear();
-      virtualInstruments.clear();
+      tradingWatchlist.clear();
+      tradingInstruments.clear();
       await getVirtualTradingWatchlist();
       await searchInstruments(searchTextController.text);
-      log('getVirtualTradingWatchlist : ${virtualWatchList.length}');
+      log('getVirtualTradingWatchlist : ${tradingWatchlist.length}');
       // } else {
       // SnackbarHelper.showSnackbar(response.error?.message);
       // }
@@ -228,8 +229,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
           // log('Socket : tick-room $data');
           tempList = VirtualTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
           tempList?.forEach((element) {
-            if (virtualInstrumentTradeDetails
-                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (virtualInstrumentTradeDetails.any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = virtualInstrumentTradeDetails.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );
@@ -300,8 +300,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualTradingPortfolio() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingPortfolioResponse> response =
-          await repository.getVirtualTradingPortfolio();
+      final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolio();
       if (response.data != null) {
         virtualPortfolio(response.data?.data);
       } else {
@@ -317,16 +316,14 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualTradingWatchlist() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingWatchListResponse> response =
-          await repository.getVirtualTradingWatchlist();
+      final RepoResponse<TradingWatchlistResponse> response = await repository.getVirtualTradingWatchlist();
       if (response.data != null) {
         if (response.data?.data! != null) {
-          virtualWatchList.clear();
-          virtualWatchlistIds.clear();
-          virtualWatchList(response.data?.data ?? []);
-          for (var element in virtualWatchList) {
-            virtualWatchlistIds
-                .add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+          tradingWatchlist.clear();
+          tradingWatchlistIds.clear();
+          tradingWatchlist(response.data?.data ?? []);
+          for (var element in tradingWatchlist) {
+            tradingWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
           }
         }
       } else {
@@ -342,8 +339,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualPositionsList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingPositionListResponse> response =
-          await repository.getVirtualPositions();
+      final RepoResponse<VirtualTradingPositionListResponse> response = await repository.getVirtualPositions();
       if (response.data != null) {
         if (response.data?.data! != null) {
           virtualPositionsList(response.data?.data ?? []);
@@ -362,12 +358,11 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future searchInstruments(String? value) async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingInstrumentListResponse> response =
-          await repository.searchInstruments(value);
+      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
       if (response.data != null) {
         if (response.data?.data! != null) {
-          virtualInstruments.clear();
-          virtualInstruments(response.data?.data ?? []);
+          tradingInstruments.clear();
+          tradingInstruments(response.data?.data ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -377,65 +372,5 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
-  }
-
-  String getStockInstrumentLastPrice(int instID) {
-    if (stockIndexInstrumentDetails.isNotEmpty) {
-      int index = stockIndexInstrumentDetails.indexWhere(
-        (stock) => stock.instrumentToken == instID,
-      );
-      if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price = stockIndexInstrumentDetails[index].lastPrice?.toString();
-      log('Price ${stockIndexInstrumentDetails[index].lastPrice!.toString()}');
-
-      return FormatHelper.formatNumbers(price);
-    } else {
-      return FormatHelper.formatNumbers('00');
-    }
-  }
-
-  Future socketIndexConnection() async {
-    List<StockIndexInstrumentDetailsList>? stockTemp = [];
-    try {
-      IO.Socket socket;
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Stock Socket : Connected');
-        //   socket.emit('userId', userDetails.value.sId);
-        //   socket.emit('user-ticks', userDetails.value.sId);
-      });
-      socket.on('index-tick', (data) {
-        log(data);
-        // log('Socket : index-tick $data');
-      });
-      socket.on(
-        'index-tick',
-        (data) {
-          log('Stock Socket : index-tick $data');
-          stockTemp = StockIndexInstrumentDetailsListResponse.fromJson(data).data ?? [];
-          stockTemp?.forEach((element) {
-            if (stockIndexInstrumentDetails
-                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
-              int index = stockIndexInstrumentDetails.indexWhere(
-                (stock) => stock.instrumentToken == element.instrumentToken,
-              );
-              stockIndexInstrumentDetails.removeAt(index);
-              stockIndexInstrumentDetails.insert(index, element);
-            } else {
-              stockIndexInstrumentDetails.add(element);
-            }
-          });
-        },
-      );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
-    } on Exception catch (e) {
-      log(e.toString());
-    }
   }
 }

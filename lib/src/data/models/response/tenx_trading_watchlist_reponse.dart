@@ -1,15 +1,15 @@
-class TenxTradingWatchlistResponse {
+class TradingWatchlistResponse {
   String? message;
-  List<TenxTradingWatchlist>? data;
+  List<TradingWatchlist>? data;
 
-  TenxTradingWatchlistResponse({this.message, this.data});
+  TradingWatchlistResponse({this.message, this.data});
 
-  TenxTradingWatchlistResponse.fromJson(Map<String, dynamic> json) {
+  TradingWatchlistResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
-      data = <TenxTradingWatchlist>[];
+      data = <TradingWatchlist>[];
       json['data'].forEach((v) {
-        data!.add(new TenxTradingWatchlist.fromJson(v));
+        data!.add(new TradingWatchlist.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class TenxTradingWatchlistResponse {
   }
 }
 
-class TenxTradingWatchlist {
+class TradingWatchlist {
   String? sId;
   String? instrument;
   String? exchange;
@@ -36,7 +36,7 @@ class TenxTradingWatchlist {
   String? contractDate;
   int? maxLot;
 
-  TenxTradingWatchlist(
+  TradingWatchlist(
       {this.sId,
       this.instrument,
       this.exchange,
@@ -48,7 +48,7 @@ class TenxTradingWatchlist {
       this.contractDate,
       this.maxLot});
 
-  TenxTradingWatchlist.fromJson(Map<String, dynamic> json) {
+  TradingWatchlist.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     instrument = json['instrument'];
     exchange = json['exchange'];

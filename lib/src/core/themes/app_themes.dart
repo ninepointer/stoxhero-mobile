@@ -35,11 +35,6 @@ class AppTheme {
         color: AppColors.lightCardBackgroundColor,
       ),
       appBarTheme: AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.dark,
-        ),
         elevation: 0,
         centerTitle: true,
         color: AppColors.lightCardBackgroundColor,

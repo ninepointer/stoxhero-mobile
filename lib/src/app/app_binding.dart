@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-import '../data/data.dart';
 import '../modules/modules.dart';
+import 'app.dart';
 
 class AppBinding extends Bindings {
   @override

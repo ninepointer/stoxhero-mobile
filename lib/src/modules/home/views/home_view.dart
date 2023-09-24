@@ -113,78 +113,64 @@ class _HomeViewState extends State<HomeView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: MaterialButton(
-                  minWidth: 40,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.bar_chart_rounded),
-                      SizedBox(height: 4),
-                      Text(
-                        'Home',
-                        style: Theme.of(context).textTheme.tsRegular12,
-                      )
-                    ],
-                  ),
-                  onPressed: () => _updateTab(0),
-                ),
+              _buildTabButton(
+                context,
+                index: 0,
+                label: 'Home',
+                icon: Icons.bar_chart_rounded,
               ),
-              Expanded(
-                child: MaterialButton(
-                  minWidth: 40,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.analytics_rounded),
-                      SizedBox(height: 4),
-                      Text(
-                        'Virtual',
-                        style: Theme.of(context).textTheme.tsRegular12,
-                      )
-                    ],
-                  ),
-                  onPressed: () => _updateTab(1),
-                ),
+              _buildTabButton(
+                context,
+                index: 1,
+                label: 'Virtual',
+                icon: Icons.analytics_rounded,
               ),
-              SizedBox(width: 42),
-              Expanded(
-                child: MaterialButton(
-                  minWidth: 40,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.trending_up_rounded),
-                      SizedBox(height: 4),
-                      Text(
-                        'MarginX',
-                        style: Theme.of(context).textTheme.tsRegular12,
-                      )
-                    ],
-                  ),
-                  onPressed: () => _updateTab(3),
-                ),
+              SizedBox(width: 40),
+              _buildTabButton(
+                context,
+                index: 3,
+                label: 'MarginX',
+                icon: Icons.trending_up_rounded,
               ),
-              Expanded(
-                child: MaterialButton(
-                  minWidth: 40,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.groups),
-                      SizedBox(height: 4),
-                      Text(
-                        'Contest',
-                        style: Theme.of(context).textTheme.tsRegular12,
-                      ),
-                    ],
-                  ),
-                  onPressed: () => _updateTab(4),
-                ),
+              _buildTabButton(
+                context,
+                index: 4,
+                label: 'Contest',
+                icon: Icons.groups_rounded,
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Expanded _buildTabButton(
+    BuildContext context, {
+    required int index,
+    required String label,
+    required IconData icon,
+  }) {
+    return Expanded(
+      child: MaterialButton(
+        minWidth: 40,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.black,
+            ),
+            SizedBox(height: 4),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.tsRegular12.copyWith(
+                    color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.black,
+                  ),
+            )
+          ],
+        ),
+        onPressed: () => _updateTab(index),
       ),
     );
   }

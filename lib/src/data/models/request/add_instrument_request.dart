@@ -9,6 +9,7 @@ class AddInstrumentRequest {
   String? contractDate;
   int? maxLot;
   String? from;
+  String? chartInstrument;
   String? exchangeSegment;
   int? exchangeInstrumentToken;
 
@@ -23,6 +24,7 @@ class AddInstrumentRequest {
     this.contractDate,
     this.maxLot,
     this.from,
+    this.chartInstrument,
     this.exchangeSegment,
     this.exchangeInstrumentToken,
   });
@@ -38,6 +40,7 @@ class AddInstrumentRequest {
     contractDate = json['contractDate'];
     maxLot = json['maxLot'];
     from = json['from'];
+    chartInstrument = json['chartInstrument'];
     exchangeSegment = json['exchangeSegment'];
     exchangeInstrumentToken = json['exchangeInstrumentToken'];
   }
@@ -54,6 +57,7 @@ class AddInstrumentRequest {
     data['contractDate'] = this.contractDate;
     data['maxLot'] = this.maxLot;
     data['from'] = this.from;
+    data['chartInstrument'] = this.chartInstrument;
     data['exchangeSegment'] = this.exchangeSegment;
     data['exchangeInstrumentToken'] = this.exchangeInstrumentToken;
     return data;

@@ -8,7 +8,7 @@ import '../../modules.dart';
 
 class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
   final TransactionType type;
-  final TenxTradingInstrument data;
+  final TradingInstrument data;
 
   const TenxTransactionBottomSheet({
     super.key,
@@ -90,9 +90,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 () => AbsorbPointer(
                   absorbing: type == TransactionType.exit,
                   child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value == 0
-                        ? null
-                        : controller.selectedQuantity.value,
+                    value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
                     onChanged: (value) => controller.selectedQuantity(value),
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
@@ -235,8 +233,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     : type == TransactionType.buy
                         ? 'Buy'
                         : 'Sell',
-                onPressed: () =>
-                    Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
+                onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
               ),
             ],
           ),

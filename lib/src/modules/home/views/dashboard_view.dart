@@ -49,28 +49,19 @@ class _DashboardViewState extends State<DashboardView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    CommonStockInfo(
-                      label: 'Nifty 50',
-                      stockPrice: '₹19,454',
-                      stockLTP: '₹183.15',
-                      stockChange: '(+34.42%)',
-                    ),
-                    CommonStockInfo(
-                      label: 'Bank Nifty',
-                      stockPrice: '₹19,454',
-                      stockLTP: '₹183.15',
-                      stockChange: '(+34.42%)',
-                    ),
-                    CommonStockInfo(
-                      label: 'Finnifty',
-                      stockPrice: '₹19,454',
-                      stockLTP: '₹183.15',
-                      stockChange: '(+34.42%)',
-                    ),
-                  ],
-                ),
+                if (controller.stockIndexDetailsList.isNotEmpty)
+                  Row(
+                    children: [
+                      for (var item in controller.stockIndexDetailsList) ...[
+                        CommonStockInfo(
+                          label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                          stockPrice: item.lastPrice.toString(),
+                          // stockLTP: '₹183.15',
+                          // stockChange: '(+34.42%)',
+                        ),
+                      ]
+                    ],
+                  ),
                 SizedBox(height: 24),
                 Container(
                   child: CarouselSlider.builder(
@@ -152,34 +143,38 @@ class _DashboardViewState extends State<DashboardView> {
                       Row(
                         children: [
                           Expanded(
-                            child: summaryCard(
-                              label: 'Virtual\nTrading',
-                              percent:
-                                  '${(controller.userDashboardReturnSummary.value.virtualData!.npnl! / 10000).toStringAsFixed(2)} %',
+                            child: customCard(
+                              label: 'Virtual Trading',
+                              percent: controller.userDashboardReturnSummary.value.virtualData?.npnl == null
+                                  ? '0'
+                                  : '${(controller.userDashboardReturnSummary.value.virtualData!.npnl! / 10000).toStringAsFixed(2)} %',
                             ),
                           ),
                           SizedBox(width: 8),
                           Expanded(
-                            child: summaryCard(
-                              label: 'Contest\nTrading',
-                              percent:
-                                  '${(controller.userDashboardReturnSummary.value.contestReturn! * 100).toStringAsFixed(2)} %',
+                            child: customCard(
+                              label: 'Contest Trading',
+                              percent: controller.userDashboardReturnSummary.value.contestReturn == null
+                                  ? '0'
+                                  : '${(controller.userDashboardReturnSummary.value.contestReturn ?? 0 * 100).toStringAsFixed(2)} %',
                             ),
                           ),
                         ],
                       ),
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           Expanded(
-                            child: summaryCard(
+                            child: customCard(
                               label: 'TenX Trading',
-                              percent:
-                                  '${(controller.userDashboardReturnSummary.value.tenxReturn! * 100).toStringAsFixed(2)} %',
+                              percent: controller.userDashboardReturnSummary.value.tenxReturn == null
+                                  ? '0'
+                                  : '${(controller.userDashboardReturnSummary.value.tenxReturn! * 100).toStringAsFixed(2)} %',
                             ),
                           ),
                           SizedBox(width: 8),
                           Expanded(
-                            child: summaryCard(
+                            child: customCard(
                               label: 'Trading',
                               percent: '${FormatHelper.formatNumbers(
                                 controller.userDashboardReturnSummary.value.tenxReturn,
@@ -199,6 +194,8 @@ class _DashboardViewState extends State<DashboardView> {
                     children: [
                       Expanded(
                         child: CommonDropdown(
+                          useSeptValue: true,
+                          getValue: controller.getProductName,
                           color: Theme.of(context).cardColor,
                           hint: 'Trading',
                           value: controller.selectedTradeType,
@@ -223,8 +220,7 @@ class _DashboardViewState extends State<DashboardView> {
                             setState(
                               () {
                                 controller.selectedTimeFrame = value!;
-                                controller.getDashboard(
-                                    controller.selectedTradeType, controller.selectedTimeFrame);
+                                controller.getDashboard(controller.selectedTradeType, controller.selectedTimeFrame);
                               },
                             );
                           },
@@ -250,7 +246,7 @@ class _DashboardViewState extends State<DashboardView> {
                                             decimal: 0,
                                             showSymbol: false,
                                           )
-                                        : 'null',
+                                        : '0',
                                   )
                                 : customCard(
                                     label: 'Total \nContests',
@@ -260,7 +256,7 @@ class _DashboardViewState extends State<DashboardView> {
                                             decimal: 0,
                                             showSymbol: false,
                                           )
-                                        : 'null',
+                                        : '0',
                                   ),
                           ),
                           SizedBox(width: 4),
@@ -274,7 +270,7 @@ class _DashboardViewState extends State<DashboardView> {
                                             decimal: 0,
                                             showSymbol: false,
                                           )
-                                        : 'null',
+                                        : '0',
                                   )
                                 : customCard(
                                     label: 'Contests Participated',
@@ -284,7 +280,7 @@ class _DashboardViewState extends State<DashboardView> {
                                             decimal: 0,
                                             showSymbol: false,
                                           )
-                                        : 'null',
+                                        : '0',
                                     valueColor: AppColors.danger,
                                   ),
                           ),
@@ -302,7 +298,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       decimal: 0,
                                       showSymbol: false,
                                     )
-                                  : 'null',
+                                  : '0',
                             ),
                           ),
                           SizedBox(width: 4),
@@ -315,7 +311,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       decimal: 0,
                                       showSymbol: false,
                                     )
-                                  : 'null',
+                                  : '0',
                               valueColor: AppColors.danger,
                             ),
                           ),
@@ -332,7 +328,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       userDashboard.totalNPNL,
                                       decimal: 0,
                                     )
-                                  : 'null',
+                                  : '0',
                             ),
                           ),
                           SizedBox(width: 4),
@@ -344,7 +340,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       userDashboard.portfolio,
                                       decimal: 0,
                                     )
-                                  : 'null',
+                                  : '0',
                             ),
                           ),
                         ],
@@ -360,7 +356,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       userDashboard.maxProfit,
                                       decimal: 0,
                                     )
-                                  : 'null',
+                                  : '0',
                             ),
                           ),
                           SizedBox(width: 4),
@@ -372,7 +368,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       userDashboard.maxLoss,
                                       decimal: 0,
                                     )
-                                  : 'null',
+                                  : '0',
                               valueColor: AppColors.danger,
                             ),
                           ),
@@ -389,7 +385,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       userDashboard.averageProfit,
                                       decimal: 0,
                                     )
-                                  : 'null',
+                                  : '0',
                             ),
                           ),
                           SizedBox(width: 4),
@@ -401,7 +397,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       userDashboard.averageLoss,
                                       decimal: 0,
                                     )
-                                  : 'null',
+                                  : '0',
                               valueColor: AppColors.danger,
                             ),
                           ),
@@ -419,7 +415,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       decimal: 0,
                                       showSymbol: false,
                                     )
-                                  : 'null',
+                                  : '0',
                               valueColor: AppColors.success,
                             ),
                           ),
@@ -433,7 +429,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       decimal: 0,
                                       showSymbol: false,
                                     )
-                                  : 'null',
+                                  : '0',
                               valueColor: AppColors.danger,
                             ),
                           ),
@@ -457,6 +453,7 @@ class _DashboardViewState extends State<DashboardView> {
     Color? valueColor,
   }) {
     return CommonCard(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       margin: EdgeInsets.zero,
       children: [
         Row(
@@ -481,14 +478,13 @@ class _DashboardViewState extends State<DashboardView> {
                 children: [
                   Text(
                     label,
-                    style: Theme.of(context).textTheme.tsRegular16,
+                    style: Theme.of(context).textTheme.tsRegular14,
                   ),
                   SizedBox(height: 4),
                   Text(
                     percent,
                     style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                          color: valueColor ??
-                              (percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                          color: valueColor ?? (percent.startsWith('-') ? AppColors.danger : AppColors.success),
                         ),
                   )
                 ],
@@ -524,22 +520,17 @@ class _DashboardViewState extends State<DashboardView> {
             ),
             SizedBox(width: 12),
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      label,
-                      style: Theme.of(context).textTheme.tsRegular14,
-                    ),
-                  ),
-                  Text(
-                    percent,
-                    style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                        color: percent.startsWith('-') ? AppColors.danger : AppColors.success),
-                  ),
-                ],
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.tsRegular14,
               ),
+            ),
+            Text(
+              percent,
+              style: Theme.of(context)
+                  .textTheme
+                  .tsMedium16
+                  .copyWith(color: percent.startsWith('-') ? AppColors.danger : AppColors.success),
             ),
             SizedBox(width: 8),
           ],

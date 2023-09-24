@@ -8,7 +8,7 @@ import '../../../data/data.dart';
 import '../../modules.dart';
 
 class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
-  final TenxTradingInstrument data;
+  final TradingInstrument data;
   final bool isAdded;
 
   const TenxSearchInstrumentsCard({
