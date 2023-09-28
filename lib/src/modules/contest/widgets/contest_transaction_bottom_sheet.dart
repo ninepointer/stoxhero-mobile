@@ -9,20 +9,21 @@ import '../../../core/core.dart';
 import '../../modules.dart';
 
 class ContestTransactionBottomSheet extends GetView<ContestController> {
-  final TradingInstrument data;
+  final TradingInstrument tradingInstrument;
   final TransactionType type;
   final String? contestId;
-
+  final LiveContest? liveContest;
   const ContestTransactionBottomSheet({
     super.key,
-    required this.data,
+    required this.tradingInstrument,
     required this.type,
+    this.liveContest,
     this.contestId,
   });
 
   @override
   Widget build(BuildContext context) {
-    log(data.toJson().toString());
+    log(tradingInstrument.toJson().toString());
     return Wrap(
       children: [
         Container(
@@ -61,11 +62,11 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.name ?? '',
+                    tradingInstrument.name ?? '',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    FormatHelper.formatNumbers(data.lastPrice),
+                    FormatHelper.formatNumbers(tradingInstrument.lastPrice),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
@@ -95,7 +96,9 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 () => AbsorbPointer(
                   absorbing: type == TransactionType.exit,
                   child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
+                    value: controller.selectedQuantity.value == 0
+                        ? null
+                        : controller.selectedQuantity.value,
                     onChanged: (value) => controller.selectedQuantity(value),
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
@@ -241,7 +244,8 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 onPressed: () {
                   Get.find<ContestController>().placeContestOrder(
                     type,
-                    data,
+                    tradingInstrument,
+                    contestId: contestId,
                   );
                 },
               ),

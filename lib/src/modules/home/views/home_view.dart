@@ -159,13 +159,14 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Icon(
               icon,
-              color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.black,
+              color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.grey,
             ),
             SizedBox(height: 4),
             Text(
               label,
               style: Theme.of(context).textTheme.tsRegular12.copyWith(
-                    color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.black,
+                    color:
+                        _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.grey,
                   ),
             )
           ],

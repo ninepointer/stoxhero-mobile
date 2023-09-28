@@ -63,7 +63,8 @@ class InviteView extends GetView<ReferralsController> {
                             iconData: Icons.share,
                           ),
                           ReferralDetailsCardTile(
-                            label: 'Your friend gets 10 Lakhs Virtual Currency for Paper Trading (Virtual Trading).',
+                            label:
+                                'Your friend gets 10 Lakhs Virtual Currency for Paper Trading (Virtual Trading).',
                             iconData: Icons.share,
                           ),
                           ReferralDetailsCardTile(
@@ -102,7 +103,8 @@ class InviteView extends GetView<ReferralsController> {
                                         splashRadius: 24,
                                         padding: EdgeInsets.zero,
                                         onPressed: () {
-                                          Clipboard.setData(ClipboardData(text: getReferralMessage()));
+                                          Clipboard.setData(
+                                              ClipboardData(text: getReferralMessage()));
                                         },
                                         icon: Icon(
                                           Icons.copy,

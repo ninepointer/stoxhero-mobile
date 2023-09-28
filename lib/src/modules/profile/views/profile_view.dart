@@ -68,12 +68,18 @@ class ProfileView extends GetView<ProfileController> {
             ProfileListTile(
               icon: Icons.account_balance,
               label: 'Bank Details',
-              onTap: () => Get.toNamed(AppRoutes.bankDetails),
+              onTap: () {
+                Get.find<BankController>().loadData();
+                Get.toNamed(AppRoutes.bankDetails);
+              },
             ),
             ProfileListTile(
               icon: Icons.account_balance,
               label: 'KYC Details',
-              onTap: () => Get.toNamed(AppRoutes.kycDetails),
+              onTap: () {
+                Get.find<BankController>().loadData();
+                Get.toNamed(AppRoutes.kycDetails);
+              },
             ),
             ProfileListTile(
               icon: Icons.school,

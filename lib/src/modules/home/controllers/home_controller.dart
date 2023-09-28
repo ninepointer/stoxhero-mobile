@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -48,23 +49,38 @@ class HomeController extends BaseController<DashboardRepository> {
   }
 
   String getStockIndexName(int instId) {
-    log('instToken : $instId');
+    // log('instToken : $instId');
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
-  String getProductName(String? lable) {
+  String getProductName(String? label) {
     String name = '';
-    if (lable == 'virtual') name = 'Virtual Trading';
-    if (lable == 'tenx') name = 'TenX Trading';
-    if (lable == 'contest') name = 'Contest Trading';
+    if (label == 'virtual') name = 'Virtual Trading';
+    if (label == 'tenx') name = 'TenX Trading';
+    if (label == 'contest') name = 'Contest Trading';
     return name;
+  }
+
+  Color getValueColor(dynamic value) {
+    if (value != null) {
+      num number = value is int || value is double ? value : num.parse(value);
+      if (number < 0) {
+        return AppColors.success;
+      } else if (number > 0) {
+        return AppColors.danger;
+      } else if (number == 0) {
+        return AppColors.black;
+      }
+    }
+    return AppColors.white;
   }
 
   Future getDashboardReturnSummary() async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardReturnSummaryResponse> response = await repository.getDashboardReturnSummary();
+      final RepoResponse<DashboardReturnSummaryResponse> response =
+          await repository.getDashboardReturnSummary();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userDashboardReturnSummary(response.data?.data);
@@ -82,7 +98,8 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboard(String? tradeType, String? timeFame) async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardTradeSummaryResponse> response = await repository.getDashboard(tradeType, timeFame);
+      final RepoResponse<DashboardTradeSummaryResponse> response =
+          await repository.getDashboard(tradeType, timeFame);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userDashboard(response.data?.data);
@@ -100,7 +117,8 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboardCarousel() async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardCarouselResponse> response = await repository.getDashboardCarousel();
+      final RepoResponse<DashboardCarouselResponse> response =
+          await repository.getDashboardCarousel();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           dashboardCarouselList(response.data?.data ?? []);
@@ -118,7 +136,8 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response =
+          await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -148,10 +167,11 @@ class HomeController extends BaseController<DashboardRepository> {
       socket.on(
         'index-tick',
         (data) {
-          log('Stock Socket : index-tick $data');
+          // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (stockIndexDetailsList
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = stockIndexDetailsList.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );
@@ -162,7 +182,7 @@ class HomeController extends BaseController<DashboardRepository> {
             }
           }
 
-          log('Socket : ${stockIndexDetailsList.length}');
+          // log('Socket : ${stockIndexDetailsList.length}');
         },
       );
       socket.onDisconnect((_) => log('Socket : Disconnect'));

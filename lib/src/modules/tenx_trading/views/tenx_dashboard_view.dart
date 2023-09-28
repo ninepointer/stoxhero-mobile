@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/modules/modules.dart';
-
-import '../../../core/core.dart';
+import '../../../app/app.dart';
 
 class TenxDashboardView extends GetView<TenxTradingController> {
   const TenxDashboardView({Key? key}) : super(key: key);
@@ -22,29 +19,29 @@ class TenxDashboardView extends GetView<TenxTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Row(
-                  //   children: [
-                  //     CommonStockInfo(
-                  //       label: 'Nifty 50',
-                  //       stockPrice: '₹ 12,500.90',
-                  //       stockLTP: '₹ 183.15',
-                  //       stockChange: '(+ 34.42%)',
-                  //     ),
-                  //     CommonStockInfo(
-                  //       label: 'Bank Nifty',
-                  //       stockPrice: '₹ 12,500.90',
-                  //       stockLTP: '₹ 183.15',
-                  //       stockChange: '(+ 34.42%)',
-                  //     ),
-                  //     CommonStockInfo(
-                  //       label: 'Finnifty',
-                  //       stockPrice: '₹ 12,500.90',
-                  //       stockLTP: '₹ 183.15',
-                  //       stockChange: '(+ 34.42%)',
-                  //     ),
-                  //     SizedBox(width: 8),
-                  //   ],
-                  // ),
+                  if (controller.stockIndexDetailsList.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          for (var item in controller.stockIndexDetailsList)
+                            CommonStockInfo(
+                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              stockPrice: FormatHelper.formatNumbers(
+                                item.lastPrice,
+                              ),
+                              stockColor: controller.getValueColor(item.lastPrice),
+                              stockLTP: FormatHelper.formatNumbers(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
+                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockLTPColor: controller.getValueColor(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   // Row(
                   //   children: [
                   //     CommonStockInfo(
@@ -69,20 +66,20 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
                   ),
-                  controller.tenxWatchlist.isEmpty
+                  controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tenxWatchlist.length >= 3
+                          height: controller.tradingWatchlist.length >= 3
                               ? 340
-                              : controller.tenxWatchlist.length * 120,
+                              : controller.tradingWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.tenxWatchlist.length,
+                            itemCount: controller.tradingWatchlist.length,
                             itemBuilder: (context, index) {
                               return TenxWatchlistCard(
                                 index: index,
-                                data: controller.tenxWatchlist[index],
+                                tradingWatchlist: controller.tradingWatchlist[index],
                               );
                             },
                           ),
@@ -113,12 +110,12 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             children: [
                               TenxPositionDetailsCard(
                                 label: 'Gross P&L',
-                                value: '0',
+                                value: controller.calculateTotalGrossPNL(),
                               ),
                               SizedBox(width: 8),
                               TenxPositionDetailsCard(
                                 label: 'Net P&L',
-                                value: '0',
+                                value: controller.calculateTotalNetPNL(),
                               ),
                             ],
                           ),
@@ -135,7 +132,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           itemCount: controller.tenxPositionsList.length,
                           itemBuilder: (context, index) {
                             var item = controller.tenxPositionsList[index];
-                            return TenxPositionCard(data: item);
+                            return TenxPositionCard(tenxTradingPosition: item);
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
@@ -146,13 +143,14 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Available Margin',
-                    info: 'Funds that you can used to trade today',
-                    value: '0',
+                    info: 'Funds that you can use to trade today',
+                    value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) -
+                        (controller.tenxTotalPositionDetails.value.brokerage ?? 0),
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Used Margin',
                     info: 'Net funds utilized for your executed trades',
-                    value: controller.tenxTotalPositionDetails.value.brokerage,
+                    value: controller.calculateTotalNetPNL(),
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Opening Balance',

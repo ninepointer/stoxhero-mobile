@@ -1,41 +1,37 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
-  final TradingInstrument data;
+  final TradingInstrument tradingInstrument;
   final bool isAdded;
 
   const TenxSearchInstrumentsCard({
     super.key,
-    required this.data,
+    required this.tradingInstrument,
     required this.isAdded,
   });
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${data.toJson()}');
+    log('data: ${tradingInstrument.toJson()}');
     FocusScope.of(context).unfocus();
     num lastPrice = controller.getInstrumentLastPrice(
-      data.instrumentToken!,
-      data.exchangeToken!,
+      tradingInstrument.instrumentToken!,
+      tradingInstrument.exchangeToken!,
     );
-    // controller.generateLotsList(type: data.instrumentType);
-    log(controller.lotsValueList.toString());
+    controller.generateLotsList(type: tradingInstrument.name);
     showBottomSheet(
       context: context,
-      builder: (context) => VirtualTransactionBottomSheet(
+      builder: (context) => TenxTransactionBottomSheet(
         type: type,
-        data: VirtualTradingInstrument(
-          name: data.tradingsymbol,
-          instrumentType: data.instrumentType,
-          exchange: data.exchange,
-          tradingsymbol: data.tradingsymbol,
-          exchangeToken: data.exchangeToken,
-          instrumentToken: data.instrumentToken,
+        tradingInstrument: TradingInstrument(
+          name: tradingInstrument.tradingsymbol,
+          instrumentType: tradingInstrument.instrumentType,
+          exchange: tradingInstrument.exchange,
+          tradingsymbol: tradingInstrument.tradingsymbol,
+          exchangeToken: tradingInstrument.exchangeToken,
+          instrumentToken: tradingInstrument.instrumentToken,
           lastPrice: lastPrice,
         ),
       ),
@@ -57,11 +53,11 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.name ?? '-',
+                    tradingInstrument.name ?? '-',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    FormatHelper.formatDateByMonth(data.expiry),
+                    FormatHelper.formatDateByMonth(tradingInstrument.expiry),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
@@ -71,11 +67,11 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.tradingsymbol ?? '-',
+                    tradingInstrument.tradingsymbol ?? '-',
                     style: Theme.of(context).textTheme.tsRegular14,
                   ),
                   Text(
-                    data.exchange ?? '-',
+                    tradingInstrument.exchange ?? '-',
                     style: Theme.of(context).textTheme.tsRegular14,
                   ),
                 ],
@@ -149,8 +145,9 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () => Get.find<TenxTradingController>().removeInstrument(data.instrumentToken)
-                    : () => Get.find<TenxTradingController>().addInstrument(data),
+                    ? () => Get.find<TenxTradingController>()
+                        .removeInstrument(tradingInstrument.instrumentToken)
+                    : () => Get.find<TenxTradingController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),

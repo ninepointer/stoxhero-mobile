@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/core/core.dart';
+import '../../../app/app.dart';
 
 class VirtualPortfolioDetailsCard extends StatelessWidget {
   final String? label;
   final dynamic value;
-
+  final Color? valueColor;
   const VirtualPortfolioDetailsCard({
     super.key,
     this.label,
     this.value,
+    this.valueColor,
   });
 
   @override
@@ -35,9 +36,10 @@ class VirtualPortfolioDetailsCard extends StatelessWidget {
                   FormatHelper.formatNumbers(
                     value,
                     decimal: 0,
+                    isNegative: true,
                   ),
                   style: AppStyles.tsPrimarySemiBold16.copyWith(
-                    color: AppColors.success,
+                    color: valueColor ?? AppColors.success,
                   ),
                 )
               ],

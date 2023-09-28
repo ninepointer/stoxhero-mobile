@@ -247,13 +247,17 @@ class CompletedContestCard extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          FormatHelper.formatNumbers(completedContestPnl?.payoutAmount),
+                          FormatHelper.formatNumbers(
+                            (completedContestPnl?.payoutAmount ?? 0) >= 0
+                                ? completedContestPnl?.payoutAmount
+                                : 0,
+                          ),
                           style: Theme.of(context).textTheme.tsMedium14.copyWith(
                                 color: (completedContestPnl?.payoutAmount ?? 0) >= 0
                                     ? AppColors.success
                                     : AppColors.danger,
                               ),
-                        ),
+                        )
                       ],
                     ),
                   ),

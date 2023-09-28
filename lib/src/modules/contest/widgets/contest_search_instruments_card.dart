@@ -1,17 +1,18 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+
 import '../../../app/app.dart';
 
-class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
+class ContestSearchInstrumentsCard extends GetView<ContestController> {
   final TradingInstrument tradingInstrument;
   final bool isAdded;
-  const VirtualSearchInstrumentsCard({
+
+  const ContestSearchInstrumentsCard({
     super.key,
     required this.tradingInstrument,
     required this.isAdded,
   });
-
   void openBottomSheet(BuildContext context, TransactionType type) {
     log('data: ${tradingInstrument.toJson()}');
     FocusScope.of(context).unfocus();
@@ -22,7 +23,7 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
     controller.generateLotsList(type: tradingInstrument.name);
     showBottomSheet(
       context: context,
-      builder: (context) => VirtualTransactionBottomSheet(
+      builder: (context) => ContestTransactionBottomSheet(
         type: type,
         tradingInstrument: TradingInstrument(
           name: tradingInstrument.tradingsymbol,
@@ -82,6 +83,17 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
           children: [
             Expanded(
               child: GestureDetector(
+                // onTap: () {
+                //   log('instrument : ${data.toJson()}');
+                //   FocusScope.of(context).unfocus();
+                //   showBottomSheet(
+                //     context: context,
+                //     builder: (context) => TenxTransactionBottomSheet(
+                //       type: TransactionType.buy,
+                //       data: data,
+                //     ),
+                //   );
+                // },
                 onTap: () => openBottomSheet(context, TransactionType.buy),
                 child: Container(
                   alignment: Alignment.center,
@@ -103,6 +115,17 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
             ),
             Expanded(
               child: GestureDetector(
+                // onTap: () {
+                //   log('instrument : ${data.toJson()}');
+                //   FocusScope.of(context).unfocus();
+                //   showBottomSheet(
+                //     context: context,
+                //     builder: (context) => TenxTransactionBottomSheet(
+                //       type: TransactionType.sell,
+                //       data: data,
+                //     ),
+                //   );
+                // },
                 onTap: () => openBottomSheet(context, TransactionType.sell),
                 child: Container(
                   alignment: Alignment.center,
@@ -122,9 +145,9 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () => Get.find<VirtualTradingController>()
+                    ? () => Get.find<ContestController>()
                         .removeInstrument(tradingInstrument.instrumentToken)
-                    : () => Get.find<VirtualTradingController>().addInstrument(tradingInstrument),
+                    : () => Get.find<ContestController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),

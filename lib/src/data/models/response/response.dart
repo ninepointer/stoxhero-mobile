@@ -36,7 +36,7 @@ export 'trading_instrument_list_response.dart';
 export 'tenx_trading_instrument_trade_details_list_response.dart';
 export 'tenx_trading_portfolio__details_response.dart';
 export 'tenx_trading_position_list_response.dart';
-export 'tenx_trading_watchlist_reponse.dart';
+export 'trading_watchlist_reponse.dart';
 export 'tutorial_response.dart';
 export 'upcoming_contest_list_response.dart';
 export 'upcoming_marginx_list_response.dart';

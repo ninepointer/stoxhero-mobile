@@ -1,19 +1,16 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/data/models/response/contest_watchlist_response.dart';
-import 'package:stoxhero/src/modules/contest/contest_index.dart';
 
-import '../../../core/core.dart';
+import '../../../app/app.dart';
 
 class ContestWatchlistCard extends StatefulWidget {
   final int index;
-  final ContestWatchList contestWatchList;
+  final TradingWatchlist tradingWatchlist;
   const ContestWatchlistCard({
     Key? key,
-    required this.contestWatchList,
     required this.index,
+    required this.tradingWatchlist,
   }) : super(key: key);
 
   @override
@@ -61,7 +58,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                           isRightAlign: false,
                           label: 'Contract Date',
                           value:
-                              FormatHelper.formatDateByMonth(widget.contestWatchList.contractDate),
+                              FormatHelper.formatDateByMonth(widget.tradingWatchlist.contractDate),
                         ),
                         ContestWatchListCardTile(
                           isRightAlign: true,
@@ -80,16 +77,16 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Symbol',
-                          value: widget.contestWatchList.symbol,
+                          value: widget.tradingWatchlist.symbol,
                         ),
                         SizedBox(height: 4),
                         ContestWatchListCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
-                          // value: controller.getInstrumentChanges(
-                          //   widget.contestWatchList.instrumentToken!,
-                          //   widget.contestWatchList.exchangeInstrumentToken!,
-                          // ),
+                          value: controller.getInstrumentChanges(
+                            widget.tradingWatchlist.instrumentToken!,
+                            widget.tradingWatchlist.exchangeInstrumentToken!,
+                          ),
                         ),
                       ],
                     ),
@@ -104,21 +101,21 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            log('instrument : ${widget.contestWatchList.toJson()}');
+                            log('instrument : ${widget.tradingWatchlist.toJson()}');
                             FocusScope.of(context).unfocus();
-                            // showBottomSheet(
-                            //   context: context,
-                            //   builder: (context) => ContestTransactionBottomSheet(
-                            //     type: ContestTransactionType.buy,
-                            //     contestWatchList: VirtualTradingInstrument(
-                            //       name: widget.contestWatchList.symbol,
-                            //       exchange: widget.contestWatchList.exchange,
-                            //       tradingsymbol: widget.contestWatchList.symbol,
-                            //       exchangeToken: widget.contestWatchList.exchangeInstrumentToken,
-                            //       instrumentToken: widget.contestWatchList.instrumentToken,
-                            //     ),
-                            //   ),
-                            // );
+                            showBottomSheet(
+                              context: context,
+                              builder: (context) => ContestTransactionBottomSheet(
+                                type: TransactionType.buy,
+                                tradingInstrument: TradingInstrument(
+                                  name: widget.tradingWatchlist.symbol,
+                                  exchange: widget.tradingWatchlist.exchange,
+                                  tradingsymbol: widget.tradingWatchlist.symbol,
+                                  exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
+                                  instrumentToken: widget.tradingWatchlist.instrumentToken,
+                                ),
+                              ),
+                            );
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -141,7 +138,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            log('instrument : ${widget.contestWatchList.toJson()}');
+                            log('instrument : ${widget.tradingWatchlist.toJson()}');
                             FocusScope.of(context).unfocus();
                             // showBottomSheet(
                             //   context: context,
@@ -174,7 +171,8 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          // onTap: () => controller.removeInstrument(widget.data.instrumentToken),
+                          onTap: () =>
+                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),

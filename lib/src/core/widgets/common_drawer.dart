@@ -43,9 +43,11 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<OrdersController>().loadData();
         break;
       case 3:
-        ThemeService().switchTheme();
         break;
       case 4:
+        ThemeService().switchTheme();
+        break;
+      case 5:
         AppStorage.clearStorage();
         Get.offAllNamed(AppRoutes.signin);
         // AppStorage.clearLoginDetails();
@@ -143,14 +145,18 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 2),
               ),
               ProfileListTile(
+                label: 'Internship/Training',
+                onTap: () => selectedItem(context, 3),
+              ),
+              ProfileListTile(
                 icon: Icons.dark_mode,
                 label: 'Dark Mode',
-                onTap: () => selectedItem(context, 3),
+                onTap: () => selectedItem(context, 4),
               ),
               ProfileListTile(
                 icon: Icons.logout,
                 label: 'Logout',
-                onTap: () => selectedItem(context, 4),
+                onTap: () => selectedItem(context, 5),
               ),
             ],
           ),

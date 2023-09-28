@@ -5,7 +5,7 @@ import '../../../core/core.dart';
 import '../../../data/data.dart';
 import '../../modules.dart';
 
-class LiveContestCard extends StatelessWidget {
+class LiveContestCard extends GetView<ContestController> {
   final LiveContest? liveContest;
   final ContestPosition? contestPositionList;
   final ContestCreditData? contestPortfolio;
@@ -250,34 +250,63 @@ class LiveContestCard extends StatelessWidget {
         ),
         Row(
           children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Get.find<ContestController>().loadTradingData();
-                  Get.find<ContestController>().getContestPositions(liveContest?.sId);
-                  Get.find<ContestController>().getContestPortfolio(liveContest?.sId);
-                  Get.find<ContestController>().getContestWatchList(
-                      liveContest?.isNifty, liveContest?.isBankNifty, liveContest?.isFinNifty);
-                  Get.to(() => ContestDashboardView());
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(.25),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
+            if (liveContest?.entryFee != 0)
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    controller.calculateUserWalletAmount();
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => ContestBuySubscriptionBottomSheet(),
+                    );
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withOpacity(.25),
+                    ),
+                    child: Text(
+                      'Pay Now',
+                      style: AppStyles.tsWhiteMedium14.copyWith(
+                        color: AppColors.success,
+                      ),
                     ),
                   ),
-                  child: Text(
-                    'Start Trading',
-                    style: AppStyles.tsWhiteMedium14.copyWith(
-                      color: AppColors.success,
+                ),
+              )
+            else
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    controller.loadTradingData();
+                    controller.getContestPositions(liveContest?.sId);
+                    controller.getContestPortfolio(liveContest?.sId);
+                    controller.getContestWatchList(
+                      liveContest?.isNifty,
+                      liveContest?.isBankNifty,
+                      liveContest?.isFinNifty,
+                    );
+                    Get.to(() => ContestDashboardView());
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withOpacity(.25),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Start Trading',
+                      style: AppStyles.tsWhiteMedium14.copyWith(
+                        color: AppColors.success,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
             Expanded(
               child: GestureDetector(
                 child: Container(

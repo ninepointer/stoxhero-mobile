@@ -40,7 +40,8 @@ class WalletView extends GetView<WalletController> {
                     buttonLabel: 'Redeem',
                     onPressed: null,
                   ),
-                  if (controller.walletTransactionsList.isNotEmpty) CommonTile(label: 'Recent Transactions'),
+                  if (controller.walletTransactionsList.isNotEmpty)
+                    CommonTile(label: 'Recent Transactions'),
                   if (controller.walletTransactionsList.isNotEmpty)
                     ListView.builder(
                       shrinkWrap: true,

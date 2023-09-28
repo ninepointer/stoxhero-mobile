@@ -22,28 +22,26 @@ class ContestDashboardView extends GetView<ContestController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Nifty 50',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Bank Nifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Finnifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                    ],
-                  ),
+                  if (controller.stockIndexDetailsList.isNotEmpty)
+                    Row(
+                      children: [
+                        for (var item in controller.stockIndexDetailsList)
+                          CommonStockInfo(
+                            label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                            stockPrice: FormatHelper.formatNumbers(
+                              item.lastPrice,
+                            ),
+                            stockColor: controller.getValueColor(item.lastPrice),
+                            stockLTP: FormatHelper.formatNumbers(
+                              item.lastPrice! - (item.ohlc?.close ?? 0),
+                            ),
+                            stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                            stockLTPColor: controller.getValueColor(
+                              item.lastPrice! - (item.ohlc?.close ?? 0),
+                            ),
+                          ),
+                      ],
+                    ),
                   Row(
                     children: [
                       CommonStockInfo(
@@ -80,35 +78,35 @@ class ContestDashboardView extends GetView<ContestController> {
                             itemBuilder: (context, index) {
                               return ContestWatchlistCard(
                                 index: index,
-                                data: controller.contestWatchList[index],
+                                contestWatchlist: controller.contestWatchList[index],
                               );
                             },
                           ),
                         ),
-                  CommonTile(label: 'My Rank'),
-                  CommonRankCard(
-                    rank: '#1000',
-                    name: 'Ritik Prajapat',
-                    netPnl: '+ ₹12,02.69',
-                  ),
-                  CommonTile(label: 'Top Rank'),
-                  CommonRankCard(
-                    rank: '#1000',
-                    name: 'Ritik Prajapat',
-                    netPnl: '+ ₹12,02.69',
-                  ),
-                  SizedBox(height: 4),
-                  CommonRankCard(
-                    rank: '#1000',
-                    name: 'Ritik Prajapat',
-                    netPnl: '+ ₹12,02.69',
-                  ),
-                  SizedBox(height: 4),
-                  CommonRankCard(
-                    rank: '#1000',
-                    name: 'Ritik Prajapat',
-                    netPnl: '+ ₹12,02.69',
-                  ),
+                  // CommonTile(label: 'My Rank'),
+                  // CommonRankCard(
+                  //   rank: '#1000',
+                  //   name: 'Ritik Prajapat',
+                  //   netPnl: '+ ₹12,02.69',
+                  // ),
+                  // CommonTile(label: 'Top Rank'),
+                  // CommonRankCard(
+                  //   rank: '#1000',
+                  //   name: 'Ritik Prajapat',
+                  //   netPnl: '+ ₹12,02.69',
+                  // ),
+                  // SizedBox(height: 4),
+                  // CommonRankCard(
+                  //   rank: '#1000',
+                  //   name: 'Ritik Prajapat',
+                  //   netPnl: '+ ₹12,02.69',
+                  // ),
+                  // SizedBox(height: 4),
+                  // CommonRankCard(
+                  //   rank: '#1000',
+                  //   name: 'Ritik Prajapat',
+                  //   netPnl: '+ ₹12,02.69',
+                  // ),
                   if (controller.contestPositionsList.isNotEmpty)
                     CommonTile(label: 'My Position Details'),
                   if (controller.contestPositionsList.isNotEmpty)

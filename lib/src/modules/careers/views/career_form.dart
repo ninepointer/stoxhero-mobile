@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/core/core.dart';
-import 'package:stoxhero/src/modules/careers/controllers/career_controller.dart';
+
+import '../../../app/app.dart';
 
 class CareerForm extends StatefulWidget {
-  const CareerForm({Key? key}) : super(key: key);
+  final String? careerId;
+  const CareerForm({Key? key, this.careerId}) : super(key: key);
 
   @override
   State<CareerForm> createState() => _CareerFormState();
@@ -13,7 +13,6 @@ class CareerForm extends StatefulWidget {
 
 class _CareerFormState extends State<CareerForm> {
   late CareerController controller;
-
   @override
   void initState() {
     controller = Get.find<CareerController>();
@@ -58,7 +57,7 @@ class _CareerFormState extends State<CareerForm> {
               ),
               CommonTextField(
                 prefixIcon: Icon(Icons.mail),
-                controller: controller.lastNameTextController,
+                controller: controller.emailTextController,
                 hintText: 'Email',
               ),
               CommonTextField(
@@ -71,23 +70,28 @@ class _CareerFormState extends State<CareerForm> {
                   FilteringTextInputFormatter.digitsOnly,
                 ],
               ),
-              CommonDropdown(
-                color: AppColors.grey.withOpacity(0.1),
-                hint: 'College Name',
-                value: controller.selectedValue3,
-                dropdownItems: controller.dropdownItems3,
-                onChanged: (value) => setState(() => controller.selectedValue1 = value!),
+              // CommonDropdown(
+              //   color: AppColors.grey.withOpacity(0.1),
+              //   hint: 'College Name',
+              //   value: controller.selectedValue3,
+              //   dropdownItems: controller.dropdownItems3,
+              //   onChanged: (value) => setState(() => controller.selectedValue1 = value!),
+              // ),
+              CommonTextField(
+                prefixIcon: Icon(Icons.school),
+                controller: controller.collegeNameTextController,
+                hintText: 'College Name',
               ),
-              SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
                     child: CommonDropdown(
                       color: AppColors.grey.withOpacity(0.1),
                       hint: 'Experience',
-                      value: controller.selectedValue1,
-                      dropdownItems: controller.dropdownItems1,
-                      onChanged: (value) => setState(() => controller.selectedValue1 = value!),
+                      value: controller.experienceSelectedValue,
+                      dropdownItems: controller.experienceDropdown,
+                      onChanged: (value) =>
+                          setState(() => controller.experienceSelectedValue = value!),
                     ),
                   ),
                   SizedBox(width: 12),
@@ -112,22 +116,26 @@ class _CareerFormState extends State<CareerForm> {
               CommonDropdown(
                 color: AppColors.grey.withOpacity(0.1),
                 hint: 'Hear about us',
-                value: controller.selectedValue2,
-                dropdownItems: controller.dropdownItems2,
-                onChanged: (value) => setState(() => controller.selectedValue2 = value!),
+                value: controller.hearAboutSelectedValue,
+                dropdownItems: controller.hearAboutDropdown,
+                onChanged: (value) => setState(
+                  () => controller.hearAboutSelectedValue = value!,
+                ),
               ),
               SizedBox(height: 12),
               CommonTextField(
                 prefixIcon: Icon(Icons.mail),
                 hintText: 'LinkedIn Profile Link',
+                controller: controller.linkedInProfileTextController,
               ),
               CommonTextField(
                 prefixIcon: Icon(Icons.password),
                 hintText: 'OTP',
+                controller: controller.otpTextController,
               ),
               CommonFilledButton(
                 label: 'Submit',
-                onPressed: () {},
+                onPressed: controller.generateCareerOtp,
               ),
             ],
           ),

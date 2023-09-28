@@ -44,7 +44,7 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
                         return VirtualSearchInstrumentsCard(
-                          data: data,
+                          tradingInstrument: data,
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),

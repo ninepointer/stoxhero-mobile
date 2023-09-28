@@ -67,4 +67,12 @@ class VirtualTradingRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<StockIndexInstrumentListResponse>> getStockIndexInstrumentsList() async {
+    String apiURL = AppUrls.stockIndex;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
+  }
 }

@@ -22,7 +22,12 @@ class CareerController extends BaseController<CareerRepository> {
   final emailTextController = TextEditingController();
   final mobileTextController = TextEditingController();
   final dobTextController = TextEditingController();
+  final collegeNameTextController = TextEditingController();
+  final otpTextController = TextEditingController();
+  final linkedInProfileTextController = TextEditingController();
+
   final careerList = <CareerList>[].obs;
+  final careerDetails = CareerList().obs;
 
   void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
@@ -38,12 +43,11 @@ class CareerController extends BaseController<CareerRepository> {
     }
   }
 
-  String? selectedValue1;
-  String? selectedValue2;
-  String? selectedValue3;
+  String? experienceSelectedValue;
+  String? hearAboutSelectedValue;
 
-  final List<String> dropdownItems1 = ['Yes', 'No'];
-  final List<String> dropdownItems2 = [
+  final List<String> experienceDropdown = ['Yes', 'No'];
+  final List<String> hearAboutDropdown = [
     'LinkedIn',
     'Facebook',
     'Instagram',
@@ -65,6 +69,45 @@ class CareerController extends BaseController<CareerRepository> {
       }
     } catch (e) {
       log('Career: ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future generateCareerOtp() async {
+    isLoading(true);
+
+    FocusScope.of(Get.context!).unfocus();
+
+    CareerFormRequest data = CareerFormRequest(
+      firstName: firstNameTextController.text,
+      lastName: lastNameTextController.text,
+      email: emailTextController.text,
+      mobile: mobileTextController.text,
+      collegeName: collegeNameTextController.text,
+      dob: dobTextController.text,
+      priorTradingExperience: experienceSelectedValue,
+      source: hearAboutSelectedValue,
+      linkedInProfileLink: linkedInProfileTextController.text,
+      career: careerDetails.value.id,
+    );
+
+    try {
+      final RepoResponse<GenericResponse> response = await repository.generateCareerOtp(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          // isSignup(false);
+          SnackbarHelper.showSnackbar(response.data?.message!);
+          // clearForm();
+        }
+      } else {
+        otpTextController.clear();
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

@@ -9,7 +9,6 @@ import '../../modules.dart';
 
 class ContestPositionCard extends GetView<ContestController> {
   final ContestPosition position;
-
   const ContestPositionCard({super.key, required this.position});
 
   void openBottomSheet(BuildContext context, TransactionType type) {
@@ -19,19 +18,36 @@ class ContestPositionCard extends GetView<ContestController> {
       position.iId?.instrumentToken ?? 0,
       position.iId?.exchangeInstrumentToken ?? 0,
     );
+    controller.generateLotsList(type: position.iId?.symbol);
     showBottomSheet(
       context: context,
-      builder: (context) => ContestTransactionBottomSheet(
-        type: type,
-        data: TradingInstrument(
-          name: position.iId!.symbol,
-          exchange: position.iId!.exchange,
-          tradingsymbol: position.iId!.symbol,
-          exchangeToken: position.iId!.exchangeInstrumentToken,
-          instrumentToken: position.iId!.instrumentToken,
-          lastPrice: lastPrice,
-        ),
-      ),
+      builder: (context) {
+        if (type == TransactionType.exit) {
+          return ContestTransactionBottomSheet(
+            type: type,
+            tradingInstrument: TradingInstrument(
+              name: position.iId!.symbol,
+              exchange: position.iId!.exchange,
+              tradingsymbol: position.iId!.symbol,
+              exchangeToken: position.iId!.exchangeInstrumentToken,
+              instrumentToken: position.iId!.instrumentToken,
+              lotSize: position.lots,
+            ),
+          );
+        } else {
+          return ContestTransactionBottomSheet(
+            type: type,
+            tradingInstrument: TradingInstrument(
+              name: position.iId!.symbol,
+              exchange: position.iId!.exchange,
+              tradingsymbol: position.iId!.symbol,
+              exchangeToken: position.iId!.exchangeInstrumentToken,
+              instrumentToken: position.iId!.instrumentToken,
+              lastPrice: lastPrice,
+            ),
+          );
+        }
+      },
     );
   }
 

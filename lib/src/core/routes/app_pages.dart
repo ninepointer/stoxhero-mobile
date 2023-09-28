@@ -1,4 +1,5 @@
 import 'package:get/route_manager.dart';
+import 'package:stoxhero/src/modules/contest/views/contest_search_symbol_view.dart';
 
 import '../../modules/modules.dart';
 import 'routes.dart';
@@ -87,6 +88,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.contest,
       page: () => ContestView(),
+      binding: ContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contestSearchSymbol,
+      page: () => ContestSearchSymbolView(),
       binding: ContestBinding(),
     ),
     GetPage(

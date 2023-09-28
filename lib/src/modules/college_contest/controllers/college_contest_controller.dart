@@ -114,7 +114,8 @@ class CollegeContestController extends BaseController<ContestRepository> {
   Future getCompletedContestPnlList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestPnlListResponse> response = await repository.getCompletedContestPnlList();
+      final RepoResponse<CompletedContestPnlListResponse> response =
+          await repository.getCompletedContestPnlList();
       if (response.data != null) {
         List<CompletedCollegeContest> tempList = [];
         completedContestPnlList(response.data?.data ?? []);
@@ -182,7 +183,8 @@ class CollegeContestController extends BaseController<ContestRepository> {
   Future getLiveCollegeContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<LiveCollegeContestListResponse> response = await repository.getLiveCollegeContestList();
+      final RepoResponse<LiveCollegeContestListResponse> response =
+          await repository.getLiveCollegeContestList();
       if (response.data != null) {
         liveCollegeContestList(response.data?.data ?? []);
         log('liveCollegeContestList : ${liveCollegeContestList.length}');

@@ -1,57 +1,37 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class VirtualPositionCard extends GetView<VirtualTradingController> {
   final VirtualTradingPosition position;
   const VirtualPositionCard({super.key, required this.position});
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('instrument Details: ${position.toJson()}');
     FocusScope.of(context).unfocus();
     num lastPrice = controller.getInstrumentLastPrice(
-      position.iId?.instrumentToken ?? 0,
-      position.iId?.exchangeInstrumentToken ?? 0,
+      position.id?.instrumentToken ?? 0,
+      position.id?.exchangeInstrumentToken ?? 0,
     );
+    controller.generateLotsList(type: position.id?.symbol);
     showBottomSheet(
       context: context,
-      builder: (context) => VirtualTransactionBottomSheet(
-        type: type,
-        data: VirtualTradingInstrument(
-          name: position.iId!.symbol,
-          exchange: position.iId!.exchange,
-          tradingsymbol: position.iId!.symbol,
-          exchangeToken: position.iId!.exchangeInstrumentToken,
-          instrumentToken: position.iId!.instrumentToken,
-          lastPrice: lastPrice,
-        ),
-      ),
+      builder: (context) {
+        return VirtualTransactionBottomSheet(
+          type: type,
+          tradingInstrument: TradingInstrument(
+            name: position.id?.symbol,
+            exchange: position.id?.exchange,
+            tradingsymbol: position.id?.symbol,
+            exchangeToken: position.id?.exchangeInstrumentToken,
+            instrumentToken: position.id?.instrumentToken,
+            lastPrice: lastPrice,
+          ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    log("Data: ${FormatHelper.formatNumbers(
-      controller.calculateGrossPNL(
-        controller.getInstrumentLastPrice(
-          position.iId!.instrumentToken!,
-          position.iId!.exchangeInstrumentToken!,
-        ),
-        position.lastaverageprice ?? 0,
-        position.lots!.toInt(),
-      ),
-    )}");
-    log("${controller.getInstrumentLastPrice(
-      position.iId!.instrumentToken!,
-      position.iId!.exchangeInstrumentToken!,
-    )}");
-    log('${position.lastaverageprice}');
-    log('${position.lots!.toInt()}');
     return Column(
       children: [
         CommonCard(
@@ -71,22 +51,23 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       children: [
                         PositionListCardTile(
                           label: 'Symbol',
-                          value: position.iId?.symbol,
+                          value: position.id?.symbol,
                         ),
                         PositionListCardTile(
                           isRightAlign: true,
                           label: 'Gross P&L',
-                          valueColor: controller.getValueColor(position.amount),
-                          value: FormatHelper.formatNumbers(
-                            controller.calculateGrossPNL(
-                              controller.getInstrumentLastPrice(
-                                position.iId!.instrumentToken!,
-                                position.iId!.exchangeInstrumentToken!,
-                              ),
-                              position.lastaverageprice ?? 0,
-                              position.lots!.toInt(),
-                            ),
-                          ),
+                          value: position.lots == 0
+                              ? FormatHelper.formatNumbers(position.amount)
+                              : FormatHelper.formatNumbers(
+                                  controller.calculateGrossPNL(
+                                    controller.getInstrumentLastPrice(
+                                      position.id?.instrumentToken ?? 0,
+                                      position.id?.exchangeInstrumentToken ?? 0,
+                                    ),
+                                    position.lastaverageprice ?? 0,
+                                    position.lots ?? 0,
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -97,21 +78,18 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         PositionListCardTile(
-                          isRightAlign: true,
                           label: 'Avg. Price',
                           value: FormatHelper.formatNumbers(position.lastaverageprice),
-                          valueColor: AppColors.black,
                         ),
                         PositionListCardTile(
                           isRightAlign: true,
                           label: 'LTP',
-                          value: FormatHelper.formatNumbers(controller
-                              .getInstrumentLastPrice(
-                                position.iId!.instrumentToken!,
-                                position.iId!.exchangeInstrumentToken!,
-                              )
-                              .toString()),
-                          valueColor: controller.getValueColor(position.lastaverageprice),
+                          value: FormatHelper.formatNumbers(
+                            controller.getInstrumentLastPrice(
+                              position.id?.instrumentToken ?? 0,
+                              position.id?.exchangeInstrumentToken ?? 0,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -127,11 +105,8 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         isRightAlign: true,
                         label: 'Changes(%)',
                         value: controller.getInstrumentChanges(
-                          position.iId!.instrumentToken!,
-                          position.iId!.exchangeInstrumentToken!,
-                        ),
-                        valueColor: controller.getValueColor(
-                          position.iId!.instrumentToken!,
+                          position.id?.instrumentToken ?? 0,
+                          position.id?.exchangeInstrumentToken ?? 0,
                         ),
                       ),
                     ],
@@ -182,7 +157,28 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => openBottomSheet(context, TransactionType.exit),
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                      List<int> lots = controller.generateLotsList(type: position.id?.symbol);
+                      controller.selectedQuantity.value = position.lots!.toInt();
+                      controller.lotsValueList.assignAll(lots);
+                      showBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return VirtualTransactionBottomSheet(
+                            type: TransactionType.exit,
+                            tradingInstrument: TradingInstrument(
+                              name: position.id?.symbol,
+                              exchange: position.id?.exchange,
+                              tradingsymbol: position.id?.symbol,
+                              exchangeToken: position.id?.exchangeInstrumentToken,
+                              instrumentToken: position.id?.instrumentToken,
+                              lotSize: position.lots,
+                            ),
+                          );
+                        },
+                      );
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(12),
@@ -236,7 +232,7 @@ class PositionListCardTile extends StatelessWidget {
         Text(
           value,
           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor,
+                color: valueColor ?? (value.startsWith('-') ? AppColors.danger : AppColors.success),
               ),
         ),
       ],

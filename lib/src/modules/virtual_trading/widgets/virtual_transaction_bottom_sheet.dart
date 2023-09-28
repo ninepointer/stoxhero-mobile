@@ -1,25 +1,19 @@
-import 'dart:developer';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
-  final VirtualTradingInstrument data;
+  final TradingInstrument tradingInstrument;
   final TransactionType type;
   const VirtualTransactionBottomSheet({
     super.key,
     required this.type,
-    required this.data,
+    required this.tradingInstrument,
   });
 
   @override
   Widget build(BuildContext context) {
-    log(data.toJson().toString());
+    // log(tradingInstrument.toJson().toString());
     return Wrap(
       children: [
         Container(
@@ -58,11 +52,11 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.name ?? '',
+                    tradingInstrument.name ?? '',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    FormatHelper.formatNumbers(data.lastPrice),
+                    FormatHelper.formatNumbers(tradingInstrument.lastPrice),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
@@ -240,7 +234,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 onPressed: () {
                   Get.find<VirtualTradingController>().placeVirtualTradingOrder(
                     type,
-                    data,
+                    tradingInstrument,
                   );
                 },
               ),

@@ -11,6 +11,7 @@ export 'widgets/contest_leaderboard_card.dart';
 export 'widgets/contest_portfolio_details_card.dart';
 export 'widgets/contest_position_card.dart';
 export 'widgets/contest_position_details_card.dart';
+export 'widgets/contest_search_instruments_card.dart';
 export 'widgets/contest_transaction_bottom_sheet.dart';
 export 'widgets/contest_watchlist_card.dart';
 export 'widgets/live_contest_card.dart';

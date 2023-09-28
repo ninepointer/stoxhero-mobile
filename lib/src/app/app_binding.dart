@@ -1,6 +1,3 @@
-import 'package:get/get.dart';
-
-import '../modules/modules.dart';
 import 'app.dart';
 
 class AppBinding extends Bindings {

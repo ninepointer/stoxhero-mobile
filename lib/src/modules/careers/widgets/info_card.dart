@@ -91,7 +91,7 @@ class InfoCard extends StatelessWidget {
             height: 48,
             onPressed: () {
               Get.to(() => ResponsibilitiesView(
-                    careerId: career?.sId,
+                    careerId: career?.id,
                   ));
             },
           ),

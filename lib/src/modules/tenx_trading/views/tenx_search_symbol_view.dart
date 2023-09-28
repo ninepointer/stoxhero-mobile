@@ -46,7 +46,7 @@ class TenxSearchSymbolView extends GetView<TenxTradingController> {
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
                         return TenxSearchInstrumentsCard(
-                          data: data,
+                          tradingInstrument: data,
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),

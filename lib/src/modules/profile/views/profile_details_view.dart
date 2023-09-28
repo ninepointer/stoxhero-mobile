@@ -105,9 +105,9 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                           child: CommonDropdown(
                             color: AppColors.grey.withOpacity(0.1),
                             hint: 'Gender',
-                            value: controller.selectedValue,
+                            value: controller.genderValue,
                             dropdownItems: controller.dropdownItems,
-                            onChanged: (value) => setState(() => controller.selectedValue = value!),
+                            onChanged: (value) => setState(() => controller.genderValue = value),
                           ),
                         ),
                         SizedBox(width: 12),

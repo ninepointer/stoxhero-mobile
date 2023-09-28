@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/core/core.dart';
-
+import '../../../app/app.dart'; 
 class TenxPositionDetailsCard extends StatelessWidget {
   final String? label;
   final dynamic value;

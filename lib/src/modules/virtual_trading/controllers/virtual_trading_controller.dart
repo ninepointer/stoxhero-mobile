@@ -1,13 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:uuid/uuid.dart';
 
-import '../../../base/base.dart';
-import '../../../core/core.dart';
-import '../../../data/data.dart';
+import '../../../app/app.dart';
 
 class VirtualTradingBinding implements Bindings {
   @override
@@ -25,6 +22,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
+  final tradingWatch = TradingWatchlist().obs;
   final tradingWatchlistIds = <int>[].obs;
 
   final virtualPositionsList = <VirtualTradingPosition>[].obs;
@@ -36,40 +34,42 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final selectedQuantity = 0.obs;
   final lotsValueList = <int>[0].obs;
 
+  final stockIndexDetailsList = <StockIndexDetails>[].obs;
+  final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
+
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
+    await socketConnection();
     await getVirtualTradingPortfolio();
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
-    await socketConnection();
+    await socketIndexConnection();
+    await getStockIndexInstrumentsList();
   }
 
   num calculateGrossPNL(num ltp, num avg, int lots) {
     num position = ltp - avg;
-    num grossPNL = position * lots;
-    return grossPNL;
+    num pnl = position * lots;
+    return pnl;
   }
 
-  num calculateNetPNL(num ltp, num avg, int lots, num brokerage) {
-    num position = ltp - avg;
-    num grossPNL = position * lots;
-    num netPNL = grossPNL * brokerage;
-    return netPNL;
+  String getStockIndexName(int instId) {
+    // log('instToken : $instId');
+    int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
+    return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
   List<int> generateLotsList({String? type}) {
     List<int> result = [];
-    switch (type) {
-      case 'NIFTY50':
-        for (int i = 50; i <= 1800; i += 50) result.add(i);
-        break;
-      case 'BANKNIFTY':
-        for (int i = 15; i <= 900; i += 15) result.add(i);
-        break;
-      case 'FINNIFTY':
-        for (int i = 40; i <= 880; i += 40) result.add(i);
-        break;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 15; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 40; i <= 880; i += 40) result.add(i);
+    } else {
+      for (int i = 50; i <= 1800; i += 50) result.add(i);
     }
+
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
     return result;
@@ -78,12 +78,12 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Color getValueColor(dynamic value) {
     if (value != null) {
       num number = value is int || value is double ? value : num.parse(value);
-      if (number < 0) {
+      if (number > 0) {
         return AppColors.success;
-      } else if (number > 0) {
+      } else if (number < 0) {
         return AppColors.danger;
       } else if (number == 0) {
-        return AppColors.black;
+        return AppColors.white;
       }
     }
     return AppColors.white;
@@ -95,20 +95,64 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     Get.toNamed(AppRoutes.virtualSearchSymbol);
   }
 
+  // void calculateTotalPositionValues() {
+  //   int totalLots = 0;
+  //   num totalBrokerage = 0;
+  //   num totalGross = 0;
+  //   num totalNet = 0;
+
+  //   for (var position in virtualPositionsList) {
+  //     log('postion : ${position.toJson()}');
+  //     totalLots += position.lots ?? 0;
+  //     totalBrokerage += position.brokerage ?? 0;
+  //     totalGross += position.lastaverageprice ?? 0;
+  //     totalNet += position.amount ?? 0;
+  //   }
+
+  //   tenxTotalPositionDetails(
+  //     TenxTotalPositionDetails(
+  //       lots: totalLots,
+  //       brokerage: totalBrokerage,
+  //       gross: totalGross,
+  //       net: totalNet,
+  //     ),
+  //   );
+  //   log('ContestTotalPositionDetails : ${tenxTotalPositionDetails.toJson()}');
+  // }
+
   void calculateTotalPositionValues() {
     int totalLots = 0;
-    num totalBrokerage = 0;
     num totalGross = 0;
+    num totalBrokerage = 0;
     num totalNet = 0;
 
     for (var position in virtualPositionsList) {
-      log('postion : ${position.toJson()}');
-      totalLots += position.lots ?? 0;
-      totalBrokerage += position.brokerage ?? 0;
-      totalGross += position.amount ?? 0;
-      totalNet += position.amount ?? 0;
-    }
+      log('calculateTotalGross : ${position.toJson()}');
+      log('totalGross : $totalGross');
 
+      num ltp = getInstrumentLastPrice(
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
+      );
+      num avg = position.lastaverageprice ?? 0;
+
+      num diff = ltp - avg;
+      int lots = position.lots ?? 0;
+
+      totalLots += lots;
+      totalBrokerage += position.brokerage ?? 0;
+
+      num gross;
+      if (lots == 0) {
+        gross = position.amount ?? 0;
+      } else {
+        gross = diff * lots;
+      }
+      totalGross += gross;
+
+      num net = gross - (position.brokerage ?? 0);
+      totalNet += net;
+    }
     tenxTotalPositionDetails(
       TenxTotalPositionDetails(
         lots: totalLots,
@@ -117,6 +161,68 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         net: totalNet,
       ),
     );
+    log('TotalPositionDetails : ${tenxTotalPositionDetails.toJson()}');
+  }
+
+  num calculateTotalGrossPNL() {
+    num totalGrossPNL = 0;
+    for (var position in virtualPositionsList) {
+      num ltp = getInstrumentLastPrice(
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
+      );
+      num avg = position.lastaverageprice ?? 0;
+
+      num diff = ltp - avg;
+      int lots = position.lots ?? 0;
+      num gross = 0;
+      if (lots == 0) {
+        gross += position.amount ?? 0;
+      } else {
+        gross = diff * lots;
+      }
+      totalGrossPNL += gross;
+    }
+
+    // tenxTotalPositionDetails(
+    //   TenxTotalPositionDetails(
+
+    //     gross: totalGross,
+    //     net: totalNet,
+    //   ),
+    // );
+    // log('TotalGross : ${totalGrossPNL.toString()}');
+
+    return totalGrossPNL;
+  }
+
+  num calculateTotalNetPNL() {
+    num totalNetPNL = 0;
+    num brokerage = 0;
+
+    for (var position in virtualPositionsList) {
+      num ltp = getInstrumentLastPrice(
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
+      );
+      num avg = position.lastaverageprice ?? 0;
+      num lots = position.lots ?? 0;
+
+      num diff = ltp - avg;
+      num gross = diff * lots;
+
+      brokerage = position.brokerage ?? 0;
+      num netPNL = gross - brokerage;
+
+      totalNetPNL += netPNL;
+      log('LTP: ${ltp.toString()}');
+      log("AVG: ${avg.toString()}");
+      log('LOTS: ${lots.toString()}');
+      log('diff: ${diff.toString()}');
+      log('broker: ${brokerage.toString()}');
+    }
+    log('totalNetPNL : ${totalNetPNL.toString()}');
+    return totalNetPNL;
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
@@ -195,8 +301,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       await getVirtualTradingWatchlist();
       await searchInstruments(searchTextController.text);
       log('getVirtualTradingWatchlist : ${tradingWatchlist.length}');
+      SnackbarHelper.showSnackbar('Instrument Remove');
       // } else {
-      // SnackbarHelper.showSnackbar(response.error?.message);
       // }
     } catch (e) {
       log(e.toString());
@@ -229,7 +335,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
           // log('Socket : tick-room $data');
           tempList = VirtualTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
           tempList?.forEach((element) {
-            if (virtualInstrumentTradeDetails.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (virtualInstrumentTradeDetails
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = virtualInstrumentTradeDetails.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );
@@ -249,7 +356,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     }
   }
 
-  Future placeVirtualTradingOrder(TransactionType type, VirtualTradingInstrument inst) async {
+  Future placeVirtualTradingOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
     TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
@@ -300,7 +407,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualTradingPortfolio() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolio();
+      final RepoResponse<VirtualTradingPortfolioResponse> response =
+          await repository.getVirtualTradingPortfolio();
       if (response.data != null) {
         virtualPortfolio(response.data?.data);
       } else {
@@ -316,14 +424,16 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualTradingWatchlist() async {
     isLoading(true);
     try {
-      final RepoResponse<TradingWatchlistResponse> response = await repository.getVirtualTradingWatchlist();
+      final RepoResponse<TradingWatchlistResponse> response =
+          await repository.getVirtualTradingWatchlist();
       if (response.data != null) {
         if (response.data?.data! != null) {
           tradingWatchlist.clear();
           tradingWatchlistIds.clear();
           tradingWatchlist(response.data?.data ?? []);
           for (var element in tradingWatchlist) {
-            tradingWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+            tradingWatchlistIds
+                .add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
           }
         }
       } else {
@@ -339,7 +449,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualPositionsList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingPositionListResponse> response = await repository.getVirtualPositions();
+      final RepoResponse<VirtualTradingPositionListResponse> response =
+          await repository.getVirtualPositions();
       if (response.data != null) {
         if (response.data?.data! != null) {
           virtualPositionsList(response.data?.data ?? []);
@@ -358,7 +469,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future searchInstruments(String? value) async {
     isLoading(true);
     try {
-      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
+      final RepoResponse<TradingInstrumentListResponse> response =
+          await repository.searchInstruments(value);
       if (response.data != null) {
         if (response.data?.data! != null) {
           tradingInstruments.clear();
@@ -372,5 +484,65 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getStockIndexInstrumentsList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<StockIndexInstrumentListResponse> response =
+          await repository.getStockIndexInstrumentsList();
+      if (response.data != null) {
+        stockIndexInstrumentList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('car ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future socketIndexConnection() async {
+    List<StockIndexDetails>? stockTemp = [];
+    try {
+      IO.Socket socket;
+      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+        'autoConnect': false,
+        'transports': ['websocket'],
+      });
+      socket.connect();
+      socket.onConnect((_) {
+        log('Socket : Connected');
+        socket.emit('userId', userDetails.value.sId);
+        socket.emit('user-ticks', userDetails.value.sId);
+      });
+      socket.on(
+        'index-tick',
+        (data) {
+          // log('Stock Socket : index-tick $data');
+          stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
+          for (var element in stockTemp ?? []) {
+            if (stockIndexDetailsList
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+              int index = stockIndexDetailsList.indexWhere(
+                (stock) => stock.instrumentToken == element.instrumentToken,
+              );
+              stockIndexDetailsList.removeAt(index);
+              stockIndexDetailsList.insert(index, element);
+            } else {
+              stockIndexDetailsList.add(element);
+            }
+          }
+
+          // log('Socket : ${stockIndexDetailsList.length}');
+        },
+      );
+      socket.onDisconnect((_) => log('Socket : Disconnect'));
+      socket.onConnectError((err) => log(err));
+      socket.onError((err) => log(err));
+    } on Exception catch (e) {
+      log(e.toString());
+    }
   }
 }

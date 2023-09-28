@@ -1,19 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class VirtualWatchListCard extends StatefulWidget {
   final int index;
-  final TradingWatchlist data;
+  final TradingWatchlist tradingWatchlist;
   const VirtualWatchListCard({
     super.key,
     required this.index,
-    required this.data,
+    required this.tradingWatchlist,
   });
 
   @override
@@ -38,26 +32,26 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
   }
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${widget.data.toJson()}');
+    // log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
 
     num lastPrice = controller.getInstrumentLastPrice(
-      widget.data.instrumentToken!,
-      widget.data.exchangeInstrumentToken!,
+      widget.tradingWatchlist.instrumentToken!,
+      widget.tradingWatchlist.exchangeInstrumentToken!,
     );
-    controller.generateLotsList(type: widget.data.instrument);
-    log(controller.lotsValueList.toString());
+    controller.generateLotsList(type: widget.tradingWatchlist.instrument);
+    // log(controller.lotsValueList.toString());
     showBottomSheet(
       context: context,
       builder: (context) => VirtualTransactionBottomSheet(
         type: type,
-        data: VirtualTradingInstrument(
-          name: widget.data.symbol,
-          instrumentType: widget.data.instrument,
-          exchange: widget.data.exchange,
-          tradingsymbol: widget.data.symbol,
-          exchangeToken: widget.data.exchangeInstrumentToken,
-          instrumentToken: widget.data.instrumentToken,
+        tradingInstrument: TradingInstrument(
+          name: widget.tradingWatchlist.symbol,
+          instrumentType: widget.tradingWatchlist.instrument,
+          exchange: widget.tradingWatchlist.exchange,
+          tradingsymbol: widget.tradingWatchlist.symbol,
+          exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
+          instrumentToken: widget.tradingWatchlist.instrumentToken,
           lastPrice: lastPrice,
         ),
       ),
@@ -87,20 +81,19 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                         VirtualWatchListCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
-                          value: FormatHelper.formatDateByMonth(widget.data.contractDate),
+                          value: FormatHelper.formatDateByMonth(
+                            widget.tradingWatchlist.contractDate,
+                          ),
                         ),
                         VirtualWatchListCardTile(
                           isRightAlign: true,
                           label: 'LTP',
                           value: FormatHelper.formatNumbers(
-                            controller
-                                .getInstrumentLastPrice(
-                                  widget.data.instrumentToken!,
-                                  widget.data.exchangeInstrumentToken!,
-                                )
-                                .toString(),
+                            controller.getInstrumentLastPrice(
+                              widget.tradingWatchlist.instrumentToken!,
+                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                            ),
                           ),
-                          valueColor: controller.getValueColor(widget.data.instrumentToken),
                         ),
                       ],
                     ),
@@ -111,17 +104,16 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                         VirtualWatchListCardTile(
                           isRightAlign: false,
                           label: 'Symbol',
-                          value: widget.data.symbol,
+                          value: widget.tradingWatchlist.symbol,
                         ),
                         SizedBox(height: 4),
                         VirtualWatchListCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
-                            widget.data.instrumentToken!,
-                            widget.data.exchangeInstrumentToken!,
+                            widget.tradingWatchlist.instrumentToken!,
+                            widget.tradingWatchlist.exchangeInstrumentToken!,
                           ),
-                          valueColor: controller.getValueColor(widget.data.instrumentToken),
                         ),
                       ],
                     ),
@@ -170,7 +162,8 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => controller.removeInstrument(widget.data.instrumentToken),
+                          onTap: () =>
+                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -240,7 +233,8 @@ class VirtualWatchListCardTile extends StatelessWidget {
         Text(
           value ?? '-',
           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor,
+                color:
+                    valueColor ?? (value!.startsWith('-') ? AppColors.danger : AppColors.success),
               ),
         ),
       ],

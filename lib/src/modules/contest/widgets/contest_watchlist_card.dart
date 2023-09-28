@@ -9,11 +9,13 @@ import '../../modules.dart';
 
 class ContestWatchlistCard extends StatefulWidget {
   final int index;
-  final ContestWatchList data;
+  final ContestWatchList contestWatchlist;
+  final String? contestId;
   const ContestWatchlistCard({
     Key? key,
     required this.index,
-    required this.data,
+    required this.contestWatchlist,
+    this.contestId,
   }) : super(key: key);
 
   @override
@@ -38,27 +40,29 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
   }
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${widget.data.toJson()}');
+    log('data: ${widget.contestWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
 
     num lastPrice = controller.getInstrumentLastPrice(
-      widget.data.instrumentToken!,
-      widget.data.exchangeInstrumentToken!,
+      widget.contestWatchlist.instrumentToken!,
+      widget.contestWatchlist.exchangeInstrumentToken!,
     );
-    controller.generateLotsList(type: widget.data.instrument);
+    controller.generateLotsList(type: widget.contestWatchlist.instrument);
     log(controller.lotsValueList.toString());
     showBottomSheet(
       context: context,
       builder: (context) => ContestTransactionBottomSheet(
         type: type,
-        data: TradingInstrument(
-          name: widget.data.symbol,
-          instrumentType: widget.data.instrument,
-          exchange: widget.data.exchange,
-          tradingsymbol: widget.data.symbol,
-          exchangeToken: widget.data.exchangeInstrumentToken,
-          instrumentToken: widget.data.instrumentToken,
+        contestId: widget.contestWatchlist.sId,
+        tradingInstrument: TradingInstrument(
+          name: widget.contestWatchlist.symbol,
+          instrumentType: widget.contestWatchlist.instrument,
+          exchange: widget.contestWatchlist.exchange,
+          tradingsymbol: widget.contestWatchlist.symbol,
+          exchangeToken: widget.contestWatchlist.exchangeInstrumentToken,
+          instrumentToken: widget.contestWatchlist.instrumentToken,
           lastPrice: lastPrice,
+          id: widget.contestWatchlist.sId,
         ),
       ),
     );
@@ -87,7 +91,8 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
-                          value: FormatHelper.formatDateByMonth(widget.data.contractDate),
+                          value:
+                              FormatHelper.formatDateByMonth(widget.contestWatchlist.contractDate),
                         ),
                         ContestWatchListCardTile(
                           isRightAlign: true,
@@ -95,12 +100,13 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                           value: FormatHelper.formatNumbers(
                             controller
                                 .getInstrumentLastPrice(
-                                  widget.data.instrumentToken!,
-                                  widget.data.exchangeInstrumentToken!,
+                                  widget.contestWatchlist.instrumentToken!,
+                                  widget.contestWatchlist.exchangeInstrumentToken!,
                                 )
                                 .toString(),
                           ),
-                          valueColor: controller.getValueColor(widget.data.instrumentToken),
+                          valueColor:
+                              controller.getValueColor(widget.contestWatchlist.instrumentToken),
                         ),
                       ],
                     ),
@@ -111,17 +117,18 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Symbol',
-                          value: widget.data.symbol,
+                          value: widget.contestWatchlist.symbol,
                         ),
                         SizedBox(height: 4),
                         ContestWatchListCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
-                            widget.data.instrumentToken!,
-                            widget.data.exchangeInstrumentToken!,
+                            widget.contestWatchlist.instrumentToken!,
+                            widget.contestWatchlist.exchangeInstrumentToken!,
                           ),
-                          valueColor: controller.getValueColor(widget.data.instrumentToken),
+                          valueColor:
+                              controller.getValueColor(widget.contestWatchlist.instrumentToken),
                         ),
                       ],
                     ),
@@ -174,7 +181,8 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => controller.removeInstrument(widget.data.instrumentToken),
+                          onTap: () =>
+                              controller.removeInstrument(widget.contestWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),

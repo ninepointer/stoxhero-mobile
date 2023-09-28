@@ -24,12 +24,13 @@ class CareerView extends GetView<CareerController> {
                     context: context,
                     title: 'Internship',
                     buttonLabel: 'View Opening',
-                image: AppImages.internship,
-                onPressed: () {controller.getCareerList('Job');
-                      if (controller.careerList.isNotEmpty &&
-                          controller.careerList[0].listingType == 'Job') {
-                        Get.to(() => InternshipView());
-                      }
+                    image: AppImages.internship,
+                    onPressed: () {
+                      controller.getCareerList('Job');
+                      // if (controller.careerList.isNotEmpty &&
+                      //     controller.careerList[0].listingType == 'Job') {
+                      // }
+                      Get.to(() => InternshipView());
                     },
                   ),
                   SizedBox(height: 12),
@@ -37,19 +38,17 @@ class CareerView extends GetView<CareerController> {
                     context: context,
                     title: 'Workshop',
                     buttonLabel: 'View Opening',
-                image: AppImages.workshop,
-                onPressed: () {controller.getCareerList('Workshop');
-                      if (controller.careerList.isNotEmpty &&
-                          controller.careerList[0].listingType == 'Workshop') {
-                        Get.to(() => WorkshopView());
-                      }
-                },
-              ),
-              SizedBox(height: 12),
-              customCard(
-                context: context,
-                title: 'Jobs',
-                buttonLabel: 'View Opening',
+                    image: AppImages.workshop,
+                    onPressed: () {
+                      controller.getCareerList('Workshop');
+                      Get.to(() => WorkshopView());
+                    },
+                  ),
+                  SizedBox(height: 12),
+                  customCard(
+                    context: context,
+                    title: 'Jobs',
+                    buttonLabel: 'View Opening',
                     image: AppImages.job,
                     onPressed: () {},
                   ),

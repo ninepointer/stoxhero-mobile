@@ -99,31 +99,24 @@ class ContestListView extends GetView<ContestController> {
                     SizedBox(height: 12),
                   ] else if (controller.segmentedControlValue.value == 2) ...[
                     if (controller.premiumCompletedContestList.isNotEmpty)
-                      CommonTile(label: 'Premium Contest\'s'),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.premiumCompletedContestList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return CompletedContestCard(
-                          completedContest: controller.premiumCompletedContestList[index],
-                          completedContestPnl: controller.completedContestPnlList[index],
-                        );
-                      },
-                    ),
+                      CommonTile(label: 'Premium Contests'),
                     SizedBox(height: 8),
                     if (controller.freeCompletedContestList.isNotEmpty)
-                      CommonTile(label: 'Free Contest\'s'),
+                      CommonTile(label: 'Free Contests'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: controller.completedContestList.length,
                       itemBuilder: (BuildContext context, int index) {
+                        final completedContest = controller.completedContestList[index];
+                        final matchingContestPnl = controller.completedContestPnlList.firstWhere(
+                          (pnl) => pnl.contestId == completedContest.id,
+                        );
                         return CompletedContestCard(
-                          completedContest: controller.freeCompletedContestList[index],
-                          completedContestPnl: controller.completedContestPnlList[index],
+                          id: completedContest.id,
+                          completedContest: completedContest,
+                          completedContestPnl: matchingContestPnl,
                         );
                       },
                     ),

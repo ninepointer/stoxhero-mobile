@@ -1,13 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import '../../../base/base.dart';
-import '../../../core/core.dart';
-import '../../../data/data.dart';
+import '../../../app/app.dart';
 import '../../../data/models/response/contest_instrument_trade_details_list_response.dart';
 
 class ContestBinding implements Bindings {
@@ -36,6 +32,7 @@ class ContestController extends BaseController<ContestRepository> {
   final contestTodaysOrdersList = <ContestOrderList>[].obs;
   final completedContestOrdersList = <CompletedContestOrder>[].obs;
   final liveContestList = <LiveContest>[].obs;
+  final liveContest = LiveContest().obs;
   final livePremiumContestList = <LiveContest>[].obs;
   final liveFreeContestList = <LiveContest>[].obs;
   final contestWatchList = <ContestWatchList>[].obs;
@@ -44,7 +41,11 @@ class ContestController extends BaseController<ContestRepository> {
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
 
   final tradingInstruments = <TradingInstrument>[].obs;
+  final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
+
+  final stockIndexDetailsList = <StockIndexDetails>[].obs;
+  final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
 
   final contestInstrumentTradeDetails = <ContestInstrumentTradeDetails>[].obs;
   final selectedWatchlistIndex = RxInt(-1);
@@ -53,6 +54,7 @@ class ContestController extends BaseController<ContestRepository> {
   final lotsValueList = <int>[0].obs;
   final selectedContest = UpComingContest().obs;
   final selectedContestId = ''.obs;
+
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getUpComingContestList();
@@ -64,7 +66,15 @@ class ContestController extends BaseController<ContestRepository> {
   Future loadTradingData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getLiveContestList();
+    await getStockIndexInstrumentsList();
+    await socketIndexConnection();
     await socketConnection();
+  }
+
+  String getStockIndexName(int instId) {
+    // log('instToken : $instId');
+    int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
+    return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
   num calculateGrossPNL(num ltp, num avg, int lots) {
@@ -75,17 +85,15 @@ class ContestController extends BaseController<ContestRepository> {
 
   List<int> generateLotsList({String? type}) {
     List<int> result = [];
-    switch (type) {
-      case 'NIFTY50':
-        for (int i = 50; i <= 1800; i += 50) result.add(i);
-        break;
-      case 'BANKNIFTY':
-        for (int i = 15; i <= 900; i += 15) result.add(i);
-        break;
-      case 'FINNIFTY':
-        for (int i = 40; i <= 880; i += 40) result.add(i);
-        break;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 15; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 40; i <= 880; i += 40) result.add(i);
+    } else {
+      for (int i = 50; i <= 1800; i += 50) result.add(i);
     }
+
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
     return result;
@@ -126,12 +134,12 @@ class ContestController extends BaseController<ContestRepository> {
   Color getValueColor(dynamic value) {
     if (value != null) {
       num number = value is int || value is double ? value : num.parse(value);
-      if (number < 0) {
+      if (number > 0) {
         return AppColors.success;
-      } else if (number > 0) {
+      } else if (number < 0) {
         return AppColors.danger;
       } else if (number == 0) {
-        return AppColors.black;
+        return AppColors.white;
       }
     }
     return AppColors.white;
@@ -147,7 +155,13 @@ class ContestController extends BaseController<ContestRepository> {
 
   void gotoSearchInstrument() {
     searchTextController.text = 'Nifty';
-    Get.toNamed(AppRoutes.tenxSearchSymbol);
+    searchInstruments(
+      searchTextController.text,
+      liveContest.value.isNifty,
+      liveContest.value.isBankNifty,
+      liveContest.value.isFinNifty,
+    );
+    Get.toNamed(AppRoutes.contestSearchSymbol);
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
@@ -200,7 +214,8 @@ class ContestController extends BaseController<ContestRepository> {
         // log('Socket : tick-room $data');
         tempList = ContestInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
-          if (contestInstrumentTradeDetails.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+          if (contestInstrumentTradeDetails
+              .any((obj) => obj.instrumentToken == element.instrumentToken)) {
             int index = contestInstrumentTradeDetails.indexWhere(
               (stock) => stock.instrumentToken == element.instrumentToken,
             );
@@ -219,7 +234,8 @@ class ContestController extends BaseController<ContestRepository> {
     }
   }
 
-  Future placeContestOrder(TransactionType type, TradingInstrument inst, {String? contestId}) async {
+  Future placeContestOrder(TransactionType type, TradingInstrument inst,
+      {String? contestId}) async {
     Get.back();
     isLoading(true);
     ContestPlaceOrderRequest data = ContestPlaceOrderRequest(
@@ -270,7 +286,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getUpComingContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<UpComingContestListResponse> response = await repository.getUpComingContestList();
+      final RepoResponse<UpComingContestListResponse> response =
+          await repository.getUpComingContestList();
       if (response.data != null) {
         upComingContestList(response.data?.data ?? []);
         if (upComingContestList.isNotEmpty) {
@@ -296,7 +313,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestListResponse> response = await repository.getCompletedContestList();
+      final RepoResponse<CompletedContestListResponse> response =
+          await repository.getCompletedContestList();
       if (response.data != null) {
         tempCompletedContestList(response.data?.data ?? []);
         if (tempCompletedContestList.isNotEmpty) {
@@ -322,7 +340,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestPnlList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestPnlListResponse> response = await repository.getCompletedContestPnlList();
+      final RepoResponse<CompletedContestPnlListResponse> response =
+          await repository.getCompletedContestPnlList();
       if (response.data != null) {
         List<CompletedContest> tempList = [];
         completedContestPnlList(response.data?.data ?? []);
@@ -348,7 +367,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestLeaderboardList() async {
     isLoading(true);
     try {
-      final RepoResponse<ContestLeaderboardResponse> response = await repository.getContestLeaderboardList();
+      final RepoResponse<ContestLeaderboardResponse> response =
+          await repository.getContestLeaderboardList();
       if (response.data != null) {
         contestLeaderboardList(response.data?.data ?? []);
       } else {
@@ -406,7 +426,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestPortfolio(String? id) async {
     isLoading(true);
     try {
-      final RepoResponse<ContestPortfolioResponse> response = await repository.getContestPortfolio(id);
+      final RepoResponse<ContestPortfolioResponse> response =
+          await repository.getContestPortfolio(id);
       if (response.data != null) {
         contestPortfolio(response.data?.data);
       } else {
@@ -422,15 +443,17 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) async {
     isLoading(true);
     try {
-      final RepoResponse<ContestWatchListResponse> response =
+      final RepoResponse<TradingWatchlistResponse> response =
           await repository.getContestWatchList(isNifty, isBankNifty, isFinNifty);
       if (response.data != null) {
         if (response.data?.data! != null) {
-          contestWatchList.clear();
+          tradingWatchlist.clear();
           tradingWatchlistIds.clear();
-          contestWatchList(response.data?.data ?? []);
-          for (var element in contestWatchList) {
-            tradingWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+          tradingWatchlist(response.data?.data ?? []);
+          for (var element in tradingWatchlist) {
+            tradingWatchlistIds.add(
+              element.instrumentToken ?? element.exchangeInstrumentToken ?? 0,
+            );
           }
         }
       } else {
@@ -446,7 +469,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestPositions(String? id) async {
     isLoading(true);
     try {
-      final RepoResponse<ContestPositionListResponse> response = await repository.getContestPositions(id);
+      final RepoResponse<ContestPositionListResponse> response =
+          await repository.getContestPositions(id);
       if (response.data != null) {
         if (response.data?.data! != null) {
           contestPositionsList(response.data?.data ?? []);
@@ -465,7 +489,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestOrders(String? id) async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestOrdersResponse> response = await repository.getCompletedContestOrders(
+      final RepoResponse<CompletedContestOrdersResponse> response =
+          await repository.getCompletedContestOrders(
         id,
       );
       if (response.data != null) {
@@ -480,14 +505,25 @@ class ContestController extends BaseController<ContestRepository> {
     isLoading(false);
   }
 
-  Future searchInstruments(String? value) async {
+  Future searchInstruments(
+    String? value,
+    bool? isNifty,
+    bool? isBankNifty,
+    bool? isFinNifty,
+  ) async {
     isLoading(true);
     try {
-      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
+      final RepoResponse<TradingInstrumentListResponse> response =
+          await repository.searchInstruments(
+        value,
+        isNifty,
+        isBankNifty,
+        isFinNifty,
+      );
       if (response.data != null) {
-        if (response.data?.data! != null) {
+        if (response.data?.data != null) {
           tradingInstruments.clear();
-          tradingInstruments(response.data?.data ?? []);
+          tradingInstruments.addAll(response.data?.data ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -508,11 +544,16 @@ class ContestController extends BaseController<ContestRepository> {
       contestWatchList.clear();
       tradingInstruments.clear();
       await getContestWatchList(
-        liveContestList[0].isNifty,
-        liveContestList[0].isBankNifty,
-        liveContestList[0].isFinNifty,
+        LiveContest().isNifty,
+        LiveContest().isBankNifty,
+        LiveContest().isFinNifty,
       );
-      await searchInstruments(searchTextController.text);
+      await searchInstruments(
+        searchTextController.text,
+        liveContest.value.isNifty,
+        liveContest.value.isBankNifty,
+        liveContest.value.isFinNifty,
+      );
       log('getVirtualTradingWatchlist : ${contestWatchList.length}');
       // } else {
       SnackbarHelper.showSnackbar('Instrument Remove');
@@ -522,5 +563,112 @@ class ContestController extends BaseController<ContestRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getStockIndexInstrumentsList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<StockIndexInstrumentListResponse> response =
+          await repository.getStockIndexInstrumentsList();
+      if (response.data != null) {
+        stockIndexInstrumentList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('car ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future addInstrument(TradingInstrument inst) async {
+    isLoading(true);
+    AddInstrumentRequest data = AddInstrumentRequest(
+      instrument: inst.name,
+      exchange: inst.exchange,
+      status: inst.status,
+      symbol: inst.tradingsymbol,
+      lotSize: inst.lotSize,
+      instrumentToken: inst.instrumentToken,
+      uId: Uuid().v4(),
+      contractDate: inst.expiry,
+      maxLot: 1800,
+      from: "paperTrade",
+      chartInstrument: inst.chartInstrument,
+      exchangeSegment: inst.segment,
+      exchangeInstrumentToken: inst.exchangeToken,
+    );
+
+    log('addInstrument : ${data.toJson()}');
+
+    try {
+      final RepoResponse<GenericResponse> response = await repository.addInstrument(
+        data.toJson(),
+      );
+      if (response.data?.message == "Instrument Added") {
+        tradingWatchlist.clear();
+        tradingInstruments.clear();
+        // await getContestWatchList(
+        //     // LiveContest().isNifty,
+        //     // LiveContest().isBankNifty,
+        //     // LiveContest().isFinNifty,
+        //     );
+        await searchInstruments(
+          searchTextController.text,
+          liveContest.value.isNifty,
+          liveContest.value.isBankNifty,
+          liveContest.value.isFinNifty,
+        );
+        SnackbarHelper.showSnackbar("Instrument Added");
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future socketIndexConnection() async {
+    List<StockIndexDetails>? stockTemp = [];
+    try {
+      IO.Socket socket;
+      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+        'autoConnect': false,
+        'transports': ['websocket'],
+      });
+      socket.connect();
+      socket.onConnect((_) {
+        log('Socket : Connected');
+        socket.emit('userId', userDetails.value.sId);
+        socket.emit('user-ticks', userDetails.value.sId);
+      });
+      socket.on(
+        'index-tick',
+        (data) {
+          // log('Stock Socket : index-tick $data');
+          stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
+          for (var element in stockTemp ?? []) {
+            if (stockIndexDetailsList
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+              int index = stockIndexDetailsList.indexWhere(
+                (stock) => stock.instrumentToken == element.instrumentToken,
+              );
+              stockIndexDetailsList.removeAt(index);
+              stockIndexDetailsList.insert(index, element);
+            } else {
+              stockIndexDetailsList.add(element);
+            }
+          }
+
+          // log('Socket : ${stockIndexDetailsList.length}');
+        },
+      );
+      socket.onDisconnect((_) => log('Socket : Disconnect'));
+      socket.onConnectError((err) => log(err));
+      socket.onError((err) => log(err));
+    } on Exception catch (e) {
+      log(e.toString());
+    }
   }
 }

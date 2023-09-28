@@ -43,8 +43,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
     startTimeDateTime = DateTime.parse(widget.upComingContest?.contestStartTime ?? '');
 
     setState(() {
-      remainingTime =
-          startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
+      remainingTime = startTimeDateTime.isAfter(currentTime)
+          ? startTimeDateTime.difference(currentTime)
+          : Duration.zero;
     });
 
     timer = Timer.periodic(
@@ -256,7 +257,8 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       Text(
                         widget.upComingContest?.entryFee == 0
                             ? 'Free'
-                            : FormatHelper.formatNumbers(widget.upComingContest?.entryFee, decimal: 0),
+                            : FormatHelper.formatNumbers(widget.upComingContest?.entryFee,
+                                decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -270,7 +272,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatNumbers(widget.upComingContest?.portfolio?.portfolioValue, decimal: 0),
+                        FormatHelper.formatNumbers(
+                            widget.upComingContest?.portfolio?.portfolioValue,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -335,7 +339,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     //   context: context,
                     //   builder: (context) => ContestBuySubscriptionBottomSheet(),
                     // );
-                    // Get.to(() => ContestDashboardView());
+                    Get.to(() => ContestDashboardView());
                   },
                   child: Container(
                     alignment: Alignment.center,

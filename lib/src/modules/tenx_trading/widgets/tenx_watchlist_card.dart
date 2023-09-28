@@ -9,12 +9,12 @@ import '../../modules.dart';
 
 class TenxWatchlistCard extends StatefulWidget {
   final int index;
-  final TradingWatchlist data;
+  final TradingWatchlist tradingWatchlist;
 
   const TenxWatchlistCard({
     super.key,
     required this.index,
-    required this.data,
+    required this.tradingWatchlist,
   });
 
   @override
@@ -39,26 +39,26 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
   }
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${widget.data.toJson()}');
+    log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
 
     num lastPrice = controller.getInstrumentLastPrice(
-      widget.data.instrumentToken!,
-      widget.data.exchangeInstrumentToken!,
+      widget.tradingWatchlist.instrumentToken!,
+      widget.tradingWatchlist.exchangeInstrumentToken!,
     );
-    controller.generateLotsList(type: widget.data.instrument);
+    controller.generateLotsList(type: widget.tradingWatchlist.instrument);
     log(controller.lotsValueList.toString());
     showBottomSheet(
       context: context,
-      builder: (context) => VirtualTransactionBottomSheet(
+      builder: (context) => TenxTransactionBottomSheet(
         type: type,
-        data: VirtualTradingInstrument(
-          name: widget.data.symbol,
-          instrumentType: widget.data.instrument,
-          exchange: widget.data.exchange,
-          tradingsymbol: widget.data.symbol,
-          exchangeToken: widget.data.exchangeInstrumentToken,
-          instrumentToken: widget.data.instrumentToken,
+        tradingInstrument: TradingInstrument(
+          name: widget.tradingWatchlist.symbol,
+          instrumentType: widget.tradingWatchlist.instrument,
+          exchange: widget.tradingWatchlist.exchange,
+          tradingsymbol: widget.tradingWatchlist.symbol,
+          exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
+          instrumentToken: widget.tradingWatchlist.instrumentToken,
           lastPrice: lastPrice,
         ),
       ),
@@ -86,20 +86,19 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                         TenxWatchlistCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
-                          value: FormatHelper.formatDateByMonth(widget.data.contractDate),
+                          value: FormatHelper.formatDateByMonth(
+                            widget.tradingWatchlist.contractDate,
+                          ),
                         ),
                         TenxWatchlistCardTile(
                           isRightAlign: true,
                           label: 'LTP',
                           value: FormatHelper.formatNumbers(
-                            controller
-                                .getInstrumentLastPrice(
-                                  widget.data.instrumentToken!,
-                                  widget.data.exchangeInstrumentToken!,
-                                )
-                                .toString(),
+                            controller.getInstrumentLastPrice(
+                              widget.tradingWatchlist.instrumentToken!,
+                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                            ),
                           ),
-                          valueColor: controller.getValueColor(widget.data.instrumentToken),
                         ),
                       ],
                     ),
@@ -110,14 +109,14 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                         TenxWatchlistCardTile(
                           isRightAlign: false,
                           label: 'Symbol',
-                          value: widget.data.symbol,
+                          value: widget.tradingWatchlist.symbol,
                         ),
                         TenxWatchlistCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
-                            widget.data.instrumentToken!,
-                            widget.data.exchangeInstrumentToken!,
+                            widget.tradingWatchlist.instrumentToken!,
+                            widget.tradingWatchlist.exchangeInstrumentToken!,
                           ),
                         ),
                       ],
@@ -152,9 +151,9 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                           onTap: () => openBottomSheet(context, TransactionType.buy),
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(8),
+                            padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.success.withOpacity(.1),
+                              color: AppColors.success.withOpacity(.25),
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(8),
                               ),
@@ -190,9 +189,9 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                           onTap: () => openBottomSheet(context, TransactionType.sell),
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(8),
+                            padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.danger.withOpacity(.1),
+                              color: AppColors.danger.withOpacity(.25),
                             ),
                             child: Text(
                               'SELL',
@@ -205,12 +204,13 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => controller.removeInstrument(widget.data.instrumentToken),
+                          onTap: () =>
+                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(8),
+                            padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.info.withOpacity(.1),
+                              color: AppColors.info.withOpacity(.25),
                               borderRadius: BorderRadius.only(
                                 bottomRight: Radius.circular(8),
                               ),
@@ -278,7 +278,8 @@ class TenxWatchlistCardTile extends StatelessWidget {
           value ?? '-',
           style: Theme.of(context).textTheme.tsMedium14.copyWith(
                 // color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-                color: valueColor,
+                color:
+                    valueColor ?? (value!.startsWith('-') ? AppColors.danger : AppColors.success),
               ),
         ),
       ],

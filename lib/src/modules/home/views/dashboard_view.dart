@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import '../../../core/core.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class DashboardView extends StatefulWidget {
   @override
@@ -36,6 +33,17 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
   }
 
+  String getProductMonth(String? label) {
+    String name = '';
+    DateTime now = DateTime.now();
+
+    if (label == 'this month') name = DateFormat('MMMM yyyy').format(now);
+    if (label == 'last month')
+      name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+    if (label == 'lifetime') name = 'Lifetime';
+    return name;
+  }
+
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
@@ -55,9 +63,17 @@ class _DashboardViewState extends State<DashboardView> {
                       for (var item in controller.stockIndexDetailsList) ...[
                         CommonStockInfo(
                           label: controller.getStockIndexName(item.instrumentToken ?? 0),
-                          stockPrice: item.lastPrice.toString(),
-                          // stockLTP: '₹183.15',
-                          // stockChange: '(+34.42%)',
+                          stockPrice: FormatHelper.formatNumbers(
+                            item.lastPrice,
+                          ),
+                          stockColor: controller.getValueColor(item.lastPrice),
+                          stockLTP: FormatHelper.formatNumbers(
+                            item.lastPrice! - (item.ohlc?.close ?? 0),
+                          ),
+                          stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                          stockLTPColor: controller.getValueColor(
+                            item.lastPrice! - (item.ohlc?.close ?? 0),
+                          ),
                         ),
                       ]
                     ],
@@ -145,7 +161,9 @@ class _DashboardViewState extends State<DashboardView> {
                           Expanded(
                             child: customCard(
                               label: 'Virtual Trading',
-                              percent: controller.userDashboardReturnSummary.value.virtualData?.npnl == null
+                              percent: controller
+                                          .userDashboardReturnSummary.value.virtualData?.npnl ==
+                                      null
                                   ? '0'
                                   : '${(controller.userDashboardReturnSummary.value.virtualData!.npnl! / 10000).toStringAsFixed(2)} %',
                             ),
@@ -154,9 +172,10 @@ class _DashboardViewState extends State<DashboardView> {
                           Expanded(
                             child: customCard(
                               label: 'Contest Trading',
-                              percent: controller.userDashboardReturnSummary.value.contestReturn == null
+                              percent: controller.userDashboardReturnSummary.value.contestReturn ==
+                                      null
                                   ? '0'
-                                  : '${(controller.userDashboardReturnSummary.value.contestReturn ?? 0 * 100).toStringAsFixed(2)} %',
+                                  : '${(controller.userDashboardReturnSummary.value.contestReturn! * 100).toStringAsFixed(2)} %',
                             ),
                           ),
                         ],
@@ -167,7 +186,8 @@ class _DashboardViewState extends State<DashboardView> {
                           Expanded(
                             child: customCard(
                               label: 'TenX Trading',
-                              percent: controller.userDashboardReturnSummary.value.tenxReturn == null
+                              percent: controller.userDashboardReturnSummary.value.tenxReturn ==
+                                      null
                                   ? '0'
                                   : '${(controller.userDashboardReturnSummary.value.tenxReturn! * 100).toStringAsFixed(2)} %',
                             ),
@@ -212,6 +232,8 @@ class _DashboardViewState extends State<DashboardView> {
                       SizedBox(width: 4),
                       Expanded(
                         child: CommonDropdown(
+                          useSeptValue: true,
+                          getValue: getProductMonth,
                           color: Theme.of(context).cardColor,
                           hint: 'Date',
                           value: controller.selectedTimeFrame,
@@ -220,7 +242,8 @@ class _DashboardViewState extends State<DashboardView> {
                             setState(
                               () {
                                 controller.selectedTimeFrame = value!;
-                                controller.getDashboard(controller.selectedTradeType, controller.selectedTimeFrame);
+                                controller.getDashboard(
+                                    controller.selectedTradeType, controller.selectedTimeFrame);
                               },
                             );
                           },
@@ -484,55 +507,13 @@ class _DashboardViewState extends State<DashboardView> {
                   Text(
                     percent,
                     style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                          color: valueColor ?? (percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                          color: valueColor ??
+                              (percent.startsWith('-') ? AppColors.danger : AppColors.success),
                         ),
                   )
                 ],
               ),
             ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget summaryCard({
-    required String label,
-    required String percent,
-  }) {
-    return CommonCard(
-      margin: EdgeInsets.only(bottom: 8),
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      children: [
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: AppColors.secondary.withOpacity(.25),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.trending_up_rounded,
-                color: AppColors.secondary,
-                size: 16,
-              ),
-            ),
-            SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.tsRegular14,
-              ),
-            ),
-            Text(
-              percent,
-              style: Theme.of(context)
-                  .textTheme
-                  .tsMedium16
-                  .copyWith(color: percent.startsWith('-') ? AppColors.danger : AppColors.success),
-            ),
-            SizedBox(width: 8),
           ],
         ),
       ],

@@ -46,7 +46,8 @@ class PortfolioController extends BaseController<PortfolioRepository> {
   Future getMyTenxPortfolioList() async {
     isLoading(true);
     try {
-      final RepoResponse<MyTenxPortfolioResponse> response = await repository.getMyTenxPortfolioList();
+      final RepoResponse<MyTenxPortfolioResponse> response =
+          await repository.getMyTenxPortfolioList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           myTenxPortfolioList(response.data?.data ?? []);
@@ -64,7 +65,8 @@ class PortfolioController extends BaseController<PortfolioRepository> {
   Future getVirtualTradingPortfolioList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolioList();
+      final RepoResponse<VirtualTradingPortfolioResponse> response =
+          await repository.getVirtualTradingPortfolioList();
       if (response.data != null) {
         virtualPortfolio(response.data?.data);
       } else {

@@ -1,9 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import 'package:stoxhero/src/core/core.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+import '../../../app/app.dart';
 
 class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
   @override

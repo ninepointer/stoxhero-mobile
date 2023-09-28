@@ -18,12 +18,16 @@ class BankDetailsView extends GetView<BankController> {
             IconButton(
               splashRadius: 24,
               icon: controller.isEditEnabled.value ? Icon(Icons.save) : Icon(Icons.edit),
-              onPressed: () {
-                if (controller.isEditEnabled.value) controller.saveUserBankDetails();
-                controller.isEditEnabled.toggle();
-                FocusScope.of(context).unfocus();
-              },
-            ),
+              onPressed: controller.userDetails.value.kYCStatus == 'Approved'
+                  ? null
+                  : () {
+                      if (controller.isEditEnabled.value) {
+                        controller.saveUserBankDetails();
+                      }
+                      controller.isEditEnabled.toggle();
+                      FocusScope.of(context).unfocus();
+                    },
+            )
           ],
         ),
         body: Visibility(
@@ -47,9 +51,11 @@ class BankDetailsView extends GetView<BankController> {
                     CommonTextField(
                       prefixIcon: Icon(Icons.credit_card),
                       hintText: 'UPI ID',
+                      controller: controller.upiIdTextController,
                     ),
                     CommonTextField(
                       hintText: 'Google Pay Number',
+                      controller: controller.googlePayNumberTextController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
@@ -58,6 +64,7 @@ class BankDetailsView extends GetView<BankController> {
                     ),
                     CommonTextField(
                       hintText: 'PhonePe Number',
+                      controller: controller.phonePeNumberTextController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
@@ -66,6 +73,7 @@ class BankDetailsView extends GetView<BankController> {
                     ),
                     CommonTextField(
                       hintText: 'Paytm Number',
+                      controller: controller.paytmNumberTextController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
@@ -80,12 +88,15 @@ class BankDetailsView extends GetView<BankController> {
                     SizedBox(height: 12),
                     CommonTextField(
                       hintText: 'Your Name as per Bank Account',
+                      controller: controller.nameAsPerBankAccountTextController,
                     ),
                     CommonTextField(
                       hintText: 'Bank Name',
+                      controller: controller.bankNameTextController,
                     ),
                     CommonTextField(
                       hintText: 'Account Number',
+                      controller: controller.accountNumberTextController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -93,6 +104,7 @@ class BankDetailsView extends GetView<BankController> {
                     ),
                     CommonTextField(
                       hintText: 'IFSC Code',
+                      controller: controller.ifscCodeTextController,
                     ),
                   ],
                 ),

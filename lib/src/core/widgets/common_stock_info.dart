@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/data/data.dart';
 
 import '../core.dart';
 
 class CommonStockInfo extends StatelessWidget {
   final String? label;
-  final String? stockPrice;
+  final dynamic stockPrice;
   final String? stockLTP;
   final String? stockChange;
-  final StockIndexDetails? stockList;
-  final StockIndexInstrument? stock;
+  final Color? stockColor;
+  final Color? stockLTPColor;
   const CommonStockInfo({
     Key? key,
     required this.label,
-    this.stockPrice,
+    required this.stockPrice,
     this.stockLTP,
     this.stockChange,
-    this.stockList,
-    this.stock,
+    this.stockColor,
+    this.stockLTPColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: CommonCard(
-        margin: EdgeInsets.all(8).copyWith(
-          bottom: 0,
-          right: 0,
-        ),
+        margin: EdgeInsets.zero,
         padding: EdgeInsets.zero,
         children: [
           Container(
@@ -47,7 +43,12 @@ class CommonStockInfo extends StatelessWidget {
                         SizedBox(height: 4),
                         Text(
                           stockPrice ?? '-',
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                                color: stockColor ??
+                                    (stockPrice!.startsWith('-')
+                                        ? AppColors.danger
+                                        : AppColors.success),
+                              ),
                         ),
                       ],
                     ),
@@ -59,13 +60,15 @@ class CommonStockInfo extends StatelessWidget {
                     children: [
                       Text(
                         stockLTP ?? '',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsGreyMedium12.copyWith(
+                              color: stockLTPColor,
+                            ),
                       ),
                       SizedBox(width: 4),
                       Text(
                         stockChange ?? '',
                         style: AppStyles.tsWhiteMedium10.copyWith(
-                          color: AppColors.success,
+                          color: stockLTPColor,
                         ),
                       ),
                     ],

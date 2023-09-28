@@ -23,9 +23,10 @@ class ProfileController extends BaseController<ProfileRepository> {
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
-  String? selectedValue;
-  List<String> dropdownItems = ['Male', 'Female', 'Other'];
   final isEditEnabled = false.obs;
+
+  String? genderValue;
+  List<String> dropdownItems = ['Male', 'Female', 'Other'];
 
   final userNameTextController = TextEditingController();
   final positionTextController = TextEditingController();
@@ -64,7 +65,7 @@ class ProfileController extends BaseController<ProfileRepository> {
     emailTextController.text = userDetails.value.email ?? '';
     mobileTextController.text = userDetails.value.mobile ?? '';
     dobTextController.text = formatDate(userDetails.value.dob);
-    genderTextController.text = userDetails.value.gender ?? '';
+    genderValue = userDetails.value.gender ?? '';
     addressTextController.text = userDetails.value.address ?? '';
     cityTextController.text = userDetails.value.city ?? '';
     pincodeTextController.text = userDetails.value.pincode ?? '';
@@ -112,7 +113,7 @@ class ProfileController extends BaseController<ProfileRepository> {
       "last_name": lastNameTextController.text,
       "email": emailTextController.text,
       "mobile": mobileTextController.text,
-      "gender": genderTextController.text,
+      "gender": genderValue,
       "dob": dobTextController.text,
       "address": addressTextController.text,
       "city": cityTextController.text,

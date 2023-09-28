@@ -172,12 +172,14 @@ List<OnBoardingContent> contents = [
   OnBoardingContent(
     image: 'assets/images/onboarding2.png',
     title: 'Battle Ground',
-    description: 'Enter trading battles, show your skills, and win \n exciting gifts and cash prizes!',
+    description:
+        'Enter trading battles, show your skills, and win \n exciting gifts and cash prizes!',
   ),
   OnBoardingContent(
     image: 'assets/images/onboarding3.png',
     title: 'Contests',
-    description: "Trade in our virtual contest, earn real cash \n rewards based on your portfolio's value!",
+    description:
+        "Trade in our virtual contest, earn real cash \n rewards based on your portfolio's value!",
   ),
   OnBoardingContent(
     image: 'assets/images/onboarding4.png',

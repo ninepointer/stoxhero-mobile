@@ -31,7 +31,7 @@ class ContestSearchSymbolView extends GetView<ContestController> {
                       icon: Icon(Icons.close),
                       onPressed: controller.searchTextController.clear,
                     ),
-                    onChanged: controller.searchInstruments,
+                    // onChanged: controller.searchInstruments,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -45,8 +45,8 @@ class ContestSearchSymbolView extends GetView<ContestController> {
                       separatorBuilder: (_, __) => SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
-                        return TenxSearchInstrumentsCard(
-                          data: data,
+                        return ContestSearchInstrumentsCard(
+                          tradingInstrument: data,
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),

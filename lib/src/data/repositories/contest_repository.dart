@@ -93,13 +93,13 @@ class ContestRepository extends BaseRepository {
         : RepoResponse(data: ContestPortfolioResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestWatchListResponse>> getContestWatchList(
+  Future<RepoResponse<TradingWatchlistResponse>> getContestWatchList(
       bool? isNifty, bool? isBankNifty, bool? isFinNifty) async {
-    String apiURL = AppUrls.contestWatchList(isNifty, isBankNifty, isFinNifty);
+    String apiURL = AppUrls.contestInstrumentWatchList(isNifty, isBankNifty, isFinNifty);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: ContestWatchListResponse.fromJson(response));
+        : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
   Future<RepoResponse<ContestPositionListResponse>> getContestPositions(String? id) async {
@@ -126,8 +126,13 @@ class ContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(String? value) async {
-    String apiURL = AppUrls.tradingInstruments;
+  Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(
+    String? value,
+    bool? isNifty,
+    bool? isBankNifty,
+    bool? isFinNifty,
+  ) async {
+    String apiURL = AppUrls.contestsTradingInstruments(isNifty, isBankNifty, isFinNifty);
     var query = {'search': value, 'page': 1, 'size': 20};
     var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
@@ -141,5 +146,21 @@ class ContestRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> addInstrument(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.addInstrument;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StockIndexInstrumentListResponse>> getStockIndexInstrumentsList() async {
+    String apiURL = AppUrls.stockIndex;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/core/core.dart';
+import '../../../app/app.dart';
 
 class TenxPortfolioDetailsCard extends StatelessWidget {
   final String? label;

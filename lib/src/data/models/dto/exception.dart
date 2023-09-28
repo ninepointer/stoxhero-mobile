@@ -22,11 +22,13 @@ class ExceptionHandler {
           return APIException(message: ErrorMessages.connectionTimeout);
         case DioExceptionType.badResponse:
           return APIException(
-            message: ErrorResponse.fromJson(error.response?.data).message ?? ErrorMessages.somethingWentWrong,
+            message: ErrorResponse.fromJson(error.response?.data).message ??
+                ErrorMessages.somethingWentWrong,
           );
         case DioExceptionType.unknown:
           return APIException(
-            message: ErrorResponse.fromJson(error.response?.data).message ?? ErrorMessages.somethingWentWrong,
+            message: ErrorResponse.fromJson(error.response?.data).message ??
+                ErrorMessages.somethingWentWrong,
           );
         default:
           return APIException(message: ErrorMessages.networkGeneral);

@@ -1,19 +1,16 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
   final TransactionType type;
-  final TradingInstrument data;
+  final TradingInstrument tradingInstrument;
 
   const TenxTransactionBottomSheet({
     super.key,
     required this.type,
-    required this.data,
+    required this.tradingInstrument,
   });
 
   @override
@@ -56,11 +53,11 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.name ?? '-',
+                    tradingInstrument.name ?? '-',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    FormatHelper.formatNumbers(data.lastPrice),
+                    FormatHelper.formatNumbers(tradingInstrument.lastPrice),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
@@ -90,7 +87,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 () => AbsorbPointer(
                   absorbing: type == TransactionType.exit,
                   child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
+                    value: controller.selectedQuantity.value == 0
+                        ? null
+                        : controller.selectedQuantity.value,
                     onChanged: (value) => controller.selectedQuantity(value),
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
@@ -233,7 +232,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     : type == TransactionType.buy
                         ? 'Buy'
                         : 'Sell',
-                onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(type, data),
+                onPressed: () => Get.find<TenxTradingController>()
+                    .placeTenxTradingOrder(type, tradingInstrument),
               ),
             ],
           ),
