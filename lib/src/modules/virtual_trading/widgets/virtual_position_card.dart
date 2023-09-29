@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
@@ -12,26 +14,32 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
       position.id?.exchangeInstrumentToken ?? 0,
     );
     controller.generateLotsList(type: position.id?.symbol);
-    showBottomSheet(
+    BottomSheetHelper.openBottomSheet(
       context: context,
-      builder: (context) {
-        return VirtualTransactionBottomSheet(
-          type: type,
-          tradingInstrument: TradingInstrument(
-            name: position.id?.symbol,
-            exchange: position.id?.exchange,
-            tradingsymbol: position.id?.symbol,
-            exchangeToken: position.id?.exchangeInstrumentToken,
-            instrumentToken: position.id?.instrumentToken,
-            lastPrice: lastPrice,
-          ),
-        );
-      },
+      child: VirtualTransactionBottomSheet(
+        type: type,
+        tradingInstrument: TradingInstrument(
+          name: position.id?.symbol,
+          exchange: position.id?.exchange,
+          tradingsymbol: position.id?.symbol,
+          exchangeToken: position.id?.exchangeInstrumentToken,
+          instrumentToken: position.id?.instrumentToken,
+          lastPrice: lastPrice,
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // log('${controller.calculateGrossPNL(
+    //   controller.getInstrumentLastPrice(
+    //     position.id?.instrumentToken ?? 0,
+    //     position.id?.exchangeInstrumentToken ?? 0,
+    //   ),
+    //   position.lastaverageprice ?? 0,
+    //   position.lots ?? 0,
+    // )}');
     return Column(
       children: [
         CommonCard(
@@ -60,14 +68,15 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                               ? FormatHelper.formatNumbers(position.amount)
                               : FormatHelper.formatNumbers(
                                   controller.calculateGrossPNL(
+                                    position.amount!,
+                                    position.lots!.toInt(),
                                     controller.getInstrumentLastPrice(
-                                      position.id?.instrumentToken ?? 0,
-                                      position.id?.exchangeInstrumentToken ?? 0,
+                                      position.id!.instrumentToken!,
+                                      position.id!.exchangeInstrumentToken!,
                                     ),
-                                    position.lastaverageprice ?? 0,
-                                    position.lots ?? 0,
                                   ),
                                 ),
+                                
                         ),
                       ],
                     ),
@@ -162,21 +171,19 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       List<int> lots = controller.generateLotsList(type: position.id?.symbol);
                       controller.selectedQuantity.value = position.lots!.toInt();
                       controller.lotsValueList.assignAll(lots);
-                      showBottomSheet(
+                      BottomSheetHelper.openBottomSheet(
                         context: context,
-                        builder: (context) {
-                          return VirtualTransactionBottomSheet(
-                            type: TransactionType.exit,
-                            tradingInstrument: TradingInstrument(
-                              name: position.id?.symbol,
-                              exchange: position.id?.exchange,
-                              tradingsymbol: position.id?.symbol,
-                              exchangeToken: position.id?.exchangeInstrumentToken,
-                              instrumentToken: position.id?.instrumentToken,
-                              lotSize: position.lots,
-                            ),
-                          );
-                        },
+                        child: VirtualTransactionBottomSheet(
+                          type: TransactionType.exit,
+                          tradingInstrument: TradingInstrument(
+                            name: position.id?.symbol,
+                            exchange: position.id?.exchange,
+                            tradingsymbol: position.id?.symbol,
+                            exchangeToken: position.id?.exchangeInstrumentToken,
+                            instrumentToken: position.id?.instrumentToken,
+                            lotSize: position.lots,
+                          ),
+                        ),
                       );
                     },
                     child: Container(

@@ -15,7 +15,7 @@ class ContestBuySubscriptionBottomSheet extends GetView<ContestController> {
             width: double.infinity,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
@@ -108,8 +108,7 @@ class ContestBuySubscriptionBottomSheet extends GetView<ContestController> {
                               splashRadius: 24,
                               padding: EdgeInsets.zero,
                               onPressed: () {
-                                String referralCode =
-                                    controller.userDetailsData.myReferralCode ?? '-';
+                                String referralCode = controller.userDetailsData.myReferralCode ?? '-';
                                 Clipboard.setData(ClipboardData(text: referralCode));
                                 SnackbarHelper.showSnackbar('Referral code copied to clipboard');
                               },

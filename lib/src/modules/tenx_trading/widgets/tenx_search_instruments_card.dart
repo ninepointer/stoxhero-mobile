@@ -21,9 +21,9 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
       tradingInstrument.exchangeToken!,
     );
     controller.generateLotsList(type: tradingInstrument.name);
-    showBottomSheet(
+    BottomSheetHelper.openBottomSheet(
       context: context,
-      builder: (context) => TenxTransactionBottomSheet(
+      child: TenxTransactionBottomSheet(
         type: type,
         tradingInstrument: TradingInstrument(
           name: tradingInstrument.tradingsymbol,
@@ -83,17 +83,6 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
           children: [
             Expanded(
               child: GestureDetector(
-                // onTap: () {
-                //   log('instrument : ${data.toJson()}');
-                //   FocusScope.of(context).unfocus();
-                //   showBottomSheet(
-                //     context: context,
-                //     builder: (context) => TenxTransactionBottomSheet(
-                //       type: TransactionType.buy,
-                //       data: data,
-                //     ),
-                //   );
-                // },
                 onTap: () => openBottomSheet(context, TransactionType.buy),
                 child: Container(
                   alignment: Alignment.center,
@@ -115,17 +104,6 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
             ),
             Expanded(
               child: GestureDetector(
-                // onTap: () {
-                //   log('instrument : ${data.toJson()}');
-                //   FocusScope.of(context).unfocus();
-                //   showBottomSheet(
-                //     context: context,
-                //     builder: (context) => TenxTransactionBottomSheet(
-                //       type: TransactionType.sell,
-                //       data: data,
-                //     ),
-                //   );
-                // },
                 onTap: () => openBottomSheet(context, TransactionType.sell),
                 child: Container(
                   alignment: Alignment.center,
@@ -145,16 +123,13 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () => Get.find<TenxTradingController>()
-                        .removeInstrument(tradingInstrument.instrumentToken)
+                    ? () => Get.find<TenxTradingController>().removeInstrument(tradingInstrument.instrumentToken)
                     : () => Get.find<TenxTradingController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isAdded
-                        ? AppColors.info.withOpacity(.25)
-                        : AppColors.secondary.withOpacity(.25),
+                    color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

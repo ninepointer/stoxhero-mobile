@@ -92,13 +92,11 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
               AbsorbPointer(
                 absorbing: type == MarginXTransactionType.exit,
                 child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0
-                      ? null
-                      : controller.selectedQuantity.value,
+                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
                   onChanged: (value) => controller.selectedQuantity(value),
                   menuMaxHeight: 250,
                   isDense: true,
-                  items: AppConstants.instrumentsQuantity.map((int number) {
+                  items: [10, 20, 30].map((int number) {
                     return DropdownMenuItem<int>(
                       value: number,
                       child: Text(number.toString()),

@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,44 +12,11 @@ class KycDetailsView extends StatefulWidget {
 
 class _KycDetailsViewState extends State<KycDetailsView> {
   late BankController controller;
-  List<File?> images = List.generate(5, (_) => null);
-
-  List<PlatformFile> filesList = [];
 
   @override
   void initState() {
     controller = Get.find<BankController>();
     super.initState();
-  }
-
-  Future pickImage(int index) async {
-    try {
-      // final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      // if (image == null) return;
-      // final imageTemporary = File(image.path);
-
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-      );
-      filesList = result?.files ?? [];
-      // NetworkService().postAuthFormData(path: result, data: filesList);
-      if (result != null) {
-        File file = File(result.files.single.path ?? '');
-        String filename = file.path.split('/').last;
-      }
-
-      log(filesList.toString());
-
-      setState(() {});
-    } on PlatformException catch (e) {
-      print('Failed to pick Image $e');
-    }
-  }
-
-  void removeImage(int index) {
-    setState(() {
-      images[index] = null;
-    });
   }
 
   @override
@@ -80,18 +44,19 @@ class _KycDetailsViewState extends State<KycDetailsView> {
         body: Visibility(
           visible: !controller.isLoadingStatus,
           replacement: CommonLoader(),
-          child: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            color: Theme.of(context).cardColor,
+            margin: EdgeInsets.only(top: 4),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(16).copyWith(bottom: 100),
               child: AbsorbPointer(
                 absorbing: !controller.isEditEnabled.value,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 16),
                     Text(
                       'KYC Status: ${controller.userDetails.value.kYCStatus}',
-                      style: Theme.of(context).textTheme.tsMedium14,
+                      style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 8),
                     CommonTextField(
@@ -117,39 +82,63 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                     ),
                     buildImage(
                       label: 'Aadhaar Card Front Image',
-                      imageUpload: () => pickImage(0),
-                      removeImage: images[0] != null ? () => removeImage(0) : null,
-                      image: images[0],
+                      file: controller.aadhaarCardFrontFile.value,
+                      selectFile: () => controller.filePicker(
+                        KycDocumentType.aadhaarCardFront,
+                      ),
+                      removeFile: () => controller.filePicker(
+                        KycDocumentType.aadhaarCardFront,
+                        removeFile: true,
+                      ),
                     ),
                     SizedBox(height: 12),
                     buildImage(
                       label: 'Aadhaar Card Back Image',
-                      imageUpload: () => pickImage(1),
-                      removeImage: images[1] != null ? () => removeImage(1) : null,
-                      image: images[1],
+                      file: controller.aadhaarCardBackFile.value,
+                      selectFile: () => controller.filePicker(
+                        KycDocumentType.aadhaarCardBack,
+                      ),
+                      removeFile: () => controller.filePicker(
+                        KycDocumentType.aadhaarCardBack,
+                        removeFile: true,
+                      ),
                     ),
                     SizedBox(height: 12),
                     buildImage(
                       label: 'Pan Card Image',
-                      imageUpload: () => pickImage(2),
-                      removeImage: images[2] != null ? () => removeImage(2) : null,
-                      image: images[2],
+                      file: controller.panCardFile.value,
+                      selectFile: () => controller.filePicker(
+                        KycDocumentType.panCard,
+                      ),
+                      removeFile: () => controller.filePicker(
+                        KycDocumentType.panCard,
+                        removeFile: true,
+                      ),
                     ),
                     SizedBox(height: 12),
                     buildImage(
                       label: 'Passport Size Image',
-                      imageUpload: () => pickImage(3),
-                      removeImage: images[3] != null ? () => removeImage(3) : null,
-                      image: images[3],
+                      file: controller.passportSizePhotoFile.value,
+                      selectFile: () => controller.filePicker(
+                        KycDocumentType.passportPhoto,
+                      ),
+                      removeFile: () => controller.filePicker(
+                        KycDocumentType.passportPhoto,
+                        removeFile: true,
+                      ),
                     ),
                     SizedBox(height: 12),
                     buildImage(
                       label: 'Address Proof Image',
-                      imageUpload: () => pickImage(4),
-                      removeImage: images[4] != null ? () => removeImage(4) : null,
-                      image: images[4],
+                      file: controller.addressProofFile.value,
+                      selectFile: () => controller.filePicker(
+                        KycDocumentType.addressProof,
+                      ),
+                      removeFile: () => controller.filePicker(
+                        KycDocumentType.addressProof,
+                        removeFile: true,
+                      ),
                     ),
-                    SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -162,51 +151,59 @@ class _KycDetailsViewState extends State<KycDetailsView> {
 
   Widget buildImage({
     required String label,
-    required VoidCallback imageUpload,
-    VoidCallback? removeImage,
-    File? image,
+    VoidCallback? selectFile,
+    VoidCallback? removeFile,
+    PlatformFile? file,
   }) {
-    String imageType = '';
-    if (image != null) {
-      if (image.path.endsWith('.jpg') || image.path.endsWith('.jpeg')) {
-        imageType = 'JPEG Image';
-      } else if (image.path.endsWith('.png')) {
-        imageType = 'PNG Image';
-      } else {
-        imageType = 'Unknown Image Type';
-      }
-    }
+    bool hasFile = (file?.path != null);
     return GestureDetector(
-      onTap: imageUpload,
-      child: Card(
+      onTap: selectFile,
+      child: CommonCard(
         margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
+        children: [
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (image != null)
-                Image.file(
-                  image,
-                  width: 100,
-                  height: 100,
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: hasFile ? AppColors.success.withOpacity(.25) : AppColors.grey.withOpacity(.25),
                 ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(label),
-                  SizedBox(height: 4),
-                  Text(imageType),
-                ],
+                child: Icon(
+                  hasFile ? Icons.verified_rounded : Icons.description_rounded,
+                  size: 20,
+                  color: hasFile ? AppColors.success : AppColors.grey,
+                ),
               ),
-              if (image != null && removeImage != null)
+              SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: Theme.of(context).textTheme.tsRegular16,
+                    ),
+                    if (hasFile) ...[
+                      SizedBox(height: 4),
+                      Text(
+                        file?.name ?? '',
+                        style: AppStyles.tsGreyRegular14,
+                      ),
+                    ]
+                  ],
+                ),
+              ),
+              if (hasFile)
                 IconButton(
-                  onPressed: () => removeImage(),
-                  icon: Icon(Icons.cancel),
+                  icon: Icon(Icons.close),
+                  onPressed: removeFile,
+                  splashRadius: 24,
                 ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }

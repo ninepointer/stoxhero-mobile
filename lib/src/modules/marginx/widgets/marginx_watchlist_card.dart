@@ -60,8 +60,7 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                         MarginXWatchListCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
-                          value:
-                              FormatHelper.formatDateByMonth(widget.contestWatchList.contractDate),
+                          value: FormatHelper.formatDateByMonth(widget.contestWatchList.contractDate),
                         ),
                         MarginXWatchListCardTile(
                           isRightAlign: true,

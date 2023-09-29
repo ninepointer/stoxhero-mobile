@@ -13,7 +13,6 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
 
   @override
   Widget build(BuildContext context) {
-    // log(tradingInstrument.toJson().toString());
     return Wrap(
       children: [
         Container(
@@ -86,9 +85,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 () => AbsorbPointer(
                   absorbing: type == TransactionType.exit,
                   child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value == 0
-                        ? null
-                        : controller.selectedQuantity.value,
+                    value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
                     onChanged: (value) => controller.selectedQuantity(value),
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
@@ -97,8 +94,17 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                         child: Text(number.toString()),
                       );
                     }).toList(),
+                    dropdownStyleData: DropdownStyleData(
+                      maxHeight: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    menuItemStyleData: MenuItemStyleData(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                    ),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(16),
+                      contentPadding: EdgeInsets.all(16).copyWith(left: 0),
                       filled: true,
                       fillColor: AppColors.grey.withOpacity(.1),
                       hintText: 'Quantity',

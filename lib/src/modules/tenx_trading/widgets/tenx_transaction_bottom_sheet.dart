@@ -87,9 +87,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 () => AbsorbPointer(
                   absorbing: type == TransactionType.exit,
                   child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value == 0
-                        ? null
-                        : controller.selectedQuantity.value,
+                    value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
                     onChanged: (value) => controller.selectedQuantity(value),
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
@@ -98,8 +96,17 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                         child: Text(number.toString()),
                       );
                     }).toList(),
+                    dropdownStyleData: DropdownStyleData(
+                      maxHeight: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    menuItemStyleData: MenuItemStyleData(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                    ),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(16),
+                      contentPadding: EdgeInsets.all(16).copyWith(left: 0),
                       filled: true,
                       fillColor: AppColors.grey.withOpacity(.1),
                       hintText: 'Quantity',
@@ -232,8 +239,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     : type == TransactionType.buy
                         ? 'Buy'
                         : 'Sell',
-                onPressed: () => Get.find<TenxTradingController>()
-                    .placeTenxTradingOrder(type, tradingInstrument),
+                onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(type, tradingInstrument),
               ),
             ],
           ),

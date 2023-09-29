@@ -41,9 +41,9 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
     );
     controller.generateLotsList(type: widget.tradingWatchlist.instrument);
     // log(controller.lotsValueList.toString());
-    showBottomSheet(
+    BottomSheetHelper.openBottomSheet(
       context: context,
-      builder: (context) => VirtualTransactionBottomSheet(
+      child: VirtualTransactionBottomSheet(
         type: type,
         tradingInstrument: TradingInstrument(
           name: widget.tradingWatchlist.symbol,
@@ -94,6 +94,12 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                               widget.tradingWatchlist.exchangeInstrumentToken!,
                             ),
                           ),
+                          valueColor: controller.getValueColor(
+                            controller.getInstrumentLastPrice(
+                              widget.tradingWatchlist.instrumentToken!,
+                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -113,6 +119,12 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                           value: controller.getInstrumentChanges(
                             widget.tradingWatchlist.instrumentToken!,
                             widget.tradingWatchlist.exchangeInstrumentToken!,
+                          ),
+                          valueColor: controller.getValueColor(
+                            controller.getInstrumentChanges(
+                              widget.tradingWatchlist.instrumentToken!,
+                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                            ),
                           ),
                         ),
                       ],
@@ -162,8 +174,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () =>
-                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                          onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -233,8 +244,7 @@ class VirtualWatchListCardTile extends StatelessWidget {
         Text(
           value ?? '-',
           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color:
-                    valueColor ?? (value!.startsWith('-') ? AppColors.danger : AppColors.success),
+                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
               ),
         ),
       ],

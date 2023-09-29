@@ -11,6 +11,7 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
+        color: Theme.of(context).cardColor,
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -63,12 +64,4 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
       ),
     );
   }
-}
-
-void showBottomModalSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    builder: (context) => WalletTransactionBottomSheet(),
-  );
 }

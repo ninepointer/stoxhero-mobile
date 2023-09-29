@@ -33,19 +33,20 @@ class BankDetailsView extends GetView<BankController> {
         body: Visibility(
           visible: !controller.isLoadingStatus,
           replacement: CommonLoader(),
-          child: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            color: Theme.of(context).cardColor,
+            margin: EdgeInsets.only(top: 4),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(16),
               child: AbsorbPointer(
                 absorbing: !controller.isEditEnabled.value,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 16),
                     Text(
                       'Online Payment',
                       textAlign: TextAlign.start,
-                      style: AppStyles.tsGreyMedium16,
+                      style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
                     CommonTextField(
@@ -83,7 +84,7 @@ class BankDetailsView extends GetView<BankController> {
                     Text(
                       'Bank Details',
                       textAlign: TextAlign.start,
-                      style: AppStyles.tsGreyMedium16,
+                      style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
                     CommonTextField(

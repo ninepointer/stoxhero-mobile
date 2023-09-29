@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/app.dart';
+import '../../../../app/app.dart';
 
 class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
   const VirtualSearchSymbolView({Key? key}) : super(key: key);

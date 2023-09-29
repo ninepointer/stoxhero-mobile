@@ -20,9 +20,9 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
       tradingInstrument.exchangeToken!,
     );
     controller.generateLotsList(type: tradingInstrument.name);
-    showBottomSheet(
+    BottomSheetHelper.openBottomSheet(
       context: context,
-      builder: (context) => VirtualTransactionBottomSheet(
+      child: VirtualTransactionBottomSheet(
         type: type,
         tradingInstrument: TradingInstrument(
           name: tradingInstrument.tradingsymbol,
@@ -122,16 +122,13 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () => Get.find<VirtualTradingController>()
-                        .removeInstrument(tradingInstrument.instrumentToken)
+                    ? () => Get.find<VirtualTradingController>().removeInstrument(tradingInstrument.instrumentToken)
                     : () => Get.find<VirtualTradingController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isAdded
-                        ? AppColors.info.withOpacity(.25)
-                        : AppColors.secondary.withOpacity(.25),
+                    color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

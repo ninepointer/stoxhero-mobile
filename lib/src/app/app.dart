@@ -30,6 +30,7 @@ class _AppState extends State<App> {
     );
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      defaultTransition: Transition.rightToLeft,
       title: AppConstants.appName,
       themeMode: ThemeService().theme,
       theme: AppTheme.lightThemeData(context),

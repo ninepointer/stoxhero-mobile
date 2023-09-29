@@ -1,6 +1,6 @@
 export 'controllers/virtual_trading_controller.dart';
-export 'views/virtual_trading_view.dart';
-export 'views/virtual_search_symbol_view.dart';
+export 'widgets/views/virtual_trading_view.dart';
+export 'widgets/views/virtual_search_symbol_view.dart';
 export 'widgets/virtual_portfolio_details_card.dart';
 export 'widgets/virtual_position_details_card.dart';
 export 'widgets/virtual_search_instruments_card.dart';

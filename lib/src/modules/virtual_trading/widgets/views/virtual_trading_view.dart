@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../app/app.dart';
+import '../../../../app/app.dart';
 
 class VirtualTradingView extends GetView<VirtualTradingController> {
   const VirtualTradingView({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          for (var item in controller.stockIndexDetailsList)
+                          for (var item in controller.stockIndexDetailsList) ...[
                             CommonStockInfo(
                               label: controller.getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
@@ -37,6 +37,8 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
                             ),
+                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                          ]
                         ],
                       ),
                     ),
@@ -47,7 +49,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         Expanded(
                           child: marginNPNLCard(
                             context,
-                            label: 'Virtual Margin Money',
+                            label: 'Margin',
                             value: controller.tenxTotalPositionDetails.value.net,
                           ),
                         ),
@@ -56,9 +58,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           child: marginNPNLCard(
                             context,
                             label: 'Net P & L',
-                            value: controller.tenxTotalPositionDetails.value.lots == 0
-                                ? controller.tenxTotalPositionDetails.value.net
-                                : controller.calculateTotalNetPNL(),
+                            value: controller.calculateTotalNetPNL(),
                           ),
                         ),
                       ],
@@ -74,9 +74,8 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tradingWatchlist.length >= 3
-                              ? 340
-                              : controller.tradingWatchlist.length * 120,
+                          height:
+                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -89,8 +88,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             },
                           ),
                         ),
-                  if (controller.virtualPositionsList.isNotEmpty)
-                    CommonTile(label: 'My Position Details'),
+                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -120,9 +118,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               SizedBox(width: 8),
                               VirtualPositionDetailsCard(
                                 label: 'Net P&L',
-                                value: controller.tenxTotalPositionDetails.value.lots == 0
-                                    ? controller.tenxTotalPositionDetails.value.net
-                                    : controller.calculateTotalNetPNL(),
+                                value: controller.calculateTotalNetPNL(),
                               ),
                             ],
                           ),
@@ -150,18 +146,15 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     value: controller.virtualPortfolio.value.totalFund,
                   ),
                   VirtualPortfolioDetailsCard(
-                    label: 'Virtual Available Margin',
+                    label: 'Available Margin',
                     // value: difference,
-                    value: (controller.virtualPortfolio.value.openingBalance ?? 0),
+                    value: controller.calculateMargin(),
                   ),
                   VirtualPortfolioDetailsCard(
                     label: 'Virtual Used Margin',
-                    value: controller.tenxTotalPositionDetails.value.lots == 0
-                        ? controller.tenxTotalPositionDetails.value.net
-                        : controller.calculateTotalNetPNL(),
-                    valueColor: (controller.tenxTotalPositionDetails.value.net ?? 0) < 0
-                        ? AppColors.danger
-                        : AppColors.success,
+                    value: controller.calculateTotalNetPNL().abs(),
+                    valueColor:
+                        (controller.tenxTotalPositionDetails.value.net ?? 0) < 0 ? AppColors.danger : AppColors.success,
                   ),
                   SizedBox(height: 56),
                 ],

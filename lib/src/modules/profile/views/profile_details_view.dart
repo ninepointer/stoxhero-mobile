@@ -42,15 +42,22 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
         body: Visibility(
           visible: !controller.isLoadingStatus,
           replacement: CommonLoader(),
-          child: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            margin: EdgeInsets.only(top: 4),
+            color: Theme.of(context).cardColor,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(16),
               child: AbsorbPointer(
                 absorbing: !controller.isEditEnabled.value,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 16),
+                    Text(
+                      'Account Information',
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.tsMedium16,
+                    ),
+                    SizedBox(height: 12),
                     CommonTextField(
                       isDisabled: true,
                       controller: controller.positionTextController,
@@ -64,7 +71,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     Text(
                       'Personal Information',
                       textAlign: TextAlign.start,
-                      style: AppStyles.tsGreyMedium16,
+                      style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
                     Row(
@@ -132,7 +139,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     Text(
                       'Location',
                       textAlign: TextAlign.start,
-                      style: AppStyles.tsGreyMedium16,
+                      style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
                     CommonTextField(
@@ -183,7 +190,6 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
                   ],
                 ),
               ),

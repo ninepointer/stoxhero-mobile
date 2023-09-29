@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/core/core.dart';
-import '../../../app/app.dart'; 
+import '../../../app/app.dart';
+
 class TenxPositionDetailsCard extends StatelessWidget {
   final String? label;
   final dynamic value;
   final bool isNum;
-
+  final Color? valueColor;
   const TenxPositionDetailsCard({
     super.key,
     this.label,
     this.value,
     this.isNum = false,
+    this.valueColor,
   });
 
   @override
@@ -33,7 +35,7 @@ class TenxPositionDetailsCard extends StatelessWidget {
                   decimal: isNum ? 0 : 2,
                 ),
                 style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                      color: AppColors.secondary,
+                      color: valueColor ?? AppColors.secondary,
                     ),
               ),
             ],
