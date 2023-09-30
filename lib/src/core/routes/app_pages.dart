@@ -139,5 +139,15 @@ class AppPages {
       page: () => VirtualSearchSymbolView(),
       binding: VirtualTradingBinding(),
     ),
+    GetPage(
+      name: AppRoutes.Internship,
+      page: () => InternshipDashboardView(),
+      binding: InternshipBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.internshipSearchSymbol,
+      page: () => InternshipSearchSymbolView(),
+      binding: InternshipBinding(),
+    ),
   ];
 }

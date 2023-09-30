@@ -2,19 +2,9 @@ import 'dart:developer';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:stoxhero/src/base/base.dart';
 
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-
-enum ChartType {
-  gross,
-  net,
-  orders,
-  brokerage,
-}
+import '../../../app/app.dart';
 
 class AnalyticsBinding implements Bindings {
   @override
@@ -94,7 +84,7 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     if (userDetailsData.designation == AppConstants.equityTraderType) {
       await getInfinityTradingOverviewDetails();
       await getInfinityTradingDateWiseDetails();
-      await getInfinityAnalyticsExpectedPnLOverviewDetails();
+      // await getInfinityAnalyticsExpectedPnLOverviewDetails();
     } else {
       await getTenxTradingOverviewDetails();
       await getTenxTradingOverviewDetails();
@@ -149,9 +139,13 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
   }
 
   Widget bottomTitlesMonthly(double value, TitleMeta meta) {
-    var date = DateFormat("dd MMM").format(
-      DateFormat('yyyy-MM-dd').parse(virtualTadingMonthlyPnlList[value.toInt()].date!),
-    );
+    var index = value.toInt();
+    var date = index >= 0 && index < virtualTadingMonthlyPnlList.length
+        ? DateFormat("dd MMM").format(
+            DateFormat('yyyy-MM-dd').parse(virtualTadingMonthlyPnlList[value.toInt() - 1].date!),
+          )
+        : "";
+
     return SideTitleWidget(
       axisSide: meta.axisSide,
       angle: 55,
@@ -162,54 +156,54 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     );
   }
 
-  List<double> getChartMinMaxValue(ChartType type) {
-    List<AnalyticsDateWiseDetails> dataList = selectedTab.value == 0
-        ? userDetailsData.designation == AppConstants.equityTraderType
-            ? infinityTadingDateWiseList
-            : tenxTadingDateWiseList
-        : virtualTadingDateWiseList;
+  // List<double> getChartMinMaxValue(ChartType type) {
+  //   List<AnalyticsDateWiseDetails> dataList = selectedTab.value == 0
+  //       ? userDetailsData.designation == AppConstants.equityTraderType
+  //           ? infinityTadingDateWiseList
+  //           : tenxTadingDateWiseList
+  //       : virtualTadingDateWiseList;
 
-    double minValue = 0;
-    double maxValue = 0;
+  //   double minValue = 0;
+  //   double maxValue = 0;
 
-    switch (type) {
-      case ChartType.gross:
-        dataList.sort((a, b) => (a.gpnl ?? 0).compareTo(b.gpnl ?? 0));
-        minValue = dataList.first.gpnl!.toDouble();
+  //   switch (type) {
+  //     case ChartType.gross:
+  //       dataList.sort((a, b) => (a.gpnl ?? 0).compareTo(b.gpnl ?? 0));
+  //       minValue = dataList.first.gpnl!.toDouble();
 
-        dataList.sort((a, b) => (b.gpnl ?? 0).compareTo(a.gpnl ?? 0));
-        maxValue = dataList.first.gpnl!.toDouble();
+  //       dataList.sort((a, b) => (b.gpnl ?? 0).compareTo(a.gpnl ?? 0));
+  //       maxValue = dataList.first.gpnl!.toDouble();
 
-        break;
-      case ChartType.net:
-        dataList.sort((a, b) => (a.gpnl ?? 0).compareTo(b.gpnl ?? 0));
-        minValue = dataList.first.gpnl!.toDouble();
+  //       break;
+  //     case ChartType.net:
+  //       dataList.sort((a, b) => (a.gpnl ?? 0).compareTo(b.gpnl ?? 0));
+  //       minValue = dataList.first.gpnl!.toDouble();
 
-        dataList.sort((a, b) => (b.gpnl ?? 0).compareTo(a.gpnl ?? 0));
-        maxValue = dataList.first.gpnl!.toDouble();
+  //       dataList.sort((a, b) => (b.gpnl ?? 0).compareTo(a.gpnl ?? 0));
+  //       maxValue = dataList.first.gpnl!.toDouble();
 
-        break;
-      case ChartType.orders:
-        dataList.sort((a, b) => (a.gpnl ?? 0).compareTo(b.gpnl ?? 0));
-        minValue = dataList.first.gpnl!.toDouble();
+  //       break;
+  //     case ChartType.orders:
+  //       dataList.sort((a, b) => (a.gpnl ?? 0).compareTo(b.gpnl ?? 0));
+  //       minValue = dataList.first.gpnl!.toDouble();
 
-        dataList.sort((a, b) => (b.gpnl ?? 0).compareTo(a.gpnl ?? 0));
-        maxValue = dataList.first.gpnl!.toDouble();
+  //       dataList.sort((a, b) => (b.gpnl ?? 0).compareTo(a.gpnl ?? 0));
+  //       maxValue = dataList.first.gpnl!.toDouble();
 
-        break;
-      case ChartType.brokerage:
-        dataList.sort((a, b) => (a.gpnl ?? 0).compareTo(b.gpnl ?? 0));
-        minValue = dataList.first.gpnl!.toDouble();
+  //       break;
+  //     case ChartType.brokerage:
+  //       dataList.sort((a, b) => (a.gpnl ?? 0).compareTo(b.gpnl ?? 0));
+  //       minValue = dataList.first.gpnl!.toDouble();
 
-        dataList.sort((a, b) => (b.gpnl ?? 0).compareTo(a.gpnl ?? 0));
-        maxValue = dataList.first.gpnl!.toDouble();
+  //       dataList.sort((a, b) => (b.gpnl ?? 0).compareTo(a.gpnl ?? 0));
+  //       maxValue = dataList.first.gpnl!.toDouble();
 
-        break;
-      default:
-    }
+  //       break;
+  //     default:
+  //   }
 
-    return [minValue, maxValue];
-  }
+  //   return [minValue, maxValue];
+  // }
 
   List<BarChartGroupData> getGrossChartsData({
     required Color barColor,
@@ -685,24 +679,24 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     isLoading(false);
   }
 
-  Future getInfinityAnalyticsExpectedPnLOverviewDetails() async {
-    isLoading(true);
-    try {
-      final RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse> response =
-          await repository.getInfinityAnalyticsExpectedPnLOverviewDetails();
-      if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {
-          infinityTadingExpectedPnlList(response.data?.data);
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
-  }
+  // Future getInfinityAnalyticsExpectedPnLOverviewDetails() async {
+  //   isLoading(true);
+  //   try {
+  //     final RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse> response =
+  //         await repository.getInfinityAnalyticsExpectedPnLOverviewDetails();
+  //     if (response.data != null) {
+  //       if (response.data?.status?.toLowerCase() == "success") {
+  //         infinityTadingExpectedPnlList(response.data?.data);
+  //       }
+  //     } else {
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //   }
+  //   isLoading(false);
+  // }
 
   Future getVirtualAnalyticsMonthlyPnLOverviewDetails() async {
     isLoading(true);

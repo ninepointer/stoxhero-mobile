@@ -1,11 +1,13 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+
 import '../../../app/app.dart';
 
-class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
-  final TradingInstrument tradingInstrument;
+class InternshipTransactionBottomSheet extends GetView<InternshipController> {
   final TransactionType type;
-  const VirtualTransactionBottomSheet({
+  final TradingInstrument tradingInstrument;
+
+  const InternshipTransactionBottomSheet({
     super.key,
     required this.type,
     required this.tradingInstrument,
@@ -51,13 +53,14 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    tradingInstrument.name ?? '',
+                    tradingInstrument.name ?? '-',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
                     type == TransactionType.buy
                         ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
                         : tradingInstrument.lotSize.toString(),
+                    style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
               ),
@@ -240,12 +243,8 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                     : type == TransactionType.buy
                         ? 'Buy'
                         : 'Sell',
-                onPressed: () {
-                  Get.find<VirtualTradingController>().placeVirtualTradingOrder(
-                    type,
-                    tradingInstrument,
-                  );
-                },
+                onPressed: () =>
+                    Get.find<InternshipController>().placeInternshipOrder(type, tradingInstrument),
               ),
             ],
           ),

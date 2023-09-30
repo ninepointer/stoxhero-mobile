@@ -85,4 +85,14 @@ class FormatHelper {
       return '-';
     }
   }
+
+  static String formatDateYear(String? value) {
+    if (value != null) {
+      DateTime dateTime = DateTime.parse(value);
+      String formattedString = DateFormat('d MMMM yyyy').format(dateTime);
+      return formattedString;
+    } else {
+      return '-';
+    }
+  }
 }

@@ -18,12 +18,14 @@ class AppRoutes {
   static const String tenxSearchSymbol = '/tenx_search_symbol';
   static const String virtualSearchSymbol = '/virtual_search_symbol';
   static const String contestSearchSymbol = '/contest_search_symbol';
+  static const String internshipSearchSymbol = '/internship_search_symbol';
   static const String virtualTrading = '/virtual_trading';
   static const String contest = '/contest';
   static const String pastContest = '/contest/past_contest';
   static const String faq = '/faq';
   static const String tutorial = '/tutorial';
   static const String careers = '/careers';
+  static const String Internship = '/Internship';
   static const String wallet = '/wallet';
   static const String marginx = '/marginx';
   static const String collegeContest = '/college_contest';

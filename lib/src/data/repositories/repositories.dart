@@ -3,6 +3,7 @@ export 'auth_repoitory.dart';
 export 'career_respository.dart';
 export 'contest_repository.dart';
 export 'dashboard_respository.dart';
+export 'internship_respository.dart';
 export 'marginx_respository.dart';
 export 'orders_repository.dart';
 export 'portfolio_repository.dart';

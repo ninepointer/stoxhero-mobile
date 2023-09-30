@@ -46,7 +46,9 @@ class AppUrls {
   static const String infinityTradingAnalyticsOverView = "$apiURL/analytics/infinity/myoverview";
   // static String analyticsExpectedPnL(String? trade) =>
   //     "$apiURL/userdashboard/expectedpnl?tradeType=$trade";
-  static const String analyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=virtual";
+  static const String virtualAnalyticsExpectedPnL =
+      "$apiURL/userdashboard/expectedpnl?tradeType=virtual";
+  static const String tenXAnalyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=tenX";
   static const String analyticsVirtualMonthlyPnL = "$apiURL/analytics/papertrade/mymonthlypnl";
 
   static const String virtualTradingDateWiseAnalytics = "$apiURL/analytics/papertrade/mystats";
@@ -107,4 +109,12 @@ class AppUrls {
 
   static const String generateCareerOtp = "$apiURL/career/generateotp";
   static const String confirmCareerOtp = "$apiURL/career/confirmotp";
+
+  static const String internshipBatch = "$apiURL/internbatch/currentinternship";
+  static const String internshipPlaceOrder = "$apiURL/internPlacingOrder";
+  static String internshipPosition(String? id) => "$apiURL/internship/pnl/$id";
+  static String internshipOverview(String? id) => "$apiURL/analytics/internship/myoverview/$id";
+  static String internshipMonthlyPNL(String? id) => "$apiURL/analytics/internship/mymonthlypnl/$id";
+  static String internshipDateWisePNL(String? id) => "$apiURL/analytics/internship/mystats/$id";
+  static String internshipBatchPortfolio(String? id) => "$apiURL/internship/marginDetail/$id";
 }

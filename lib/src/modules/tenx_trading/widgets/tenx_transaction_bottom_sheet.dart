@@ -57,8 +57,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    FormatHelper.formatNumbers(tradingInstrument.lastPrice),
-                    style: AppStyles.tsSecondaryMedium16,
+                    type == TransactionType.buy
+                        ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
+                        : tradingInstrument.lotSize.toString(),
                   ),
                 ],
               ),
@@ -87,7 +88,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 () => AbsorbPointer(
                   absorbing: type == TransactionType.exit,
                   child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
+                    value: controller.selectedQuantity.value == 0
+                        ? null
+                        : controller.selectedQuantity.value,
                     onChanged: (value) => controller.selectedQuantity(value),
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
@@ -239,7 +242,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     : type == TransactionType.buy
                         ? 'Buy'
                         : 'Sell',
-                onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(type, tradingInstrument),
+                onPressed: () => Get.find<TenxTradingController>()
+                    .placeTenxTradingOrder(type, tradingInstrument),
               ),
             ],
           ),

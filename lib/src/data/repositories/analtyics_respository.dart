@@ -62,7 +62,7 @@ class AnalyticsRepository extends BaseRepository {
 
   Future<RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse>>
       getVirtualAnalyticsExpectedPnLOverviewDetails() async {
-    String apiURL = AppUrls.analyticsExpectedPnL;
+    String apiURL = AppUrls.virtualAnalyticsExpectedPnL;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
@@ -71,21 +71,21 @@ class AnalyticsRepository extends BaseRepository {
 
   Future<RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse>>
       getTenXAnalyticsExpectedPnLOverviewDetails() async {
-    String apiURL = AppUrls.analyticsExpectedPnL;
+    String apiURL = AppUrls.tenXAnalyticsExpectedPnL;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: AnalyticsExpectedPnLOverviewDetailsResponse.fromJson(response));
   }
 
-  Future<RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse>>
-      getInfinityAnalyticsExpectedPnLOverviewDetails() async {
-    String apiURL = AppUrls.analyticsExpectedPnL;
-    var response = await service.getAuth(path: apiURL);
-    return response is APIException
-        ? RepoResponse(error: response)
-        : RepoResponse(data: AnalyticsExpectedPnLOverviewDetailsResponse.fromJson(response));
-  }
+  // Future<RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse>>
+  //     getInfinityAnalyticsExpectedPnLOverviewDetails() async {
+  //   String apiURL = AppUrls.analyticsExpectedPnL;
+  //   var response = await service.getAuth(path: apiURL);
+  //   return response is APIException
+  //       ? RepoResponse(error: response)
+  //       : RepoResponse(data: AnalyticsExpectedPnLOverviewDetailsResponse.fromJson(response));
+  // }
 
   Future<RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse>>
       getVirtualAnalyticsMonthlyPnLOverviewDetails() async {
