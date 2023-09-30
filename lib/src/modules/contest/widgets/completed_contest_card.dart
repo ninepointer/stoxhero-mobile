@@ -124,7 +124,7 @@ class CompletedContestCard extends StatelessWidget {
                 AppImages.contestTrophy,
                 width: 40,
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 2),
               Text(
                 'Reward',
                 style: AppStyles.tsGreyRegular12,
@@ -144,7 +144,7 @@ class CompletedContestCard extends StatelessWidget {
                         'Start Date & Time',
                         style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(completedContest?.contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -158,7 +158,7 @@ class CompletedContestCard extends StatelessWidget {
                         'End Date & Time',
                         style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(completedContest?.contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -178,7 +178,7 @@ class CompletedContestCard extends StatelessWidget {
                         'Entry Fees',
                         style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         completedContest?.entryFee == 0
                             ? 'Free'
@@ -197,7 +197,7 @@ class CompletedContestCard extends StatelessWidget {
                         'Portfolio',
                         style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatNumbers(
                           completedContestPnl?.portfolioValue,
@@ -221,13 +221,11 @@ class CompletedContestCard extends StatelessWidget {
                           'Net P&L',
                           style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0),
                           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                                color: (completedContestPnl?.npnl ?? 0) >= 0
-                                    ? AppColors.success
-                                    : AppColors.danger,
+                                color: (completedContestPnl?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
                               ),
                         ),
                       ],
@@ -245,12 +243,10 @@ class CompletedContestCard extends StatelessWidget {
                           'Payout',
                           style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           FormatHelper.formatNumbers(
-                            (completedContestPnl?.payoutAmount ?? 0) >= 0
-                                ? completedContestPnl?.payoutAmount
-                                : 0,
+                            (completedContestPnl?.payoutAmount ?? 0) >= 0 ? completedContestPnl?.payoutAmount : 0,
                           ),
                           style: Theme.of(context).textTheme.tsMedium14.copyWith(
                                 color: (completedContestPnl?.payoutAmount ?? 0) >= 0

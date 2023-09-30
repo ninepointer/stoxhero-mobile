@@ -63,23 +63,22 @@ class AppUrls {
   static const String purchaseIntent = "$tenx/capturepurchaseintent";
   static const String purchaseSubscription = "$apiURL/userwallet/deduct";
 
+  static const String purchaseContestIntent = "$apiURL/dailycontest/purchaseintent/";
+  static const String purchaseContest = "$apiURL/dailycontest/feededuct";
   static const String upComingContests = "$apiURL/dailycontest/contests/upcoming";
   static const String liveContests = "$apiURL/dailycontest/contests/userlive";
   static const String completedContests = "$apiURL/dailycontest/contests/completed";
   static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
   static const String contestLeaderboard = "$apiURL/contestscoreboard/scoreboard";
   static const String contestPlacingOrder = "$apiURL/placingOrderDailyContest";
-  static const String contestTodaysOrders =
-      "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
+  static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
 
-  static String completedContestOrders(String? id) =>
-      '$apiURL/dailycontest/trade/$id/my/todayorders';
+  static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
 
   static String contestInstrumentWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
 
-  static String contestCreditData(String? id) =>
-      "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
+  static String contestCreditData(String? id) => "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
 
   static String contestPosition(String? id) => "$apiURL/dailycontest/trade/$id/pnl";
 

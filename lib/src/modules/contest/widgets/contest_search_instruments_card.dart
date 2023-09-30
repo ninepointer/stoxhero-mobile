@@ -21,9 +21,9 @@ class ContestSearchInstrumentsCard extends GetView<ContestController> {
       tradingInstrument.exchangeToken!,
     );
     controller.generateLotsList(type: tradingInstrument.name);
-    showBottomSheet(
+    BottomSheetHelper.openBottomSheet(
       context: context,
-      builder: (context) => ContestTransactionBottomSheet(
+      child: ContestTransactionBottomSheet(
         type: type,
         tradingInstrument: TradingInstrument(
           name: tradingInstrument.tradingsymbol,
@@ -62,7 +62,7 @@ class ContestSearchInstrumentsCard extends GetView<ContestController> {
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -145,16 +145,13 @@ class ContestSearchInstrumentsCard extends GetView<ContestController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () => Get.find<ContestController>()
-                        .removeInstrument(tradingInstrument.instrumentToken)
+                    ? () => Get.find<ContestController>().removeInstrument(tradingInstrument.instrumentToken)
                     : () => Get.find<ContestController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isAdded
-                        ? AppColors.info.withOpacity(.25)
-                        : AppColors.secondary.withOpacity(.25),
+                    color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

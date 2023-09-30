@@ -6,7 +6,7 @@ export 'views/contest_list_view.dart';
 export 'views/contest_view.dart';
 export 'views/past_contest_view.dart';
 export 'widgets/completed_contest_card.dart';
-export 'widgets/contest_buy_subscription_bottom_sheet.dart';
+export '../widgets/purchase_item_bottom_sheet.dart';
 export 'widgets/contest_leaderboard_card.dart';
 export 'widgets/contest_portfolio_details_card.dart';
 export 'widgets/contest_position_card.dart';

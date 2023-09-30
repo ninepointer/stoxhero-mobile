@@ -47,6 +47,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
     return Column(
       children: [
         CommonCard(
+          hasBorder: false,
           margin: EdgeInsets.all(8).copyWith(
             bottom: 0,
           ),

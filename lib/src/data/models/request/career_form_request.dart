@@ -10,19 +10,22 @@ class CareerFormRequest {
   String? dob;
   String? priorTradingExperience;
   String? campaignCode;
+  String? mobileOtp;
 
-  CareerFormRequest(
-      {this.firstName,
-      this.lastName,
-      this.email,
-      this.mobile,
-      this.collegeName,
-      this.linkedInProfileLink,
-      this.source,
-      this.career,
-      this.dob,
-      this.priorTradingExperience,
-      this.campaignCode});
+  CareerFormRequest({
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.mobile,
+    this.collegeName,
+    this.linkedInProfileLink,
+    this.source,
+    this.career,
+    this.dob,
+    this.priorTradingExperience,
+    this.campaignCode,
+    this.mobileOtp,
+  });
 
   CareerFormRequest.fromJson(Map<String, dynamic> json) {
     firstName = json['firstName'];
@@ -36,6 +39,7 @@ class CareerFormRequest {
     dob = json['dob'];
     priorTradingExperience = json['priorTradingExperience'];
     campaignCode = json['campaignCode'];
+    mobileOtp = json['mobile_otp'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +55,7 @@ class CareerFormRequest {
     data['dob'] = this.dob;
     data['priorTradingExperience'] = this.priorTradingExperience;
     data['campaignCode'] = this.campaignCode;
+    data['mobile_otp'] = this.mobileOtp;
     return data;
   }
 }

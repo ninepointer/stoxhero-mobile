@@ -16,3 +16,4 @@ export 'tutorial/tutorial_index.dart';
 export 'virtual_trading/virtual_trading_index.dart';
 export 'wallet/wallet_index.dart';
 export 'college_contest/college_contest_index.dart';
+export 'widgets/widgets.dart';

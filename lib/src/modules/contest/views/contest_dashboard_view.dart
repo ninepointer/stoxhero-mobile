@@ -68,9 +68,8 @@ class ContestDashboardView extends GetView<ContestController> {
                   controller.contestWatchList.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.contestWatchList.length >= 5
-                              ? 300
-                              : controller.contestWatchList.length * 76,
+                          height:
+                              controller.contestWatchList.length >= 5 ? 300 : controller.contestWatchList.length * 76,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -107,8 +106,7 @@ class ContestDashboardView extends GetView<ContestController> {
                   //   name: 'Ritik Prajapat',
                   //   netPnl: '+ ₹12,02.69',
                   // ),
-                  if (controller.contestPositionsList.isNotEmpty)
-                    CommonTile(label: 'My Position Details'),
+                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),

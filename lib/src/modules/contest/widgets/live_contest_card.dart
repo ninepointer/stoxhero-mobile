@@ -6,12 +6,12 @@ import '../../../data/data.dart';
 import '../../modules.dart';
 
 class LiveContestCard extends GetView<ContestController> {
-  final LiveContest? liveContest;
+  final LiveContest? contest;
   final ContestPosition? contestPositionList;
   final ContestCreditData? contestPortfolio;
   const LiveContestCard({
     Key? key,
-    this.liveContest,
+    this.contest,
     this.contestPositionList,
     this.contestPortfolio,
   }) : super(key: key);
@@ -29,7 +29,7 @@ class LiveContestCard extends GetView<ContestController> {
             children: [
               Expanded(
                 child: Text(
-                  liveContest?.contestName ?? '-',
+                  contest?.contestName ?? '-',
                   style: AppStyles.tsSecondaryMedium16,
                 ),
               ),
@@ -41,7 +41,7 @@ class LiveContestCard extends GetView<ContestController> {
           child: Row(
             children: [
               Visibility(
-                visible: liveContest?.isNifty == true,
+                visible: contest?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -56,7 +56,7 @@ class LiveContestCard extends GetView<ContestController> {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: liveContest?.isBankNifty == true,
+                visible: contest?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -71,7 +71,7 @@ class LiveContestCard extends GetView<ContestController> {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: liveContest?.isFinNifty == true,
+                visible: contest?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -92,7 +92,7 @@ class LiveContestCard extends GetView<ContestController> {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  liveContest?.contestExpiry ?? '',
+                  contest?.contestExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -104,7 +104,7 @@ class LiveContestCard extends GetView<ContestController> {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  liveContest?.contestStatus ?? '',
+                  contest?.contestStatus ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -128,9 +128,9 @@ class LiveContestCard extends GetView<ContestController> {
                           'No. of Seats left',
                           style: Theme.of(context).textTheme.tsRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
-                          '${liveContest?.maxParticipants}',
+                          '${contest?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -147,7 +147,7 @@ class LiveContestCard extends GetView<ContestController> {
                         style: Theme.of(context).textTheme.tsRegular12,
                       ),
                       Text(
-                        '${liveContest?.payoutPercentage} % of the net P&L',
+                        '${contest?.payoutPercentage} % of the net P&L',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -160,7 +160,7 @@ class LiveContestCard extends GetView<ContestController> {
                         //   'Remaining',
                         //   style: Theme.of(context).textTheme.tsRegular12,
                         // ),
-                        // SizedBox(height: 4),
+                        // SizedBox(height: 2),
                         // Text(
                         //   "00:00:00",
                         //   // '${contestEndTime}',
@@ -182,9 +182,9 @@ class LiveContestCard extends GetView<ContestController> {
                         'Start Date & Time',
                         style: Theme.of(context).textTheme.tsRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(liveContest?.contestStartTime),
+                        FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -196,9 +196,9 @@ class LiveContestCard extends GetView<ContestController> {
                         'End Date & Time',
                         style: Theme.of(context).textTheme.tsRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(liveContest?.contestEndTime),
+                        FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -216,11 +216,9 @@ class LiveContestCard extends GetView<ContestController> {
                         'Entry Fees',
                         style: Theme.of(context).textTheme.tsRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        liveContest?.entryFee == 0
-                            ? 'Free'
-                            : FormatHelper.formatNumbers(liveContest?.entryFee, decimal: 0),
+                        contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -232,10 +230,10 @@ class LiveContestCard extends GetView<ContestController> {
                         'Portfolio',
                         style: Theme.of(context).textTheme.tsRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatNumbers(
-                          liveContest?.portfolio?.portfolioValue,
+                          contest?.portfolio?.portfolioValue,
                           decimal: 0,
                         ),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -250,14 +248,18 @@ class LiveContestCard extends GetView<ContestController> {
         ),
         Row(
           children: [
-            if (liveContest?.entryFee != 0)
+            if (contest?.entryFee != 0)
               Expanded(
                 child: GestureDetector(
                   onTap: () {
                     controller.calculateUserWalletAmount();
-                    showModalBottomSheet(
+                    BottomSheetHelper.openBottomSheet(
                       context: context,
-                      builder: (context) => ContestBuySubscriptionBottomSheet(),
+                      child: PurchaseItemBottomSheet(
+                        walletBalance: controller.walletBalance.value,
+                        buyItemPrice: contest?.entryFee ?? 0,
+                        onSubmit: () {},
+                      ),
                     );
                   },
                   child: Container(
@@ -280,12 +282,12 @@ class LiveContestCard extends GetView<ContestController> {
                 child: GestureDetector(
                   onTap: () {
                     controller.loadTradingData();
-                    controller.getContestPositions(liveContest?.sId);
-                    controller.getContestPortfolio(liveContest?.sId);
+                    controller.getContestPositions(contest?.sId);
+                    controller.getContestPortfolio(contest?.sId);
                     controller.getContestWatchList(
-                      liveContest?.isNifty,
-                      liveContest?.isBankNifty,
-                      liveContest?.isFinNifty,
+                      contest?.isNifty,
+                      contest?.isBankNifty,
+                      contest?.isFinNifty,
                     );
                     Get.to(() => ContestDashboardView());
                   },

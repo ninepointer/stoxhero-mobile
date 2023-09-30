@@ -19,6 +19,7 @@ class TenxPositionDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: CommonCard(
+        hasBorder: false,
         margin: EdgeInsets.zero,
         children: [
           Row(

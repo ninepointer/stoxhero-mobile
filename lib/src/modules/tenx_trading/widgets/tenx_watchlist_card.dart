@@ -70,6 +70,7 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
       () => Column(
         children: [
           CommonCard(
+            hasBorder: false,
             margin: EdgeInsets.all(8).copyWith(top: 4, bottom: 0),
             padding: EdgeInsets.zero,
             onTap: _updateWatchlistIndex,

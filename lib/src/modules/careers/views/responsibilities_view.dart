@@ -36,8 +36,7 @@ class ResponsibilitiesView extends GetView<CareerController> {
                 children: [
                   if (selectedCareer != null)
                     ...selectedCareer.rolesAndResponsibilities
-                            ?.map((responsibility) =>
-                                _buildResponsibilityRow(responsibility, context))
+                            ?.map((responsibility) => _buildResponsibilityRow(responsibility, context))
                             .toList() ??
                         [], // Use map to create rows
                 ],

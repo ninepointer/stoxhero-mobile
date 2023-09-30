@@ -107,16 +107,16 @@ class ProfileView extends GetView<ProfileController> {
                 Get.find<TutorialController>().loadData();
               },
             ),
-            ProfileListTile(
-              label: 'Messages',
-              icon: Icons.message,
-              onTap: () {},
-            ),
-            ProfileListTile(
-              label: 'Settings',
-              icon: Icons.settings,
-              onTap: () {},
-            ),
+            // ProfileListTile(
+            //   label: 'Messages',
+            //   icon: Icons.message,
+            //   onTap: () {},
+            // ),
+            // ProfileListTile(
+            //   label: 'Settings',
+            //   icon: Icons.settings,
+            //   onTap: () {},
+            // ),
           ],
         ),
       ),

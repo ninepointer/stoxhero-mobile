@@ -22,7 +22,7 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   final myReferralsList = <MyReferralData>[].obs;
 
   final userDetails = LoginDetailsResponse().obs;
-  LoginDetailsResponse get userDetailsData => userDetails.value;
+  LoginDetailsResponse get userDetailsData => AppStorage.getUserDetails();
 
   void loadData() async {
     loadUserDetails();
@@ -30,6 +30,10 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     getActiveReferrals();
     getMyReferrals();
     getReferralsLeaderboard();
+  }
+
+  String getReferralMessage() {
+    return "AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR Join me at StoxHero - Options Trading and Investment Platform 🤝 👉 Get 10,00,000 virtual currency in your account to start option trading using my referral code 👉 Join the community of ace traders and learn real-time options trading 👉 Participate in TenX Trading and earn 10% real cash on the profit you will make on the platform 📲 Visit https://www.stoxhero.com/signup?referral=${userDetailsData.myReferralCode} Use my below invitation code 👇 and get INR ₹10,00,000 in your wallet and start trading My Referral Code to join the StoxHero: ${userDetailsData.myReferralCode}";
   }
 
   void loadUserDetails() {
@@ -80,8 +84,7 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     isLoading(true);
     try {
       var userDetails = AppStorage.getUserDetails();
-      final RepoResponse<MyReferralsResponse> response =
-          await repository.getMyReferrals(userDetails.sId ?? '');
+      final RepoResponse<MyReferralsResponse> response = await repository.getMyReferrals(userDetails.sId ?? '');
       if (response.data != null) {
         myReferralsList(response.data?.data ?? []);
       } else {
@@ -97,8 +100,7 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   Future getReferralsLeaderboard() async {
     isLoading(true);
     try {
-      final RepoResponse<ReferralsLeaderboardResponse> response =
-          await repository.getReferralsLeaderboard();
+      final RepoResponse<ReferralsLeaderboardResponse> response = await repository.getReferralsLeaderboard();
       if (response.data != null) {
         referralsLeaderboardList(response.data?.data ?? []);
       } else {

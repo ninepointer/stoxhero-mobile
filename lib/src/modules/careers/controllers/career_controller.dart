@@ -17,6 +17,8 @@ class CareerController extends BaseController<CareerRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
+  final isOtpVisible = false.obs;
+
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
   final emailTextController = TextEditingController();
@@ -29,6 +31,8 @@ class CareerController extends BaseController<CareerRepository> {
   final careerList = <CareerList>[].obs;
   final careerDetails = CareerList().obs;
 
+  final selectedDOBDateTime = ''.obs;
+
   void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -40,6 +44,7 @@ class CareerController extends BaseController<CareerRepository> {
     if (pickedDate != null) {
       String date = DateFormat("dd-MM-yyyy").format(pickedDate);
       dobTextController.text = date;
+      selectedDOBDateTime(pickedDate.toString());
     }
   }
 
@@ -54,7 +59,7 @@ class CareerController extends BaseController<CareerRepository> {
     'Twitter',
     'Google',
     'Friend',
-    'Others'
+    'Others',
   ];
   final List<String> dropdownItems3 = [];
 
@@ -74,7 +79,43 @@ class CareerController extends BaseController<CareerRepository> {
     isLoading(false);
   }
 
-  Future generateCareerOtp() async {
+  void validateCarrerOtp(String? careerId) async {
+    isLoading(true);
+    if (otpTextController.text.isNotEmpty) {
+      FocusScope.of(Get.context!).unfocus();
+
+      CareerFormRequest data = CareerFormRequest(
+        firstName: firstNameTextController.text,
+        lastName: lastNameTextController.text,
+        email: emailTextController.text,
+        mobile: mobileTextController.text,
+        collegeName: collegeNameTextController.text,
+        dob: selectedDOBDateTime.value,
+        priorTradingExperience: experienceSelectedValue,
+        source: hearAboutSelectedValue,
+        linkedInProfileLink: linkedInProfileTextController.text,
+        mobileOtp: otpTextController.text,
+        career: careerId,
+        campaignCode: "",
+      );
+
+      try {
+        final RepoResponse response = await repository.validateCareerOtp(
+          data.toJson(),
+        );
+        if (response.data != null) {
+          Get.back();
+          SnackbarHelper.showSnackbar(response.data['info']);
+        }
+      } catch (e) {
+        log(e.toString());
+        SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      }
+    }
+    isLoading(false);
+  }
+
+  void submitCareerForm(String? careerId) async {
     isLoading(true);
 
     FocusScope.of(Get.context!).unfocus();
@@ -85,26 +126,21 @@ class CareerController extends BaseController<CareerRepository> {
       email: emailTextController.text,
       mobile: mobileTextController.text,
       collegeName: collegeNameTextController.text,
-      dob: dobTextController.text,
+      dob: selectedDOBDateTime.value,
       priorTradingExperience: experienceSelectedValue,
       source: hearAboutSelectedValue,
       linkedInProfileLink: linkedInProfileTextController.text,
-      career: careerDetails.value.id,
+      career: careerId,
+      campaignCode: "",
     );
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.generateCareerOtp(
+      final RepoResponse response = await repository.generateCareerOtp(
         data.toJson(),
       );
       if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {
-          // isSignup(false);
-          SnackbarHelper.showSnackbar(response.data?.message!);
-          // clearForm();
-        }
-      } else {
-        otpTextController.clear();
-        SnackbarHelper.showSnackbar(response.error?.message);
+        SnackbarHelper.showSnackbar(response.data['info']);
+        isOtpVisible(true);
       }
     } catch (e) {
       log(e.toString());

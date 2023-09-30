@@ -14,87 +14,87 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
         title: Text('Contest Orders'),
       ),
       body: Obx(
-        () {
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.contestTodaysOrdersList.length,
-            itemBuilder: (context, index) {
-              var order = controller.contestTodaysOrdersList[index];
-              return CommonCard(
-                children: [
-                  OrderCardTile(
-                    label: 'Contract',
-                    value: order.symbol,
-                  ),
-                  SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OrderCardTile(
-                        label: 'Quantity',
-                        value: FormatHelper.formatNumbers(order.quantity),
-                      ),
-                      OrderCardTile(
-                        isRightAlign: true,
-                        label: 'Price',
-                        value: FormatHelper.formatNumbers(order.averagePrice),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OrderCardTile(
-                        label: 'Amount',
-                        value: FormatHelper.formatNumbers(
-                          order.amount,
-                          isNegative: true,
+        () => Visibility(
+          visible: !controller.isLoadingStatus,
+          replacement: CommonLoader(),
+          child: controller.contestTodaysOrdersList.isEmpty
+              ? NoDataFound()
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: controller.contestTodaysOrdersList.length,
+                  itemBuilder: (context, index) {
+                    var order = controller.contestTodaysOrdersList[index];
+                    return CommonCard(
+                      children: [
+                        CommonCardTile(
+                          label: 'Contract',
+                          value: order.symbol,
                         ),
-                      ),
-                      OrderCardTile(
-                        isRightAlign: true,
-                        label: 'Type',
-                        value: order.buyOrSell,
-                        valueColor: order.buyOrSell == AppConstants.buy
-                            ? AppColors.success
-                            : AppColors.danger,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OrderCardTile(
-                        label: 'Order ID',
-                        value: order.orderId,
-                      ),
-                      OrderCardTile(
-                        isRightAlign: true,
-                        label: 'Status',
-                        value: order.status,
-                        valueColor: order.status == AppConstants.complete
-                            ? AppColors.success
-                            : AppColors.danger,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OrderCardTile(
-                        label: 'Time',
-                        value: FormatHelper.formatDateTime(order.tradeTime),
-                      ),
-                    ],
-                  )
-                ],
-              );
-            },
-          );
-        },
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CommonCardTile(
+                              label: 'Quantity',
+                              value: FormatHelper.formatNumbers(order.quantity),
+                            ),
+                            CommonCardTile(
+                              isRightAlign: true,
+                              label: 'Price',
+                              value: FormatHelper.formatNumbers(order.averagePrice),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CommonCardTile(
+                              label: 'Amount',
+                              value: FormatHelper.formatNumbers(
+                                order.amount,
+                                isNegative: true,
+                              ),
+                            ),
+                            CommonCardTile(
+                              isRightAlign: true,
+                              label: 'Type',
+                              value: order.buyOrSell,
+                              valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CommonCardTile(
+                              label: 'Order ID',
+                              value: order.orderId,
+                            ),
+                            CommonCardTile(
+                              isRightAlign: true,
+                              label: 'Status',
+                              value: order.status,
+                              valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CommonCardTile(
+                              label: 'Time',
+                              value: FormatHelper.formatDateTime(order.tradeTime),
+                            ),
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                ),
+        ),
       ),
     );
   }

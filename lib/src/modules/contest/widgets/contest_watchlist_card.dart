@@ -49,9 +49,9 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
     );
     controller.generateLotsList(type: widget.contestWatchlist.instrument);
     log(controller.lotsValueList.toString());
-    showBottomSheet(
+    BottomSheetHelper.openBottomSheet(
       context: context,
-      builder: (context) => ContestTransactionBottomSheet(
+      child: ContestTransactionBottomSheet(
         type: type,
         contestId: widget.contestWatchlist.sId,
         tradingInstrument: TradingInstrument(
@@ -91,8 +91,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
-                          value:
-                              FormatHelper.formatDateByMonth(widget.contestWatchlist.contractDate),
+                          value: FormatHelper.formatDateByMonth(widget.contestWatchlist.contractDate),
                         ),
                         ContestWatchListCardTile(
                           isRightAlign: true,
@@ -105,12 +104,11 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                                 )
                                 .toString(),
                           ),
-                          valueColor:
-                              controller.getValueColor(widget.contestWatchlist.instrumentToken),
+                          valueColor: controller.getValueColor(widget.contestWatchlist.instrumentToken),
                         ),
                       ],
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 2),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -119,7 +117,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                           label: 'Symbol',
                           value: widget.contestWatchlist.symbol,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         ContestWatchListCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
@@ -127,8 +125,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                             widget.contestWatchlist.instrumentToken!,
                             widget.contestWatchlist.exchangeInstrumentToken!,
                           ),
-                          valueColor:
-                              controller.getValueColor(widget.contestWatchlist.instrumentToken),
+                          valueColor: controller.getValueColor(widget.contestWatchlist.instrumentToken),
                         ),
                       ],
                     ),
@@ -181,8 +178,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () =>
-                              controller.removeInstrument(widget.contestWatchlist.instrumentToken),
+                          onTap: () => controller.removeInstrument(widget.contestWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -216,7 +212,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
           //       SizedBox(height: 8),
           //     ],
           //   ),
-          // if (controller.selectedWatchlistIndex.value != widget.index) SizedBox(height: 4),
+          // if (controller.selectedWatchlistIndex.value != widget.index) SizedBox(height: 2),
           // // Divider(
           // //   thickness: 1,
           // //   height: 0,

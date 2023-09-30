@@ -31,7 +31,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                       'Trader Name',
                       style: AppStyles.tsGreyRegular14,
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 2),
                     Text(
                       '${contestLeaderboard?.traderFirstName!.capitalizeFirst} ${contestLeaderboard?.traderLastName!.capitalizeFirst}',
                       style: Theme.of(context).textTheme.tsMedium16,
@@ -47,7 +47,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                       'Strike Rate',
                       style: AppStyles.tsGreyRegular14,
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 2),
                     Text(
                       '${FormatHelper.formatNumbers(contestLeaderboard?.strikeRate, showSymbol: false)}%',
                       style: Theme.of(context).textTheme.tsMedium16,
@@ -69,7 +69,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                       'Contests Participated',
                       style: AppStyles.tsGreyRegular14,
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 2),
                     Text(
                       '${FormatHelper.formatNumbers(
                         contestLeaderboard?.contestParticipated,
@@ -89,7 +89,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                       'Contests Won',
                       style: AppStyles.tsGreyRegular14,
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 2),
                     Text(
                       '${FormatHelper.formatNumbers(
                         contestLeaderboard?.contestWon,

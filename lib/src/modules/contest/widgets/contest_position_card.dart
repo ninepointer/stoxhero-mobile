@@ -19,35 +19,31 @@ class ContestPositionCard extends GetView<ContestController> {
       position.iId?.exchangeInstrumentToken ?? 0,
     );
     controller.generateLotsList(type: position.iId?.symbol);
-    showBottomSheet(
+    BottomSheetHelper.openBottomSheet(
       context: context,
-      builder: (context) {
-        if (type == TransactionType.exit) {
-          return ContestTransactionBottomSheet(
-            type: type,
-            tradingInstrument: TradingInstrument(
-              name: position.iId!.symbol,
-              exchange: position.iId!.exchange,
-              tradingsymbol: position.iId!.symbol,
-              exchangeToken: position.iId!.exchangeInstrumentToken,
-              instrumentToken: position.iId!.instrumentToken,
-              lotSize: position.lots,
+      child: type == TransactionType.exit
+          ? ContestTransactionBottomSheet(
+              type: type,
+              tradingInstrument: TradingInstrument(
+                name: position.iId!.symbol,
+                exchange: position.iId!.exchange,
+                tradingsymbol: position.iId!.symbol,
+                exchangeToken: position.iId!.exchangeInstrumentToken,
+                instrumentToken: position.iId!.instrumentToken,
+                lotSize: position.lots,
+              ),
+            )
+          : ContestTransactionBottomSheet(
+              type: type,
+              tradingInstrument: TradingInstrument(
+                name: position.iId!.symbol,
+                exchange: position.iId!.exchange,
+                tradingsymbol: position.iId!.symbol,
+                exchangeToken: position.iId!.exchangeInstrumentToken,
+                instrumentToken: position.iId!.instrumentToken,
+                lastPrice: lastPrice,
+              ),
             ),
-          );
-        } else {
-          return ContestTransactionBottomSheet(
-            type: type,
-            tradingInstrument: TradingInstrument(
-              name: position.iId!.symbol,
-              exchange: position.iId!.exchange,
-              tradingsymbol: position.iId!.symbol,
-              exchangeToken: position.iId!.exchangeInstrumentToken,
-              instrumentToken: position.iId!.instrumentToken,
-              lastPrice: lastPrice,
-            ),
-          );
-        }
-      },
     );
   }
 

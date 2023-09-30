@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import '../../../app/app.dart';
@@ -13,7 +12,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
             width: double.infinity,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
@@ -46,9 +45,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                 ),
                 SizedBox(height: 36),
                 CommonCard(
-                  hasBorder: false,
                   margin: EdgeInsets.zero,
-                  padding: EdgeInsets.all(18),
                   children: [
                     Row(
                       children: [
@@ -68,8 +65,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                     ),
                   ],
                 ),
-                if (controller.selectedSubscription.value.discountedPrice! <=
-                    controller.walletBalance.value)
+                if (controller.selectedSubscription.value.discountedPrice! <= controller.walletBalance.value)
                   Column(
                     children: [
                       SizedBox(height: 24),
@@ -79,8 +75,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                       ),
                     ],
                   ),
-                if (!(controller.selectedSubscription.value.discountedPrice! <=
-                    controller.walletBalance.value))
+                if (!(controller.selectedSubscription.value.discountedPrice! <= controller.walletBalance.value))
                   Column(
                     children: [
                       SizedBox(height: 24),
@@ -90,46 +85,7 @@ class TenxBuySubscriptionBottomSheet extends GetView<TenxTradingController> {
                         style: Theme.of(context).textTheme.tsRegular14,
                       ),
                       SizedBox(height: 24),
-                      CommonCard(
-                        hasBorder: false,
-                        margin: EdgeInsets.zero,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                controller.userDetailsData.myReferralCode ?? '-',
-                                style: Theme.of(context).textTheme.tsRegular20.copyWith(
-                                      fontSize: 24,
-                                    ),
-                              ),
-                              Spacer(),
-                              IconButton(
-                                visualDensity: VisualDensity.compact,
-                                splashRadius: 24,
-                                padding: EdgeInsets.zero,
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.copy,
-                                  size: 20,
-                                  color: AppColors.secondary,
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              IconButton(
-                                visualDensity: VisualDensity.compact,
-                                splashRadius: 24,
-                                padding: EdgeInsets.zero,
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.share,
-                                  size: 20,
-                                  color: AppColors.secondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      ReferralCodeCard(),
                     ],
                   ),
                 SizedBox(height: 56),

@@ -39,8 +39,7 @@ class CollegeContestView extends GetView<CollegeContestController> {
                       NoDataFound(
                         label: 'No Upcoming College Contest!',
                       ),
-                    if (controller.premiumContestList.isNotEmpty)
-                      CommonTile(label: 'Premium Contest\'s'),
+                    if (controller.premiumContestList.isNotEmpty) CommonTile(label: 'Premium Contests'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -53,7 +52,7 @@ class CollegeContestView extends GetView<CollegeContestController> {
                       },
                     ),
                     SizedBox(height: 8),
-                    if (controller.freeContestList.isNotEmpty) CommonTile(label: 'Free Contest\'s'),
+                    if (controller.freeContestList.isNotEmpty) CommonTile(label: 'Free Contests'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -83,13 +82,11 @@ class CollegeContestView extends GetView<CollegeContestController> {
                         },
                       )
                   ] else if (controller.segmentedControlValue.value == 2) ...[
-                    if (controller.premiumCompletedContestList.isEmpty &&
-                        controller.freeCompletedContestList.isEmpty)
+                    if (controller.premiumCompletedContestList.isEmpty && controller.freeCompletedContestList.isEmpty)
                       NoDataFound(
                         label: 'No Completed College Contest!',
                       ),
-                    if (controller.premiumCompletedContestList.isNotEmpty)
-                      CommonTile(label: 'Premium Contest\'s'),
+                    if (controller.premiumCompletedContestList.isNotEmpty) CommonTile(label: 'Premium Contests'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -103,8 +100,7 @@ class CollegeContestView extends GetView<CollegeContestController> {
                       },
                     ),
                     SizedBox(height: 8),
-                    if (controller.freeCompletedContestList.isNotEmpty)
-                      CommonTile(label: 'Free Contest\'s'),
+                    if (controller.freeCompletedContestList.isNotEmpty) CommonTile(label: 'Free Contests'),
                     ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,

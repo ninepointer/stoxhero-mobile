@@ -16,6 +16,7 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      hasBorder: false,
       margin: EdgeInsets.all(8).copyWith(bottom: 0),
       children: [
         Row(
@@ -28,11 +29,11 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
                     label ?? '-',
                     style: Theme.of(context).textTheme.tsMedium14,
                   ),
-                  SizedBox(height: 2),
-                  Text(
-                    info ?? '-',
-                    style: AppStyles.tsGreyRegular12,
-                  ),
+                  // SizedBox(height: 2),
+                  // Text(
+                  //   info ?? '-',
+                  //   style: AppStyles.tsGreyRegular12,
+                  // ),
                 ],
               ),
             ),

@@ -11,11 +11,15 @@ class CareerRepository extends BaseRepository {
         : RepoResponse(data: CareerResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> generateCareerOtp(Map<String, dynamic> data) async {
+  Future<RepoResponse> generateCareerOtp(Map<String, dynamic> data) async {
     String apiURL = AppUrls.generateCareerOtp;
     var response = await service.post(path: apiURL, data: data);
-    return response is APIException
-        ? RepoResponse(error: response)
-        : RepoResponse(data: GenericResponse.fromJson(response));
+    return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
+  }
+
+  Future<RepoResponse> validateCareerOtp(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.confirmCareerOtp;
+    var response = await service.post(path: apiURL, data: data);
+    return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
   }
 }

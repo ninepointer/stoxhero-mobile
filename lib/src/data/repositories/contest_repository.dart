@@ -163,4 +163,12 @@ class ContestRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
   }
+
+  Future<RepoResponse<GenericResponse>> purchaseContest(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.purchaseContest;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
 }

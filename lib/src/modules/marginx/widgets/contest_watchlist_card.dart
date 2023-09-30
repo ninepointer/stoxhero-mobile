@@ -57,8 +57,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
-                          value:
-                              FormatHelper.formatDateByMonth(widget.tradingWatchlist.contractDate),
+                          value: FormatHelper.formatDateByMonth(widget.tradingWatchlist.contractDate),
                         ),
                         ContestWatchListCardTile(
                           isRightAlign: true,
@@ -103,9 +102,9 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                           onTap: () {
                             log('instrument : ${widget.tradingWatchlist.toJson()}');
                             FocusScope.of(context).unfocus();
-                            showBottomSheet(
+                            BottomSheetHelper.openBottomSheet(
                               context: context,
-                              builder: (context) => ContestTransactionBottomSheet(
+                              child: ContestTransactionBottomSheet(
                                 type: TransactionType.buy,
                                 tradingInstrument: TradingInstrument(
                                   name: widget.tradingWatchlist.symbol,
@@ -171,8 +170,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () =>
-                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                          onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),

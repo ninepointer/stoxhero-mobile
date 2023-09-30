@@ -77,7 +77,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   Color getValueColor(dynamic value) {
-    // print('getValueColor $value');
     if (value != null) {
       if (value is String) {
         if (value.contains('-')) {

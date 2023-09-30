@@ -1,3 +1,5 @@
+import 'package:stoxhero/src/data/data.dart';
+
 class UpComingContestListResponse {
   String? status;
   String? message;
@@ -49,8 +51,7 @@ class UpComingContest {
   bool? isAllIndex;
   String? createdOn;
   String? lastModifiedOn;
-  List<InterestedUsers>? interestedUsers;
-  List<PurchaseIntent>? purchaseIntent;
+  List<Participants>? participants;
 
   UpComingContest({
     this.id,
@@ -74,8 +75,7 @@ class UpComingContest {
     this.isAllIndex,
     this.createdOn,
     this.lastModifiedOn,
-    this.interestedUsers,
-    this.purchaseIntent,
+    this.participants,
   });
 
   UpComingContest.fromJson(Map<String, dynamic> json) {
@@ -100,16 +100,10 @@ class UpComingContest {
     isAllIndex = json['isAllIndex'];
     createdOn = json['createdOn'];
     lastModifiedOn = json['lastModifiedOn'];
-    if (json['interestedUsers'] != null) {
-      interestedUsers = <InterestedUsers>[];
-      json['interestedUsers'].forEach((v) {
-        interestedUsers!.add(new InterestedUsers.fromJson(v));
-      });
-    }
-    if (json['purchaseIntent'] != null) {
-      purchaseIntent = <PurchaseIntent>[];
-      json['purchaseIntent'].forEach((v) {
-        purchaseIntent!.add(new PurchaseIntent.fromJson(v));
+    if (json['participants'] != null) {
+      participants = <Participants>[];
+      json['participants'].forEach((v) {
+        participants!.add(new Participants.fromJson(v));
       });
     }
   }
@@ -139,11 +133,8 @@ class UpComingContest {
     data['isAllIndex'] = this.isAllIndex;
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
-    if (this.interestedUsers != null) {
-      data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
-    }
-    if (this.purchaseIntent != null) {
-      data['purchaseIntent'] = this.purchaseIntent!.map((v) => v.toJson()).toList();
+    if (this.participants != null) {
+      data['participants'] = this.participants!.map((v) => v.toJson()).toList();
     }
     return data;
   }

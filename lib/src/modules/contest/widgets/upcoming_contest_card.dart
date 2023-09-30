@@ -8,11 +8,11 @@ import 'package:stoxhero/src/modules/contest/contest_index.dart';
 import '../../../core/core.dart';
 
 class UpComingContestCard extends StatefulWidget {
-  final UpComingContest? upComingContest;
+  final UpComingContest? contest;
 
   const UpComingContestCard({
     Key? key,
-    this.upComingContest,
+    this.contest,
   }) : super(key: key);
 
   @override
@@ -40,12 +40,11 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
 
   void updateRemainingTime() {
     DateTime currentTime = DateTime.now();
-    startTimeDateTime = DateTime.parse(widget.upComingContest?.contestStartTime ?? '');
+    startTimeDateTime = DateTime.parse(widget.contest?.contestStartTime ?? '');
 
     setState(() {
-      remainingTime = startTimeDateTime.isAfter(currentTime)
-          ? startTimeDateTime.difference(currentTime)
-          : Duration.zero;
+      remainingTime =
+          startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
     });
 
     timer = Timer.periodic(
@@ -77,7 +76,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
             children: [
               Expanded(
                 child: Text(
-                  widget.upComingContest?.contestName ?? '-',
+                  widget.contest?.contestName ?? '-',
                   style: AppStyles.tsSecondaryMedium16,
                 ),
               ),
@@ -89,7 +88,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
           child: Row(
             children: [
               Visibility(
-                visible: widget.upComingContest?.isNifty == true,
+                visible: widget.contest?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -104,7 +103,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: widget.upComingContest?.isBankNifty == true,
+                visible: widget.contest?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -119,7 +118,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: widget.upComingContest?.isFinNifty == true,
+                visible: widget.contest?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -140,7 +139,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  widget.upComingContest?.contestExpiry ?? '',
+                  widget.contest?.contestExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -167,7 +166,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          '${widget.upComingContest?.maxParticipants}',
+                          '${widget.contest?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -184,7 +183,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         style: AppStyles.tsGreyRegular12,
                       ),
                       Text(
-                        '${widget.upComingContest?.payoutPercentage} % of the net P&L',
+                        '${widget.contest?.payoutPercentage} % of the net P&L',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -221,7 +220,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(widget.upComingContest?.contestStartTime),
+                        FormatHelper.formatDateTimeToIST(widget.contest?.contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -235,7 +234,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatDateTimeToIST(widget.upComingContest?.contestEndTime),
+                        FormatHelper.formatDateTimeToIST(widget.contest?.contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -255,10 +254,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        widget.upComingContest?.entryFee == 0
+                        widget.contest?.entryFee == 0
                             ? 'Free'
-                            : FormatHelper.formatNumbers(widget.upComingContest?.entryFee,
-                                decimal: 0),
+                            : FormatHelper.formatNumbers(widget.contest?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -272,9 +270,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        FormatHelper.formatNumbers(
-                            widget.upComingContest?.portfolio?.portfolioValue,
-                            decimal: 0),
+                        FormatHelper.formatNumbers(widget.contest?.portfolio?.portfolioValue, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -305,57 +301,48 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 ),
               ),
             ),
-            if (widget.upComingContest?.entryFee != 0)
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    controller.calculateUserWalletAmount();
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => ContestBuySubscriptionBottomSheet(),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(.25),
-                    ),
-                    child: Text(
-                      'Pay Now',
-                      style: AppStyles.tsWhiteMedium14.copyWith(
-                        color: AppColors.success,
-                      ),
-                    ),
+            Expanded(
+              child: GestureDetector(
+                onTap: controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0
+                    ? () {
+                        Get.to(() => ContestDashboardView());
+                      }
+                    : () async {
+                        await controller.calculateUserWalletAmount();
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: PurchaseItemBottomSheet(
+                            walletBalance: controller.walletBalance.value,
+                            buyItemPrice: widget.contest?.entryFee ?? 0,
+                            onSubmit: () {
+                              Get.back();
+                              var data = {
+                                "contestFee": widget.contest?.entryFee,
+                                "contestId": widget.contest?.id,
+                                "contestName": widget.contest?.contestName,
+                              };
+                              controller.purchaseContest(data);
+                            },
+                          ),
+                        );
+                      },
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.success.withOpacity(.25),
                   ),
-                ),
-              )
-            else
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    // controller.calculateUserWalletAmount();
-                    // showModalBottomSheet(
-                    //   context: context,
-                    //   builder: (context) => ContestBuySubscriptionBottomSheet(),
-                    // );
-                    Get.to(() => ContestDashboardView());
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(.25),
-                    ),
-                    child: Text(
-                      'Start Trading',
-                      style: AppStyles.tsWhiteMedium14.copyWith(
-                        color: AppColors.success,
-                      ),
+                  child: Text(
+                    controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0
+                        ? 'Start Trading'
+                        : 'Pay Now',
+                    style: AppStyles.tsWhiteMedium14.copyWith(
+                      color: AppColors.success,
                     ),
                   ),
                 ),
               ),
+            ),
             Expanded(
               child: GestureDetector(
                 child: Container(
