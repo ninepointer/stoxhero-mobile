@@ -43,8 +43,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<OrdersController>().loadData();
         break;
       case 3:
-        Get.find<InternshipController>().loadUserData();
         Get.toNamed(AppRoutes.Internship);
+        Get.find<InternshipController>().loadUserData();
 
         break;
       case 4:

@@ -47,13 +47,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     await getStockIndexInstrumentsList();
   }
 
-  num calculateGrossPNL(num avg, int lots, num ltp) {
-    num pnl = 0;
-    num value = (avg + (lots) * ltp);
-    pnl += value;
-    return pnl;
-  }
-
   String getStockIndexName(int instId) {
     // log('instToken : $instId');
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
@@ -103,6 +96,13 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     searchTextController.text = 'Nifty';
     searchInstruments(searchTextController.text);
     Get.toNamed(AppRoutes.virtualSearchSymbol);
+  }
+
+  num calculateGrossPNL(num avg, int lots, num ltp) {
+    num pnl = 0;
+    num value = (avg + (lots) * ltp);
+    pnl += value;
+    return pnl;
   }
 
   void calculateTotalPositionValues() {
@@ -157,11 +157,12 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         position.id!.instrumentToken!,
         position.id!.exchangeInstrumentToken!,
       );
-
       num value = (avg + (lots) * ltp);
-      num brokerage = value - position.brokerage!;
-      totalNetPNL += brokerage;
+      num brokerage = position.brokerage!;
+      num broker = value - brokerage;
+      totalNetPNL += broker;
     }
+    log('totalNetPNL : ${totalNetPNL.toString()}');
     return totalNetPNL.round();
   }
 

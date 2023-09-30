@@ -20,7 +20,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
               Container(
                 child: Text(
                   "Batch: ${controller.internshipBatchDetails.value.batchName ?? '-'}",
-                  style: AppStyles.tsWhiteMedium16,
+                  style: Theme.of(context).textTheme.tsMedium16,
                 ),
               ),
               SizedBox(height: 8),
@@ -34,28 +34,28 @@ class InternshipInfoCard extends GetView<InternshipController> {
               Container(
                 child: Text(
                   "Start Date: ${FormatHelper.formatDateYear(controller.internshipBatchDetails.value.batchStartDate)}",
-                  style: AppStyles.tsWhiteMedium16,
+                  style: Theme.of(context).textTheme.tsMedium16,
                 ),
               ),
               SizedBox(height: 8),
               Container(
                 child: Text(
                   "End Date: ${FormatHelper.formatDateYear(controller.internshipBatchDetails.value.batchEndDate)}",
-                  style: AppStyles.tsWhiteMedium16,
+                  style: Theme.of(context).textTheme.tsMedium16,
                 ),
               ),
               SizedBox(height: 8),
               Container(
                 child: Text(
                   "Portfolio: ${FormatHelper.formatNumbers(controller.internshipBatchDetails.value.portfolio?.portfolioValue)}",
-                  style: AppStyles.tsWhiteMedium16,
+                  style: Theme.of(context).textTheme.tsMedium16,
                 ),
               ),
               SizedBox(height: 8),
               Container(
                 child: Text(
                   "Available Margin: ${FormatHelper.formatNumbers(controller.internshipBatchPortfolio.value.openingBalance)}",
-                  style: AppStyles.tsWhiteMedium16,
+                  style: Theme.of(context).textTheme.tsMedium16,
                 ),
               ),
               SizedBox(height: 12),
