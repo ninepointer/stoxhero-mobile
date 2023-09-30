@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import '../../../../app/app.dart';
+import '../../../app/app.dart';
 
-class VirtualTradingView extends GetView<VirtualTradingController> {
-  const VirtualTradingView({Key? key}) : super(key: key);
-
+class InternshipTradingView extends GetView<InternshipController> {
+  const InternshipTradingView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(' Internship Trading'),
+      ),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
           replacement: CommonLoader(),
           child: RefreshIndicator(
-            onRefresh: controller.loadData,
+            onRefresh: controller.loadTradingData,
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   if (controller.stockIndexDetailsList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.all(8.0).copyWith(
+                        bottom: 0,
+                      ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
                             CommonStockInfo(
@@ -80,29 +83,29 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             padding: EdgeInsets.zero,
                             itemCount: controller.tradingWatchlist.length,
                             itemBuilder: (context, index) {
-                              return VirtualWatchListCard(
+                              return InternshipWatchlistCard(
                                 index: index,
                                 tradingWatchlist: controller.tradingWatchlist[index],
                               );
                             },
                           ),
                         ),
-                  if (controller.virtualPositionsList.isNotEmpty)
+                  if (controller.internshipPositionList.isNotEmpty)
                     CommonTile(label: 'My Position Details'),
-                  if (controller.virtualPositionsList.isNotEmpty)
+                  if (controller.internshipPositionList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
                         children: [
                           Row(
                             children: [
-                              VirtualPositionDetailsCard(
+                              InternshipPositionDetailsCard(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              VirtualPositionDetailsCard(
+                              InternshipPositionDetailsCard(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -111,14 +114,18 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              VirtualPositionDetailsCard(
+                              InternshipPositionDetailsCard(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
+                                valueColor:
+                                    controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
-                              VirtualPositionDetailsCard(
+                              InternshipPositionDetailsCard(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
+                                valueColor:
+                                    controller.getValueColor(controller.calculateTotalNetPNL()),
                               ),
                             ],
                           ),
@@ -126,38 +133,40 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                       ),
                     ),
                   CommonTile(label: 'My Position'),
-                  controller.virtualPositionsList.isEmpty
+                  controller.internshipPositionList.isEmpty
                       ? NoDataFound()
-                      : ListView.separated(
+                      : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.virtualPositionsList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 8),
+                          itemCount: controller.internshipPositionList.length,
                           itemBuilder: (context, index) {
-                            return VirtualPositionCard(
-                              position: controller.virtualPositionsList[index],
-                            );
+                            var item = controller.internshipPositionList[index];
+                            return InternshipPositionCard(internshipPosition: item);
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
-                  VirtualPortfolioDetailsCard(
-                    label: 'Virtual Portfolio Value',
-                    value: controller.virtualPortfolio.value.totalFund,
+                  InternshipPortfolioDetailsCard(
+                    label: 'Portfolio Value',
+                    info: 'Total funds added by StoxHero in your Account',
+                    value: controller.internshipBatchPortfolio.value.totalFund,
                   ),
-                  VirtualPortfolioDetailsCard(
+                  InternshipPortfolioDetailsCard(
                     label: 'Available Margin',
-                    // value: difference,
+                    info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
-                  VirtualPortfolioDetailsCard(
-                    label: 'Virtual Used Margin',
+                  InternshipPortfolioDetailsCard(
+                    label: 'Used Margin',
+                    info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0
                         ? 0
                         : controller.calculateTotalNetPNL().abs(),
-                    valueColor: (controller.tenxTotalPositionDetails.value.net ?? 0) < 0
-                        ? AppColors.danger
-                        : AppColors.success,
+                  ),
+                  InternshipPortfolioDetailsCard(
+                    label: 'Opening Balance',
+                    info: 'Cash available at the beginning of the day',
+                    value: controller.internshipBatchPortfolio.value.openingBalance,
                   ),
                   SizedBox(height: 56),
                 ],

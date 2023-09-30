@@ -1,48 +1,55 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+
 import '../../../app/app.dart';
 
-class VirtualPositionCard extends GetView<VirtualTradingController> {
-  final VirtualTradingPosition position;
-  const VirtualPositionCard({super.key, required this.position});
+class InternshipPositionCard extends GetView<InternshipController> {
+  final InternshipPosition internshipPosition;
 
-  void openBottomSheet(BuildContext context, TransactionType type) {
-    FocusScope.of(context).unfocus();
-    num lastPrice = controller.getInstrumentLastPrice(
-      position.id?.instrumentToken ?? 0,
-      position.id?.exchangeInstrumentToken ?? 0,
-    );
-    controller.generateLotsList(type: position.id?.symbol);
-    BottomSheetHelper.openBottomSheet(
-      context: context,
-      child: VirtualTransactionBottomSheet(
-        type: type,
-        tradingInstrument: TradingInstrument(
-          name: position.id?.symbol,
-          exchange: position.id?.exchange,
-          tradingsymbol: position.id?.symbol,
-          exchangeToken: position.id?.exchangeInstrumentToken,
-          instrumentToken: position.id?.instrumentToken,
-          lastPrice: lastPrice,
-        ),
-      ),
-    );
-  }
+  const InternshipPositionCard({super.key, required this.internshipPosition});
 
   @override
   Widget build(BuildContext context) {
-    // log('${controller.calculateGrossPNL(
-    //   controller.getInstrumentLastPrice(
-    //     position.id?.instrumentToken ?? 0,
-    //     position.id?.exchangeInstrumentToken ?? 0,
-    //   ),
-    //   position.lastaverageprice ?? 0,
-    //   position.lots ?? 0,
-    // )}');
+    void openBottomSheet(BuildContext context, TransactionType type) {
+      log('instrument Details: ${internshipPosition.toJson()}');
+      FocusScope.of(context).unfocus();
+      num lastPrice = controller.getInstrumentLastPrice(
+        internshipPosition.id?.instrumentToken ?? 0,
+        internshipPosition.id?.exchangeInstrumentToken ?? 0,
+      );
+      controller.generateLotsList(type: internshipPosition.id?.symbol);
+
+      if (type == TransactionType.sell) {
+        List lotsList = controller.generateLotsList(type: internshipPosition.id?.symbol);
+        int index = lotsList.indexOf(internshipPosition.lots ?? 0);
+        if (index != -1) {
+          List<int> newLotsList = controller.lotsValueList.sublist(0, index + 1);
+          controller.lotsValueList.value = newLotsList;
+        }
+      }
+      BottomSheetHelper.openBottomSheet(
+        context: context,
+        child: InternshipTransactionBottomSheet(
+          type: type,
+          tradingInstrument: TradingInstrument(
+            name: internshipPosition.id!.symbol,
+            exchange: internshipPosition.id!.exchange,
+            tradingsymbol: internshipPosition.id!.symbol,
+            exchangeToken: internshipPosition.id!.exchangeInstrumentToken,
+            instrumentToken: internshipPosition.id!.instrumentToken,
+            lastPrice: lastPrice,
+          ),
+        ),
+      );
+    }
+
     return Column(
       children: [
         CommonCard(
-          hasBorder: false,
-          margin: EdgeInsets.symmetric(horizontal: 12),
+          margin: EdgeInsets.all(8).copyWith(
+            bottom: 0,
+          ),
           padding: EdgeInsets.zero,
           children: [
             Padding(
@@ -55,22 +62,32 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PositionListCardTile(
+                        InternshipPositionCardTile(
                           label: 'Symbol',
-                          value: position.id?.symbol,
+                          value: internshipPosition.id?.symbol,
                         ),
-                        PositionListCardTile(
+                        InternshipPositionCardTile(
                           isRightAlign: true,
                           label: 'Gross P&L',
-                          value: position.lots == 0
-                              ? FormatHelper.formatNumbers(position.amount)
+                          valueColor: controller.getValueColor(
+                            controller.calculateGrossPNL(
+                              internshipPosition.amount!,
+                              internshipPosition.lots!.toInt(),
+                              controller.getInstrumentLastPrice(
+                                internshipPosition.id!.instrumentToken!,
+                                internshipPosition.id!.exchangeInstrumentToken!,
+                              ),
+                            ),
+                          ),
+                          value: internshipPosition.lots == 0
+                              ? FormatHelper.formatNumbers(internshipPosition.amount)
                               : FormatHelper.formatNumbers(
                                   controller.calculateGrossPNL(
-                                    position.amount!,
-                                    position.lots!.toInt(),
+                                    internshipPosition.amount!,
+                                    internshipPosition.lots!.toInt(),
                                     controller.getInstrumentLastPrice(
-                                      position.id!.instrumentToken!,
-                                      position.id!.exchangeInstrumentToken!,
+                                      internshipPosition.id!.instrumentToken!,
+                                      internshipPosition.id!.exchangeInstrumentToken!,
                                     ),
                                   ),
                                 ),
@@ -83,19 +100,15 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PositionListCardTile(
+                        InternshipPositionCardTile(
                           label: 'Avg. Price',
-                          value: FormatHelper.formatNumbers(position.lastaverageprice),
+                          value: FormatHelper.formatNumbers(internshipPosition.lastaverageprice),
                         ),
-                        PositionListCardTile(
+                        InternshipPositionCardTile(
                           isRightAlign: true,
                           label: 'LTP',
-                          value: FormatHelper.formatNumbers(
-                            controller.getInstrumentLastPrice(
-                              position.id?.instrumentToken ?? 0,
-                              position.id?.exchangeInstrumentToken ?? 0,
-                            ),
-                          ),
+                          valueColor: controller.getValueColor(internshipPosition.lastaverageprice),
+                          value: FormatHelper.formatNumbers(internshipPosition.lastaverageprice),
                         ),
                       ],
                     ),
@@ -103,16 +116,22 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      PositionListCardTile(
+                      InternshipPositionCardTile(
                         label: 'Quantity',
-                        value: position.lots.toString(),
+                        value: internshipPosition.lots.toString(),
                       ),
-                      PositionListCardTile(
+                      InternshipPositionCardTile(
                         isRightAlign: true,
                         label: 'Changes(%)',
                         value: controller.getInstrumentChanges(
-                          position.id?.instrumentToken ?? 0,
-                          position.id?.exchangeInstrumentToken ?? 0,
+                          internshipPosition.id!.instrumentToken!,
+                          internshipPosition.id!.exchangeInstrumentToken!,
+                        ),
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentChanges(
+                            internshipPosition.id!.instrumentToken!,
+                            internshipPosition.id!.exchangeInstrumentToken!,
+                          ),
                         ),
                       ),
                     ],
@@ -165,20 +184,19 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                   child: GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
-                      List<int> lots = controller.generateLotsList(type: position.id?.symbol);
-                      controller.selectedQuantity.value = position.lots!.toInt();
-                      controller.lotsValueList.assignAll(lots);
+                      controller.selectedQuantity.value = internshipPosition.lots ?? 0;
+                      controller.lotsValueList.value = [internshipPosition.lots ?? 0];
                       BottomSheetHelper.openBottomSheet(
                         context: context,
-                        child: VirtualTransactionBottomSheet(
+                        child: InternshipTransactionBottomSheet(
                           type: TransactionType.exit,
                           tradingInstrument: TradingInstrument(
-                            name: position.id?.symbol,
-                            exchange: position.id?.exchange,
-                            tradingsymbol: position.id?.symbol,
-                            exchangeToken: position.id?.exchangeInstrumentToken,
-                            instrumentToken: position.id?.instrumentToken,
-                            lotSize: position.lots,
+                            name: internshipPosition.id!.symbol,
+                            exchange: internshipPosition.id!.exchange,
+                            tradingsymbol: internshipPosition.id!.symbol,
+                            exchangeToken: internshipPosition.id!.exchangeInstrumentToken,
+                            instrumentToken: internshipPosition.id!.instrumentToken,
+                            lotSize: internshipPosition.lots,
                           ),
                         ),
                       );
@@ -210,14 +228,15 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
   }
 }
 
-class PositionListCardTile extends StatelessWidget {
+class InternshipPositionCardTile extends StatelessWidget {
   final String? label;
-  final dynamic value;
+  final String? value;
   final bool isRightAlign;
   final Color? valueColor;
-  const PositionListCardTile({
+
+  const InternshipPositionCardTile({
     super.key,
-    required this.label,
+    this.label,
     this.value,
     this.isRightAlign = false,
     this.valueColor,
@@ -230,13 +249,13 @@ class PositionListCardTile extends StatelessWidget {
       children: [
         Text(
           label ?? '-',
-          style: AppStyles.tsGreyMedium12,
+          style: AppStyles.tsGreyRegular12,
         ),
         SizedBox(height: 2),
         Text(
-          value,
+          value ?? '-',
           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor ?? (value.startsWith('-') ? AppColors.danger : AppColors.success),
+                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
               ),
         ),
       ],

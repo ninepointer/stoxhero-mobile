@@ -90,9 +90,11 @@ class InfoCard extends StatelessWidget {
             label: 'Click here to Apply!',
             height: 48,
             onPressed: () {
-              Get.to(() => ResponsibilitiesView(
-                    careerId: career?.id,
-                  ));
+              Get.to(
+                () => ResponsibilitiesView(
+                  careerId: career?.id,
+                ),
+              );
             },
           ),
         ),

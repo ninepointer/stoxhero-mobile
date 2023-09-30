@@ -50,3 +50,6 @@ export 'virtual_trading_watchlist_response.dart';
 export 'wallet_transactions_list_response.dart';
 export 'contest_instrument_list_response.dart';
 export 'stock_index_instrument_list_response.dart';
+export 'internship_batch_response.dart';
+export 'internship_batch_portfolio_response.dart';
+export 'internship_position_response.dart';

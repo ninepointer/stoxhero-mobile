@@ -6,9 +6,6 @@ class TenxDashboardView extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
-    num netPnl = controller.calculateTotalNetPNL();
-    num displayedValue = netPnl >= 0 ? 0 : netPnl.abs();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(' Tenx Trading'),
@@ -76,8 +73,9 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
+                          height: controller.tradingWatchlist.length >= 3
+                              ? 340
+                              : controller.tradingWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -90,7 +88,8 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             },
                           ),
                         ),
-                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.tenxPositionsList.isNotEmpty)
+                    CommonTile(label: 'My Position Details'),
                   if (controller.tenxPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -116,13 +115,15 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                               TenxPositionDetailsCard(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
-                                valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
+                                valueColor:
+                                    controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
                               TenxPositionDetailsCard(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
-                                valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                                valueColor:
+                                    controller.getValueColor(controller.calculateTotalNetPNL()),
                               ),
                             ],
                           ),
@@ -151,17 +152,19 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   TenxPortfolioDetailsCard(
                     label: 'Available Margin',
                     info: 'Funds that you can use to trade today',
-                    value: controller.calOpening(),
+                    value: controller.calculateMargin(),
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Used Margin',
                     info: 'Net funds utilized for your executed trades',
-                    value: displayedValue,
+                    value: controller.calculateTotalNetPNL() > 0
+                        ? 0
+                        : controller.calculateTotalNetPNL().abs(),
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Opening Balance',
                     info: 'Cash available at the beginning of the day',
-                    value: controller.tenxPortfolioDetails.value.totalFund,
+                    value: controller.tenxPortfolioDetails.value.openingBalance,
                   ),
                   SizedBox(height: 56),
                 ],

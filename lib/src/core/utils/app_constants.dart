@@ -1,3 +1,4 @@
+
 class AppConstants {
   static const String appName = 'StoxHero';
   static const String token =
@@ -11,3 +12,4 @@ class AppConstants {
 }
 
 enum TransactionType { buy, sell, exit }
+
