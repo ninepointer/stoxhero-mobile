@@ -52,9 +52,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   final rangeTotalRedDays = 0.obs;
 
   Future loadUserData() async {
-    userDetails(AppStorage.getUserDetails());
-    await getInternshipBatchPortfolioDetails();
     await getInternshipBatchDetails();
+    await getInternshipBatchPortfolioDetails();
   }
 
   Future loadData() async {
@@ -73,8 +72,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     await socketIndexConnection();
     await getInternshipWatchlist();
     await getInternshipPositions();
-    await 
-     await getStockIndexInstrumentsList();
+
+    await getStockIndexInstrumentsList();
     await getInternshipBatchPortfolioDetails();
   }
 
@@ -395,16 +394,20 @@ class InternshipController extends BaseController<InternshipRespository> {
   num calculateMargin() {
     num pnl = 0;
     num amount = 0;
+    num lots = 0;
     for (var position in internshipPositionList) {
       amount += position.amount ?? 0;
+      lots += position.lots ?? 0;
     }
     num openingBalance = internshipBatchPortfolio.value.openingBalance ?? 0;
     pnl += openingBalance + amount;
-    num margin = pnl + calculateTotalNetPNL();
-    // log("OPening $openingBalance");
-    // log("amount $amount");
-    // log("margin $margin");
-    return margin;
+
+    if (lots == 0) {
+      num margin = pnl + calculateTotalNetPNL();
+      return margin;
+    } else {
+      return pnl;
+    }
   }
 
   Color getValueColor(dynamic value) {
@@ -719,7 +722,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       log(response.data.toString());
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successfull');
-        await getInternshipBatchDetails();
+        await getInternshipPositions();
         await getInternshipBatchPortfolioDetails();
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());

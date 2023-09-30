@@ -58,6 +58,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                     type == TransactionType.buy
                         ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
                         : tradingInstrument.lotSize.toString(),
+                    style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
               ),

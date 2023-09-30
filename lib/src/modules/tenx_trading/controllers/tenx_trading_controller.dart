@@ -151,16 +151,19 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   num calculateMargin() {
     num pnl = 0;
     num amount = 0;
+    num lots = 0;
     for (var position in tenxPositionsList) {
       amount += position.amount ?? 0;
+      lots += position.lots ?? 0;
     }
     num openingBalance = tenxPortfolioDetails.value.openingBalance ?? 0;
     pnl += openingBalance + amount;
-    num margin = pnl + calculateTotalNetPNL();
-    log("OPening $openingBalance");
-    log("amount $amount");
-    log("margin $margin");
-    return pnl;
+    if (lots == 0) {
+      num margin = pnl + calculateTotalNetPNL();
+      return margin;
+    } else {
+      return pnl;
+    }
   }
 
   void calculateUserWalletAmount() async {
