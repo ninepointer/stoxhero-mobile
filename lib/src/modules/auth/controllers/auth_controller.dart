@@ -103,6 +103,7 @@ class AuthController extends BaseController<AuthRepository> {
       email: emailTextController.text,
       mobile: mobileTextController.text,
       mobileOtp: otpTextController.text,
+      referrerCode: "",
     );
 
     try {
@@ -117,8 +118,6 @@ class AuthController extends BaseController<AuthRepository> {
           clearForm();
         }
       } else {
-        otpTextController.clear();
-        Get.offAllNamed(AppRoutes.signin);
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {

@@ -52,11 +52,6 @@ class WalletTransactionCard extends StatelessWidget {
                     dateTime ?? '-',
                     style: AppStyles.tsGreyRegular12,
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    subtitle ?? '-',
-                    style: AppStyles.tsSecondaryRegular14,
-                  ),
                 ],
               ),
             ),
@@ -68,7 +63,12 @@ class WalletTransactionCard extends StatelessWidget {
               ),
             )
           ],
-        )
+        ),
+        SizedBox(height: 8),
+        Text(
+          subtitle ?? '-',
+          style: AppStyles.tsGreyRegular14,
+        ),
       ],
     );
   }
