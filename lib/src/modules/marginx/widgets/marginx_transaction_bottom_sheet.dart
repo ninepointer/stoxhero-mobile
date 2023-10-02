@@ -1,20 +1,16 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../modules.dart';
-
-enum MarginXTransactionType { buy, sell, exit }
+import '../../../app/app.dart';
 
 class MarginXTransactionBottomSheet extends GetView<MarginXController> {
-  final MarginXTransactionType type;
-  // final ContestInstrument data;
+  final TransactionType type;
+  final TradingInstrument tradingInstrument;
 
   const MarginXTransactionBottomSheet({
     super.key,
     required this.type,
-    // required contestWatchList,
-    // required this.data,
+    required this.tradingInstrument,
   });
 
   @override
@@ -57,13 +53,15 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '',
-                    // data.name ?? '-',
+                    tradingInstrument.name ?? '-',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    '',
-                    // FormatHelper.formatNumbers(data.lastPrice),
+                    type == TransactionType.buy
+                        ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
+                        : type == TransactionType.sell
+                            ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
+                            : tradingInstrument.lotSize.toString(),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
@@ -89,50 +87,62 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                 ],
               ),
               SizedBox(height: 16),
-              AbsorbPointer(
-                absorbing: type == MarginXTransactionType.exit,
-                child: DropdownButtonFormField<int>(
-                  value: controller.selectedQuantity.value == 0 ? null : controller.selectedQuantity.value,
-                  onChanged: (value) => controller.selectedQuantity(value),
-                  menuMaxHeight: 250,
-                  isDense: true,
-                  items: [10, 20, 30].map((int number) {
-                    return DropdownMenuItem<int>(
-                      value: number,
-                      child: Text(number.toString()),
-                    );
-                  }).toList(),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(16),
-                    // filled: true,
-                    hintText: 'Quantity',
-                    // fillColor: AppColors.grey.shade700,
-                    hintStyle: AppStyles.tsGreyRegular14,
-                    errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                      color: AppColors.danger.shade700,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
+              Obx(
+                () => AbsorbPointer(
+                  absorbing: type == TransactionType.exit,
+                  child: DropdownButtonFormField2<int>(
+                    value: controller.selectedQuantity.value == 0
+                        ? null
+                        : controller.selectedQuantity.value,
+                    onChanged: (value) => controller.selectedQuantity(value),
+                    isDense: true,
+                    items: controller.lotsValueList.map((int number) {
+                      return DropdownMenuItem<int>(
+                        value: number,
+                        child: Text(number.toString()),
+                      );
+                    }).toList(),
+                    dropdownStyleData: DropdownStyleData(
+                      maxHeight: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                    menuItemStyleData: MenuItemStyleData(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.primary,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(16).copyWith(left: 0),
+                      filled: true,
+                      fillColor: AppColors.grey.withOpacity(.1),
+                      hintText: 'Quantity',
+                      hintStyle: AppStyles.tsGreyRegular14,
+                      errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                        color: AppColors.danger.shade700,
                       ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors.danger,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.danger,
+                        ),
                       ),
                     ),
                   ),
@@ -224,20 +234,20 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                 ],
               ),
               CommonFilledButton(
-                  backgroundColor: type == MarginXTransactionType.exit
-                      ? AppColors.warning
-                      : type == MarginXTransactionType.buy
-                          ? AppColors.success
-                          : AppColors.danger,
-                  margin: EdgeInsets.symmetric(vertical: 24),
-                  label: type == MarginXTransactionType.exit
-                      ? 'Exit'
-                      : type == MarginXTransactionType.buy
-                          ? 'Buy'
-                          : 'Sell',
-                  onPressed: () =>
-                      // Get.find<VirtualTradingController>().placeTenxTradingOrder(type, data),
-                      ''),
+                backgroundColor: type == TransactionType.exit
+                    ? AppColors.warning
+                    : type == TransactionType.buy
+                        ? AppColors.success
+                        : AppColors.danger,
+                margin: EdgeInsets.symmetric(vertical: 24),
+                label: type == TransactionType.exit
+                    ? 'Exit'
+                    : type == TransactionType.buy
+                        ? 'Buy'
+                        : 'Sell',
+                onPressed: () =>
+                    Get.find<MarginXController>().placeMarginXOrder(type, tradingInstrument),
+              ),
             ],
           ),
         ),

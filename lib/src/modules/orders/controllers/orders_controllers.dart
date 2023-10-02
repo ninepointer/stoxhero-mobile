@@ -24,10 +24,11 @@ class OrdersController extends BaseController<OrdersRepository> {
 
   final tenxTradeTodaysOrdersList = <TenxTradeOrder>[].obs;
   final tenxTradeAllOrdersList = <TenxTradeOrder>[].obs;
-
+  final tenxTrade = TenxTradeOrder().obs;
   final virtualTradeTodaysOrdersList = <VirtualTradeOrder>[].obs;
   final virtualTradeAllOrdersList = <VirtualTradeOrder>[].obs;
-
+  final tenXSubscription = <TenXSubscription>[].obs;
+  final tenXSub = TenXSubscription().obs;
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
   }
@@ -48,6 +49,7 @@ class OrdersController extends BaseController<OrdersRepository> {
     } else {
       await getTenxTradeTodaysOrdersList();
       await getTenxTradeAllOrdersList();
+      await getTenXSubscriptionList();
     }
 
     await getVirtualTradeTodaysOrdersList();
@@ -100,22 +102,30 @@ class OrdersController extends BaseController<OrdersRepository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           tenxTradeTodaysOrdersList(response.data?.data ?? []);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
         }
       } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
+        // Data not found, display a message
+        SnackbarHelper.showSnackbar("Data is not available");
       }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isLoading(false);
     }
-    isLoading(false);
   }
 
   Future getTenxTradeAllOrdersList() async {
     isLoading(true);
     try {
       final RepoResponse<TenxTradeOrdersListResponse> response =
-          await repository.getTenxTradeAllOrdersList();
+          await repository.getTenxTradeAllOrdersList(
+        tenxTrade.value.sId,
+        tenXSub.value.userPurchaseDetail?[0].subscribedOn,
+        tenXSub.value.userPurchaseDetail?[0].expiredBy,
+      );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           tenxTradeAllOrdersList(response.data?.data ?? []);
@@ -157,6 +167,25 @@ class OrdersController extends BaseController<OrdersRepository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           virtualTradeAllOrdersList(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getTenXSubscriptionList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<TenXSubscriptionResponse> response =
+          await repository.getTenXSubscriptionList();
+      if (response.data != null) {
+        if (response.data?.message?.toLowerCase() == "success") {
+          tenXSubscription(response.data?.data ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

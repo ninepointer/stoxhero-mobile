@@ -29,11 +29,11 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
                     label ?? '-',
                     style: Theme.of(context).textTheme.tsMedium14,
                   ),
-                  // SizedBox(height: 2),
-                  // Text(
-                  //   info ?? '-',
-                  //   style: AppStyles.tsGreyRegular12,
-                  // ),
+                  SizedBox(height: 2),
+                  Text(
+                    info ?? '-',
+                    style: AppStyles.tsGreyRegular12,
+                  ),
                 ],
               ),
             ),

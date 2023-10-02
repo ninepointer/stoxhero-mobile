@@ -41,6 +41,7 @@ class ProfileController extends BaseController<ProfileRepository> {
   final pincodeTextController = TextEditingController();
   final stateTextController = TextEditingController();
   final countryTextController = TextEditingController();
+  final selectedDOBDateTime = ''.obs;
 
   void loadData() {
     loadProfileDetails();
@@ -91,6 +92,7 @@ class ProfileController extends BaseController<ProfileRepository> {
     if (pickedDate != null) {
       String date = DateFormat("dd-MM-yyyy").format(pickedDate);
       dobTextController.text = date;
+      selectedDOBDateTime(pickedDate.toString());
     }
   }
 

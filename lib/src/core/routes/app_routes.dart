@@ -19,6 +19,7 @@ class AppRoutes {
   static const String virtualSearchSymbol = '/virtual_search_symbol';
   static const String contestSearchSymbol = '/contest_search_symbol';
   static const String internshipSearchSymbol = '/internship_search_symbol';
+  static const String marginXSearchSymbol = '/marginX_search_symbol';
   static const String virtualTrading = '/virtual_trading';
   static const String contest = '/contest';
   static const String pastContest = '/contest/past_contest';

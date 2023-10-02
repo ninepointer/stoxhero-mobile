@@ -37,6 +37,7 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
             SizedBox(height: 16),
             CommonTextField(
               hintText: 'Amount',
+              controller: controller.amountTextController,
               prefixIcon: Icon(Icons.money),
             ),
             SizedBox(height: 16),

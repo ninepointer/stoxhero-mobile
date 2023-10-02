@@ -171,4 +171,12 @@ class ContestRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<InstrumentLivePriceListResponse>> getInstrumentLivePrices() async {
+    String apiURL = AppUrls.getliveprice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: InstrumentLivePriceListResponse.fromJson(response));
+  }
 }

@@ -34,4 +34,12 @@ class CollegeContestRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: LiveCollegeContestListResponse.fromJson(response));
   }
+
+  Future<RepoResponse<TradingWatchlistResponse>> getInternshipWatchlist() async {
+    String apiURL = AppUrls.tradingInstrumentWatchlist;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
+  }
 }

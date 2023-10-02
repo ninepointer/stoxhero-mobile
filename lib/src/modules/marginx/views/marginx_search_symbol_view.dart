@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stoxhero/src/modules/marginx/widgets/marginx_search_instruments_card.dart';
+import 'package:stoxhero/src/modules/modules.dart';
 
-import '../../../../app/app.dart';
+import '../../../core/core.dart';
 
-class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
-  const VirtualSearchSymbolView({Key? key}) : super(key: key);
+class MarginXSearchSymbolView extends GetView<MarginXController> {
+  const MarginXSearchSymbolView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                       icon: Icon(Icons.close),
                       onPressed: controller.searchTextController.clear,
                     ),
-                    onChanged: controller.searchInstruments,
+                    // onChanged: controller.searchInstruments,
                   ),
                 ),
                 SizedBox(height: 8),
@@ -43,7 +46,7 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                       separatorBuilder: (_, __) => SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
-                        return VirtualSearchInstrumentsCard(
+                        return MarginXSearchInstrumentsCard(
                           tradingInstrument: data,
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,

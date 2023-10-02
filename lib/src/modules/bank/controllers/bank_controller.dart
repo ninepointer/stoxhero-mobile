@@ -121,12 +121,16 @@ class BankController extends BaseController<ProfileRepository> {
     }
   }
 
-  Future<MultipartFile> convertPlatformFileToMultipartFile(PlatformFile? platformFile) async {
-    final file = File(platformFile?.path ?? '');
-    return await MultipartFile.fromFile(
-      file.path,
-      contentType: MediaType.parse(getMediaTypeFromFile(file)),
-    );
+  Future<MultipartFile?> convertPlatformFileToMultipartFile(PlatformFile? platformFile) async {
+    if (platformFile?.path == null) {
+      return null;
+    } else {
+      final file = File(platformFile?.path ?? '');
+      return await MultipartFile.fromFile(
+        file.path,
+        contentType: MediaType.parse(getMediaTypeFromFile(file)),
+      );
+    }
   }
 
   String getMediaTypeFromFile(File file) {
@@ -194,7 +198,7 @@ class BankController extends BaseController<ProfileRepository> {
       'upiId': upiIdTextController.text,
       'googlePay_number': googlePayNumberTextController.text,
       'phonePe_number': phonePeNumberTextController.text,
-      'paytm_number': paytmNumberTextController.text,
+      'payTM_number': paytmNumberTextController.text,
       'bankName': bankNameTextController.text,
       'nameAsPerBankAccount': nameAsPerBankAccountTextController.text,
       'accountNumber': accountNumberTextController.text,
@@ -220,35 +224,41 @@ class BankController extends BaseController<ProfileRepository> {
   }
 
   Future saveUserKYCDetails() async {
-    isLoading(true);
-
-    Map<String, dynamic> data = {
-      'aadhaarNumber': aadhaarCardNumberTextController.text,
-      'panNumber': panCardNumberTextController.text,
-      'passportNumber': passportCardNumberTextController.text,
-      'drivingLicenseNumber': drivingLicenseNumberTextController.text,
-      'aadhaarCardFrontImage': await convertPlatformFileToMultipartFile(aadhaarCardFrontFile.value),
-      'aadhaarCardBackImage': await convertPlatformFileToMultipartFile(aadhaarCardBackFile.value),
-      'panCardFrontImage': await convertPlatformFileToMultipartFile(panCardFile.value),
-      'passportPhoto': await convertPlatformFileToMultipartFile(passportSizePhotoFile.value),
-      'addressProofDocument': await convertPlatformFileToMultipartFile(addressProofFile.value),
-    };
-    try {
-      final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
-      if (response.data != null) {
-        await AppStorage.setUserDetails(
-          LoginDetailsResponse.fromJson(response.data?.data),
-        );
-        log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
-        SnackbarHelper.showSnackbar(response.data?.message);
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
+    if (aadhaarCardFrontFile.value?.path == null ||
+        aadhaarCardBackFile.value?.path == null ||
+        panCardFile.value?.path == null) {
+      return SnackbarHelper.showSnackbar('Upload Required Document');
+    } else {
+      isLoading(true);
+      Map<String, dynamic> data = {
+        'aadhaarNumber': aadhaarCardNumberTextController.text,
+        'panNumber': panCardNumberTextController.text,
+        'passportNumber': passportCardNumberTextController.text,
+        'drivingLicenseNumber': drivingLicenseNumberTextController.text,
+        'aadhaarCardFrontImage':
+            await convertPlatformFileToMultipartFile(aadhaarCardFrontFile.value),
+        'aadhaarCardBackImage': await convertPlatformFileToMultipartFile(aadhaarCardBackFile.value),
+        'panCardFrontImage': await convertPlatformFileToMultipartFile(panCardFile.value),
+        'passportPhoto': await convertPlatformFileToMultipartFile(passportSizePhotoFile.value),
+        'addressProofDocument': await convertPlatformFileToMultipartFile(addressProofFile.value),
+      };
+      try {
+        final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
+        if (response.data != null) {
+          await AppStorage.setUserDetails(
+            LoginDetailsResponse.fromJson(response.data?.data),
+          );
+          log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
+          SnackbarHelper.showSnackbar(response.data?.message);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
+        }
+      } catch (e) {
+        log('Save: ${e.toString()}');
+        SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
       }
-    } catch (e) {
-      log('Save: ${e.toString()}');
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
 
-    isLoading(false);
+      isLoading(false);
+    }
   }
 }

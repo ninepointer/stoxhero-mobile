@@ -99,14 +99,12 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                               widget.tradingWatchlist.exchangeInstrumentToken!,
                             ),
                           ),
-                          valueColor: (FormatHelper.formatNumbers(
+                          valueColor: controller.getValueColor(
                             controller.getInstrumentLastPrice(
                               widget.tradingWatchlist.instrumentToken!,
                               widget.tradingWatchlist.exchangeInstrumentToken!,
                             ),
-                          ).startsWith('-')
-                              ? AppColors.danger
-                              : AppColors.success),
+                          ),
                         ),
                       ],
                     ),
@@ -126,14 +124,12 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                             widget.tradingWatchlist.instrumentToken!,
                             widget.tradingWatchlist.exchangeInstrumentToken!,
                           ),
-                          valueColor: (controller
-                                  .getInstrumentChanges(
-                                    widget.tradingWatchlist.instrumentToken!,
-                                    widget.tradingWatchlist.exchangeInstrumentToken!,
-                                  )
-                                  .startsWith('-')
-                              ? AppColors.danger
-                              : AppColors.success),
+                          valueColor: controller.getValueColor(
+                            controller.getInstrumentChanges(
+                              widget.tradingWatchlist.instrumentToken!,
+                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -186,7 +182,8 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                          onTap: () =>
+                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),

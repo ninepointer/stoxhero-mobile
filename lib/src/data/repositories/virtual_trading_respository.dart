@@ -3,6 +3,14 @@ import '../../core/core.dart';
 import '../data.dart';
 
 class VirtualTradingRepository extends BaseRepository {
+  Future<RepoResponse<InstrumentLivePriceListResponse>> getInstrumentLivePrices() async {
+    String apiURL = AppUrls.getliveprice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: InstrumentLivePriceListResponse.fromJson(response));
+  }
+
   Future<RepoResponse<VirtualTradingPortfolioResponse>> getVirtualTradingPortfolio() async {
     String apiURL = AppUrls.virtualTradingPortfolio;
     var response = await service.getAuth(path: apiURL);

@@ -423,12 +423,18 @@ class AnalyticsView extends GetView<AnalyticsController> {
                             barColor: AppColors.danger,
                           ),
                         ),
-                        // MonthlyAnalyticsChart(
-                        //   title: 'Monthly Gross P&L',
-                        //   barGroups: controller.getMonthlyGPnLChartData(
-                        //     barColor: AppColors.danger,
-                        //   ),
-                        // ),
+                        MonthlyAnalyticsChart(
+                          title: 'Monthly Gross P&L',
+                          barGroups: controller.getMonthlyGPnLChartData(
+                            barColor: AppColors.primary,
+                          ),
+                        ),
+                        MonthlyAnalyticsChart(
+                          title: 'Monthly Net P&L',
+                          barGroups: controller.getMonthlyNPnlChartData(
+                            barColor: AppColors.secondary,
+                          ),
+                        ),
                         SizedBox(height: 36),
                       ],
                     ),

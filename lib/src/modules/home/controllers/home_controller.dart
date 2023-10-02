@@ -64,16 +64,24 @@ class HomeController extends BaseController<DashboardRepository> {
 
   Color getValueColor(dynamic value) {
     if (value != null) {
-      num number = value is int || value is double ? value : num.parse(value);
-      if (number < 0) {
-        return AppColors.success;
-      } else if (number > 0) {
-        return AppColors.danger;
-      } else if (number == 0) {
-        return AppColors.black;
+      if (value is String) {
+        if (value.contains('-')) {
+          return AppColors.danger;
+        } else if (value == '0') {
+          return AppColors.success;
+        }
+      } else {
+        num number = value is int || value is double ? value : num.parse(value);
+        if (number > 0) {
+          return AppColors.success;
+        } else if (number < 0) {
+          return AppColors.danger;
+        } else if (number == 0) {
+          return AppColors.success;
+        }
       }
     }
-    return AppColors.white;
+    return AppColors.grey;
   }
 
   Future getDashboardReturnSummary() async {

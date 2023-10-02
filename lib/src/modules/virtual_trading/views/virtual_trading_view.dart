@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../app/app.dart';
+import '../../../app/app.dart';
 
 class VirtualTradingView extends GetView<VirtualTradingController> {
   const VirtualTradingView({Key? key}) : super(key: key);

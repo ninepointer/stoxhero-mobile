@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
 
-class PortfolioCard extends StatelessWidget {
+class PortfolioCard extends GetView<PortfolioController> {
   final String? portfolioName;
   final String? portfolioValue;
   final num? cashBalance;
@@ -76,7 +77,7 @@ class PortfolioCard extends StatelessWidget {
                       cashBalance,
                       isNegative: true,
                     ),
-                    valueColor: AppColors.danger,
+                    valueColor: AppColors.success,
                   ),
                   PortfolioCardTile(
                     isRightAlign: true,
@@ -84,7 +85,10 @@ class PortfolioCard extends StatelessWidget {
                     value: FormatHelper.formatNumbers(
                       investedAmount,
                     ),
-                    valueColor: AppColors.success,
+                    valueColor: controller.getValueColor(
+                      FormatHelper.formatNumbers(investedAmount
+                      ),
+                    ),
                   ),
                 ],
               ),

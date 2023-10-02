@@ -28,8 +28,9 @@ class OrdersRepository extends BaseRepository {
         : RepoResponse(data: TenxTradeOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxTradeOrdersListResponse>> getTenxTradeAllOrdersList() async {
-    String apiURL = AppUrls.tenxTradeAllOrders;
+  Future<RepoResponse<TenxTradeOrdersListResponse>> getTenxTradeAllOrdersList(
+      String? subId, String? subscribedOn, String? expiredOn) async {
+    String apiURL = AppUrls.tenxTradeAllOrders(subId, subscribedOn, expiredOn);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
@@ -50,5 +51,13 @@ class OrdersRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: VirtualTradeOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<TenXSubscriptionResponse>> getTenXSubscriptionList() async {
+    String apiURL = AppUrls.tenxSubscription;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TenXSubscriptionResponse.fromJson(response));
   }
 }

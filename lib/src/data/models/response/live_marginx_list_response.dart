@@ -25,7 +25,7 @@ class LiveMarginxListResponse {
 }
 
 class LiveMarginX {
-  String? sId;
+  String? id;
   String? marginXName;
   String? startTime;
   String? endTime;
@@ -48,7 +48,7 @@ class LiveMarginX {
   int? iV;
 
   LiveMarginX(
-      {this.sId,
+      {this.id,
       this.marginXName,
       this.startTime,
       this.endTime,
@@ -71,7 +71,7 @@ class LiveMarginX {
       this.iV});
 
   LiveMarginX.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     marginXName = json['marginXName'];
     startTime = json['startTime'];
     endTime = json['endTime'];
@@ -118,7 +118,7 @@ class LiveMarginX {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['marginXName'] = this.marginXName;
     data['startTime'] = this.startTime;
     data['endTime'] = this.endTime;
@@ -154,15 +154,15 @@ class LiveMarginX {
 }
 
 class MarginXTemplate {
-  String? sId;
+  String? id;
   String? templateName;
   int? portfolioValue;
   int? entryFee;
 
-  MarginXTemplate({this.sId, this.templateName, this.portfolioValue, this.entryFee});
+  MarginXTemplate({this.id, this.templateName, this.portfolioValue, this.entryFee});
 
   MarginXTemplate.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     templateName = json['templateName'];
     portfolioValue = json['portfolioValue'];
     entryFee = json['entryFee'];
@@ -170,7 +170,7 @@ class MarginXTemplate {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['templateName'] = this.templateName;
     data['portfolioValue'] = this.portfolioValue;
     data['entryFee'] = this.entryFee;
@@ -179,9 +179,9 @@ class MarginXTemplate {
 }
 
 class Participantss {
+  String? sId;
   String? userId;
   String? boughtAt;
-  String? sId;
 
   Participantss({this.userId, this.boughtAt, this.sId});
 

@@ -125,6 +125,11 @@ class AppPages {
       binding: MarginXBinding(),
     ),
     GetPage(
+      name: AppRoutes.marginXSearchSymbol,
+      page: () => MarginXSearchSymbolView(),
+      binding: MarginXBinding(),
+    ),
+    GetPage(
       name: AppRoutes.collegeContest,
       page: () => CollegeContestView(),
       binding: CollegeContestBinding(),

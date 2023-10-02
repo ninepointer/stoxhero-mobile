@@ -78,18 +78,35 @@ class AnalyticsRepository extends BaseRepository {
         : RepoResponse(data: AnalyticsExpectedPnLOverviewDetailsResponse.fromJson(response));
   }
 
-  // Future<RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse>>
-  //     getInfinityAnalyticsExpectedPnLOverviewDetails() async {
-  //   String apiURL = AppUrls.analyticsExpectedPnL;
-  //   var response = await service.getAuth(path: apiURL);
-  //   return response is APIException
-  //       ? RepoResponse(error: response)
-  //       : RepoResponse(data: AnalyticsExpectedPnLOverviewDetailsResponse.fromJson(response));
-  // }
+  Future<RepoResponse<AnalyticsExpectedPnLOverviewDetailsResponse>>
+      getInfinityAnalyticsExpectedPnLOverviewDetails() async {
+    String apiURL = AppUrls.infinityAnalyticsExpectedPnL;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: AnalyticsExpectedPnLOverviewDetailsResponse.fromJson(response));
+  }
 
   Future<RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse>>
       getVirtualAnalyticsMonthlyPnLOverviewDetails() async {
     String apiURL = AppUrls.analyticsVirtualMonthlyPnL;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: AnalyticsMonthlyPnLOverviewDetailsResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse>>
+      getTenXAnalyticsMonthlyPnLOverviewDetails() async {
+    String apiURL = AppUrls.analyticsTenXMonthlyPnl;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: AnalyticsMonthlyPnLOverviewDetailsResponse.fromJson(response));
+  }
+  Future<RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse>>
+      getInfinityAnalyticsMonthlyPnLOverviewDetails() async {
+    String apiURL = AppUrls.analyticsTenXMonthlyPnl;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)

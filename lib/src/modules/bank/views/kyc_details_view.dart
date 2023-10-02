@@ -81,7 +81,7 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                       controller: controller.drivingLicenseNumberTextController,
                     ),
                     buildImage(
-                      label: 'Aadhaar Card Front Image',
+                      label: 'Aadhaar Card Front Image *',
                       file: controller.aadhaarCardFrontFile.value,
                       selectFile: () => controller.filePicker(
                         KycDocumentType.aadhaarCardFront,
@@ -93,7 +93,7 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                     ),
                     SizedBox(height: 12),
                     buildImage(
-                      label: 'Aadhaar Card Back Image',
+                      label: 'Aadhaar Card Back Image *',
                       file: controller.aadhaarCardBackFile.value,
                       selectFile: () => controller.filePicker(
                         KycDocumentType.aadhaarCardBack,
@@ -105,7 +105,7 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                     ),
                     SizedBox(height: 12),
                     buildImage(
-                      label: 'Pan Card Image',
+                      label: 'Pan Card Image *',
                       file: controller.panCardFile.value,
                       selectFile: () => controller.filePicker(
                         KycDocumentType.panCard,
@@ -168,7 +168,9 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: hasFile ? AppColors.success.withOpacity(.25) : AppColors.grey.withOpacity(.25),
+                  color: hasFile
+                      ? AppColors.success.withOpacity(.25)
+                      : AppColors.grey.withOpacity(.25),
                 ),
                 child: Icon(
                   hasFile ? Icons.verified_rounded : Icons.description_rounded,

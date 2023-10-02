@@ -34,7 +34,9 @@ class _ViewCardState extends State<ViewCard> {
     final isUpcoming = widget.viewMarginx != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text('View')),
+      appBar: AppBar(
+        title: Text('View'),
+      ),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
@@ -123,8 +125,8 @@ class _ViewCardState extends State<ViewCard> {
                           Expanded(
                             child: Text(
                               isUpcoming
-                                  ? widget.viewMarginx!.marginXName ?? ''
-                                  : widget.completedMarginx!.marginxName ?? '',
+                                  ? widget.viewMarginx?.marginXName ?? ''
+                                  : widget.completedMarginx?.marginxName ?? '',
                               style: AppStyles.tsSecondaryMedium16,
                               textAlign: TextAlign.center,
                             ),
@@ -273,12 +275,9 @@ class _ViewCardState extends State<ViewCard> {
                                     SizedBox(height: 4),
                                     Text(
                                       FormatHelper.formatNumbers(
-                                          widget.completedMarginx?.earning ?? 0),
-                                      style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                                            color: (widget.completedMarginx?.earning ?? 0) >= 0
-                                                ? AppColors.success
-                                                : AppColors.danger,
-                                          ),
+                                        widget.completedMarginx?.earning,
+                                      ),
+                                      style: Theme.of(context).textTheme.tsMedium14,
                                     ),
                                   ],
                                 ),
@@ -291,11 +290,7 @@ class _ViewCardState extends State<ViewCard> {
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      FormatHelper.formatNumbers(
-                                          isUpcoming
-                                              ? widget.viewMarginx?.marginXTemplate?.portfolioValue
-                                              : widget.completedMarginx?.portfolioValue,
-                                          decimal: 0),
+                                      controller.calculatePayout().toStringAsFixed(2),
                                       style: Theme.of(context).textTheme.tsMedium14,
                                     ),
                                   ],

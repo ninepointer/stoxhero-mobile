@@ -50,9 +50,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     userDetails.value = AppStorage.getUserDetails();
     await getTenxTradingActiveSubs();
     await getTenxTradingWatchlist();
+    await getInstrumentLivePriceList();
     await getTenxPositionsList();
     await getTenxTradingPortfolioDetails();
-    await getInstrumentLivePriceList();
     await socketConnection();
     await socketIndexConnection();
     await getStockIndexInstrumentsList();
@@ -70,11 +70,10 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     if (type?.contains('BANK') ?? false) {
       for (int i = 15; i <= 900; i += 15) result.add(i);
     } else if (type?.contains('FIN') ?? false) {
-      for (int i = 40; i <= 880; i += 40) result.add(i);
+      for (int i = 40; i <= 1800; i += 40) result.add(i);
     } else {
       for (int i = 50; i <= 1800; i += 50) result.add(i);
     }
-
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
     return result;
@@ -222,7 +221,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       int index = tenxInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return FormatHelper.formatNumbers('00', showSymbol: false);
+      if (index == -1) return FormatHelper.formatNumbers('00');
       String? price = tenxInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {

@@ -34,6 +34,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final selectedQuantity = 0.obs;
   final lotsValueList = <int>[0].obs;
 
+  final isLivePriceLoaded = false.obs;
+  final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
+
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
 
@@ -44,6 +47,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
     await socketIndexConnection();
+    await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
   }
 
@@ -59,7 +63,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     if (type?.contains('BANK') ?? false) {
       for (int i = 15; i <= 900; i += 15) result.add(i);
     } else if (type?.contains('FIN') ?? false) {
-      for (int i = 40; i <= 880; i += 40) result.add(i);
+      for (int i = 40; i <= 1800; i += 40) result.add(i);
     } else {
       for (int i = 50; i <= 1800; i += 50) result.add(i);
     }
@@ -207,6 +211,26 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     }
   }
 
+  Future getInstrumentLivePriceList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<InstrumentLivePriceListResponse> response =
+          await repository.getInstrumentLivePrices();
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          isLivePriceLoaded(true);
+          instrumentLivePriceList(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
   Future addInstrument(TradingInstrument inst) async {
     isLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
@@ -350,7 +374,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
       } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
+        SnackbarHelper.showSnackbar("You don't have any open position for this symbol");
       }
     } catch (e) {
       log(e.toString());

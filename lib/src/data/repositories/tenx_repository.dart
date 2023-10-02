@@ -100,4 +100,12 @@ class TenxTradingRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
   }
+
+  Future<RepoResponse<TenXSubscriptionResponse>> getTenXSubscriptionList() async {
+    String apiURL = AppUrls.tenxSubscription;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TenXSubscriptionResponse.fromJson(response));
+  }
 }

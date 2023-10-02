@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
+import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
 class InternshipBinding implements Bindings {
   @override
@@ -30,15 +31,16 @@ class InternshipController extends BaseController<InternshipRespository> {
   final internshipBatchPortfolio = InternshipBatchPortfolio().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final internshipPositionList = <InternshipPosition>[].obs;
-  final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
+  final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
 
-  final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
   final lotsValueList = <int>[0].obs;
+  final isLivePriceLoaded = false.obs;
+  final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
@@ -72,7 +74,7 @@ class InternshipController extends BaseController<InternshipRespository> {
     await socketIndexConnection();
     await getInternshipWatchlist();
     await getInternshipPositions();
-
+    await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
     await getInternshipBatchPortfolioDetails();
   }
@@ -313,7 +315,7 @@ class InternshipController extends BaseController<InternshipRespository> {
     if (type?.contains('BANK') ?? false) {
       for (int i = 15; i <= 900; i += 15) result.add(i);
     } else if (type?.contains('FIN') ?? false) {
-      for (int i = 40; i <= 880; i += 40) result.add(i);
+      for (int i = 40; i <= 1800; i += 40) result.add(i);
     } else {
       for (int i = 50; i <= 1800; i += 50) result.add(i);
     }
@@ -433,12 +435,12 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
-    if (tenxInstrumentTradeDetailsList.isNotEmpty) {
-      int index = tenxInstrumentTradeDetailsList.indexWhere(
+    if (tradingInstrumentTradeDetailsList.isNotEmpty) {
+      int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return 0;
-      num price = tenxInstrumentTradeDetailsList[index].lastPrice ?? 0;
+      num price = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
 
       return price;
     } else {
@@ -447,16 +449,36 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   String getInstrumentChanges(int instID, int exchID) {
-    if (tenxInstrumentTradeDetailsList.isNotEmpty) {
-      int index = tenxInstrumentTradeDetailsList.indexWhere(
+    if (tradingInstrumentTradeDetailsList.isNotEmpty) {
+      int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return FormatHelper.formatNumbers('00', showSymbol: false);
-      String? price = tenxInstrumentTradeDetailsList[index].change?.toString();
+      String? price = tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
     }
+  }
+
+  Future getInstrumentLivePriceList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<InstrumentLivePriceListResponse> response =
+          await repository.getInstrumentLivePrices();
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          isLivePriceLoaded(true);
+          instrumentLivePriceList(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
   }
 
   Future getStockIndexInstrumentsList() async {
@@ -477,7 +499,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   Future socketConnection() async {
-    List<TenxTradingInstrumentTradeDetails>? tempList = [];
+    List<TradingInstrumentTradeDetails>? tempList = [];
     try {
       IO.Socket socket;
 
@@ -497,17 +519,17 @@ class InternshipController extends BaseController<InternshipRespository> {
       });
       socket.on('tick-room', (data) {
         // log('Socket : tick-room $data');
-        tempList = TenxTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+        tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
-          if (tenxInstrumentTradeDetailsList
+          if (tradingInstrumentTradeDetailsList
               .any((obj) => obj.instrumentToken == element.instrumentToken)) {
-            int index = tenxInstrumentTradeDetailsList.indexWhere(
+            int index = tradingInstrumentTradeDetailsList.indexWhere(
               (stock) => stock.instrumentToken == element.instrumentToken,
             );
-            tenxInstrumentTradeDetailsList.removeAt(index);
-            tenxInstrumentTradeDetailsList.insert(index, element);
+            tradingInstrumentTradeDetailsList.removeAt(index);
+            tradingInstrumentTradeDetailsList.insert(index, element);
           } else {
-            tenxInstrumentTradeDetailsList.add(element);
+            tradingInstrumentTradeDetailsList.add(element);
           }
         });
       });

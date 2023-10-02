@@ -59,7 +59,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   Text(
                     type == TransactionType.buy
                         ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
-                        : tradingInstrument.lotSize.toString(),
+                        : type == TransactionType.sell
+                            ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
+                            : tradingInstrument.lotSize.toString(),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],

@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/app/app.dart';
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
 class TenxTradeOrdersTabView extends GetView<OrdersController> {
-  const TenxTradeOrdersTabView({Key? key}) : super(key: key);
+  final String? tenxSub;
+
+  const TenxTradeOrdersTabView({
+    Key? key,
+    this.tenxSub,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +86,8 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OrderCardTile(
-                              label: 'Date & Time',
-                              value: FormatHelper.formatDateTime(order.tradeTime),
+                              label: 'Order ID',
+                              value: order.orderId,
                             ),
                             OrderCardTile(
                               isRightAlign: true,
@@ -98,8 +104,8 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OrderCardTile(
-                              label: 'Order ID',
-                              value: order.orderId,
+                              label: 'Timestamp',
+                              value: FormatHelper.formatDateTime(order.tradeTimeUtc),
                             ),
                           ],
                         )

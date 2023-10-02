@@ -1,13 +1,9 @@
 class TenxTradeOrdersListResponse {
   String? status;
   List<TenxTradeOrder>? data;
-  num? count;
+  int? count;
 
-  TenxTradeOrdersListResponse({
-    this.status,
-    this.data,
-    this.count,
-  });
+  TenxTradeOrdersListResponse({this.status, this.data, this.count});
 
   TenxTradeOrdersListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -33,54 +29,80 @@ class TenxTradeOrdersListResponse {
 
 class TenxTradeOrder {
   String? sId;
+  String? product;
+  int? quantity;
+  int? amount;
+  double? averagePrice;
+  String? buyOrSell;
   String? orderId;
   String? status;
-  num? averagePrice;
-  num? quantity;
-  String? product;
-  String? buyOrSell;
+  TenxSubscriptionId? subscriptionId;
   String? symbol;
-  num? amount;
-  String? tradeTime;
+  String? tradeTimeUtc;
 
-  TenxTradeOrder({
-    this.sId,
-    this.orderId,
-    this.status,
-    this.averagePrice,
-    this.quantity,
-    this.product,
-    this.buyOrSell,
-    this.symbol,
-    this.amount,
-    this.tradeTime,
-  });
+  TenxTradeOrder(
+      {this.sId,
+      this.product,
+      this.quantity,
+      this.amount,
+      this.averagePrice,
+      this.buyOrSell,
+      this.orderId,
+      this.status,
+      this.subscriptionId,
+      this.symbol,
+      this.tradeTimeUtc});
 
   TenxTradeOrder.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    product = json['Product'];
+    quantity = json['Quantity'];
+    amount = json['amount'];
+    averagePrice = json['average_price'];
+    buyOrSell = json['buyOrSell'];
     orderId = json['order_id'];
     status = json['status'];
-    averagePrice = json['average_price'];
-    quantity = json['Quantity'];
-    product = json['Product'];
-    buyOrSell = json['buyOrSell'];
+    subscriptionId = json['subscriptionId'] != null
+        ? new TenxSubscriptionId.fromJson(json['subscriptionId'])
+        : null;
     symbol = json['symbol'];
-    amount = json['amount'];
-    tradeTime = json['trade_time'];
+    tradeTimeUtc = json['trade_time_utc'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
+    data['Product'] = this.product;
+    data['Quantity'] = this.quantity;
+    data['amount'] = this.amount;
+    data['average_price'] = this.averagePrice;
+    data['buyOrSell'] = this.buyOrSell;
     data['order_id'] = this.orderId;
     data['status'] = this.status;
-    data['average_price'] = this.averagePrice;
-    data['Quantity'] = this.quantity;
-    data['Product'] = this.product;
-    data['buyOrSell'] = this.buyOrSell;
+    if (this.subscriptionId != null) {
+      data['subscriptionId'] = this.subscriptionId!.toJson();
+    }
     data['symbol'] = this.symbol;
-    data['amount'] = this.amount;
-    data['trade_time'] = this.tradeTime;
+    data['trade_time_utc'] = this.tradeTimeUtc;
+    return data;
+  }
+}
+
+class TenxSubscriptionId {
+  String? sId;
+  String? planName;
+
+  TenxSubscriptionId({this.sId, this.planName});
+
+  TenxSubscriptionId.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    planName = json['plan_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['plan_name'] = this.planName;
     return data;
   }
 }
