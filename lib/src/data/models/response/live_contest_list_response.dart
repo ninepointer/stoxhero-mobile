@@ -48,7 +48,6 @@ class LiveContest {
   bool? isBankNifty;
   bool? isFinNifty;
   bool? isAllIndex;
-  List<Null>? rewards;
   List<LiveInterestedUsers>? interestedUsers;
   List<Participants>? participants;
   String? createdOn;
@@ -76,7 +75,6 @@ class LiveContest {
       this.isBankNifty,
       this.isFinNifty,
       this.isAllIndex,
-      this.rewards,
       this.interestedUsers,
       this.participants,
       this.createdOn,
@@ -94,8 +92,7 @@ class LiveContest {
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
-    portfolio =
-        json['portfolio'] != null ? new LiveContestPortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null ? new LiveContestPortfolio.fromJson(json['portfolio']) : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -105,12 +102,6 @@ class LiveContest {
     isBankNifty = json['isBankNifty'];
     isFinNifty = json['isFinNifty'];
     isAllIndex = json['isAllIndex'];
-    if (json['rewards'] != null) {
-      rewards = <Null>[];
-      json['rewards'].forEach((v) {
-        // rewards!.add(new Null.fromJson(v));
-      });
-    }
     if (json['interestedUsers'] != null) {
       interestedUsers = <LiveInterestedUsers>[];
       json['interestedUsers'].forEach((v) {
@@ -152,9 +143,6 @@ class LiveContest {
     data['isBankNifty'] = this.isBankNifty;
     data['isFinNifty'] = this.isFinNifty;
     data['isAllIndex'] = this.isAllIndex;
-    if (this.rewards != null) {
-      // data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
-    }
     if (this.interestedUsers != null) {
       data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
     }

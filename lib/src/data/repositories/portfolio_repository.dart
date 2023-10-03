@@ -26,4 +26,12 @@ class PortfolioRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: VirtualTradingPortfolioResponse.fromJson(response));
   }
+
+  Future<RepoResponse<TenxTradingPortfolioMarginDetailsResponse>> getTenXTradingMarginDetailsList(String id) async {
+    String apiURL = '${AppUrls.tenx}/$id/${AppUrls.tradeMarginDetails}';
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TenxTradingPortfolioMarginDetailsResponse.fromJson(response));
+  }
 }

@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
 import '../../app/app.dart';
 
-class PurchaseItemBottomSheet extends StatelessWidget {
-  final num walletBalance;
+class PurchaseItemBottomSheet extends StatefulWidget {
   final int buyItemPrice;
   final VoidCallback onSubmit;
 
   PurchaseItemBottomSheet({
-    required this.walletBalance,
     required this.buyItemPrice,
     required this.onSubmit,
   });
+
+  @override
+  State<PurchaseItemBottomSheet> createState() => _PurchaseItemBottomSheetState();
+}
+
+class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
+  num? walletBalance;
+
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    calculateUserWalletAmount();
+  }
+
+  void calculateUserWalletAmount() async {
+    isLoading = true;
+    setState(() {});
+    num amount = 0;
+    var response = await Get.find<WalletRepository>().getWalletTransactionsList();
+    var list = response.data?.data?.transactions ?? [];
+    for (var e in list) amount += e.amount ?? 0;
+    walletBalance = amount;
+    isLoading = false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,78 +51,85 @@ class PurchaseItemBottomSheet extends StatelessWidget {
               topRight: Radius.circular(8),
             ),
           ),
-          child: Column(
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(0.25),
+          child: Visibility(
+            visible: !isLoading,
+            replacement: Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: CommonLoader(),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.secondary.withOpacity(0.25),
+                  ),
+                  child: Icon(
+                    Icons.lock,
+                    color: AppColors.secondary,
+                  ),
                 ),
-                child: Icon(
-                  Icons.lock,
-                  color: AppColors.secondary,
+                SizedBox(height: 24),
+                Text(
+                  'Choose how to pay',
+                  style: AppStyles.tsSecondarySemiBold20,
                 ),
-              ),
-              SizedBox(height: 24),
-              Text(
-                'Choose how to pay',
-                style: AppStyles.tsSecondarySemiBold20,
-              ),
-              SizedBox(height: 16),
-              Text(
-                'Your payment is encrypted and you can change your payment method at anytime.',
-                textAlign: TextAlign.center,
-                style: AppStyles.tsGreyRegular14,
-              ),
-              SizedBox(height: 36),
-              CommonCard(
-                margin: EdgeInsets.zero,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        'StoxHero Wallet',
-                        style: Theme.of(context).textTheme.tsRegular16,
-                      ),
-                      Spacer(),
-                      Text(
-                        FormatHelper.formatNumbers(
-                          walletBalance,
-                          decimal: 0,
+                SizedBox(height: 16),
+                Text(
+                  'Your payment is encrypted and you can change your payment method at anytime.',
+                  textAlign: TextAlign.center,
+                  style: AppStyles.tsGreyRegular14,
+                ),
+                SizedBox(height: 36),
+                CommonCard(
+                  margin: EdgeInsets.zero,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'StoxHero Wallet',
+                          style: Theme.of(context).textTheme.tsRegular16,
                         ),
-                        style: Theme.of(context).textTheme.tsMedium20,
+                        Spacer(),
+                        Text(
+                          FormatHelper.formatNumbers(
+                            walletBalance,
+                            decimal: 0,
+                          ),
+                          style: Theme.of(context).textTheme.tsMedium20,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                if (walletBalance == null || widget.buyItemPrice <= walletBalance!)
+                  Column(
+                    children: [
+                      SizedBox(height: 24),
+                      CommonFilledButton(
+                        label: 'Proceed',
+                        onPressed: widget.onSubmit,
                       ),
                     ],
                   ),
-                ],
-              ),
-              if (buyItemPrice <= walletBalance)
-                Column(
-                  children: [
-                    SizedBox(height: 24),
-                    CommonFilledButton(
-                      label: 'Proceed',
-                      onPressed: onSubmit,
-                    ),
-                  ],
-                ),
-              if (buyItemPrice >= walletBalance)
-                Column(
-                  children: [
-                    SizedBox(height: 24),
-                    Text(
-                      'Your wallet balance is low kindly refer more users on this platform to buy this subscription.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.tsRegular14,
-                    ),
-                    SizedBox(height: 24),
-                    ReferralCodeCard(),
-                  ],
-                ),
-              SizedBox(height: 56),
-            ],
+                if (walletBalance != null && widget.buyItemPrice >= walletBalance!)
+                  Column(
+                    children: [
+                      SizedBox(height: 24),
+                      Text(
+                        'Your wallet balance is low kindly refer more users on this platform to buy this subscription.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.tsRegular14,
+                      ),
+                      SizedBox(height: 24),
+                      ReferralCodeCard(),
+                    ],
+                  ),
+                SizedBox(height: 56),
+              ],
+            ),
           ),
         ),
       ],

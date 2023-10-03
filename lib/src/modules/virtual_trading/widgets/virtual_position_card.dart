@@ -54,6 +54,18 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         PositionListCardTile(
                           isRightAlign: true,
                           label: 'Gross P&L',
+                          valueColor: controller.getValueColor(
+                            position.lots == 0
+                                ? position.amount
+                                : controller.calculateGrossPNL(
+                                    position.amount!,
+                                    position.lots!.toInt(),
+                                    controller.getInstrumentLastPrice(
+                                      position.id!.instrumentToken!,
+                                      position.id!.exchangeInstrumentToken!,
+                                    ),
+                                  ),
+                          ),
                           value: position.lots == 0
                               ? FormatHelper.formatNumbers(position.amount)
                               : FormatHelper.formatNumbers(

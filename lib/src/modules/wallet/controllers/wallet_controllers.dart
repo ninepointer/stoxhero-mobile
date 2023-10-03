@@ -26,13 +26,15 @@ class WalletController extends BaseController<WalletRepository> {
   final amount = 0.obs;
 
   void onConfirm() {
-    print('Confirmed');
-    withdrawals();
-    Get.back();
+    if (amountTextController.text.isEmpty) {
+      SnackbarHelper.showSnackbar('Enter valid amount!');
+    } else {
+      withdrawals();
+      Get.back();
+    }
   }
 
   void onCancel() {
-    print('Cancelled');
     Get.back();
   }
 
@@ -43,8 +45,7 @@ class WalletController extends BaseController<WalletRepository> {
   Future getWalletTransactionsList() async {
     isLoading(true);
     try {
-      final RepoResponse<WalletTransactionsListResponse> response =
-          await repository.getWalletTransactionsList();
+      final RepoResponse<WalletTransactionsListResponse> response = await repository.getWalletTransactionsList();
       if (response.data != null) {
         totalCashAmount(0);
         walletTransactionsList((response.data?.data?.transactions ?? []));

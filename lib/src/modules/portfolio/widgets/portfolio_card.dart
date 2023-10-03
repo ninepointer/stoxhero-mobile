@@ -5,6 +5,7 @@ import 'package:stoxhero/src/modules/modules.dart';
 import '../../../core/core.dart';
 
 class PortfolioCard extends GetView<PortfolioController> {
+  final String? id;
   final String? portfolioName;
   final String? portfolioValue;
   final num? cashBalance;
@@ -13,6 +14,7 @@ class PortfolioCard extends GetView<PortfolioController> {
   final String? portfolioAccount;
   const PortfolioCard({
     super.key,
+    this.id,
     this.portfolioName,
     this.portfolioValue,
     this.cashBalance,
@@ -33,7 +35,9 @@ class PortfolioCard extends GetView<PortfolioController> {
             alignment: Alignment.center,
             child: Text(
               portfolioName ?? '',
-              style: Theme.of(context).textTheme.tsMedium16,
+              style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                    color: AppColors.primary,
+                  ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -47,25 +51,10 @@ class PortfolioCard extends GetView<PortfolioController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Portfolio Value',
-                        style: AppStyles.tsGreyRegular16,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        FormatHelper.formatNumbers(portfolioValue),
-                        style: AppStyles.tsPrimaryMedium20.copyWith(
-                          color: AppColors.info,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              PortfolioCardTile(
+                label: 'Portfolio Value',
+                value: FormatHelper.formatNumbers(portfolioValue),
+                valueColor: AppColors.info,
               ),
               SizedBox(height: 16),
               Row(
@@ -73,22 +62,26 @@ class PortfolioCard extends GetView<PortfolioController> {
                 children: [
                   PortfolioCardTile(
                     label: 'Opening Balance',
-                    value: FormatHelper.formatNumbers(
-                      cashBalance,
-                      isNegative: true,
-                    ),
+                    value: id == null
+                        ? FormatHelper.formatNumbers(
+                            cashBalance,
+                          )
+                        : FormatHelper.formatNumbers(
+                            controller.getTenxOpeningBalance(id ?? ''),
+                          ),
                     valueColor: AppColors.success,
                   ),
                   PortfolioCardTile(
                     isRightAlign: true,
                     label: 'Available Margin',
-                    value: FormatHelper.formatNumbers(
-                      investedAmount,
-                    ),
-                    valueColor: controller.getValueColor(
-                      FormatHelper.formatNumbers(investedAmount
-                      ),
-                    ),
+                    value: id == null
+                        ? FormatHelper.formatNumbers(
+                            investedAmount,
+                          )
+                        : FormatHelper.formatNumbers(
+                            controller.getTenxOpeningBalance(id ?? ''),
+                          ),
+                    valueColor: AppColors.success,
                   ),
                 ],
               ),

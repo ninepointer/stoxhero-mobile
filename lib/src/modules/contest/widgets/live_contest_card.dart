@@ -251,17 +251,36 @@ class LiveContestCard extends GetView<ContestController> {
             if (contest?.entryFee != 0)
               Expanded(
                 child: GestureDetector(
-                  onTap: () {
-                    controller.calculateUserWalletAmount();
-                    BottomSheetHelper.openBottomSheet(
-                      context: context,
-                      child: PurchaseItemBottomSheet(
-                        walletBalance: controller.walletBalance.value,
-                        buyItemPrice: contest?.entryFee ?? 0,
-                        onSubmit: () {},
-                      ),
-                    );
-                  },
+                  onTap: controller.checkIfLivePurchased(contest) || contest?.entryFee == 0
+                      ? () {
+                          controller.loadTradingData();
+                          controller.getContestPositions(contest?.sId);
+                          controller.getContestPortfolio(contest?.sId);
+                          controller.getContestWatchList(
+                            contest?.isNifty,
+                            contest?.isBankNifty,
+                            contest?.isFinNifty,
+                          );
+                          controller.liveContest(contest);
+                          Get.to(() => ContestDashboardView());
+                        }
+                      : () {
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: PurchaseItemBottomSheet(
+                              buyItemPrice: contest?.entryFee ?? 0,
+                              onSubmit: () {
+                                Get.back();
+                                var data = {
+                                  "contestFee": contest?.entryFee,
+                                  "contestId": contest?.sId,
+                                  "contestName": contest?.contestName,
+                                };
+                                controller.purchaseContest(data);
+                              },
+                            ),
+                          );
+                        },
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(12),
@@ -269,39 +288,7 @@ class LiveContestCard extends GetView<ContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      'Pay Now',
-                      style: AppStyles.tsWhiteMedium14.copyWith(
-                        color: AppColors.success,
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            else
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    controller.loadTradingData();
-                    controller.getContestPositions(contest?.sId);
-                    controller.getContestPortfolio(contest?.sId);
-                    controller.getContestWatchList(
-                      contest?.isNifty,
-                      contest?.isBankNifty,
-                      contest?.isFinNifty,
-                    );
-                    Get.to(() => ContestDashboardView());
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(.25),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      'Start Trading',
+                      controller.checkIfLivePurchased(contest) || contest?.entryFee == 0 ? 'Start Trading' : 'Pay Now',
                       style: AppStyles.tsWhiteMedium14.copyWith(
                         color: AppColors.success,
                       ),

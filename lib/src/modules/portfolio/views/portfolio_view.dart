@@ -39,6 +39,7 @@ class PortfolioView extends GetView<PortfolioController> {
                   itemBuilder: (context, index) {
                     var portfolio = controller.myTenxPortfolioList[index];
                     return PortfolioCard(
+                      id: portfolio.subscriptionId,
                       portfolioName: portfolio.portfolioName,
                       portfolioAccount: portfolio.portfolioAccount,
                       portfolioType: portfolio.portfolioType,

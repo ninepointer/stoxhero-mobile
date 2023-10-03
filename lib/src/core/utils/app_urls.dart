@@ -5,6 +5,7 @@ class AppUrls {
   static const String apiURL = '$baseURL/api/v1';
 
   static const String tenx = '$apiURL/tenX';
+  static const String tradeMarginDetails = 'trade/marginDetail';
 
   static const String stockIndex = "$apiURL/stockindex";
 
@@ -46,11 +47,9 @@ class AppUrls {
   static const String virtualTradingAnalyticsOverView = "$apiURL/analytics/papertrade/myoverview";
   static const String tenxTradingAnalyticsOverView = "$apiURL/analytics/stoxhero/myoverview";
   static const String infinityTradingAnalyticsOverView = "$apiURL/analytics/infinity/myoverview";
-  static const String virtualAnalyticsExpectedPnL =
-      "$apiURL/userdashboard/expectedpnl?tradeType=virtual";
+  static const String virtualAnalyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=virtual";
   static const String tenXAnalyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=tenX";
-  static const String infinityAnalyticsExpectedPnL =
-      "$apiURL/userdashboard/expectedpnl?tradeType=infinity";
+  static const String infinityAnalyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=infinity";
   static const String analyticsVirtualMonthlyPnL = "$apiURL/analytics/papertrade/mymonthlypnl";
   static const String analyticsTenXMonthlyPnl = "$apiURL/analytics/stoxhero/mymonthlypnl";
   static const String virtualTradingDateWiseAnalytics = "$apiURL/analytics/papertrade/mystats";
@@ -75,17 +74,14 @@ class AppUrls {
   static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
   static const String contestLeaderboard = "$apiURL/contestscoreboard/scoreboard";
   static const String contestPlacingOrder = "$apiURL/placingOrderDailyContest";
-  static const String contestTodaysOrders =
-      "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
+  static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
 
-  static String completedContestOrders(String? id) =>
-      '$apiURL/dailycontest/trade/$id/my/todayorders';
+  static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
 
   static String contestInstrumentWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
 
-  static String contestCreditData(String? id) =>
-      "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
+  static String contestCreditData(String? id) => "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
 
   static String contestPosition(String? id) => "$apiURL/dailycontest/trade/$id/pnl";
 
