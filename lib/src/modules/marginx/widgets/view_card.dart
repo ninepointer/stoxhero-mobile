@@ -155,7 +155,7 @@ class _ViewCardState extends State<ViewCard> {
                                       'Total Seats',
                                       style: AppStyles.tsGreyRegular12,
                                     ),
-                                    SizedBox(height: 4),
+                                    SizedBox(height: 2),
                                     Text(
                                       '${isUpcoming ? widget.upcomingMarginX?.maxParticipants : (isLive ? widget.liveMarginX?.maxParticipants : widget.completedMarginX?.maxParticipants)}',
                                       style: Theme.of(context).textTheme.tsMedium14,
@@ -171,7 +171,7 @@ class _ViewCardState extends State<ViewCard> {
                                       'Available Seats',
                                       style: AppStyles.tsGreyRegular12,
                                     ),
-                                    SizedBox(height: 4),
+                                    SizedBox(height: 2),
                                     Text(
                                       "00",
                                       style: Theme.of(context).textTheme.tsMedium14,
@@ -192,7 +192,7 @@ class _ViewCardState extends State<ViewCard> {
                                     'Start Date & Time',
                                     style: AppStyles.tsGreyRegular12,
                                   ),
-                                  SizedBox(height: 4),
+                                  SizedBox(height: 2),
                                   Text(
                                     FormatHelper.formatDateTimeToIST(
                                       isUpcoming
@@ -212,14 +212,12 @@ class _ViewCardState extends State<ViewCard> {
                                     'End Date & Time',
                                     style: AppStyles.tsGreyRegular12,
                                   ),
-                                  SizedBox(height: 4),
+                                  SizedBox(height: 2),
                                   Text(
                                     FormatHelper.formatDateTimeToIST(
                                       isUpcoming
                                           ? widget.upcomingMarginX?.endTime
-                                          : (isLive
-                                              ? widget.liveMarginX?.endTime
-                                              : widget.completedMarginX?.endTime),
+                                          : (isLive ? widget.liveMarginX?.endTime : widget.completedMarginX?.endTime),
                                     ),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
@@ -238,7 +236,7 @@ class _ViewCardState extends State<ViewCard> {
                                     'Investment',
                                     style: AppStyles.tsGreyRegular12,
                                   ),
-                                  SizedBox(height: 4),
+                                  SizedBox(height: 2),
                                   Text(
                                     FormatHelper.formatNumbers(
                                         isUpcoming
@@ -258,15 +256,13 @@ class _ViewCardState extends State<ViewCard> {
                                     'Portfolio',
                                     style: AppStyles.tsGreyRegular12,
                                   ),
-                                  SizedBox(height: 4),
+                                  SizedBox(height: 2),
                                   Text(
                                     FormatHelper.formatNumbers(
                                         isUpcoming
-                                            ? widget
-                                                .upcomingMarginX?.marginXTemplate?.portfolioValue
+                                            ? widget.upcomingMarginX?.marginXTemplate?.portfolioValue
                                             : (isLive
-                                                ? widget
-                                                    .liveMarginX?.marginXTemplate?.portfolioValue
+                                                ? widget.liveMarginX?.marginXTemplate?.portfolioValue
                                                 : widget.completedMarginX?.portfolioValue),
                                         decimal: 0),
                                     style: Theme.of(context).textTheme.tsMedium14,
@@ -287,7 +283,7 @@ class _ViewCardState extends State<ViewCard> {
                                       'Payout',
                                       style: AppStyles.tsGreyRegular12,
                                     ),
-                                    SizedBox(height: 4),
+                                    SizedBox(height: 2),
                                     Text(
                                       FormatHelper.formatNumbers(
                                         widget.completedMarginX?.earning,
@@ -303,7 +299,7 @@ class _ViewCardState extends State<ViewCard> {
                                       'Payout %',
                                       style: AppStyles.tsGreyRegular12,
                                     ),
-                                    SizedBox(height: 4),
+                                    SizedBox(height: 2),
                                     Text(
                                       '${controller.calculatePayout(
                                             widget.completedMarginX!.entryFee!,

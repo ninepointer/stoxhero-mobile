@@ -86,59 +86,56 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
               ),
               SizedBox(height: 16),
               Obx(
-                () => AbsorbPointer(
-                  absorbing: type == TransactionType.exit,
-                  child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value,
-                    onChanged: (value) => controller.selectedQuantity(value),
-                    isDense: true,
-                    items: controller.lotsValueList.map((int number) {
-                      return DropdownMenuItem<int>(
-                        value: number,
-                        child: Text(number >= 0 ? number.toString() : number.toString()),
-                      );
-                    }).toList(),
-                    dropdownStyleData: DropdownStyleData(
-                      maxHeight: 250,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                () => DropdownButtonFormField2<int>(
+                  value: controller.selectedQuantity.value,
+                  onChanged: (value) => controller.selectedQuantity(value),
+                  isDense: true,
+                  items: controller.lotsValueList.map((int number) {
+                    return DropdownMenuItem<int>(
+                      value: number,
+                      child: Text(number >= 0 ? number.toString() : number.toString()),
+                    );
+                  }).toList(),
+                  dropdownStyleData: DropdownStyleData(
+                    maxHeight: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  menuItemStyleData: MenuItemStyleData(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(16).copyWith(left: 0),
+                    filled: true,
+                    fillColor: AppColors.grey.withOpacity(.1),
+                    hintText: 'Quantity',
+                    hintStyle: AppStyles.tsGreyRegular14,
+                    errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                      color: AppColors.danger.shade700,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                        width: 2,
                       ),
                     ),
-                    menuItemStyleData: MenuItemStyleData(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
                     ),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(16).copyWith(left: 0),
-                      filled: true,
-                      fillColor: AppColors.grey.withOpacity(.1),
-                      hintText: 'Quantity',
-                      hintStyle: AppStyles.tsGreyRegular14,
-                      errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                        color: AppColors.danger.shade700,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: AppColors.primary,
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          width: 2,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: AppColors.danger,
-                        ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: AppColors.danger,
                       ),
                     ),
                   ),

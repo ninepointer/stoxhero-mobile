@@ -105,7 +105,7 @@ class AppUrls {
   static String marginXInstrumentWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
   static String marginXTradingInstruments(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
-      "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
+      "$apiURL/tradableInstruments?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
 
   static const String marginXPlaceOrder = "$apiURL/placingOrderMarginx";
   static const String purchaseMarginX = "$apiURL/marginx/feededuct";

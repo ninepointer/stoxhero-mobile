@@ -43,14 +43,14 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
   void dispose() {
     timer.cancel();
     super.dispose();
-  } 
+  }
 
   void updateRemainingTime() {
     DateTime currentTime = DateTime.now();
     startTimeDateTime = DateTime.parse(widget.contest?.contestStartTime ?? '');
 
-     setState(() {
-     remainingTime = 
+    setState(() {
+      remainingTime =
           startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
       isVisible = remainingTime == Duration.zero;
       log(isVisible.toString());
@@ -76,7 +76,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
   Widget build(BuildContext context) {
     return Visibility(
       visible: !isVisible,
-      replacement: NoDataFound(),
+      replacement: SizedBox(),
       child: CommonCard(
         padding: EdgeInsets.zero,
         children: [
@@ -176,7 +176,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                             'No. of Seats left',
                             style: AppStyles.tsGreyRegular12,
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: 2),
                           Text(
                             '${widget.contest?.maxParticipants}',
                             style: Theme.of(context).textTheme.tsMedium14,
@@ -208,7 +208,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                             'Remaining',
                             style: AppStyles.tsGreyRegular12,
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: 2),
                           Text(
                             '${remainingTime.inDays} days \n${remainingTime.inHours.remainder(24)} hrs \n${remainingTime.inMinutes.remainder(60)} mins \n${remainingTime.inSeconds.remainder(60)} secs',
                             style: Theme.of(context).textTheme.tsMedium14,
@@ -230,7 +230,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           'Start Date & Time',
                           style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           FormatHelper.formatDateTimeToIST(widget.contest?.contestStartTime),
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -244,7 +244,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           'End Date & Time',
                           style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           FormatHelper.formatDateTimeToIST(widget.contest?.contestEndTime),
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -264,7 +264,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           'Entry Fees',
                           style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           widget.contest?.entryFee == 0
                               ? 'Free'
@@ -280,7 +280,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           'Portfolio',
                           style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           FormatHelper.formatNumbers(widget.contest?.portfolio?.portfolioValue, decimal: 0),
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -293,83 +293,83 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               ],
             ),
           ),
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(.25),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(8),
+              bottomRight: Radius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(.25),
                       ),
-                    ),
-                    child: Text(
-                      'Get Notified',
-                      style: AppStyles.tsPrimaryMedium14,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0
-                      ? () {}
-                      : () async {
-                          BottomSheetHelper.openBottomSheet(
-                            context: context,
-                            child: PurchaseItemBottomSheet(
-                              buyItemPrice: widget.contest?.entryFee ?? 0,
-                              onSubmit: () {
-                                Get.back();
-                                var data = {
-                                  "contestFee": widget.contest?.entryFee,
-                                  "contestId": widget.contest?.id,
-                                  "contestName": widget.contest?.contestName,
-                                };
-                                controller.purchaseContest(data);
-                              },
-                            ),
-                          );
-                        },
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(.25),
-                    ),
-                    child: Text(
-                      controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0
-                          ? 'Start Trading'
-                          : 'Pay Now',
-                      style: AppStyles.tsWhiteMedium14.copyWith(
-                        color: AppColors.success,
+                      child: Text(
+                        'Get Notified',
+                        style: AppStyles.tsPrimaryMedium14,
                       ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withOpacity(.25),
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(8),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0
+                        ? () {}
+                        : () async {
+                            BottomSheetHelper.openBottomSheet(
+                              context: context,
+                              child: PurchaseItemBottomSheet(
+                                buyItemPrice: widget.contest?.entryFee ?? 0,
+                                onSubmit: () {
+                                  Get.back();
+                                  var data = {
+                                    "contestFee": widget.contest?.entryFee,
+                                    "contestId": widget.contest?.id,
+                                    "contestName": widget.contest?.contestName,
+                                  };
+                                  controller.purchaseContest(data);
+                                },
+                              ),
+                            );
+                          },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.success.withOpacity(.25),
                       ),
-                    ),
-                    child: Text(
-                      'Share',
-                      style: AppStyles.tsSecondaryMedium14,
+                      child: Text(
+                        controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0
+                            ? 'Purchased'
+                            : 'Pay Now',
+                        style: AppStyles.tsWhiteMedium14.copyWith(
+                          color: AppColors.success,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: GestureDetector(
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withOpacity(.25),
+                      ),
+                      child: Text(
+                        'Share',
+                        style: AppStyles.tsSecondaryMedium14,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

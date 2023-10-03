@@ -58,9 +58,8 @@ class ContestTradingView extends GetView<ContestController> {
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tradingWatchlist.length >= 3
-                              ? 340
-                              : controller.tradingWatchlist.length * 120,
+                          height:
+                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -73,8 +72,7 @@ class ContestTradingView extends GetView<ContestController> {
                             },
                           ),
                         ),
-                  if (controller.contestPositionsList.isNotEmpty)
-                    CommonTile(label: 'My Position Details'),
+                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -156,9 +154,7 @@ class ContestTradingView extends GetView<ContestController> {
                   ContestPortfolioDetailsCard(
                     label: 'Used Margin',
                     info: 'Net funds utilized for your executed trades',
-                    value: controller.calculateTotalNetPNL() > 0
-                        ? 0
-                        : controller.calculateTotalNetPNL().abs(),
+                    value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   SizedBox(height: 56),

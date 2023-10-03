@@ -115,9 +115,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: AppStyles.tsGreyRegular14,
+                          style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           '${marginx?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -133,7 +133,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                       ),
                       Text(
                         'Reward',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       Text(
                         '% of your Investment',
@@ -147,9 +147,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
                       children: [
                         Text(
                           'Remaining',
-                          style: AppStyles.tsGreyRegular14,
+                          style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           "Started ",
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -168,9 +168,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
                     children: [
                       Text(
                         'Start Date & Time',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(marginx?.startTime),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -182,9 +182,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
                     children: [
                       Text(
                         'End Date & Time',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(marginx?.endTime),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -202,9 +202,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
                     children: [
                       Text(
                         'Investment',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatNumbers(marginx?.marginXTemplate?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -216,12 +216,11 @@ class LiveMarginxCard extends GetView<MarginXController> {
                     children: [
                       Text(
                         'Portfolio',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(marginx?.marginXTemplate?.portfolioValue,
-                            decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.marginXTemplate?.portfolioValue, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],

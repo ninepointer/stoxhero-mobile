@@ -301,8 +301,7 @@ class MarginXController extends BaseController<MarginXRepository> {
           tradingWatchlistIds.clear();
           tradingWatchlist(response.data?.data ?? []);
           for (var element in tradingWatchlist) {
-            tradingWatchlistIds
-                .add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+            tradingWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
           }
         }
       } else {
@@ -360,8 +359,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   ) async {
     isLoading(true);
     try {
-      final RepoResponse<TradingInstrumentListResponse> response =
-          await repository.searchInstruments(
+      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
         value,
         isNifty,
         isBankNifty,
@@ -505,8 +503,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future getInstrumentLivePriceList() async {
     isLoading(true);
     try {
-      final RepoResponse<InstrumentLivePriceListResponse> response =
-          await repository.getInstrumentLivePrices();
+      final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
           isLivePriceLoaded(true);
@@ -525,8 +522,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future getUpComingMarginXList() async {
     isLoading(true);
     try {
-      final RepoResponse<UpComingMarginXListResponse> response =
-          await repository.getUpComingMarginXList();
+      final RepoResponse<UpComingMarginXListResponse> response = await repository.getUpComingMarginXList();
       if (response.data != null) {
         upComingMarginXList(response.data?.data ?? []);
       } else {
@@ -558,8 +554,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future getCompletedMarginXList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedMarginxListResponse> response =
-          await repository.getCompletedMarginXList();
+      final RepoResponse<CompletedMarginxListResponse> response = await repository.getCompletedMarginXList();
       if (response.data != null) {
         completedMarginXList(response.data?.data ?? []);
       } else {
@@ -575,8 +570,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future getCompletedMarginXOrders(String? id) async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedMarginXOrdersResponse> response =
-          await repository.getCompletedMarginXOrders(id);
+      final RepoResponse<CompletedMarginXOrdersResponse> response = await repository.getCompletedMarginXOrders(id);
       if (response.data != null) {
         completedMarginXOrdersList(response.data?.data ?? []);
       } else {
@@ -612,8 +606,7 @@ class MarginXController extends BaseController<MarginXRepository> {
         // log('Socket : tick-room $data');
         tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
-          if (tradingInstrumentTradeDetailsList
-              .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+          if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
             int index = tradingInstrumentTradeDetailsList.indexWhere(
               (stock) => stock.instrumentToken == element.instrumentToken,
             );
@@ -635,8 +628,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response =
-          await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -669,8 +661,7 @@ class MarginXController extends BaseController<MarginXRepository> {
           // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList
-                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = stockIndexDetailsList.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );
@@ -699,11 +690,12 @@ class MarginXController extends BaseController<MarginXRepository> {
         data,
       );
       if (response.data != null) {
-        getLiveMarginXList();
         SnackbarHelper.showSnackbar(response.data?.message ?? 'Success');
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
+      getUpComingMarginXList();
+      getLiveMarginXList();
     } catch (e) {
       log('Purchase Marginx: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

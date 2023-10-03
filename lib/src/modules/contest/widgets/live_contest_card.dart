@@ -126,7 +126,7 @@ class LiveContestCard extends GetView<ContestController> {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: Theme.of(context).textTheme.tsRegular12,
+                          style: Theme.of(context).textTheme.tsGreyRegular12,
                         ),
                         SizedBox(height: 2),
                         Text(
@@ -144,7 +144,7 @@ class LiveContestCard extends GetView<ContestController> {
                       ),
                       Text(
                         'Reward',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
                       Text(
                         '${contest?.payoutPercentage} % of the net P&L',
@@ -158,7 +158,7 @@ class LiveContestCard extends GetView<ContestController> {
                       children: [
                         // Text(
                         //   'Remaining',
-                        //   style: Theme.of(context).textTheme.tsRegular12,
+                        //   style: Theme.of(context).textTheme.tsGreyRegular12,
                         // ),
                         // SizedBox(height: 2),
                         // Text(
@@ -180,7 +180,7 @@ class LiveContestCard extends GetView<ContestController> {
                     children: [
                       Text(
                         'Start Date & Time',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
                       SizedBox(height: 2),
                       Text(
@@ -194,7 +194,7 @@ class LiveContestCard extends GetView<ContestController> {
                     children: [
                       Text(
                         'End Date & Time',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
                       SizedBox(height: 2),
                       Text(
@@ -214,13 +214,11 @@ class LiveContestCard extends GetView<ContestController> {
                     children: [
                       Text(
                         'Entry Fees',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
                       SizedBox(height: 2),
                       Text(
-                        contest?.entryFee == 0
-                            ? 'Free'
-                            : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
+                        contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -230,7 +228,7 @@ class LiveContestCard extends GetView<ContestController> {
                     children: [
                       Text(
                         'Portfolio',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
                       SizedBox(height: 2),
                       Text(
@@ -248,9 +246,13 @@ class LiveContestCard extends GetView<ContestController> {
             ],
           ),
         ),
-        Row(
-          children: [
-            if (contest?.entryFee != 0)
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
+          child: Row(
+            children: [
               Expanded(
                 child: GestureDetector(
                   onTap: controller.checkIfLivePurchased(contest) || contest?.entryFee == 0
@@ -280,12 +282,13 @@ class LiveContestCard extends GetView<ContestController> {
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                      ),
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      controller.checkIfLivePurchased(contest) || contest?.entryFee == 0
-                          ? 'Start Trading'
-                          : 'Pay Now',
+                      controller.checkIfLivePurchased(contest) || contest?.entryFee == 0 ? 'Start Trading' : 'Pay Now',
                       style: AppStyles.tsWhiteMedium14.copyWith(
                         color: AppColors.success,
                       ),
@@ -293,25 +296,26 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ),
               ),
-            Expanded(
-              child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary.withOpacity(.25),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(8),
+              Expanded(
+                child: GestureDetector(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withOpacity(.25),
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(8),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    'Share',
-                    style: AppStyles.tsSecondaryMedium14,
+                    child: Text(
+                      'Share',
+                      style: AppStyles.tsSecondaryMedium14,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

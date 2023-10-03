@@ -20,7 +20,6 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
           child: controller.contestTodaysOrdersList.isEmpty
               ? NoDataFound()
               : ListView.builder(
-                  shrinkWrap: true,
                   itemCount: controller.contestTodaysOrdersList.length,
                   itemBuilder: (context, index) {
                     var order = controller.contestTodaysOrdersList[index];

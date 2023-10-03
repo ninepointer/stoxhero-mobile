@@ -42,9 +42,8 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
     startTimeDateTime = DateTime.parse(widget.marginx?.startTime ?? '');
 
     setState(() {
-      remainingTime = startTimeDateTime.isAfter(currentTime)
-          ? startTimeDateTime.difference(currentTime)
-          : Duration.zero;
+      remainingTime =
+          startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
     });
     timer = Timer.periodic(
       Duration(seconds: 1),
@@ -173,9 +172,9 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: AppStyles.tsGreyRegular14,
+                          style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           '${widget.marginx?.maxParticipants}',
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -191,7 +190,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                       ),
                       Text(
                         'Reward',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       Text(
                         '% of your Investment',
@@ -205,9 +204,9 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                       children: [
                         Text(
                           'Remaining',
-                          style: AppStyles.tsGreyRegular14,
+                          style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           '${remainingTime.inDays} days \n${remainingTime.inHours.remainder(24)} hrs \n${remainingTime.inMinutes.remainder(60)} mins \n${remainingTime.inSeconds.remainder(60)} secs',
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -227,9 +226,9 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Text(
                         'Start Date & Time',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(widget.marginx?.startTime),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -241,9 +240,9 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Text(
                         'End Date & Time',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(widget.marginx?.endTime),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -261,12 +260,11 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Text(
                         'Investment',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(widget.marginx?.marginXTemplate?.entryFee,
-                            decimal: 0),
+                        FormatHelper.formatNumbers(widget.marginx?.marginXTemplate?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -276,12 +274,11 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Text(
                         'Portfolio',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(widget.marginx?.marginXTemplate?.portfolioValue,
-                            decimal: 0),
+                        FormatHelper.formatNumbers(widget.marginx?.marginXTemplate?.portfolioValue, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],

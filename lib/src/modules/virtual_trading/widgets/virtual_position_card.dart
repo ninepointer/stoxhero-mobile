@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
@@ -184,33 +186,47 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     onTap: () {
                       FocusScope.of(context).unfocus();
                       List<int> lots = controller.generateLotsList(type: position.id?.symbol);
-                      int selectedLots = position.lots!.toInt();
+                      int exitLots = position.lots!.toInt();
+                      int maxLots = lots.last;
 
-                      if (selectedLots < 0) {
-                        selectedLots = -selectedLots;
-                      }
+                      if (exitLots == 0) {
+                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                      } else {
+                        log(exitLots.toString());
+                        log(maxLots.toString());
+                        if (exitLots.toString().contains('-')) {
+                          if (exitLots < 0) {
+                            exitLots = -exitLots;
+                          }
 
-                      if (!lots.contains(selectedLots)) {
-                        lots.add(selectedLots);
-                        lots.sort();
-                      }
+                          if (!lots.contains(exitLots)) {
+                            lots.add(exitLots);
+                            lots.sort();
+                          }
+                          controller.selectedQuantity.value = exitLots;
+                        }
 
-                      controller.selectedQuantity.value = selectedLots;
-                      controller.lotsValueList.assignAll(lots);
-                      BottomSheetHelper.openBottomSheet(
-                        context: context,
-                        child: VirtualTransactionBottomSheet(
-                          type: TransactionType.exit,
-                          tradingInstrument: TradingInstrument(
-                            name: position.id?.symbol,
-                            exchange: position.id?.exchange,
-                            tradingsymbol: position.id?.symbol,
-                            exchangeToken: position.id?.exchangeInstrumentToken,
-                            instrumentToken: position.id?.instrumentToken,
-                            lotSize: position.lots,
+                        if (exitLots > maxLots) {
+                          controller.selectedQuantity.value = maxLots;
+                        } else {
+                          controller.selectedQuantity.value = exitLots;
+                        }
+                        controller.lotsValueList.assignAll(lots);
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: VirtualTransactionBottomSheet(
+                            type: TransactionType.exit,
+                            tradingInstrument: TradingInstrument(
+                              name: position.id?.symbol,
+                              exchange: position.id?.exchange,
+                              tradingsymbol: position.id?.symbol,
+                              exchangeToken: position.id?.exchangeInstrumentToken,
+                              instrumentToken: position.id?.instrumentToken,
+                              lotSize: position.lots,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,

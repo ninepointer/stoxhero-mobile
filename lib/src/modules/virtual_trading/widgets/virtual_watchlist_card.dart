@@ -172,8 +172,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () =>
-                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                          onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -237,7 +236,7 @@ class VirtualWatchListCardTile extends StatelessWidget {
       children: [
         Text(
           label ?? '-',
-          style: AppStyles.tsGreyMedium12,
+          style: AppStyles.tsGreyRegular12,
         ),
         SizedBox(height: 2),
         Text(

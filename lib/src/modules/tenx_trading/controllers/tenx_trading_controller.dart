@@ -52,6 +52,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future loadTenxData() async {
+    userDetails.value = AppStorage.getUserDetails();
     await socketConnection();
     await socketIndexConnection();
     await getTenxTradingPortfolioDetails();
@@ -89,7 +90,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num totalNet = 0;
 
     for (var position in tenxPositionsList) {
-      log('postion : ${position.toJson()}');
       totalLots += position.lots ?? 0;
       totalBrokerage += position.brokerage ?? 0;
       totalGross += position.lastaverageprice ?? 0;
@@ -146,7 +146,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
-    log('totalNetPNL : ${totalNetPNL.toString()}');
     return totalNetPNL.round();
   }
 

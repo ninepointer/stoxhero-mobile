@@ -114,7 +114,6 @@ class ContestController extends BaseController<ContestRepository> {
     num totalNet = 0;
 
     for (var position in contestPositionsList) {
-      log('postion : ${position.toJson()}');
       totalLots += position.lots ?? 0;
       totalBrokerage += position.brokerage ?? 0;
       totalGross += position.amount ?? 0;
@@ -227,7 +226,6 @@ class ContestController extends BaseController<ContestRepository> {
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
-    log('totalNetPNL : ${totalNetPNL.toString()}');
     return totalNetPNL.round();
   }
 
@@ -329,8 +327,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getUpComingContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<UpComingContestListResponse> response =
-          await repository.getUpComingContestList();
+      final RepoResponse<UpComingContestListResponse> response = await repository.getUpComingContestList();
       if (response.data != null) {
         upComingContestList(response.data?.data ?? []);
         if (upComingContestList.isNotEmpty) {
@@ -356,8 +353,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestListResponse> response =
-          await repository.getCompletedContestList();
+      final RepoResponse<CompletedContestListResponse> response = await repository.getCompletedContestList();
       if (response.data != null) {
         tempCompletedContestList(response.data?.data ?? []);
         if (tempCompletedContestList.isNotEmpty) {
@@ -383,8 +379,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestPnlList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestPnlListResponse> response =
-          await repository.getCompletedContestPnlList();
+      final RepoResponse<CompletedContestPnlListResponse> response = await repository.getCompletedContestPnlList();
       if (response.data != null) {
         List<CompletedContest> tempList = [];
         completedContestPnlList(response.data?.data ?? []);
@@ -410,8 +405,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestLeaderboardList() async {
     isLoading(true);
     try {
-      final RepoResponse<ContestLeaderboardResponse> response =
-          await repository.getContestLeaderboardList();
+      final RepoResponse<ContestLeaderboardResponse> response = await repository.getContestLeaderboardList();
       if (response.data != null) {
         contestLeaderboardList(response.data?.data ?? []);
       } else {
@@ -536,8 +530,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getCompletedContestOrders(String? id) async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestOrdersResponse> response =
-          await repository.getCompletedContestOrders(
+      final RepoResponse<CompletedContestOrdersResponse> response = await repository.getCompletedContestOrders(
         id,
       );
       if (response.data != null) {
@@ -560,8 +553,7 @@ class ContestController extends BaseController<ContestRepository> {
   ) async {
     isLoading(true);
     try {
-      final RepoResponse<TradingInstrumentListResponse> response =
-          await repository.searchInstruments(
+      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
         value,
         isNifty,
         isBankNifty,
@@ -658,8 +650,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getInstrumentLivePriceList() async {
     isLoading(true);
     try {
-      final RepoResponse<InstrumentLivePriceListResponse> response =
-          await repository.getInstrumentLivePrices();
+      final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
           isLivePriceLoaded(true);
@@ -698,8 +689,7 @@ class ContestController extends BaseController<ContestRepository> {
         // log('Socket : tick-room $data');
         tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
-          if (tradingInstrumentTradeDetailsList
-              .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+          if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
             int index = tradingInstrumentTradeDetailsList.indexWhere(
               (stock) => stock.instrumentToken == element.instrumentToken,
             );
@@ -721,8 +711,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response =
-          await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -755,8 +744,7 @@ class ContestController extends BaseController<ContestRepository> {
           // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList
-                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = stockIndexDetailsList.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );
@@ -785,11 +773,12 @@ class ContestController extends BaseController<ContestRepository> {
         data,
       );
       if (response.data != null) {
-        getUpComingContestList();
         SnackbarHelper.showSnackbar(response.data?.message ?? 'Success');
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
+      getUpComingContestList();
+      getLiveContestList();
     } catch (e) {
       log('Purchase Contest: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
