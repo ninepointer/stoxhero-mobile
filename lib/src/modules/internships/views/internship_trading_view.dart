@@ -31,7 +31,9 @@ class InternshipTradingView extends GetView<InternshipController> {
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
-                              stockColor: controller.getValueColor(item.lastPrice),
+                              stockColor: controller.getValueColor(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
                               stockLTP: FormatHelper.formatNumbers(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
@@ -75,9 +77,8 @@ class InternshipTradingView extends GetView<InternshipController> {
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tradingWatchlist.length >= 3
-                              ? 340
-                              : controller.tradingWatchlist.length * 120,
+                          height:
+                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -90,8 +91,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                             },
                           ),
                         ),
-                  if (controller.internshipPositionList.isNotEmpty)
-                    CommonTile(label: 'My Position Details'),
+                  if (controller.internshipPositionList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.internshipPositionList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -117,15 +117,13 @@ class InternshipTradingView extends GetView<InternshipController> {
                               InternshipPositionDetailsCard(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
-                                valueColor:
-                                    controller.getValueColor(controller.calculateTotalGrossPNL()),
+                                valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
                               InternshipPositionDetailsCard(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
-                                valueColor:
-                                    controller.getValueColor(controller.calculateTotalNetPNL()),
+                                valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                               ),
                             ],
                           ),
@@ -159,9 +157,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                   InternshipPortfolioDetailsCard(
                     label: 'Used Margin',
                     info: 'Net funds utilized for your executed trades',
-                    value: controller.calculateTotalNetPNL() > 0
-                        ? 0
-                        : controller.calculateTotalNetPNL().abs(),
+                    value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                   ),
                   InternshipPortfolioDetailsCard(
                     label: 'Opening Balance',

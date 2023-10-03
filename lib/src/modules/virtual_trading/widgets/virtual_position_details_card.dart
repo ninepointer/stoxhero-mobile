@@ -5,12 +5,13 @@ class VirtualPositionDetailsCard extends StatelessWidget {
   final String? label;
   final dynamic value;
   final bool isNum;
-
+  final Color? valueColor;
   const VirtualPositionDetailsCard({
     super.key,
     this.label,
     this.value,
     this.isNum = false,
+    this.valueColor,
   });
 
   @override
@@ -33,7 +34,7 @@ class VirtualPositionDetailsCard extends StatelessWidget {
                   decimal: isNum ? 0 : 2,
                 ),
                 style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                      color: (value is num && value < 0) ? AppColors.danger : AppColors.success,
+                      color: valueColor ?? AppColors.secondary,
                     ),
               ),
             ],

@@ -38,8 +38,7 @@ class _DashboardViewState extends State<DashboardView> {
     DateTime now = DateTime.now();
 
     if (label == 'this month') name = DateFormat('MMMM yyyy').format(now);
-    if (label == 'last month')
-      name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+    if (label == 'last month') name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
     if (label == 'lifetime') name = 'Lifetime';
     return name;
   }
@@ -69,7 +68,9 @@ class _DashboardViewState extends State<DashboardView> {
                             stockPrice: FormatHelper.formatNumbers(
                               item.lastPrice,
                             ),
-                            stockColor: controller.getValueColor(item.lastPrice),
+                            stockColor: controller.getValueColor(
+                              item.lastPrice! - (item.ohlc?.close ?? 0),
+                            ),
                             stockLTP: FormatHelper.formatNumbers(
                               item.lastPrice! - (item.ohlc?.close ?? 0),
                             ),
@@ -166,9 +167,7 @@ class _DashboardViewState extends State<DashboardView> {
                           Expanded(
                             child: customCard(
                               label: 'Virtual Trading',
-                              percent: controller
-                                          .userDashboardReturnSummary.value.virtualData?.npnl ==
-                                      null
+                              percent: controller.userDashboardReturnSummary.value.virtualData?.npnl == null
                                   ? '0'
                                   : '${(controller.userDashboardReturnSummary.value.virtualData!.npnl! / 10000).toStringAsFixed(2)} %',
                             ),
@@ -177,8 +176,7 @@ class _DashboardViewState extends State<DashboardView> {
                           Expanded(
                             child: customCard(
                               label: 'Contest Trading',
-                              percent: controller.userDashboardReturnSummary.value.contestReturn ==
-                                      null
+                              percent: controller.userDashboardReturnSummary.value.contestReturn == null
                                   ? '0'
                                   : '${(controller.userDashboardReturnSummary.value.contestReturn! * 100).toStringAsFixed(2)} %',
                             ),
@@ -191,8 +189,7 @@ class _DashboardViewState extends State<DashboardView> {
                           Expanded(
                             child: customCard(
                               label: 'TenX Trading',
-                              percent: controller.userDashboardReturnSummary.value.tenxReturn ==
-                                      null
+                              percent: controller.userDashboardReturnSummary.value.tenxReturn == null
                                   ? '0'
                                   : '${(controller.userDashboardReturnSummary.value.tenxReturn! * 100).toStringAsFixed(2)} %',
                             ),
@@ -247,8 +244,7 @@ class _DashboardViewState extends State<DashboardView> {
                             setState(
                               () {
                                 controller.selectedTimeFrame = value!;
-                                controller.getDashboard(
-                                    controller.selectedTradeType, controller.selectedTimeFrame);
+                                controller.getDashboard(controller.selectedTradeType, controller.selectedTimeFrame);
                               },
                             );
                           },
@@ -512,8 +508,7 @@ class _DashboardViewState extends State<DashboardView> {
                   Text(
                     percent,
                     style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                          color: valueColor ??
-                              (percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                          color: valueColor ?? (percent.startsWith('-') ? AppColors.danger : AppColors.success),
                         ),
                   )
                 ],

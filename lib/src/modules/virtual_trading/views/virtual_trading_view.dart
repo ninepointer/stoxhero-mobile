@@ -28,7 +28,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
-                              stockColor: controller.getValueColor(item.lastPrice),
+                              stockColor: controller.getValueColor(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
                               stockLTP: FormatHelper.formatNumbers(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
@@ -72,9 +74,8 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.tradingWatchlist.length >= 3
-                              ? 340
-                              : controller.tradingWatchlist.length * 120,
+                          height:
+                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -87,8 +88,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             },
                           ),
                         ),
-                  if (controller.virtualPositionsList.isNotEmpty)
-                    CommonTile(label: 'My Position Details'),
+                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -114,11 +114,13 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               VirtualPositionDetailsCard(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
+                                valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
                               VirtualPositionDetailsCard(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
+                                valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                               ),
                             ],
                           ),
@@ -152,12 +154,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   ),
                   VirtualPortfolioDetailsCard(
                     label: 'Virtual Used Margin',
-                    value: controller.calculateTotalNetPNL() > 0
-                        ? 0
-                        : controller.calculateTotalNetPNL().abs(),
-                    valueColor: (controller.tenxTotalPositionDetails.value.net ?? 0) < 0
-                        ? AppColors.danger
-                        : AppColors.success,
+                    value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
+                    valueColor:
+                        (controller.tenxTotalPositionDetails.value.net ?? 0) < 0 ? AppColors.danger : AppColors.success,
                   ),
                   SizedBox(height: 56),
                 ],

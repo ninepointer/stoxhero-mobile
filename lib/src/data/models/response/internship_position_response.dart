@@ -26,7 +26,7 @@ class InternshipPositionResponse {
 
 class InternshipPosition {
   InternshipId? id;
-  int? amount;
+  num? amount;
   num? brokerage;
   int? lots;
   num? lastaverageprice;
@@ -67,12 +67,7 @@ class InternshipId {
   int? exchangeInstrumentToken;
   String? exchange;
 
-  InternshipId(
-      {this.symbol,
-      this.product,
-      this.instrumentToken,
-      this.exchangeInstrumentToken,
-      this.exchange});
+  InternshipId({this.symbol, this.product, this.instrumentToken, this.exchangeInstrumentToken, this.exchange});
 
   InternshipId.fromJson(Map<String, dynamic> json) {
     symbol = json['symbol'];
