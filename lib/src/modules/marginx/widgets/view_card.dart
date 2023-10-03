@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/data/data.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+import 'dart:developer';
 
-import '../../../core/core.dart';
+import 'package:flutter/material.dart';
+import '../../../app/app.dart';
 
 class ViewCard extends StatefulWidget {
-  final UpcomingMarginX? viewMarginx;
-  final CompletedMarginX? completedMarginx;
+  final UpcomingMarginX? upcomingMarginX;
+  final CompletedMarginX? completedMarginX;
+  final LiveMarginX? liveMarginX;
 
   ViewCard({
     Key? key,
-    this.viewMarginx,
-    this.completedMarginx,
+    this.upcomingMarginX,
+    this.completedMarginX,
+    this.liveMarginX,
   }) : super(key: key);
 
   @override
@@ -31,7 +31,10 @@ class _ViewCardState extends State<ViewCard> {
 
   @override
   Widget build(BuildContext context) {
-    final isUpcoming = widget.viewMarginx != null;
+    final isUpcoming = widget.upcomingMarginX != null;
+    final isLive = widget.liveMarginX != null;
+    log('Entry: ${widget.liveMarginX?.marginXTemplate?.entryFee?.toInt()}');
+    log('Completed: ${widget.completedMarginX?.earning}');
 
     return Scaffold(
       appBar: AppBar(
@@ -108,7 +111,7 @@ class _ViewCardState extends State<ViewCard> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            "You recieve the payout in your wallet as soon as the market closes for that day i.e after 3:30 PM",
+                            "You receive the payout in your wallet as soon as the market closes for that day i.e., after 3:30 PM",
                             style: Theme.of(context).textTheme.tsRegular14,
                           ),
                         ],
@@ -125,8 +128,10 @@ class _ViewCardState extends State<ViewCard> {
                           Expanded(
                             child: Text(
                               isUpcoming
-                                  ? widget.viewMarginx?.marginXName ?? ''
-                                  : widget.completedMarginx?.marginxName ?? '',
+                                  ? widget.upcomingMarginX?.marginXName ?? ''
+                                  : (isLive
+                                      ? widget.liveMarginX?.marginXName ?? ''
+                                      : widget.completedMarginX?.marginxName ?? ''),
                               style: AppStyles.tsSecondaryMedium16,
                               textAlign: TextAlign.center,
                             ),
@@ -152,7 +157,7 @@ class _ViewCardState extends State<ViewCard> {
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      '${isUpcoming ? widget.viewMarginx?.maxParticipants : widget.completedMarginx?.maxParticipants}',
+                                      '${isUpcoming ? widget.upcomingMarginX?.maxParticipants : (isLive ? widget.liveMarginX?.maxParticipants : widget.completedMarginX?.maxParticipants)}',
                                       style: Theme.of(context).textTheme.tsMedium14,
                                     ),
                                   ],
@@ -191,8 +196,10 @@ class _ViewCardState extends State<ViewCard> {
                                   Text(
                                     FormatHelper.formatDateTimeToIST(
                                       isUpcoming
-                                          ? widget.viewMarginx?.startTime
-                                          : widget.completedMarginx?.startTime,
+                                          ? widget.upcomingMarginX?.startTime
+                                          : (isLive
+                                              ? widget.liveMarginX?.startTime
+                                              : widget.completedMarginX?.startTime),
                                     ),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
@@ -209,8 +216,10 @@ class _ViewCardState extends State<ViewCard> {
                                   Text(
                                     FormatHelper.formatDateTimeToIST(
                                       isUpcoming
-                                          ? widget.viewMarginx?.endTime
-                                          : widget.completedMarginx?.endTime,
+                                          ? widget.upcomingMarginX?.endTime
+                                          : (isLive
+                                              ? widget.liveMarginX?.endTime
+                                              : widget.completedMarginX?.endTime),
                                     ),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
@@ -233,8 +242,10 @@ class _ViewCardState extends State<ViewCard> {
                                   Text(
                                     FormatHelper.formatNumbers(
                                         isUpcoming
-                                            ? widget.viewMarginx?.marginXTemplate?.entryFee
-                                            : widget.completedMarginx?.entryFee,
+                                            ? widget.upcomingMarginX?.marginXTemplate?.entryFee
+                                            : (isLive
+                                                ? widget.liveMarginX?.marginXTemplate?.entryFee
+                                                : widget.completedMarginX?.entryFee),
                                         decimal: 0),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
@@ -251,8 +262,12 @@ class _ViewCardState extends State<ViewCard> {
                                   Text(
                                     FormatHelper.formatNumbers(
                                         isUpcoming
-                                            ? widget.viewMarginx?.marginXTemplate?.portfolioValue
-                                            : widget.completedMarginx?.portfolioValue,
+                                            ? widget
+                                                .upcomingMarginX?.marginXTemplate?.portfolioValue
+                                            : (isLive
+                                                ? widget
+                                                    .liveMarginX?.marginXTemplate?.portfolioValue
+                                                : widget.completedMarginX?.portfolioValue),
                                         decimal: 0),
                                     style: Theme.of(context).textTheme.tsMedium14,
                                   ),
@@ -261,7 +276,7 @@ class _ViewCardState extends State<ViewCard> {
                             ],
                           ),
                           SizedBox(height: 16),
-                          if (!isUpcoming)
+                          if (!isUpcoming && !isLive)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -275,7 +290,7 @@ class _ViewCardState extends State<ViewCard> {
                                     SizedBox(height: 4),
                                     Text(
                                       FormatHelper.formatNumbers(
-                                        widget.completedMarginx?.earning,
+                                        widget.completedMarginX?.earning,
                                       ),
                                       style: Theme.of(context).textTheme.tsMedium14,
                                     ),
@@ -290,36 +305,46 @@ class _ViewCardState extends State<ViewCard> {
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      controller.calculatePayout().toStringAsFixed(2),
+                                      '${controller.calculatePayout(
+                                            widget.completedMarginX!.entryFee!,
+                                            widget.completedMarginX!.earning!,
+                                          ) > 0 ? '-' : ''}${controller.calculatePayout(
+                                            widget.completedMarginX!.entryFee!,
+                                            widget.completedMarginX!.earning!,
+                                          ).abs().toStringAsFixed(2)} %',
                                       style: Theme.of(context).textTheme.tsMedium14,
-                                    ),
+                                    )
                                   ],
                                 ),
                               ],
                             ),
-                          if (!isUpcoming) SizedBox(height: 16),
+                          if (!isUpcoming && !isLive) SizedBox(height: 16),
                         ],
                       ),
                     ),
                     Row(
                       children: [
-                        Expanded(
-                          child: GestureDetector(
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: AppColors.success.withOpacity(0.25),
-                              ),
-                              child: Text(
-                                'Buy',
-                                style: AppStyles.tsWhiteMedium14.copyWith(
-                                  color: AppColors.success,
+                        if (isUpcoming || isLive)
+                          Expanded(
+                            child: GestureDetector(
+                              child: Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(8),
+                                  ),
+                                  color: AppColors.success.withOpacity(0.25),
+                                ),
+                                child: Text(
+                                  'Buy',
+                                  style: AppStyles.tsWhiteMedium14.copyWith(
+                                    color: AppColors.success,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
                         Expanded(
                           child: GestureDetector(
                             child: Container(

@@ -25,16 +25,16 @@ class ContestPositionListResponse {
 }
 
 class ContestPosition {
-  CId? iId;
+  CId? id;
   num? amount;
   num? brokerage;
   int? lots;
   num? lastaverageprice;
 
-  ContestPosition({this.iId, this.amount, this.brokerage, this.lots, this.lastaverageprice});
+  ContestPosition({this.id, this.amount, this.brokerage, this.lots, this.lastaverageprice});
 
   ContestPosition.fromJson(Map<String, dynamic> json) {
-    iId = json['_id'] != null ? new CId.fromJson(json['_id']) : null;
+    id = json['_id'] != null ? new CId.fromJson(json['_id']) : null;
     amount = json['amount'];
     brokerage = json['brokerage'];
     lots = json['lots'];
@@ -43,8 +43,8 @@ class ContestPosition {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.iId != null) {
-      data['_id'] = this.iId!.toJson();
+    if (this.id != null) {
+      data['_id'] = this.id!.toJson();
     }
     data['amount'] = this.amount;
     data['brokerage'] = this.brokerage;

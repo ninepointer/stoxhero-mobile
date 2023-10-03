@@ -218,7 +218,9 @@ class LiveContestCard extends GetView<ContestController> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
+                        contest?.entryFee == 0
+                            ? 'Free'
+                            : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -253,16 +255,9 @@ class LiveContestCard extends GetView<ContestController> {
                 child: GestureDetector(
                   onTap: controller.checkIfLivePurchased(contest) || contest?.entryFee == 0
                       ? () {
-                          controller.loadTradingData();
-                          controller.getContestPositions(contest?.sId);
-                          controller.getContestPortfolio(contest?.sId);
-                          controller.getContestWatchList(
-                            contest?.isNifty,
-                            contest?.isBankNifty,
-                            contest?.isFinNifty,
-                          );
                           controller.liveContest(contest);
-                          Get.to(() => ContestDashboardView());
+                          controller.loadTradingData();
+                          Get.to(() => ContestTradingView());
                         }
                       : () {
                           BottomSheetHelper.openBottomSheet(
@@ -273,7 +268,7 @@ class LiveContestCard extends GetView<ContestController> {
                                 Get.back();
                                 var data = {
                                   "contestFee": contest?.entryFee,
-                                  "contestId": contest?.sId,
+                                  "contestId": contest?.id,
                                   "contestName": contest?.contestName,
                                 };
                                 controller.purchaseContest(data);
@@ -288,7 +283,9 @@ class LiveContestCard extends GetView<ContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      controller.checkIfLivePurchased(contest) || contest?.entryFee == 0 ? 'Start Trading' : 'Pay Now',
+                      controller.checkIfLivePurchased(contest) || contest?.entryFee == 0
+                          ? 'Start Trading'
+                          : 'Pay Now',
                       style: AppStyles.tsWhiteMedium14.copyWith(
                         color: AppColors.success,
                       ),

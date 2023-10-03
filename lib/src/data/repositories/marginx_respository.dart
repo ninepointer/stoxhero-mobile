@@ -49,7 +49,11 @@ class MarginXRepository extends BaseRepository {
     bool? isBankNifty,
     bool? isFinNifty,
   ) async {
-    String apiURL = AppUrls.marginXTradingInstruments(isNifty, isBankNifty, isFinNifty);
+    String apiURL = AppUrls.marginXTradingInstruments(
+      isNifty,
+      isBankNifty,
+      isFinNifty,
+    );
     var query = {'search': value, 'page': 1, 'size': 20};
     var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
@@ -115,7 +119,7 @@ class MarginXRepository extends BaseRepository {
   }
 
   Future<RepoResponse<GenericResponse>> purchaseMarginX(Map<String, dynamic> data) async {
-    String apiURL = AppUrls.purchaseContest;
+    String apiURL = AppUrls.purchaseMarginX;
     var response = await service.patchAuth(path: apiURL, data: data);
     return response is APIException
         ? RepoResponse(error: response)

@@ -43,14 +43,14 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
   void dispose() {
     timer.cancel();
     super.dispose();
-  }
+  } 
 
   void updateRemainingTime() {
     DateTime currentTime = DateTime.now();
     startTimeDateTime = DateTime.parse(widget.contest?.contestStartTime ?? '');
 
-    setState(() {
-      remainingTime =
+     setState(() {
+     remainingTime = 
           startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
       isVisible = remainingTime == Duration.zero;
       log(isVisible.toString());

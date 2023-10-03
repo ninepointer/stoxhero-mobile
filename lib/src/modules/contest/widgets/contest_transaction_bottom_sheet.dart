@@ -1,29 +1,18 @@
-import 'dart:developer';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/data/data.dart';
-
-import '../../../core/core.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class ContestTransactionBottomSheet extends GetView<ContestController> {
   final TradingInstrument tradingInstrument;
   final TransactionType type;
-  final String? contestId;
-  final LiveContest? liveContest;
   const ContestTransactionBottomSheet({
     super.key,
-    required this.tradingInstrument,
     required this.type,
-    this.liveContest,
-    this.contestId,
+    required this.tradingInstrument,
   });
 
   @override
   Widget build(BuildContext context) {
-    log(tradingInstrument.toJson().toString());
     return Wrap(
       children: [
         Container(
@@ -66,7 +55,11 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    FormatHelper.formatNumbers(tradingInstrument.lastPrice),
+                    type == TransactionType.buy
+                        ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
+                        : type == TransactionType.sell
+                            ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
+                            : tradingInstrument.lotSize.toString(),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
@@ -107,8 +100,17 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                         child: Text(number.toString()),
                       );
                     }).toList(),
+                    dropdownStyleData: DropdownStyleData(
+                      maxHeight: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    menuItemStyleData: MenuItemStyleData(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                    ),
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(16),
+                      contentPadding: EdgeInsets.all(16).copyWith(left: 0),
                       filled: true,
                       fillColor: AppColors.grey.withOpacity(.1),
                       hintText: 'Quantity',
@@ -245,7 +247,6 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                   Get.find<ContestController>().placeContestOrder(
                     type,
                     tradingInstrument,
-                    contestId: contestId,
                   );
                 },
               ),

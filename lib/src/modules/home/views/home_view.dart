@@ -49,6 +49,7 @@ class _HomeViewState extends State<HomeView> {
         Get.find<MarginXController>().loadData();
         break;
       case 4:
+        Get.find<ContestController>().loadData();
         break;
       default:
     }

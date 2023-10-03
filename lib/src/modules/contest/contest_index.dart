@@ -1,6 +1,6 @@
 export 'controllers/contest_controller.dart';
 export 'views/completed_contest_orders_list_view.dart';
-export 'views/contest_dashboard_view.dart';
+export 'views/contest_trading_view.dart';
 export 'views/contest_leaderboard_view.dart';
 export 'views/contest_list_view.dart';
 export 'views/contest_view.dart';

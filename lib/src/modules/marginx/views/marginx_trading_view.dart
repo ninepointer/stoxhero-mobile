@@ -32,7 +32,9 @@ class MarginXTradingView extends GetView<MarginXController> {
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
-                              stockColor: controller.getValueColor(item.lastPrice),
+                              stockColor: controller.getValueColor(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
                               stockLTP: FormatHelper.formatNumbers(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
@@ -64,7 +66,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                             padding: EdgeInsets.zero,
                             itemCount: controller.tradingWatchlist.length,
                             itemBuilder: (context, index) {
-                              return MarginXWatchListCard(
+                              return MarginXWatchlistCard(
                                 index: index,
                                 tradingWatchlist: controller.tradingWatchlist[index],
                               );

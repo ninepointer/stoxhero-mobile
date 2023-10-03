@@ -1,25 +1,19 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class ContestWatchlistCard extends StatefulWidget {
   final int index;
-  final ContestWatchList contestWatchlist;
-  final String? contestId;
+  final TradingWatchlist tradingWatchlist;
   const ContestWatchlistCard({
-    Key? key,
+    super.key,
     required this.index,
-    required this.contestWatchlist,
-    this.contestId,
-  }) : super(key: key);
+    required this.tradingWatchlist,
+  });
 
   @override
-  _ContestWatchlistCardState createState() => _ContestWatchlistCardState();
+  State<ContestWatchlistCard> createState() => _ContestWatchlistCardState();
 }
 
 class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
@@ -40,29 +34,27 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
   }
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${widget.contestWatchlist.toJson()}');
+    log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
 
     num lastPrice = controller.getInstrumentLastPrice(
-      widget.contestWatchlist.instrumentToken!,
-      widget.contestWatchlist.exchangeInstrumentToken!,
+      widget.tradingWatchlist.instrumentToken!,
+      widget.tradingWatchlist.exchangeInstrumentToken!,
     );
-    controller.generateLotsList(type: widget.contestWatchlist.instrument);
-    log(controller.lotsValueList.toString());
+    controller.generateLotsList(type: widget.tradingWatchlist.instrument);
+    log(lastPrice.toString());
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: ContestTransactionBottomSheet(
         type: type,
-        contestId: widget.contestWatchlist.sId,
         tradingInstrument: TradingInstrument(
-          name: widget.contestWatchlist.symbol,
-          instrumentType: widget.contestWatchlist.instrument,
-          exchange: widget.contestWatchlist.exchange,
-          tradingsymbol: widget.contestWatchlist.symbol,
-          exchangeToken: widget.contestWatchlist.exchangeInstrumentToken,
-          instrumentToken: widget.contestWatchlist.instrumentToken,
+          name: widget.tradingWatchlist.symbol,
+          instrumentType: widget.tradingWatchlist.instrument,
+          exchange: widget.tradingWatchlist.exchange,
+          tradingsymbol: widget.tradingWatchlist.symbol,
+          exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
+          instrumentToken: widget.tradingWatchlist.instrumentToken,
           lastPrice: lastPrice,
-          id: widget.contestWatchlist.sId,
         ),
       ),
     );
@@ -76,7 +68,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
           if (controller.selectedWatchlistIndex.value == widget.index) SizedBox(height: 8),
           CommonCard(
             hasBorder: false,
-            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            margin: EdgeInsets.symmetric(horizontal: 8),
             padding: EdgeInsets.zero,
             onTap: _updateWatchlistIndex,
             children: [
@@ -91,41 +83,51 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
-                          value: FormatHelper.formatDateByMonth(widget.contestWatchlist.contractDate),
+                          value: FormatHelper.formatDateByMonth(
+                            widget.tradingWatchlist.contractDate,
+                          ),
                         ),
                         ContestWatchListCardTile(
                           isRightAlign: true,
                           label: 'LTP',
                           value: FormatHelper.formatNumbers(
-                            controller
-                                .getInstrumentLastPrice(
-                                  widget.contestWatchlist.instrumentToken!,
-                                  widget.contestWatchlist.exchangeInstrumentToken!,
-                                )
-                                .toString(),
+                            controller.getInstrumentLastPrice(
+                              widget.tradingWatchlist.instrumentToken!,
+                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                            ),
                           ),
-                          valueColor: controller.getValueColor(widget.contestWatchlist.instrumentToken),
+                          valueColor: controller.getValueColor(
+                            controller.getInstrumentLastPrice(
+                              widget.tradingWatchlist.instrumentToken!,
+                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 2),
+                    SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ContestWatchListCardTile(
                           isRightAlign: false,
                           label: 'Symbol',
-                          value: widget.contestWatchlist.symbol,
+                          value: widget.tradingWatchlist.symbol,
                         ),
-                        SizedBox(height: 2),
+                        SizedBox(height: 4),
                         ContestWatchListCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
-                            widget.contestWatchlist.instrumentToken!,
-                            widget.contestWatchlist.exchangeInstrumentToken!,
+                            widget.tradingWatchlist.instrumentToken!,
+                            widget.tradingWatchlist.exchangeInstrumentToken!,
                           ),
-                          valueColor: controller.getValueColor(widget.contestWatchlist.instrumentToken),
+                          valueColor: controller.getValueColor(
+                            controller.getInstrumentChanges(
+                              widget.tradingWatchlist.instrumentToken!,
+                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -151,9 +153,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                             ),
                             child: Text(
                               'BUY',
-                              style: AppStyles.tsWhiteMedium14.copyWith(
-                                color: AppColors.success,
-                              ),
+                              style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.success),
                             ),
                           ),
                         ),
@@ -169,16 +169,15 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                             ),
                             child: Text(
                               'SELL',
-                              style: AppStyles.tsWhiteMedium14.copyWith(
-                                color: AppColors.danger,
-                              ),
+                              style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.danger),
                             ),
                           ),
                         ),
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => controller.removeInstrument(widget.contestWatchlist.instrumentToken),
+                          onTap: () =>
+                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
@@ -190,9 +189,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                             ),
                             child: Text(
                               'REMOVE',
-                              style: AppStyles.tsWhiteMedium14.copyWith(
-                                color: AppColors.info,
-                              ),
+                              style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.info),
                             ),
                           ),
                         ),
@@ -202,21 +199,21 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                 ),
             ],
           ),
-          // if (controller.selectedWatchlistIndex.value == widget.index)
-          //   Column(
-          //     children: [
-          //       // Divider(
-          //       //   thickness: 1,
-          //       //   height: 0,
-          //       // ),
-          //       SizedBox(height: 8),
-          //     ],
-          //   ),
-          // if (controller.selectedWatchlistIndex.value != widget.index) SizedBox(height: 2),
-          // // Divider(
-          // //   thickness: 1,
-          // //   height: 0,
-          // // ),
+          if (controller.selectedWatchlistIndex.value == widget.index)
+            Column(
+              children: [
+                // Divider(
+                //   thickness: 1,
+                //   height: 0,
+                // ),
+                SizedBox(height: 8),
+              ],
+            ),
+          if (controller.selectedWatchlistIndex.value != widget.index) SizedBox(height: 4),
+          // Divider(
+          //   thickness: 1,
+          //   height: 0,
+          // ),
         ],
       ),
     );
@@ -250,7 +247,7 @@ class ContestWatchListCardTile extends StatelessWidget {
         Text(
           value ?? '-',
           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor,
+                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
               ),
         ),
       ],

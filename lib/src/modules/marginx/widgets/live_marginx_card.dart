@@ -1,11 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../core/core.dart';
-import '../../../data/models/response/live_marginx_list_response.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class LiveMarginxCard extends GetView<MarginXController> {
   final LiveMarginX? marginx;
@@ -244,7 +238,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
               child: GestureDetector(
                 onTap: () {
                   Get.to(
-                    () => ViewCard(),
+                    () => ViewCard(
+                      liveMarginX: marginx,
+                    ),
                   );
                 },
                 child: Container(
@@ -265,55 +261,31 @@ class LiveMarginxCard extends GetView<MarginXController> {
                 ),
               ),
             ),
-            // if (contest?.entryFee != 0)
-            // Expanded(
-            //   child: GestureDetector(
-            //     onTap: controller.checkIfPurchased(marginx)
-            //         ? () {
-            //             Get.to(() => ContestDashboardView());
-            //           }
-            //         : () async {
-            //             await controller.calculateUserWalletAmount();
-            //             BottomSheetHelper.openBottomSheet(
-            //               context: context,
-            //               child: PurchaseItemBottomSheet(
-            //                 walletBalance: controller.walletBalance.value,
-            //                 buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
-            //                 onSubmit: () {
-            //                   Get.back();
-            //                   var data = {
-            //                     "marginXFee": marginx?.marginXTemplate?.entryFee,
-            //                     "marginXId": marginx?.marginXTemplate?.id,
-            //                     "marginXtemplateName": marginx?.marginXTemplate?.templateName,
-            //                   };
-            //                   controller.purchaseMarginX(data);
-            //                 },
-            //               ),
-            //             );
-            //           },
-            //     child: Container(
-            //       alignment: Alignment.center,
-            //       padding: EdgeInsets.all(12),
-            //       decoration: BoxDecoration(
-            //         color: AppColors.success.withOpacity(.25),
-            //       ),
-            //       child: Text(
-            //         'Pay Now',
-            //         style: AppStyles.tsWhiteMedium14.copyWith(
-            //           color: AppColors.success,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  log("MarginX ID: ${marginx?.id}");
-                  controller.liveMarginX(marginx);
-                  controller.loadTradingData();
-                  Get.to(() => MarginXTradingView());
-                },
+                onTap: controller.checkIfLivePurchased(marginx)
+                    ? () {
+                        controller.loadTradingData();
+                        controller.liveMarginX(marginx);
+                        Get.to(() => MarginXTradingView());
+                      }
+                    : () {
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: PurchaseItemBottomSheet(
+                            buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
+                            onSubmit: () {
+                              Get.back();
+                              var data = {
+                                "entryFee": marginx?.marginXTemplate?.entryFee,
+                                "marginXId": marginx?.id,
+                                "marginXName": marginx?.marginXName,
+                              };
+                              controller.purchaseMarginX(data);
+                            },
+                          ),
+                        );
+                      },
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(12),
@@ -321,7 +293,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                     color: AppColors.success.withOpacity(.25),
                   ),
                   child: Text(
-                    'Start Trading',
+                    controller.checkIfLivePurchased(marginx) ? 'Start Trading' : 'Pay Now',
                     style: AppStyles.tsWhiteMedium14.copyWith(
                       color: AppColors.success,
                     ),
@@ -329,6 +301,34 @@ class LiveMarginxCard extends GetView<MarginXController> {
                 ),
               ),
             ),
+            // Expanded(
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       log("MarginX ID: ${marginx?.id}");
+            //       controller.loadTradingData();
+            //       controller.liveMarginX(marginx);
+            //       // controller.get(
+            //       //   contest?.isNifty,
+            //       //   contest?.isBankNifty,
+            //       //   contest?.isFinNifty,
+            //       // );
+            //       Get.to(() => MarginXTradingView());
+            //     },
+            //     child: Container(
+            //       alignment: Alignment.center,
+            //       padding: EdgeInsets.all(12),
+            //       decoration: BoxDecoration(
+            //         color: AppColors.success.withOpacity(.25),
+            //       ),
+            //       child: Text(
+            //         'Start Trading',
+            //         style: AppStyles.tsWhiteMedium14.copyWith(
+            //           color: AppColors.success,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: GestureDetector(
                 child: Container(

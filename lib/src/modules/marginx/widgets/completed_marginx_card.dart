@@ -241,7 +241,7 @@ class CompletedMarginxCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => ViewCard(completedMarginx: completedMarginx));
+                  Get.to(() => ViewCard(completedMarginX: completedMarginx));
                 },
                 child: Container(
                   alignment: Alignment.center,

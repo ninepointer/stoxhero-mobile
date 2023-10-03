@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/core/core.dart';
+import '../../../app/app.dart';
 
 class ContestPortfolioDetailsCard extends StatelessWidget {
   final String? label;
   final dynamic value;
-
+  final Color? valueColor;
+  final String? info;
   const ContestPortfolioDetailsCard({
     super.key,
     this.label,
     this.value,
+    this.valueColor,
+    this.info,
   });
 
   @override
@@ -20,31 +23,38 @@ class ContestPortfolioDetailsCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: 8),
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label ?? '-',
-                      style: Theme.of(context).textTheme.tsRegular14,
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label ?? '-',
+                        style: Theme.of(context).textTheme.tsMedium14,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        info ?? '-',
+                        style: AppStyles.tsGreyRegular12,
+                      ),
+                    ],
+                  ),
                 ),
                 Text(
                   FormatHelper.formatNumbers(
                     value,
                     decimal: 0,
+                    isNegative: true,
                   ),
                   style: AppStyles.tsPrimarySemiBold16.copyWith(
-                    color: AppColors.success,
+                    color: valueColor ?? AppColors.success,
                   ),
                 )
               ],
             ),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 4),
       ],
     );
   }

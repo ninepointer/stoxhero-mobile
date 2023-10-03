@@ -28,7 +28,7 @@ class LiveContestListResponse {
 }
 
 class LiveContest {
-  String? sId;
+  String? id;
   String? contestName;
   String? contestStartTime;
   String? contestEndTime;
@@ -55,7 +55,7 @@ class LiveContest {
   int? iV;
 
   LiveContest(
-      {this.sId,
+      {this.id,
       this.contestName,
       this.contestStartTime,
       this.contestEndTime,
@@ -82,7 +82,7 @@ class LiveContest {
       this.iV});
 
   LiveContest.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     contestName = json['contestName'];
     contestStartTime = json['contestStartTime'];
     contestEndTime = json['contestEndTime'];
@@ -92,7 +92,8 @@ class LiveContest {
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
-    portfolio = json['portfolio'] != null ? new LiveContestPortfolio.fromJson(json['portfolio']) : null;
+    portfolio =
+        json['portfolio'] != null ? new LiveContestPortfolio.fromJson(json['portfolio']) : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -121,7 +122,7 @@ class LiveContest {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['contestName'] = this.contestName;
     data['contestStartTime'] = this.contestStartTime;
     data['contestEndTime'] = this.contestEndTime;

@@ -118,7 +118,7 @@ class ContestRepository extends BaseRepository {
         : RepoResponse(data: CompletedContestOrdersResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> placeOrder(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> placeContestOrder(Map<String, dynamic> data) async {
     String apiURL = AppUrls.contestPlacingOrder;
     var response = await service.postAuth(path: apiURL, data: data);
     return response is APIException

@@ -89,15 +89,13 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 () => AbsorbPointer(
                   absorbing: type == TransactionType.exit,
                   child: DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value == 0
-                        ? null
-                        : controller.selectedQuantity.value,
+                    value: controller.selectedQuantity.value,
                     onChanged: (value) => controller.selectedQuantity(value),
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
                       return DropdownMenuItem<int>(
                         value: number,
-                        child: Text(number.toString()),
+                        child: Text(number >= 0 ? number.toString() : number.toString()),
                       );
                     }).toList(),
                     dropdownStyleData: DropdownStyleData(

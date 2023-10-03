@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import '../../../app/app.dart';
 
-import '../../../core/core.dart';
-import '../../modules.dart';
-
-class ContestDashboardView extends GetView<ContestController> {
-  const ContestDashboardView({Key? key}) : super(key: key);
+class ContestTradingView extends GetView<ContestController> {
+  const ContestTradingView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contest Trading'),
+        title: const Text(' Contest Trading'),
       ),
       body: Obx(
         () => Visibility(
@@ -23,41 +20,34 @@ class ContestDashboardView extends GetView<ContestController> {
               child: Column(
                 children: [
                   if (controller.stockIndexDetailsList.isNotEmpty)
-                    Row(
-                      children: [
-                        for (var item in controller.stockIndexDetailsList)
-                          CommonStockInfo(
-                            label: controller.getStockIndexName(item.instrumentToken ?? 0),
-                            stockPrice: FormatHelper.formatNumbers(
-                              item.lastPrice,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0).copyWith(
+                        bottom: 0,
+                      ),
+                      child: Row(
+                        children: [
+                          for (var item in controller.stockIndexDetailsList) ...[
+                            CommonStockInfo(
+                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              stockPrice: FormatHelper.formatNumbers(
+                                item.lastPrice,
+                              ),
+                              stockColor: controller.getValueColor(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
+                              stockLTP: FormatHelper.formatNumbers(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
+                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockLTPColor: controller.getValueColor(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
                             ),
-                            stockColor: controller.getValueColor(item.lastPrice),
-                            stockLTP: FormatHelper.formatNumbers(
-                              item.lastPrice! - (item.ohlc?.close ?? 0),
-                            ),
-                            stockChange: '(${item.change?.toStringAsFixed(2)}%)',
-                            stockLTPColor: controller.getValueColor(
-                              item.lastPrice! - (item.ohlc?.close ?? 0),
-                            ),
-                          ),
-                      ],
+                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                          ]
+                        ],
+                      ),
                     ),
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Margin',
-                        stockPrice: '₹ 19,454.09',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Net P&L',
-                        stockPrice: '₹ 19,454.98',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                    ],
-                  ),
                   CommonTile(
                     label: 'My Watchlist',
                     showIconButton: true,
@@ -65,48 +55,26 @@ class ContestDashboardView extends GetView<ContestController> {
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
                   ),
-                  controller.contestWatchList.isEmpty
+                  controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height:
-                              controller.contestWatchList.length >= 5 ? 300 : controller.contestWatchList.length * 76,
+                          height: controller.tradingWatchlist.length >= 3
+                              ? 340
+                              : controller.tradingWatchlist.length * 120,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.contestWatchList.length,
+                            itemCount: controller.tradingWatchlist.length,
                             itemBuilder: (context, index) {
                               return ContestWatchlistCard(
                                 index: index,
-                                contestWatchlist: controller.contestWatchList[index],
+                                tradingWatchlist: controller.tradingWatchlist[index],
                               );
                             },
                           ),
                         ),
-                  // CommonTile(label: 'My Rank'),
-                  // CommonRankCard(
-                  //   rank: '#1000',
-                  //   name: 'Ritik Prajapat',
-                  //   netPnl: '+ ₹12,02.69',
-                  // ),
-                  // CommonTile(label: 'Top Rank'),
-                  // CommonRankCard(
-                  //   rank: '#1000',
-                  //   name: 'Ritik Prajapat',
-                  //   netPnl: '+ ₹12,02.69',
-                  // ),
-                  // SizedBox(height: 4),
-                  // CommonRankCard(
-                  //   rank: '#1000',
-                  //   name: 'Ritik Prajapat',
-                  //   netPnl: '+ ₹12,02.69',
-                  // ),
-                  // SizedBox(height: 4),
-                  // CommonRankCard(
-                  //   rank: '#1000',
-                  //   name: 'Ritik Prajapat',
-                  //   netPnl: '+ ₹12,02.69',
-                  // ),
-                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.contestPositionsList.isNotEmpty)
+                    CommonTile(label: 'My Position Details'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -131,12 +99,30 @@ class ContestDashboardView extends GetView<ContestController> {
                             children: [
                               ContestPositionDetailsCard(
                                 label: 'Gross P&L',
-                                value: controller.tenxTotalPositionDetails.value.gross,
+                                value: controller.calculateTotalGrossPNL(),
+                                valueColor: controller.getValueColor(
+                                  controller.calculateTotalGrossPNL(),
+                                ),
                               ),
                               SizedBox(width: 8),
                               ContestPositionDetailsCard(
                                 label: 'Net P&L',
-                                value: controller.contestPositionsList[0].lastaverageprice,
+                                value: controller.calculateTotalNetPNL(),
+                                valueColor: controller.getValueColor(
+                                  controller.calculateTotalNetPNL(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              ContestPositionDetailsCard(
+                                label: 'Account Balance',
+                                // value: controller.calculateAccountBalance(),
+                                // valueColor: controller.getValueColor(
+                                //   controller.calculateAccountBalance(),
+                                // ),
                               ),
                             ],
                           ),
@@ -146,30 +132,34 @@ class ContestDashboardView extends GetView<ContestController> {
                   CommonTile(label: 'My Position'),
                   controller.contestPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.separated(
+                      : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.contestPositionsList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
-                            return ContestPositionCard(
-                              position: controller.contestPositionsList[index],
-                            );
+                            var item = controller.contestPositionsList[index];
+                            return ContestPositionCard(position: item);
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
                   ContestPortfolioDetailsCard(
                     label: 'Portfolio Value',
+                    info: 'Total funds added by StoxHero in your Account',
                     value: controller.contestPortfolio.value.totalFund,
                   ),
                   ContestPortfolioDetailsCard(
                     label: 'Available Margin',
-                    // value: controller.virtualPortfolio.value.openingBalance,
+                    info: 'Funds that you can use to trade today',
+                    value: controller.calculateMargin(),
                   ),
                   ContestPortfolioDetailsCard(
                     label: 'Used Margin',
-                    // value: controller.tenxTotalPositionDetails.value.brokerage,
+                    info: 'Net funds utilized for your executed trades',
+                    value: controller.calculateTotalNetPNL() > 0
+                        ? 0
+                        : controller.calculateTotalNetPNL().abs(),
+                    valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   SizedBox(height: 56),
                 ],

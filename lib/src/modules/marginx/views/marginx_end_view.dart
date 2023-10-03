@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../app/app.dart';
 
 class MarginxEndView extends StatelessWidget {
   const MarginxEndView({Key? key}) : super(key: key);
@@ -12,9 +11,7 @@ class MarginxEndView extends StatelessWidget {
       ),
       body: Container(
         child: Column(
-          children: [
-            
-          ],
+          children: [],
         ),
       ),
     );

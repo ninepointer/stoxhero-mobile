@@ -57,7 +57,7 @@ class MarginXView extends GetView<MarginXController> {
                             itemCount: controller.upComingMarginXList.length,
                             itemBuilder: (BuildContext context, int index) {
                               return UpcomingMarginxCard(
-                                upComingMarginx: controller.upComingMarginXList[index],
+                                marginx: controller.upComingMarginXList[index],
                               );
                             },
                           ),

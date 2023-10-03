@@ -98,14 +98,14 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                           label: 'LTP',
                           value: FormatHelper.formatNumbers(
                             controller.getInstrumentLastPrice(
-                              position.id?.instrumentToken ?? 0,
-                              position.id?.exchangeInstrumentToken ?? 0,
+                              position.id!.instrumentToken!,
+                              position.id!.exchangeInstrumentToken!,
                             ),
                           ),
                           valueColor: controller.getValueColor(
                             controller.getInstrumentLastPrice(
-                              position.id?.instrumentToken ?? 0,
-                              position.id?.exchangeInstrumentToken ?? 0,
+                              position.id!.instrumentToken!,
+                              position.id!.exchangeInstrumentToken!,
                             ),
                           ),
                         ),
@@ -184,7 +184,18 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     onTap: () {
                       FocusScope.of(context).unfocus();
                       List<int> lots = controller.generateLotsList(type: position.id?.symbol);
-                      controller.selectedQuantity.value = position.lots!.toInt();
+                      int selectedLots = position.lots!.toInt();
+
+                      if (selectedLots < 0) {
+                        selectedLots = -selectedLots;
+                      }
+
+                      if (!lots.contains(selectedLots)) {
+                        lots.add(selectedLots);
+                        lots.sort();
+                      }
+
+                      controller.selectedQuantity.value = selectedLots;
                       controller.lotsValueList.assignAll(lots);
                       BottomSheetHelper.openBottomSheet(
                         context: context,

@@ -3,20 +3,20 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class MarginXWatchListCard extends StatefulWidget {
+class MarginXWatchlistCard extends StatefulWidget {
   final int index;
   final TradingWatchlist tradingWatchlist;
-  const MarginXWatchListCard({
+  const MarginXWatchlistCard({
     super.key,
     required this.index,
     required this.tradingWatchlist,
   });
 
   @override
-  State<MarginXWatchListCard> createState() => _MarginXWatchListCardState();
+  State<MarginXWatchlistCard> createState() => _MarginXWatchlistCardState();
 }
 
-class _MarginXWatchListCardState extends State<MarginXWatchListCard> {
+class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
   late MarginXController controller;
 
   @override
@@ -80,14 +80,14 @@ class _MarginXWatchListCardState extends State<MarginXWatchListCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        MarginXWatchListCardTile(
+                        MarginXWatchlistCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
                           value: FormatHelper.formatDateByMonth(
                             widget.tradingWatchlist.contractDate,
                           ),
                         ),
-                        MarginXWatchListCardTile(
+                        MarginXWatchlistCardTile(
                           isRightAlign: true,
                           label: 'LTP',
                           value: FormatHelper.formatNumbers(
@@ -109,13 +109,13 @@ class _MarginXWatchListCardState extends State<MarginXWatchListCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        MarginXWatchListCardTile(
+                        MarginXWatchlistCardTile(
                           isRightAlign: false,
                           label: 'Symbol',
                           value: widget.tradingWatchlist.symbol,
                         ),
                         SizedBox(height: 4),
-                        MarginXWatchListCardTile(
+                        MarginXWatchlistCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
@@ -220,13 +220,13 @@ class _MarginXWatchListCardState extends State<MarginXWatchListCard> {
   }
 }
 
-class MarginXWatchListCardTile extends StatelessWidget {
+class MarginXWatchlistCardTile extends StatelessWidget {
   final String? label;
   final String? value;
   final bool isRightAlign;
   final Color? valueColor;
 
-  const MarginXWatchListCardTile({
+  const MarginXWatchlistCardTile({
     super.key,
     required this.label,
     this.value,

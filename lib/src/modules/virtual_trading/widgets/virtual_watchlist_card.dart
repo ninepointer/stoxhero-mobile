@@ -32,7 +32,6 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
   }
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    // log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
 
     num lastPrice = controller.getInstrumentLastPrice(
@@ -40,7 +39,6 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
       widget.tradingWatchlist.exchangeInstrumentToken!,
     );
     controller.generateLotsList(type: widget.tradingWatchlist.instrument);
-    // log(controller.lotsValueList.toString());
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualTransactionBottomSheet(
@@ -174,7 +172,8 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                          onTap: () =>
+                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),
