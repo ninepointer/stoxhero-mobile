@@ -69,9 +69,6 @@ class MarginXController extends BaseController<MarginXRepository> {
     searchTextController.text = 'Nifty';
     searchInstruments(
       searchTextController.text,
-      liveMarginX.value.isNifty,
-      liveMarginX.value.isBankNifty,
-      liveMarginX.value.isFinNifty,
     );
     Get.toNamed(AppRoutes.marginXSearchSymbol);
   }
@@ -108,6 +105,12 @@ class MarginXController extends BaseController<MarginXRepository> {
       }
     }
     return isPurchased;
+  }
+
+  int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
+    int seatsLeft = maxParticipants - currentParticipants;
+
+    return seatsLeft >= 0 ? seatsLeft : 0;
   }
 
   List<int> generateLotsList({String? type}) {
@@ -212,7 +215,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
-    log('totalNetPNL : ${totalNetPNL.toString()}');
+    // log('totalNetPNL : ${totalNetPNL.toString()}');
     return totalNetPNL.round();
   }
 
@@ -225,12 +228,13 @@ class MarginXController extends BaseController<MarginXRepository> {
       lots += position.lots ?? 0;
     }
     num openingBalance = marginXPortfolio.value.totalFund ?? 0;
-    pnl += openingBalance + amount;
-    if (lots == 0) {
-      num margin = openingBalance + calculateTotalNetPNL();
-      return margin;
+    if (lots == 0 || lots < 0) {
+      num margin1 = openingBalance + calculateTotalNetPNL();
+      return margin1;
     } else {
-      return pnl;
+      pnl = openingBalance + amount;
+      num margin = pnl + calculateTotalNetPNL();
+      return margin;
     }
   }
 
@@ -353,17 +357,14 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   Future searchInstruments(
     String? value,
-    bool? isNifty,
-    bool? isBankNifty,
-    bool? isFinNifty,
   ) async {
     isLoading(true);
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
         value,
-        isNifty,
-        isBankNifty,
-        isFinNifty,
+        liveMarginX.value.isNifty,
+        liveMarginX.value.isBankNifty,
+        liveMarginX.value.isFinNifty,
       );
       if (response.data != null) {
         if (response.data?.data != null) {
@@ -407,9 +408,6 @@ class MarginXController extends BaseController<MarginXRepository> {
       await getMarginXTradingWatchlist();
       await searchInstruments(
         searchTextController.text,
-        liveMarginX.value.isNifty,
-        liveMarginX.value.isBankNifty,
-        liveMarginX.value.isFinNifty,
       );
       SnackbarHelper.showSnackbar('Instrument Added');
       // } else {
@@ -432,9 +430,6 @@ class MarginXController extends BaseController<MarginXRepository> {
       await getMarginXTradingWatchlist();
       await searchInstruments(
         searchTextController.text,
-        liveMarginX.value.isNifty,
-        liveMarginX.value.isBankNifty,
-        liveMarginX.value.isFinNifty,
       );
       log('MarginX WatchList : ${tradingWatchlist.length}');
       SnackbarHelper.showSnackbar('Instrument Remove');
@@ -459,7 +454,13 @@ class MarginXController extends BaseController<MarginXRepository> {
       quantity: selectedQuantity.value,
       triggerPrice: "",
       battleId: liveMarginX.value.id,
-      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      buyOrSell: type == TransactionType.exit
+          ? type == TransactionType.buy
+              ? "SELL"
+              : "BUY"
+          : type == TransactionType.buy
+              ? "BUY"
+              : "SELL",
       contestId: liveMarginX.value.id,
       createdBy: userDetailsData.name,
       exchange: inst.exchange,

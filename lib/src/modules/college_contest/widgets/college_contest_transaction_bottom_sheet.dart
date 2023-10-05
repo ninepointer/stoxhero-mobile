@@ -2,10 +2,10 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
+class CollegeContestTransactionBottomSheet extends GetView<CollegeContestController> {
   final TradingInstrument tradingInstrument;
   final TransactionType type;
-  const VirtualTransactionBottomSheet({
+  const CollegeContestTransactionBottomSheet({
     super.key,
     required this.type,
     required this.tradingInstrument,
@@ -57,19 +57,9 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                     ),
                     Text(
                       type == TransactionType.buy
-                          ? FormatHelper.formatNumbers(
-                              controller.getInstrumentLastPrice(
-                                tradingInstrument.instrumentToken!,
-                                tradingInstrument.exchangeToken!,
-                              ),
-                            )
+                          ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
                           : type == TransactionType.sell
-                              ? FormatHelper.formatNumbers(
-                                  controller.getInstrumentLastPrice(
-                                    tradingInstrument.instrumentToken!,
-                                    tradingInstrument.exchangeToken!,
-                                  ),
-                                )
+                              ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
                               : tradingInstrument.lotSize.toString(),
                       style: AppStyles.tsSecondaryMedium16,
                     ),
@@ -248,7 +238,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                           ? 'Buy'
                           : 'Sell',
                   onPressed: () {
-                    Get.find<VirtualTradingController>().placeVirtualTradingOrder(
+                    Get.find<CollegeContestController>().placeContestOrder(
                       type,
                       tradingInstrument,
                     );

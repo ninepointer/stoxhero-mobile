@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class VirtualPositionCard extends GetView<VirtualTradingController> {
-  final VirtualTradingPosition position;
-  const VirtualPositionCard({super.key, required this.position});
+class CollegeContestPositionCard extends GetView<CollegeContestController> {
+  final ContestPosition position;
+  const CollegeContestPositionCard({super.key, required this.position});
 
   void openBottomSheet(BuildContext context, TransactionType type) {
     FocusScope.of(context).unfocus();
@@ -16,7 +16,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
     controller.generateLotsList(type: position.id?.symbol);
     BottomSheetHelper.openBottomSheet(
       context: context,
-      child: VirtualTransactionBottomSheet(
+      child: CollegeContestTransactionBottomSheet(
         type: type,
         tradingInstrument: TradingInstrument(
           name: position.id?.symbol,
@@ -49,11 +49,11 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PositionListCardTile(
+                        CollegeContestPositionCardTile(
                           label: 'Symbol',
                           value: position.id?.symbol,
                         ),
-                        PositionListCardTile(
+                        CollegeContestPositionCardTile(
                           isRightAlign: true,
                           label: 'Gross P&L',
                           valueColor: controller.getValueColor(
@@ -89,13 +89,13 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PositionListCardTile(
+                        CollegeContestPositionCardTile(
                           label: 'Avg. Price',
                           value: FormatHelper.formatNumbers(
                             position.lastaverageprice,
                           ),
                         ),
-                        PositionListCardTile(
+                        CollegeContestPositionCardTile(
                           isRightAlign: true,
                           label: 'LTP',
                           value: FormatHelper.formatNumbers(
@@ -117,11 +117,11 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      PositionListCardTile(
+                      CollegeContestPositionCardTile(
                         label: 'Quantity',
                         value: position.lots.toString(),
                       ),
-                      PositionListCardTile(
+                      CollegeContestPositionCardTile(
                         isRightAlign: true,
                         label: 'Changes(%)',
                         value: controller.getInstrumentChanges(
@@ -214,7 +214,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         controller.lotsValueList.assignAll(lots);
                         BottomSheetHelper.openBottomSheet(
                           context: context,
-                          child: VirtualTransactionBottomSheet(
+                          child: CollegeContestTransactionBottomSheet(
                             type: TransactionType.exit,
                             tradingInstrument: TradingInstrument(
                               name: position.id?.symbol,
@@ -255,12 +255,12 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
   }
 }
 
-class PositionListCardTile extends StatelessWidget {
+class CollegeContestPositionCardTile extends StatelessWidget {
   final String? label;
   final dynamic value;
   final bool isRightAlign;
   final Color? valueColor;
-  const PositionListCardTile({
+  const CollegeContestPositionCardTile({
     super.key,
     required this.label,
     this.value,

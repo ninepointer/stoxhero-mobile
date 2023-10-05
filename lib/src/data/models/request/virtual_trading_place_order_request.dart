@@ -1,10 +1,9 @@
-class TenxTradingPlaceOrderRequest {
+class VirtualTradingPlaceOrderRequest {
   String? exchange;
   String? symbol;
   String? buyOrSell;
   int? quantity;
   String? price;
-  String? battleId;
   String? product;
   String? orderType;
   String? triggerPrice;
@@ -15,21 +14,17 @@ class TenxTradingPlaceOrderRequest {
   String? variety;
   String? createdBy;
   String? orderId;
-  String? subscriptionId;
-  String? marginxId;
   String? userId;
   int? instrumentToken;
   String? trader;
   bool? paperTrade;
-  bool? tenxTraderPath;
 
-  TenxTradingPlaceOrderRequest(
+  VirtualTradingPlaceOrderRequest(
       {this.exchange,
       this.symbol,
       this.buyOrSell,
       this.quantity,
       this.price,
-      this.battleId,
       this.product,
       this.orderType,
       this.triggerPrice,
@@ -40,21 +35,17 @@ class TenxTradingPlaceOrderRequest {
       this.variety,
       this.createdBy,
       this.orderId,
-      this.subscriptionId,
-      this.marginxId,
       this.userId,
       this.instrumentToken,
       this.trader,
-      this.paperTrade,
-      this.tenxTraderPath});
+      this.paperTrade});
 
-  TenxTradingPlaceOrderRequest.fromJson(Map<String, dynamic> json) {
+  VirtualTradingPlaceOrderRequest.fromJson(Map<String, dynamic> json) {
     exchange = json['exchange'];
     symbol = json['symbol'];
     buyOrSell = json['buyOrSell'];
     quantity = json['Quantity'];
     price = json['Price'];
-    battleId = json['battleId'];
     product = json['Product'];
     orderType = json['OrderType'];
     triggerPrice = json['TriggerPrice'];
@@ -65,13 +56,10 @@ class TenxTradingPlaceOrderRequest {
     variety = json['variety'];
     createdBy = json['createdBy'];
     orderId = json['order_id'];
-    subscriptionId = json['subscriptionId'];
-    marginxId = json['marginxId'];
     userId = json['userId'];
     instrumentToken = json['instrumentToken'];
     trader = json['trader'];
     paperTrade = json['paperTrade'];
-    tenxTraderPath = json['tenxTraderPath'];
   }
 
   Map<String, dynamic> toJson() {
@@ -81,7 +69,6 @@ class TenxTradingPlaceOrderRequest {
     data['buyOrSell'] = this.buyOrSell;
     data['Quantity'] = this.quantity;
     data['Price'] = this.price;
-    data['battleId'] = this.battleId;
     data['Product'] = this.product;
     data['OrderType'] = this.orderType;
     data['TriggerPrice'] = this.triggerPrice;
@@ -92,13 +79,10 @@ class TenxTradingPlaceOrderRequest {
     data['variety'] = this.variety;
     data['createdBy'] = this.createdBy;
     data['order_id'] = this.orderId;
-    data['subscriptionId'] = this.subscriptionId;
-    data['marginxId'] = this.marginxId;
     data['userId'] = this.userId;
     data['instrumentToken'] = this.instrumentToken;
     data['trader'] = this.trader;
     data['paperTrade'] = this.paperTrade;
-    data['tenxTraderPath'] = this.tenxTraderPath;
     return data;
   }
 }

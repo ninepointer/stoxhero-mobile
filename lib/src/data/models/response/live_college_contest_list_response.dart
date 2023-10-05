@@ -28,7 +28,7 @@ class LiveCollegeContestListResponse {
 }
 
 class LiveCollegeContest {
-  String? sId;
+  String? id;
   String? contestName;
   String? contestStartTime;
   String? contestEndTime;
@@ -48,7 +48,6 @@ class LiveCollegeContest {
   bool? isBankNifty;
   bool? isFinNifty;
   bool? isAllIndex;
-  List<Null>? rewards;
   List<LiveCollegeInterestedUsers>? interestedUsers;
   List<CollegeParticipants>? participants;
   String? createdOn;
@@ -56,7 +55,7 @@ class LiveCollegeContest {
   int? iV;
 
   LiveCollegeContest(
-      {this.sId,
+      {this.id,
       this.contestName,
       this.contestStartTime,
       this.contestEndTime,
@@ -76,7 +75,6 @@ class LiveCollegeContest {
       this.isBankNifty,
       this.isFinNifty,
       this.isAllIndex,
-      this.rewards,
       this.interestedUsers,
       this.participants,
       this.createdOn,
@@ -84,7 +82,7 @@ class LiveCollegeContest {
       this.iV});
 
   LiveCollegeContest.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     contestName = json['contestName'];
     contestStartTime = json['contestStartTime'];
     contestEndTime = json['contestEndTime'];
@@ -104,12 +102,7 @@ class LiveCollegeContest {
     isBankNifty = json['isBankNifty'];
     isFinNifty = json['isFinNifty'];
     isAllIndex = json['isAllIndex'];
-    if (json['rewards'] != null) {
-      rewards = <Null>[];
-      json['rewards'].forEach((v) {
-        // rewards!.add(new Null.fromJson(v));
-      });
-    }
+
     if (json['interestedUsers'] != null) {
       interestedUsers = <LiveCollegeInterestedUsers>[];
       json['interestedUsers'].forEach((v) {
@@ -129,7 +122,7 @@ class LiveCollegeContest {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['contestName'] = this.contestName;
     data['contestStartTime'] = this.contestStartTime;
     data['contestEndTime'] = this.contestEndTime;
@@ -151,9 +144,7 @@ class LiveCollegeContest {
     data['isBankNifty'] = this.isBankNifty;
     data['isFinNifty'] = this.isFinNifty;
     data['isAllIndex'] = this.isAllIndex;
-    if (this.rewards != null) {
-      // data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
-    }
+
     if (this.interestedUsers != null) {
       data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
     }

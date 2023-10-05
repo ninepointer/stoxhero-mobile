@@ -1,9 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/app/app.dart';
-import 'package:stoxhero/src/core/core.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+import '../../../app/app.dart';
 
 class TenxTradeOrdersTabView extends GetView<OrdersController> {
   final String? tenxSub;
@@ -75,9 +71,7 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                               isRightAlign: true,
                               label: 'Type',
                               value: order.buyOrSell,
-                              valueColor: order.buyOrSell == AppConstants.buy
-                                  ? AppColors.success
-                                  : AppColors.danger,
+                              valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
                             ),
                           ],
                         ),
@@ -93,9 +87,7 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                               isRightAlign: true,
                               label: 'Status',
                               value: order.status,
-                              valueColor: order.status == AppConstants.complete
-                                  ? AppColors.success
-                                  : AppColors.danger,
+                              valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
                             ),
                           ],
                         ),

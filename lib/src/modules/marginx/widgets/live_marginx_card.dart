@@ -119,7 +119,12 @@ class LiveMarginxCard extends GetView<MarginXController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          '${marginx?.maxParticipants}',
+                          controller
+                              .calculateSeatsLeft(
+                                marginx?.maxParticipants ?? 0,
+                                marginx?.participants?.length ?? 0,
+                              )
+                              .toString(),
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -237,9 +242,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
               child: GestureDetector(
                 onTap: () {
                   Get.to(
-                    () => ViewCard(
-                      liveMarginX: marginx,
-                    ),
+                    () => ViewCard(liveMarginX: marginx),
                   );
                 },
                 child: Container(
@@ -269,21 +272,27 @@ class LiveMarginxCard extends GetView<MarginXController> {
                         Get.to(() => MarginXTradingView());
                       }
                     : () {
-                        BottomSheetHelper.openBottomSheet(
-                          context: context,
-                          child: PurchaseItemBottomSheet(
-                            buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
-                            onSubmit: () {
-                              Get.back();
-                              var data = {
-                                "entryFee": marginx?.marginXTemplate?.entryFee,
-                                "marginXId": marginx?.id,
-                                "marginXName": marginx?.marginXName,
-                              };
-                              controller.purchaseMarginX(data);
-                            },
-                          ),
-                        );
+                        if (controller.calculateSeatsLeft(
+                                marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) ==
+                            0) {
+                          SnackbarHelper.showSnackbar('Contest is Full');
+                        } else {
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: PurchaseItemBottomSheet(
+                              buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
+                              onSubmit: () {
+                                Get.back();
+                                var data = {
+                                  "entryFee": marginx?.marginXTemplate?.entryFee,
+                                  "marginXId": marginx?.id,
+                                  "marginXName": marginx?.marginXName,
+                                };
+                                controller.purchaseMarginX(data);
+                              },
+                            ),
+                          );
+                        }
                       },
                 child: Container(
                   alignment: Alignment.center,
@@ -292,7 +301,16 @@ class LiveMarginxCard extends GetView<MarginXController> {
                     color: AppColors.success.withOpacity(.25),
                   ),
                   child: Text(
-                    controller.checkIfLivePurchased(marginx) ? 'Start Trading' : 'Pay Now',
+                    controller.checkIfLivePurchased(marginx) &&
+                            controller.calculateSeatsLeft(
+                                    marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) >
+                                0
+                        ? 'Start Trading'
+                        : controller.calculateSeatsLeft(
+                                    marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) ==
+                                0
+                            ? 'MarginX Full'
+                            : 'Pay Now',
                     style: AppStyles.tsWhiteMedium14.copyWith(
                       color: AppColors.success,
                     ),
@@ -300,34 +318,6 @@ class LiveMarginxCard extends GetView<MarginXController> {
                 ),
               ),
             ),
-            // Expanded(
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       log("MarginX ID: ${marginx?.id}");
-            //       controller.loadTradingData();
-            //       controller.liveMarginX(marginx);
-            //       // controller.get(
-            //       //   contest?.isNifty,
-            //       //   contest?.isBankNifty,
-            //       //   contest?.isFinNifty,
-            //       // );
-            //       Get.to(() => MarginXTradingView());
-            //     },
-            //     child: Container(
-            //       alignment: Alignment.center,
-            //       padding: EdgeInsets.all(12),
-            //       decoration: BoxDecoration(
-            //         color: AppColors.success.withOpacity(.25),
-            //       ),
-            //       child: Text(
-            //         'Start Trading',
-            //         style: AppStyles.tsWhiteMedium14.copyWith(
-            //           color: AppColors.success,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Expanded(
               child: GestureDetector(
                 child: Container(

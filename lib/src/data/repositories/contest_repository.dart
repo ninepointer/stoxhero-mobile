@@ -1,7 +1,6 @@
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
-import '../models/response/completed_college_contest_list_response.dart';
 import '../models/response/upcoming_college_contest_list_response.dart';
 
 class ContestRepository extends BaseRepository {

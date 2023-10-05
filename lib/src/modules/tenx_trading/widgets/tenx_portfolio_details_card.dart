@@ -5,12 +5,13 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
   final String? label;
   final String? info;
   final dynamic value;
-
+  final Color? valueColor;
   const TenxPortfolioDetailsCard({
     super.key,
     this.label,
     this.info,
     this.value,
+    this.valueColor,
   });
 
   @override
@@ -44,7 +45,7 @@ class TenxPortfolioDetailsCard extends StatelessWidget {
                 decimal: 0,
               ),
               style: AppStyles.tsPrimarySemiBold16.copyWith(
-                color: AppColors.success,
+                color: valueColor ?? AppColors.success,
               ),
             )
           ],

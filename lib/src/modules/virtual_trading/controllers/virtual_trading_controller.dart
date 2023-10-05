@@ -165,7 +165,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
-    // log('totalNetPNL : ${totalNetPNL.toString()}');
     return totalNetPNL.round();
   }
 
@@ -179,16 +178,12 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     }
     num openingBalance = virtualPortfolio.value.openingBalance ?? 0;
 
-    if (lots == 0) {
+    if (lots == 0 || lots < 0) {
       num margin1 = openingBalance + calculateTotalNetPNL();
-      // log("Margin1: $margin1");
       return margin1;
     } else {
       pnl = openingBalance + amount;
       num margin = pnl + calculateTotalNetPNL();
-      // log("Opening $openingBalance");
-      // log("Amount $amount");
-      // log("Margin: $margin");
       return margin;
     }
   }
@@ -345,27 +340,32 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future placeVirtualTradingOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
-    TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
-      exchange: inst.exchange,
-      symbol: inst.tradingsymbol,
-      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+    VirtualTradingPlaceOrderRequest data = VirtualTradingPlaceOrderRequest(
+      orderType: "MARKET",
       price: "",
       product: "NRML",
-      orderType: "MARKET",
+      quantity: selectedQuantity.value,
       triggerPrice: "",
-      stopLoss: "",
-      uId: Uuid().v4(),
+      buyOrSell: type == TransactionType.exit
+          ? type == TransactionType.buy
+              ? "BUY"
+              : "SELL"
+          : type == TransactionType.buy
+              ? "SELL"
+              : "BUY",
+      exchange: inst.exchange,
       exchangeInstrumentToken: inst.exchangeToken,
+      orderId: Uuid().v4(),
+      paperTrade: true,
+      stopLoss: "",
+      symbol: inst.tradingsymbol,
+      trader: userDetailsData.sId,
+      userId: userDetailsData.email,
       validity: "DAY",
       variety: "regular",
+      uId: Uuid().v4(),
       createdBy: userDetailsData.name,
-      orderId: Uuid().v4(),
-      userId: userDetailsData.email,
       instrumentToken: inst.instrumentToken,
-      trader: userDetailsData.sId,
-      paperTrade: true,
-      tenxTraderPath: false,
     );
     log('placeVirtualTradingOrder : ${data.toJson()}');
     try {

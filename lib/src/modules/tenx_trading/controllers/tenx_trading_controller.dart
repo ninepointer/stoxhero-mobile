@@ -157,7 +157,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       amount += position.amount ?? 0;
       lots += position.lots ?? 0;
     }
-    num openingBalance = tenxPortfolioDetails.value.totalFund ?? 0;
+    num openingBalance = tenxPortfolioDetails.value.openingBalance ?? 0;
     pnl += openingBalance + amount;
     if (lots == 0) {
       num margin = openingBalance + calculateTotalNetPNL();
@@ -407,7 +407,13 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
-      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      buyOrSell: type == TransactionType.exit
+          ? type == TransactionType.buy
+              ? "BUY"
+              : "SELL"
+          : type == TransactionType.buy
+              ? "BUY"
+              : "SELL",
       quantity: selectedQuantity.value,
       price: "",
       product: "NRML",
@@ -426,10 +432,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       trader: userDetails.value.sId,
       paperTrade: false,
       tenxTraderPath: true,
+      battleId: selectedSubscriptionId.value,
+      marginxId: selectedSubscriptionId.value,
     );
     log('placeTenxTradingOrder : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.placeOrder(
+      final RepoResponse<GenericResponse> response = await repository.placeTenxTradingOrder(
         data.toJson(),
       );
       log(response.data.toString());

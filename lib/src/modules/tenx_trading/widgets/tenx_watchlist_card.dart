@@ -182,8 +182,7 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () =>
-                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                          onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(12),

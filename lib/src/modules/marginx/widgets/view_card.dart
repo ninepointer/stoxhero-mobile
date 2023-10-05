@@ -173,7 +173,13 @@ class _ViewCardState extends State<ViewCard> {
                                     ),
                                     SizedBox(height: 2),
                                     Text(
-                                      "00",
+                                      "${isUpcoming ? controller.calculateSeatsLeft(
+                                            widget.upcomingMarginX?.maxParticipants ?? 0,
+                                            widget.upcomingMarginX?.participants?.length ?? 0,
+                                          ).toString() : (isLive ? controller.calculateSeatsLeft(
+                                            widget.liveMarginX?.maxParticipants ?? 0,
+                                            widget.liveMarginX?.participants?.length ?? 0,
+                                          ).toString() : widget.completedMarginX?.maxParticipants)}",
                                       style: Theme.of(context).textTheme.tsMedium14,
                                     ),
                                   ],
@@ -323,17 +329,64 @@ class _ViewCardState extends State<ViewCard> {
                         if (isUpcoming || isLive)
                           Expanded(
                             child: GestureDetector(
+                              onTap: isLive
+                                  ? () {
+                                      if (controller.checkIfLivePurchased(widget.liveMarginX)) {
+                                        controller.loadTradingData();
+                                        controller.liveMarginX(widget.liveMarginX);
+                                        Get.to(() => MarginXTradingView());
+                                      } else {
+                                        BottomSheetHelper.openBottomSheet(
+                                          context: context,
+                                          child: PurchaseItemBottomSheet(
+                                            buyItemPrice: widget.liveMarginX?.marginXTemplate?.entryFee ?? 0,
+                                            onSubmit: () {
+                                              Get.back();
+                                              var data = {
+                                                "entryFee": widget.liveMarginX?.marginXTemplate?.entryFee,
+                                                "marginXId": widget.liveMarginX?.id,
+                                                "marginXName": widget.liveMarginX?.marginXName,
+                                              };
+                                              controller.purchaseMarginX(data);
+                                            },
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  : () {
+                                      if (controller.checkIfPurchased(widget.upcomingMarginX)) {
+                                      } else {
+                                        BottomSheetHelper.openBottomSheet(
+                                          context: context,
+                                          child: PurchaseItemBottomSheet(
+                                            buyItemPrice: widget.upcomingMarginX?.marginXTemplate?.entryFee ?? 0,
+                                            onSubmit: () {
+                                              Get.back();
+                                              var data = {
+                                                "entryFee": widget.upcomingMarginX?.marginXTemplate?.entryFee,
+                                                "marginXId": widget.upcomingMarginX?.id,
+                                                "marginXName": widget.upcomingMarginX?.marginXName,
+                                              };
+                                              controller.purchaseMarginX(data);
+                                            },
+                                          ),
+                                        );
+                                      }
+                                    },
                               child: Container(
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(8),
-                                  ),
-                                  color: AppColors.success.withOpacity(0.25),
+                                  color: AppColors.success.withOpacity(.25),
                                 ),
                                 child: Text(
-                                  'Buy',
+                                  isLive
+                                      ? controller.checkIfLivePurchased(widget.liveMarginX)
+                                          ? 'Start Trading'
+                                          : 'Pay Now'
+                                      : controller.checkIfPurchased(widget.upcomingMarginX)
+                                          ? 'Purchased'
+                                          : 'Pay Now',
                                   style: AppStyles.tsWhiteMedium14.copyWith(
                                     color: AppColors.success,
                                   ),

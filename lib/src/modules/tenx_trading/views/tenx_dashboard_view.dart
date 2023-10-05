@@ -131,14 +131,16 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   CommonTile(label: 'My Position'),
                   controller.tenxPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.builder(
+                      : ListView.separated(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.tenxPositionsList.length,
+                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
-                            var item = controller.tenxPositionsList[index];
-                            return TenxPositionCard(tenxTradingPosition: item);
+                            return TenxPositionCard(
+                              position: controller.tenxPositionsList[index],
+                            );
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
@@ -150,17 +152,20 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   TenxPortfolioDetailsCard(
                     label: 'Available Margin',
                     info: 'Funds that you can use to trade today',
-                    value: controller.calculateMargin(),
+                    value: (controller.tenxPortfolioDetails.value.totalFund ?? 0) + controller.calculateMargin(),
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Used Margin',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
+                    valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Opening Balance',
                     info: 'Cash available at the beginning of the day',
-                    value: controller.tenxPortfolioDetails.value.totalFund,
+                    value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
+                        ? controller.tenxPortfolioDetails.value.openingBalance
+                        : controller.tenxPortfolioDetails.value.totalFund,
                   ),
                   SizedBox(height: 56),
                 ],

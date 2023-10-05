@@ -31,7 +31,6 @@ class LiveMarginX {
   String? endTime;
   String? liveTime;
   MarginXTemplate? marginXTemplate;
-  List<Null>? potentialParticipants;
   int? maxParticipants;
   String? status;
   String? createdBy;
@@ -41,7 +40,6 @@ class LiveMarginX {
   bool? isBankNifty;
   bool? isFinNifty;
   List<Participantss>? participants;
-  List<Null>? sharedBy;
   List<PurchaseIntents>? purchaseIntents;
   String? createdOn;
   String? lastModifiedOn;
@@ -54,7 +52,6 @@ class LiveMarginX {
       this.endTime,
       this.liveTime,
       this.marginXTemplate,
-      this.potentialParticipants,
       this.maxParticipants,
       this.status,
       this.createdBy,
@@ -64,7 +61,6 @@ class LiveMarginX {
       this.isBankNifty,
       this.isFinNifty,
       this.participants,
-      this.sharedBy,
       this.purchaseIntents,
       this.createdOn,
       this.lastModifiedOn,
@@ -76,15 +72,8 @@ class LiveMarginX {
     startTime = json['startTime'];
     endTime = json['endTime'];
     liveTime = json['liveTime'];
-    marginXTemplate = json['marginXTemplate'] != null
-        ? new MarginXTemplate.fromJson(json['marginXTemplate'])
-        : null;
-    if (json['potentialParticipants'] != null) {
-      potentialParticipants = <Null>[];
-      json['potentialParticipants'].forEach((v) {
-        // potentialParticipants!.add(new Null.fromJson(v));
-      });
-    }
+    marginXTemplate = json['marginXTemplate'] != null ? new MarginXTemplate.fromJson(json['marginXTemplate']) : null;
+
     maxParticipants = json['maxParticipants'];
     status = json['status'];
     createdBy = json['createdBy'];
@@ -99,12 +88,7 @@ class LiveMarginX {
         participants!.add(new Participantss.fromJson(v));
       });
     }
-    if (json['sharedBy'] != null) {
-      sharedBy = <Null>[];
-      json['sharedBy'].forEach((v) {
-        // sharedBy!.add(new Null.fromJson(v));
-      });
-    }
+
     if (json['purchaseIntent'] != null) {
       purchaseIntents = <PurchaseIntents>[];
       json['purchaseIntent'].forEach((v) {
@@ -126,9 +110,7 @@ class LiveMarginX {
     if (this.marginXTemplate != null) {
       data['marginXTemplate'] = this.marginXTemplate!.toJson();
     }
-    if (this.potentialParticipants != null) {
-      // data['potentialParticipants'] = this.potentialParticipants!.map((v) => v.toJson()).toList();
-    }
+
     data['maxParticipants'] = this.maxParticipants;
     data['status'] = this.status;
     data['createdBy'] = this.createdBy;
@@ -140,9 +122,7 @@ class LiveMarginX {
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
     }
-    if (this.sharedBy != null) {
-      // data['sharedBy'] = this.sharedBy!.map((v) => v.toJson()).toList();
-    }
+
     if (this.purchaseIntents != null) {
       data['purchaseIntent'] = this.purchaseIntents!.map((v) => v.toJson()).toList();
     }

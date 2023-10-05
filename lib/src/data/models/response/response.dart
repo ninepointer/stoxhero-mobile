@@ -57,3 +57,5 @@ export 'marginx_trading_position_response.dart';
 export 'marginx_portfolio_response.dart';
 export 'tenx_subscription_response.dart';
 export 'tenx_trading_portfolio_margin_details_response.dart';
+export 'live_contest_leaderboard_response.dart';
+export 'completed_college_contest_list_response.dart';

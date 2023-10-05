@@ -130,7 +130,12 @@ class LiveContestCard extends GetView<ContestController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          '${contest?.maxParticipants}',
+                          controller
+                              .calculateSeatsLeft(
+                                contest?.maxParticipants ?? 0,
+                                contest?.participants?.length ?? 0,
+                              )
+                              .toString(),
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -155,18 +160,7 @@ class LiveContestCard extends GetView<ContestController> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        // Text(
-                        //   'Remaining',
-                        //   style: Theme.of(context).textTheme.tsGreyRegular12,
-                        // ),
-                        // SizedBox(height: 2),
-                        // Text(
-                        //   "00:00:00",
-                        //   // '${contestEndTime}',
-                        //   style: Theme.of(context).textTheme.tsMedium14,
-                        // ),
-                      ],
+                      children: [],
                     ),
                   ),
                 ],
@@ -255,28 +249,38 @@ class LiveContestCard extends GetView<ContestController> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: controller.checkIfLivePurchased(contest) || contest?.entryFee == 0
+                  onTap: (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
+                          controller.calculateSeatsLeft(
+                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
+                              0
                       ? () {
                           controller.liveContest(contest);
                           controller.loadTradingData();
+                          controller.liveLeaderboardList();
                           Get.to(() => ContestTradingView());
                         }
                       : () {
-                          BottomSheetHelper.openBottomSheet(
-                            context: context,
-                            child: PurchaseItemBottomSheet(
-                              buyItemPrice: contest?.entryFee ?? 0,
-                              onSubmit: () {
-                                Get.back();
-                                var data = {
-                                  "contestFee": contest?.entryFee,
-                                  "contestId": contest?.id,
-                                  "contestName": contest?.contestName,
-                                };
-                                controller.purchaseContest(data);
-                              },
-                            ),
-                          );
+                          if (controller.calculateSeatsLeft(
+                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
+                              0) {
+                            SnackbarHelper.showSnackbar('Contest is Full');
+                          } else {
+                            BottomSheetHelper.openBottomSheet(
+                              context: context,
+                              child: PurchaseItemBottomSheet(
+                                buyItemPrice: contest?.entryFee ?? 0,
+                                onSubmit: () {
+                                  Get.back();
+                                  var data = {
+                                    "contestFee": contest?.entryFee,
+                                    "contestId": contest?.id,
+                                    "contestName": contest?.contestName,
+                                  };
+                                  controller.purchaseContest(data);
+                                },
+                              ),
+                            );
+                          }
                         },
                   child: Container(
                     alignment: Alignment.center,
@@ -288,7 +292,16 @@ class LiveContestCard extends GetView<ContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      controller.checkIfLivePurchased(contest) || contest?.entryFee == 0 ? 'Start Trading' : 'Pay Now',
+                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
+                              controller.calculateSeatsLeft(
+                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
+                                  0
+                          ? 'Start Trading'
+                          : controller.calculateSeatsLeft(
+                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
+                                  0
+                              ? 'Contest Full'
+                              : 'Pay Now',
                       style: AppStyles.tsWhiteMedium14.copyWith(
                         color: AppColors.success,
                       ),

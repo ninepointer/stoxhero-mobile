@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/modules/marginx/widgets/marginx_search_instruments_card.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+import '../../../app/app.dart';
 
-import '../../../core/core.dart';
-
-class MarginXSearchSymbolView extends GetView<MarginXController> {
-  const MarginXSearchSymbolView({Key? key}) : super(key: key);
+class CollegeContestSearchSymbolView extends GetView<ContestController> {
+  const CollegeContestSearchSymbolView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +42,7 @@ class MarginXSearchSymbolView extends GetView<MarginXController> {
                       separatorBuilder: (_, __) => SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
-                        return MarginXSearchInstrumentsCard(
+                        return ContestSearchInstrumentsCard(
                           tradingInstrument: data,
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,

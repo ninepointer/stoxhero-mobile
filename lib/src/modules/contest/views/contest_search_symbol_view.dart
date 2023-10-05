@@ -31,7 +31,7 @@ class ContestSearchSymbolView extends GetView<ContestController> {
                       icon: Icon(Icons.close),
                       onPressed: controller.searchTextController.clear,
                     ),
-                    // onChanged: controller.searchInstruments,
+                    onChanged: controller.searchInstruments,
                   ),
                 ),
                 SizedBox(height: 8),

@@ -103,16 +103,13 @@ class MarginXPositionCard extends GetView<MarginXController> {
                       children: [
                         MarginXPositionCardTile(
                           label: 'Avg. Price',
-                          value:
-                              FormatHelper.formatNumbers(position.lastaverageprice),
+                          value: FormatHelper.formatNumbers(position.lastaverageprice),
                         ),
                         MarginXPositionCardTile(
                           isRightAlign: true,
                           label: 'LTP',
-                          valueColor:
-                              controller.getValueColor(position.lastaverageprice),
-                          value:
-                              FormatHelper.formatNumbers(position.lastaverageprice),
+                          valueColor: controller.getValueColor(position.lastaverageprice),
+                          value: FormatHelper.formatNumbers(position.lastaverageprice),
                         ),
                       ],
                     ),
@@ -188,27 +185,48 @@ class MarginXPositionCard extends GetView<MarginXController> {
                   child: GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
-                      controller.selectedQuantity.value = position.lots ?? 0;
-                      controller.lotsValueList.value = [position.lots ?? 0];
-                      num lastPrice = controller.getInstrumentLastPrice(
-                        position.id?.instrumentToken ?? 0,
-                        position.id?.exchangeInstrumentToken ?? 0,
-                      );
-                      BottomSheetHelper.openBottomSheet(
-                        context: context,
-                        child: MarginXTransactionBottomSheet(
-                          type: TransactionType.exit,
-                          tradingInstrument: TradingInstrument(
-                            name: position.id!.symbol,
-                            exchange: position.id!.exchange,
-                            tradingsymbol: position.id!.symbol,
-                            exchangeToken: position.id!.exchangeInstrumentToken,
-                            instrumentToken: position.id!.instrumentToken,
-                            lotSize: position.lots,
-                            lastPrice: lastPrice,
+                      List<int> lots = controller.generateLotsList(type: position.id?.symbol);
+                      int exitLots = position.lots!.toInt();
+                      int maxLots = lots.last;
+
+                      if (exitLots == 0) {
+                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                      } else {
+                        log(exitLots.toString());
+                        log(maxLots.toString());
+                        if (exitLots.toString().contains('-')) {
+                          if (exitLots < 0) {
+                            exitLots = -exitLots;
+                          }
+
+                          if (!lots.contains(exitLots)) {
+                            lots.add(exitLots);
+                            lots.sort();
+                          }
+                          controller.selectedQuantity.value = exitLots;
+                        }
+
+                        if (exitLots > maxLots) {
+                          controller.selectedQuantity.value = maxLots;
+                        } else {
+                          controller.selectedQuantity.value = exitLots;
+                        }
+                        controller.lotsValueList.assignAll(lots);
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: MarginXTransactionBottomSheet(
+                            type: TransactionType.exit,
+                            tradingInstrument: TradingInstrument(
+                              name: position.id?.symbol,
+                              exchange: position.id?.exchange,
+                              tradingsymbol: position.id?.symbol,
+                              exchangeToken: position.id?.exchangeInstrumentToken,
+                              instrumentToken: position.id?.instrumentToken,
+                              lotSize: position.lots,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,

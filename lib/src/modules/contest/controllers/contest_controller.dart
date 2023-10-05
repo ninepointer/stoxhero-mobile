@@ -57,6 +57,8 @@ class ContestController extends BaseController<ContestRepository> {
 
   final isLivePriceLoaded = false.obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
+  final liveLeaderboardList = <LiveContestLeaderboard>[].obs;
+  final liveLeaderboard = LiveContestLeaderboard().obs;
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
@@ -68,13 +70,15 @@ class ContestController extends BaseController<ContestRepository> {
 
   Future loadTradingData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await getLiveContestList();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
     await getContestWatchList();
     await getContestPositions();
+    await getContestPortfolio();
     await socketIndexConnection();
     await socketConnection();
+    await socketLeaderboardConnection();
+    await socketMyRankConnection();
   }
 
   String getStockIndexName(int instId) {
@@ -126,7 +130,8 @@ class ContestController extends BaseController<ContestRepository> {
       gross: totalGross,
       net: totalNet,
     ));
-
+    log('contest-leaderboardData${liveContest.value.id}');
+    log('contest-myrank${userDetails.value.sId}${liveContest.value.id}');
     log('ContestTotalPositionDetails : ${tenxTotalPositionDetails.toJson()}');
   }
 
@@ -152,18 +157,18 @@ class ContestController extends BaseController<ContestRepository> {
     return AppColors.grey;
   }
 
+  int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
+    int seatsLeft = maxParticipants - currentParticipants;
+    return seatsLeft;
+  }
+
   void handleSegmentChange(int val) => changeSegment(val);
 
   void changeSegment(int val) => segmentedControlValue.value = val;
 
   void gotoSearchInstrument() {
     searchTextController.text = '';
-    searchInstruments(
-      searchTextController.text,
-      liveContest.value.isNifty,
-      liveContest.value.isBankNifty,
-      liveContest.value.isFinNifty,
-    );
+    searchInstruments(searchTextController.text);
     Get.toNamed(AppRoutes.contestSearchSymbol);
   }
 
@@ -283,7 +288,13 @@ class ContestController extends BaseController<ContestRepository> {
       quantity: selectedQuantity.value,
       triggerPrice: "",
       battleId: liveContest.value.id,
-      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      buyOrSell: type == TransactionType.exit
+          ? type == TransactionType.buy
+              ? "BUY"
+              : "SELL"
+          : type == TransactionType.buy
+              ? "SELL"
+              : "BUY",
       contestId: liveContest.value.id,
       createdBy: userDetailsData.name,
       exchange: inst.exchange,
@@ -301,7 +312,7 @@ class ContestController extends BaseController<ContestRepository> {
       validity: "DAY",
       variety: "regular",
     );
-    log('placeVirtualTradingOrder : ${data.toJson()}');
+    log('placeContestTradingOrder : ${data.toJson()}');
     try {
       final RepoResponse<GenericResponse> response = await repository.placeContestOrder(
         data.toJson(),
@@ -547,17 +558,14 @@ class ContestController extends BaseController<ContestRepository> {
 
   Future searchInstruments(
     String? value,
-    bool? isNifty,
-    bool? isBankNifty,
-    bool? isFinNifty,
   ) async {
     isLoading(true);
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
         value,
-        isNifty,
-        isBankNifty,
-        isFinNifty,
+        liveContest.value.isNifty,
+        liveContest.value.isBankNifty,
+        liveContest.value.isFinNifty,
       );
       if (response.data != null) {
         if (response.data?.data != null) {
@@ -585,9 +593,6 @@ class ContestController extends BaseController<ContestRepository> {
       await getContestWatchList();
       await searchInstruments(
         searchTextController.text,
-        liveContest.value.isNifty,
-        liveContest.value.isBankNifty,
-        liveContest.value.isFinNifty,
       );
       log('getVirtualTradingWatchlist : ${contestWatchList.length}');
       // } else {
@@ -627,16 +632,9 @@ class ContestController extends BaseController<ContestRepository> {
       if (response.data?.message == "Instrument Added") {
         tradingWatchlist.clear();
         tradingInstruments.clear();
-        // await getContestWatchList(
-        //     // LiveContest().isNifty,
-        //     // LiveContest().isBankNifty,
-        //     // LiveContest().isFinNifty,
-        //     );
+        await getContestWatchList();
         await searchInstruments(
           searchTextController.text,
-          liveContest.value.isNifty,
-          liveContest.value.isBankNifty,
-          liveContest.value.isFinNifty,
         );
         SnackbarHelper.showSnackbar("Instrument Added");
       }
@@ -784,5 +782,102 @@ class ContestController extends BaseController<ContestRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future socketLeaderboardConnection() async {
+    List<LiveContestLeaderboard>? tempList = [];
+    try {
+      IO.Socket socket;
+
+      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+        'autoConnect': false,
+        'transports': ['websocket'],
+      });
+      socket.connect();
+      socket.onConnect((_) {
+        log('Socket : Connected');
+        log('Socket Lead: ${liveLeaderboardList.length}');
+        socket.emit('userId', userDetails.value.sId);
+        socket.emit('user-ticks', userDetails.value.sId);
+      });
+
+      socket.on('contest-leaderboardData${liveContest.value.id}', (data) {
+        print(data);
+        log('Socket Leaderboard : contest-leaderboardData${liveContest.value.id} $data');
+        tempList = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
+        tempList?.forEach((element) {
+          if (liveLeaderboardList.any((obj) => obj.name == element.name)) {
+            int index = liveLeaderboardList.indexWhere(
+              (stock) => stock.name == element.name,
+            );
+            liveLeaderboardList.removeAt(index);
+            liveLeaderboardList.insert(index, element);
+          } else {
+            liveLeaderboardList.add(element);
+          }
+        });
+      });
+      socket.onDisconnect((_) => log('Socket : Disconnect'));
+      socket.onConnectError((err) => log(err));
+      socket.onError((err) => log(err));
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future socketMyRankConnection() async {
+    List<LiveContestLeaderboard>? lead = [];
+    try {
+      IO.Socket socket;
+      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+        'autoConnect': false,
+        'transports': ['websocket'],
+      });
+      socket.connect();
+      socket.onConnect((_) {
+        log('Socket My Rank: Connected');
+        log('Socket Lead: ${liveLeaderboardList.length}');
+        socket.emit('userId', userDetails.value.sId);
+        socket.emit('user-ticks', userDetails.value.sId);
+      });
+      socket.on(
+        'contest-myrank${userDetails.value.sId}${liveContest.value.id}',
+        (data) {
+          print(data);
+          log('contest-myrank${userDetails.value.sId}${liveContest.value.id}');
+          lead = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
+          for (var element in lead ?? []) {
+            if (liveLeaderboardList.any((obj) => obj.userName == element.userName)) {
+              int index = liveLeaderboardList.indexWhere(
+                (stock) => stock.userName == element.userName,
+              );
+              liveLeaderboardList.removeAt(index);
+              liveLeaderboardList.insert(index, element);
+            } else {
+              liveLeaderboardList.add(element);
+            }
+          }
+          log('Socket Lead: ${liveLeaderboardList.length}');
+        },
+      );
+      //   lead.forEach((element) {
+      //     if (liveLeadboardList.any((obj) => obj.userName == element.name)) {
+      //       int index = liveLeadboardList.indexWhere(
+      //         (stock) => stock.name == element.name,
+      //       );
+      //       liveLeadboardList.removeAt(index);
+      //       liveLeadboardList.insert(index, element);
+      //     } else {
+      //       liveLeadboardList.add(element);
+      //     }
+      //   });
+      //   log('Socket Lead: ${liveLeadboardList.length}');
+      // });
+      socket.onDisconnect((_) => log('Socket : Disconnect'));
+      socket.onConnectError((err) => log(err));
+      socket.onError((err) => log(err));
+    } on Exception catch (e) {
+      log(e.toString());
+    }
   }
 }

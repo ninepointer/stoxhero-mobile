@@ -61,7 +61,7 @@ class TenxTradingRepository extends BaseRepository {
         : RepoResponse(data: TenxTradingPortfolioDetailsResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> placeOrder(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> placeTenxTradingOrder(Map<String, dynamic> data) async {
     String apiURL = AppUrls.tenxTradingPlacingOrder;
     var response = await service.postAuth(path: apiURL, data: data);
     return response is APIException

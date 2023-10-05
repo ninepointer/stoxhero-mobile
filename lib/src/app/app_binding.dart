@@ -1,3 +1,4 @@
+
 import 'app.dart';
 
 class AppBinding extends Bindings {
@@ -19,6 +20,7 @@ class AppBinding extends Bindings {
     Get.put(VirtualTradingRepository(), permanent: true);
     Get.put(TutorialRepository(), permanent: true);
     Get.put(InternshipRespository(), permanent: true);
+    Get.put(CollegeContestRepository(), permanent: true);
 
     Get.put(AppController(), permanent: true);
     Get.put(AuthController(), permanent: true);

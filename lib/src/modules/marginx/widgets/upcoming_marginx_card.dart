@@ -176,7 +176,12 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          '${widget.marginx?.maxParticipants}',
+                          controller
+                              .calculateSeatsLeft(
+                                widget.marginx?.maxParticipants ?? 0,
+                                widget.marginx?.participants?.length ?? 0,
+                              )
+                              .toString(),
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -318,24 +323,33 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: controller.checkIfPurchased(widget.marginx)
+                onTap: controller.checkIfPurchased(widget.marginx) &&
+                        controller.calculateSeatsLeft(
+                                widget.marginx?.maxParticipants ?? 0, widget.marginx?.participants?.length ?? 0) >
+                            0
                     ? () {}
                     : () {
-                        BottomSheetHelper.openBottomSheet(
-                          context: context,
-                          child: PurchaseItemBottomSheet(
-                            buyItemPrice: widget.marginx?.marginXTemplate?.entryFee ?? 0,
-                            onSubmit: () {
-                              Get.back();
-                              var data = {
-                                "entryFee": widget.marginx?.marginXTemplate?.entryFee,
-                                "marginXId": widget.marginx?.id,
-                                "marginXName": widget.marginx?.marginXName,
-                              };
-                              controller.purchaseMarginX(data);
-                            },
-                          ),
-                        );
+                        if (controller.calculateSeatsLeft(
+                                widget.marginx?.maxParticipants ?? 0, widget.marginx?.participants?.length ?? 0) ==
+                            0) {
+                          SnackbarHelper.showSnackbar('MarginX is Full');
+                        } else {
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: PurchaseItemBottomSheet(
+                              buyItemPrice: widget.marginx?.marginXTemplate?.entryFee ?? 0,
+                              onSubmit: () {
+                                Get.back();
+                                var data = {
+                                  "entryFee": widget.marginx?.marginXTemplate?.entryFee,
+                                  "marginXId": widget.marginx?.id,
+                                  "marginXName": widget.marginx?.marginXName,
+                                };
+                                controller.purchaseMarginX(data);
+                              },
+                            ),
+                          );
+                        }
                       },
                 child: Container(
                   alignment: Alignment.center,
@@ -344,7 +358,16 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     color: AppColors.success.withOpacity(.25),
                   ),
                   child: Text(
-                    controller.checkIfPurchased(widget.marginx) ? 'Purchased' : 'Pay Now',
+                    controller.checkIfPurchased(widget.marginx) &&
+                            controller.calculateSeatsLeft(
+                                    widget.marginx?.maxParticipants ?? 0, widget.marginx?.participants?.length ?? 0) >
+                                0
+                        ? 'Purchased'
+                        : controller.calculateSeatsLeft(
+                                    widget.marginx?.maxParticipants ?? 0, widget.marginx?.participants?.length ?? 0) ==
+                                0
+                            ? 'MarginX Full'
+                            : 'Pay Now',
                     style: AppStyles.tsWhiteMedium14.copyWith(
                       color: AppColors.success,
                     ),

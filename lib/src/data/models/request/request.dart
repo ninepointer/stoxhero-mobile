@@ -7,3 +7,4 @@ export 'tenx_trading_place_order_request.dart';
 export 'verify_signin_request.dart';
 export 'verify_signup_response.dart';
 export 'internship_place_order_request.dart';
+export 'virtual_trading_place_order_request.dart';

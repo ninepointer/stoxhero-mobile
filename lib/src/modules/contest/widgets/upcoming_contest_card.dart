@@ -178,7 +178,12 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           ),
                           SizedBox(height: 2),
                           Text(
-                            '${widget.contest?.maxParticipants}',
+                            controller
+                                .calculateSeatsLeft(
+                                  widget.contest?.maxParticipants ?? 0,
+                                  widget.contest?.participants?.length ?? 0,
+                                )
+                                .toString(),
                             style: Theme.of(context).textTheme.tsMedium14,
                           ),
                         ],
@@ -317,24 +322,33 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0
+                    onTap: (controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0) &&
+                            controller.calculateSeatsLeft(
+                                    widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) >
+                                0
                         ? () {}
                         : () async {
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: PurchaseItemBottomSheet(
-                                buyItemPrice: widget.contest?.entryFee ?? 0,
-                                onSubmit: () {
-                                  Get.back();
-                                  var data = {
-                                    "contestFee": widget.contest?.entryFee,
-                                    "contestId": widget.contest?.id,
-                                    "contestName": widget.contest?.contestName,
-                                  };
-                                  controller.purchaseContest(data);
-                                },
-                              ),
-                            );
+                            if (controller.calculateSeatsLeft(
+                                    widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) ==
+                                0) {
+                              SnackbarHelper.showSnackbar('Contest is Full');
+                            } else {
+                              BottomSheetHelper.openBottomSheet(
+                                context: context,
+                                child: PurchaseItemBottomSheet(
+                                  buyItemPrice: widget.contest?.entryFee ?? 0,
+                                  onSubmit: () {
+                                    Get.back();
+                                    var data = {
+                                      "contestFee": widget.contest?.entryFee,
+                                      "contestId": widget.contest?.id,
+                                      "contestName": widget.contest?.contestName,
+                                    };
+                                    controller.purchaseContest(data);
+                                  },
+                                ),
+                              );
+                            }
                           },
                     child: Container(
                       alignment: Alignment.center,
@@ -343,9 +357,16 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         color: AppColors.success.withOpacity(.25),
                       ),
                       child: Text(
-                        controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0
+                        (controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0) &&
+                                controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
+                                        widget.contest?.participants?.length ?? 0) >
+                                    0
                             ? 'Purchased'
-                            : 'Pay Now',
+                            : controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
+                                        widget.contest?.participants?.length ?? 0) ==
+                                    0
+                                ? 'Contest Full'
+                                : 'Pay Now',
                         style: AppStyles.tsWhiteMedium14.copyWith(
                           color: AppColors.success,
                         ),

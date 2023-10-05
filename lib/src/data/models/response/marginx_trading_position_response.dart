@@ -26,7 +26,7 @@ class MarginXTradingPositionResponse {
 
 class MarginXTradingPosition {
   Mid? id;
-  int? amount;
+  num? amount;
   num? brokerage;
   int? lots;
   num? lastaverageprice;

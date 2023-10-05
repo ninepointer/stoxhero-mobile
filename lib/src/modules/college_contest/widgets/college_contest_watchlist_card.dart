@@ -3,25 +3,25 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class ContestWatchlistCard extends StatefulWidget {
+class CollegeContestWatchlistCard extends StatefulWidget {
   final int index;
   final TradingWatchlist tradingWatchlist;
-  const ContestWatchlistCard({
+  const CollegeContestWatchlistCard({
     super.key,
     required this.index,
     required this.tradingWatchlist,
   });
 
   @override
-  State<ContestWatchlistCard> createState() => _ContestWatchlistCardState();
+  State<CollegeContestWatchlistCard> createState() => _CollegeContestWatchlistCardState();
 }
 
-class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
-  late ContestController controller;
+class _CollegeContestWatchlistCardState extends State<CollegeContestWatchlistCard> {
+  late CollegeContestController controller;
 
   @override
   void initState() {
-    controller = Get.find<ContestController>();
+    controller = Get.find<CollegeContestController>();
     super.initState();
   }
 
@@ -45,7 +45,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
     log(lastPrice.toString());
     BottomSheetHelper.openBottomSheet(
       context: context,
-      child: ContestTransactionBottomSheet(
+      child: CollegeContestTransactionBottomSheet(
         type: type,
         tradingInstrument: TradingInstrument(
           name: widget.tradingWatchlist.symbol,
@@ -80,14 +80,14 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ContestWatchlistCardTile(
+                        CollegeContestWatchlistCardTile(
                           isRightAlign: false,
                           label: 'Contract Date',
                           value: FormatHelper.formatDateByMonth(
                             widget.tradingWatchlist.contractDate,
                           ),
                         ),
-                        ContestWatchlistCardTile(
+                        CollegeContestWatchlistCardTile(
                           isRightAlign: true,
                           label: 'LTP',
                           value: FormatHelper.formatNumbers(
@@ -109,13 +109,13 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ContestWatchlistCardTile(
+                        CollegeContestWatchlistCardTile(
                           isRightAlign: false,
                           label: 'Symbol',
                           value: widget.tradingWatchlist.symbol,
                         ),
                         SizedBox(height: 4),
-                        ContestWatchlistCardTile(
+                        CollegeContestWatchlistCardTile(
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
@@ -219,13 +219,13 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
   }
 }
 
-class ContestWatchlistCardTile extends StatelessWidget {
+class CollegeContestWatchlistCardTile extends StatelessWidget {
   final String? label;
   final String? value;
   final bool isRightAlign;
   final Color? valueColor;
 
-  const ContestWatchlistCardTile({
+  const CollegeContestWatchlistCardTile({
     super.key,
     required this.label,
     this.value,

@@ -72,6 +72,19 @@ class ContestTradingView extends GetView<ContestController> {
                             },
                           ),
                         ),
+                  CommonTile(label: 'My Rank'),
+                  // for (var item in controller.liveLeaderboardList) ...[
+                  //   CommonRankCard(
+                  //     rank: "",
+                  //     name: item.userName.toString(),
+                  //     netPnl: item.npnl.toString(),
+                  //   ),
+                  // ],
+                  CommonRankCard(
+                    rank: controller.liveLeaderboard.value.npnl.toString(),
+                    name: controller.userDetails.value.name.toString(),
+                    netPnl: controller.calculateTotalNetPNL().toString(),
+                  ),
                   if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
@@ -130,14 +143,16 @@ class ContestTradingView extends GetView<ContestController> {
                   CommonTile(label: 'My Position'),
                   controller.contestPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.builder(
+                      : ListView.separated(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.contestPositionsList.length,
+                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
-                            var item = controller.contestPositionsList[index];
-                            return ContestPositionCard(position: item);
+                            return ContestPositionCard(
+                              position: controller.contestPositionsList[index],
+                            );
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
