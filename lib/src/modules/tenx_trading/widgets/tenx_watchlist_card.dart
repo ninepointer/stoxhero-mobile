@@ -41,7 +41,6 @@ class _TenxWatchlistCardState extends State<TenxWatchlistCard> {
   void openBottomSheet(BuildContext context, TransactionType type) {
     log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
-
     num lastPrice = controller.getInstrumentLastPrice(
       widget.tradingWatchlist.instrumentToken!,
       widget.tradingWatchlist.exchangeInstrumentToken!,

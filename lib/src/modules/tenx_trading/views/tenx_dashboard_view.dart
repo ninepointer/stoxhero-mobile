@@ -15,7 +15,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
           visible: !controller.isLoadingStatus,
           replacement: CommonLoader(),
           child: RefreshIndicator(
-            onRefresh: controller.loadData,
+            onRefresh: controller.loadTenxData,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -152,7 +152,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   TenxPortfolioDetailsCard(
                     label: 'Available Margin',
                     info: 'Funds that you can use to trade today',
-                    value: (controller.tenxPortfolioDetails.value.totalFund ?? 0) + controller.calculateMargin(),
+                    value: controller.calculateMargin(),
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Used Margin',

@@ -129,11 +129,11 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                           Row(
                             children: [
                               CollegeContestPositionDetailsCard(
-                                label: 'Account Balance',
-                                // value: controller.calculateAccountBalance(),
-                                // valueColor: controller.getValueColor(
-                                //   controller.calculateAccountBalance(),
-                                // ),
+                                label: 'Payout',
+                                value: controller.calculatePayout(),
+                                valueColor: controller.getValueColor(
+                                  controller.calculatePayout(),
+                                ),
                               ),
                             ],
                           ),

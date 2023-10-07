@@ -43,12 +43,12 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
     await socketConnection();
-    await getVirtualTradingPortfolio();
-    await getVirtualTradingWatchlist();
-    await getVirtualPositionsList();
     await socketIndexConnection();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
+    await getVirtualTradingWatchlist();
+    await getVirtualPositionsList();
+    await getVirtualTradingPortfolio();
   }
 
   String getStockIndexName(int instId) {

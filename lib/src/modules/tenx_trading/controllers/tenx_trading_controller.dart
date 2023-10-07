@@ -55,11 +55,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     userDetails.value = AppStorage.getUserDetails();
     await socketConnection();
     await socketIndexConnection();
-    await getTenxTradingPortfolioDetails();
-    await getTenxTradingWatchlist();
     await getInstrumentLivePriceList();
-    await getTenxPositionsList();
     await getStockIndexInstrumentsList();
+    await getTenxTradingWatchlist();
+    await getTenxPositionsList();
+    await getTenxTradingPortfolioDetails();
   }
 
   String getStockIndexName(int instId) {
@@ -409,8 +409,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       symbol: inst.tradingsymbol,
       buyOrSell: type == TransactionType.exit
           ? type == TransactionType.buy
-              ? "BUY"
-              : "SELL"
+              ? "SELL"
+              : "BUY"
           : type == TransactionType.buy
               ? "BUY"
               : "SELL",

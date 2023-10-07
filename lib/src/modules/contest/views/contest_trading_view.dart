@@ -72,7 +72,7 @@ class ContestTradingView extends GetView<ContestController> {
                             },
                           ),
                         ),
-                  CommonTile(label: 'My Rank'),
+                  // CommonTile(label: 'My Rank'),
                   // for (var item in controller.liveLeaderboardList) ...[
                   //   CommonRankCard(
                   //     rank: "",
@@ -80,11 +80,11 @@ class ContestTradingView extends GetView<ContestController> {
                   //     netPnl: item.npnl.toString(),
                   //   ),
                   // ],
-                  CommonRankCard(
-                    rank: controller.liveLeaderboard.value.npnl.toString(),
-                    name: controller.userDetails.value.name.toString(),
-                    netPnl: controller.calculateTotalNetPNL().toString(),
-                  ),
+                  // CommonRankCard(
+                  //   rank: controller.liveLeaderboard.value.npnl.toString(),
+                  //   name: controller.userDetails.value.name.toString(),
+                  //   netPnl: controller.calculateTotalNetPNL().toString(),
+                  // ),
                   if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
@@ -129,11 +129,11 @@ class ContestTradingView extends GetView<ContestController> {
                           Row(
                             children: [
                               ContestPositionDetailsCard(
-                                label: 'Account Balance',
-                                // value: controller.calculateAccountBalance(),
-                                // valueColor: controller.getValueColor(
-                                //   controller.calculateAccountBalance(),
-                                // ),
+                                label: 'Payout',
+                                value: controller.calculatePayout(),
+                                valueColor: controller.getValueColor(
+                                  controller.calculatePayout(),
+                                ),
                               ),
                             ],
                           ),

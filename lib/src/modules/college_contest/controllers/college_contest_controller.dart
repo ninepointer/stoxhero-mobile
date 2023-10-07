@@ -97,6 +97,12 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     return result;
   }
 
+  num calculatePayout() {
+    num npnl = calculateTotalNetPNL() * liveCollegeContest.value.payoutPercentage!;
+    num payout = npnl < 0 ? 0 : npnl / 100;
+    return payout;
+  }
+
   Future calculateUserWalletAmount() async {
     num amount = 0;
     var response = await Get.find<WalletRepository>().getWalletTransactionsList();
@@ -161,7 +167,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   void gotoSearchInstrument() {
     searchTextController.text = '';
     searchInstruments(searchTextController.text);
-    Get.toNamed(AppRoutes.contestSearchSymbol);
+    Get.toNamed(AppRoutes.collegeContestSearchSymbol);
   }
 
   bool checkIfPurchased(UpComingCollegeContest? contest) {
@@ -348,11 +354,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       battleId: liveCollegeContest.value.id,
       buyOrSell: type == TransactionType.exit
           ? type == TransactionType.buy
-              ? "SELL"
-              : "BUY"
-          : type == TransactionType.buy
               ? "BUY"
-              : "SELL",
+              : "SELL"
+          : type == TransactionType.exit
+              ? "SELL"
+              : "BUY",
       contestId: liveCollegeContest.value.id,
       createdBy: userDetailsData.name,
       exchange: inst.exchange,

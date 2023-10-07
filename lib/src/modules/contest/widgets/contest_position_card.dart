@@ -188,7 +188,7 @@ class ContestPositionCard extends GetView<ContestController> {
                       List<int> lots = controller.generateLotsList(type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
                       int maxLots = lots.last;
-
+                      log('selectedQuantity ${controller.selectedQuantity.value}');
                       if (exitLots == 0) {
                         SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
                       } else {

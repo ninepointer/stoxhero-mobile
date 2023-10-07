@@ -39,7 +39,7 @@ class ContestController extends BaseController<ContestRepository> {
   final contestPositionsList = <ContestPosition>[].obs;
   final contestPortfolio = ContestCreditData().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
-
+  final contestRequest = ContestPlaceOrderRequest().obs;
   final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
@@ -78,7 +78,7 @@ class ContestController extends BaseController<ContestRepository> {
     await socketIndexConnection();
     await socketConnection();
     await socketLeaderboardConnection();
-    await socketMyRankConnection();
+    // await socketMyRankConnection();
   }
 
   String getStockIndexName(int instId) {
@@ -160,6 +160,12 @@ class ContestController extends BaseController<ContestRepository> {
   int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
     int seatsLeft = maxParticipants - currentParticipants;
     return seatsLeft;
+  }
+
+  num calculatePayout() {
+    num npnl = calculateTotalNetPNL() * liveContest.value.payoutPercentage!;
+    num payout = npnl < 0 ? 0 : npnl / 100;
+    return payout;
   }
 
   void handleSegmentChange(int val) => changeSegment(val);
@@ -281,6 +287,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future placeContestOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
+
     ContestPlaceOrderRequest data = ContestPlaceOrderRequest(
       orderType: "MARKET",
       price: "",
@@ -290,11 +297,11 @@ class ContestController extends BaseController<ContestRepository> {
       battleId: liveContest.value.id,
       buyOrSell: type == TransactionType.exit
           ? type == TransactionType.buy
-              ? "BUY"
+              ? "SELL"
               : "SELL"
           : type == TransactionType.buy
-              ? "SELL"
-              : "BUY",
+              ? "BUY"
+              : "SELL",
       contestId: liveContest.value.id,
       createdBy: userDetailsData.name,
       exchange: inst.exchange,
@@ -786,6 +793,7 @@ class ContestController extends BaseController<ContestRepository> {
 
   Future socketLeaderboardConnection() async {
     List<LiveContestLeaderboard>? tempList = [];
+
     try {
       IO.Socket socket;
 
@@ -801,52 +809,26 @@ class ContestController extends BaseController<ContestRepository> {
         socket.emit('user-ticks', userDetails.value.sId);
       });
 
-      socket.on('contest-leaderboardData${liveContest.value.id}', (data) {
-        print(data);
-        log('Socket Leaderboard : contest-leaderboardData${liveContest.value.id} $data');
-        tempList = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
-        tempList?.forEach((element) {
-          if (liveLeaderboardList.any((obj) => obj.name == element.name)) {
-            int index = liveLeaderboardList.indexWhere(
-              (stock) => stock.name == element.name,
-            );
-            liveLeaderboardList.removeAt(index);
-            liveLeaderboardList.insert(index, element);
-          } else {
-            liveLeaderboardList.add(element);
-          }
-        });
-      });
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
-    } on Exception catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future socketMyRankConnection() async {
-    List<LiveContestLeaderboard>? lead = [];
-    try {
-      IO.Socket socket;
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket My Rank: Connected');
-        log('Socket Lead: ${liveLeaderboardList.length}');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
       socket.on(
-        'contest-myrank${userDetails.value.sId}${liveContest.value.id}',
+        'contest-leaderboardData${liveContest.value.id}',
         (data) {
           print(data);
-          log('contest-myrank${userDetails.value.sId}${liveContest.value.id}');
-          lead = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
-          for (var element in lead ?? []) {
+          log('Data: $data');
+          log('Socket Leaderboard : contest-leaderboardData${liveContest.value.id} $data');
+          tempList = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
+          //   tempList?.forEach((element) {
+          //     if (liveContestList.any((obj) => obj.live. == element.userName)) {
+          //       int index = liveContestList.indexWhere(
+          //         (stock) => stock.userName == element.userName,
+          //       );
+          //       liveContestList.removeAt(index);
+          //       liveContestList.insert(index, element);
+          //     } else {
+          //       liveContestList.add(element);
+          //     }
+          //   });
+          // });
+          for (var element in tempList ?? []) {
             if (liveLeaderboardList.any((obj) => obj.userName == element.userName)) {
               int index = liveLeaderboardList.indexWhere(
                 (stock) => stock.userName == element.userName,
@@ -857,22 +839,10 @@ class ContestController extends BaseController<ContestRepository> {
               liveLeaderboardList.add(element);
             }
           }
-          log('Socket Lead: ${liveLeaderboardList.length}');
+
+          // log('Socket : ${liveLeaderboardList.length}');
         },
       );
-      //   lead.forEach((element) {
-      //     if (liveLeadboardList.any((obj) => obj.userName == element.name)) {
-      //       int index = liveLeadboardList.indexWhere(
-      //         (stock) => stock.name == element.name,
-      //       );
-      //       liveLeadboardList.removeAt(index);
-      //       liveLeadboardList.insert(index, element);
-      //     } else {
-      //       liveLeadboardList.add(element);
-      //     }
-      //   });
-      //   log('Socket Lead: ${liveLeadboardList.length}');
-      // });
       socket.onDisconnect((_) => log('Socket : Disconnect'));
       socket.onConnectError((err) => log(err));
       socket.onError((err) => log(err));
@@ -880,4 +850,60 @@ class ContestController extends BaseController<ContestRepository> {
       log(e.toString());
     }
   }
+
+  // Future socketMyRankConnection() async {
+  //   List<LiveContestLeaderboard>? lead = [];
+  //   try {
+  //     IO.Socket socket;
+  //     socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+  //       'autoConnect': false,
+  //       'transports': ['websocket'],
+  //     });
+  //     socket.connect();
+  //     socket.onConnect((_) {
+  //       log('Socket My Rank: Connected');
+  //       log('Socket Lead: ${liveLeaderboardList.length}');
+  //       socket.emit('userId', userDetails.value.sId);
+  //       socket.emit('user-ticks', userDetails.value.sId);
+  //     });
+  //     socket.on(
+  //       'contest-myrank${userDetails.value.sId}${liveContest.value.id}',
+  //       (data) {
+  //         print(data);
+  //         log('contest-myrank${userDetails.value.sId}${liveContest.value.id}');
+  //         lead = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
+  //         for (var element in lead ?? []) {
+  //           if (liveLeaderboardList.any((obj) => obj.userName == element.userName)) {
+  //             int index = liveLeaderboardList.indexWhere(
+  //               (stock) => stock.userName == element.userName,
+  //             );
+  //             liveLeaderboardList.removeAt(index);
+  //             liveLeaderboardList.insert(index, element);
+  //           } else {
+  //             liveLeaderboardList.add(element);
+  //           }
+  //         }
+  //         log('Socket Lead: ${liveLeaderboardList.length}');
+  //       },
+  //     );
+  //     //   lead.forEach((element) {
+  //     //     if (liveLeadboardList.any((obj) => obj.userName == element.name)) {
+  //     //       int index = liveLeadboardList.indexWhere(
+  //     //         (stock) => stock.name == element.name,
+  //     //       );
+  //     //       liveLeadboardList.removeAt(index);
+  //     //       liveLeadboardList.insert(index, element);
+  //     //     } else {
+  //     //       liveLeadboardList.add(element);
+  //     //     }
+  //     //   });
+  //     //   log('Socket Lead: ${liveLeadboardList.length}');
+  //     // });
+  //     socket.onDisconnect((_) => log('Socket : Disconnect'));
+  //     socket.onConnectError((err) => log(err));
+  //     socket.onError((err) => log(err));
+  //   } on Exception catch (e) {
+  //     log(e.toString());
+  //   }
+  // }
 }

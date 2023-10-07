@@ -144,16 +144,18 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         ),
                   CommonTile(label: 'Portfolio Details'),
                   VirtualPortfolioDetailsCard(
-                    label: 'Virtual Portfolio Value',
+                    label: 'Portfolio Value',
+                    info: 'Total funds added by StoxHero in your Account',
                     value: controller.virtualPortfolio.value.totalFund,
                   ),
                   VirtualPortfolioDetailsCard(
                     label: 'Available Margin',
-                    // value: difference,
+                    info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
                   VirtualPortfolioDetailsCard(
-                    label: 'Virtual Used Margin',
+                    label: 'Used Margin',
+                    info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
