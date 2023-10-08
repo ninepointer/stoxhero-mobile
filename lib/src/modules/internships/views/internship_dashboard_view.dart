@@ -59,14 +59,17 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                       CommonFilledButton(
                         label: 'Start Trading',
                         onPressed: () {
+                          controller.loadTradingData();
                           Get.to(() => InternshipTradingView());
-                          Get.find<InternshipController>().loadTradingData();
                         },
                       ),
                       SizedBox(height: 12),
                       CommonFilledButton(
                         label: 'View Orders',
-                        onPressed: () {},
+                        onPressed: () {
+                          controller.loadOrderData();
+                          Get.to(() => InternshipOrdersView());
+                        },
                       ),
                       SizedBox(height: 12),
                       CommonFilledButton(

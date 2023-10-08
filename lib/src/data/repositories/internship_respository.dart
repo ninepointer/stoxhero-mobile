@@ -1,8 +1,7 @@
 import '../../app/app.dart';
 
 class InternshipRespository extends BaseRepository {
-  Future<RepoResponse<AnalyticsOverviewDetailsResponse>> getInternshipAnalyticsOverview(
-      String? id) async {
+  Future<RepoResponse<AnalyticsOverviewDetailsResponse>> getInternshipAnalyticsOverview(String? id) async {
     String apiURL = AppUrls.internshipOverview(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -10,8 +9,7 @@ class InternshipRespository extends BaseRepository {
         : RepoResponse(data: AnalyticsOverviewDetailsResponse.fromJson(response));
   }
 
-  Future<RepoResponse<AnalyticsDateWiseDetailsResponse>>
-      getInternshipAnalyticsDateWisePnLOverviewDetails(
+  Future<RepoResponse<AnalyticsDateWiseDetailsResponse>> getInternshipAnalyticsDateWisePnLOverviewDetails(
     String? id,
     Map<String, dynamic> query,
   ) async {
@@ -22,8 +20,8 @@ class InternshipRespository extends BaseRepository {
         : RepoResponse(data: AnalyticsDateWiseDetailsResponse.fromJson(response));
   }
 
-  Future<RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse>>
-      getInternshipAnalyticsMonthlyPnLOverviewDetails(String? id) async {
+  Future<RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse>> getInternshipAnalyticsMonthlyPnLOverviewDetails(
+      String? id) async {
     String apiURL = AppUrls.internshipMonthlyPNL(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -39,8 +37,7 @@ class InternshipRespository extends BaseRepository {
         : RepoResponse(data: InternshipBatchResponse.fromJson(response));
   }
 
-  Future<RepoResponse<InternshipBatchPortfolioResponse>> getInternshipBatchPortfolioDetails(
-      String? id) async {
+  Future<RepoResponse<InternshipBatchPortfolioResponse>> getInternshipBatchPortfolioDetails(String? id) async {
     String apiURL = AppUrls.internshipBatchPortfolio(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -119,5 +116,21 @@ class InternshipRespository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: InternshipPositionResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<InternshipOrdersListResponse>> getInternshipAllOrdersList() async {
+    String apiURL = AppUrls.internshipAllOrders;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: InternshipOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<InternshipOrdersListResponse>> getInternshipTodayOrdersList() async {
+    String apiURL = AppUrls.internshipTodayOrders;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: InternshipOrdersListResponse.fromJson(response));
   }
 }

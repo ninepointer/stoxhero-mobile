@@ -140,7 +140,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                           itemCount: controller.internshipPositionList.length,
                           itemBuilder: (context, index) {
                             var item = controller.internshipPositionList[index];
-                            return InternshipPositionCard(internshipPosition: item);
+                            return InternshipPositionCard(position: item);
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),

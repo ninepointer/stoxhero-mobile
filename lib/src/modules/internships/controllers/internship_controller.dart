@@ -19,6 +19,7 @@ class InternshipController extends BaseController<InternshipRespository> {
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+  final segmentedControlValue = 0.obs;
 
   final searchTextController = TextEditingController();
   final startDateTextController = TextEditingController();
@@ -35,7 +36,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
-
+  final internshipAllOrders = <InternshipOrdersList>[].obs;
+  final internshipTodayOrders = <InternshipOrdersList>[].obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
   final lotsValueList = <int>[0].obs;
@@ -78,6 +80,16 @@ class InternshipController extends BaseController<InternshipRespository> {
     await getStockIndexInstrumentsList();
     await getInternshipBatchPortfolioDetails();
   }
+
+  Future loadOrderData() async {
+    userDetails.value = AppStorage.getUserDetails();
+    await getInternshipAllOrdersList();
+    await getInternshipTodayOrdersList();
+  }
+
+  void handleSegmentChange(int val) => changeSegment(val);
+
+  void changeSegment(int val) => segmentedControlValue.value = val;
 
   String getStockIndexName(int instId) {
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
@@ -710,7 +722,13 @@ class InternshipController extends BaseController<InternshipRespository> {
       quantity: selectedQuantity.value,
       triggerPrice: "",
       battleId: internshipBatchDetails.value.id,
-      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      buyOrSell: type == TransactionType.exit
+          ? type == TransactionType.buy
+              ? "BUY"
+              : "SELL"
+          : type == TransactionType.buy
+              ? "SELL"
+              : "BUY",
       createdBy: userDetailsData.name,
       exchange: inst.exchange,
       exchangeInstrumentToken: inst.exchangeToken,
@@ -843,6 +861,42 @@ class InternshipController extends BaseController<InternshipRespository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           internshipMonthlyPnlList(response.data?.data);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getInternshipTodayOrdersList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<InternshipOrdersListResponse> response = await repository.getInternshipTodayOrdersList();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          internshipTodayOrders(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getInternshipAllOrdersList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<InternshipOrdersListResponse> response = await repository.getInternshipAllOrdersList();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          internshipAllOrders(response.data?.data ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

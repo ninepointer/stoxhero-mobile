@@ -125,4 +125,6 @@ class AppUrls {
   static String internshipMonthlyPNL(String? id) => "$apiURL/analytics/internship/mymonthlypnl/$id";
   static String internshipDateWisePNL(String? id) => "$apiURL/analytics/internship/mystats/$id";
   static String internshipBatchPortfolio(String? id) => "$apiURL/internship/marginDetail/$id";
+  static const String internshipAllOrders = "$apiURL/internship/my/historyorders";
+  static const String internshipTodayOrders = "$apiURL/internship/my/todayorders";
 }

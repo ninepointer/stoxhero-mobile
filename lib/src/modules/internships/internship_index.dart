@@ -12,3 +12,4 @@ export 'widgets/internship_position_details_card.dart';
 export 'widgets/internship_search_instruments_card.dart';
 export 'widgets/internship_transaction_bottom_sheet.dart';
 export 'widgets/internship_watchlist_card.dart';
+export 'views/internship_orders_view.dart';

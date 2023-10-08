@@ -1,43 +1,31 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import '../../../app/app.dart';
 
 class InternshipPositionCard extends GetView<InternshipController> {
-  final InternshipPosition internshipPosition;
+  final InternshipPosition position;
 
-  const InternshipPositionCard({super.key, required this.internshipPosition});
+  const InternshipPositionCard({super.key, required this.position});
 
   @override
   Widget build(BuildContext context) {
     void openBottomSheet(BuildContext context, TransactionType type) {
-      log('instrument Details: ${internshipPosition.toJson()}');
       FocusScope.of(context).unfocus();
       num lastPrice = controller.getInstrumentLastPrice(
-        internshipPosition.id?.instrumentToken ?? 0,
-        internshipPosition.id?.exchangeInstrumentToken ?? 0,
+        position.id!.instrumentToken!,
+        position.id!.exchangeInstrumentToken!,
       );
-      controller.generateLotsList(type: internshipPosition.id?.symbol);
-
-      if (type == TransactionType.sell) {
-        List lotsList = controller.generateLotsList(type: internshipPosition.id?.symbol);
-        int index = lotsList.indexOf(internshipPosition.lots ?? 0);
-        if (index != -1) {
-          List<int> newLotsList = controller.lotsValueList.sublist(0, index + 1);
-          controller.lotsValueList.value = newLotsList;
-        }
-      }
+      controller.generateLotsList(type: position.id?.symbol);
       BottomSheetHelper.openBottomSheet(
         context: context,
-        child: InternshipTransactionBottomSheet(
+        child: VirtualTransactionBottomSheet(
           type: type,
           tradingInstrument: TradingInstrument(
-            name: internshipPosition.id!.symbol,
-            exchange: internshipPosition.id!.exchange,
-            tradingsymbol: internshipPosition.id!.symbol,
-            exchangeToken: internshipPosition.id!.exchangeInstrumentToken,
-            instrumentToken: internshipPosition.id!.instrumentToken,
+            name: position.id?.symbol,
+            exchange: position.id?.exchange,
+            tradingsymbol: position.id?.symbol,
+            exchangeToken: position.id?.exchangeInstrumentToken,
+            instrumentToken: position.id?.instrumentToken,
             lastPrice: lastPrice,
           ),
         ),
@@ -64,30 +52,30 @@ class InternshipPositionCard extends GetView<InternshipController> {
                       children: [
                         InternshipPositionCardTile(
                           label: 'Symbol',
-                          value: internshipPosition.id?.symbol,
+                          value: position.id?.symbol,
                         ),
                         InternshipPositionCardTile(
                           isRightAlign: true,
                           label: 'Gross P&L',
                           valueColor: controller.getValueColor(
                             controller.calculateGrossPNL(
-                              internshipPosition.amount!,
-                              internshipPosition.lots!.toInt(),
+                              position.amount!,
+                              position.lots!.toInt(),
                               controller.getInstrumentLastPrice(
-                                internshipPosition.id!.instrumentToken!,
-                                internshipPosition.id!.exchangeInstrumentToken!,
+                                position.id!.instrumentToken!,
+                                position.id!.exchangeInstrumentToken!,
                               ),
                             ),
                           ),
-                          value: internshipPosition.lots == 0
-                              ? FormatHelper.formatNumbers(internshipPosition.amount)
+                          value: position.lots == 0
+                              ? FormatHelper.formatNumbers(position.amount)
                               : FormatHelper.formatNumbers(
                                   controller.calculateGrossPNL(
-                                    internshipPosition.amount!,
-                                    internshipPosition.lots!.toInt(),
+                                    position.amount!,
+                                    position.lots!.toInt(),
                                     controller.getInstrumentLastPrice(
-                                      internshipPosition.id!.instrumentToken!,
-                                      internshipPosition.id!.exchangeInstrumentToken!,
+                                      position.id!.instrumentToken!,
+                                      position.id!.exchangeInstrumentToken!,
                                     ),
                                   ),
                                 ),
@@ -102,13 +90,13 @@ class InternshipPositionCard extends GetView<InternshipController> {
                       children: [
                         InternshipPositionCardTile(
                           label: 'Avg. Price',
-                          value: FormatHelper.formatNumbers(internshipPosition.lastaverageprice),
+                          value: FormatHelper.formatNumbers(position.lastaverageprice),
                         ),
                         InternshipPositionCardTile(
                           isRightAlign: true,
                           label: 'LTP',
-                          valueColor: controller.getValueColor(internshipPosition.lastaverageprice),
-                          value: FormatHelper.formatNumbers(internshipPosition.lastaverageprice),
+                          valueColor: controller.getValueColor(position.lastaverageprice),
+                          value: FormatHelper.formatNumbers(position.lastaverageprice),
                         ),
                       ],
                     ),
@@ -118,19 +106,19 @@ class InternshipPositionCard extends GetView<InternshipController> {
                     children: [
                       InternshipPositionCardTile(
                         label: 'Quantity',
-                        value: internshipPosition.lots.toString(),
+                        value: position.lots.toString(),
                       ),
                       InternshipPositionCardTile(
                         isRightAlign: true,
                         label: 'Changes(%)',
                         value: controller.getInstrumentChanges(
-                          internshipPosition.id!.instrumentToken!,
-                          internshipPosition.id!.exchangeInstrumentToken!,
+                          position.id!.instrumentToken!,
+                          position.id!.exchangeInstrumentToken!,
                         ),
                         valueColor: controller.getValueColor(
                           controller.getInstrumentChanges(
-                            internshipPosition.id!.instrumentToken!,
-                            internshipPosition.id!.exchangeInstrumentToken!,
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
                           ),
                         ),
                       ),
@@ -184,22 +172,46 @@ class InternshipPositionCard extends GetView<InternshipController> {
                   child: GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
-                      controller.selectedQuantity.value = internshipPosition.lots ?? 0;
-                      controller.lotsValueList.value = [internshipPosition.lots ?? 0];
-                      BottomSheetHelper.openBottomSheet(
-                        context: context,
-                        child: InternshipTransactionBottomSheet(
-                          type: TransactionType.exit,
-                          tradingInstrument: TradingInstrument(
-                            name: internshipPosition.id!.symbol,
-                            exchange: internshipPosition.id!.exchange,
-                            tradingsymbol: internshipPosition.id!.symbol,
-                            exchangeToken: internshipPosition.id!.exchangeInstrumentToken,
-                            instrumentToken: internshipPosition.id!.instrumentToken,
-                            lotSize: internshipPosition.lots,
+                      List<int> lots = controller.generateLotsList(type: position.id?.symbol);
+                      int exitLots = position.lots!.toInt();
+                      int maxLots = lots.last;
+
+                      if (exitLots == 0) {
+                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                      } else {
+                        if (exitLots.toString().contains('-')) {
+                          if (exitLots < 0) {
+                            exitLots = -exitLots;
+                          }
+
+                          if (!lots.contains(exitLots)) {
+                            lots.add(exitLots);
+                            lots.sort();
+                          }
+                          controller.selectedQuantity.value = exitLots;
+                        }
+
+                        if (exitLots > maxLots) {
+                          controller.selectedQuantity.value = maxLots;
+                        } else {
+                          controller.selectedQuantity.value = exitLots;
+                        }
+                        controller.lotsValueList.assignAll(lots);
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: VirtualTransactionBottomSheet(
+                            type: TransactionType.exit,
+                            tradingInstrument: TradingInstrument(
+                              name: position.id?.symbol,
+                              exchange: position.id?.exchange,
+                              tradingsymbol: position.id?.symbol,
+                              exchangeToken: position.id?.exchangeInstrumentToken,
+                              instrumentToken: position.id?.instrumentToken,
+                              lotSize: position.lots,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,

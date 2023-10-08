@@ -84,7 +84,7 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CommonCardTile(
-                              label: 'Time',
+                              label: 'Timestamp',
                               value: FormatHelper.formatDateTime(order.tradeTime),
                             ),
                           ],
