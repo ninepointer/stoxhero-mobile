@@ -80,7 +80,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(8),
             alignment: Alignment.center,
             child: Row(
               children: [
@@ -307,7 +307,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                   child: GestureDetector(
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withOpacity(.25),
                       ),
@@ -350,7 +350,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                           },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                       ),
@@ -376,7 +376,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                   child: GestureDetector(
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.secondary.withOpacity(.25),
                       ),

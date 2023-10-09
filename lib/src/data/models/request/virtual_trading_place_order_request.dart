@@ -2,7 +2,7 @@ class VirtualTradingPlaceOrderRequest {
   String? exchange;
   String? symbol;
   String? buyOrSell;
-  int? quantity;
+  dynamic quantity;
   String? price;
   String? product;
   String? orderType;

@@ -1,38 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stoxhero/src/modules/modules.dart';
 
 import '../core.dart';
 
-class CommonRankCard extends StatelessWidget {
+class CommonRankCard extends GetView<ContestController> {
   final String rank;
   final String name;
-  final String netPnl;
+  final String netPnL;
+  final String reward;
   const CommonRankCard({
     Key? key,
     required this.rank,
     required this.name,
-    required this.netPnl,
+    required this.netPnL,
+    required this.reward,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      hasBorder: false,
       margin: EdgeInsets.symmetric(horizontal: 8),
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.secondary.withOpacity(.25),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                '#$rank',
+                style: AppStyles.tsSecondarySemiBold16,
+              ),
+            ),
+            SizedBox(width: 8),
+            Text(
+              name,
+              style: Theme.of(context).textTheme.tsMedium16,
+            ),
+          ],
+        ),
+        SizedBox(height: 12),
+        Row(
           children: [
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    rank,
-                    style: AppStyles.tsSecondarySemiBold16,
+                    'NET P&L',
+                    style: Theme.of(context).textTheme.tsGreyRegular12,
                   ),
                   SizedBox(height: 4),
                   Text(
-                    name,
-                    style: Theme.of(context).textTheme.tsMedium14,
+                    FormatHelper.formatNumbers(netPnL),
+                    style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                          color: controller.getValueColor(netPnL),
+                        ),
                   ),
                 ],
               ),
@@ -42,13 +69,15 @@ class CommonRankCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'Net P&L',
+                    'Reward',
                     style: Theme.of(context).textTheme.tsGreyRegular12,
                   ),
                   SizedBox(height: 4),
                   Text(
-                    netPnl,
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    FormatHelper.formatNumbers(reward),
+                    style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                          color: controller.getValueColor(reward),
+                        ),
                   ),
                 ],
               ),

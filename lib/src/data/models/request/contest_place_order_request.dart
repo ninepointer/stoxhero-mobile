@@ -2,7 +2,7 @@ class ContestPlaceOrderRequest {
   String? exchange;
   String? symbol;
   String? buyOrSell;
-  int? quantity;
+  dynamic quantity;
   String? price;
   String? contestId;
   String? battleId;

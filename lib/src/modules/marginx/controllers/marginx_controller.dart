@@ -37,6 +37,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   final isLivePriceLoaded = false.obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
+  final selectedStringQuantity = "0".obs;
   final lotsValueList = <int>[0].obs;
 
   final tradingInstruments = <TradingInstrument>[].obs;
@@ -48,10 +49,14 @@ class MarginXController extends BaseController<MarginXRepository> {
   // final marginx = LiveMarginX().obs;
 
   Future loadData() async {
-    userDetails.value = AppStorage.getUserDetails();
+    loadUserDetails();
     await getLiveMarginXList();
     await getUpComingMarginXList();
     await getCompletedMarginXList();
+  }
+
+  Future loadUserDetails() async {
+    userDetails.value = AppStorage.getUserDetails();
   }
 
   Future loadTradingData() async {
@@ -447,6 +452,13 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future placeMarginXOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    }
     ContestPlaceOrderRequest data = ContestPlaceOrderRequest(
       orderType: "MARKET",
       price: "",
@@ -454,13 +466,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       quantity: selectedQuantity.value,
       triggerPrice: "",
       battleId: liveMarginX.value.id,
-      buyOrSell: type == TransactionType.exit
-          ? type == TransactionType.buy
-              ? "SELL"
-              : "BUY"
-          : type == TransactionType.buy
-              ? "BUY"
-              : "SELL",
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       contestId: liveMarginX.value.id,
       createdBy: userDetailsData.name,
       exchange: inst.exchange,
@@ -695,6 +701,8 @@ class MarginXController extends BaseController<MarginXRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
+      await Get.find<AuthController>().getUserDetails(navigate: false);
+      loadUserDetails();
       getUpComingMarginXList();
       getLiveMarginXList();
     } catch (e) {

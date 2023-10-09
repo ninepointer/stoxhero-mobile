@@ -235,8 +235,8 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                   label: type == TransactionType.exit
                       ? 'Exit'
                       : type == TransactionType.buy
-                          ? 'Buy'
-                          : 'Sell',
+                          ? 'BUY'
+                          : 'SELL',
                   onPressed: () {
                     Get.find<ContestController>().placeContestOrder(
                       type,

@@ -36,10 +36,9 @@ class CollegeContestSearchSymbolView extends GetView<CollegeContestController> {
                   child: Visibility(
                     visible: !controller.isLoadingStatus,
                     replacement: CommonLoader(),
-                    child: ListView.separated(
+                    child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: controller.tradingInstruments.length,
-                      separatorBuilder: (_, __) => SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
                         return CollegeContestSearchInstrumentsCard(

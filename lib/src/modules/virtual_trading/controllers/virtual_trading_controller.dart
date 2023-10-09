@@ -32,6 +32,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
+  final selectedStringQuantity = "0".obs;
   final lotsValueList = <int>[0].obs;
 
   final isLivePriceLoaded = false.obs;
@@ -336,21 +337,23 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   Future placeVirtualTradingOrder(TransactionType type, TradingInstrument inst) async {
+    print(type);
     Get.back();
     isLoading(true);
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    }
     VirtualTradingPlaceOrderRequest data = VirtualTradingPlaceOrderRequest(
       orderType: "MARKET",
       price: "",
       product: "NRML",
       quantity: selectedQuantity.value,
       triggerPrice: "",
-      buyOrSell: type == TransactionType.exit
-          ? type == TransactionType.buy
-              ? "BUY"
-              : "SELL"
-          : type == TransactionType.buy
-              ? "SELL"
-              : "BUY",
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       exchange: inst.exchange,
       exchangeInstrumentToken: inst.exchangeToken,
       orderId: Uuid().v4(),

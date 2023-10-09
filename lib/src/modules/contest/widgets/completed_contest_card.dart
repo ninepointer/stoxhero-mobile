@@ -273,7 +273,7 @@ class CompletedContestCard extends StatelessWidget {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),

@@ -143,12 +143,11 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                   CommonTile(label: 'My Position'),
                   controller.contestPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.separated(
+                      : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.contestPositionsList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             return CollegeContestPositionCard(
                               position: controller.contestPositionsList[index],

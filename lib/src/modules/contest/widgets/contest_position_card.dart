@@ -14,6 +14,7 @@ class ContestPositionCard extends GetView<ContestController> {
       position.id!.exchangeInstrumentToken!,
     );
     controller.generateLotsList(type: position.id?.symbol);
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: ContestTransactionBottomSheet(
@@ -36,11 +37,11 @@ class ContestPositionCard extends GetView<ContestController> {
       children: [
         CommonCard(
           hasBorder: false,
-          margin: EdgeInsets.symmetric(horizontal: 12),
+          margin: EdgeInsets.all(8).copyWith(bottom: 0),
           padding: EdgeInsets.zero,
           children: [
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -147,7 +148,7 @@ class ContestPositionCard extends GetView<ContestController> {
                     onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -168,7 +169,7 @@ class ContestPositionCard extends GetView<ContestController> {
                     onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(.25),
                       ),
@@ -211,6 +212,7 @@ class ContestPositionCard extends GetView<ContestController> {
                         } else {
                           controller.selectedQuantity.value = exitLots;
                         }
+                        controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
                         controller.lotsValueList.assignAll(lots);
                         BottomSheetHelper.openBottomSheet(
                           context: context,
@@ -230,7 +232,7 @@ class ContestPositionCard extends GetView<ContestController> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.warning.withOpacity(.25),
                         borderRadius: BorderRadius.only(

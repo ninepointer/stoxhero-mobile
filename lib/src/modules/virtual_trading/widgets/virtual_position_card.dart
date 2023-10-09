@@ -13,6 +13,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
       position.id!.instrumentToken!,
       position.id!.exchangeInstrumentToken!,
     );
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
     controller.generateLotsList(type: position.id?.symbol);
     BottomSheetHelper.openBottomSheet(
       context: context,
@@ -36,92 +37,88 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
       children: [
         CommonCard(
           hasBorder: false,
-          margin: EdgeInsets.symmetric(horizontal: 12),
+          margin: EdgeInsets.all(8).copyWith(bottom: 0),
           padding: EdgeInsets.zero,
           children: [
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        PositionListCardTile(
-                          label: 'Symbol',
-                          value: position.id?.symbol,
-                        ),
-                        PositionListCardTile(
-                          isRightAlign: true,
-                          label: 'Gross P&L',
-                          valueColor: controller.getValueColor(
-                            position.lots == 0
-                                ? position.amount
-                                : controller.calculateGrossPNL(
-                                    position.amount!,
-                                    position.lots!.toInt(),
-                                    controller.getInstrumentLastPrice(
-                                      position.id!.instrumentToken!,
-                                      position.id!.exchangeInstrumentToken!,
-                                    ),
-                                  ),
-                          ),
-                          value: position.lots == 0
-                              ? FormatHelper.formatNumbers(position.amount)
-                              : FormatHelper.formatNumbers(
-                                  controller.calculateGrossPNL(
-                                    position.amount!,
-                                    position.lots!.toInt(),
-                                    controller.getInstrumentLastPrice(
-                                      position.id!.instrumentToken!,
-                                      position.id!.exchangeInstrumentToken!,
-                                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TradeCardTile(
+                        label: 'Symbol',
+                        value: position.id?.symbol,
+                      ),
+                      TradeCardTile(
+                        isRightAlign: true,
+                        label: 'Gross P&L',
+                        valueColor: controller.getValueColor(
+                          position.lots == 0
+                              ? position.amount
+                              : controller.calculateGrossPNL(
+                                  position.amount!,
+                                  position.lots!.toInt(),
+                                  controller.getInstrumentLastPrice(
+                                    position.id!.instrumentToken!,
+                                    position.id!.exchangeInstrumentToken!,
                                   ),
                                 ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        PositionListCardTile(
-                          label: 'Avg. Price',
-                          value: FormatHelper.formatNumbers(
-                            position.lastaverageprice,
-                          ),
-                        ),
-                        PositionListCardTile(
-                          isRightAlign: true,
-                          label: 'LTP',
-                          value: FormatHelper.formatNumbers(
-                            controller.getInstrumentLastPrice(
-                              position.id!.instrumentToken!,
-                              position.id!.exchangeInstrumentToken!,
-                            ),
-                          ),
-                          valueColor: controller.getValueColor(
-                            controller.getInstrumentLastPrice(
-                              position.id!.instrumentToken!,
-                              position.id!.exchangeInstrumentToken!,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                        value: position.lots == 0
+                            ? FormatHelper.formatNumbers(position.amount)
+                            : FormatHelper.formatNumbers(
+                                controller.calculateGrossPNL(
+                                  position.amount!,
+                                  position.lots!.toInt(),
+                                  controller.getInstrumentLastPrice(
+                                    position.id!.instrumentToken!,
+                                    position.id!.exchangeInstrumentToken!,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      PositionListCardTile(
+                      TradeCardTile(
+                        label: 'Avg. Price',
+                        value: FormatHelper.formatNumbers(
+                          position.lastaverageprice,
+                        ),
+                      ),
+                      TradeCardTile(
+                        isRightAlign: true,
+                        label: 'LTP',
+                        value: FormatHelper.formatNumbers(
+                          controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        ),
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TradeCardTile(
+                        hasBottomMargin: false,
                         label: 'Quantity',
                         value: position.lots.toString(),
                       ),
-                      PositionListCardTile(
+                      TradeCardTile(
+                        hasBottomMargin: false,
                         isRightAlign: true,
                         label: 'Changes(%)',
                         value: controller.getInstrumentChanges(
@@ -147,7 +144,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -168,7 +165,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(.25),
                       ),
@@ -211,6 +208,8 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         } else {
                           controller.selectedQuantity.value = exitLots;
                         }
+                        controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+                        print(controller.selectedStringQuantity.value);
                         controller.lotsValueList.assignAll(lots);
                         BottomSheetHelper.openBottomSheet(
                           context: context,
@@ -230,7 +229,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(12),
+                      padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: AppColors.warning.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -255,36 +254,36 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
   }
 }
 
-class PositionListCardTile extends StatelessWidget {
-  final String? label;
-  final dynamic value;
-  final bool isRightAlign;
-  final Color? valueColor;
-  const PositionListCardTile({
-    super.key,
-    required this.label,
-    this.value,
-    this.isRightAlign = false,
-    this.valueColor,
-  });
+// class PositionListCardTile extends StatelessWidget {
+//   final String? label;
+//   final dynamic value;
+//   final bool isRightAlign;
+//   final Color? valueColor;
+//   const PositionListCardTile({
+//     super.key,
+//     required this.label,
+//     this.value,
+//     this.isRightAlign = false,
+//     this.valueColor,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: [
-        Text(
-          label ?? '-',
-          style: AppStyles.tsGreyMedium12,
-        ),
-        SizedBox(height: 2),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-              ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+//       children: [
+//         Text(
+//           label ?? '-',
+//           style: AppStyles.tsGreyMedium12,
+//         ),
+//         SizedBox(height: 2),
+//         Text(
+//           value,
+//           style: Theme.of(context).textTheme.tsMedium14.copyWith(
+//                 color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
+//               ),
+//         ),
+//       ],
+//     );
+//   }
+// }

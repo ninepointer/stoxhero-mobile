@@ -19,7 +19,7 @@ class ContestTradingView extends GetView<ContestController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(8.0).copyWith(
                         bottom: 0,
@@ -72,19 +72,18 @@ class ContestTradingView extends GetView<ContestController> {
                             },
                           ),
                         ),
-                  // CommonTile(label: 'My Rank'),
-                  // for (var item in controller.liveLeaderboardList) ...[
-                  //   CommonRankCard(
-                  //     rank: "",
-                  //     name: item.userName.toString(),
-                  //     netPnl: item.npnl.toString(),
-                  //   ),
-                  // ],
-                  // CommonRankCard(
-                  //   rank: controller.liveLeaderboard.value.npnl.toString(),
-                  //   name: controller.userDetails.value.name.toString(),
-                  //   netPnl: controller.calculateTotalNetPNL().toString(),
-                  // ),
+                  CommonTile(
+                    label: 'My Rank',
+                    showSeeAllButton: true,
+                    seeAllLabel: 'Leaderboard',
+                    onPressed: () => Get.toNamed(AppRoutes.contestLiveLeaderboard),
+                  ),
+                  CommonRankCard(
+                    rank: controller.myRank.toString(),
+                    name: '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
+                    netPnL: "0",
+                    reward: controller.calculatePayout().toString(),
+                  ),
                   if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
@@ -143,12 +142,11 @@ class ContestTradingView extends GetView<ContestController> {
                   CommonTile(label: 'My Position'),
                   controller.contestPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.separated(
+                      : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.contestPositionsList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             return ContestPositionCard(
                               position: controller.contestPositionsList[index],

@@ -285,7 +285,7 @@ class LiveContestCard extends GetView<ContestController> {
                         },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
+                    padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(8),
@@ -321,7 +321,7 @@ class LiveContestCard extends GetView<ContestController> {
                   },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
+                    padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: AppColors.secondary.withOpacity(.25),
                       borderRadius: BorderRadius.only(

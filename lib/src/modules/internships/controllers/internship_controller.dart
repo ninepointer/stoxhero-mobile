@@ -46,6 +46,7 @@ class InternshipController extends BaseController<InternshipRespository> {
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
+  final selectedStringQuantity = "0".obs;
 
   final rangeGrossAmount = 0.0.obs;
   final rangeNetAmount = 0.0.obs;
@@ -715,6 +716,13 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future placeInternshipOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    }
     InternshipPlaceOrderRequest data = InternshipPlaceOrderRequest(
       orderType: "MARKET",
       price: "",
@@ -722,13 +730,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       quantity: selectedQuantity.value,
       triggerPrice: "",
       battleId: internshipBatchDetails.value.id,
-      buyOrSell: type == TransactionType.exit
-          ? type == TransactionType.buy
-              ? "BUY"
-              : "SELL"
-          : type == TransactionType.buy
-              ? "SELL"
-              : "BUY",
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       createdBy: userDetailsData.name,
       exchange: inst.exchange,
       exchangeInstrumentToken: inst.exchangeToken,

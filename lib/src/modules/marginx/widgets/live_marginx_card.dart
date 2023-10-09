@@ -247,7 +247,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -296,7 +296,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                       },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.success.withOpacity(.25),
                   ),
@@ -322,7 +322,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
               child: GestureDetector(
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(

@@ -24,13 +24,6 @@ class InternshipInfoCard extends GetView<InternshipController> {
                 ),
               ),
               SizedBox(height: 8),
-              // Container(
-              //   child: Text(
-              //     college ?? '-',
-              //     style: AppStyles.tsWhiteMedium16,
-              //   ),
-              // ),
-              SizedBox(height: 8),
               Container(
                 child: Text(
                   "Start Date: ${FormatHelper.formatDateYear(controller.internshipBatchDetails.value.batchStartDate)}",
@@ -54,7 +47,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
               SizedBox(height: 8),
               Container(
                 child: Text(
-                  "Available Margin: ${FormatHelper.formatNumbers(controller.internshipBatchPortfolio.value.openingBalance)}",
+                  "Available Margin: ${FormatHelper.formatNumbers(controller.calculateMargin().round())}",
                   style: Theme.of(context).textTheme.tsMedium16,
                 ),
               ),

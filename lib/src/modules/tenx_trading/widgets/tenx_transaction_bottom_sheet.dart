@@ -247,8 +247,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   label: type == TransactionType.exit
                       ? 'Exit'
                       : type == TransactionType.buy
-                          ? 'Buy'
-                          : 'Sell',
+                          ? 'BUY'
+                          : 'SELL',
                   onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(
                     type,
                     tradingInstrument,

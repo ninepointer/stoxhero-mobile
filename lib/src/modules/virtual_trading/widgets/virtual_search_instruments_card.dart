@@ -41,11 +41,11 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
   Widget build(BuildContext context) {
     return CommonCard(
       hasBorder: false,
-      margin: EdgeInsets.symmetric(horizontal: 12),
+      margin: EdgeInsets.all(8).copyWith(bottom: 0),
       padding: EdgeInsets.zero,
       children: [
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Column(
             children: [
               Row(
@@ -53,25 +53,25 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
                 children: [
                   Text(
                     tradingInstrument.name ?? '-',
-                    style: AppStyles.tsSecondaryMedium16,
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                   Text(
                     FormatHelper.formatDateByMonth(tradingInstrument.expiry),
-                    style: AppStyles.tsSecondaryMedium16,
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     tradingInstrument.tradingsymbol ?? '-',
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                   Text(
                     tradingInstrument.exchange ?? '-',
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                 ],
               ),
@@ -85,7 +85,7 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
                 onTap: () => openBottomSheet(context, TransactionType.buy),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.success.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -106,7 +106,7 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
                 onTap: () => openBottomSheet(context, TransactionType.sell),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.danger.withOpacity(.25),
                   ),
@@ -126,7 +126,7 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
                     : () => Get.find<VirtualTradingController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(

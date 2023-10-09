@@ -66,7 +66,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final lotsValueList = <int>[0].obs;
   final selectedContest = UpComingContest().obs;
   final selectedContestId = ''.obs;
-
+  final selectedStringQuantity = "0".obs;
   final isLivePriceLoaded = false.obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
 
@@ -393,6 +393,13 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future placeContestOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    }
     ContestPlaceOrderRequest data = ContestPlaceOrderRequest(
       orderType: "MARKET",
       price: "",
@@ -400,13 +407,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       quantity: selectedQuantity.value,
       triggerPrice: "",
       battleId: liveCollegeContest.value.id,
-      buyOrSell: type == TransactionType.exit
-          ? type == TransactionType.buy
-              ? "BUY"
-              : "SELL"
-          : type == TransactionType.exit
-              ? "SELL"
-              : "BUY",
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       contestId: liveCollegeContest.value.id,
       createdBy: userDetailsData.name,
       exchange: inst.exchange,

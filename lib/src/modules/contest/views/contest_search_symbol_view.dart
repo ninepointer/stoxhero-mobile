@@ -19,9 +19,9 @@ class ContestSearchSymbolView extends GetView<ContestController> {
           child: Container(
             child: Column(
               children: [
-                SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                Container(
+                  color: Theme.of(context).cardColor,
+                  padding: const EdgeInsets.all(8).copyWith(top: 0),
                   child: CommonTextField(
                     controller: controller.searchTextController,
                     padding: EdgeInsets.zero,
@@ -39,10 +39,9 @@ class ContestSearchSymbolView extends GetView<ContestController> {
                   child: Visibility(
                     visible: !controller.isLoadingStatus,
                     replacement: CommonLoader(),
-                    child: ListView.separated(
+                    child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: controller.tradingInstruments.length,
-                      separatorBuilder: (_, __) => SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
                         return ContestSearchInstrumentsCard(

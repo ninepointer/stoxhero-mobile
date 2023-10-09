@@ -96,6 +96,11 @@ class AppPages {
       binding: ContestBinding(),
     ),
     GetPage(
+      name: AppRoutes.contestLiveLeaderboard,
+      page: () => ContestLiveLeaderboardView(),
+      binding: ContestBinding(),
+    ),
+    GetPage(
       name: AppRoutes.pastContest,
       page: () => PastContestView(),
       binding: ContestBinding(),
@@ -158,6 +163,11 @@ class AppPages {
       name: AppRoutes.internshipSearchSymbol,
       page: () => InternshipSearchSymbolView(),
       binding: InternshipBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.payment,
+      page: () => PaymentView(),
+      binding: WalletBinding(),
     ),
   ];
 }

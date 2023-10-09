@@ -104,6 +104,17 @@ class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
                     ),
                   ],
                 ),
+                // CommonCard(
+                //   onTap: () async {
+                //     var data = await Get.toNamed(AppRoutes.payment);
+                //     print(data);
+                //   },
+                //   margin: EdgeInsets.only(top: 16),
+                //   padding: EdgeInsets.all(16),
+                //   children: [
+                //     Text('Pay using Bank Account/UPI'),
+                //   ],
+                // ),
                 if (walletBalance == null || widget.buyItemPrice <= walletBalance!)
                   Column(
                     children: [

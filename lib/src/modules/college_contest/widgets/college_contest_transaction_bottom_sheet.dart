@@ -235,8 +235,8 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                   label: type == TransactionType.exit
                       ? 'Exit'
                       : type == TransactionType.buy
-                          ? 'Buy'
-                          : 'Sell',
+                          ? 'BUY'
+                          : 'SELL',
                   onPressed: () {
                     Get.find<CollegeContestController>().placeContestOrder(
                       type,

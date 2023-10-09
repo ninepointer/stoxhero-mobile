@@ -37,6 +37,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final userSubscriptionsIds = <String>[].obs;
   final selectedQuantity = 0.obs;
+  final selectedStringQuantity = "0".obs;
   final lotsValueList = <int>[0].obs;
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
@@ -404,16 +405,17 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future placeTenxTradingOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    }
     TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
-      buyOrSell: type == TransactionType.exit
-          ? type == TransactionType.buy
-              ? "SELL"
-              : "BUY"
-          : type == TransactionType.buy
-              ? "BUY"
-              : "SELL",
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       quantity: selectedQuantity.value,
       price: "",
       product: "NRML",

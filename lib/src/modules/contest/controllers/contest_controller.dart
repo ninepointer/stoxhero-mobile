@@ -12,6 +12,7 @@ class ContestBinding implements Bindings {
 }
 
 class ContestController extends BaseController<ContestRepository> {
+  late IO.Socket socket;
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
@@ -45,7 +46,7 @@ class ContestController extends BaseController<ContestRepository> {
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
-
+  final selectedStringQuantity = "0".obs;
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
 
@@ -55,7 +56,8 @@ class ContestController extends BaseController<ContestRepository> {
   final lotsValueList = <int>[0].obs;
   final selectedContest = UpComingContest().obs;
   final selectedContestId = ''.obs;
-  bool isInterestedUser = false;
+
+  final myRank = 0.obs;
 
   final isLivePriceLoaded = false.obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
@@ -63,11 +65,16 @@ class ContestController extends BaseController<ContestRepository> {
   final liveLeaderboard = LiveContestLeaderboard().obs;
 
   Future loadData() async {
-    userDetails.value = AppStorage.getUserDetails();
+    loadUserDetails();
     await getLiveContestList();
     await getUpComingContestList();
     await getCompletedContestList();
     await getCompletedContestPnlList();
+    initSocketConnection();
+  }
+
+  Future loadUserDetails() async {
+    userDetails.value = AppStorage.getUserDetails();
   }
 
   Future loadTradingData() async {
@@ -92,6 +99,24 @@ class ContestController extends BaseController<ContestRepository> {
       }
     }
     return false;
+  }
+
+  Future initSocketConnection() async {
+    log('Socket : initSocketConnection');
+    socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket'],
+    }).connect();
+
+    socket.onConnect((_) {
+      log('Socket : Connected');
+      socket.emit('userId', userDetails.value.sId);
+      socket.emit('user-ticks', userDetails.value.sId);
+    });
+
+    socket.onConnectError((e) => print(e));
+
+    log('Socket Status : ${socket.connected}');
   }
 
   String getStockIndexName(int instId) {
@@ -167,7 +192,7 @@ class ContestController extends BaseController<ContestRepository> {
         }
       }
     }
-    return AppColors.grey;
+    return AppColors.success;
   }
 
   int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
@@ -177,7 +202,13 @@ class ContestController extends BaseController<ContestRepository> {
 
   num calculatePayout() {
     num npnl = calculateTotalNetPNL() * liveContest.value.payoutPercentage!;
-    num payout = npnl < 0 ? 0 : npnl / 100;
+    num payout = npnl <= 0 ? 0 : npnl / 100;
+    return payout;
+  }
+
+  num calculateUserPayout(dynamic netPnl) {
+    num reward = netPnl * liveContest.value.payoutPercentage!;
+    num payout = reward <= 0 ? 0 : reward / 100;
     return payout;
   }
 
@@ -300,7 +331,13 @@ class ContestController extends BaseController<ContestRepository> {
   Future placeContestOrder(TransactionType type, TradingInstrument inst) async {
     Get.back();
     isLoading(true);
-
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    }
     ContestPlaceOrderRequest data = ContestPlaceOrderRequest(
       orderType: "MARKET",
       price: "",
@@ -308,13 +345,7 @@ class ContestController extends BaseController<ContestRepository> {
       quantity: selectedQuantity.value,
       triggerPrice: "",
       battleId: liveContest.value.id,
-      buyOrSell: type == TransactionType.exit
-          ? type == TransactionType.buy
-              ? "SELL"
-              : "SELL"
-          : type == TransactionType.buy
-              ? "BUY"
-              : "SELL",
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       contestId: liveContest.value.id,
       createdBy: userDetailsData.name,
       exchange: inst.exchange,
@@ -687,24 +718,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future socketConnection() async {
     List<TradingInstrumentTradeDetails>? tempList = [];
     try {
-      IO.Socket socket;
-
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
-      socket.on('index-tick', (data) {
-        // print(data);
-        // log('Socket : index-tick $data');
-      });
       socket.on('tick-room', (data) {
-        // log('Socket : tick-room $data');
         tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
           if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -745,17 +759,6 @@ class ContestController extends BaseController<ContestRepository> {
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      IO.Socket socket;
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
       socket.on(
         'index-tick',
         (data) {
@@ -795,6 +798,8 @@ class ContestController extends BaseController<ContestRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
+      await Get.find<AuthController>().getUserDetails(navigate: false);
+      await loadUserDetails();
       getUpComingContestList();
       getLiveContestList();
     } catch (e) {
@@ -805,55 +810,29 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future socketLeaderboardConnection() async {
-    List<LiveContestLeaderboard>? tempList = [];
-
     try {
-      IO.Socket socket;
+      var rankData = {
+        "employeeId": userDetails.value.employeeid,
+        "userId": userDetails.value.sId,
+        "id": liveContest.value.id,
+      };
+      log('Socket Emit RankData : $rankData');
 
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        log('Socket Lead: ${liveLeaderboardList.length}');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
+      socket.emit('dailyContestLeaderboard', rankData);
+
+      socket.on(
+        'contest-myrank${userDetails.value.sId}${liveContest.value.id}',
+        (data) {
+          log('Socket MyRank : contest-myrank${userDetails.value.sId}${liveContest.value.id} : $data');
+          myRank(data);
+        },
+      );
 
       socket.on(
         'contest-leaderboardData${liveContest.value.id}',
         (data) {
-          print(data);
-          log('Data: $data');
           log('Socket Leaderboard : contest-leaderboardData${liveContest.value.id} $data');
-          tempList = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
-          //   tempList?.forEach((element) {
-          //     if (liveContestList.any((obj) => obj.live. == element.userName)) {
-          //       int index = liveContestList.indexWhere(
-          //         (stock) => stock.userName == element.userName,
-          //       );
-          //       liveContestList.removeAt(index);
-          //       liveContestList.insert(index, element);
-          //     } else {
-          //       liveContestList.add(element);
-          //     }
-          //   });
-          // });
-          for (var element in tempList ?? []) {
-            if (liveLeaderboardList.any((obj) => obj.userName == element.userName)) {
-              int index = liveLeaderboardList.indexWhere(
-                (stock) => stock.userName == element.userName,
-              );
-              liveLeaderboardList.removeAt(index);
-              liveLeaderboardList.insert(index, element);
-            } else {
-              liveLeaderboardList.add(element);
-            }
-          }
-
-          // log('Socket : ${liveLeaderboardList.length}');
+          liveLeaderboardList.value = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
         },
       );
       socket.onDisconnect((_) => log('Socket : Disconnect'));
@@ -924,9 +903,7 @@ class ContestController extends BaseController<ContestRepository> {
     isLoading(true);
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.getShareContest(
-        isUpcoming ? upComingContest.value.id : liveContest.value.id,
-      );
+      await repository.getShareContest(isUpcoming ? upComingContest.value.id : liveContest.value.id);
 
       if (isUpcoming) {
         getUpComingContestList();
@@ -944,9 +921,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getNotified() async {
     isLoading(true);
     try {
-      final RepoResponse<GenericResponse> response = await repository.getNotified(
-        upComingContest.value.id,
-      );
+      await repository.getNotified(upComingContest.value.id);
       getUpComingContestList();
     } catch (e) {
       log(e.toString());

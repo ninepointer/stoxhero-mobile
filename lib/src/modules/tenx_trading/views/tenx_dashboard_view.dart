@@ -19,7 +19,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(8.0).copyWith(
                         bottom: 0,
@@ -131,12 +131,11 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   CommonTile(label: 'My Position'),
                   controller.tenxPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.separated(
+                      : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.tenxPositionsList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             return TenxPositionCard(
                               position: controller.tenxPositionsList[index],

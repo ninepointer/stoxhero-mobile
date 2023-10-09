@@ -10,6 +10,7 @@ class CommonTile extends StatelessWidget {
   final bool showIconButton;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
+  final String? seeAllLabel;
   const CommonTile({
     Key? key,
     this.label = 'Label',
@@ -19,6 +20,7 @@ class CommonTile extends StatelessWidget {
     this.showIconButton = false,
     this.margin,
     this.padding,
+    this.seeAllLabel,
   }) : super(key: key);
 
   @override
@@ -41,7 +43,7 @@ class CommonTile extends StatelessWidget {
                 GestureDetector(
                   onTap: onPressed,
                   child: Text(
-                    'See All',
+                    seeAllLabel ?? 'See All',
                     style: AppStyles.tsPrimaryMedium14,
                   ),
                 )

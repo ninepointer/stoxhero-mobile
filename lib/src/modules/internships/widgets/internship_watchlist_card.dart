@@ -43,7 +43,7 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
       widget.tradingWatchlist.instrumentToken!,
       widget.tradingWatchlist.exchangeInstrumentToken!,
     );
-    controller.generateLotsList(type: widget.tradingWatchlist.instrument);
+    controller.generateLotsList(type: widget.tradingWatchlist.symbol);
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: InternshipTransactionBottomSheet(
@@ -67,12 +67,13 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
       () => Column(
         children: [
           CommonCard(
-            margin: EdgeInsets.all(8).copyWith(top: 4, bottom: 0),
+            hasBorder: false,
+            margin: EdgeInsets.all(8).copyWith(bottom: 0),
             padding: EdgeInsets.zero,
             onTap: _updateWatchlistIndex,
             children: [
               Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -146,7 +147,7 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
                           onTap: () => openBottomSheet(context, TransactionType.buy),
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: AppColors.success.withOpacity(.25),
                               borderRadius: BorderRadius.only(
@@ -167,7 +168,7 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
                           onTap: () => openBottomSheet(context, TransactionType.sell),
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: AppColors.danger.withOpacity(.25),
                             ),
@@ -182,11 +183,10 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
                       ),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () =>
-                              controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                          onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: AppColors.info.withOpacity(.25),
                               borderRadius: BorderRadius.only(
@@ -207,21 +207,6 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
                 ),
             ],
           ),
-          if (controller.selectedWatchlistIndex.value == widget.index)
-            Column(
-              children: [
-                // Divider(
-                //   thickness: 1,
-                //   height: 0,
-                // ),
-                SizedBox(height: 8),
-              ],
-            ),
-          if (controller.selectedWatchlistIndex.value != widget.index) SizedBox(height: 4),
-          // Divider(
-          //   thickness: 1,
-          //   height: 0,
-          // ),
         ],
       ),
     );

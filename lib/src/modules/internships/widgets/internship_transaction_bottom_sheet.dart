@@ -236,8 +236,8 @@ class InternshipTransactionBottomSheet extends GetView<InternshipController> {
                 label: type == TransactionType.exit
                     ? 'Exit'
                     : type == TransactionType.buy
-                        ? 'Buy'
-                        : 'Sell',
+                        ? 'BUY'
+                        : 'SELL',
                 onPressed: () => Get.find<InternshipController>().placeInternshipOrder(type, tradingInstrument),
               ),
             ],

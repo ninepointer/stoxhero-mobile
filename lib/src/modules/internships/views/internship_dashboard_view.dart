@@ -39,7 +39,7 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'What is stoxHero Internship Program ?',
+                          'What is StoxHero Internship Program ?',
                           style: Theme.of(context).textTheme.tsMedium16,
                         ),
                         Icon(

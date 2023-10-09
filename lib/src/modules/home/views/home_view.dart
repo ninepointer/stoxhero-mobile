@@ -43,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
         Get.find<VirtualTradingController>().loadData();
         break;
       case 2:
+        // Get.toNamed(AppRoutes.payment);
         Get.find<TenxTradingController>().getTenxTradingActiveSubs();
         break;
       case 3:
@@ -166,8 +167,7 @@ class _HomeViewState extends State<HomeView> {
             Text(
               label,
               style: Theme.of(context).textTheme.tsRegular12.copyWith(
-                    color:
-                        _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.grey,
+                    color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.grey,
                   ),
             )
           ],

@@ -247,8 +247,8 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                   label: type == TransactionType.exit
                       ? 'Exit'
                       : type == TransactionType.buy
-                          ? 'Buy'
-                          : 'Sell',
+                          ? 'BUY'
+                          : 'SELL',
                   onPressed: () => Get.find<MarginXController>().placeMarginXOrder(type, tradingInstrument),
                 ),
               ],

@@ -243,10 +243,10 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                           : AppColors.danger,
                   margin: EdgeInsets.symmetric(vertical: 24),
                   label: type == TransactionType.exit
-                      ? 'Exit'
+                      ? 'EXIT'
                       : type == TransactionType.buy
-                          ? 'Buy'
-                          : 'Sell',
+                          ? 'BUY'
+                          : 'SELL',
                   onPressed: () {
                     Get.find<VirtualTradingController>().placeVirtualTradingOrder(
                       type,

@@ -16,7 +16,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Row(
@@ -75,7 +75,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
+                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 150,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -130,12 +130,11 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   CommonTile(label: 'My Position'),
                   controller.virtualPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.separated(
+                      : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.virtualPositionsList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             return VirtualPositionCard(
                               position: controller.virtualPositionsList[index],

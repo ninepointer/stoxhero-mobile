@@ -42,11 +42,11 @@ class CollegeContestSearchInstrumentsCard extends GetView<CollegeContestControll
   Widget build(BuildContext context) {
     return CommonCard(
       hasBorder: false,
-      margin: EdgeInsets.symmetric(horizontal: 12),
+      margin: EdgeInsets.all(8).copyWith(bottom: 0),
       padding: EdgeInsets.zero,
       children: [
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Column(
             children: [
               Row(
@@ -68,11 +68,11 @@ class CollegeContestSearchInstrumentsCard extends GetView<CollegeContestControll
                 children: [
                   Text(
                     tradingInstrument.tradingsymbol ?? '-',
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                   Text(
                     tradingInstrument.exchange ?? '-',
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                 ],
               ),
@@ -86,7 +86,7 @@ class CollegeContestSearchInstrumentsCard extends GetView<CollegeContestControll
                 onTap: () => openBottomSheet(context, TransactionType.buy),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.success.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -107,7 +107,7 @@ class CollegeContestSearchInstrumentsCard extends GetView<CollegeContestControll
                 onTap: () => openBottomSheet(context, TransactionType.sell),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.danger.withOpacity(.25),
                   ),
@@ -127,7 +127,7 @@ class CollegeContestSearchInstrumentsCard extends GetView<CollegeContestControll
                     : () => Get.find<CollegeContestController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
