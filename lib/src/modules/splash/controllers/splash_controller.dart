@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -33,6 +34,7 @@ class SplashController extends GetxController {
     await Future.delayed(Duration(seconds: 3));
     try {
       if (isNewUser) {
+        FirebaseAnalytics.instance.logEvent(name: 'new_user_logged');
         Get.offAllNamed(AppRoutes.onBoarding);
         AppStorage.setNewUserStatus(false);
       } else {
@@ -42,6 +44,10 @@ class SplashController extends GetxController {
           await Get.find<AuthController>().getUserDetails();
           log('Test: ${AppStorage.getUserDetails().toJson()}');
           log('Get: ${AppStorage.getToken()}');
+          FirebaseAnalytics.instance.logEvent(name: 'user_login', parameters: {
+            'id': AppStorage.getUserDetails().sId,
+            'email': AppStorage.getUserDetails().email,
+          });
         } else {
           if (token == null || token.isEmpty) {
             Get.offAllNamed(AppRoutes.signin);
