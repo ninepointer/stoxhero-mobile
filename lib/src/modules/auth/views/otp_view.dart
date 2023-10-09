@@ -126,7 +126,7 @@ class OtpView extends GetView<AuthController> {
                       SizedBox(height: 24),
                       CommonOutlinedButton(
                         label: 'Send again',
-                        onPressed: () {},
+                        onPressed: () => controller.resendSigninOtp(),
                       ),
                     ],
                   ),

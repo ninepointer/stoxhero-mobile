@@ -3,7 +3,6 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
-
 class OrdersView extends GetView<OrdersController> {
   const OrdersView({Key? key}) : super(key: key);
 

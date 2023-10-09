@@ -54,14 +54,17 @@ class AnalyticsInfoCard extends StatelessWidget {
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          color: Theme.of(context).cardColor,
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Row(
             children: [
               Container(
                 padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(0.25),
+                  color: AppColors.secondary.withOpacity(.25),
                 ),
                 child: Icon(
                   Icons.auto_graph_rounded,

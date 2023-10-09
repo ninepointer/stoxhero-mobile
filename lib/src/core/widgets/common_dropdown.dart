@@ -8,6 +8,8 @@ class CommonDropdown extends StatelessWidget {
   final List<String> dropdownItems;
   final Color? color;
   final ValueChanged<String?>? onChanged;
+  final bool useSeptValue;
+  final String? Function(String?)? getValue;
   const CommonDropdown({
     Key? key,
     required this.hint,
@@ -15,6 +17,8 @@ class CommonDropdown extends StatelessWidget {
     required this.dropdownItems,
     required this.onChanged,
     this.color,
+    this.getValue,
+    this.useSeptValue = false,
   }) : super(key: key);
 
   @override
@@ -43,7 +47,7 @@ class CommonDropdown extends StatelessWidget {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(
-                    value,
+                    useSeptValue ? (getValue?.call(value) ?? value) : value,
                     style: Theme.of(context).textTheme.tsRegular14,
                   ),
                 );

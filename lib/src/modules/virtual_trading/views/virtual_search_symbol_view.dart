@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/modules/modules.dart';
 
-import '../../../core/core.dart';
+import '../../../app/app.dart';
 
 class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
   const VirtualSearchSymbolView({Key? key}) : super(key: key);
@@ -19,9 +17,11 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
           child: Container(
             child: Column(
               children: [
-                SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                Container(
+                  color: Theme.of(context).cardColor,
+                  padding: const EdgeInsets.all(8).copyWith(
+                    top: 0,
+                  ),
                   child: CommonTextField(
                     controller: controller.searchTextController,
                     padding: EdgeInsets.zero,
@@ -39,15 +39,14 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                   child: Visibility(
                     visible: !controller.isLoadingStatus,
                     replacement: CommonLoader(),
-                    child: ListView.separated(
+                    child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: controller.virtualInstruments.length,
-                      separatorBuilder: (_, __) => SizedBox(height: 8),
+                      itemCount: controller.tradingInstruments.length,
                       itemBuilder: (context, index) {
-                        var data = controller.virtualInstruments[index];
+                        var data = controller.tradingInstruments[index];
                         return VirtualSearchInstrumentsCard(
-                          data: data,
-                          isAdded: controller.virtualInstruments.contains(
+                          tradingInstrument: data,
+                          isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),
                         );

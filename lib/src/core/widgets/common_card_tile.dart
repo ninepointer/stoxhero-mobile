@@ -25,12 +25,12 @@ class CommonCardTile extends StatelessWidget {
       children: [
         Text(
           label ?? '-',
-          style: AppStyles.tsGreyRegular14,
+          style: AppStyles.tsGreyRegular12,
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 2),
         Text(
           isValueNumber ? FormatHelper.formatNumbers(value) : value ?? '-',
-          style: Theme.of(context).textTheme.tsMedium16.copyWith(
+          style: Theme.of(context).textTheme.tsMedium14.copyWith(
                 color: valueColor,
               ),
         ),

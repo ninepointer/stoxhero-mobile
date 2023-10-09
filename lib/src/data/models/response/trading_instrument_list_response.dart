@@ -1,17 +1,17 @@
-class TenxTradingInstrumentListResponse {
-  List<TenxTradingInstrument>? data;
+class TradingInstrumentListResponse {
+  List<TradingInstrument>? data;
 
-  TenxTradingInstrumentListResponse({this.data});
+  TradingInstrumentListResponse({this.data});
 
-  TenxTradingInstrumentListResponse.fromJson(List? json) {
+  TradingInstrumentListResponse.fromJson(List? json) {
     if (json != null) {
-      data = <TenxTradingInstrument>[];
-      data = json.map((data) => TenxTradingInstrument.fromJson(data)).toList();
+      data = <TradingInstrument>[];
+      data = json.map((data) => TradingInstrument.fromJson(data)).toList();
     }
   }
 }
 
-class TenxTradingInstrument {
+class TradingInstrument {
   String? id;
   int? instrumentToken;
   int? exchangeToken;
@@ -27,34 +27,35 @@ class TenxTradingInstrument {
   String? exchange;
   String? lastModifiedBy;
   String? createdBy;
+  String? status;
+  String? chartInstrument;
   String? lastModifiedOn;
   String? createdOn;
-  String? status;
-  bool? infinityVisibility;
+  bool? earlySubscription;
 
-  TenxTradingInstrument({
-    this.id,
-    this.instrumentToken,
-    this.exchangeToken,
-    this.tradingsymbol,
-    this.name,
-    this.lastPrice,
-    this.expiry,
-    this.strike,
-    this.tickSize,
-    this.lotSize,
-    this.instrumentType,
-    this.segment,
-    this.exchange,
-    this.lastModifiedBy,
-    this.createdBy,
-    this.lastModifiedOn,
-    this.createdOn,
-    this.status,
-    this.infinityVisibility,
-  });
+  TradingInstrument(
+      {this.id,
+      this.instrumentToken,
+      this.exchangeToken,
+      this.tradingsymbol,
+      this.name,
+      this.lastPrice,
+      this.expiry,
+      this.strike,
+      this.tickSize,
+      this.lotSize,
+      this.instrumentType,
+      this.segment,
+      this.exchange,
+      this.lastModifiedBy,
+      this.createdBy,
+      this.status,
+      this.chartInstrument,
+      this.lastModifiedOn,
+      this.createdOn,
+      this.earlySubscription});
 
-  TenxTradingInstrument.fromJson(Map<String, dynamic> json) {
+  TradingInstrument.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     instrumentToken = json['instrument_token'];
     exchangeToken = json['exchange_token'];
@@ -70,10 +71,11 @@ class TenxTradingInstrument {
     exchange = json['exchange'];
     lastModifiedBy = json['lastModifiedBy'];
     createdBy = json['createdBy'];
+    status = json['status'];
+    chartInstrument = json['chartInstrument'];
     lastModifiedOn = json['lastModifiedOn'];
     createdOn = json['createdOn'];
-    status = json['status'];
-    infinityVisibility = json['infinityVisibility'];
+    earlySubscription = json['earlySubscription'];
   }
 
   Map<String, dynamic> toJson() {
@@ -93,10 +95,11 @@ class TenxTradingInstrument {
     data['exchange'] = this.exchange;
     data['lastModifiedBy'] = this.lastModifiedBy;
     data['createdBy'] = this.createdBy;
+    data['status'] = this.status;
+    data['chartInstrument'] = this.chartInstrument;
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['createdOn'] = this.createdOn;
-    data['status'] = this.status;
-    data['infinityVisibility'] = this.infinityVisibility;
+    data['earlySubscription'] = this.earlySubscription;
     return data;
   }
 }

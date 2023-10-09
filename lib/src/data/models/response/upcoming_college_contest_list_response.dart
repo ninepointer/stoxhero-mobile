@@ -28,7 +28,7 @@ class UpComingCollegeContestListResponse {
 }
 
 class UpComingCollegeContest {
-  String? sId;
+  String? id;
   String? contestName;
   String? contestStartTime;
   String? contestEndTime;
@@ -38,7 +38,7 @@ class UpComingCollegeContest {
   String? contestFor;
   String? collegeCode;
   int? entryFee;
-  double? payoutPercentage;
+  num? payoutPercentage;
   Portfolio? portfolio;
   String? college;
   int? maxParticipants;
@@ -58,7 +58,7 @@ class UpComingCollegeContest {
   int? iV;
 
   UpComingCollegeContest(
-      {this.sId,
+      {this.id,
       this.contestName,
       this.contestStartTime,
       this.contestEndTime,
@@ -88,7 +88,7 @@ class UpComingCollegeContest {
       this.iV});
 
   UpComingCollegeContest.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     contestName = json['contestName'];
     contestStartTime = json['contestStartTime'];
     contestEndTime = json['contestEndTime'];
@@ -135,7 +135,7 @@ class UpComingCollegeContest {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['contestName'] = this.contestName;
     data['contestStartTime'] = this.contestStartTime;
     data['contestEndTime'] = this.contestEndTime;

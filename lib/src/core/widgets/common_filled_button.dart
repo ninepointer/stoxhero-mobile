@@ -62,7 +62,7 @@ class CommonFilledButton extends StatelessWidget {
                               : 16,
                     ),
               ),
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isLoading ? () {} : onPressed,
       ),
     );
   }

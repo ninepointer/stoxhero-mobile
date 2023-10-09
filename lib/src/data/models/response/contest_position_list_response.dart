@@ -1,15 +1,15 @@
 class ContestPositionListResponse {
   String? message;
-  List<ContestPositionList>? data;
+  List<ContestPosition>? data;
 
   ContestPositionListResponse({this.message, this.data});
 
   ContestPositionListResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
-      data = <ContestPositionList>[];
+      data = <ContestPosition>[];
       json['data'].forEach((v) {
-        data!.add(new ContestPositionList.fromJson(v));
+        data!.add(new ContestPosition.fromJson(v));
       });
     }
   }
@@ -24,17 +24,17 @@ class ContestPositionListResponse {
   }
 }
 
-class ContestPositionList {
-  CId? iId;
-  int? amount;
+class ContestPosition {
+  CId? id;
+  num? amount;
   num? brokerage;
   int? lots;
-  int? lastaverageprice;
+  num? lastaverageprice;
 
-  ContestPositionList({this.iId, this.amount, this.brokerage, this.lots, this.lastaverageprice});
+  ContestPosition({this.id, this.amount, this.brokerage, this.lots, this.lastaverageprice});
 
-  ContestPositionList.fromJson(Map<String, dynamic> json) {
-    iId = json['_id'] != null ? new CId.fromJson(json['_id']) : null;
+  ContestPosition.fromJson(Map<String, dynamic> json) {
+    id = json['_id'] != null ? new CId.fromJson(json['_id']) : null;
     amount = json['amount'];
     brokerage = json['brokerage'];
     lots = json['lots'];
@@ -43,8 +43,8 @@ class ContestPositionList {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.iId != null) {
-      data['_id'] = this.iId!.toJson();
+    if (this.id != null) {
+      data['_id'] = this.id!.toJson();
     }
     data['amount'] = this.amount;
     data['brokerage'] = this.brokerage;

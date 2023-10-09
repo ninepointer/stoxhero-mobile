@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
 
 class InviteView extends GetView<ReferralsController> {
   const InviteView({Key? key}) : super(key: key);
-  String getReferralMessage() {
-    return "AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR Join me at StoxHero - Options Trading and Investment Platform 🤝 👉 Get 10,00,000 virtual currency in your account to start option trading using my referral code 👉 Join the community of ace traders and learn real-time options trading 👉 Participate in TenX Trading and earn 10% real cash on the profit you will make on the platform 📲 Visit https://www.stoxhero.com/signup?referral=${controller.userDetailsData.myReferralCode} Use my below invitation code 👇 and get INR ₹10,00,000 in your wallet and start trading My Referral Code to join the StoxHero: ${controller.userDetailsData.myReferralCode}";
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,60 +71,7 @@ class InviteView extends GetView<ReferralsController> {
                             iconData: Icons.share,
                           ),
                           SizedBox(height: 16),
-                          Card(
-                            elevation: 0,
-                            color: AppColors.grey.withOpacity(.25),
-                            margin: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Container(
-                              margin: EdgeInsets.all(14),
-                              width: double.infinity,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        controller.userDetailsData.myReferralCode ?? '-',
-                                        style: Theme.of(context).textTheme.tsRegular20.copyWith(
-                                              fontSize: 24,
-                                            ),
-                                      ),
-                                      Spacer(),
-                                      IconButton(
-                                        visualDensity: VisualDensity.compact,
-                                        splashRadius: 24,
-                                        padding: EdgeInsets.zero,
-                                        onPressed: () {
-                                          Clipboard.setData(ClipboardData(text: getReferralMessage()));
-                                        },
-                                        icon: Icon(
-                                          Icons.copy,
-                                          size: 20,
-                                          color: AppColors.secondary,
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      IconButton(
-                                        visualDensity: VisualDensity.compact,
-                                        splashRadius: 24,
-                                        padding: EdgeInsets.zero,
-                                        onPressed: () {
-                                          Share.share(getReferralMessage());
-                                        },
-                                        icon: Icon(
-                                          Icons.share,
-                                          size: 20,
-                                          color: AppColors.secondary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          ReferralCodeCard(),
                         ],
                       ),
                     ),

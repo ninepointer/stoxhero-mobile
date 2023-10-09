@@ -1,28 +1,49 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class MarginXPositionCard extends GetView<MarginXController> {
-  final ContestPositionList position;
+  final MarginXTradingPosition position;
 
   const MarginXPositionCard({super.key, required this.position});
 
   @override
   Widget build(BuildContext context) {
+    void openBottomSheet(BuildContext context, TransactionType type) {
+      FocusScope.of(context).unfocus();
+      num lastPrice = controller.getInstrumentLastPrice(
+        position.id!.instrumentToken!,
+        position.id!.exchangeInstrumentToken!,
+      );
+      controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+      controller.generateLotsList(type: position.id?.symbol);
+      BottomSheetHelper.openBottomSheet(
+        context: context,
+        child: VirtualTransactionBottomSheet(
+          type: type,
+          tradingInstrument: TradingInstrument(
+            name: position.id?.symbol,
+            exchange: position.id?.exchange,
+            tradingsymbol: position.id?.symbol,
+            exchangeToken: position.id?.exchangeInstrumentToken,
+            instrumentToken: position.id?.instrumentToken,
+            lastPrice: lastPrice,
+          ),
+        ),
+      );
+    }
+
     return Column(
       children: [
         CommonCard(
           hasBorder: false,
-          margin: EdgeInsets.symmetric(horizontal: 12),
+          margin: EdgeInsets.all(8).copyWith(bottom: 0),
           padding: EdgeInsets.zero,
           children: [
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -31,15 +52,35 @@ class MarginXPositionCard extends GetView<MarginXController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        MarginXWatchListCardTile(
+                        TradeCardTile(
                           label: 'Symbol',
-                          value: position.iId?.symbol,
+                          value: position.id?.symbol,
                         ),
-                        MarginXWatchListCardTile(
+                        TradeCardTile(
                           isRightAlign: true,
                           label: 'Gross P&L',
-                          valueColor: controller.getValueColor(position.amount),
-                          value: FormatHelper.formatNumbers(position.amount),
+                          valueColor: controller.getValueColor(
+                            controller.calculateGrossPNL(
+                              position.amount!,
+                              position.lots!.toInt(),
+                              controller.getInstrumentLastPrice(
+                                position.id!.instrumentToken!,
+                                position.id!.exchangeInstrumentToken!,
+                              ),
+                            ),
+                          ),
+                          value: position.lots == 0
+                              ? FormatHelper.formatNumbers(position.amount)
+                              : FormatHelper.formatNumbers(
+                                  controller.calculateGrossPNL(
+                                    position.amount!,
+                                    position.lots!.toInt(),
+                                    controller.getInstrumentLastPrice(
+                                      position.id!.instrumentToken!,
+                                      position.id!.exchangeInstrumentToken!,
+                                    ),
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -49,13 +90,13 @@ class MarginXPositionCard extends GetView<MarginXController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        MarginXWatchListCardTile(
-                          label: 'Quantity',
-                          value: position.lots.toString(),
-                        ),
-                        MarginXWatchListCardTile(
-                          isRightAlign: true,
+                        TradeCardTile(
                           label: 'Avg. Price',
+                          value: FormatHelper.formatNumbers(position.lastaverageprice),
+                        ),
+                        TradeCardTile(
+                          isRightAlign: true,
+                          label: 'LTP',
                           valueColor: controller.getValueColor(position.lastaverageprice),
                           value: FormatHelper.formatNumbers(position.lastaverageprice),
                         ),
@@ -65,15 +106,25 @@ class MarginXPositionCard extends GetView<MarginXController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      MarginXWatchListCardTile(
-                        label: 'LTP',
-                        valueColor: controller.getValueColor(position.lastaverageprice),
-                        value: FormatHelper.formatNumbers(position.lastaverageprice),
+                      TradeCardTile(
+                        hasBottomMargin: false,
+                        label: 'Quantity',
+                        value: position.lots.toString(),
                       ),
-                      MarginXWatchListCardTile(
+                      TradeCardTile(
+                        hasBottomMargin: false,
                         isRightAlign: true,
                         label: 'Changes(%)',
-                        value: '0.00%',
+                        value: controller.getInstrumentChanges(
+                          position.id!.instrumentToken!,
+                          position.id!.exchangeInstrumentToken!,
+                        ),
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentChanges(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -84,28 +135,12 @@ class MarginXPositionCard extends GetView<MarginXController> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      log('instrument : ${position.toJson()}');
-                      FocusScope.of(context).unfocus();
-                      // showBottomSheet(
-                      //   context: context,
-                      //   builder: (context) => MarginXTransactionBottomSheet(
-                      //     type: MarginXTransactionType.buy,
-                      //     data: VirtualTradingInstrument(
-                      //       name: position.iId!.symbol,
-                      //       exchange: position.iId!.exchange,
-                      //       tradingsymbol: position.iId!.symbol,
-                      //       exchangeToken: position.iId!.exchangeInstrumentToken,
-                      //       instrumentToken: position.iId!.instrumentToken,
-                      //     ),
-                      //   ),
-                      // );
-                    },
+                    onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.success.withOpacity(0.1),
+                        color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(8),
                         ),
@@ -121,28 +156,12 @@ class MarginXPositionCard extends GetView<MarginXController> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      log('instrument : ${position.toJson()}');
-                      FocusScope.of(context).unfocus();
-                      // showBottomSheet(
-                      //   context: context,
-                      //   builder: (context) => MarginXTransactionBottomSheet(
-                      //     type: MarginXTransactionType.sell,
-                      //     data: VirtualTradingInstrument(
-                      //       name: position.iId!.symbol,
-                      //       exchange: position.iId!.exchange,
-                      //       tradingsymbol: position.iId!.symbol,
-                      //       exchangeToken: position.iId!.exchangeInstrumentToken,
-                      //       instrumentToken: position.iId!.instrumentToken,
-                      //     ),
-                      //   ),
-                      // );
-                    },
+                    onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.danger.withOpacity(0.1),
+                        color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
                         'SELL',
@@ -156,28 +175,56 @@ class MarginXPositionCard extends GetView<MarginXController> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      log('instrument : ${position.toJson()}');
                       FocusScope.of(context).unfocus();
-                      // controller.selectedQuantity(position.lots);
-                      // showBottomSheet(
-                      //   context: context,
-                      //   builder: (context) => MarginXTransactionBottomSheet(
-                      //     type: MarginXTransactionType.exit,
-                      //     data: VirtualTradingInstrument(
-                      //       name: position.iId!.symbol,
-                      //       exchange: position.iId!.exchange,
-                      //       tradingsymbol: position.iId!.symbol,
-                      //       exchangeToken: position.iId!.exchangeInstrumentToken,
-                      //       instrumentToken: position.iId!.instrumentToken,
-                      //     ),
-                      //   ),
-                      // );
+                      List<int> lots = controller.generateLotsList(type: position.id?.symbol);
+                      int exitLots = position.lots!.toInt();
+                      int maxLots = lots.last;
+
+                      if (exitLots == 0) {
+                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                      } else {
+                        log(exitLots.toString());
+                        log(maxLots.toString());
+                        if (exitLots.toString().contains('-')) {
+                          if (exitLots < 0) {
+                            exitLots = -exitLots;
+                          }
+
+                          if (!lots.contains(exitLots)) {
+                            lots.add(exitLots);
+                            lots.sort();
+                          }
+                          controller.selectedQuantity.value = exitLots;
+                        }
+
+                        if (exitLots > maxLots) {
+                          controller.selectedQuantity.value = maxLots;
+                        } else {
+                          controller.selectedQuantity.value = exitLots;
+                        }
+                        controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+                        controller.lotsValueList.assignAll(lots);
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: MarginXTransactionBottomSheet(
+                            type: TransactionType.exit,
+                            tradingInstrument: TradingInstrument(
+                              name: position.id?.symbol,
+                              exchange: position.id?.exchange,
+                              tradingsymbol: position.id?.symbol,
+                              exchangeToken: position.id?.exchangeInstrumentToken,
+                              instrumentToken: position.id?.instrumentToken,
+                              lotSize: position.lots,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(0.1),
+                        color: AppColors.warning.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
@@ -199,3 +246,38 @@ class MarginXPositionCard extends GetView<MarginXController> {
     );
   }
 }
+
+// class MarginXPositionCardTile extends StatelessWidget {
+//   final String? label;
+//   final String? value;
+//   final bool isRightAlign;
+//   final Color? valueColor;
+
+//   const MarginXPositionCardTile({
+//     super.key,
+//     this.label,
+//     this.value,
+//     this.isRightAlign = false,
+//     this.valueColor,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+//       children: [
+//         Text(
+//           label ?? '-',
+//           style: AppStyles.tsGreyRegular12,
+//         ),
+//         SizedBox(height: 2),
+//         Text(
+//           value ?? '-',
+//           style: Theme.of(context).textTheme.tsMedium14.copyWith(
+//                 color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
+//               ),
+//         ),
+//       ],
+//     );
+//   }
+// }

@@ -22,9 +22,9 @@ class VirtualTradingPortfolioResponse {
 class VirtualTradingPortfolio {
   String? portfolioId;
   String? portfolioName;
-  int? totalFund;
-  double? npnl;
-  double? openingBalance;
+  num? totalFund;
+  num? npnl;
+  num? openingBalance;
 
   VirtualTradingPortfolio({
     this.portfolioId,

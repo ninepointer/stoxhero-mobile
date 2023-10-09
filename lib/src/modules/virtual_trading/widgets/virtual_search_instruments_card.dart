@@ -1,57 +1,77 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
-  final VirtualTradingInstrument data;
+  final TradingInstrument tradingInstrument;
   final bool isAdded;
-
   const VirtualSearchInstrumentsCard({
     super.key,
-    required this.data,
+    required this.tradingInstrument,
     required this.isAdded,
   });
+
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    log('data: ${tradingInstrument.toJson()}');
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      tradingInstrument.instrumentToken!,
+      tradingInstrument.exchangeToken!,
+    );
+    controller.generateLotsList(type: tradingInstrument.name);
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: VirtualTransactionBottomSheet(
+        type: type,
+        tradingInstrument: TradingInstrument(
+          name: tradingInstrument.tradingsymbol,
+          instrumentType: tradingInstrument.instrumentType,
+          exchange: tradingInstrument.exchange,
+          tradingsymbol: tradingInstrument.tradingsymbol,
+          exchangeToken: tradingInstrument.exchangeToken,
+          instrumentToken: tradingInstrument.instrumentToken,
+          lastPrice: lastPrice,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return CommonCard(
       hasBorder: false,
-      margin: EdgeInsets.symmetric(horizontal: 12),
+      margin: EdgeInsets.all(8).copyWith(bottom: 0),
       padding: EdgeInsets.zero,
       children: [
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.name ?? '-',
-                    style: AppStyles.tsSecondaryMedium16,
+                    tradingInstrument.name ?? '-',
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                   Text(
-                    FormatHelper.formatDateByMonth(data.expiry),
-                    style: AppStyles.tsSecondaryMedium16,
+                    FormatHelper.formatDateByMonth(tradingInstrument.expiry),
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.tradingsymbol ?? '-',
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    tradingInstrument.tradingsymbol ?? '-',
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                   Text(
-                    data.exchange ?? '-',
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    tradingInstrument.exchange ?? '-',
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                 ],
               ),
@@ -62,22 +82,12 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  log('instrument : ${data.toJson()}');
-                  FocusScope.of(context).unfocus();
-                  showBottomSheet(
-                    context: context,
-                    builder: (context) => VirtualTransactionBottomSheet(
-                      type: VirtualTransactionType.buy,
-                      data: data,
-                    ),
-                  );
-                },
+                onTap: () => openBottomSheet(context, TransactionType.buy),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.2),
+                    color: AppColors.success.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
@@ -93,22 +103,12 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  log('instrument : ${data.toJson()}');
-                  FocusScope.of(context).unfocus();
-                  showBottomSheet(
-                    context: context,
-                    builder: (context) => VirtualTransactionBottomSheet(
-                      type: VirtualTransactionType.sell,
-                      data: data,
-                    ),
-                  );
-                },
+                onTap: () => openBottomSheet(context, TransactionType.sell),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.danger.withOpacity(0.2),
+                    color: AppColors.danger.withOpacity(.25),
                   ),
                   child: Text(
                     'SELL',
@@ -122,16 +122,13 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () =>
-                        Get.find<VirtualTradingController>().removeInstrument(data.instrumentToken)
-                    : () => Get.find<VirtualTradingController>().addInstrument(data),
+                    ? () => Get.find<VirtualTradingController>().removeInstrument(tradingInstrument.instrumentToken)
+                    : () => Get.find<VirtualTradingController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: isAdded
-                        ? AppColors.info.withOpacity(0.2)
-                        : AppColors.secondary.withOpacity(0.2),
+                    color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),

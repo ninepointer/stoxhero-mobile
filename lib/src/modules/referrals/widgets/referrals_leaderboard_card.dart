@@ -19,23 +19,22 @@ class ReferralsLeaderboardCard extends StatelessWidget {
     return CommonCard(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              name ?? '-',
-              style: Theme.of(context).textTheme.tsRegular18,
-            ),
-            SizedBox(width: 8),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: AppColors.secondary.shade900.withOpacity(0.25),
+                shape: BoxShape.circle,
+                color: AppColors.secondary.withOpacity(0.25),
               ),
               child: Text(
                 rank ?? '#',
                 style: AppStyles.tsSecondaryMedium16,
               ),
+            ),
+            SizedBox(width: 8),
+            Text(
+              name ?? '-',
+              style: Theme.of(context).textTheme.tsRegular18,
             ),
           ],
         ),

@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:stoxhero/main.dart';
 
+import '../../../../main.dart';
 import '../../../core/core.dart';
 import '../../modules.dart';
 
@@ -40,6 +40,8 @@ class SplashController extends GetxController {
         await Future.delayed(Duration(seconds: 1));
         if (useTestToken) {
           await Get.find<AuthController>().getUserDetails();
+          log('Test: ${AppStorage.getUserDetails().toJson()}');
+          log('Get: ${AppStorage.getToken()}');
         } else {
           if (token == null || token.isEmpty) {
             Get.offAllNamed(AppRoutes.signin);
@@ -48,7 +50,23 @@ class SplashController extends GetxController {
           }
         }
       }
-    } catch (e) {
+    }
+    // try {
+    //   if (isNewUser) {
+    //     Get.offAllNamed(AppRoutes.onBoarding);
+    //     AppStorage.setNewUserStatus(false);
+    //   } else {
+    //     // await Get.find<AuthController>().getUserDetails();
+    //     String? token = AppStorage.getToken();
+    //     await Future.delayed(Duration(seconds: 1));
+    //     if (token == null || token.isEmpty) {
+    //       Get.offAllNamed(AppRoutes.signin);
+    //     } else {
+    //       await Get.find<AuthController>().getUserDetails();
+    //     }
+    //   }
+    // }
+    catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }

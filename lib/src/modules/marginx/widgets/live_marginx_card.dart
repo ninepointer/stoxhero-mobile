@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import '../../../app/app.dart';
 
-import '../../../core/core.dart';
-import '../../../data/models/response/live_marginx_list_response.dart';
-import '../../../data/models/response/upcoming_marginx_list_response.dart';
-import '../../modules.dart';
-
-class LiveMarginxCard extends StatelessWidget {
-  final LiveMarginX? liveMarginx;
-  final UpcomingMarginX? upComingMarginx;
-
-  LiveMarginxCard({
-    Key? key,
-    this.liveMarginx,
-    this.upComingMarginx,
-  }) : super(key: key);
+class LiveMarginxCard extends GetView<MarginXController> {
+  final LiveMarginX? marginx;
+  LiveMarginxCard({Key? key, this.marginx}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +17,7 @@ class LiveMarginxCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
-                    liveMarginx?.marginXName ?? '',
+                    marginx?.marginXName ?? '',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ),
@@ -52,39 +41,48 @@ class LiveMarginxCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.success,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Text(
-                  'Nifty',
-                  style: AppStyles.tsWhiteMedium12,
-                ),
-              ),
-              SizedBox(width: 4),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.secondary,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Text(
-                  'Bank Nifty',
-                  style: AppStyles.tsWhiteMedium12,
+              Visibility(
+                visible: marginx?.isNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.success,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'Nifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
               ),
               SizedBox(width: 4),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.info,
-                  borderRadius: BorderRadius.circular(100),
+              Visibility(
+                visible: marginx?.isBankNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'Bank Nifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
-                child: Text(
-                  'Finnifty',
-                  style: AppStyles.tsWhiteMedium12,
+              ),
+              SizedBox(width: 4),
+              Visibility(
+                visible: marginx?.isFinNifty == true,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.info,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    'Finnifty',
+                    style: AppStyles.tsWhiteMedium12,
+                  ),
                 ),
               ),
               SizedBox(width: 4),
@@ -117,11 +115,16 @@ class LiveMarginxCard extends StatelessWidget {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: AppStyles.tsGreyRegular14,
+                          style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
-                          '${liveMarginx?.maxParticipants}',
+                          controller
+                              .calculateSeatsLeft(
+                                marginx?.maxParticipants ?? 0,
+                                marginx?.participants?.length ?? 0,
+                              )
+                              .toString(),
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -135,7 +138,7 @@ class LiveMarginxCard extends StatelessWidget {
                       ),
                       Text(
                         'Reward',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       Text(
                         '% of your Investment',
@@ -149,9 +152,9 @@ class LiveMarginxCard extends StatelessWidget {
                       children: [
                         Text(
                           'Remaining',
-                          style: AppStyles.tsGreyRegular14,
+                          style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           "Started ",
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -170,11 +173,11 @@ class LiveMarginxCard extends StatelessWidget {
                     children: [
                       Text(
                         'Start Date & Time',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(liveMarginx?.startTime),
+                        FormatHelper.formatDateTimeToIST(marginx?.startTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -184,11 +187,11 @@ class LiveMarginxCard extends StatelessWidget {
                     children: [
                       Text(
                         'End Date & Time',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(liveMarginx?.endTime),
+                        FormatHelper.formatDateTimeToIST(marginx?.endTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -204,12 +207,11 @@ class LiveMarginxCard extends StatelessWidget {
                     children: [
                       Text(
                         'Investment',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(liveMarginx?.marginXTemplate?.entryFee,
-                            decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.marginXTemplate?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -219,12 +221,11 @@ class LiveMarginxCard extends StatelessWidget {
                     children: [
                       Text(
                         'Portfolio',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(liveMarginx?.marginXTemplate?.portfolioValue,
-                            decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.marginXTemplate?.portfolioValue, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -241,12 +242,12 @@ class LiveMarginxCard extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   Get.to(
-                    () => ViewCard(),
+                    () => ViewCard(liveMarginX: marginx),
                   );
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -264,14 +265,52 @@ class LiveMarginxCard extends StatelessWidget {
             ),
             Expanded(
               child: GestureDetector(
+                onTap: controller.checkIfLivePurchased(marginx)
+                    ? () {
+                        controller.loadTradingData();
+                        controller.liveMarginX(marginx);
+                        Get.to(() => MarginXTradingView());
+                      }
+                    : () {
+                        if (controller.calculateSeatsLeft(
+                                marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) ==
+                            0) {
+                          SnackbarHelper.showSnackbar('Contest is Full');
+                        } else {
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: PurchaseItemBottomSheet(
+                              buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
+                              onSubmit: () {
+                                Get.back();
+                                var data = {
+                                  "entryFee": marginx?.marginXTemplate?.entryFee,
+                                  "marginXId": marginx?.id,
+                                  "marginXName": marginx?.marginXName,
+                                };
+                                controller.purchaseMarginX(data);
+                              },
+                            ),
+                          );
+                        }
+                      },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.25),
+                    color: AppColors.success.withOpacity(.25),
                   ),
                   child: Text(
-                    'Buy',
+                    controller.checkIfLivePurchased(marginx) &&
+                            controller.calculateSeatsLeft(
+                                    marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) >
+                                0
+                        ? 'Start Trading'
+                        : controller.calculateSeatsLeft(
+                                    marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) ==
+                                0
+                            ? 'MarginX Full'
+                            : 'Pay Now',
                     style: AppStyles.tsWhiteMedium14.copyWith(
                       color: AppColors.success,
                     ),
@@ -283,7 +322,7 @@ class LiveMarginxCard extends StatelessWidget {
               child: GestureDetector(
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(

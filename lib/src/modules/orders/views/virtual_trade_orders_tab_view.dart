@@ -98,7 +98,7 @@ class VirtualTradeOrdersTabView extends GetView<OrdersController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OrderCardTile(
-                              label: 'Time',
+                              label: 'Timestamp',
                               value: FormatHelper.formatDateTime(order.tradeTime),
                             ),
                           ],

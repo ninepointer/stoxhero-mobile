@@ -1,16 +1,35 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class ContestPositionCard extends GetView<ContestController> {
-  final ContestPositionList position;
-
+  final ContestPosition position;
   const ContestPositionCard({super.key, required this.position});
+
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      position.id!.instrumentToken!,
+      position.id!.exchangeInstrumentToken!,
+    );
+    controller.generateLotsList(type: position.id?.symbol);
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: ContestTransactionBottomSheet(
+        type: type,
+        tradingInstrument: TradingInstrument(
+          name: position.id?.symbol,
+          exchange: position.id?.exchange,
+          tradingsymbol: position.id?.symbol,
+          exchangeToken: position.id?.exchangeInstrumentToken,
+          instrumentToken: position.id?.instrumentToken,
+          lastPrice: lastPrice,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +37,11 @@ class ContestPositionCard extends GetView<ContestController> {
       children: [
         CommonCard(
           hasBorder: false,
-          margin: EdgeInsets.symmetric(horizontal: 12),
+          margin: EdgeInsets.all(8).copyWith(bottom: 0),
           padding: EdgeInsets.zero,
           children: [
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -31,15 +50,37 @@ class ContestPositionCard extends GetView<ContestController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ContestWatchListCardTile(
+                        ContestPositionCardTile(
                           label: 'Symbol',
-                          value: position.iId?.symbol,
+                          value: position.id?.symbol,
                         ),
-                        ContestWatchListCardTile(
+                        ContestPositionCardTile(
                           isRightAlign: true,
                           label: 'Gross P&L',
-                          valueColor: controller.getValueColor(position.amount),
-                          value: FormatHelper.formatNumbers(position.amount),
+                          valueColor: controller.getValueColor(
+                            position.lots == 0
+                                ? position.amount
+                                : controller.calculateGrossPNL(
+                                    position.amount!,
+                                    position.lots!.toInt(),
+                                    controller.getInstrumentLastPrice(
+                                      position.id!.instrumentToken!,
+                                      position.id!.exchangeInstrumentToken!,
+                                    ),
+                                  ),
+                          ),
+                          value: position.lots == 0
+                              ? FormatHelper.formatNumbers(position.amount)
+                              : FormatHelper.formatNumbers(
+                                  controller.calculateGrossPNL(
+                                    position.amount!,
+                                    position.lots!.toInt(),
+                                    controller.getInstrumentLastPrice(
+                                      position.id!.instrumentToken!,
+                                      position.id!.exchangeInstrumentToken!,
+                                    ),
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -49,15 +90,27 @@ class ContestPositionCard extends GetView<ContestController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ContestWatchListCardTile(
-                          label: 'Quantity',
-                          value: position.lots.toString(),
-                        ),
-                        ContestWatchListCardTile(
-                          isRightAlign: true,
+                        ContestPositionCardTile(
                           label: 'Avg. Price',
-                          valueColor: controller.getValueColor(position.lastaverageprice),
-                          value: FormatHelper.formatNumbers(position.lastaverageprice),
+                          value: FormatHelper.formatNumbers(
+                            position.lastaverageprice,
+                          ),
+                        ),
+                        ContestPositionCardTile(
+                          isRightAlign: true,
+                          label: 'LTP',
+                          value: FormatHelper.formatNumbers(
+                            controller.getInstrumentLastPrice(
+                              position.id!.instrumentToken!,
+                              position.id!.exchangeInstrumentToken!,
+                            ),
+                          ),
+                          valueColor: controller.getValueColor(
+                            controller.getInstrumentLastPrice(
+                              position.id!.instrumentToken!,
+                              position.id!.exchangeInstrumentToken!,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -65,15 +118,23 @@ class ContestPositionCard extends GetView<ContestController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ContestWatchListCardTile(
-                        label: 'LTP',
-                        valueColor: controller.getValueColor(position.lastaverageprice),
-                        value: FormatHelper.formatNumbers(position.lastaverageprice),
+                      ContestPositionCardTile(
+                        label: 'Quantity',
+                        value: position.lots.toString(),
                       ),
-                      ContestWatchListCardTile(
+                      ContestPositionCardTile(
                         isRightAlign: true,
                         label: 'Changes(%)',
-                        value: '0.00%',
+                        value: controller.getInstrumentChanges(
+                          position.id?.instrumentToken ?? 0,
+                          position.id?.exchangeInstrumentToken ?? 0,
+                        ),
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentChanges(
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -84,28 +145,12 @@ class ContestPositionCard extends GetView<ContestController> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      log('instrument : ${position.toJson()}');
-                      FocusScope.of(context).unfocus();
-                      showBottomSheet(
-                        context: context,
-                        builder: (context) => VirtualTransactionBottomSheet(
-                          type: VirtualTransactionType.buy,
-                          data: VirtualTradingInstrument(
-                            name: position.iId!.symbol,
-                            exchange: position.iId!.exchange,
-                            tradingsymbol: position.iId!.symbol,
-                            exchangeToken: position.iId!.exchangeInstrumentToken,
-                            instrumentToken: position.iId!.instrumentToken,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.success.withOpacity(0.1),
+                        color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(8),
                         ),
@@ -121,28 +166,12 @@ class ContestPositionCard extends GetView<ContestController> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {
-                      log('instrument : ${position.toJson()}');
-                      FocusScope.of(context).unfocus();
-                      showBottomSheet(
-                        context: context,
-                        builder: (context) => VirtualTransactionBottomSheet(
-                          type: VirtualTransactionType.sell,
-                          data: VirtualTradingInstrument(
-                            name: position.iId!.symbol,
-                            exchange: position.iId!.exchange,
-                            tradingsymbol: position.iId!.symbol,
-                            exchangeToken: position.iId!.exchangeInstrumentToken,
-                            instrumentToken: position.iId!.instrumentToken,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.danger.withOpacity(0.1),
+                        color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
                         'SELL',
@@ -156,28 +185,56 @@ class ContestPositionCard extends GetView<ContestController> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      log('instrument : ${position.toJson()}');
                       FocusScope.of(context).unfocus();
-                      // controller.selectedQuantity(position.lots);
-                      showBottomSheet(
-                        context: context,
-                        builder: (context) => VirtualTransactionBottomSheet(
-                          type: VirtualTransactionType.exit,
-                          data: VirtualTradingInstrument(
-                            name: position.iId!.symbol,
-                            exchange: position.iId!.exchange,
-                            tradingsymbol: position.iId!.symbol,
-                            exchangeToken: position.iId!.exchangeInstrumentToken,
-                            instrumentToken: position.iId!.instrumentToken,
+                      List<int> lots = controller.generateLotsList(type: position.id?.symbol);
+                      int exitLots = position.lots!.toInt();
+                      int maxLots = lots.last;
+                      log('selectedQuantity ${controller.selectedQuantity.value}');
+                      if (exitLots == 0) {
+                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                      } else {
+                        log(exitLots.toString());
+                        log(maxLots.toString());
+                        if (exitLots.toString().contains('-')) {
+                          if (exitLots < 0) {
+                            exitLots = -exitLots;
+                          }
+
+                          if (!lots.contains(exitLots)) {
+                            lots.add(exitLots);
+                            lots.sort();
+                          }
+                          controller.selectedQuantity.value = exitLots;
+                        }
+
+                        if (exitLots > maxLots) {
+                          controller.selectedQuantity.value = maxLots;
+                        } else {
+                          controller.selectedQuantity.value = exitLots;
+                        }
+                        controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+                        controller.lotsValueList.assignAll(lots);
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: ContestTransactionBottomSheet(
+                            type: TransactionType.exit,
+                            tradingInstrument: TradingInstrument(
+                              name: position.id?.symbol,
+                              exchange: position.id?.exchange,
+                              tradingsymbol: position.id?.symbol,
+                              exchangeToken: position.id?.exchangeInstrumentToken,
+                              instrumentToken: position.id?.instrumentToken,
+                              lotSize: position.lots,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(0.1),
+                        color: AppColors.warning.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
@@ -194,6 +251,40 @@ class ContestPositionCard extends GetView<ContestController> {
               ],
             )
           ],
+        ),
+      ],
+    );
+  }
+}
+
+class ContestPositionCardTile extends StatelessWidget {
+  final String? label;
+  final dynamic value;
+  final bool isRightAlign;
+  final Color? valueColor;
+  const ContestPositionCardTile({
+    super.key,
+    required this.label,
+    this.value,
+    this.isRightAlign = false,
+    this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Text(
+          label ?? '-',
+          style: AppStyles.tsGreyMedium12,
+        ),
+        SizedBox(height: 2),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
+              ),
         ),
       ],
     );

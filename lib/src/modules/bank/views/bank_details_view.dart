@@ -18,38 +18,45 @@ class BankDetailsView extends GetView<BankController> {
             IconButton(
               splashRadius: 24,
               icon: controller.isEditEnabled.value ? Icon(Icons.save) : Icon(Icons.edit),
-              onPressed: () {
-                if (controller.isEditEnabled.value) controller.saveUserBankDetails();
-                controller.isEditEnabled.toggle();
-                FocusScope.of(context).unfocus();
-              },
-            ),
+              onPressed: controller.userDetails.value.kYCStatus == 'Approved'
+                  ? null
+                  : () {
+                      if (controller.isEditEnabled.value) {
+                        controller.saveUserBankDetails();
+                      }
+                      controller.isEditEnabled.toggle();
+                      FocusScope.of(context).unfocus();
+                    },
+            )
           ],
         ),
         body: Visibility(
           visible: !controller.isLoadingStatus,
           replacement: CommonLoader(),
-          child: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            color: Theme.of(context).cardColor,
+            margin: EdgeInsets.only(top: 4),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(16),
               child: AbsorbPointer(
                 absorbing: !controller.isEditEnabled.value,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 16),
                     Text(
                       'Online Payment',
                       textAlign: TextAlign.start,
-                      style: AppStyles.tsGreyMedium16,
+                      style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
                     CommonTextField(
                       prefixIcon: Icon(Icons.credit_card),
                       hintText: 'UPI ID',
+                      controller: controller.upiIdTextController,
                     ),
                     CommonTextField(
                       hintText: 'Google Pay Number',
+                      controller: controller.googlePayNumberTextController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
@@ -58,6 +65,7 @@ class BankDetailsView extends GetView<BankController> {
                     ),
                     CommonTextField(
                       hintText: 'PhonePe Number',
+                      controller: controller.phonePeNumberTextController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
@@ -66,6 +74,7 @@ class BankDetailsView extends GetView<BankController> {
                     ),
                     CommonTextField(
                       hintText: 'Paytm Number',
+                      controller: controller.paytmNumberTextController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
@@ -75,17 +84,20 @@ class BankDetailsView extends GetView<BankController> {
                     Text(
                       'Bank Details',
                       textAlign: TextAlign.start,
-                      style: AppStyles.tsGreyMedium16,
+                      style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
                     CommonTextField(
                       hintText: 'Your Name as per Bank Account',
+                      controller: controller.nameAsPerBankAccountTextController,
                     ),
                     CommonTextField(
                       hintText: 'Bank Name',
+                      controller: controller.bankNameTextController,
                     ),
                     CommonTextField(
                       hintText: 'Account Number',
+                      controller: controller.accountNumberTextController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -93,6 +105,7 @@ class BankDetailsView extends GetView<BankController> {
                     ),
                     CommonTextField(
                       hintText: 'IFSC Code',
+                      controller: controller.ifscCodeTextController,
                     ),
                   ],
                 ),

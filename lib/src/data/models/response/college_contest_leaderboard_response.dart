@@ -31,7 +31,7 @@ class CollegeContestLeaderboard {
   CollegeId? iId;
   int? contestParticipated;
   int? contestWon;
-  double? totalPayout;
+  num? totalPayout;
   String? traderFirstName;
   String? traderLastName;
   num? strikeRate;

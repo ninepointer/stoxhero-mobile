@@ -56,9 +56,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                         isRightAlign: true,
                         label: 'Type',
                         value: order.buyOrSell,
-                        valueColor: order.buyOrSell == AppConstants.buy
-                            ? AppColors.success
-                            : AppColors.danger,
+                        valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
                       ),
                     ],
                   ),
@@ -74,9 +72,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                         isRightAlign: true,
                         label: 'Status',
                         value: order.status,
-                        valueColor: order.status == AppConstants.complete
-                            ? AppColors.success
-                            : AppColors.danger,
+                        valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
                       ),
                     ],
                   ),
@@ -85,7 +81,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       OrderCardTile(
-                        label: 'Time',
+                        label: 'Timestamp',
                         value: FormatHelper.formatDateTime(order.tradeTime),
                       ),
                     ],

@@ -1,4 +1,5 @@
 import 'package:get/route_manager.dart';
+import 'package:stoxhero/src/modules/contest/views/contest_search_symbol_view.dart';
 
 import '../../modules/modules.dart';
 import 'routes.dart';
@@ -90,6 +91,16 @@ class AppPages {
       binding: ContestBinding(),
     ),
     GetPage(
+      name: AppRoutes.contestSearchSymbol,
+      page: () => ContestSearchSymbolView(),
+      binding: ContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contestLiveLeaderboard,
+      page: () => ContestLiveLeaderboardView(),
+      binding: ContestBinding(),
+    ),
+    GetPage(
       name: AppRoutes.pastContest,
       page: () => PastContestView(),
       binding: ContestBinding(),
@@ -119,8 +130,18 @@ class AppPages {
       binding: MarginXBinding(),
     ),
     GetPage(
+      name: AppRoutes.marginXSearchSymbol,
+      page: () => MarginXSearchSymbolView(),
+      binding: MarginXBinding(),
+    ),
+    GetPage(
       name: AppRoutes.collegeContest,
       page: () => CollegeContestView(),
+      binding: CollegeContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.collegeContestSearchSymbol,
+      page: () => CollegeContestSearchSymbolView(),
       binding: CollegeContestBinding(),
     ),
     GetPage(
@@ -132,6 +153,21 @@ class AppPages {
       name: AppRoutes.virtualSearchSymbol,
       page: () => VirtualSearchSymbolView(),
       binding: VirtualTradingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.Internship,
+      page: () => InternshipDashboardView(),
+      binding: InternshipBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.internshipSearchSymbol,
+      page: () => InternshipSearchSymbolView(),
+      binding: InternshipBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.payment,
+      page: () => PaymentView(),
+      binding: WalletBinding(),
     ),
   ];
 }

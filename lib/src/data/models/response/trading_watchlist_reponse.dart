@@ -1,15 +1,15 @@
-class TenxTradingWatchlistResponse {
+class TradingWatchlistResponse {
   String? message;
-  List<TenxTradingWatchlist>? data;
+  List<TradingWatchlist>? data;
 
-  TenxTradingWatchlistResponse({this.message, this.data});
+  TradingWatchlistResponse({this.message, this.data});
 
-  TenxTradingWatchlistResponse.fromJson(Map<String, dynamic> json) {
+  TradingWatchlistResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
-      data = <TenxTradingWatchlist>[];
+      data = <TradingWatchlist>[];
       json['data'].forEach((v) {
-        data!.add(new TenxTradingWatchlist.fromJson(v));
+        data!.add(new TradingWatchlist.fromJson(v));
       });
     }
   }
@@ -24,8 +24,8 @@ class TenxTradingWatchlistResponse {
   }
 }
 
-class TenxTradingWatchlist {
-  String? sId;
+class TradingWatchlist {
+  String? id;
   String? instrument;
   String? exchange;
   String? symbol;
@@ -35,9 +35,10 @@ class TenxTradingWatchlist {
   int? exchangeInstrumentToken;
   String? contractDate;
   int? maxLot;
+  String? chartInstrument;
 
-  TenxTradingWatchlist(
-      {this.sId,
+  TradingWatchlist(
+      {this.id,
       this.instrument,
       this.exchange,
       this.symbol,
@@ -46,10 +47,11 @@ class TenxTradingWatchlist {
       this.instrumentToken,
       this.exchangeInstrumentToken,
       this.contractDate,
-      this.maxLot});
+      this.maxLot,
+      this.chartInstrument});
 
-  TenxTradingWatchlist.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+  TradingWatchlist.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
     instrument = json['instrument'];
     exchange = json['exchange'];
     symbol = json['symbol'];
@@ -59,11 +61,12 @@ class TenxTradingWatchlist {
     exchangeInstrumentToken = json['exchangeInstrumentToken'];
     contractDate = json['contractDate'];
     maxLot = json['maxLot'];
+    chartInstrument = json['chartInstrument'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['instrument'] = this.instrument;
     data['exchange'] = this.exchange;
     data['symbol'] = this.symbol;
@@ -73,6 +76,7 @@ class TenxTradingWatchlist {
     data['exchangeInstrumentToken'] = this.exchangeInstrumentToken;
     data['contractDate'] = this.contractDate;
     data['maxLot'] = this.maxLot;
+    data['chartInstrument'] = this.chartInstrument;
     return data;
   }
 }

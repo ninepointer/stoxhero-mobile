@@ -39,30 +39,24 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<PortfolioController>().loadData();
         break;
       case 2:
-        Get.toNamed(AppRoutes.referrals);
-        Get.find<ReferralsController>().loadData();
+        Get.toNamed(AppRoutes.orders);
+        Get.find<OrdersController>().loadData();
         break;
       case 3:
-       
+        Get.toNamed(AppRoutes.Internship);
+        Get.find<InternshipController>().loadUserData();
+
         break;
       case 4:
+        ThemeService().switchTheme();
         break;
       case 5:
-        break;
-      case 6:
-        ThemeService().switchTheme();
-        break;
-      case 7:
-        AppStorage.clearLoginDetails();
-        Get.offAllNamed(AppRoutes.signin);
-        break;
-      case 6:
-        ThemeService().switchTheme();
-        break;
-      case 7:
         AppStorage.clearStorage();
         Get.offAllNamed(AppRoutes.signin);
+        // AppStorage.clearLoginDetails();
+        // Get.offAllNamed(AppRoutes.signin);
         break;
+
       default:
     }
   }
@@ -84,8 +78,21 @@ class _CommonDrawerState extends State<CommonDrawer> {
                   getUserFullName(),
                   style: Theme.of(context).textTheme.tsMedium16,
                 ),
-                accountEmail: Text(
-                  'Referral Code: ${controller.userDetailsData.myReferralCode ?? '-'}',
+                accountEmail: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Referral Code: ${controller.userDetailsData.myReferralCode ?? '-'}',
+                      ),
+                    ),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     // Add your logout logic here
+                    //   },
+                    //   icon: Icon(Icons.logout),
+                    //   color: Theme.of(context).primaryColor,
+                    // ),
+                  ],
                 ),
                 currentAccountPicture: Container(
                   decoration: BoxDecoration(
@@ -138,21 +145,22 @@ class _CommonDrawerState extends State<CommonDrawer> {
               ),
               ProfileListTile(
                 label: 'Orders',
-                onTap: () {
-                  Get.toNamed(AppRoutes.orders);
-                  Get.find<OrdersController>().loadData();
-                },
+                onTap: () => selectedItem(context, 2),
+              ),
+              ProfileListTile(
+                label: 'Internship/Training',
+                onTap: () => selectedItem(context, 3),
               ),
               ProfileListTile(
                 icon: Icons.dark_mode,
                 label: 'Dark Mode',
-                onTap: () => selectedItem(context, 6),
+                onTap: () => selectedItem(context, 4),
               ),
-              // ProfileListTile(
-              //   icon: Icons.logout,
-              //   label: 'Logout',
-              //   onTap: () => selectedItem(context, 7),
-              // ),
+              ProfileListTile(
+                icon: Icons.logout,
+                label: 'Logout',
+                onTap: () => selectedItem(context, 5),
+              ),
             ],
           ),
         ),

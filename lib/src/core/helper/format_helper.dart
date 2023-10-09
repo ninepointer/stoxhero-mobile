@@ -7,7 +7,7 @@ class FormatHelper {
     bool showSymbol = true,
     int decimal = 2,
   }) {
-    if (value == null || value.toString().isEmpty) return '0';
+    if (value == null || value.toString().isEmpty) return '₹ 0';
     if (value != null) {
       num number = value is int || value is double
           ? isNegative
@@ -25,7 +25,7 @@ class FormatHelper {
       String formattedAmount = currencyFormat.format(number);
       return formattedAmount;
     } else {
-      return '0';
+      return '₹ 0';
     }
   }
 
@@ -81,6 +81,16 @@ class FormatHelper {
       DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
       String formattedIST = DateFormat('d MMM yyyy hh:mm a').format(dateTimeIST);
       return formattedIST;
+    } else {
+      return '-';
+    }
+  }
+
+  static String formatDateYear(String? value) {
+    if (value != null) {
+      DateTime dateTime = DateTime.parse(value);
+      String formattedString = DateFormat('d MMMM yyyy').format(dateTime);
+      return formattedString;
     } else {
       return '-';
     }

@@ -1,57 +1,78 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
-  final TenxTradingInstrument data;
+  final TradingInstrument tradingInstrument;
   final bool isAdded;
 
   const TenxSearchInstrumentsCard({
     super.key,
-    required this.data,
+    required this.tradingInstrument,
     required this.isAdded,
   });
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    log('data: ${tradingInstrument.toJson()}');
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      tradingInstrument.instrumentToken!,
+      tradingInstrument.exchangeToken!,
+    );
+    controller.generateLotsList(type: tradingInstrument.name);
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: TenxTransactionBottomSheet(
+        type: type,
+        tradingInstrument: TradingInstrument(
+          name: tradingInstrument.tradingsymbol,
+          instrumentType: tradingInstrument.instrumentType,
+          exchange: tradingInstrument.exchange,
+          tradingsymbol: tradingInstrument.tradingsymbol,
+          exchangeToken: tradingInstrument.exchangeToken,
+          instrumentToken: tradingInstrument.instrumentToken,
+          lastPrice: lastPrice,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return CommonCard(
       hasBorder: false,
-      margin: EdgeInsets.symmetric(horizontal: 12),
+      margin: EdgeInsets.all(8).copyWith(bottom: 0),
       padding: EdgeInsets.zero,
       children: [
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.name ?? '-',
+                    tradingInstrument.name ?? '-',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                   Text(
-                    FormatHelper.formatDateByMonth(data.expiry),
+                    FormatHelper.formatDateByMonth(tradingInstrument.expiry),
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    data.tradingsymbol ?? '-',
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    tradingInstrument.tradingsymbol ?? '-',
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                   Text(
-                    data.exchange ?? '-',
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    tradingInstrument.exchange ?? '-',
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
                 ],
               ),
@@ -62,55 +83,39 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  log('instrument : ${data.toJson()}');
-                  FocusScope.of(context).unfocus();
-                  showBottomSheet(
-                    context: context,
-                    builder: (context) => TenxTransactionBottomSheet(
-                      type: TransactionType.buy,
-                      data: data,
-                    ),
-                  );
-                },
+                onTap: () => openBottomSheet(context, TransactionType.buy),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.success.shade400,
+                    color: AppColors.success.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),
                     ),
                   ),
                   child: Text(
                     'BUY',
-                    style: AppStyles.tsWhiteMedium14,
+                    style: AppStyles.tsWhiteMedium14.copyWith(
+                      color: AppColors.success,
+                    ),
                   ),
                 ),
               ),
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  log('instrument : ${data.toJson()}');
-                  FocusScope.of(context).unfocus();
-                  showBottomSheet(
-                    context: context,
-                    builder: (context) => TenxTransactionBottomSheet(
-                      type: TransactionType.sell,
-                      data: data,
-                    ),
-                  );
-                },
+                onTap: () => openBottomSheet(context, TransactionType.sell),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.danger.shade400,
+                    color: AppColors.danger.withOpacity(.25),
                   ),
                   child: Text(
                     'SELL',
-                    style: AppStyles.tsWhiteMedium14,
+                    style: AppStyles.tsWhiteMedium14.copyWith(
+                      color: AppColors.danger,
+                    ),
                   ),
                 ),
               ),
@@ -118,20 +123,22 @@ class TenxSearchInstrumentsCard extends GetView<TenxTradingController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () => Get.find<TenxTradingController>().removeInstrument(data.instrumentToken)
-                    : () => Get.find<TenxTradingController>().addInstrument(data),
+                    ? () => Get.find<TenxTradingController>().removeInstrument(tradingInstrument.instrumentToken)
+                    : () => Get.find<TenxTradingController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: isAdded ? AppColors.info.shade400 : AppColors.secondary.shade400,
+                    color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),
                   ),
                   child: Text(
                     isAdded ? 'REMOVE' : 'ADD',
-                    style: AppStyles.tsWhiteMedium14,
+                    style: AppStyles.tsWhiteMedium14.copyWith(
+                      color: isAdded ? AppColors.info : AppColors.secondary,
+                    ),
                   ),
                 ),
               ),

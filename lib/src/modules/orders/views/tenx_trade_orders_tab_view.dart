@@ -1,11 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/core/core.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+import '../../../app/app.dart';
 
 class TenxTradeOrdersTabView extends GetView<OrdersController> {
-  const TenxTradeOrdersTabView({Key? key}) : super(key: key);
+  final String? tenxSub;
+
+  const TenxTradeOrdersTabView({
+    Key? key,
+    this.tenxSub,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,27 +71,7 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                               isRightAlign: true,
                               label: 'Type',
                               value: order.buyOrSell,
-                              valueColor: order.buyOrSell == AppConstants.buy
-                                  ? AppColors.success
-                                  : AppColors.danger,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OrderCardTile(
-                              label: 'Date & Time',
-                              value: FormatHelper.formatDateTime(order.tradeTime),
-                            ),
-                            OrderCardTile(
-                              isRightAlign: true,
-                              label: 'Status',
-                              value: order.status,
-                              valueColor: order.status == AppConstants.complete
-                                  ? AppColors.success
-                                  : AppColors.danger,
+                              valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
                             ),
                           ],
                         ),
@@ -100,6 +82,22 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                             OrderCardTile(
                               label: 'Order ID',
                               value: order.orderId,
+                            ),
+                            OrderCardTile(
+                              isRightAlign: true,
+                              label: 'Status',
+                              value: order.status,
+                              valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OrderCardTile(
+                              label: 'Timestamp',
+                              value: FormatHelper.formatDateTime(order.tradeTimeUtc),
                             ),
                           ],
                         )

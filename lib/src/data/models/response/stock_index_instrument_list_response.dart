@@ -1,5 +1,28 @@
-class StockIndexResponse {
-  String? sId;
+class StockIndexInstrumentListResponse {
+  List<StockIndexInstrument>? data;
+
+  StockIndexInstrumentListResponse({this.data});
+
+  StockIndexInstrumentListResponse.fromJson(List? json) {
+    if (json != null) {
+      data = <StockIndexInstrument>[];
+      json.forEach((v) {
+        data!.add(new StockIndexInstrument.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson(data) {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class StockIndexInstrument {
+  String? id;
   String? displayName;
   String? exchange;
   String? instrumentSymbol;
@@ -13,8 +36,8 @@ class StockIndexResponse {
   String? lastModifiedOn;
   int? iV;
 
-  StockIndexResponse(
-      {this.sId,
+  StockIndexInstrument(
+      {this.id,
       this.displayName,
       this.exchange,
       this.instrumentSymbol,
@@ -28,8 +51,8 @@ class StockIndexResponse {
       this.lastModifiedOn,
       this.iV});
 
-  StockIndexResponse.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+  StockIndexInstrument.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
     displayName = json['displayName'];
     exchange = json['exchange'];
     instrumentSymbol = json['instrumentSymbol'];
@@ -46,7 +69,7 @@ class StockIndexResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['displayName'] = this.displayName;
     data['exchange'] = this.exchange;
     data['instrumentSymbol'] = this.instrumentSymbol;

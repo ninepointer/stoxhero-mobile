@@ -2,9 +2,9 @@ class IndexTradeDetailsList {
   bool? tradable;
   String? mode;
   int? instrumentToken;
-  double? lastPrice;
+  num? lastPrice;
   Ohlc? ohlc;
-  double? change;
+  num? change;
   String? exchangeTimestamp;
 
   IndexTradeDetailsList({
@@ -43,10 +43,10 @@ class IndexTradeDetailsList {
 }
 
 class Ohlc {
-  double? high;
-  double? low;
-  double? open;
-  double? close;
+  num? high;
+  num? low;
+  num? open;
+  num? close;
 
   Ohlc({
     this.high,

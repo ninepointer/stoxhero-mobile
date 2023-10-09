@@ -9,10 +9,10 @@ import 'package:stoxhero/src/modules/modules.dart';
 import '../../../data/models/response/upcoming_marginx_list_response.dart';
 
 class UpcomingMarginxCard extends StatefulWidget {
-  final UpcomingMarginX? upComingMarginx;
+  final UpcomingMarginX? marginx;
   UpcomingMarginxCard({
     Key? key,
-    this.upComingMarginx,
+    this.marginx,
   }) : super(key: key);
 
   @override
@@ -39,12 +39,11 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
 
   void updateRemainingTime() {
     DateTime currentTime = DateTime.now();
-    startTimeDateTime = DateTime.parse(widget.upComingMarginx?.startTime ?? '');
+    startTimeDateTime = DateTime.parse(widget.marginx?.startTime ?? '');
 
     setState(() {
-      remainingTime = startTimeDateTime.isAfter(currentTime)
-          ? startTimeDateTime.difference(currentTime)
-          : Duration.zero;
+      remainingTime =
+          startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
     });
     timer = Timer.periodic(
       Duration(seconds: 1),
@@ -74,7 +73,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Text(
-                    widget.upComingMarginx?.marginXName ?? '-',
+                    widget.marginx?.marginXName ?? '-',
                     style: AppStyles.tsSecondaryMedium16,
                   ),
                 ),
@@ -99,7 +98,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
           child: Row(
             children: [
               Visibility(
-                visible: widget.upComingMarginx?.isNifty == true,
+                visible: widget.marginx?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -114,7 +113,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: widget.upComingMarginx?.isBankNifty == true,
+                visible: widget.marginx?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -129,7 +128,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: widget.upComingMarginx?.isFinNifty == true,
+                visible: widget.marginx?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -150,7 +149,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  widget.upComingMarginx?.marginXExpiry ?? '',
+                  widget.marginx?.marginXExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -173,11 +172,16 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: AppStyles.tsGreyRegular14,
+                          style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
-                          '${widget.upComingMarginx?.maxParticipants}',
+                          controller
+                              .calculateSeatsLeft(
+                                widget.marginx?.maxParticipants ?? 0,
+                                widget.marginx?.participants?.length ?? 0,
+                              )
+                              .toString(),
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -191,7 +195,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                       ),
                       Text(
                         'Reward',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                       Text(
                         '% of your Investment',
@@ -205,9 +209,9 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                       children: [
                         Text(
                           'Remaining',
-                          style: AppStyles.tsGreyRegular14,
+                          style: AppStyles.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
                           '${remainingTime.inDays} days \n${remainingTime.inHours.remainder(24)} hrs \n${remainingTime.inMinutes.remainder(60)} mins \n${remainingTime.inSeconds.remainder(60)} secs',
                           style: Theme.of(context).textTheme.tsMedium14,
@@ -227,11 +231,11 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Text(
                         'Start Date & Time',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(widget.upComingMarginx?.startTime),
+                        FormatHelper.formatDateTimeToIST(widget.marginx?.startTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -241,11 +245,11 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Text(
                         'End Date & Time',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(widget.upComingMarginx?.endTime),
+                        FormatHelper.formatDateTimeToIST(widget.marginx?.endTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -261,13 +265,11 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Text(
                         'Investment',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(
-                            widget.upComingMarginx?.marginXTemplate?.entryFee,
-                            decimal: 0),
+                        FormatHelper.formatNumbers(widget.marginx?.marginXTemplate?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -277,13 +279,11 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Text(
                         'Portfolio',
-                        style: AppStyles.tsGreyRegular14,
+                        style: AppStyles.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(
-                            widget.upComingMarginx?.marginXTemplate?.portfolioValue,
-                            decimal: 0),
+                        FormatHelper.formatNumbers(widget.marginx?.marginXTemplate?.portfolioValue, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -300,12 +300,12 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
               child: GestureDetector(
                 onTap: () {
                   Get.to(
-                    () => ViewCard(viewMarginx: widget.upComingMarginx),
+                    () => ViewCard(upcomingMarginX: widget.marginx),
                   );
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -323,14 +323,51 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
             ),
             Expanded(
               child: GestureDetector(
+                onTap: controller.checkIfPurchased(widget.marginx) &&
+                        controller.calculateSeatsLeft(
+                                widget.marginx?.maxParticipants ?? 0, widget.marginx?.participants?.length ?? 0) >
+                            0
+                    ? () {}
+                    : () {
+                        if (controller.calculateSeatsLeft(
+                                widget.marginx?.maxParticipants ?? 0, widget.marginx?.participants?.length ?? 0) ==
+                            0) {
+                          SnackbarHelper.showSnackbar('MarginX is Full');
+                        } else {
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: PurchaseItemBottomSheet(
+                              buyItemPrice: widget.marginx?.marginXTemplate?.entryFee ?? 0,
+                              onSubmit: () {
+                                Get.back();
+                                var data = {
+                                  "entryFee": widget.marginx?.marginXTemplate?.entryFee,
+                                  "marginXId": widget.marginx?.id,
+                                  "marginXName": widget.marginx?.marginXName,
+                                };
+                                controller.purchaseMarginX(data);
+                              },
+                            ),
+                          );
+                        }
+                      },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.25),
+                    color: AppColors.success.withOpacity(.25),
                   ),
                   child: Text(
-                    'Buy',
+                    controller.checkIfPurchased(widget.marginx) &&
+                            controller.calculateSeatsLeft(
+                                    widget.marginx?.maxParticipants ?? 0, widget.marginx?.participants?.length ?? 0) >
+                                0
+                        ? 'Purchased'
+                        : controller.calculateSeatsLeft(
+                                    widget.marginx?.maxParticipants ?? 0, widget.marginx?.participants?.length ?? 0) ==
+                                0
+                            ? 'MarginX Full'
+                            : 'Pay Now',
                     style: AppStyles.tsWhiteMedium14.copyWith(
                       color: AppColors.success,
                     ),
@@ -342,7 +379,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
               child: GestureDetector(
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(

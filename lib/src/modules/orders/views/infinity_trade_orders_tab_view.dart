@@ -164,7 +164,7 @@ class _InfinityTradeOrdersTabViewState extends State<InfinityTradeOrdersTabView>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OrderCardTile(
-                              label: 'Time',
+                              label: 'Timestamp',
                               value: FormatHelper.formatDateTime(order.tradeTime),
                             ),
                           ],

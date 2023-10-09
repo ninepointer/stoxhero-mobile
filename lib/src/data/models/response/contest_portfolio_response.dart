@@ -1,17 +1,17 @@
 class ContestPortfolioResponse {
-  String? status;
+  String? message;
   ContestCreditData? data;
 
-  ContestPortfolioResponse({this.status, this.data});
+  ContestPortfolioResponse({this.message, this.data});
 
   ContestPortfolioResponse.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
+    message = json['message'];
     data = json['data'] != null ? new ContestCreditData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
+    data['message'] = this.message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -22,18 +22,24 @@ class ContestPortfolioResponse {
 class ContestCreditData {
   String? batch;
   int? totalFund;
+  num? npnl;
+  num? openingBalance;
 
-  ContestCreditData({this.batch, this.totalFund});
+  ContestCreditData({this.batch, this.totalFund, this.npnl, this.openingBalance});
 
   ContestCreditData.fromJson(Map<String, dynamic> json) {
     batch = json['batch'];
     totalFund = json['totalFund'];
+    npnl = json['npnl'];
+    openingBalance = json['openingBalance'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['batch'] = this.batch;
     data['totalFund'] = this.totalFund;
+    data['npnl'] = this.npnl;
+    data['openingBalance'] = this.openingBalance;
     return data;
   }
 }

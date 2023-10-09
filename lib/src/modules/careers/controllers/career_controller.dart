@@ -17,12 +17,21 @@ class CareerController extends BaseController<CareerRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
+  final isOtpVisible = false.obs;
+
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
   final emailTextController = TextEditingController();
   final mobileTextController = TextEditingController();
   final dobTextController = TextEditingController();
+  final collegeNameTextController = TextEditingController();
+  final otpTextController = TextEditingController();
+  final linkedInProfileTextController = TextEditingController();
+
   final careerList = <CareerList>[].obs;
+  final careerDetails = CareerList().obs;
+
+  final selectedDOBDateTime = ''.obs;
 
   void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
@@ -35,22 +44,22 @@ class CareerController extends BaseController<CareerRepository> {
     if (pickedDate != null) {
       String date = DateFormat("dd-MM-yyyy").format(pickedDate);
       dobTextController.text = date;
+      selectedDOBDateTime(pickedDate.toString());
     }
   }
 
-  String? selectedValue1;
-  String? selectedValue2;
-  String? selectedValue3;
+  String? experienceSelectedValue;
+  String? hearAboutSelectedValue;
 
-  final List<String> dropdownItems1 = ['Yes', 'No'];
-  final List<String> dropdownItems2 = [
+  final List<String> experienceDropdown = ['Yes', 'No'];
+  final List<String> hearAboutDropdown = [
     'LinkedIn',
     'Facebook',
     'Instagram',
     'Twitter',
     'Google',
     'Friend',
-    'Others'
+    'Others',
   ];
   final List<String> dropdownItems3 = [];
 
@@ -65,6 +74,76 @@ class CareerController extends BaseController<CareerRepository> {
       }
     } catch (e) {
       log('Career: ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  void validateCarrerOtp(String? careerId) async {
+    isLoading(true);
+    if (otpTextController.text.isNotEmpty) {
+      FocusScope.of(Get.context!).unfocus();
+
+      CareerFormRequest data = CareerFormRequest(
+        firstName: firstNameTextController.text,
+        lastName: lastNameTextController.text,
+        email: emailTextController.text,
+        mobile: mobileTextController.text,
+        collegeName: collegeNameTextController.text,
+        dob: selectedDOBDateTime.value,
+        priorTradingExperience: experienceSelectedValue,
+        source: hearAboutSelectedValue,
+        linkedInProfileLink: linkedInProfileTextController.text,
+        mobileOtp: otpTextController.text,
+        career: careerId,
+        campaignCode: "",
+      );
+
+      try {
+        final RepoResponse response = await repository.validateCareerOtp(
+          data.toJson(),
+        );
+        if (response.data != null) {
+          Get.back();
+          SnackbarHelper.showSnackbar(response.data['info']);
+        }
+      } catch (e) {
+        log(e.toString());
+        SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      }
+    }
+    isLoading(false);
+  }
+
+  void submitCareerForm(String? careerId) async {
+    isLoading(true);
+
+    FocusScope.of(Get.context!).unfocus();
+
+    CareerFormRequest data = CareerFormRequest(
+      firstName: firstNameTextController.text,
+      lastName: lastNameTextController.text,
+      email: emailTextController.text,
+      mobile: mobileTextController.text,
+      collegeName: collegeNameTextController.text,
+      dob: selectedDOBDateTime.value,
+      priorTradingExperience: experienceSelectedValue,
+      source: hearAboutSelectedValue,
+      linkedInProfileLink: linkedInProfileTextController.text,
+      career: careerId,
+      campaignCode: "",
+    );
+
+    try {
+      final RepoResponse response = await repository.generateCareerOtp(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        SnackbarHelper.showSnackbar(response.data['info']);
+        isOtpVisible(true);
+      }
+    } catch (e) {
+      log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

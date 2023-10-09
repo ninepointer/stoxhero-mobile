@@ -19,9 +19,9 @@ class TenxSearchSymbolView extends GetView<TenxTradingController> {
           child: Container(
             child: Column(
               children: [
-                SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                Container(
+                  color: Theme.of(context).cardColor,
+                  padding: const EdgeInsets.all(8).copyWith(top: 0),
                   child: CommonTextField(
                     controller: controller.searchTextController,
                     padding: EdgeInsets.zero,
@@ -39,15 +39,14 @@ class TenxSearchSymbolView extends GetView<TenxTradingController> {
                   child: Visibility(
                     visible: !controller.isLoadingStatus,
                     replacement: CommonLoader(),
-                    child: ListView.separated(
+                    child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: controller.tenxInstruments.length,
-                      separatorBuilder: (_, __) => SizedBox(height: 8),
+                      itemCount: controller.tradingInstruments.length,
                       itemBuilder: (context, index) {
-                        var data = controller.tenxInstruments[index];
+                        var data = controller.tradingInstruments[index];
                         return TenxSearchInstrumentsCard(
-                          data: data,
-                          isAdded: controller.tenxWatchlistIds.contains(
+                          tradingInstrument: data,
+                          isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),
                         );

@@ -25,7 +25,7 @@ class UpComingMarginXListResponse {
 }
 
 class UpcomingMarginX {
-  String? sId;
+  String? id;
   String? marginXName;
   String? startTime;
   String? endTime;
@@ -48,7 +48,7 @@ class UpcomingMarginX {
   int? iV;
 
   UpcomingMarginX(
-      {this.sId,
+      {this.id,
       this.marginXName,
       this.startTime,
       this.endTime,
@@ -71,7 +71,7 @@ class UpcomingMarginX {
       this.iV});
 
   UpcomingMarginX.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     marginXName = json['marginXName'];
     startTime = json['startTime'];
     endTime = json['endTime'];
@@ -118,7 +118,7 @@ class UpcomingMarginX {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['marginXName'] = this.marginXName;
     data['startTime'] = this.startTime;
     data['endTime'] = this.endTime;

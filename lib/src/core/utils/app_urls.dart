@@ -5,6 +5,9 @@ class AppUrls {
   static const String apiURL = '$baseURL/api/v1';
 
   static const String tenx = '$apiURL/tenX';
+  static const String tradeMarginDetails = 'trade/marginDetail';
+
+  static const String stockIndex = "$apiURL/stockindex";
 
   static const String signup = "$apiURL/signup";
   static const String phoneLogin = "$apiURL/phonelogin";
@@ -17,36 +20,44 @@ class AppUrls {
   static const String myPortfolio = "$apiURL/portfolio/myPortfolio";
   static const String myTenx = "$apiURL/portfolio/myTenx";
   static const String virtualTradingPortfolio = "$apiURL/paperTrade/margin";
-
+  static String tenxPortfolio(String? id) => "$apiURL/tenX/$id/trade/marginDetail";
   static const String earnings = "$apiURL/earnings";
   static const String referralsActive = "$apiURL/referrals/active";
   static const String referralsLeaderboard = "$apiURL/referrals/leaderboard";
   static const String referralsMyRank = "$apiURL/referrals/myrank";
   static const String myReferrals = "$apiURL/myreferrals";
   static const String tenxActive = "$apiURL/tenx/active";
-
+  static const String tenxSubscription = "$apiURL/tenX/mySubscription";
+  static const String withdrawal = "$apiURL/withdrawals";
   static const String infinityTradeTodaysOrders = "$apiURL/infinityTrade/my/todayorders";
   static const String infinityTradeAllOrders = "$apiURL/infinityTrade/my/historyorders";
 
-  static const String tenxTradeTodaysOrders = "$apiURL/tenx/my/todayorders";
-  static const String tenxTradeAllOrders = "$apiURL/tenx/my/historyorders";
+  static const String tenxTradeTodaysOrders = "$apiURL/tenX/my/todayorders";
+  static String tenxTradeAllOrders(String? subId, String? subscribedOn, String? expiredOn) =>
+      "$apiURL/tenX/my/historyorders/$subId/$subscribedOn/$expiredOn";
 
   static const String paperTradeTodaysOrders = "$apiURL/paperTrade/my/todayorders";
   static const String paperTradeAllOrders = "$apiURL/paperTrade/my/historyorders";
+
   static const String paperTradePosition = "$apiURL/paperTrade/pnl";
+  static const String paperTradePlacingOrder = "$apiURL/paperTrade";
 
   static const String userWalletTransactions = "$apiURL/userwallet/my";
 
   static const String virtualTradingAnalyticsOverView = "$apiURL/analytics/papertrade/myoverview";
   static const String tenxTradingAnalyticsOverView = "$apiURL/analytics/stoxhero/myoverview";
   static const String infinityTradingAnalyticsOverView = "$apiURL/analytics/infinity/myoverview";
-
+  static const String virtualAnalyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=virtual";
+  static const String tenXAnalyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=tenX";
+  static const String infinityAnalyticsExpectedPnL = "$apiURL/userdashboard/expectedpnl?tradeType=infinity";
+  static const String analyticsVirtualMonthlyPnL = "$apiURL/analytics/papertrade/mymonthlypnl";
+  static const String analyticsTenXMonthlyPnl = "$apiURL/analytics/stoxhero/mymonthlypnl";
   static const String virtualTradingDateWiseAnalytics = "$apiURL/analytics/papertrade/mystats";
   static const String tenxTradingDateWiseAnalytics = "$apiURL/analytics/stoxhero/mystats";
   static const String infinityTradingDateWiseAnalytics = "$apiURL/analytics/infinity/mystats";
 
-  static const String tenxTradingSearchInstruments = "$apiURL/tradableInstruments";
-  static const String tenxTradingWatchlist = "$apiURL/instrumentDetails";
+  static const String tradingInstruments = "$apiURL/tradableInstruments";
+  static const String tradingInstrumentWatchlist = "$apiURL/instrumentDetails";
   static const String getliveprice = "$apiURL/getliveprice";
 
   static const String tenxTradingPlacingOrder = "$apiURL/tenxPlacingOrder";
@@ -55,38 +66,68 @@ class AppUrls {
   static const String purchaseIntent = "$tenx/capturepurchaseintent";
   static const String purchaseSubscription = "$apiURL/userwallet/deduct";
 
-  static const String liveContests = "$apiURL/dailycontest/contests/userlive";
+  static const String purchaseContestIntent = "$apiURL/dailycontest/purchaseintent/";
+  static const String purchaseContest = "$apiURL/dailycontest/feededuct";
   static const String upComingContests = "$apiURL/dailycontest/contests/upcoming";
+  static const String liveContests = "$apiURL/dailycontest/contests/userlive";
   static const String completedContests = "$apiURL/dailycontest/contests/completed";
   static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
   static const String contestLeaderboard = "$apiURL/contestscoreboard/scoreboard";
+  static const String contestPlacingOrder = "$apiURL/placingOrderDailyContest";
   static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
 
-  static const String liveCollageContests = "$apiURL/dailycontest/collagecontest/userlive";
+  static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
+
+  static String contestInstrumentWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
+      "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
+
+  static String contestCreditData(String? id) => "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
+
+  static String contestPosition(String? id) => "$apiURL/dailycontest/trade/$id/pnl";
+
+  static String contestsTradingInstruments(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
+      "$apiURL/tradableInstruments?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=Daily Contest";
+
   static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
+  static const String liveCollegeContests = "$apiURL/dailycontest/collegecontests/userlive";
   static const String completedCollegeContests = "$apiURL/dailycontest/contests/collegecompleted";
   static const String collegeContestLeaderboard = "$apiURL/contestscoreboard/collegescoreboard";
-  static const String liveCollegeContests = "$apiURL/dailycontest/collegecontests/userlive";
-  static const String contestWatchList = "$apiURL/instrumentDetails?isBankNifty=true&dailyContest=true";
-  static const String contestCreditData = "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/myPnlandCreditData";
-  static const String contestPosition = "$apiURL/dailycontest/trade/650326ff43a4e0b349b86492/pnl";
-
+  static const String generateCollegeContestOtp = "$apiURL/dailycontest/generateotp";
+  static const String confirmCollegeContestOtp = "$apiURL/dailycontest/confirmotp";
+  static String shareContest(String? id) => "$apiURL/dailycontest/contest/$id/share";
+  static String getNotified(String? id) => "$apiURL/dailycontest/contest/$id/register";
   static const String returnSummary = "$apiURL/userdashboard/summary";
   static const String dashboardCarousel = "$apiURL/carousels/home";
   static const String tutorial = "$apiURL/tutorialcategory/";
 
-  static const String upComingMarginX = "$apiURL/marginx/userupcoming";
   static const String liveMarginx = "$apiURL/marginx/userlive";
+  static const String upComingMarginX = "$apiURL/marginx/userupcoming";
   static const String completedMarginx = "$apiURL/marginx/usercompleted";
+  static String marginXPosition(String? id) => "$apiURL/marginxtrade/$id/pnl";
+  static String marginXCreditData(String? id) => "$apiURL/marginxtrade/$id/myPnlandCreditData";
+  static String marginXInstrumentWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
+      "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
+  static String marginXTradingInstruments(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
+      "$apiURL/tradableInstruments?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
 
-  static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
-
-  static const String stockIndex = "$apiURL/stockindex";
+  static const String marginXPlaceOrder = "$apiURL/placingOrderMarginx";
+  static const String purchaseMarginX = "$apiURL/marginx/feededuct";
+  static String completedMarginXOrders(String? id) => "$apiURL/marginxtrade/$id/my/allorders";
 
   static String performance(String? tradeType, String? timeFrame) =>
       "$apiURL/userdashboard/stats?tradeType=$tradeType&timeframe=$timeFrame";
 
-  static String careers(String? type) => "$apiURL/career?type=$type";
+  static String careers(String? type) => "$apiURL/career/live?type=$type";
+  static const String generateCareerOtp = "$apiURL/career/generateotp";
+  static const String confirmCareerOtp = "$apiURL/career/confirmotp";
 
-  static String completedMarginXOrders(String? id) => "$apiURL/marginxtrade/$id/my/allorders";
+  static const String internshipBatch = "$apiURL/internbatch/currentinternship";
+  static const String internshipPlaceOrder = "$apiURL/internPlacingOrder";
+  static String internshipPosition(String? id) => "$apiURL/internship/pnl/$id";
+  static String internshipOverview(String? id) => "$apiURL/analytics/internship/myoverview/$id";
+  static String internshipMonthlyPNL(String? id) => "$apiURL/analytics/internship/mymonthlypnl/$id";
+  static String internshipDateWisePNL(String? id) => "$apiURL/analytics/internship/mystats/$id";
+  static String internshipBatchPortfolio(String? id) => "$apiURL/internship/marginDetail/$id";
+  static const String internshipAllOrders = "$apiURL/internship/my/historyorders";
+  static const String internshipTodayOrders = "$apiURL/internship/my/todayorders";
 }

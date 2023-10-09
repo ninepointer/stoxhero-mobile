@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/core/core.dart';
+import '../../../app/app.dart';
 
 class ContestPositionDetailsCard extends StatelessWidget {
   final String? label;
-  final num? value;
+  final dynamic value;
   final bool isNum;
-
+  final Color? valueColor;
   const ContestPositionDetailsCard({
     super.key,
     this.label,
     this.value,
     this.isNum = false,
+    this.valueColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: CommonCard(
+        hasBorder: false,
         margin: EdgeInsets.zero,
         children: [
           Row(
@@ -33,7 +35,7 @@ class ContestPositionDetailsCard extends StatelessWidget {
                   decimal: isNum ? 0 : 2,
                 ),
                 style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                      color: value! < 0 ? AppColors.danger : AppColors.success,
+                      color: valueColor ?? AppColors.secondary,
                     ),
               ),
             ],

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/modules/modules.dart';
-
-import '../../../core/core.dart';
+import '../../../app/app.dart';
 
 class VirtualTradingView extends GetView<VirtualTradingController> {
   const VirtualTradingView({Key? key}) : super(key: key);
@@ -19,43 +16,53 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Nifty 50',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
+                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (var item in controller.stockIndexDetailsList) ...[
+                            CommonStockInfo(
+                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              stockPrice: FormatHelper.formatNumbers(
+                                item.lastPrice,
+                              ),
+                              stockColor: controller.getValueColor(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
+                              stockLTP: FormatHelper.formatNumbers(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
+                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockLTPColor: controller.getValueColor(
+                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                              ),
+                            ),
+                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                          ]
+                        ],
                       ),
-                      CommonStockInfo(
-                        label: 'Bank Nifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Finnifty',
-                        stockPrice: '₹ 12,500.90',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      CommonStockInfo(
-                        label: 'Margin',
-                        stockPrice: '₹ 19,454.09',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                      CommonStockInfo(
-                        label: 'Net P&L',
-                        stockPrice: '₹ 19,454.98',
-                        stockLTP: '₹ 183.15',
-                        stockChange: '(+ 34.42%)',
-                      ),
-                    ],
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CommonMarginNPNLCard(
+                            label: 'Margin',
+                            value: controller.calculateTotalNetPNL(),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CommonMarginNPNLCard(
+                            label: 'Net P & L',
+                            value: controller.calculateTotalNetPNL(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   CommonTile(
                     label: 'My Watchlist',
@@ -64,26 +71,24 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
                   ),
-                  controller.virtualWatchList.isEmpty
+                  controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
-                          height: controller.virtualWatchList.length >= 5
-                              ? 300
-                              : controller.virtualWatchList.length * 76,
+                          height:
+                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 150,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.virtualWatchList.length,
+                            itemCount: controller.tradingWatchlist.length,
                             itemBuilder: (context, index) {
                               return VirtualWatchListCard(
                                 index: index,
-                                data: controller.virtualWatchList[index],
+                                tradingWatchlist: controller.tradingWatchlist[index],
                               );
                             },
                           ),
                         ),
-                  if (controller.virtualPositionsList.isNotEmpty)
-                    CommonTile(label: 'My Position Details'),
+                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -94,12 +99,12 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               VirtualPositionDetailsCard(
                                 isNum: true,
                                 label: 'Running Lots',
-                                value: controller.virtualPositionsList[0].lots,
+                                value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
                               VirtualPositionDetailsCard(
                                 label: 'Brokerage',
-                                value: controller.virtualPositionsList[0].brokerage,
+                                value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
                             ],
                           ),
@@ -108,12 +113,14 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             children: [
                               VirtualPositionDetailsCard(
                                 label: 'Gross P&L',
-                                value: controller.virtualPositionsList[0].amount,
+                                value: controller.calculateTotalGrossPNL(),
+                                valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
                               VirtualPositionDetailsCard(
                                 label: 'Net P&L',
-                                value: controller.virtualPositionsList[0].lastaverageprice,
+                                value: controller.calculateTotalNetPNL(),
+                                valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                               ),
                             ],
                           ),
@@ -123,12 +130,11 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   CommonTile(label: 'My Position'),
                   controller.virtualPositionsList.isEmpty
                       ? NoDataFound()
-                      : ListView.separated(
+                      : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.virtualPositionsList.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 8),
                           itemBuilder: (context, index) {
                             return VirtualPositionCard(
                               position: controller.virtualPositionsList[index],
@@ -138,15 +144,19 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   CommonTile(label: 'Portfolio Details'),
                   VirtualPortfolioDetailsCard(
                     label: 'Portfolio Value',
+                    info: 'Total funds added by StoxHero in your Account',
                     value: controller.virtualPortfolio.value.totalFund,
                   ),
                   VirtualPortfolioDetailsCard(
                     label: 'Available Margin',
-                    value: controller.virtualPortfolio.value.openingBalance,
+                    info: 'Funds that you can use to trade today',
+                    value: controller.calculateMargin(),
                   ),
                   VirtualPortfolioDetailsCard(
                     label: 'Used Margin',
-                    // value: controller.tenxTotalPositionDetails.value.brokerage,
+                    info: 'Net funds utilized for your executed trades',
+                    value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
+                    valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   SizedBox(height: 56),
                 ],

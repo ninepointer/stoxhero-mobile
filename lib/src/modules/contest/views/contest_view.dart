@@ -9,54 +9,64 @@ class ContestView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SingleChildScrollView(
       padding: EdgeInsets.all(16),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            customCard(
-              context: context,
-              title: 'Contests',
-              image: AppImages.contest,
-              buttonLabel: 'Join Contest!',
-              onPressed: () {
-                Get.find<ContestController>().loadData();
-                Get.to(() => ContestListView());
-              },
-            ),
-            SizedBox(height: 12),
-            customCard(
-              context: context,
-              title: 'College Contests',
-              image: AppImages.collegeContest,
-              buttonLabel: 'Join College Contest!',
-              onPressed: () {
-                Get.find<CollegeContestController>().loadData();
-                Get.to(() => CollegeContestView());
-              },
-            ),
-            SizedBox(height: 12),
-            customCard(
-              context: context,
-              title: 'Contests Leaderboard',
-              image: AppImages.contestLeaderboard,
-              buttonLabel: 'See Contest Leaderboard!',
-              onPressed: () {
-                ContestController contestController = Get.find<ContestController>();
-                CollegeContestController collegeContestController = Get.find<CollegeContestController>();
-                contestController.getContestLeaderboardList();
-                collegeContestController.getCollegeContestLeaderboardList();
-                Get.to(
-                  () => ContestLeaderboardView(
-                    contestController: contestController,
-                    collegeContestController: collegeContestController,
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 16),
-          ],
-        ),
+      child: Column(
+        children: [
+          // CommonFilledButton(
+          //     label: 'Form',
+          //     onPressed: () {
+          //       CollegeContestController controller = Get.find<CollegeContestController>();
+          //       controller.loadRegisterData();
+          //       Get.to(
+          //         () => CollegeContestRegisterView(
+          //           contest: controller.liveCollegeContestList[0],
+          //         ),
+          //       );
+          //     }),
+          // SizedBox(height: 12),
+          customCard(
+            context: context,
+            title: 'Contests',
+            image: AppImages.contest,
+            buttonLabel: 'Join Contest!',
+            onPressed: () {
+              Get.find<ContestController>().loadData();
+              Get.to(() => ContestListView());
+            },
+          ),
+          SizedBox(height: 12),
+          customCard(
+            context: context,
+            title: 'College Contests',
+            image: AppImages.collegeContest,
+            buttonLabel: 'Join College Contest!',
+            onPressed: () {
+              Get.find<CollegeContestController>().loadData();
+              Get.to(() => CollegeContestView());
+            },
+          ),
+          SizedBox(height: 12),
+          customCard(
+            context: context,
+            title: 'Contests Leaderboard',
+            image: AppImages.contestLeaderboard,
+            buttonLabel: 'See Contest Leaderboard!',
+            onPressed: () {
+              ContestController contestController = Get.find<ContestController>();
+              CollegeContestController collegeContestController = Get.find<CollegeContestController>();
+              contestController.getContestLeaderboardList();
+              collegeContestController.getCollegeContestLeaderboardList();
+              Get.to(
+                () => ContestLeaderboardView(
+                  contestController: contestController,
+                  collegeContestController: collegeContestController,
+                ),
+              );
+            },
+          ),
+          SizedBox(height: 16),
+        ],
       ),
     );
   }
@@ -73,7 +83,7 @@ class ContestView extends StatelessWidget {
       padding: EdgeInsets.zero,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -110,7 +120,6 @@ class ContestView extends StatelessWidget {
                 height: 48,
                 onPressed: onPressed,
               ),
-              SizedBox(height: 8),
             ],
           ),
         ),

@@ -22,32 +22,38 @@ class ReferralsLeaderboardView extends GetView<ReferralsController> {
       child: Column(
         children: [
           CommonTile(label: 'Referral Leaderboard'),
-          Row(
-            children: [
-              Expanded(
-                child: customCard(
-                  context,
-                  label: 'Friend Joined',
-                  earning: controller.earnings.value.joined?.toString() ?? '0',
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: customCard(
+                    context,
+                    label: 'Friend\nJoined',
+                    earning: controller.earnings.value.joined?.toString() ?? '0',
+                  ),
                 ),
-              ),
-              Expanded(
-                child: customCard(
-                  context,
-                  label: 'Total Earnings',
-                  earning: "₹ ${controller.earnings.value.earnings?.toString() ?? '0'}",
-                  valueColor: AppColors.success,
+                SizedBox(width: 8),
+                Expanded(
+                  child: customCard(
+                    context,
+                    label: 'Total \n Earnings',
+                    earning: "₹ ${controller.earnings.value.earnings?.toString() ?? '0'}",
+                    valueColor: AppColors.success,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: customCard(
-                  context,
-                  label: 'My Rank',
-                  earning: '00',
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
+          // SizedBox(height: 8),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   child: customCard(
+          //     context,
+          //     label: 'My Rank',
+          //     earning: '00',
+          //   ),
+          // ),
           ListView.builder(
             shrinkWrap: true,
             itemCount: controller.referralsLeaderboardList.length,
@@ -93,18 +99,19 @@ class ReferralsLeaderboardView extends GetView<ReferralsController> {
     Color? valueColor,
   }) {
     return CommonCard(
-      margin: EdgeInsets.symmetric(horizontal: 2),
+      margin: EdgeInsets.zero,
       children: [
-        Column(
+        Row(
           children: [
-            Container(
-              alignment: Alignment.center,
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.tsRegular16,
+            Expanded(
+              child: Container(
+                child: Text(
+                  label,
+                  style: Theme.of(context).textTheme.tsRegular16,
+                ),
               ),
             ),
-            SizedBox(height: 4),
+            SizedBox(width: 4),
             Text(
               earning,
               style: Theme.of(context).textTheme.tsMedium16.copyWith(

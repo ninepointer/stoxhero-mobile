@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/core.dart';
+import '../../modules.dart';
 
 class FaqView extends StatefulWidget {
   const FaqView({Key? key}) : super(key: key);
@@ -9,8 +10,8 @@ class FaqView extends StatefulWidget {
 }
 
 class _FaqViewState extends State<FaqView> {
-  List<bool> isExpandedList = List.generate(6, (index) => false);
   int expandedIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +36,7 @@ class _FaqViewState extends State<FaqView> {
               style: Theme.of(context).textTheme.tsMedium18,
             ),
             SizedBox(height: 12),
-            buildExpandableCard(0, 'About Stoxhero', ''),
-            buildExpandableCard(1, 'Login & Registration', ''),
-            buildExpandableCard(2, 'Portfolios', ''),
-            buildExpandableCard(3, 'StoxHero Battles', ''),
-            buildExpandableCard(4, 'Points & Ranking System', ''),
-            buildExpandableCard(5, 'StoxHero Account', ''),
+            for (int i = 0; i < faqItems.length; i++) buildExpandableCard(i, faqItems[i]),
             SizedBox(height: 24),
             Text(
               'For any additional queries,\n drop us an email: team@stoxhero.com',
@@ -53,19 +49,11 @@ class _FaqViewState extends State<FaqView> {
     );
   }
 
-  Widget buildExpandableCard(
-    int index,
-    String title,
-    String content,
-  ) {
+  Widget buildExpandableCard(int index, FaqItem item) {
     return CommonCard(
       onTap: () {
         setState(() {
-          if (expandedIndex == index) {
-            expandedIndex = -1;
-          } else {
-            expandedIndex = index;
-          }
+          expandedIndex = expandedIndex == index ? -1 : index;
         });
       },
       children: [
@@ -73,7 +61,7 @@ class _FaqViewState extends State<FaqView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              title,
+              item.title,
               style: AppStyles.tsSecondaryRegular16,
             ),
             Icon(
@@ -87,8 +75,8 @@ class _FaqViewState extends State<FaqView> {
             children: [
               SizedBox(height: 16),
               Text(
-                content,
-                style: AppStyles.tsWhiteRegular14,
+                item.content,
+                style: Theme.of(context).textTheme.tsRegular14,
               ),
             ],
           ),

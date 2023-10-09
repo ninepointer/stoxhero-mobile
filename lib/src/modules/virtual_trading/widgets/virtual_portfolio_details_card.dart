@@ -1,50 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/core/core.dart';
+import '../../../app/app.dart';
 
 class VirtualPortfolioDetailsCard extends StatelessWidget {
   final String? label;
+  final String? info;
   final dynamic value;
-
+  final Color? valueColor;
   const VirtualPortfolioDetailsCard({
     super.key,
     this.label,
+    this.info,
     this.value,
+    this.valueColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return CommonCard(
+      hasBorder: false,
+      margin: EdgeInsets.all(8).copyWith(bottom: 0),
       children: [
-        CommonCard(
-          hasBorder: false,
-          margin: EdgeInsets.symmetric(horizontal: 8),
+        Row(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label ?? '-',
-                      style: Theme.of(context).textTheme.tsRegular14,
-                    ),
-                  ],
-                ),
-                Text(
-                  FormatHelper.formatNumbers(
-                    value,
-                    decimal: 0,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label ?? '-',
+                    style: Theme.of(context).textTheme.tsMedium14,
                   ),
-                  style: AppStyles.tsPrimarySemiBold16.copyWith(
-                    color: AppColors.success,
+                  SizedBox(height: 2),
+                  Text(
+                    info ?? '-',
+                    style: AppStyles.tsGreyRegular12,
                   ),
-                )
-              ],
+                ],
+              ),
             ),
+            SizedBox(width: 4),
+            Text(
+              FormatHelper.formatNumbers(
+                value,
+                decimal: 0,
+              ),
+              style: AppStyles.tsPrimarySemiBold16.copyWith(
+                color: valueColor ?? AppColors.success,
+              ),
+            )
           ],
         ),
-        SizedBox(height: 4),
       ],
     );
   }

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
-import '../core/core.dart';
+import 'app.dart';
 import 'app_binding.dart';
 export 'app_controller.dart';
+
+export '../app/app.dart';
+export '../base/base.dart';
+export '../core/core.dart';
+export '../data/data.dart';
+export '../modules/modules.dart';
+
+export 'package:get/get.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -16,15 +23,14 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Get.isDarkMode ? Brightness.dark : Brightness.light,
-        statusBarBrightness: Get.isDarkMode ? Brightness.light : Brightness.dark,
-      ),
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
     );
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      defaultTransition: Transition.rightToLeft,
       title: AppConstants.appName,
       themeMode: ThemeService().theme,
       theme: AppTheme.lightThemeData(context),

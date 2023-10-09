@@ -17,10 +17,10 @@ class VirtualTradingInstrument {
   int? exchangeToken;
   String? tradingsymbol;
   String? name;
-  int? lastPrice;
+  num? lastPrice;
   String? expiry;
   int? strike;
-  double? tickSize;
+  num? tickSize;
   int? lotSize;
   String? instrumentType;
   String? segment;
@@ -57,7 +57,8 @@ class VirtualTradingInstrument {
       this.createdOn,
       this.iV,
       this.earlySubscription,
-      this.infinityVisibility});
+      this.infinityVisibility,
+      num? lastaverageprice});
 
   VirtualTradingInstrument.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

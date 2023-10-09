@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/data/data.dart';
+import 'package:stoxhero/src/app/app.dart';
 
-import '../../../core/core.dart';
-
-class LiveCollegeContestCard extends StatelessWidget {
-  final LiveCollegeContest? liveCollegeContest;
+class LiveCollegeContestCard extends GetView<CollegeContestController> {
+  final LiveCollegeContest? contest;
+  final ContestPosition? contestPositionList;
+  final ContestCreditData? contestPortfolio;
   const LiveCollegeContestCard({
     Key? key,
-    this.liveCollegeContest,
+    this.contest,
+    this.contestPositionList,
+    this.contestPortfolio,
   }) : super(key: key);
 
   @override
@@ -23,7 +25,7 @@ class LiveCollegeContestCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  liveCollegeContest?.contestName ?? '-',
+                  contest?.contestName ?? '-',
                   style: AppStyles.tsSecondaryMedium16,
                 ),
               ),
@@ -35,7 +37,7 @@ class LiveCollegeContestCard extends StatelessWidget {
           child: Row(
             children: [
               Visibility(
-                visible: liveCollegeContest?.isNifty == true,
+                visible: contest?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -50,7 +52,7 @@ class LiveCollegeContestCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: liveCollegeContest?.isBankNifty == true,
+                visible: contest?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -65,7 +67,7 @@ class LiveCollegeContestCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: liveCollegeContest?.isFinNifty == true,
+                visible: contest?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
@@ -86,7 +88,7 @@ class LiveCollegeContestCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  liveCollegeContest?.contestExpiry ?? '',
+                  contest?.contestExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -98,7 +100,7 @@ class LiveCollegeContestCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  liveCollegeContest?.contestStatus ?? '',
+                  contest?.contestStatus ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -120,11 +122,16 @@ class LiveCollegeContestCard extends StatelessWidget {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: Theme.of(context).textTheme.tsRegular12,
+                          style: Theme.of(context).textTheme.tsGreyRegular12,
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(height: 2),
                         Text(
-                          '${liveCollegeContest?.maxParticipants}',
+                          controller
+                              .calculateSeatsLeft(
+                                contest?.maxParticipants ?? 0,
+                                contest?.participants?.length ?? 0,
+                              )
+                              .toString(),
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                       ],
@@ -138,10 +145,10 @@ class LiveCollegeContestCard extends StatelessWidget {
                       ),
                       Text(
                         'Reward',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
                       Text(
-                        '${liveCollegeContest?.payoutPercentage} % of the net P&L',
+                        '${contest?.payoutPercentage} % of the net P&L',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -149,18 +156,7 @@ class LiveCollegeContestCard extends StatelessWidget {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        // Text(
-                        //   'Remaining',
-                        //   style: Theme.of(context).textTheme.tsRegular12,
-                        // ),
-                        // SizedBox(height: 4),
-                        // Text(
-                        //   "00:00:00",
-                        //   // '${contestEndTime}',
-                        //   style: Theme.of(context).textTheme.tsMedium14,
-                        // ),
-                      ],
+                      children: [],
                     ),
                   ),
                 ],
@@ -174,11 +170,11 @@ class LiveCollegeContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Start Date & Time',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(liveCollegeContest?.contestStartTime),
+                        FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -188,11 +184,11 @@ class LiveCollegeContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'End Date & Time',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(liveCollegeContest?.contestEndTime),
+                        FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -207,14 +203,12 @@ class LiveCollegeContestCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Entry Fees',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        'Entry Fee',
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
-                        liveCollegeContest?.entryFee == 0
-                            ? 'Free'
-                            : FormatHelper.formatNumbers(liveCollegeContest?.entryFee, decimal: 0),
+                        contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                     ],
@@ -224,12 +218,12 @@ class LiveCollegeContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Portfolio',
-                        style: Theme.of(context).textTheme.tsRegular12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         FormatHelper.formatNumbers(
-                          liveCollegeContest?.portfolio?.portfolioValue,
+                          contest?.portfolio?.portfolioValue,
                           decimal: 0,
                         ),
                         style: Theme.of(context).textTheme.tsMedium14,
@@ -242,47 +236,95 @@ class LiveCollegeContestCard extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.2),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
+                          controller.calculateSeatsLeft(
+                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
+                              0
+                      ? () {
+                          controller.liveCollegeContest(contest);
+                          controller.loadTradingData();
+                          // controller.liveLeaderboardList();
+                          Get.to(() => CollegeContestTradingView());
+                        }
+                      : () {
+                          if (controller.calculateSeatsLeft(
+                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
+                              0) {
+                            SnackbarHelper.showSnackbar('Contest is Full');
+                          } else {
+                            BottomSheetHelper.openBottomSheet(
+                              context: context,
+                              child: PurchaseItemBottomSheet(
+                                buyItemPrice: contest?.entryFee ?? 0,
+                                onSubmit: () {
+                                  Get.back();
+                                  var data = {
+                                    "contestFee": contest?.entryFee,
+                                    "contestId": contest?.id,
+                                    "contestName": contest?.contestName,
+                                  };
+                                  controller.purchaseContest(data);
+                                },
+                              ),
+                            );
+                          }
+                        },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                      ),
+                      color: AppColors.success.withOpacity(.25),
                     ),
-                  ),
-                  child: Text(
-                    'Start Trading',
-                    style: AppStyles.tsWhiteMedium14.copyWith(
-                      color: AppColors.success,
+                    child: Text(
+                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
+                              controller.calculateSeatsLeft(
+                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
+                                  0
+                          ? 'Start Trading'
+                          : controller.calculateSeatsLeft(
+                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
+                                  0
+                              ? 'Contest Full'
+                              : 'Pay Now',
+                      style: AppStyles.tsWhiteMedium14.copyWith(
+                        color: AppColors.success,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary.withOpacity(0.2),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(8),
+              Expanded(
+                child: GestureDetector(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary.withOpacity(.25),
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(8),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    'Share',
-                    style: AppStyles.tsSecondaryMedium14,
+                    child: Text(
+                      'Share',
+                      style: AppStyles.tsSecondaryMedium14,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

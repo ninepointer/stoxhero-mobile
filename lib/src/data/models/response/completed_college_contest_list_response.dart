@@ -28,7 +28,7 @@ class CompletedCollegeContestListResponse {
 }
 
 class CompletedCollegeContest {
-  String? sId;
+  String? id;
   String? contestName;
   String? contestStartTime;
   String? contestEndTime;
@@ -49,10 +49,10 @@ class CompletedCollegeContest {
   bool? isBankNifty;
   bool? isFinNifty;
   bool? isAllIndex;
-  List<InterestedUsers>? interestedUsers;
+  List<CollegeInterestedUsers>? interestedUsers;
   List<ContestSharedBy>? contestSharedBy;
   List<Null>? allowedUsers;
-  List<Participants>? participants;
+  List<CollegeParticipantss>? participants;
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
@@ -62,7 +62,7 @@ class CompletedCollegeContest {
   List<Null>? purchaseIntent;
 
   CompletedCollegeContest(
-      {this.sId,
+      {this.id,
       this.contestName,
       this.contestStartTime,
       this.contestEndTime,
@@ -96,7 +96,7 @@ class CompletedCollegeContest {
       this.purchaseIntent});
 
   CompletedCollegeContest.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     contestName = json['contestName'];
     contestStartTime = json['contestStartTime'];
     contestEndTime = json['contestEndTime'];
@@ -118,9 +118,9 @@ class CompletedCollegeContest {
     isFinNifty = json['isFinNifty'];
     isAllIndex = json['isAllIndex'];
     if (json['interestedUsers'] != null) {
-      interestedUsers = <InterestedUsers>[];
+      interestedUsers = <CollegeInterestedUsers>[];
       json['interestedUsers'].forEach((v) {
-        interestedUsers!.add(new InterestedUsers.fromJson(v));
+        interestedUsers!.add(new CollegeInterestedUsers.fromJson(v));
       });
     }
     if (json['contestSharedBy'] != null) {
@@ -136,9 +136,9 @@ class CompletedCollegeContest {
       });
     }
     if (json['participants'] != null) {
-      participants = <Participants>[];
+      participants = <CollegeParticipantss>[];
       json['participants'].forEach((v) {
-        participants!.add(new Participants.fromJson(v));
+        participants!.add(new CollegeParticipantss.fromJson(v));
       });
     }
     createdOn = json['createdOn'];
@@ -162,7 +162,7 @@ class CompletedCollegeContest {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['contestName'] = this.contestName;
     data['contestStartTime'] = this.contestStartTime;
     data['contestEndTime'] = this.contestEndTime;
@@ -210,15 +210,15 @@ class CompletedCollegeContest {
   }
 }
 
-class InterestedUsers {
+class CollegeInterestedUsers {
   String? userId;
   String? registeredOn;
   String? status;
   String? sId;
 
-  InterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
+  CollegeInterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
 
-  InterestedUsers.fromJson(Map<String, dynamic> json) {
+  CollegeInterestedUsers.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     registeredOn = json['registeredOn'];
     status = json['status'];
@@ -257,15 +257,15 @@ class ContestSharedBy {
   }
 }
 
-class Participants {
+class CollegeParticipantss {
   String? userId;
   String? participatedOn;
   String? sId;
-  double? payout;
+  num? payout;
 
-  Participants({this.userId, this.participatedOn, this.sId, this.payout});
+  CollegeParticipantss({this.userId, this.participatedOn, this.sId, this.payout});
 
-  Participants.fromJson(Map<String, dynamic> json) {
+  CollegeParticipantss.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     participatedOn = json['participatedOn'];
     sId = json['_id'];

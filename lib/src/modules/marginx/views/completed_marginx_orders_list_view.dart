@@ -80,7 +80,7 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
                 ),
                 SizedBox(height: 12),
                 OrderCardTile(
-                  label: 'Time',
+                  label: 'Timestamp',
                   value: FormatHelper.formatDateTime(order.tradeTime),
                 ),
               ],

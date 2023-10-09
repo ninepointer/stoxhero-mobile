@@ -7,4 +7,3 @@ export 'widgets/virtual_search_instruments_card.dart';
 export 'widgets/virtual_transaction_bottom_sheet.dart';
 export 'widgets/virtual_watchlist_card.dart';
 export 'widgets/virtual_position_card.dart';
-export 'widgets/virtual_watchlist_card_tile.dart';

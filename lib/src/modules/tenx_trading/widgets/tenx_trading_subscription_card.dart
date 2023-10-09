@@ -90,17 +90,18 @@ class TenxTradingSubscriptionCard extends GetView<TenxTradingController> {
                 ? () {
                     controller.selectedSubscriptionId(subscription.sId);
                     controller.selectedSubscription(subscription);
-                    controller.loadData();
+                    controller.loadTenxData();
                     Get.toNamed(AppRoutes.tenxDashboard);
                   }
                 : () {
                     controller.selectedSubscriptionId(subscription.sId);
                     controller.selectedSubscription(subscription);
-                    controller.purchaseIntent();
-                    controller.calculateUserWalletAmount();
-                    showModalBottomSheet(
+                    BottomSheetHelper.openBottomSheet(
                       context: context,
-                      builder: (context) => TenxBuySubscriptionBottomSheet(),
+                      child: PurchaseItemBottomSheet(
+                        buyItemPrice: controller.selectedSubscription.value.discountedPrice ?? 0,
+                        onSubmit: () => controller.purchaseSubscription(),
+                      ),
                     );
                   },
             label: isActive ? 'Start Trading' : 'Unlock',

@@ -103,6 +103,7 @@ class AuthController extends BaseController<AuthRepository> {
       email: emailTextController.text,
       mobile: mobileTextController.text,
       mobileOtp: otpTextController.text,
+      referrerCode: "",
     );
 
     try {
@@ -117,8 +118,6 @@ class AuthController extends BaseController<AuthRepository> {
           clearForm();
         }
       } else {
-        otpTextController.clear();
-        Get.offAllNamed(AppRoutes.signin);
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
@@ -167,13 +166,43 @@ class AuthController extends BaseController<AuthRepository> {
         log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         Get.find<HomeController>().loadUserDetails();
         if (navigate) Get.offAllNamed(AppRoutes.home);
+        log('App ${AppStorage.getToken()}');
       } else {
         if (navigate) Get.offAllNamed(AppRoutes.signin);
         SnackbarHelper.showSnackbar(response.error?.message);
+        log('App ${AppStorage.getToken()}');
+        log('App ${AppStorage.getUserDetails().toJson()}');
       }
     } catch (e) {
       log(e.toString());
       Get.offAllNamed(AppRoutes.signin);
+    }
+    isLoading(false);
+  }
+
+  Future resendSigninOtp() async {
+    isLoading(true);
+
+    FocusScope.of(Get.context!).unfocus();
+
+    PhoneLoginRequest data = PhoneLoginRequest(
+      mobile: mobileTextController.text,
+    );
+
+    try {
+      final RepoResponse<GenericResponse> response = await repository.resendSigninOtp(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          SnackbarHelper.showSnackbar(response.data?.message);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/main.dart';
 import 'package:stoxhero/src/core/core.dart';
 
 import '../splash_index.dart';
@@ -37,9 +38,18 @@ class SplashView extends GetView<SplashController> {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Obx(
-                () => Text(
-                  controller.appVersion,
-                  style: AppStyles.tsGreyRegular14,
+                () => Column(
+                  children: [
+                    if (!isProd)
+                      Text(
+                        'DEV',
+                        style: AppStyles.tsPrimaryMedium12,
+                      ),
+                    Text(
+                      controller.appVersion,
+                      style: AppStyles.tsGreyRegular14,
+                    ),
+                  ],
                 ),
               ),
             ),
