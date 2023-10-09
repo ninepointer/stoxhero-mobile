@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/data/data.dart';
 import 'package:stoxhero/src/modules/contest/contest_index.dart';
@@ -74,6 +75,10 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
 
   @override
   Widget build(BuildContext context) {
+    bool isUserInterestedId = controller.isUserInterested(
+      widget.contest,
+      controller.userDetails.value.sId,
+    );
     return Visibility(
       visible: !isVisible,
       replacement: SizedBox(),
@@ -266,7 +271,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Entry Fees',
+                          'Entry Fee',
                           style: AppStyles.tsGreyRegular12,
                         ),
                         SizedBox(height: 2),
@@ -307,6 +312,16 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               children: [
                 Expanded(
                   child: GestureDetector(
+                    onTap: () {
+                      if (isUserInterestedId) {
+                        SnackbarHelper.showSnackbar('Already interested in ${widget.contest?.contestName}');
+                      } else {
+                        controller.upComingContest(widget.contest);
+                        controller.getNotified();
+
+                        SnackbarHelper.showSnackbar('You are now interested in ${widget.contest?.contestName}');
+                      }
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(12),
@@ -314,7 +329,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         color: AppColors.primary.withOpacity(.25),
                       ),
                       child: Text(
-                        'Get Notified',
+                        isUserInterestedId ? 'Notified' : 'Get Notified',
                         style: AppStyles.tsPrimaryMedium14,
                       ),
                     ),
@@ -376,6 +391,13 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 ),
                 Expanded(
                   child: GestureDetector(
+                    onTap: () {
+                      controller.upComingContest(widget.contest);
+                      controller.getShareContest(true);
+                      String url = 'https://stoxhero.com/contest';
+                      Clipboard.setData(ClipboardData(text: url));
+                      SnackbarHelper.showSnackbar('Share Link with your Friends');
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(12),

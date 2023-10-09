@@ -144,4 +144,16 @@ class CollegeContestRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: InstrumentLivePriceListResponse.fromJson(response));
   }
+
+  Future<RepoResponse> generateCollegeContestOtp(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.generateCollegeContestOtp;
+    var response = await service.post(path: apiURL, data: data);
+    return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
+  }
+
+  Future<RepoResponse> validateCollegeContestOtp(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.confirmCollegeContestOtp;
+    var response = await service.post(path: apiURL, data: data);
+    return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
+  }
 }

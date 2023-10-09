@@ -13,6 +13,18 @@ class ContestView extends StatelessWidget {
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
+          CommonFilledButton(
+              label: 'Form',
+              onPressed: () {
+                CollegeContestController controller = Get.find<CollegeContestController>();
+                controller.loadRegisterData();
+                Get.to(
+                  () => CollegeContestRegisterView(
+                    contest: controller.liveCollegeContestList[0],
+                  ),
+                );
+              }),
+          SizedBox(height: 12),
           customCard(
             context: context,
             title: 'Contests',

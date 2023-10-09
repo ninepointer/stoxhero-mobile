@@ -175,7 +175,7 @@ class CompletedContestCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Entry Fees',
+                        'Entry Fee',
                         style: AppStyles.tsGreyRegular12,
                       ),
                       SizedBox(height: 2),

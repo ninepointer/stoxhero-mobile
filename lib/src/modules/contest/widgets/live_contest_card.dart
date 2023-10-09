@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../core/core.dart';
@@ -207,7 +208,7 @@ class LiveContestCard extends GetView<ContestController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Entry Fees',
+                        'Entry Fee',
                         style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
                       SizedBox(height: 2),
@@ -311,6 +312,13 @@ class LiveContestCard extends GetView<ContestController> {
               ),
               Expanded(
                 child: GestureDetector(
+                  onTap: () {
+                    controller.liveContest(contest);
+                    controller.getShareContest(false);
+                    String url = 'https://stoxhero.com/contest';
+                    Clipboard.setData(ClipboardData(text: url));
+                    SnackbarHelper.showSnackbar('Share Link with your Friends');
+                  },
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(12),

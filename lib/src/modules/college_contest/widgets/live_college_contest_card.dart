@@ -203,7 +203,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Entry Fees',
+                        'Entry Fee',
                         style: Theme.of(context).textTheme.tsGreyRegular12,
                       ),
                       SizedBox(height: 2),

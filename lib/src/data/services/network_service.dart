@@ -201,6 +201,50 @@ class NetworkService {
     }
   }
 
+  Future<dynamic> putAuth({
+    required String path,
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? data,
+    String? token,
+  }) async {
+    try {
+      final authDio = Dio();
+
+      authDio.interceptors.clear();
+
+      authDio.interceptors.add(
+        PrettyDioLogger(
+          error: true,
+          request: true,
+          requestBody: true,
+          requestHeader: true,
+          responseBody: true,
+          responseHeader: false,
+          compact: false,
+        ),
+      );
+
+      final headers = {
+        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+      };
+
+      final response = await authDio.put(
+        path,
+        data: data,
+        queryParameters: query,
+        options: Options(
+          headers: headers,
+          contentType: "application/json",
+          responseType: ResponseType.json,
+        ),
+      );
+
+      return response.data;
+    } on Exception catch (error) {
+      return ExceptionHandler.handleError(error);
+    }
+  }
+
   Future<dynamic> get({
     required String path,
     Map<String, dynamic>? query,

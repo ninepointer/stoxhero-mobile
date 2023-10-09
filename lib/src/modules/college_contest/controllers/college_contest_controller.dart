@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:stoxhero/src/data/models/response/trading_instrument_trade_details_list_response.dart';
@@ -20,6 +21,17 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
   final segmentedControlValue = 0.obs;
+
+  final isOtpVisible = false.obs;
+
+  final firstNameTextController = TextEditingController();
+  final lastNameTextController = TextEditingController();
+  final emailTextController = TextEditingController();
+  final mobileTextController = TextEditingController();
+  final dobTextController = TextEditingController();
+  final collegeNameTextController = TextEditingController();
+  final otpTextController = TextEditingController();
+  final linkedInProfileTextController = TextEditingController();
 
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingCollegeContest>[].obs;
@@ -57,6 +69,37 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   final isLivePriceLoaded = false.obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
+
+  String? experienceSelectedValue;
+  String? hearAboutSelectedValue;
+
+  final List<String> experienceDropdown = ['Yes', 'No'];
+  final List<String> hearAboutDropdown = [
+    'LinkedIn',
+    'Facebook',
+    'Instagram',
+    'Twitter',
+    'Google',
+    'Friend',
+    'Others',
+  ];
+  final selectedDOBDateTime = ''.obs;
+
+  void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2050),
+    );
+
+    if (pickedDate != null) {
+      String date = DateFormat("dd-MM-yyyy").format(pickedDate);
+      dobTextController.text = date;
+      selectedDOBDateTime(pickedDate.toString());
+    }
+  }
+
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getCompletedCollegeContestList();
@@ -74,6 +117,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     await getContestPortfolio();
     await socketIndexConnection();
     await socketConnection();
+  }
+
+  Future loadRegisterData() async {
+    userDetails.value = AppStorage.getUserDetails();
+    await getLiveCollegeContestList();
   }
 
   String getStockIndexName(int instId) {
@@ -751,6 +799,69 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       getLiveCollegeContestList();
     } catch (e) {
       log('Purchase Contest: ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  void validateCollegeContestOtp(String? contestId) async {
+    isLoading(true);
+    if (otpTextController.text.isNotEmpty) {
+      FocusScope.of(Get.context!).unfocus();
+
+      CollegeContestFormRequest data = CollegeContestFormRequest(
+        firstName: firstNameTextController.text,
+        lastName: lastNameTextController.text,
+        email: emailTextController.text,
+        mobile: mobileTextController.text,
+        collegeName: collegeNameTextController.text,
+        dob: selectedDOBDateTime.value,
+        source: hearAboutSelectedValue,
+        contest: contestId,
+      );
+
+      try {
+        final RepoResponse response = await repository.validateCollegeContestOtp(
+          data.toJson(),
+        );
+        if (response.data != null) {
+          Get.back();
+          SnackbarHelper.showSnackbar(response.data['info']);
+        }
+      } catch (e) {
+        log(e.toString());
+        SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      }
+    }
+    isLoading(false);
+  }
+
+  void submitCollegeContestForm(String? contestId) async {
+    isLoading(true);
+
+    FocusScope.of(Get.context!).unfocus();
+
+    CollegeContestFormRequest data = CollegeContestFormRequest(
+      firstName: firstNameTextController.text,
+      lastName: lastNameTextController.text,
+      email: emailTextController.text,
+      mobile: mobileTextController.text,
+      collegeName: collegeNameTextController.text,
+      dob: selectedDOBDateTime.value,
+      source: hearAboutSelectedValue,
+      contest: contestId,
+    );
+
+    try {
+      final RepoResponse response = await repository.generateCollegeContestOtp(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        SnackbarHelper.showSnackbar(response.data['info']);
+        isOtpVisible(true);
+      }
+    } catch (e) {
+      log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

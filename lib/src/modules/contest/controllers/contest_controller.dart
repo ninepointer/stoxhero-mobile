@@ -21,6 +21,7 @@ class ContestController extends BaseController<ContestRepository> {
 
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingContest>[].obs;
+  final upComingContest = UpComingContest().obs;
   final premiumContestList = <UpComingContest>[].obs;
   final freeContestList = <UpComingContest>[].obs;
   final tempCompletedContestList = <CompletedContest>[].obs;
@@ -54,6 +55,7 @@ class ContestController extends BaseController<ContestRepository> {
   final lotsValueList = <int>[0].obs;
   final selectedContest = UpComingContest().obs;
   final selectedContestId = ''.obs;
+  bool isInterestedUser = false;
 
   final isLivePriceLoaded = false.obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
@@ -79,6 +81,17 @@ class ContestController extends BaseController<ContestRepository> {
     await socketConnection();
     await socketLeaderboardConnection();
     // await socketMyRankConnection();
+  }
+
+  bool isUserInterested(contest, userId) {
+    if (contest.interestedUsers != null) {
+      for (InterestedUsers user in contest.interestedUsers) {
+        if (user.userId?.id == userId) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   String getStockIndexName(int instId) {
@@ -906,4 +919,39 @@ class ContestController extends BaseController<ContestRepository> {
   //     log(e.toString());
   //   }
   // }
+
+  Future<void> getShareContest(bool isUpcoming) async {
+    isLoading(true);
+
+    try {
+      final RepoResponse<GenericResponse> response = await repository.getShareContest(
+        isUpcoming ? upComingContest.value.id : liveContest.value.id,
+      );
+
+      if (isUpcoming) {
+        getUpComingContestList();
+      } else {
+        getLiveContestList();
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+
+    isLoading(false);
+  }
+
+  Future getNotified() async {
+    isLoading(true);
+    try {
+      final RepoResponse<GenericResponse> response = await repository.getNotified(
+        upComingContest.value.id,
+      );
+      getUpComingContestList();
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
 }

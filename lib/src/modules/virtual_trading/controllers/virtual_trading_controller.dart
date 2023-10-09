@@ -177,17 +177,15 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       lots += position.lots ?? 0;
     }
     num openingBalance = virtualPortfolio.value.openingBalance ?? 0;
-
-    if (lots == 0 || lots < 0) {
-      num margin1 = openingBalance + calculateTotalNetPNL();
-      return margin1;
-    } else {
-      pnl = openingBalance + amount;
-      num margin = pnl + calculateTotalNetPNL();
+    pnl += openingBalance + amount;
+    if (lots == 0) {
+      num margin = openingBalance + calculateTotalNetPNL();
       return margin;
+    } else {
+      return pnl;
     }
   }
-
+ 
   num getInstrumentLastPrice(int instID, int exchID) {
     if (virtualInstrumentTradeDetails.isNotEmpty) {
       int index = virtualInstrumentTradeDetails.indexWhere(

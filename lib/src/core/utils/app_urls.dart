@@ -92,7 +92,10 @@ class AppUrls {
   static const String liveCollegeContests = "$apiURL/dailycontest/collegecontests/userlive";
   static const String completedCollegeContests = "$apiURL/dailycontest/contests/collegecompleted";
   static const String collegeContestLeaderboard = "$apiURL/contestscoreboard/collegescoreboard";
-
+  static const String generateCollegeContestOtp = "$apiURL/dailycontest/generateotp";
+  static const String confirmCollegeContestOtp = "$apiURL/dailycontest/confirmotp";
+  static String shareContest(String? id) => "$apiURL/dailycontest/contest/$id/share";
+  static String getNotified(String? id) => "$apiURL/dailycontest/contest/$id/register";
   static const String returnSummary = "$apiURL/userdashboard/summary";
   static const String dashboardCarousel = "$apiURL/carousels/home";
   static const String tutorial = "$apiURL/tutorialcategory/";

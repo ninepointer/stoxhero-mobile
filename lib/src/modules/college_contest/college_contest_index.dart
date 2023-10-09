@@ -12,3 +12,5 @@ export 'widgets/college_contest_watchlist_card.dart';
 export 'widgets/completed_college_contest_card.dart';
 export 'widgets/live_college_contest_card.dart';
 export 'widgets/upcoming_college_contest_card.dart';
+export 'views/college_contest_form_view.dart';
+export 'views/college_contest_register_view.dart';

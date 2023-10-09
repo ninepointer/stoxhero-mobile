@@ -52,7 +52,7 @@ class UpComingContest {
   String? createdOn;
   String? lastModifiedOn;
   List<Participants>? participants;
-
+  List<InterestedUsers>? interestedUsers;
   UpComingContest({
     this.id,
     this.contestName,
@@ -76,6 +76,7 @@ class UpComingContest {
     this.createdOn,
     this.lastModifiedOn,
     this.participants,
+    this.interestedUsers,
   });
 
   UpComingContest.fromJson(Map<String, dynamic> json) {
@@ -104,6 +105,12 @@ class UpComingContest {
       participants = <Participants>[];
       json['participants'].forEach((v) {
         participants!.add(new Participants.fromJson(v));
+      });
+    }
+    if (json['interestedUsers'] != null) {
+      interestedUsers = <InterestedUsers>[];
+      json['interestedUsers'].forEach((v) {
+        interestedUsers!.add(new InterestedUsers.fromJson(v));
       });
     }
   }
@@ -135,6 +142,9 @@ class UpComingContest {
     data['lastModifiedOn'] = this.lastModifiedOn;
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
+    }
+    if (this.interestedUsers != null) {
+      data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
     }
     return data;
   }
