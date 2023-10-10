@@ -49,7 +49,9 @@ class OrdersView extends GetView<OrdersController> {
               children: [
                 controller.userDetailsData.designation == AppConstants.equityTraderType
                     ? InfinityTradeOrdersTabView()
-                    : TenxTradeOrdersTabView(),
+                    : TenxTradeOrdersTabView(
+                        tenxSub: controller.tenxTrade.value.sId,
+                      ),
                 VirtualTradeOrdersTabView(),
               ],
             ),

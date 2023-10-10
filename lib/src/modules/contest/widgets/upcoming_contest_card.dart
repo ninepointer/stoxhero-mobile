@@ -318,7 +318,6 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       } else {
                         controller.upComingContest(widget.contest);
                         controller.getNotified();
-
                         SnackbarHelper.showSnackbar('You are now interested in ${widget.contest?.contestName}');
                       }
                     },

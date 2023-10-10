@@ -39,8 +39,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<PortfolioController>().loadData();
         break;
       case 2:
-        Get.toNamed(AppRoutes.orders);
         Get.find<OrdersController>().loadData();
+        Get.toNamed(AppRoutes.orders);
         break;
       case 3:
         Get.toNamed(AppRoutes.Internship);

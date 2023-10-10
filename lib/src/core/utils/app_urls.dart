@@ -32,7 +32,7 @@ class AppUrls {
   static const String infinityTradeTodaysOrders = "$apiURL/infinityTrade/my/todayorders";
   static const String infinityTradeAllOrders = "$apiURL/infinityTrade/my/historyorders";
 
-  static const String tenxTradeTodaysOrders = "$apiURL/tenX/my/todayorders";
+  static String tenxTradeTodaysOrders(String? subscriptionId) => "$apiURL/tenX/my/todayorders/$subscriptionId";
   static String tenxTradeAllOrders(String? subId, String? subscribedOn, String? expiredOn) =>
       "$apiURL/tenX/my/historyorders/$subId/$subscribedOn/$expiredOn";
 
@@ -96,6 +96,7 @@ class AppUrls {
   static const String confirmCollegeContestOtp = "$apiURL/dailycontest/confirmotp";
   static String shareContest(String? id) => "$apiURL/dailycontest/contest/$id/share";
   static String getNotified(String? id) => "$apiURL/dailycontest/contest/$id/register";
+  static String participate(String? id) => "$apiURL/dailycontest/contest/$id/participate";
   static const String returnSummary = "$apiURL/userdashboard/summary";
   static const String dashboardCarousel = "$apiURL/carousels/home";
   static const String tutorial = "$apiURL/tutorialcategory/";

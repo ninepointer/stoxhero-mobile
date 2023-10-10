@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../contest_index.dart';
+import '../../../app/app.dart';
 
 class ContestListView extends GetView<ContestController> {
   const ContestListView({Key? key}) : super(key: key);
@@ -35,81 +30,105 @@ class ContestListView extends GetView<ContestController> {
                     onValueChanged: controller.handleSegmentChange,
                   ),
                   if (controller.segmentedControlValue.value == 0) ...[
-                    if (controller.livePremiumContestList.isEmpty && controller.liveFreeContestList.isEmpty)
-                      NoDataFound(
-                        label: 'No Live Contest!',
+                    // Live Contests
+                    CommonSegmentedControl(
+                      segments: {
+                        0: 'Premium',
+                        1: 'Free',
+                      },
+                      selectedSegment: controller.liveSegmentedControlValue.value,
+                      onValueChanged: controller.handleLiveSegmentChange,
+                    ),
+                    if (controller.liveSegmentedControlValue.value == 0) ...[
+                      if (controller.livePremiumContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Premium Live Contest!',
+                        ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.livePremiumContestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return LiveContestCard(
+                            contest: controller.livePremiumContestList[index],
+                          );
+                        },
                       ),
-                    if (controller.livePremiumContestList.isNotEmpty) CommonTile(label: 'Premium Contests'),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.livePremiumContestList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return LiveContestCard(
-                          contest: controller.livePremiumContestList[index],
-                        );
-                      },
-                    ),
-                    SizedBox(height: 8),
-                    if (controller.liveFreeContestList.isNotEmpty) CommonTile(label: 'Free Contests'),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.liveFreeContestList.length,
-                      itemBuilder: (BuildContext context, index) {
-                        return LiveContestCard(
-                          contest: controller.liveFreeContestList[index],
-                        );
-                      },
-                    ),
+                    ] else if (controller.liveSegmentedControlValue.value == 1) ...[
+                      if (controller.liveFreeContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Free Live Contest!',
+                        ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.liveFreeContestList.length,
+                        itemBuilder: (BuildContext context, index) {
+                          return LiveContestCard(
+                            contest: controller.liveFreeContestList[index],
+                          );
+                        },
+                      ),
+                    ],
                     SizedBox(height: 12),
                   ] else if (controller.segmentedControlValue.value == 1) ...[
-                    if (controller.premiumContestList.isEmpty && controller.freeContestList.isEmpty)
-                      NoDataFound(
-                        label: 'No Upcoming Contest!',
-                      ),
-                    if (controller.premiumContestList.isNotEmpty)
-                      CommonTile(
-                        label: 'Premium Contests',
-                      ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.premiumContestList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return UpComingContestCard(
-                          contest: controller.premiumContestList[index],
-                        );
+                    CommonSegmentedControl(
+                      segments: {
+                        0: 'Premium',
+                        1: 'Free',
                       },
+                      selectedSegment: controller.upcomingSegmentedControlValue.value,
+                      onValueChanged: controller.handleUpcomingSegmentChange,
                     ),
-                    SizedBox(height: 8),
-                    if (controller.freeContestList.isNotEmpty)
-                      CommonTile(
-                        label: 'Free Contests',
+                    if (controller.upcomingSegmentedControlValue.value == 0) ...[
+                      if (controller.premiumContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Premium Upcoming Contest!',
+                        ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.premiumContestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return UpComingContestCard(
+                            contest: controller.premiumContestList[index],
+                          );
+                        },
                       ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.freeContestList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return UpComingContestCard(
-                          contest: controller.freeContestList[index],
-                        );
-                      },
-                    )
+                    ] else if (controller.upcomingSegmentedControlValue.value == 1) ...[
+                      if (controller.freeContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Free Upcoming Contest!',
+                        ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.freeContestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return UpComingContestCard(
+                            contest: controller.freeContestList[index],
+                          );
+                        },
+                      ),
+                    ],
                   ] else if (controller.segmentedControlValue.value == 2) ...[
-                    if (controller.premiumCompletedContestList.isEmpty && controller.freeCompletedContestList.isEmpty)
-                      NoDataFound(
-                        label: 'No Completed Contest!',
-                      ),
-                    if (controller.premiumCompletedContestList.isNotEmpty) ...[
-                      CommonTile(
-                        label: 'Premium Contests',
-                      ),
+                    CommonSegmentedControl(
+                      segments: {
+                        0: 'Premium',
+                        1: 'Free',
+                      },
+                      selectedSegment: controller.completedSegmentedControlValue.value,
+                      onValueChanged: controller.handleCompletedSegmentChange,
+                    ),
+                    if (controller.completedSegmentedControlValue.value == 0) ...[
+                      if (controller.premiumCompletedContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Premium Completed Contest!',
+                        ),
                       ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
@@ -133,12 +152,11 @@ class ContestListView extends GetView<ContestController> {
                                 );
                         },
                       ),
-                    ],
-                    SizedBox(height: 8),
-                    if (controller.freeCompletedContestList.isNotEmpty) ...[
-                      CommonTile(
-                        label: 'Free Contests',
-                      ),
+                    ] else if (controller.completedSegmentedControlValue.value == 1) ...[
+                      if (controller.freeCompletedContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Free Completed Contest!',
+                        ),
                       ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
@@ -162,8 +180,8 @@ class ContestListView extends GetView<ContestController> {
                                 );
                         },
                       ),
-                    ]
-                  ]
+                    ],
+                  ],
                 ],
               ),
             ),

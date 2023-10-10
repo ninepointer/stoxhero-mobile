@@ -31,82 +31,103 @@ class CollegeContestView extends GetView<CollegeContestController> {
                     onValueChanged: controller.handleSegmentChange,
                   ),
                   if (controller.segmentedControlValue.value == 0) ...[
-                    if (controller.livePremiumCollegeContestList.isEmpty &&
-                        controller.liveFreeCollegeContestList.isEmpty)
-                      NoDataFound(
-                        label: 'No Live Contest!',
+                    CommonSegmentedControl(
+                      segments: {
+                        0: 'Premium',
+                        1: 'Free',
+                      },
+                      selectedSegment: controller.liveSegmentedControlValue.value,
+                      onValueChanged: controller.handleLiveSegmentChange,
+                    ),
+                    if (controller.liveSegmentedControlValue.value == 0) ...[
+                      if (controller.livePremiumCollegeContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Premium Live Contest!',
+                        ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.livePremiumCollegeContestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return LiveCollegeContestCard(
+                            contest: controller.livePremiumCollegeContestList[index],
+                          );
+                        },
                       ),
-                    if (controller.livePremiumCollegeContestList.isNotEmpty) CommonTile(label: 'Premium Contests'),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.livePremiumCollegeContestList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return LiveCollegeContestCard(
-                          contest: controller.livePremiumCollegeContestList[index],
-                        );
-                      },
-                    ),
-                    SizedBox(height: 8),
-                    if (controller.liveFreeCollegeContestList.isNotEmpty) CommonTile(label: 'Free Contests'),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.liveFreeCollegeContestList.length,
-                      itemBuilder: (BuildContext context, index) {
-                        return LiveCollegeContestCard(
-                          contest: controller.liveFreeCollegeContestList[index],
-                        );
-                      },
-                    ),
-                    SizedBox(height: 12),
+                    ] else if (controller.liveSegmentedControlValue.value == 1) ...[
+                      if (controller.liveFreeCollegeContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Free Live Contest!',
+                        ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.liveFreeCollegeContestList.length,
+                        itemBuilder: (BuildContext context, index) {
+                          return LiveCollegeContestCard(
+                            contest: controller.liveFreeCollegeContestList[index],
+                          );
+                        },
+                      ),
+                    ],
                   ] else if (controller.segmentedControlValue.value == 1) ...[
-                    if (controller.premiumContestList.isEmpty && controller.freeContestList.isEmpty)
-                      NoDataFound(
-                        label: 'No Upcoming Contest!',
-                      ),
-                    if (controller.premiumContestList.isNotEmpty)
-                      CommonTile(
-                        label: 'Premium Contests',
-                      ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.premiumContestList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return UpComingCollegeContestCard(
-                          contest: controller.premiumContestList[index],
-                        );
+                    CommonSegmentedControl(
+                      segments: {
+                        0: 'Premium',
+                        1: 'Free',
                       },
+                      selectedSegment: controller.upcomingSegmentedControlValue.value,
+                      onValueChanged: controller.handleUpcomingSegmentChange,
                     ),
-                    SizedBox(height: 8),
-                    if (controller.freeContestList.isNotEmpty)
-                      CommonTile(
-                        label: 'Free Contests',
+                    if (controller.upcomingSegmentedControlValue.value == 0) ...[
+                      if (controller.premiumContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Premium Upcoming Contest!',
+                        ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.premiumContestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return UpComingCollegeContestCard(
+                            contest: controller.premiumContestList[index],
+                          );
+                        },
                       ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.freeContestList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return UpComingCollegeContestCard(
-                          contest: controller.freeContestList[index],
-                        );
-                      },
-                    )
+                    ] else if (controller.upcomingSegmentedControlValue.value == 1) ...[
+                      if (controller.freeCompletedContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Free Upcoming Contest!',
+                        ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.freeContestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return UpComingCollegeContestCard(
+                            contest: controller.freeContestList[index],
+                          );
+                        },
+                      )
+                    ],
                   ] else if (controller.segmentedControlValue.value == 2) ...[
-                    if (controller.premiumCompletedContestList.isEmpty && controller.freeCompletedContestList.isEmpty)
-                      NoDataFound(
-                        label: 'No Completed Contest!',
-                      ),
-                    if (controller.premiumCompletedContestList.isNotEmpty) ...[
-                      CommonTile(
-                        label: 'Premium Contests',
-                      ),
+                    CommonSegmentedControl(
+                      segments: {
+                        0: 'Premium',
+                        1: 'Free',
+                      },
+                      selectedSegment: controller.completedSegmentedControlValue.value,
+                      onValueChanged: controller.handleCompletedSegmentChange,
+                    ),
+                    if (controller.completedSegmentedControlValue.value == 0) ...[
+                      if (controller.premiumCompletedContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Premium Completed Contest!',
+                        ),
                       ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
@@ -130,12 +151,11 @@ class CollegeContestView extends GetView<CollegeContestController> {
                                 );
                         },
                       ),
-                    ],
-                    SizedBox(height: 8),
-                    if (controller.freeCompletedContestList.isNotEmpty) ...[
-                      CommonTile(
-                        label: 'Free Contests',
-                      ),
+                    ] else if (controller.completedSegmentedControlValue.value == 1) ...[
+                      if (controller.freeCompletedContestList.isEmpty)
+                        NoDataFound(
+                          label: 'No Free Completed Contest!',
+                        ),
                       ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
@@ -159,7 +179,7 @@ class CollegeContestView extends GetView<CollegeContestController> {
                                 );
                         },
                       ),
-                    ]
+                    ],
                   ]
                 ],
               ),

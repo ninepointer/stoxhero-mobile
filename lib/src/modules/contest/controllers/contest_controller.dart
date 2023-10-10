@@ -19,6 +19,9 @@ class ContestController extends BaseController<ContestRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
   final segmentedControlValue = 0.obs;
+  final liveSegmentedControlValue = 0.obs;
+  final upcomingSegmentedControlValue = 0.obs;
+  final completedSegmentedControlValue = 0.obs;
 
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingContest>[].obs;
@@ -213,8 +216,16 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   void handleSegmentChange(int val) => changeSegment(val);
-
   void changeSegment(int val) => segmentedControlValue.value = val;
+
+  void handleLiveSegmentChange(int val) => liveChangeSegment(val);
+  void liveChangeSegment(int val) => liveSegmentedControlValue.value = val;
+
+  void handleUpcomingSegmentChange(int val) => upcomingChangeSegment(val);
+  void upcomingChangeSegment(int val) => upcomingSegmentedControlValue.value = val;
+
+  void handleCompletedSegmentChange(int val) => completedChangeSegment(val);
+  void completedChangeSegment(int val) => completedSegmentedControlValue.value = val;
 
   void gotoSearchInstrument() {
     searchTextController.text = '';
@@ -775,8 +786,6 @@ class ContestController extends BaseController<ContestRepository> {
               stockIndexDetailsList.add(element);
             }
           }
-
-          // log('Socket : ${stockIndexDetailsList.length}');
         },
       );
       socket.onDisconnect((_) => log('Socket : Disconnect'));
@@ -928,5 +937,39 @@ class ContestController extends BaseController<ContestRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future participate() async {
+    isLoading(true);
+    try {
+      await repository.participate(
+        liveContest.value.id,
+      );
+      getLiveContestList();
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  bool participateUser(contest, userId) {
+    if (contest.participants != null) {
+      for (Participants user in contest.participants) {
+        if (user.userId?.sId == userId) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  bool hasParticipatedInPaidContest(user, contests) {
+    for (var contest in contests) {
+      if (contest.entryFee > 0 && contest.participants.contains(user.sId)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

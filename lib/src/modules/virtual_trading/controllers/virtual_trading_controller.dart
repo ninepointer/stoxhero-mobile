@@ -186,7 +186,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       return pnl;
     }
   }
- 
+
   num getInstrumentLastPrice(int instID, int exchID) {
     if (virtualInstrumentTradeDetails.isNotEmpty) {
       int index = virtualInstrumentTradeDetails.indexWhere(

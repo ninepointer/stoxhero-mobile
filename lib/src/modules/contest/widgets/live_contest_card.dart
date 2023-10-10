@@ -19,6 +19,15 @@ class LiveContestCard extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isParticipants = controller.participateUser(
+      contest,
+      controller.userDetails.value.sId,
+    );
+    // bool userHasParticipatedInPaidContest = controller.hasParticipatedInPaidContest(
+    //   controller.userDetails.value.sId,
+    //   contest,
+    // );
+    print(isParticipants);
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -255,10 +264,16 @@ class LiveContestCard extends GetView<ContestController> {
                                   contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
                               0
                       ? () {
-                          controller.liveContest(contest);
-                          controller.loadTradingData();
-                          controller.liveLeaderboardList();
-                          Get.to(() => ContestTradingView());
+                          if (isParticipants) {
+                            controller.participate();
+                            controller.liveContest(contest);
+                            controller.liveLeaderboardList();
+                            controller.loadTradingData();
+                            Get.to(() => ContestTradingView());
+                          } else {
+                            SnackbarHelper.showSnackbar(
+                                'You can only participate in another contest once your current contest ends!');
+                          }
                         }
                       : () {
                           if (controller.calculateSeatsLeft(
