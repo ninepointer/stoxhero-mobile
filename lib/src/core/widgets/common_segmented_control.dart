@@ -37,7 +37,7 @@ class _CommonSegmentedControlState extends State<CommonSegmentedControl> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 16),
+      margin: EdgeInsets.symmetric(vertical: 8),
       child: CupertinoSegmentedControl<int>(
         selectedColor: AppColors.primary,
         borderColor: AppColors.grey.withOpacity(.25),
@@ -46,7 +46,7 @@ class _CommonSegmentedControlState extends State<CommonSegmentedControl> {
           return MapEntry(
             key,
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: EdgeInsets.symmetric(vertical: 8),
               child: Text(
                 value,
                 style: segmentedControlValue == key

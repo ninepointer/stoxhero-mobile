@@ -16,21 +16,13 @@ class OrdersView extends GetView<OrdersController> {
           bottom: TabBar(
             indicatorColor: AppColors.primary,
             tabs: [
-              controller.userDetailsData.designation == AppConstants.equityTraderType
-                  ? Tab(
-                      child: Text(
-                        'Infinity Trade\nOrders',
-                        style: Theme.of(context).textTheme.tsRegular12,
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  : Tab(
-                      child: Text(
-                        'TenX Trade\nOrders',
-                        style: Theme.of(context).textTheme.tsRegular12,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+              Tab(
+                child: Text(
+                  'TenX Trade\nOrders',
+                  style: Theme.of(context).textTheme.tsRegular12,
+                  textAlign: TextAlign.center,
+                ),
+              ),
               Tab(
                 child: Text(
                   'Virtual Trade\nOrders',
@@ -47,11 +39,9 @@ class OrdersView extends GetView<OrdersController> {
             replacement: CommonLoader(),
             child: TabBarView(
               children: [
-                controller.userDetailsData.designation == AppConstants.equityTraderType
-                    ? InfinityTradeOrdersTabView()
-                    : TenxTradeOrdersTabView(
-                        tenxSub: controller.tenxTrade.value.sId,
-                      ),
+                TenxTradeOrdersTabView(
+                  tenxSub: controller.tenxTrade.value.sId,
+                ),
                 VirtualTradeOrdersTabView(),
               ],
             ),

@@ -1,7 +1,7 @@
 name: stoxhero
 description: A new Flutter project.
 # version: 1.0.0+10 # Dev
-version: 1.0.0+7 # Prod
+version: 1.0.0+8 # Prod
 publish_to: "none"
 
 environment:
@@ -37,6 +37,8 @@ dependencies:
   http: ^0.13.6
   firebase_core: ^2.17.0
   firebase_analytics: ^10.5.1
+  in_app_update: ^4.2.2
+  url_launcher: ^6.1.14
 
 
 

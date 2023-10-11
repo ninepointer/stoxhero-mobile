@@ -4,6 +4,8 @@ class AppUrls {
   static const String baseURL = isProd ? 'https://stoxhero.com' : 'http://43.204.7.180';
   static const String apiURL = '$baseURL/api/v1';
 
+  static const String appVersion = '$apiURL/mobileappversion';
+
   static const String tenx = '$apiURL/tenX';
   static const String tradeMarginDetails = 'trade/marginDetail';
 

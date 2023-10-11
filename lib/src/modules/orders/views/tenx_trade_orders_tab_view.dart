@@ -29,14 +29,22 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
               onValueChanged: controller.handleSegmentChange,
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: DropdownButtonFormField2<String>(
-                value: controller.selectedItem1.value,
-                onChanged: (value) => controller.selectedItem1(value),
-                items: controller.dropdownItems1.map((String title) {
-                  return DropdownMenuItem<String>(
-                    value: title,
-                    child: Text(title.toString()),
+              padding: const EdgeInsets.all(16.0).copyWith(top: 0),
+              child: DropdownButtonFormField2<TenXSubscription>(
+                value: controller.selectedTenXSub.value,
+                onChanged: (value) {
+                  controller.selectedTenXSub(value);
+                  controller.updateTenxSubDateList();
+                  if (controller.segmentedControlValue.value == 0) {
+                    controller.getTenxTradeTodaysOrdersList();
+                  } else {
+                    controller.getTenxTradeAllOrdersList();
+                  }
+                },
+                items: controller.tenXSubscription.map((value) {
+                  return DropdownMenuItem<TenXSubscription>(
+                    value: value,
+                    child: Text(value.subscriptionName ?? ''),
                   );
                 }).toList(),
                 dropdownStyleData: DropdownStyleData(
@@ -67,17 +75,49 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                 ),
               ),
             ),
-            // // Second Dropdown
-            // DropdownButtonFormField<String>(
-            //   value: controller.selectedItem2.value,
-            //   onChanged: (value) => controller.selectedItem2(value),
-            //   items: controller.dropdownItems2.map((String item) {
-            //     return DropdownMenuItem<String>(
-            //       value: item,
-            //       child: Text(item),
-            //     );
-            //   }).toList(),
-            // ),
+            if (controller.segmentedControlValue.value == 1 && controller.selectedTenxSubDatesList.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(16.0).copyWith(top: 0),
+                child: DropdownButtonFormField2<UserPurchaseDetail>(
+                  value: controller.selectedTenxSubDate.value,
+                  onChanged: (value) {
+                    controller.selectedTenxSubDate(value);
+                    controller.getTenxTradeAllOrdersList();
+                  },
+                  items: controller.selectedTenxSubDatesList.map((value) {
+                    return DropdownMenuItem<UserPurchaseDetail>(
+                      value: value,
+                      child: Text(value.subscribedOn ?? ''),
+                    );
+                  }).toList(),
+                  dropdownStyleData: DropdownStyleData(
+                    maxHeight: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  menuItemStyleData: MenuItemStyleData(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(16).copyWith(left: 0),
+                    filled: true,
+                    fillColor: AppColors.grey.withOpacity(.1),
+                    hintText: 'Tenx Plan',
+                    hintStyle: AppStyles.tsGreyRegular14,
+                    errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                      color: AppColors.danger.shade700,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                        color: AppColors.grey.withOpacity(.25),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             if (ordersList.isEmpty)
               NoDataFound()
             else
