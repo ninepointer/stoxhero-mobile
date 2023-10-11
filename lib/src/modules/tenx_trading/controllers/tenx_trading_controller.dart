@@ -158,10 +158,10 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       amount += position.amount ?? 0;
       lots += position.lots ?? 0;
     }
-    num openingBalance = tenxPortfolioDetails.value.openingBalance ?? 0;
-    pnl += openingBalance + amount;
+    num totalFund = tenxPortfolioDetails.value.totalFund ?? 0;
+    pnl = totalFund + amount;
     if (lots == 0) {
-      num margin = openingBalance + calculateTotalNetPNL();
+      num margin = totalFund + calculateTotalNetPNL();
       return margin;
     } else {
       return pnl;

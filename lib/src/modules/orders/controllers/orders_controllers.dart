@@ -18,9 +18,10 @@ class OrdersController extends BaseController<OrdersRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
   final segmentedControlValue = 0.obs;
-
-  final infinityTradeTodaysOrdersList = <InfinityTradeOrder>[].obs;
-  final infinityTradeAllOrdersList = <InfinityTradeOrder>[].obs;
+  final selectedItem1 = ''.obs;
+  final selectedItem2 = ''.obs;
+  final dropdownItems1 = <String>[].obs;
+  final dropdownItems2 = <String>[].obs;
 
   final tenxTradeTodaysOrdersList = <TenxTradeOrder>[].obs;
   final tenxTradeAllOrdersList = <TenxTradeOrder>[].obs;
@@ -28,77 +29,47 @@ class OrdersController extends BaseController<OrdersRepository> {
   final virtualTradeTodaysOrdersList = <VirtualTradeOrder>[].obs;
   final virtualTradeAllOrdersList = <VirtualTradeOrder>[].obs;
   final tenXSubscription = <TenXSubscription>[].obs;
-  final tenXSub = TenXSubscription().obs;
+  final selectedTenXSub = TenXSubscription().obs;
+  final selectedTenxSubDate = UserPurchaseDetail().obs;
+  final selectedTenxSubDatesList = <UserPurchaseDetail>[].obs;
+
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
   }
 
-  void changeSegment(int val) {
-    segmentedControlValue.value = val;
-  }
-
-  void handleSegmentChange(int val) {
-    changeSegment(val);
-  }
+  void changeSegment(int val) => segmentedControlValue.value = val;
+  void handleSegmentChange(int val) => changeSegment(val);
 
   void loadData() async {
     loadUserDetails();
-    if (userDetailsData.designation == AppConstants.equityTraderType) {
-      await getInfinityTradeTodaysOrdersList();
-      await getInfinityTradeAllOrdersList();
-    } else {
-      await getTenxTradeTodaysOrdersList();
-      await getTenxTradeAllOrdersList();
-      await getTenXSubscriptionList();
-    }
-
+    // await getTenxTradeAllOrdersList();
+    await getTenxTradeTodaysOrdersList();
+    await getTenXSubscriptionList();
     await getVirtualTradeTodaysOrdersList();
     await getVirtualTradeAllOrdersList();
   }
 
-  Future getInfinityTradeTodaysOrdersList() async {
-    isLoading(true);
-    try {
-      final RepoResponse<InfinityTradeOrdersListResponse> response =
-          await repository.getInfinityTradeTodaysOrdersList();
-      if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {
-          infinityTradeTodaysOrdersList(response.data?.data ?? []);
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
+  void updateTenxSubDateList() {
+    selectedTenxSubDatesList.clear();
+    selectedTenxSubDatesList.addAll(selectedTenXSub.value.userPurchaseDetail?.toList() ?? []);
+    if (selectedTenxSubDatesList.isNotEmpty) selectedTenxSubDate(selectedTenxSubDatesList.first);
   }
 
-  Future getInfinityTradeAllOrdersList() async {
-    isLoading(true);
-    try {
-      final RepoResponse<InfinityTradeOrdersListResponse> response =
-          await repository.getInfinityTradeAllOrdersList();
-      if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {
-          infinityTradeAllOrdersList(response.data?.data ?? []);
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  List<String> populateDropdownItems(List<TenXSubscription> tenXSub) {
+    List<String> result = [];
+    for (var sub in tenXSub) {
+      dropdownItems1.add(sub.subscriptionName.toString());
     }
-    isLoading(false);
+    dropdownItems1.assignAll(result);
+    return result;
   }
 
   Future getTenxTradeTodaysOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradeOrdersListResponse> response =
-          await repository.getTenxTradeTodaysOrdersList();
+      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeTodaysOrdersList(
+        selectedTenXSub.value.subscriptionId,
+      );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           tenxTradeTodaysOrdersList(response.data?.data ?? []);
@@ -106,7 +77,6 @@ class OrdersController extends BaseController<OrdersRepository> {
           SnackbarHelper.showSnackbar(response.error?.message);
         }
       } else {
-        // Data not found, display a message
         SnackbarHelper.showSnackbar("Data is not available");
       }
     } catch (e) {
@@ -118,13 +88,13 @@ class OrdersController extends BaseController<OrdersRepository> {
   }
 
   Future getTenxTradeAllOrdersList() async {
+    print(selectedTenXSub.toJson());
     isLoading(true);
     try {
-      final RepoResponse<TenxTradeOrdersListResponse> response =
-          await repository.getTenxTradeAllOrdersList(
-        tenxTrade.value.sId,
-        tenXSub.value.userPurchaseDetail?[0].subscribedOn,
-        tenXSub.value.userPurchaseDetail?[0].expiredBy,
+      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeAllOrdersList(
+        selectedTenXSub.value.subscriptionId,
+        selectedTenXSub.value.userPurchaseDetail?[0].subscribedOn,
+        selectedTenXSub.value.userPurchaseDetail?[0].expiredOn,
       );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
@@ -143,8 +113,7 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getVirtualTradeTodaysOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradeOrdersListResponse> response =
-          await repository.getVirtualTradeTodaysOrdersList();
+      final RepoResponse<VirtualTradeOrdersListResponse> response = await repository.getVirtualTradeTodaysOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           virtualTradeTodaysOrdersList(response.data?.data ?? []);
@@ -162,8 +131,7 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getVirtualTradeAllOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradeOrdersListResponse> response =
-          await repository.getVirtualTradeAllOrdersList();
+      final RepoResponse<VirtualTradeOrdersListResponse> response = await repository.getVirtualTradeAllOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           virtualTradeAllOrdersList(response.data?.data ?? []);
@@ -181,12 +149,11 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getTenXSubscriptionList() async {
     isLoading(true);
     try {
-      final RepoResponse<TenXSubscriptionResponse> response =
-          await repository.getTenXSubscriptionList();
+      final RepoResponse<TenXSubscriptionResponse> response = await repository.getTenXSubscriptionList();
       if (response.data != null) {
-        if (response.data?.message?.toLowerCase() == "success") {
-          tenXSubscription(response.data?.data ?? []);
-        }
+        tenXSubscription.clear();
+        tenXSubscription(response.data?.data ?? []);
+        if (tenXSubscription.isNotEmpty) selectedTenXSub(tenXSubscription.first);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

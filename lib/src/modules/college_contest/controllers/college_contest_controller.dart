@@ -21,7 +21,9 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
   final segmentedControlValue = 0.obs;
-
+  final liveSegmentedControlValue = 0.obs;
+  final upcomingSegmentedControlValue = 0.obs;
+  final completedSegmentedControlValue = 0.obs;
   final isOtpVisible = false.obs;
 
   final firstNameTextController = TextEditingController();
@@ -121,7 +123,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   Future loadRegisterData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await getLiveCollegeContestList();
+    await getUpComingCollegeContestList();
   }
 
   String getStockIndexName(int instId) {
@@ -209,8 +211,16 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   void handleSegmentChange(int val) => changeSegment(val);
-
   void changeSegment(int val) => segmentedControlValue.value = val;
+
+  void handleLiveSegmentChange(int val) => liveChangeSegment(val);
+  void liveChangeSegment(int val) => liveSegmentedControlValue.value = val;
+
+  void handleUpcomingSegmentChange(int val) => upcomingChangeSegment(val);
+  void upcomingChangeSegment(int val) => upcomingSegmentedControlValue.value = val;
+
+  void handleCompletedSegmentChange(int val) => completedChangeSegment(val);
+  void completedChangeSegment(int val) => completedSegmentedControlValue.value = val;
 
   void gotoSearchInstrument() {
     searchTextController.text = '';

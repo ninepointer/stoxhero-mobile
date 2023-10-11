@@ -151,7 +151,9 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   TenxPortfolioDetailsCard(
                     label: 'Available Margin',
                     info: 'Funds that you can use to trade today',
-                    value: controller.calculateMargin(),
+                    value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
+                        ? controller.tenxPortfolioDetails.value.openingBalance
+                        : controller.calculateMargin(),
                   ),
                   TenxPortfolioDetailsCard(
                     label: 'Used Margin',
