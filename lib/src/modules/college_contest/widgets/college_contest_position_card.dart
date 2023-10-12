@@ -50,13 +50,13 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CollegeContestPositionCardTile(
+                        TradeCardTile(
                           label: 'Symbol',
                           value: position.id?.symbol,
                         ),
-                        CollegeContestPositionCardTile(
+                        TradeCardTile(
                           isRightAlign: true,
-                          label: 'Gross P&L',
+                          label: 'Gross P&L (Profit & Loss)',
                           valueColor: controller.getValueColor(
                             position.lots == 0
                                 ? position.amount
@@ -90,15 +90,15 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CollegeContestPositionCardTile(
-                          label: 'Avg. Price',
+                        TradeCardTile(
+                          label: 'Average Price',
                           value: FormatHelper.formatNumbers(
                             position.lastaverageprice,
                           ),
                         ),
-                        CollegeContestPositionCardTile(
+                        TradeCardTile(
                           isRightAlign: true,
-                          label: 'LTP',
+                          label: 'LTP (Last Traded Price)',
                           value: FormatHelper.formatNumbers(
                             controller.getInstrumentLastPrice(
                               position.id!.instrumentToken!,
@@ -118,11 +118,11 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CollegeContestPositionCardTile(
+                      TradeCardTile(
                         label: 'Quantity',
                         value: position.lots.toString(),
                       ),
-                      CollegeContestPositionCardTile(
+                      TradeCardTile(
                         isRightAlign: true,
                         label: 'Changes(%)',
                         value: controller.getInstrumentChanges(
@@ -148,7 +148,7 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                     onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -156,8 +156,8 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                         ),
                       ),
                       child: Text(
-                        'BUY',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        'ADD MORE',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),
                       ),
@@ -169,13 +169,13 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                     onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'SELL',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        'EXIT SOME',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.danger,
                         ),
                       ),
@@ -191,7 +191,7 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                       int maxLots = lots.last;
 
                       if (exitLots == 0) {
-                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                        SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
                         log(exitLots.toString());
                         log(maxLots.toString());
@@ -232,17 +232,17 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(.25),
+                        color: AppColors.secondary.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
                       ),
                       child: Text(
-                        'EXIT',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                          color: AppColors.warning,
+                        'EXIT ALL',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
+                          color: AppColors.secondary.shade600,
                         ),
                       ),
                     ),
@@ -251,40 +251,6 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
               ],
             )
           ],
-        ),
-      ],
-    );
-  }
-}
-
-class CollegeContestPositionCardTile extends StatelessWidget {
-  final String? label;
-  final dynamic value;
-  final bool isRightAlign;
-  final Color? valueColor;
-  const CollegeContestPositionCardTile({
-    super.key,
-    required this.label,
-    this.value,
-    this.isRightAlign = false,
-    this.valueColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: [
-        Text(
-          label ?? '-',
-          style: AppStyles.tsGreyMedium12,
-        ),
-        SizedBox(height: 2),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-              ),
         ),
       ],
     );

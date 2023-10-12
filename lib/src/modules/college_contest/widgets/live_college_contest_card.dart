@@ -120,6 +120,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
           child: Column(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
@@ -127,7 +128,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
@@ -150,7 +151,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       ),
                       Text(
                         'Reward',
-                        style: Theme.of(context).textTheme.tsGreyMedium12,
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       Text(
                         '${contest?.payoutPercentage}% of the Net P&L',
@@ -161,12 +162,22 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [],
+                      children: [
+                        Text(
+                          'Remaining Time',
+                          style: AppStyles.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Started',
+                          style: Theme.of(context).textTheme.tsMedium12,
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -200,7 +211,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

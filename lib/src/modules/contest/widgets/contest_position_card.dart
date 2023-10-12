@@ -148,7 +148,7 @@ class ContestPositionCard extends GetView<ContestController> {
                     onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -156,8 +156,8 @@ class ContestPositionCard extends GetView<ContestController> {
                         ),
                       ),
                       child: Text(
-                        'BUY',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        'ADD MORE',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),
                       ),
@@ -169,13 +169,13 @@ class ContestPositionCard extends GetView<ContestController> {
                     onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'SELL',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        'EXIT SOME',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.danger,
                         ),
                       ),
@@ -191,7 +191,7 @@ class ContestPositionCard extends GetView<ContestController> {
                       int maxLots = lots.last;
                       log('selectedQuantity ${controller.selectedQuantity.value}');
                       if (exitLots == 0) {
-                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                        SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
                         log(exitLots.toString());
                         log(maxLots.toString());
@@ -232,17 +232,17 @@ class ContestPositionCard extends GetView<ContestController> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(.25),
+                        color: AppColors.secondary.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
                       ),
                       child: Text(
-                        'EXIT',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                          color: AppColors.warning,
+                        'EXIT ALL',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
+                          color: AppColors.secondary.shade600,
                         ),
                       ),
                     ),

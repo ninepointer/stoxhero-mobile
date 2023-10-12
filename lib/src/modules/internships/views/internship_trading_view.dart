@@ -18,12 +18,11 @@ class InternshipTradingView extends GetView<InternshipController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.all(8.0).copyWith(
-                        bottom: 0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
                             CommonStockInfo(
@@ -48,19 +47,19 @@ class InternshipTradingView extends GetView<InternshipController> {
                       ),
                     ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
                         Expanded(
                           child: CommonMarginNPNLCard(
-                            label: 'Margin',
-                            value: controller.calculateTotalNetPNL(),
+                            label: 'Available Margin',
+                            value: controller.calculateMargin(),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 4),
                         Expanded(
                           child: CommonMarginNPNLCard(
-                            label: 'Net P & L',
+                            label: 'Net P&L (Profit & Loss)',
                             value: controller.calculateTotalNetPNL(),
                           ),
                         ),
@@ -73,12 +72,13 @@ class InternshipTradingView extends GetView<InternshipController> {
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -99,13 +99,13 @@ class InternshipTradingView extends GetView<InternshipController> {
                         children: [
                           Row(
                             children: [
-                              InternshipPositionDetailsCard(
+                              PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              InternshipPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -114,13 +114,13 @@ class InternshipTradingView extends GetView<InternshipController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              InternshipPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
-                              InternshipPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
@@ -130,7 +130,10 @@ class InternshipTradingView extends GetView<InternshipController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Position'),
+                  CommonTile(
+                    label: 'My Positions',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   controller.internshipPositionList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
@@ -144,22 +147,22 @@ class InternshipTradingView extends GetView<InternshipController> {
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
-                  InternshipPortfolioDetailsCard(
-                    label: 'Portfolio Value',
+                  PortfolioDetailCardTile(
+                    label: 'Virtual Portfolio Value',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.internshipBatchPortfolio.value.totalFund,
                   ),
-                  InternshipPortfolioDetailsCard(
-                    label: 'Available Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
-                  InternshipPortfolioDetailsCard(
-                    label: 'Used Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                   ),
-                  InternshipPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Opening Balance',
                     info: 'Cash available at the beginning of the day',
                     value: controller.internshipBatchPortfolio.value.openingBalance,

@@ -40,8 +40,6 @@ dependencies:
   in_app_update: ^4.2.2
   url_launcher: ^6.1.14
 
-
-
 dev_dependencies:
   flutter_launcher_icons: any
   change_app_package_name: ^1.1.0

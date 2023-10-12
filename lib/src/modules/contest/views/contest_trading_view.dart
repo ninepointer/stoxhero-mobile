@@ -21,10 +21,9 @@ class ContestTradingView extends GetView<ContestController> {
                 children: [
                   if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.all(8.0).copyWith(
-                        bottom: 0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
                             CommonStockInfo(
@@ -48,6 +47,26 @@ class ContestTradingView extends GetView<ContestController> {
                         ],
                       ),
                     ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CommonMarginNPNLCard(
+                            label: 'Available Margin',
+                            value: controller.calculateMargin(),
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Expanded(
+                          child: CommonMarginNPNLCard(
+                            label: 'Net P&L (Profit & Loss)',
+                            value: controller.calculateTotalNetPNL(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   CommonTile(
                     label: 'My Watchlist',
                     showIconButton: true,
@@ -93,13 +112,13 @@ class ContestTradingView extends GetView<ContestController> {
                         children: [
                           Row(
                             children: [
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -108,7 +127,7 @@ class ContestTradingView extends GetView<ContestController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
                                 valueColor: controller.getValueColor(
@@ -116,7 +135,7 @@ class ContestTradingView extends GetView<ContestController> {
                                 ),
                               ),
                               SizedBox(width: 8),
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
                                 valueColor: controller.getValueColor(
@@ -128,7 +147,7 @@ class ContestTradingView extends GetView<ContestController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Payout',
                                 value: controller.calculatePayout().round(),
                                 valueColor: controller.getValueColor(
@@ -140,7 +159,10 @@ class ContestTradingView extends GetView<ContestController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Positions'),
+                  CommonTile(
+                    label: 'My Positions',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   controller.contestPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
@@ -155,18 +177,18 @@ class ContestTradingView extends GetView<ContestController> {
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
-                  ContestPortfolioDetailsCard(
-                    label: 'Portfolio Value',
+                  PortfolioDetailCardTile(
+                    label: 'Virtual Portfolio Value',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.contestPortfolio.value.totalFund,
                   ),
-                  ContestPortfolioDetailsCard(
-                    label: 'Available Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
-                  ContestPortfolioDetailsCard(
-                    label: 'Used Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),

@@ -36,10 +36,10 @@ class VirtualTradeOrdersTabView extends GetView<OrdersController> {
                     return CommonCard(
                       children: [
                         OrderCardTile(
-                          label: 'Contract',
+                          label: 'Symbol',
                           value: order.symbol,
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -54,7 +54,7 @@ class VirtualTradeOrdersTabView extends GetView<OrdersController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -69,13 +69,11 @@ class VirtualTradeOrdersTabView extends GetView<OrdersController> {
                               isRightAlign: true,
                               label: 'Type',
                               value: order.buyOrSell,
-                              valueColor: order.buyOrSell == AppConstants.buy
-                                  ? AppColors.success
-                                  : AppColors.danger,
+                              valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -87,13 +85,11 @@ class VirtualTradeOrdersTabView extends GetView<OrdersController> {
                               isRightAlign: true,
                               label: 'Status',
                               value: order.status,
-                              valueColor: order.status == AppConstants.complete
-                                  ? AppColors.success
-                                  : AppColors.danger,
+                              valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

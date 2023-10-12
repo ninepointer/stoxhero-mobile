@@ -29,12 +29,12 @@ class ContestLeaderboardCard extends StatelessWidget {
                   children: [
                     Text(
                       'Trader Name',
-                      style: AppStyles.tsGreyRegular12,
+                      style: AppStyles.tsGreyMedium12,
                     ),
                     SizedBox(height: 2),
                     Text(
                       '${contestLeaderboard?.traderFirstName!.capitalizeFirst} ${contestLeaderboard?.traderLastName!.capitalizeFirst}',
-                      style: Theme.of(context).textTheme.tsMedium14,
+                      style: Theme.of(context).textTheme.tsMedium12,
                     ),
                   ],
                 ),
@@ -45,19 +45,19 @@ class ContestLeaderboardCard extends StatelessWidget {
                   children: [
                     Text(
                       'Strike Rate',
-                      style: AppStyles.tsGreyRegular12,
+                      style: AppStyles.tsGreyMedium12,
                     ),
                     SizedBox(height: 2),
                     Text(
                       '${FormatHelper.formatNumbers(contestLeaderboard?.strikeRate, showSymbol: false)}%',
-                      style: Theme.of(context).textTheme.tsMedium14,
+                      style: Theme.of(context).textTheme.tsMedium12,
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 12),
+          SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -67,7 +67,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                   children: [
                     Text(
                       'Contests Participated',
-                      style: AppStyles.tsGreyRegular12,
+                      style: AppStyles.tsGreyMedium12,
                     ),
                     SizedBox(height: 2),
                     Text(
@@ -76,7 +76,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                         showSymbol: false,
                         decimal: 0,
                       )}',
-                      style: Theme.of(context).textTheme.tsMedium14,
+                      style: Theme.of(context).textTheme.tsMedium12,
                     ),
                   ],
                 ),
@@ -87,7 +87,7 @@ class ContestLeaderboardCard extends StatelessWidget {
                   children: [
                     Text(
                       'Contests Won',
-                      style: AppStyles.tsGreyRegular12,
+                      style: AppStyles.tsGreyMedium12,
                     ),
                     SizedBox(height: 2),
                     Text(
@@ -96,27 +96,27 @@ class ContestLeaderboardCard extends StatelessWidget {
                         showSymbol: false,
                         decimal: 0,
                       )}',
-                      style: Theme.of(context).textTheme.tsMedium14,
+                      style: Theme.of(context).textTheme.tsMedium12,
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 12),
+          SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Cash Earned',
-                style: AppStyles.tsGreyRegular12,
+                style: AppStyles.tsGreyMedium12,
               ),
               Text(
                 '${FormatHelper.formatNumbers(
                   contestLeaderboard?.totalPayout,
                   decimal: 0,
                 )}',
-                style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                style: Theme.of(context).textTheme.tsMedium12.copyWith(
                       color: AppColors.success,
                     ),
               ),

@@ -36,10 +36,10 @@ class InternshipOrdersView extends GetView<InternshipController> {
                       return CommonCard(
                         children: [
                           OrderCardTile(
-                            label: 'Contract',
+                            label: 'Symbol',
                             value: order.symbol,
                           ),
-                          SizedBox(height: 12),
+                          SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -54,7 +54,7 @@ class InternshipOrdersView extends GetView<InternshipController> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 12),
+                          SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -73,7 +73,7 @@ class InternshipOrdersView extends GetView<InternshipController> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 12),
+                          SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -90,7 +90,7 @@ class InternshipOrdersView extends GetView<InternshipController> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 12),
+                          SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

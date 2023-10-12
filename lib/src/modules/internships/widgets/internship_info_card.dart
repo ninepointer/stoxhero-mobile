@@ -83,7 +83,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        "Available Margin",
+                        "Available Margin Money",
                         style: Theme.of(context).textTheme.tsGreyMedium14,
                       ),
                       Text(

@@ -81,14 +81,14 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                       children: [
                         TradeCardTile(
                           isRightAlign: false,
-                          label: 'Contract Date',
+                          label: 'Contract Expiry Date',
                           value: FormatHelper.formatDateByMonth(
                             widget.tradingWatchlist.contractDate,
                           ),
                         ),
                         TradeCardTile(
                           isRightAlign: true,
-                          label: 'LTP',
+                          label: 'LTP (Last Traded Price)',
                           value: FormatHelper.formatNumbers(
                             controller.getInstrumentLastPrice(
                               widget.tradingWatchlist.instrumentToken!,
@@ -135,104 +135,68 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                   ],
                 ),
               ),
-              if (controller.selectedWatchlistIndex.value == widget.index)
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => openBottomSheet(context, TransactionType.buy),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.success.withOpacity(.25),
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(8),
-                            ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => openBottomSheet(context, TransactionType.buy),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.success.withOpacity(.25),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
                           ),
-                          child: Text(
-                            'BUY',
-                            style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.success),
-                          ),
+                        ),
+                        child: Text(
+                          'BUY',
+                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.success),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => openBottomSheet(context, TransactionType.sell),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.danger.withOpacity(.25),
-                          ),
-                          child: Text(
-                            'SELL',
-                            style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.danger),
-                          ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => openBottomSheet(context, TransactionType.sell),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.danger.withOpacity(.25),
+                        ),
+                        child: Text(
+                          'SELL',
+                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.danger),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.info.withOpacity(.25),
-                            borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(8),
-                            ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.info.withOpacity(.25),
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(8),
                           ),
-                          child: Text(
-                            'REMOVE',
-                            style: AppStyles.tsWhiteMedium14.copyWith(color: AppColors.info),
-                          ),
+                        ),
+                        child: Text(
+                          'REMOVE',
+                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.info),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
             ],
           ),
         ],
       ),
-    );
-  }
-}
-
-class MarginXWatchlistCardTile extends StatelessWidget {
-  final String? label;
-  final String? value;
-  final bool isRightAlign;
-  final Color? valueColor;
-
-  const MarginXWatchlistCardTile({
-    super.key,
-    required this.label,
-    this.value,
-    this.isRightAlign = false,
-    this.valueColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: [
-        Text(
-          label ?? '-',
-          style: AppStyles.tsGreyRegular12,
-        ),
-        SizedBox(height: 2),
-        Text(
-          value ?? '-',
-          style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-              ),
-        ),
-      ],
     );
   }
 }

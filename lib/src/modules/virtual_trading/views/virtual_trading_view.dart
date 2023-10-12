@@ -54,7 +54,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             value: controller.calculateMargin(),
                           ),
                         ),
-                        SizedBox(width: 2),
+                        SizedBox(width: 4),
                         Expanded(
                           child: CommonMarginNPNLCard(
                             label: 'Net P&L (Profit & Loss)',
@@ -97,13 +97,13 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         children: [
                           Row(
                             children: [
-                              VirtualPositionDetailsCard(
+                              PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              VirtualPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -112,13 +112,13 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              VirtualPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
-                              VirtualPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
@@ -149,17 +149,17 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     label: 'Portfolio Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
-                  VirtualPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Virtual Portfolio Value',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.virtualPortfolio.value.totalFund,
                   ),
-                  VirtualPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
-                  VirtualPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),

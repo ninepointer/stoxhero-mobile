@@ -21,7 +21,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
       controller.generateLotsList(type: position.id?.symbol);
       BottomSheetHelper.openBottomSheet(
         context: context,
-        child: VirtualTransactionBottomSheet(
+        child: MarginXTransactionBottomSheet(
           type: type,
           tradingInstrument: TradingInstrument(
             name: position.id?.symbol,
@@ -58,7 +58,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
                         ),
                         TradeCardTile(
                           isRightAlign: true,
-                          label: 'Gross P&L',
+                          label: 'Gross P&L (Profit & Loss)',
                           valueColor: controller.getValueColor(
                             controller.calculateGrossPNL(
                               position.amount!,
@@ -91,12 +91,12 @@ class MarginXPositionCard extends GetView<MarginXController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TradeCardTile(
-                          label: 'Avg. Price',
+                          label: 'Average Price',
                           value: FormatHelper.formatNumbers(position.lastaverageprice),
                         ),
                         TradeCardTile(
                           isRightAlign: true,
-                          label: 'LTP',
+                          label: 'LTP (Last Traded Price)',
                           valueColor: controller.getValueColor(position.lastaverageprice),
                           value: FormatHelper.formatNumbers(position.lastaverageprice),
                         ),
@@ -138,7 +138,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
                     onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -146,8 +146,8 @@ class MarginXPositionCard extends GetView<MarginXController> {
                         ),
                       ),
                       child: Text(
-                        'BUY',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        'ADD MORE',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),
                       ),
@@ -159,13 +159,13 @@ class MarginXPositionCard extends GetView<MarginXController> {
                     onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'SELL',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        'EXIT SOME',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.danger,
                         ),
                       ),
@@ -181,7 +181,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
                       int maxLots = lots.last;
 
                       if (exitLots == 0) {
-                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                        SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
                         log(exitLots.toString());
                         log(maxLots.toString());
@@ -222,17 +222,17 @@ class MarginXPositionCard extends GetView<MarginXController> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(.25),
+                        color: AppColors.secondary.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
                       ),
                       child: Text(
-                        'EXIT',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                          color: AppColors.warning,
+                        'EXIT ALL',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
+                          color: AppColors.secondary.shade600,
                         ),
                       ),
                     ),
@@ -246,38 +246,3 @@ class MarginXPositionCard extends GetView<MarginXController> {
     );
   }
 }
-
-// class MarginXPositionCardTile extends StatelessWidget {
-//   final String? label;
-//   final String? value;
-//   final bool isRightAlign;
-//   final Color? valueColor;
-
-//   const MarginXPositionCardTile({
-//     super.key,
-//     this.label,
-//     this.value,
-//     this.isRightAlign = false,
-//     this.valueColor,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-//       children: [
-//         Text(
-//           label ?? '-',
-//           style: AppStyles.tsGreyRegular12,
-//         ),
-//         SizedBox(height: 2),
-//         Text(
-//           value ?? '-',
-//           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-//                 color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-//               ),
-//         ),
-//       ],
-//     );
-//   }
-// }

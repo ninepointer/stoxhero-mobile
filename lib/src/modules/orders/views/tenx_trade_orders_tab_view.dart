@@ -130,10 +130,10 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                     return CommonCard(
                       children: [
                         OrderCardTile(
-                          label: 'Contract',
+                          label: 'Symbol',
                           value: order.symbol,
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -148,7 +148,7 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -167,7 +167,7 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -183,7 +183,7 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

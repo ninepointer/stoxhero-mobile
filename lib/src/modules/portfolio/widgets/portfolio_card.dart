@@ -52,7 +52,7 @@ class PortfolioCard extends GetView<PortfolioController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PortfolioCardTile(
-                label: 'Portfolio Value',
+                label: 'Virtual Portfolio Value',
                 value: FormatHelper.formatNumbers(portfolioValue),
                 valueColor: AppColors.info,
               ),
@@ -73,7 +73,7 @@ class PortfolioCard extends GetView<PortfolioController> {
                   ),
                   PortfolioCardTile(
                     isRightAlign: true,
-                    label: 'Available Margin',
+                    label: 'Available Margin Money',
                     value: id == null
                         ? FormatHelper.formatNumbers(
                             investedAmount,

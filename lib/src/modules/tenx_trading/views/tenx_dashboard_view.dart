@@ -21,10 +21,9 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                 children: [
                   if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.all(8.0).copyWith(
-                        bottom: 0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
                             CommonStockInfo(
@@ -48,6 +47,26 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ],
                       ),
                     ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CommonMarginNPNLCard(
+                            label: 'Available Margin',
+                            value: controller.calculateMargin(),
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Expanded(
+                          child: CommonMarginNPNLCard(
+                            label: 'Net P&L (Profit & Loss)',
+                            value: controller.calculateTotalNetPNL(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   CommonTile(
                     label: 'My Watchlist',
                     showIconButton: true,
@@ -81,13 +100,13 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         children: [
                           Row(
                             children: [
-                              TenxPositionDetailsCard(
+                              PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              TenxPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -96,13 +115,13 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              TenxPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
-                              TenxPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
@@ -127,25 +146,25 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
-                  TenxPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Virtual Portfolio Value',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.tenxPortfolioDetails.value.totalFund,
                   ),
-                  TenxPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
                         ? controller.calculateMargin()
                         : controller.tenxPortfolioDetails.value.totalFund,
                   ),
-                  TenxPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
-                  TenxPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Opening Balance',
                     info: 'Cash available at the beginning of the day',
                     value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0

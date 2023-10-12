@@ -19,12 +19,11 @@ class MarginXTradingView extends GetView<MarginXController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.all(8.0).copyWith(
-                        bottom: 0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
                             CommonStockInfo(
@@ -48,18 +47,39 @@ class MarginXTradingView extends GetView<MarginXController> {
                         ],
                       ),
                     ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CommonMarginNPNLCard(
+                            label: 'Available Margin',
+                            value: controller.calculateMargin(),
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Expanded(
+                          child: CommonMarginNPNLCard(
+                            label: 'Net P&L (Profit & Loss)',
+                            value: controller.calculateTotalNetPNL(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   CommonTile(
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -80,13 +100,13 @@ class MarginXTradingView extends GetView<MarginXController> {
                         children: [
                           Row(
                             children: [
-                              MarginXPositionDetailsCard(
+                              PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              MarginXPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -95,13 +115,13 @@ class MarginXTradingView extends GetView<MarginXController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              MarginXPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
-                              MarginXPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
@@ -111,13 +131,13 @@ class MarginXTradingView extends GetView<MarginXController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              MarginXPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Invested Amount',
                                 value: controller.liveMarginX.value.marginXTemplate?.entryFee,
                                 valueColor: AppColors.info,
                               ),
                               SizedBox(width: 8),
-                              MarginXPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Return',
                                 value: controller.calculateReturn(),
                                 valueColor: controller.getValueColor(
@@ -129,7 +149,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              MarginXPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Account Balance',
                                 value: controller.calculateAccountBalance(),
                                 valueColor: controller.getValueColor(
@@ -141,7 +161,10 @@ class MarginXTradingView extends GetView<MarginXController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Position'),
+                  CommonTile(
+                    label: 'My Positions',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   controller.marginXTradingPosition.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
@@ -155,18 +178,18 @@ class MarginXTradingView extends GetView<MarginXController> {
                           },
                         ),
                   CommonTile(label: 'Portfolio Details'),
-                  MarginXPortfolioDetailsCard(
-                    label: 'Portfolio Value',
+                  PortfolioDetailCardTile(
+                    label: 'Virtual Portfolio Value',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.marginXPortfolio.value.totalFund,
                   ),
-                  MarginXPortfolioDetailsCard(
-                    label: 'Available Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
-                  MarginXPortfolioDetailsCard(
-                    label: 'Used Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),

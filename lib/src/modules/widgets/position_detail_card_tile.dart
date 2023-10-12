@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../app/app.dart';
+import '../../app/app.dart';
 
-class ContestPositionDetailsCard extends StatelessWidget {
+class PositionDetailCardTile extends StatelessWidget {
   final String? label;
   final dynamic value;
   final bool isNum;
   final Color? valueColor;
-  const ContestPositionDetailsCard({
+  const PositionDetailCardTile({
     super.key,
     this.label,
     this.value,
@@ -18,7 +18,6 @@ class ContestPositionDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: CommonCard(
-        hasBorder: false,
         margin: EdgeInsets.zero,
         children: [
           Row(
