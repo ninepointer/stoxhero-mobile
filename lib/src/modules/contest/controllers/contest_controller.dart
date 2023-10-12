@@ -104,6 +104,17 @@ class ContestController extends BaseController<ContestRepository> {
     return false;
   }
 
+  bool participateUser(contest, userId) {
+    if (contest.participants != null) {
+      for (Participants user in contest.participants) {
+        if (user.userId?.sId == userId) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   Future initSocketConnection() async {
     log('Socket : initSocketConnection');
     socket = IO.io(AppUrls.baseURL, <String, dynamic>{
@@ -171,8 +182,6 @@ class ContestController extends BaseController<ContestRepository> {
       gross: totalGross,
       net: totalNet,
     ));
-    log('contest-leaderboardData${liveContest.value.id}');
-    log('contest-myrank${userDetails.value.sId}${liveContest.value.id}');
     log('ContestTotalPositionDetails : ${tenxTotalPositionDetails.toJson()}');
   }
 
@@ -951,25 +960,5 @@ class ContestController extends BaseController<ContestRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
-  }
-
-  bool participateUser(contest, userId) {
-    if (contest.participants != null) {
-      for (Participants user in contest.participants) {
-        if (user.userId?.sId == userId) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  bool hasParticipatedInPaidContest(user, contests) {
-    for (var contest in contests) {
-      if (contest.entryFee > 0 && contest.participants.contains(user.sId)) {
-        return true;
-      }
-    }
-    return false;
   }
 }

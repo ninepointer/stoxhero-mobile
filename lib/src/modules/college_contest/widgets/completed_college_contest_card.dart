@@ -20,14 +20,14 @@ class CompletedCollegeContestCard extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   completedContest?.contestName ?? '',
-                  style: AppStyles.tsSecondaryMedium16,
+                  style: AppStyles.tsSecondaryMedium14,
                 ),
               ),
             ],
@@ -40,7 +40,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
               Visibility(
                 visible: completedContest?.isNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.success,
                     borderRadius: BorderRadius.circular(100),
@@ -55,7 +55,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
               Visibility(
                 visible: completedContest?.isBankNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.secondary,
                     borderRadius: BorderRadius.circular(100),
@@ -70,7 +70,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
               Visibility(
                 visible: completedContest?.isFinNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.info,
                     borderRadius: BorderRadius.circular(100),
@@ -83,7 +83,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.danger,
                   borderRadius: BorderRadius.circular(100),
@@ -95,7 +95,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(100),
@@ -109,7 +109,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 12),
+        SizedBox(height: 8),
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
@@ -124,13 +124,12 @@ class CompletedCollegeContestCard extends StatelessWidget {
               SizedBox(height: 4),
               Text(
                 'Reward',
-                style: AppStyles.tsGreyRegular12,
+                style: AppStyles.tsGreyMedium12,
               ),
               Text(
-                '${completedContest?.payoutPercentage} % of the net P&L',
-                style: Theme.of(context).textTheme.tsMedium14,
+                '${completedContest?.payoutPercentage}% of the Net P&L',
+                style: Theme.of(context).textTheme.tsMedium12,
               ),
-              SizedBox(height: 14),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -138,13 +137,13 @@ class CompletedCollegeContestCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Start Date & Time',
-                        style: AppStyles.tsGreyRegular12,
+                        'Starts',
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 4),
                       Text(
                         FormatHelper.formatDateTimeToIST(completedContest?.contestStartTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -152,19 +151,19 @@ class CompletedCollegeContestCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'End Date & Time',
-                        style: AppStyles.tsGreyRegular12,
+                        'Ends',
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 4),
                       Text(
                         FormatHelper.formatDateTimeToIST(completedContest?.contestEndTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 14),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -173,7 +172,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
                     children: [
                       Text(
                         'Entry Fee',
-                        style: AppStyles.tsGreyRegular12,
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 4),
                       Text(
@@ -183,7 +182,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
                                 completedContest?.entryFee,
                                 decimal: 0,
                               ),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -191,8 +190,8 @@ class CompletedCollegeContestCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Portfolio',
-                        style: AppStyles.tsGreyRegular12,
+                        'Virtual Margin Money',
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 4),
                       Text(
@@ -200,13 +199,13 @@ class CompletedCollegeContestCard extends StatelessWidget {
                           completedContestPnl?.portfolioValue,
                           decimal: 0,
                         ),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 14),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -215,22 +214,18 @@ class CompletedCollegeContestCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Net P&L',
-                          style: AppStyles.tsGreyRegular12,
+                          'Net P&L (Profit & Loss)',
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 4),
                         Text(
                           FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                          style: Theme.of(context).textTheme.tsMedium12.copyWith(
                                 color: (completedContestPnl?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
                               ),
                         ),
                       ],
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [],
                   ),
                   Expanded(
                     child: Column(
@@ -238,12 +233,12 @@ class CompletedCollegeContestCard extends StatelessWidget {
                       children: [
                         Text(
                           'Payout',
-                          style: AppStyles.tsGreyRegular12,
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 4),
                         Text(
                           FormatHelper.formatNumbers(completedContestPnl?.payoutAmount),
-                          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                          style: Theme.of(context).textTheme.tsMedium12.copyWith(
                                 color: (completedContestPnl?.payoutAmount ?? 0) >= 0
                                     ? AppColors.success
                                     : AppColors.danger,
@@ -254,7 +249,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 4),
             ],
           ),
         ),
@@ -268,7 +263,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -278,7 +273,9 @@ class CompletedCollegeContestCard extends StatelessWidget {
                   ),
                   child: Text(
                     'View Orders',
-                    style: AppStyles.tsSecondaryMedium14,
+                    style: AppStyles.tsSecondaryMedium12.copyWith(
+                      color: AppColors.secondary.shade600,
+                    ),
                   ),
                 ),
               ),

@@ -77,7 +77,7 @@ class _ViewCardState extends State<ViewCard> {
                           SizedBox(height: 8),
                           Text(
                             "What is MarginX?",
-                            style: Theme.of(context).textTheme.tsMedium16,
+                            style: Theme.of(context).textTheme.tsMedium14,
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -87,7 +87,7 @@ class _ViewCardState extends State<ViewCard> {
                           SizedBox(height: 8),
                           Text(
                             "Here's how it works:",
-                            style: Theme.of(context).textTheme.tsMedium16,
+                            style: Theme.of(context).textTheme.tsMedium14,
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -97,7 +97,7 @@ class _ViewCardState extends State<ViewCard> {
                           SizedBox(height: 8),
                           Text(
                             "Safety Net: If you end up with the same capital, your entire invested amount is safe",
-                            style: Theme.of(context).textTheme.tsMedium16,
+                            style: Theme.of(context).textTheme.tsMedium14,
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -107,7 +107,7 @@ class _ViewCardState extends State<ViewCard> {
                           SizedBox(height: 8),
                           Text(
                             "When will I receive my profit in my wallet?",
-                            style: Theme.of(context).textTheme.tsMedium16,
+                            style: Theme.of(context).textTheme.tsMedium14,
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -132,7 +132,7 @@ class _ViewCardState extends State<ViewCard> {
                                   : (isLive
                                       ? widget.liveMarginX?.marginXName ?? ''
                                       : widget.completedMarginX?.marginxName ?? ''),
-                              style: AppStyles.tsSecondaryMedium16,
+                              style: AppStyles.tsSecondaryMedium14,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -153,12 +153,12 @@ class _ViewCardState extends State<ViewCard> {
                                   children: [
                                     Text(
                                       'Total Seats',
-                                      style: AppStyles.tsGreyRegular12,
+                                      style: AppStyles.tsGreyMedium12,
                                     ),
                                     SizedBox(height: 2),
                                     Text(
                                       '${isUpcoming ? widget.upcomingMarginX?.maxParticipants : (isLive ? widget.liveMarginX?.maxParticipants : widget.completedMarginX?.maxParticipants)}',
-                                      style: Theme.of(context).textTheme.tsMedium14,
+                                      style: Theme.of(context).textTheme.tsMedium12,
                                     ),
                                   ],
                                 ),
@@ -169,7 +169,7 @@ class _ViewCardState extends State<ViewCard> {
                                   children: [
                                     Text(
                                       'Available Seats',
-                                      style: AppStyles.tsGreyRegular12,
+                                      style: AppStyles.tsGreyMedium12,
                                     ),
                                     SizedBox(height: 2),
                                     Text(
@@ -180,14 +180,14 @@ class _ViewCardState extends State<ViewCard> {
                                             widget.liveMarginX?.maxParticipants ?? 0,
                                             widget.liveMarginX?.participants?.length ?? 0,
                                           ).toString() : widget.completedMarginX?.maxParticipants)}",
-                                      style: Theme.of(context).textTheme.tsMedium14,
+                                      style: Theme.of(context).textTheme.tsMedium12,
                                     ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -195,8 +195,8 @@ class _ViewCardState extends State<ViewCard> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Start Date & Time',
-                                    style: AppStyles.tsGreyRegular12,
+                                    'Starts',
+                                    style: AppStyles.tsGreyMedium12,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
@@ -207,7 +207,7 @@ class _ViewCardState extends State<ViewCard> {
                                               ? widget.liveMarginX?.startTime
                                               : widget.completedMarginX?.startTime),
                                     ),
-                                    style: Theme.of(context).textTheme.tsMedium14,
+                                    style: Theme.of(context).textTheme.tsMedium12,
                                   ),
                                 ],
                               ),
@@ -215,8 +215,8 @@ class _ViewCardState extends State<ViewCard> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    'End Date & Time',
-                                    style: AppStyles.tsGreyRegular12,
+                                    'Ends',
+                                    style: AppStyles.tsGreyMedium12,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
@@ -225,13 +225,13 @@ class _ViewCardState extends State<ViewCard> {
                                           ? widget.upcomingMarginX?.endTime
                                           : (isLive ? widget.liveMarginX?.endTime : widget.completedMarginX?.endTime),
                                     ),
-                                    style: Theme.of(context).textTheme.tsMedium14,
+                                    style: Theme.of(context).textTheme.tsMedium12,
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -240,7 +240,7 @@ class _ViewCardState extends State<ViewCard> {
                                 children: [
                                   Text(
                                     'Investment',
-                                    style: AppStyles.tsGreyRegular12,
+                                    style: AppStyles.tsGreyMedium12,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
@@ -251,7 +251,7 @@ class _ViewCardState extends State<ViewCard> {
                                                 ? widget.liveMarginX?.marginXTemplate?.entryFee
                                                 : widget.completedMarginX?.entryFee),
                                         decimal: 0),
-                                    style: Theme.of(context).textTheme.tsMedium14,
+                                    style: Theme.of(context).textTheme.tsMedium12,
                                   ),
                                 ],
                               ),
@@ -259,8 +259,8 @@ class _ViewCardState extends State<ViewCard> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    'Portfolio',
-                                    style: AppStyles.tsGreyRegular12,
+                                    'Virtual Margin Money',
+                                    style: AppStyles.tsGreyMedium12,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
@@ -271,13 +271,13 @@ class _ViewCardState extends State<ViewCard> {
                                                 ? widget.liveMarginX?.marginXTemplate?.portfolioValue
                                                 : widget.completedMarginX?.portfolioValue),
                                         decimal: 0),
-                                    style: Theme.of(context).textTheme.tsMedium14,
+                                    style: Theme.of(context).textTheme.tsMedium12,
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(height: 4),
                           if (!isUpcoming && !isLive)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -287,14 +287,14 @@ class _ViewCardState extends State<ViewCard> {
                                   children: [
                                     Text(
                                       'Payout',
-                                      style: AppStyles.tsGreyRegular12,
+                                      style: AppStyles.tsGreyMedium12,
                                     ),
                                     SizedBox(height: 2),
                                     Text(
                                       FormatHelper.formatNumbers(
                                         widget.completedMarginX?.earning,
                                       ),
-                                      style: Theme.of(context).textTheme.tsMedium14,
+                                      style: Theme.of(context).textTheme.tsMedium12,
                                     ),
                                   ],
                                 ),
@@ -303,7 +303,7 @@ class _ViewCardState extends State<ViewCard> {
                                   children: [
                                     Text(
                                       'Payout %',
-                                      style: AppStyles.tsGreyRegular12,
+                                      style: AppStyles.tsGreyMedium12,
                                     ),
                                     SizedBox(height: 2),
                                     Text(
@@ -314,13 +314,13 @@ class _ViewCardState extends State<ViewCard> {
                                             widget.completedMarginX!.entryFee!,
                                             widget.completedMarginX!.earning!,
                                           ).abs().toStringAsFixed(2)} %',
-                                      style: Theme.of(context).textTheme.tsMedium14,
+                                      style: Theme.of(context).textTheme.tsMedium12,
                                     )
                                   ],
                                 ),
                               ],
                             ),
-                          if (!isUpcoming && !isLive) SizedBox(height: 16),
+                          if (!isUpcoming && !isLive) SizedBox(height: 4),
                         ],
                       ),
                     ),
@@ -375,7 +375,7 @@ class _ViewCardState extends State<ViewCard> {
                                     },
                               child: Container(
                                 alignment: Alignment.center,
-                                padding: EdgeInsets.all(8),
+                                padding: EdgeInsets.all(6),
                                 decoration: BoxDecoration(
                                   color: AppColors.success.withOpacity(.25),
                                 ),
@@ -387,7 +387,7 @@ class _ViewCardState extends State<ViewCard> {
                                       : controller.checkIfPurchased(widget.upcomingMarginX)
                                           ? 'Purchased'
                                           : 'Pay Now',
-                                  style: AppStyles.tsWhiteMedium14.copyWith(
+                                  style: AppStyles.tsWhiteMedium12.copyWith(
                                     color: AppColors.success,
                                   ),
                                 ),
@@ -398,7 +398,7 @@ class _ViewCardState extends State<ViewCard> {
                           child: GestureDetector(
                             child: Container(
                               alignment: Alignment.center,
-                              padding: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(6),
                               decoration: BoxDecoration(
                                 color: AppColors.secondary.withOpacity(.25),
                                 borderRadius: BorderRadius.only(
@@ -407,8 +407,8 @@ class _ViewCardState extends State<ViewCard> {
                               ),
                               child: Text(
                                 'Share',
-                                style: AppStyles.tsWhiteMedium14.copyWith(
-                                  color: AppColors.secondary,
+                                style: AppStyles.tsWhiteMedium12.copyWith(
+                                  color: AppColors.secondary.shade600,
                                 ),
                               ),
                             ),

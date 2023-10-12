@@ -27,7 +27,7 @@ class CommonTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: margin ?? EdgeInsets.symmetric(vertical: 8),
-      padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       color: Theme.of(context).cardColor,
       width: double.infinity,
       child: Column(
@@ -37,14 +37,14 @@ class CommonTile extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: AppStyles.tsSecondaryRegular16,
+                style: AppStyles.tsSecondaryMedium14,
               ),
               if (showSeeAllButton)
                 GestureDetector(
                   onTap: onPressed,
                   child: Text(
                     seeAllLabel ?? 'See All',
-                    style: AppStyles.tsPrimaryMedium14,
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                 )
               else if (showIconButton)

@@ -51,7 +51,7 @@ class UpComingCollegeContest {
   bool? isFinNifty;
   bool? isAllIndex;
   List<Null>? rewards;
-  List<InterestedUsers>? interestedUsers;
+  List<InterestedUserss>? interestedUsers;
   List<Null>? participants;
   String? createdOn;
   String? lastModifiedOn;
@@ -117,9 +117,9 @@ class UpComingCollegeContest {
       });
     }
     if (json['interestedUsers'] != null) {
-      interestedUsers = <InterestedUsers>[];
+      interestedUsers = <InterestedUserss>[];
       json['interestedUsers'].forEach((v) {
-        interestedUsers!.add(new InterestedUsers.fromJson(v));
+        interestedUsers!.add(new InterestedUserss.fromJson(v));
       });
     }
     if (json['participants'] != null) {
@@ -197,15 +197,15 @@ class Portfolio {
   }
 }
 
-class InterestedUsers {
+class InterestedUserss {
   UserId? userId;
   String? registeredOn;
   String? status;
   String? sId;
 
-  InterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
+  InterestedUserss({this.userId, this.registeredOn, this.status, this.sId});
 
-  InterestedUsers.fromJson(Map<String, dynamic> json) {
+  InterestedUserss.fromJson(Map<String, dynamic> json) {
     userId = json['userId'] != null ? new UserId.fromJson(json['userId']) : null;
     registeredOn = json['registeredOn'];
     status = json['status'];
@@ -225,17 +225,17 @@ class InterestedUsers {
 }
 
 class UserId {
-  String? sId;
+  String? id;
   String? firstName;
   String? lastName;
   String? email;
   String? mobile;
   String? creationProcess;
 
-  UserId({this.sId, this.firstName, this.lastName, this.email, this.mobile, this.creationProcess});
+  UserId({this.id, this.firstName, this.lastName, this.email, this.mobile, this.creationProcess});
 
   UserId.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
     email = json['email'];
@@ -245,7 +245,7 @@ class UserId {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
     data['email'] = this.email;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
+import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
 class TenxTradingBinding implements Bindings {
   @override
@@ -10,6 +11,7 @@ class TenxTradingBinding implements Bindings {
 }
 
 class TenxTradingController extends BaseController<TenxTradingRepository> {
+  late IO.Socket socket;
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
@@ -23,6 +25,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedWatchlistIndex = RxInt(-1);
   final isLivePriceLoaded = false.obs;
 
+  final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
@@ -54,6 +57,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   Future loadTenxData() async {
     userDetails.value = AppStorage.getUserDetails();
+    initSocketConnection();
     await socketConnection();
     await socketIndexConnection();
     await getInstrumentLivePriceList();
@@ -63,8 +67,25 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxTradingPortfolioDetails();
   }
 
+  Future initSocketConnection() async {
+    log('Socket : initSocketConnection');
+    socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket'],
+    }).connect();
+
+    socket.onConnect((_) {
+      log('Socket : Connected');
+      socket.emit('userId', userDetails.value.sId);
+      socket.emit('user-ticks', userDetails.value.sId);
+    });
+
+    socket.onConnectError((e) => print(e));
+
+    log('Socket Status : ${socket.connected}');
+  }
+
   String getStockIndexName(int instId) {
-    // log('instToken : $instId');
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
@@ -158,7 +179,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       amount += position.amount ?? 0;
       lots += position.lots ?? 0;
     }
-    num totalFund = tenxPortfolioDetails.value.totalFund ?? 0;
+    num totalFund = tenxPortfolioDetails.value.openingBalance ?? 0;
     pnl = totalFund + amount;
     if (lots == 0) {
       num margin = totalFund + calculateTotalNetPNL();
@@ -197,12 +218,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
-    if (tenxInstrumentTradeDetailsList.isNotEmpty) {
-      int index = tenxInstrumentTradeDetailsList.indexWhere(
+    if (tradingInstrumentTradeDetailsList.isNotEmpty) {
+      int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return 0;
-      num price = tenxInstrumentTradeDetailsList[index].lastPrice ?? 0;
+      num price = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
 
       return price;
     } else {
@@ -211,12 +232,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   String getInstrumentChanges(int instID, int exchID) {
-    if (tenxInstrumentTradeDetailsList.isNotEmpty) {
-      int index = tenxInstrumentTradeDetailsList.indexWhere(
+    if (tradingInstrumentTradeDetailsList.isNotEmpty) {
+      int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price = tenxInstrumentTradeDetailsList[index].change?.toString();
+      String? price = tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
@@ -224,36 +245,34 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future socketConnection() async {
-    List<TenxTradingInstrumentTradeDetails>? tempList = [];
+    List<TradingInstrumentTradeDetails>? tempList = [];
     try {
-      IO.Socket socket;
-
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
-      socket.on('index-tick', (data) {
-        // print(data);
-        // log('Socket : index-tick $data');
-      });
+      // IO.Socket socket;
+      // socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+      //   'autoConnect': false,
+      //   'transports': ['websocket'],
+      // });
+      // socket.connect();
+      // socket.onConnect((_) {
+      //   log('Socket : Connected');
+      //   socket.emit('userId', userDetails.value.sId);
+      //   socket.emit('user-ticks', userDetails.value.sId);
+      // });
+      // socket.on('index-tick', (data) {
+      //   // print(data);
+      //   // log('Socket : index-tick $data');
+      // });
       socket.on('tick-room', (data) {
-        // log('Socket : tick-room $data');
-        tempList = TenxTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+        tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
-          if (tenxInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
-            int index = tenxInstrumentTradeDetailsList.indexWhere(
+          if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            int index = tradingInstrumentTradeDetailsList.indexWhere(
               (stock) => stock.instrumentToken == element.instrumentToken,
             );
-            tenxInstrumentTradeDetailsList.removeAt(index);
-            tenxInstrumentTradeDetailsList.insert(index, element);
+            tradingInstrumentTradeDetailsList.removeAt(index);
+            tradingInstrumentTradeDetailsList.insert(index, element);
           } else {
-            tenxInstrumentTradeDetailsList.add(element);
+            tradingInstrumentTradeDetailsList.add(element);
           }
         });
       });
@@ -564,21 +583,20 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      IO.Socket socket;
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
+      // IO.Socket socket;
+      // socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+      //   'autoConnect': false,
+      //   'transports': ['websocket'],
+      // });
+      // socket.connect();
+      // socket.onConnect((_) {
+      //   log('Socket : Connected');
+      //   socket.emit('userId', userDetails.value.sId);
+      //   socket.emit('user-ticks', userDetails.value.sId);
+      // });
       socket.on(
         'index-tick',
         (data) {
-          // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
             if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -591,8 +609,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
               stockIndexDetailsList.add(element);
             }
           }
-
-          // log('Socket : ${stockIndexDetailsList.length}');
         },
       );
       socket.onDisconnect((_) => log('Socket : Disconnect'));

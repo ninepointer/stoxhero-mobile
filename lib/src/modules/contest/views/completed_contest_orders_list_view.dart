@@ -24,8 +24,9 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                   itemBuilder: (context, index) {
                     var order = controller.contestTodaysOrdersList[index];
                     return CommonCard(
+                      margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
                       children: [
-                        CommonCardTile(
+                        OrderCardTile(
                           label: 'Contract',
                           value: order.symbol,
                         ),
@@ -33,11 +34,11 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CommonCardTile(
+                            OrderCardTile(
                               label: 'Quantity',
                               value: FormatHelper.formatNumbers(order.quantity),
                             ),
-                            CommonCardTile(
+                            OrderCardTile(
                               isRightAlign: true,
                               label: 'Price',
                               value: FormatHelper.formatNumbers(order.averagePrice),
@@ -48,14 +49,14 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CommonCardTile(
+                            OrderCardTile(
                               label: 'Amount',
                               value: FormatHelper.formatNumbers(
                                 order.amount,
                                 isNegative: true,
                               ),
                             ),
-                            CommonCardTile(
+                            OrderCardTile(
                               isRightAlign: true,
                               label: 'Type',
                               value: order.buyOrSell,
@@ -67,11 +68,13 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CommonCardTile(
-                              label: 'Order ID',
-                              value: order.orderId,
+                            Expanded(
+                              child: OrderCardTile(
+                                label: 'Order ID',
+                                value: order.orderId,
+                              ),
                             ),
-                            CommonCardTile(
+                            OrderCardTile(
                               isRightAlign: true,
                               label: 'Status',
                               value: order.status,
@@ -83,7 +86,7 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CommonCardTile(
+                            OrderCardTile(
                               label: 'Timestamp',
                               value: FormatHelper.formatDateTime(order.tradeTime),
                             ),

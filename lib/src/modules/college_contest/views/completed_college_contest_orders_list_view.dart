@@ -21,12 +21,13 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
             itemBuilder: (context, index) {
               var order = controller.contestTodaysOrdersList[index];
               return CommonCard(
+                margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
                 children: [
                   OrderCardTile(
-                    label: 'Contract',
+                    label: 'Symbol',
                     value: order.symbol,
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -41,7 +42,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -60,7 +61,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -76,7 +77,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

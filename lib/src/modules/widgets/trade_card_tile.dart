@@ -34,7 +34,7 @@ class TradeCardTile extends StatelessWidget {
           SizedBox(height: 2),
           Text(
             value,
-            style: Theme.of(context).textTheme.tsMedium14.copyWith(
+            style: Theme.of(context).textTheme.tsMedium12.copyWith(
                   color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
                 ),
           ),

@@ -25,6 +25,7 @@ class AppRoutes {
   static const String contest = '/contest';
   static const String pastContest = '/contest/past_contest';
   static const String contestLiveLeaderboard = '/contest/live_leaderboard';
+  static const String collegeContestLiveLeaderboard = '/college_contest/college_contest_live_leaderboard';
   static const String faq = '/faq';
   static const String tutorial = '/tutorial';
   static const String careers = '/careers';

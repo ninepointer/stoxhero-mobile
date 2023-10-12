@@ -108,7 +108,7 @@ class _WorkshopViewState extends State<WorkshopView> {
                 //                 crossAxisAlignment: CrossAxisAlignment.start,
                 //                 children: [
                 //                   Text(
-                //                     'Start Date & Time',
+                //                     'Starts',
                 //                     style: Theme.of(context).textTheme.tsRegular12,
                 //                   ),
                 //                   SizedBox(height: 4),
@@ -122,7 +122,7 @@ class _WorkshopViewState extends State<WorkshopView> {
                 //                 crossAxisAlignment: CrossAxisAlignment.end,
                 //                 children: [
                 //                   Text(
-                //                     'End Date & Time',
+                //                     'Ends',
                 //                     style: Theme.of(context).textTheme.tsRegular12,
                 //                   ),
                 //                   SizedBox(height: 4),
