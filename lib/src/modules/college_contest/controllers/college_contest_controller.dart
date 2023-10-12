@@ -15,6 +15,7 @@ class CollegeContestBinding implements Bindings {
 }
 
 class CollegeContestController extends BaseController<CollegeContestRepository> {
+  late IO.Socket socket;
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
@@ -37,6 +38,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingCollegeContest>[].obs;
+  final upComingCollegeContest = UpComingCollegeContest().obs;
   final tempCompletedContestList = <CompletedCollegeContest>[].obs;
   final premiumCompletedContestList = <CompletedCollegeContest>[].obs;
   final freeCompletedContestList = <CompletedCollegeContest>[].obs;
@@ -71,6 +73,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final selectedStringQuantity = "0".obs;
   final isLivePriceLoaded = false.obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
+
+  final myRank = 0.obs;
+  final liveLeaderboardList = <LiveContestLeaderboard>[].obs;
+  final liveLeaderboard = LiveContestLeaderboard().obs;
 
   String? experienceSelectedValue;
   String? hearAboutSelectedValue;
@@ -108,6 +114,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     await getUpComingCollegeContestList();
     await getCompletedContestPnlList();
     await getLiveCollegeContestList();
+    initSocketConnection();
   }
 
   Future loadTradingData() async {
@@ -119,11 +126,52 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     await getContestPortfolio();
     await socketIndexConnection();
     await socketConnection();
+    await socketLeaderboardConnection();
   }
 
   Future loadRegisterData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getUpComingCollegeContestList();
+  }
+
+  bool isUserInterested(contest, userId) {
+    if (contest.interestedUsers != null) {
+      for (InterestedUserss user in contest.interestedUsers) {
+        if (user.userId?.id == userId) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  bool participateUser(contest, userId) {
+    if (contest.participants != null) {
+      for (CollegeParticipants user in contest.participants) {
+        if (user.userId?.sId == userId) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  Future initSocketConnection() async {
+    log('Socket : initSocketConnection');
+    socket = IO.io(AppUrls.baseURL, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket'],
+    }).connect();
+
+    socket.onConnect((_) {
+      log('Socket : Connected');
+      socket.emit('userId', userDetails.value.sId);
+      socket.emit('user-ticks', userDetails.value.sId);
+    });
+
+    socket.onConnectError((e) => print(e));
+
+    log('Socket Status : ${socket.connected}');
   }
 
   String getStockIndexName(int instId) {
@@ -149,7 +197,13 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   num calculatePayout() {
     num npnl = calculateTotalNetPNL() * liveCollegeContest.value.payoutPercentage!;
-    num payout = npnl < 0 ? 0 : npnl / 100;
+    num payout = npnl <= 0 ? 0 : npnl / 100;
+    return payout;
+  }
+
+  num calculateUserPayout(dynamic netPnl) {
+    num reward = netPnl * liveCollegeContest.value.payoutPercentage!;
+    num payout = reward <= 0 ? 0 : reward / 100;
     return payout;
   }
 
@@ -871,6 +925,85 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         SnackbarHelper.showSnackbar(response.data['info']);
         isOtpVisible(true);
       }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future socketLeaderboardConnection() async {
+    try {
+      var rankData = {
+        "employeeId": userDetails.value.employeeid,
+        "userId": userDetails.value.sId,
+        "id": liveCollegeContest.value.id,
+      };
+      log('Socket Emit RankData : $rankData');
+
+      socket.emit('dailyContestLeaderboard', rankData);
+
+      socket.on(
+        'contest-myrank${userDetails.value.sId}${liveCollegeContest.value.id}',
+        (data) {
+          log('Socket MyRank : contest-myrank${userDetails.value.sId}${liveCollegeContest.value.id} : $data');
+          myRank(data);
+        },
+      );
+
+      socket.on(
+        'contest-leaderboardData${liveCollegeContest.value.id}',
+        (data) {
+          log('Socket Leaderboard : contest-leaderboardData${liveCollegeContest.value.id} $data');
+          liveLeaderboardList.value = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
+        },
+      );
+      socket.onDisconnect((_) => log('Socket : Disconnect'));
+      socket.onConnectError((err) => log(err));
+      socket.onError((err) => log(err));
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future<void> getShareContest(bool isUpcoming) async {
+    isLoading(true);
+
+    try {
+      await repository.getShareContest(isUpcoming ? upComingCollegeContest.value.id : liveCollegeContest.value.id);
+
+      if (isUpcoming) {
+        getUpComingCollegeContestList();
+      } else {
+        getLiveCollegeContestList();
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+
+    isLoading(false);
+  }
+
+  Future getNotified() async {
+    isLoading(true);
+    try {
+      await repository.getNotified(upComingCollegeContest.value.id);
+      getUpComingCollegeContestList();
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future participate() async {
+    isLoading(true);
+    try {
+      await repository.participate(
+        liveCollegeContest.value.id,
+      );
+      getLiveCollegeContestList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

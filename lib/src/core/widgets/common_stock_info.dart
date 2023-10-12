@@ -38,29 +38,26 @@ class CommonStockInfo extends StatelessWidget {
                       children: [
                         Text(
                           label ?? '-',
-                          style: AppStyles.tsSecondaryMedium16,
+                          style: AppStyles.tsSecondaryMedium14,
                         ),
-                        SizedBox(height: 4),
                         Text(
                           stockPrice ?? '-',
-                          style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                                color: stockColor ??
-                                    (stockPrice!.startsWith('-')
-                                        ? AppColors.danger
-                                        : AppColors.success),
+                          style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                                color:
+                                    stockColor ?? (stockPrice!.startsWith('-') ? AppColors.danger : AppColors.success),
                               ),
                         ),
                       ],
                     ),
                   ],
                 ),
-                SizedBox(height: 6),
+                SizedBox(height: 2),
                 FittedBox(
                   child: Row(
                     children: [
                       Text(
                         stockLTP ?? '',
-                        style: Theme.of(context).textTheme.tsGreyMedium12.copyWith(
+                        style: Theme.of(context).textTheme.tsGreyMedium10.copyWith(
                               color: stockLTPColor,
                             ),
                       ),

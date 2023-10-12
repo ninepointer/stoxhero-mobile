@@ -149,6 +149,8 @@ PODS:
   - smart_auth (0.0.1):
     - Flutter
   - SwiftyGif (5.4.4)
+  - url_launcher_ios (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
@@ -162,6 +164,7 @@ DEPENDENCIES:
   - phonepe_payment_sdk (from `.symlinks/plugins/phonepe_payment_sdk/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - smart_auth (from `.symlinks/plugins/smart_auth/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -204,6 +207,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/share_plus/ios"
   smart_auth:
     :path: ".symlinks/plugins/smart_auth/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
@@ -232,6 +237,7 @@ SPEC CHECKSUMS:
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
   smart_auth: 4bedbc118723912d0e45a07e8ab34039c19e04f2
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
+  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 

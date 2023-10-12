@@ -18,12 +18,13 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
           itemBuilder: (context, index) {
             var order = controller.completedMarginXOrdersList[index];
             return CommonCard(
+              margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
               children: [
                 OrderCardTile(
-                  label: 'Contract',
+                  label: 'Symbol',
                   value: order.symbol,
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -39,7 +40,7 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
                     ),
                   ],
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -54,13 +55,11 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
                       isRightAlign: true,
                       label: 'Type',
                       value: order.buyOrSell,
-                      valueColor: order.buyOrSell == AppConstants.buy
-                          ? AppColors.success
-                          : AppColors.danger,
+                      valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
                     ),
                   ],
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -72,13 +71,11 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
                       isRightAlign: true,
                       label: 'Status',
                       value: order.status,
-                      valueColor: order.status == AppConstants.complete
-                          ? AppColors.success
-                          : AppColors.danger,
+                      valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
                     ),
                   ],
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 4),
                 OrderCardTile(
                   label: 'Timestamp',
                   value: FormatHelper.formatDateTime(order.tradeTime),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stoxhero/src/app/app.dart';
 
 class LiveCollegeContestCard extends GetView<CollegeContestController> {
@@ -14,19 +15,23 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isParticipants = controller.participateUser(
+      contest,
+      controller.userDetails.value.sId,
+    );
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   contest?.contestName ?? '-',
-                  style: AppStyles.tsSecondaryMedium16,
+                  style: AppStyles.tsSecondaryMedium14,
                 ),
               ),
             ],
@@ -39,7 +44,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               Visibility(
                 visible: contest?.isNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.success,
                     borderRadius: BorderRadius.circular(100),
@@ -54,7 +59,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               Visibility(
                 visible: contest?.isBankNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.secondary,
                     borderRadius: BorderRadius.circular(100),
@@ -69,7 +74,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               Visibility(
                 visible: contest?.isFinNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.info,
                     borderRadius: BorderRadius.circular(100),
@@ -82,7 +87,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.danger,
                   borderRadius: BorderRadius.circular(100),
@@ -94,7 +99,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(100),
@@ -107,7 +112,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
             ],
           ),
         ),
-        SizedBox(height: 12),
+        SizedBox(height: 8),
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
@@ -122,7 +127,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: Theme.of(context).textTheme.tsGreyRegular12,
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
@@ -132,7 +137,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                                 contest?.participants?.length ?? 0,
                               )
                               .toString(),
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
@@ -145,11 +150,11 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       ),
                       Text(
                         'Reward',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       Text(
-                        '${contest?.payoutPercentage} % of the net P&L',
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        '${contest?.payoutPercentage}% of the Net P&L',
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -169,13 +174,13 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Start Date & Time',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Starts',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -183,13 +188,13 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'End Date & Time',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Ends',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -204,12 +209,12 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     children: [
                       Text(
                         'Entry Fee',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -217,8 +222,8 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Portfolio',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Virtual Margin Money',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
@@ -226,13 +231,13 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                           contest?.portfolio?.portfolioValue,
                           decimal: 0,
                         ),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 4),
             ],
           ),
         ),
@@ -250,10 +255,16 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                                   contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
                               0
                       ? () {
-                          controller.liveCollegeContest(contest);
-                          controller.loadTradingData();
-                          // controller.liveLeaderboardList();
-                          Get.to(() => CollegeContestTradingView());
+                          if (isParticipants) {
+                            controller.participate();
+                            controller.liveCollegeContest(contest);
+                            controller.loadTradingData();
+                            controller.liveLeaderboardList();
+                            Get.to(() => CollegeContestTradingView());
+                          } else {
+                            SnackbarHelper.showSnackbar(
+                                'You can only participate in another contest once your current contest ends!');
+                          }
                         }
                       : () {
                           if (controller.calculateSeatsLeft(
@@ -280,7 +291,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                         },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(8),
@@ -298,7 +309,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                                   0
                               ? 'Contest Full'
                               : 'Pay Now',
-                      style: AppStyles.tsWhiteMedium14.copyWith(
+                      style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
                       ),
                     ),
@@ -307,9 +318,16 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               ),
               Expanded(
                 child: GestureDetector(
+                  onTap: () {
+                    controller.liveCollegeContest(contest);
+                    controller.getShareContest(false);
+                    String url = 'https://stoxhero.com/contest';
+                    Clipboard.setData(ClipboardData(text: url));
+                    SnackbarHelper.showSnackbar('Share Link with your Friends');
+                  },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: AppColors.secondary.withOpacity(.25),
                       borderRadius: BorderRadius.only(
@@ -318,7 +336,9 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     ),
                     child: Text(
                       'Share',
-                      style: AppStyles.tsSecondaryMedium14,
+                      style: AppStyles.tsSecondaryMedium12.copyWith(
+                        color: AppColors.secondary.shade600,
+                      ),
                     ),
                   ),
                 ),

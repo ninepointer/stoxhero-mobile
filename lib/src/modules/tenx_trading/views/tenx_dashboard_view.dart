@@ -48,35 +48,19 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ],
                       ),
                     ),
-                  // Row(
-                  //   children: [
-                  //     CommonStockInfo(
-                  //       label: 'Margin',
-                  //       stockPrice: '₹ 19,454.09',
-                  //       stockLTP: '₹ 183.15',
-                  //       stockChange: '(+ 34.42%)',
-                  //     ),
-                  //     CommonStockInfo(
-                  //       label: 'Net P&L',
-                  //       stockPrice: '₹ 19,454.98',
-                  //       stockLTP: '₹ 183.15',
-                  //       stockChange: '(+ 34.42%)',
-                  //     ),
-                  //     SizedBox(width: 8),
-                  //   ],
-                  // ),
                   CommonTile(
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -89,7 +73,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             },
                           ),
                         ),
-                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.tenxPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -128,7 +112,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Position'),
+                  CommonTile(label: 'My Positions'),
                   controller.tenxPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
@@ -144,19 +128,19 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ),
                   CommonTile(label: 'Portfolio Details'),
                   TenxPortfolioDetailsCard(
-                    label: 'Portfolio Value',
+                    label: 'Virtual Portfolio Value',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.tenxPortfolioDetails.value.totalFund,
                   ),
                   TenxPortfolioDetailsCard(
-                    label: 'Available Margin',
+                    label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
-                        ? controller.tenxPortfolioDetails.value.openingBalance
-                        : controller.calculateMargin(),
+                        ? controller.calculateMargin()
+                        : controller.tenxPortfolioDetails.value.totalFund,
                   ),
                   TenxPortfolioDetailsCard(
-                    label: 'Used Margin',
+                    label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),

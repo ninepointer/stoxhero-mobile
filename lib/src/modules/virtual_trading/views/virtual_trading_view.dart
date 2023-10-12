@@ -45,19 +45,19 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                       ),
                     ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
                         Expanded(
                           child: CommonMarginNPNLCard(
-                            label: 'Margin',
-                            value: controller.calculateTotalNetPNL(),
+                            label: 'Available Margin',
+                            value: controller.calculateMargin(),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 2),
                         Expanded(
                           child: CommonMarginNPNLCard(
-                            label: 'Net P & L',
+                            label: 'Net P&L (Profit & Loss)',
                             value: controller.calculateTotalNetPNL(),
                           ),
                         ),
@@ -70,12 +70,13 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 150,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -88,7 +89,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             },
                           ),
                         ),
-                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -127,7 +128,10 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Position'),
+                  CommonTile(
+                    label: 'My Positions',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   controller.virtualPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
@@ -141,19 +145,22 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             );
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
+                  CommonTile(
+                    label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   VirtualPortfolioDetailsCard(
-                    label: 'Portfolio Value',
+                    label: 'Virtual Portfolio Value',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.virtualPortfolio.value.totalFund,
                   ),
                   VirtualPortfolioDetailsCard(
-                    label: 'Available Margin',
+                    label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
                   VirtualPortfolioDetailsCard(
-                    label: 'Used Margin',
+                    label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),

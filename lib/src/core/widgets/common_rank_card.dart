@@ -33,17 +33,17 @@ class CommonRankCard extends GetView<ContestController> {
               ),
               child: Text(
                 '#$rank',
-                style: AppStyles.tsSecondarySemiBold16,
+                style: AppStyles.tsSecondarySemiBold14,
               ),
             ),
             SizedBox(width: 8),
             Text(
               name,
-              style: Theme.of(context).textTheme.tsMedium16,
+              style: Theme.of(context).textTheme.tsMedium14,
             ),
           ],
         ),
-        SizedBox(height: 12),
+        SizedBox(height: 4),
         Row(
           children: [
             Expanded(
@@ -51,13 +51,12 @@ class CommonRankCard extends GetView<ContestController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'NET P&L',
-                    style: Theme.of(context).textTheme.tsGreyRegular12,
+                    'Net P&L (Profit & Loss)',
+                    style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
-                  SizedBox(height: 4),
                   Text(
                     FormatHelper.formatNumbers(netPnL),
-                    style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                    style: Theme.of(context).textTheme.tsMedium12.copyWith(
                           color: controller.getValueColor(netPnL),
                         ),
                   ),
@@ -70,12 +69,11 @@ class CommonRankCard extends GetView<ContestController> {
                 children: [
                   Text(
                     'Reward',
-                    style: Theme.of(context).textTheme.tsGreyRegular12,
+                    style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
-                  SizedBox(height: 4),
                   Text(
                     FormatHelper.formatNumbers(reward),
-                    style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                    style: Theme.of(context).textTheme.tsMedium12.copyWith(
                           color: controller.getValueColor(reward),
                         ),
                   ),

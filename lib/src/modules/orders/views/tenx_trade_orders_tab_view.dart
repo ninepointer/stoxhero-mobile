@@ -87,7 +87,7 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                   items: controller.selectedTenxSubDatesList.map((value) {
                     return DropdownMenuItem<UserPurchaseDetail>(
                       value: value,
-                      child: Text(value.subscribedOn ?? ''),
+                      child: Text(FormatHelper.formatDateTimeToIST(value.subscribedOn ?? '')),
                     );
                   }).toList(),
                   dropdownStyleData: DropdownStyleData(

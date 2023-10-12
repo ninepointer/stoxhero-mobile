@@ -145,6 +145,11 @@ class AppPages {
       binding: CollegeContestBinding(),
     ),
     GetPage(
+      name: AppRoutes.collegeContestLiveLeaderboard,
+      page: () => CollegeContestLiveLeaderboardView(),
+      binding: CollegeContestBinding(),
+    ),
+    GetPage(
       name: AppRoutes.virtualTrading,
       page: () => VirtualTradingView(),
       binding: VirtualTradingBinding(),

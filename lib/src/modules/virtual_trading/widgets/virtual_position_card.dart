@@ -54,7 +54,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       ),
                       TradeCardTile(
                         isRightAlign: true,
-                        label: 'Gross P&L',
+                        label: 'Gross P&L (Profit & Loss)',
                         valueColor: controller.getValueColor(
                           position.lots == 0
                               ? position.amount
@@ -86,14 +86,14 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TradeCardTile(
-                        label: 'Avg. Price',
+                        label: 'Average Price',
                         value: FormatHelper.formatNumbers(
                           position.lastaverageprice,
                         ),
                       ),
                       TradeCardTile(
                         isRightAlign: true,
-                        label: 'LTP',
+                        label: 'LTP (Last Traded Price)',
                         value: FormatHelper.formatNumbers(
                           controller.getInstrumentLastPrice(
                             position.id!.instrumentToken!,
@@ -144,7 +144,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -152,8 +152,8 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         ),
                       ),
                       child: Text(
-                        'BUY',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        'ADD MORE',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.success,
                         ),
                       ),
@@ -165,13 +165,13 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'SELL',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        'EXIT SOME',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.danger,
                         ),
                       ),
@@ -187,7 +187,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       int maxLots = lots.last;
 
                       if (exitLots == 0) {
-                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                        SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
                         log(exitLots.toString());
                         log(maxLots.toString());
@@ -229,17 +229,17 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(.25),
+                        color: AppColors.secondary.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
                       ),
                       child: Text(
-                        'EXIT',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                          color: AppColors.warning,
+                        'EXIT ALL',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
+                          color: AppColors.secondary.shade600,
                         ),
                       ),
                     ),
@@ -253,37 +253,3 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
     );
   }
 }
-
-// class PositionListCardTile extends StatelessWidget {
-//   final String? label;
-//   final dynamic value;
-//   final bool isRightAlign;
-//   final Color? valueColor;
-//   const PositionListCardTile({
-//     super.key,
-//     required this.label,
-//     this.value,
-//     this.isRightAlign = false,
-//     this.valueColor,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-//       children: [
-//         Text(
-//           label ?? '-',
-//           style: AppStyles.tsGreyMedium12,
-//         ),
-//         SizedBox(height: 2),
-//         Text(
-//           value,
-//           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-//                 color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-//               ),
-//         ),
-//       ],
-//     );
-//   }
-// }

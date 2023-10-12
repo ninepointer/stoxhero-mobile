@@ -43,7 +43,7 @@ class OrdersController extends BaseController<OrdersRepository> {
   void loadData() async {
     loadUserDetails();
     // await getTenxTradeAllOrdersList();
-    await getTenxTradeTodaysOrdersList();
+    // await getTenxTradeTodaysOrdersList();
     await getTenXSubscriptionList();
     await getVirtualTradeTodaysOrdersList();
     await getVirtualTradeAllOrdersList();

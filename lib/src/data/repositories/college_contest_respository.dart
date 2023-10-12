@@ -156,4 +156,28 @@ class CollegeContestRepository extends BaseRepository {
     var response = await service.post(path: apiURL, data: data);
     return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
   }
+
+  Future<RepoResponse<GenericResponse>> getShareContest(String? id) async {
+    String apiURL = AppUrls.shareContest(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getNotified(String? id) async {
+    String apiURL = AppUrls.getNotified(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> participate(String? id) async {
+    String apiURL = AppUrls.participate(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
 }

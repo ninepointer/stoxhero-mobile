@@ -54,12 +54,13 @@ class ContestTradingView extends GetView<ContestController> {
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
                     padding: EdgeInsets.only(left: 16),
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -81,10 +82,10 @@ class ContestTradingView extends GetView<ContestController> {
                   CommonRankCard(
                     rank: controller.myRank.toString(),
                     name: '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
-                    netPnL: "0",
+                    netPnL: controller.calculateTotalNetPNL().toString(),
                     reward: controller.calculatePayout().toString(),
                   ),
-                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -129,7 +130,7 @@ class ContestTradingView extends GetView<ContestController> {
                             children: [
                               ContestPositionDetailsCard(
                                 label: 'Payout',
-                                value: controller.calculatePayout(),
+                                value: controller.calculatePayout().round(),
                                 valueColor: controller.getValueColor(
                                   controller.calculatePayout(),
                                 ),
@@ -139,7 +140,7 @@ class ContestTradingView extends GetView<ContestController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Position'),
+                  CommonTile(label: 'My Positions'),
                   controller.contestPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(

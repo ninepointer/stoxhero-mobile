@@ -15,18 +15,18 @@ class CommonMarginNPNLCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      padding: EdgeInsets.all(12),
       margin: EdgeInsets.zero,
       children: [
         Text(
           label ?? '',
-          style: AppStyles.tsSecondaryMedium16,
+          style: AppStyles.tsSecondaryMedium14,
         ),
-        SizedBox(height: 4),
         Text(
           FormatHelper.formatNumbers(
             value,
           ),
-          style: Theme.of(context).textTheme.tsMedium14.copyWith(
+          style: Theme.of(context).textTheme.tsMedium12.copyWith(
                 color: (value is num && value < 0) ? AppColors.danger : AppColors.success,
               ),
         ),

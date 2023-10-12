@@ -72,20 +72,19 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             },
                           ),
                         ),
-                  CommonTile(label: 'My Rank'),
-                  // for (var item in controller.liveLeaderboardList) ...[
-                  //   CommonRankCard(
-                  //     rank: "",
-                  //     name: item.userName.toString(),
-                  //     netPnl: item.npnl.toString(),
-                  //   ),
-                  // ],
-                  // CommonRankCard(
-                  //   rank: controller.liveLeaderboard.value.npnl.toString(),
-                  //   name: controller.userDetails.value.name.toString(),
-                  //   netPnl: controller.calculateTotalNetPNL().toString(),
-                  // ),
-                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  CommonTile(
+                    label: 'My Rank',
+                    showSeeAllButton: true,
+                    seeAllLabel: 'Leaderboard',
+                    onPressed: () => Get.toNamed(AppRoutes.collegeContestLiveLeaderboard),
+                  ),
+                  CommonRankCard(
+                    rank: controller.myRank.toString(),
+                    name: '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
+                    netPnL: controller.calculateTotalNetPNL().toString(),
+                    reward: controller.calculatePayout().toString(),
+                  ),
+                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -130,7 +129,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             children: [
                               CollegeContestPositionDetailsCard(
                                 label: 'Payout',
-                                value: controller.calculatePayout(),
+                                value: controller.calculatePayout().round(),
                                 valueColor: controller.getValueColor(
                                   controller.calculatePayout(),
                                 ),

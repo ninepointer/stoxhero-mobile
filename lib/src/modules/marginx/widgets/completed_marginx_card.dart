@@ -18,13 +18,13 @@ class CompletedMarginxCard extends StatelessWidget {
       padding: EdgeInsets.zero,
       children: [
         Container(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   completedMarginx?.marginxName ?? '-',
-                  style: AppStyles.tsSecondaryMedium16,
+                  style: AppStyles.tsSecondaryMedium14,
                 ),
               ),
             ],
@@ -37,7 +37,7 @@ class CompletedMarginxCard extends StatelessWidget {
               Visibility(
                 visible: completedMarginx?.isNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.success,
                     borderRadius: BorderRadius.circular(100),
@@ -52,7 +52,7 @@ class CompletedMarginxCard extends StatelessWidget {
               Visibility(
                 visible: completedMarginx?.isBankNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.secondary,
                     borderRadius: BorderRadius.circular(100),
@@ -67,7 +67,7 @@ class CompletedMarginxCard extends StatelessWidget {
               Visibility(
                 visible: completedMarginx?.isFinNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.info,
                     borderRadius: BorderRadius.circular(100),
@@ -80,7 +80,7 @@ class CompletedMarginxCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.danger,
                   borderRadius: BorderRadius.circular(100),
@@ -93,7 +93,7 @@ class CompletedMarginxCard extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 12),
+        SizedBox(height: 8),
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
@@ -111,18 +111,17 @@ class CompletedMarginxCard extends StatelessWidget {
                         ),
                         Text(
                           'Reward',
-                          style: AppStyles.tsGreyRegular12,
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         Text(
                           '% of your Investment',
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -130,13 +129,13 @@ class CompletedMarginxCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Start Date & Time',
-                        style: AppStyles.tsGreyRegular12,
+                        'Starts',
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(completedMarginx?.startTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -144,19 +143,19 @@ class CompletedMarginxCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'End Date & Time',
-                        style: AppStyles.tsGreyRegular12,
+                        'Ends',
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(completedMarginx?.endTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -165,12 +164,12 @@ class CompletedMarginxCard extends StatelessWidget {
                     children: [
                       Text(
                         'Investment',
-                        style: AppStyles.tsGreyRegular12,
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatNumbers(completedMarginx?.entryFee, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -178,19 +177,19 @@ class CompletedMarginxCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Portfolio',
-                        style: AppStyles.tsGreyRegular12,
+                        'Virtual Margin Money',
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatNumbers(completedMarginx?.portfolioValue, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -198,13 +197,13 @@ class CompletedMarginxCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Net P&L',
-                        style: AppStyles.tsGreyRegular12,
+                        'Net P&L (Profit & Loss)',
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatNumbers(completedMarginx?.npnl ?? 0, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                        style: Theme.of(context).textTheme.tsMedium12.copyWith(
                               color: (completedMarginx?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
                             ),
                       ),
@@ -215,12 +214,12 @@ class CompletedMarginxCard extends StatelessWidget {
                     children: [
                       Text(
                         'Net Earnings',
-                        style: AppStyles.tsGreyRegular12,
+                        style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatNumbers(completedMarginx?.earning ?? 0, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                        style: Theme.of(context).textTheme.tsMedium12.copyWith(
                               color: (completedMarginx?.earning ?? 0) >= 0 ? AppColors.success : AppColors.danger,
                             ),
                       )
@@ -228,7 +227,7 @@ class CompletedMarginxCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 4),
             ],
           ),
         ),
@@ -241,7 +240,7 @@ class CompletedMarginxCard extends StatelessWidget {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -250,7 +249,7 @@ class CompletedMarginxCard extends StatelessWidget {
                   ),
                   child: Text(
                     'View',
-                    style: AppStyles.tsWhiteMedium14.copyWith(
+                    style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.info,
                     ),
                   ),
@@ -265,13 +264,13 @@ class CompletedMarginxCard extends StatelessWidget {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: AppColors.success.withOpacity(0.25),
                   ),
                   child: Text(
                     'Orders',
-                    style: AppStyles.tsWhiteMedium14.copyWith(
+                    style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.success,
                     ),
                   ),
@@ -282,7 +281,7 @@ class CompletedMarginxCard extends StatelessWidget {
               child: GestureDetector(
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -291,8 +290,8 @@ class CompletedMarginxCard extends StatelessWidget {
                   ),
                   child: Text(
                     'Share P&L',
-                    style: AppStyles.tsWhiteMedium14.copyWith(
-                      color: AppColors.secondary,
+                    style: AppStyles.tsWhiteMedium12.copyWith(
+                      color: AppColors.secondary.shade600,
                     ),
                   ),
                 ),

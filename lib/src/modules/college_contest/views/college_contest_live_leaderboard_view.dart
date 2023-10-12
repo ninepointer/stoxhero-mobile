@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
-class ContestLiveLeaderboardView extends GetView<ContestController> {
-  const ContestLiveLeaderboardView({Key? key}) : super(key: key);
+class CollegeContestLiveLeaderboardView extends GetView<CollegeContestController> {
+  const CollegeContestLiveLeaderboardView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contest Leaderboard'),
+        title: Text('College Contest Leaderboard'),
       ),
       body: Obx(
         () => Column(

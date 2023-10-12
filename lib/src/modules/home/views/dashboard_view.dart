@@ -36,7 +36,6 @@ class _DashboardViewState extends State<DashboardView> {
   String getProductMonth(String? label) {
     String name = '';
     DateTime now = DateTime.now();
-
     if (label == 'this month') name = DateFormat('MMMM yyyy').format(now);
     if (label == 'last month') name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
     if (label == 'lifetime') name = 'Lifetime';
@@ -84,19 +83,24 @@ class _DashboardViewState extends State<DashboardView> {
                       ],
                     ),
                   ),
-                SizedBox(height: 24),
+                SizedBox(height: 2),
                 Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
                   child: CarouselSlider.builder(
                     itemCount: controller.dashboardCarouselList.length,
                     itemBuilder: (context, int index, realIndex) {
-                      print('dash: ${controller.dashboardCarouselList[index].carouselImage}');
                       return Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                        ),
                         width: double.infinity,
-                        color: AppColors.white,
-                        child: Image.network(
-                          "${controller.dashboardCarouselList[index].carouselImage}",
-                          fit: BoxFit.fill,
-                          width: double.infinity,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            "${controller.dashboardCarouselList[index].carouselImage}",
+                            fit: BoxFit.fill,
+                            width: double.infinity,
+                          ),
                         ),
                       );
                     },
@@ -107,22 +111,39 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ),
                 ),
-                SizedBox(height: 12),
                 CommonTile(
-                  label: 'Upcoming Contest',
+                  label: 'Live Contests',
                   showSeeAllButton: true,
-                  onPressed: () {
-                    Get.to(() => ContestListView());
-                  },
-                  margin: EdgeInsets.zero,
+                  onPressed: () => Get.to(() => ContestListView()),
+                  margin: EdgeInsets.only(bottom: 0, top: 8),
+                ),
+                contestController.liveContestList.isEmpty
+                    ? NoDataFound(label: 'No Live Contests')
+                    : Container(
+                        height: 275,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemCount: contestController.liveContestList.length,
+                          itemBuilder: (context, index) {
+                            return LiveContestCard(
+                              contest: contestController.liveContestList[index],
+                            );
+                          },
+                        ),
+                      ),
+                CommonTile(
+                  label: 'Upcoming Contests',
+                  showSeeAllButton: true,
+                  onPressed: () => Get.to(() => ContestListView()),
+                  margin: EdgeInsets.only(bottom: 0, top: 8),
                 ),
                 contestController.upComingContestList.isEmpty
-                    ? NoDataFound(label: 'No Upcoming Contest')
+                    ? NoDataFound(label: 'No Upcoming Contests')
                     : SizedBox(
-                        height: contestController.upComingContestList.length >= 1
-                            ? 350
-                            : contestController.upComingContestList.length * 150,
+                        height: 275,
                         child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           itemCount: contestController.upComingContestList.length,
@@ -135,29 +156,9 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                 SizedBox(height: 12),
                 CommonTile(
-                  label: 'Live Contest',
-                  showSeeAllButton: true,
-                  onPressed: () => Get.to(() => ContestListView()),
+                  label: 'Return Summary',
+                  margin: EdgeInsets.only(bottom: 8, top: 0),
                 ),
-                contestController.liveContestList.isEmpty
-                    ? NoDataFound(label: 'No Live Contest')
-                    : SizedBox(
-                        height: contestController.liveContestList.length >= 1
-                            ? 350
-                            : contestController.liveContestList.length * 150,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          itemCount: contestController.liveContestList.length,
-                          itemBuilder: (context, index) {
-                            return LiveContestCard(
-                              contest: contestController.liveContestList[index],
-                            );
-                          },
-                        ),
-                      ),
-                SizedBox(height: 12),
-                CommonTile(label: 'Return Summary'),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
@@ -502,12 +503,12 @@ class _DashboardViewState extends State<DashboardView> {
                 children: [
                   Text(
                     label,
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    style: Theme.of(context).textTheme.tsRegular12,
                   ),
                   SizedBox(height: 4),
                   Text(
                     percent,
-                    style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                    style: Theme.of(context).textTheme.tsMedium14.copyWith(
                           color: valueColor ?? (percent.startsWith('-') ? AppColors.danger : AppColors.success),
                         ),
                   )

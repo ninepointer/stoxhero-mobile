@@ -37,7 +37,7 @@ class CommonDropdown extends StatelessWidget {
                 hint,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: AppStyles.tsGreyRegular16,
+                style: AppStyles.tsGreyRegular14,
               ),
             ),
             value: value,

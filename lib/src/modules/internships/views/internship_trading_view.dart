@@ -91,7 +91,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                             },
                           ),
                         ),
-                  if (controller.internshipPositionList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.internshipPositionList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.internshipPositionList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),

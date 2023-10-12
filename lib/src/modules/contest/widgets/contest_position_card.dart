@@ -50,13 +50,13 @@ class ContestPositionCard extends GetView<ContestController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ContestPositionCardTile(
+                        TradeCardTile(
                           label: 'Symbol',
                           value: position.id?.symbol,
                         ),
-                        ContestPositionCardTile(
+                        TradeCardTile(
                           isRightAlign: true,
-                          label: 'Gross P&L',
+                          label: 'Gross P&L (Profit & Loss)',
                           valueColor: controller.getValueColor(
                             position.lots == 0
                                 ? position.amount
@@ -90,15 +90,15 @@ class ContestPositionCard extends GetView<ContestController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ContestPositionCardTile(
-                          label: 'Avg. Price',
+                        TradeCardTile(
+                          label: 'Average Price',
                           value: FormatHelper.formatNumbers(
                             position.lastaverageprice,
                           ),
                         ),
-                        ContestPositionCardTile(
+                        TradeCardTile(
                           isRightAlign: true,
-                          label: 'LTP',
+                          label: 'LTP (Last Traded Price)',
                           value: FormatHelper.formatNumbers(
                             controller.getInstrumentLastPrice(
                               position.id!.instrumentToken!,
@@ -118,11 +118,11 @@ class ContestPositionCard extends GetView<ContestController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ContestPositionCardTile(
+                      TradeCardTile(
                         label: 'Quantity',
                         value: position.lots.toString(),
                       ),
-                      ContestPositionCardTile(
+                      TradeCardTile(
                         isRightAlign: true,
                         label: 'Changes(%)',
                         value: controller.getInstrumentChanges(
@@ -251,40 +251,6 @@ class ContestPositionCard extends GetView<ContestController> {
               ],
             )
           ],
-        ),
-      ],
-    );
-  }
-}
-
-class ContestPositionCardTile extends StatelessWidget {
-  final String? label;
-  final dynamic value;
-  final bool isRightAlign;
-  final Color? valueColor;
-  const ContestPositionCardTile({
-    super.key,
-    required this.label,
-    this.value,
-    this.isRightAlign = false,
-    this.valueColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: [
-        Text(
-          label ?? '-',
-          style: AppStyles.tsGreyMedium12,
-        ),
-        SizedBox(height: 2),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-              ),
         ),
       ],
     );

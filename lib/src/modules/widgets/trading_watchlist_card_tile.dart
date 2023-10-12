@@ -1,40 +1,25 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import '../../../app/app.dart';
+import '../../app/app.dart';
 
-class ContestWatchlistCard extends StatefulWidget {
+class TradingWatchlistCardTile extends StatefulWidget {
   final int index;
   final TradingWatchlist tradingWatchlist;
-  const ContestWatchlistCard({
-    super.key,
-    required this.index,
-    required this.tradingWatchlist,
-  });
+  const TradingWatchlistCardTile({Key? key, required this.index, required this.tradingWatchlist}) : super(key: key);
 
   @override
-  State<ContestWatchlistCard> createState() => _ContestWatchlistCardState();
+  _TradingWatchlistCardTileState createState() => _TradingWatchlistCardTileState();
 }
 
-class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
-  late ContestController controller;
+class _TradingWatchlistCardTileState extends State<TradingWatchlistCardTile> {
+  late VirtualTradingController controller;
 
   @override
   void initState() {
-    controller = Get.find<ContestController>();
+    controller = Get.find<VirtualTradingController>();
     super.initState();
   }
 
-  void _updateWatchlistIndex() {
-    if (controller.selectedWatchlistIndex.value == widget.index) {
-      controller.selectedWatchlistIndex(-1);
-    } else {
-      controller.selectedWatchlistIndex(widget.index);
-    }
-  }
-
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
 
     num lastPrice = controller.getInstrumentLastPrice(
@@ -42,10 +27,9 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
       widget.tradingWatchlist.exchangeInstrumentToken!,
     );
     controller.generateLotsList(type: widget.tradingWatchlist.symbol);
-    log(lastPrice.toString());
     BottomSheetHelper.openBottomSheet(
       context: context,
-      child: ContestTransactionBottomSheet(
+      child: VirtualTransactionBottomSheet(
         type: type,
         tradingInstrument: TradingInstrument(
           name: widget.tradingWatchlist.symbol,
@@ -69,7 +53,6 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
             hasBorder: false,
             margin: EdgeInsets.all(8).copyWith(bottom: 0),
             padding: EdgeInsets.zero,
-            onTap: _updateWatchlistIndex,
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -108,12 +91,13 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TradeCardTile(
+                          hasBottomMargin: false,
                           isRightAlign: false,
                           label: 'Symbol',
                           value: widget.tradingWatchlist.symbol,
                         ),
-                        SizedBox(height: 4),
                         TradeCardTile(
+                          hasBottomMargin: false,
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
@@ -132,69 +116,65 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => openBottomSheet(context, TransactionType.buy),
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppColors.success.withOpacity(.25),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(8),
+              Container(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => openBottomSheet(context, TransactionType.buy),
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.success.withOpacity(.25),
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(8),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          'BUY',
-                          style: AppStyles.tsWhiteMedium12.copyWith(
-                            color: AppColors.success,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => openBottomSheet(context, TransactionType.sell),
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppColors.danger.withOpacity(.25),
-                        ),
-                        child: Text(
-                          'SELL',
-                          style: AppStyles.tsWhiteMedium12.copyWith(
-                            color: AppColors.danger,
+                          child: Text(
+                            'BUY',
+                            style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.success),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppColors.info.withOpacity(.25),
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(8),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => openBottomSheet(context, TransactionType.sell),
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.danger.withOpacity(.25),
                           ),
-                        ),
-                        child: Text(
-                          'REMOVE',
-                          style: AppStyles.tsWhiteMedium12.copyWith(
-                            color: AppColors.info,
+                          child: Text(
+                            'SELL',
+                            style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.danger),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.info.withOpacity(.25),
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            'REMOVE',
+                            style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.info),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
