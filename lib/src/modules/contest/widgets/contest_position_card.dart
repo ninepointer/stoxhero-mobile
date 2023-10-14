@@ -156,7 +156,7 @@ class ContestPositionCard extends GetView<ContestController> {
                         ),
                       ),
                       child: Text(
-                        'ADD MORE',
+          position.lots == 0 ? 'ADD' : 'ADD MORE',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),
@@ -174,7 +174,7 @@ class ContestPositionCard extends GetView<ContestController> {
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'EXIT SOME',
+                        position.lots == 0 ? 'SELL' : 'EXIT SOME',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.danger,
                         ),

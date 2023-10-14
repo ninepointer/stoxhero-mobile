@@ -71,6 +71,26 @@ class MarginXController extends BaseController<MarginXRepository> {
     await getMarginXTradingWatchlist();
   }
 
+  int getOpenPositionCount() {
+    int openCount = 0;
+    for (var position in marginXTradingPosition) {
+      if (position.lots != 0) {
+        openCount++;
+      }
+    }
+    return openCount;
+  }
+
+  int getClosePositionCount() {
+    int closeCount = 0;
+    for (var position in marginXTradingPosition) {
+      if (position.lots == 0) {
+        closeCount++;
+      }
+    }
+    return closeCount;
+  }
+
   void gotoSearchInstrument() {
     searchTextController.text = 'Nifty';
     searchInstruments(
@@ -458,6 +478,14 @@ class MarginXController extends BaseController<MarginXRepository> {
         type = TransactionType.buy;
       } else {
         type = TransactionType.sell;
+      }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
       }
     }
     ContestPlaceOrderRequest data = ContestPlaceOrderRequest(

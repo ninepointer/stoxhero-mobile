@@ -47,6 +47,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
   final selectedStringQuantity = "0".obs;
+  final careerList = <CareerList>[].obs;
 
   final rangeGrossAmount = 0.0.obs;
   final rangeNetAmount = 0.0.obs;
@@ -89,8 +90,27 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   void handleSegmentChange(int val) => changeSegment(val);
-
   void changeSegment(int val) => segmentedControlValue.value = val;
+
+  int getOpenPositionCount() {
+    int openCount = 0;
+    for (var position in internshipPositionList) {
+      if (position.lots != 0) {
+        openCount++;
+      }
+    }
+    return openCount;
+  }
+
+  int getClosePositionCount() {
+    int closeCount = 0;
+    for (var position in internshipPositionList) {
+      if (position.lots == 0) {
+        closeCount++;
+      }
+    }
+    return closeCount;
+  }
 
   String getStockIndexName(int instId) {
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
@@ -721,6 +741,14 @@ class InternshipController extends BaseController<InternshipRespository> {
         type = TransactionType.buy;
       } else {
         type = TransactionType.sell;
+      }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
       }
     }
     InternshipPlaceOrderRequest data = InternshipPlaceOrderRequest(

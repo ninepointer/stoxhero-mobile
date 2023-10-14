@@ -238,6 +238,26 @@ class ContestController extends BaseController<ContestRepository> {
   void handleCompletedSegmentChange(int val) => completedChangeSegment(val);
   void completedChangeSegment(int val) => completedSegmentedControlValue.value = val;
 
+  int getOpenPositionCount() {
+    int openCount = 0;
+    for (var position in contestPositionsList) {
+      if (position.lots != 0) {
+        openCount++;
+      }
+    }
+    return openCount;
+  }
+
+  int getClosePositionCount() {
+    int closeCount = 0;
+    for (var position in contestPositionsList) {
+      if (position.lots == 0) {
+        closeCount++;
+      }
+    }
+    return closeCount;
+  }
+
   void gotoSearchInstrument() {
     searchTextController.text = '';
     searchInstruments(searchTextController.text);
@@ -358,6 +378,14 @@ class ContestController extends BaseController<ContestRepository> {
         type = TransactionType.buy;
       } else {
         type = TransactionType.sell;
+      }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
       }
     }
     ContestPlaceOrderRequest data = ContestPlaceOrderRequest(

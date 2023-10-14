@@ -159,7 +159,14 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Positions'),
+               CommonTile(
+                    label: 'My Positions',
+                    showSeeAllButton: true,
+                    seeAllLabel:
+                        '( Open P: ${controller.getOpenPositionCount()} | Close P: ${controller.getClosePositionCount()} )',
+                    sellAllColor: AppColors.grey,
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   controller.contestPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(

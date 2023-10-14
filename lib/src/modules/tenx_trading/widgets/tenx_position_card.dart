@@ -152,7 +152,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                         ),
                       ),
                       child: Text(
-                        'ADD MORE',
+                       position.lots == 0 ? 'ADD' : 'ADD MORE',
                         style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.success,
                         ),
@@ -170,7 +170,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'EXIT SOME',
+                        position.lots == 0 ? 'SELL' : 'EXIT SOME',
                         style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.danger,
                         ),

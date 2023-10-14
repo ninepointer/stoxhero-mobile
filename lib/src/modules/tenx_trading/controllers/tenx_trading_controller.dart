@@ -89,6 +89,26 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     log('Socket Status : ${socket.connected}');
   }
 
+  int getOpenPositionCount() {
+    int openCount = 0;
+    for (var position in tenxPositionsList) {
+      if (position.lots != 0) {
+        openCount++;
+      }
+    }
+    return openCount;
+  } 
+
+  int getClosePositionCount() {
+    int closeCount = 0;
+    for (var position in tenxPositionsList) {
+      if (position.lots == 0) {
+        closeCount++;
+      }
+    }
+    return closeCount;
+  }
+
   String getStockIndexName(int instId) {
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
@@ -433,6 +453,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         type = TransactionType.buy;
       } else {
         type = TransactionType.sell;
+      }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
       }
     }
     TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(

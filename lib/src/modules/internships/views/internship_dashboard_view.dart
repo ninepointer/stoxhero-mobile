@@ -40,7 +40,7 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                       children: [
                         Text(
                           'What is StoxHero Internship Program ?',
-                          style: Theme.of(context).textTheme.tsMedium16,
+                          style: AppStyles.tsSecondaryRegular16,
                         ),
                         Icon(
                           isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
@@ -51,6 +51,7 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                     if (isExpanded) CommonInternshipInfo(),
                   ],
                 ),
+                // if (controller.userDetails.value.internshipBatch!.isNotEmpty)
                 InternshipInfoCard(),
                 Padding(
                   padding: const EdgeInsets.all(14),
@@ -81,6 +82,20 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                       ),
                     ],
                   ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: controller.careerList.length,
+                  itemBuilder: (BuildContext context, index) {
+                    if (controller.careerList[index].listingType == 'Job') {
+                      return InfoCard(
+                        career: controller.careerList[index],
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
                 ),
               ],
             ),

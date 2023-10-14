@@ -58,6 +58,7 @@ class ContestLeaderboardView extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return CollegeContestLeaderboardCard(
+                          index: index + 1,
                           contestLeaderboard: collegeContestController.collegeContestLeaderboardList[index],
                         );
                       },

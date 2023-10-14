@@ -11,6 +11,7 @@ class CommonTile extends StatelessWidget {
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final String? seeAllLabel;
+  final Color? sellAllColor;
   const CommonTile({
     Key? key,
     this.label = 'Label',
@@ -21,6 +22,7 @@ class CommonTile extends StatelessWidget {
     this.margin,
     this.padding,
     this.seeAllLabel,
+    this.sellAllColor,
   }) : super(key: key);
 
   @override
@@ -44,7 +46,9 @@ class CommonTile extends StatelessWidget {
                   onTap: onPressed,
                   child: Text(
                     seeAllLabel ?? 'See All',
-                    style: AppStyles.tsSecondaryMedium14,
+                    style: AppStyles.tsSecondaryMedium14.copyWith(
+                      color: sellAllColor,
+                    ),
                   ),
                 )
               else if (showIconButton)

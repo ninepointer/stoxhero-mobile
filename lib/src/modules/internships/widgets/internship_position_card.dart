@@ -142,7 +142,7 @@ class InternshipPositionCard extends GetView<InternshipController> {
                         ),
                       ),
                       child: Text(
-                        'ADD MORE',
+                position.lots == 0 ? 'ADD' : 'ADD MORE',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),

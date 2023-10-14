@@ -80,6 +80,26 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     log('Socket Status : ${socket.connected}');
   }
 
+  int getOpenPositionCount() {
+    int openCount = 0;
+    for (var position in virtualPositionsList) {
+      if (position.lots != 0) {
+        openCount++;
+      }
+    }
+    return openCount;
+  }
+
+  int getClosePositionCount() {
+    int closeCount = 0;
+    for (var position in virtualPositionsList) {
+      if (position.lots == 0) {
+        closeCount++;
+      }
+    }
+    return closeCount;
+  }
+
   String getStockIndexName(int instId) {
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';

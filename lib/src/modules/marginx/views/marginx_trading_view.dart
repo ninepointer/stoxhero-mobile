@@ -161,8 +161,12 @@ class MarginXTradingView extends GetView<MarginXController> {
                         ],
                       ),
                     ),
-                  CommonTile(
+                CommonTile(
                     label: 'My Positions',
+                    showSeeAllButton: true,
+                    seeAllLabel:
+                        '( Open P: ${controller.getOpenPositionCount()} | Close P: ${controller.getClosePositionCount()} )',
+                    sellAllColor: AppColors.grey,
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.marginXTradingPosition.isEmpty
