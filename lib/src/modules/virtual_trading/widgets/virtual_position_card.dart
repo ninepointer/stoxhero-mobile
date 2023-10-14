@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
@@ -189,20 +187,16 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       if (exitLots == 0) {
                         SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
-                        log(exitLots.toString());
-                        log(maxLots.toString());
                         if (exitLots.toString().contains('-')) {
                           if (exitLots < 0) {
                             exitLots = -exitLots;
                           }
-
                           if (!lots.contains(exitLots)) {
                             lots.add(exitLots);
                             lots.sort();
                           }
                           controller.selectedQuantity.value = exitLots;
                         }
-
                         if (exitLots > maxLots) {
                           controller.selectedQuantity.value = maxLots;
                         } else {

@@ -14,8 +14,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late HomeController controller;
 
-  int _selectedIndex = 2;
-
   List<Widget> _tabs = [
     DashboardView(),
     VirtualTradingView(),
@@ -31,7 +29,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _updateTab(int index) {
-    _selectedIndex = index;
+    controller.selectedIndex.value = index;
 
     switch (index) {
       case 0:
@@ -97,7 +95,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
-      body: _tabs[_selectedIndex],
+      body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         onPressed: () => _updateTab(2),
@@ -107,40 +105,42 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 4,
-        child: Container(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildTabButton(
-                context,
-                index: 0,
-                label: 'Home',
-                icon: Icons.bar_chart_rounded,
-              ),
-              _buildTabButton(
-                context,
-                index: 1,
-                label: 'Virtual',
-                icon: Icons.analytics_rounded,
-              ),
-              SizedBox(width: 40),
-              _buildTabButton(
-                context,
-                index: 3,
-                label: 'MarginX',
-                icon: Icons.trending_up_rounded,
-              ),
-              _buildTabButton(
-                context,
-                index: 4,
-                label: 'Contest',
-                icon: Icons.groups_rounded,
-              ),
-            ],
+      bottomNavigationBar: Obx(
+        () => BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          notchMargin: 4,
+          child: Container(
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildTabButton(
+                  context,
+                  index: 0,
+                  label: 'Home',
+                  icon: Icons.bar_chart_rounded,
+                ),
+                _buildTabButton(
+                  context,
+                  index: 1,
+                  label: 'Virtual',
+                  icon: Icons.analytics_rounded,
+                ),
+                SizedBox(width: 40),
+                _buildTabButton(
+                  context,
+                  index: 3,
+                  label: 'MarginX',
+                  icon: Icons.trending_up_rounded,
+                ),
+                _buildTabButton(
+                  context,
+                  index: 4,
+                  label: 'Contest',
+                  icon: Icons.groups_rounded,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -161,13 +161,13 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Icon(
               icon,
-              color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.grey,
+              color: controller.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey,
             ),
             SizedBox(height: 4),
             Text(
               label,
               style: Theme.of(context).textTheme.tsRegular12.copyWith(
-                    color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.grey,
+                    color: controller.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey,
                   ),
             )
           ],

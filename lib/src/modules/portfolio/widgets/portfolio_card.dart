@@ -26,7 +26,7 @@ class PortfolioCard extends GetView<PortfolioController> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.only(left: 12, right: 12, bottom: 8),
+      margin: EdgeInsets.only(left: 12, right: 12, bottom: 4),
       padding: EdgeInsets.zero,
       children: [
         Padding(
@@ -35,28 +35,23 @@ class PortfolioCard extends GetView<PortfolioController> {
             alignment: Alignment.center,
             child: Text(
               portfolioName ?? '',
-              style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                    color: AppColors.primary,
-                  ),
+              style: Theme.of(context).textTheme.tsPrimaryMedium14,
               textAlign: TextAlign.center,
             ),
           ),
         ),
         Divider(thickness: 1, height: 0),
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 8,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PortfolioCardTile(
-                label: 'Virtual Portfolio Value',
+                label: 'Virtual Margin Money',
                 value: FormatHelper.formatNumbers(portfolioValue),
                 valueColor: AppColors.info,
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -85,7 +80,7 @@ class PortfolioCard extends GetView<PortfolioController> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -100,7 +95,7 @@ class PortfolioCard extends GetView<PortfolioController> {
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 4),
             ],
           ),
         ),

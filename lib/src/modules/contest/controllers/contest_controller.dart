@@ -66,6 +66,8 @@ class ContestController extends BaseController<ContestRepository> {
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
   final liveLeaderboardList = <LiveContestLeaderboard>[].obs;
   final liveLeaderboard = LiveContestLeaderboard().obs;
+  final completedContestLeaderboardList = <CompletedContestLeaderboardList>[].obs;
+  final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
 
   Future loadData() async {
     loadUserDetails();
@@ -861,62 +863,6 @@ class ContestController extends BaseController<ContestRepository> {
     }
   }
 
-  // Future socketMyRankConnection() async {
-  //   List<LiveContestLeaderboard>? lead = [];
-  //   try {
-  //     IO.Socket socket;
-  //     socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-  //       'autoConnect': false,
-  //       'transports': ['websocket'],
-  //     });
-  //     socket.connect();
-  //     socket.onConnect((_) {
-  //       log('Socket My Rank: Connected');
-  //       log('Socket Lead: ${liveLeaderboardList.length}');
-  //       socket.emit('userId', userDetails.value.sId);
-  //       socket.emit('user-ticks', userDetails.value.sId);
-  //     });
-  //     socket.on(
-  //       'contest-myrank${userDetails.value.sId}${liveContest.value.id}',
-  //       (data) {
-  //         print(data);
-  //         log('contest-myrank${userDetails.value.sId}${liveContest.value.id}');
-  //         lead = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
-  //         for (var element in lead ?? []) {
-  //           if (liveLeaderboardList.any((obj) => obj.userName == element.userName)) {
-  //             int index = liveLeaderboardList.indexWhere(
-  //               (stock) => stock.userName == element.userName,
-  //             );
-  //             liveLeaderboardList.removeAt(index);
-  //             liveLeaderboardList.insert(index, element);
-  //           } else {
-  //             liveLeaderboardList.add(element);
-  //           }
-  //         }
-  //         log('Socket Lead: ${liveLeaderboardList.length}');
-  //       },
-  //     );
-  //     //   lead.forEach((element) {
-  //     //     if (liveLeadboardList.any((obj) => obj.userName == element.name)) {
-  //     //       int index = liveLeadboardList.indexWhere(
-  //     //         (stock) => stock.name == element.name,
-  //     //       );
-  //     //       liveLeadboardList.removeAt(index);
-  //     //       liveLeadboardList.insert(index, element);
-  //     //     } else {
-  //     //       liveLeadboardList.add(element);
-  //     //     }
-  //     //   });
-  //     //   log('Socket Lead: ${liveLeadboardList.length}');
-  //     // });
-  //     socket.onDisconnect((_) => log('Socket : Disconnect'));
-  //     socket.onConnectError((err) => log(err));
-  //     socket.onError((err) => log(err));
-  //   } on Exception catch (e) {
-  //     log(e.toString());
-  //   }
-  // }
-
   Future<void> getShareContest(bool isUpcoming) async {
     isLoading(true);
 
@@ -957,6 +903,23 @@ class ContestController extends BaseController<ContestRepository> {
       getLiveContestList();
     } catch (e) {
       log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getCompletedContestLeaderboardList(String? id) async {
+    isLoading(true);
+    try {
+      final RepoResponse<CompletedContestLeaderboardListResponse> response =
+          await repository.getCompletedContestLeaderboardList(id);
+      if (response.data != null) {
+        completedContestLeaderboardList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('Leaderboard: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

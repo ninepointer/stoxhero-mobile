@@ -19,6 +19,13 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+
+  final isWatchlistLoading = false.obs;
+  bool get isWatchlistLoadingStatus => isLoading.value;
+
+  final isPositionLoading = false.obs;
+  bool get isPositionLoadingStatus => isPositionLoading.value;
+
   final searchTextController = TextEditingController();
   final virtualPortfolio = VirtualTradingPortfolio().obs;
 
@@ -356,13 +363,25 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     print(type);
     Get.back();
     isLoading(true);
+
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
         type = TransactionType.sell;
       }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
+      }
     }
+
+    log(type.toString());
+
     VirtualTradingPlaceOrderRequest data = VirtualTradingPlaceOrderRequest(
       orderType: "MARKET",
       price: "",

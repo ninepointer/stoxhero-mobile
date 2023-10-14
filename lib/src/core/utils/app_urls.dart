@@ -77,9 +77,9 @@ class AppUrls {
   static const String contestLeaderboard = "$apiURL/contestscoreboard/scoreboard";
   static const String contestPlacingOrder = "$apiURL/placingOrderDailyContest";
   static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
-
+  static String completedContestLeaderboard(String? id) => "$apiURL/dailycontest/contestleaderboard/$id";
   static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
-
+  static String completedCollegeContestCertificate(String? id) => "apiURL/dailycontest/download/$id";
   static String contestInstrumentWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
 
@@ -133,4 +133,6 @@ class AppUrls {
   static String internshipBatchPortfolio(String? id) => "$apiURL/internship/marginDetail/$id";
   static const String internshipAllOrders = "$apiURL/internship/my/historyorders";
   static const String internshipTodayOrders = "$apiURL/internship/my/todayorders";
+  static String tenxCountTradingDays(String? id) => "$apiURL/tenX/$id/trade/countTradingDays";
+  static String shareMarginX(String? id) => "$apiURL/marginx/share/$id";
 }

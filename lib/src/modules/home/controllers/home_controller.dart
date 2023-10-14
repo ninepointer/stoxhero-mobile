@@ -21,9 +21,12 @@ class HomeController extends BaseController<DashboardRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
+  final selectedIndex = 0.obs;
+
   final userDashboard = DashboardTradeSummary().obs;
   final userDashboardReturnSummary = DashboardReturnSummary().obs;
   final dashboardCarouselList = <DashboardCarousel>[].obs;
+  final dashboardCarousel = DashboardCarousel().obs;
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
@@ -46,6 +49,18 @@ class HomeController extends BaseController<DashboardRepository> {
     await getDashboardReturnSummary();
     await getDashboardCarousel();
     await getDashboard(selectedTradeType, selectedTimeFrame);
+  }
+
+  void navigateToCarousel(String link) {
+    if (link == 'marginxs') {
+      selectedIndex(3);
+    } else if (link == 'contests') {
+      selectedIndex(4);
+    } else if (link == 'tenxtrading') {
+      selectedIndex(2);
+    } else if (link == 'referrals') {
+      Get.toNamed(AppRoutes.referrals);
+    }
   }
 
   String getStockIndexName(int instId) {
@@ -87,8 +102,7 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboardReturnSummary() async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardReturnSummaryResponse> response =
-          await repository.getDashboardReturnSummary();
+      final RepoResponse<DashboardReturnSummaryResponse> response = await repository.getDashboardReturnSummary();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userDashboardReturnSummary(response.data?.data);
@@ -106,8 +120,7 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboard(String? tradeType, String? timeFame) async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardTradeSummaryResponse> response =
-          await repository.getDashboard(tradeType, timeFame);
+      final RepoResponse<DashboardTradeSummaryResponse> response = await repository.getDashboard(tradeType, timeFame);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userDashboard(response.data?.data);
@@ -125,8 +138,7 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboardCarousel() async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardCarouselResponse> response =
-          await repository.getDashboardCarousel();
+      final RepoResponse<DashboardCarouselResponse> response = await repository.getDashboardCarousel();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           dashboardCarouselList(response.data?.data ?? []);
@@ -144,8 +156,7 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response =
-          await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -178,8 +189,7 @@ class HomeController extends BaseController<DashboardRepository> {
           // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList
-                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = stockIndexDetailsList.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );

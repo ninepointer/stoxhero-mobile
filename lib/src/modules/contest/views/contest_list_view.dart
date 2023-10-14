@@ -39,10 +39,17 @@ class ContestListView extends GetView<ContestController> {
                       selectedSegment: controller.liveSegmentedControlValue.value,
                       onValueChanged: controller.handleLiveSegmentChange,
                     ),
+
                     if (controller.liveSegmentedControlValue.value == 0) ...[
                       if (controller.livePremiumContestList.isEmpty)
                         NoDataFound(
-                          label: 'No Premium Live Contest!',
+                          image: Image.asset(
+                            AppImages.contestTrophy,
+                            height: 48,
+                            width: 48,
+                          ),
+                          label:
+                              'Oops! \nThere are no Premium Live Contest at the moment.\nPlease check Upcoming Contest!',
                         ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -58,7 +65,13 @@ class ContestListView extends GetView<ContestController> {
                     ] else if (controller.liveSegmentedControlValue.value == 1) ...[
                       if (controller.liveFreeContestList.isEmpty)
                         NoDataFound(
-                          label: 'No Free Live Contest!',
+                          image: Image.asset(
+                            AppImages.contestTrophy,
+                            height: 48,
+                            width: 48,
+                          ),
+                          label:
+                              'Oops! \nThere are no Free Live Contest at the moment.\nPlease check Upcoming Contest!',
                         ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -85,7 +98,13 @@ class ContestListView extends GetView<ContestController> {
                     if (controller.upcomingSegmentedControlValue.value == 0) ...[
                       if (controller.premiumContestList.isEmpty)
                         NoDataFound(
-                          label: 'No Premium Upcoming Contest!',
+                          image: Image.asset(
+                            AppImages.contestTrophy,
+                            height: 48,
+                            width: 48,
+                          ),
+                          label:
+                              'Oops! \nThere are no Premium Upcoming Contest at the moment.\nPlease check Live Contest!',
                         ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -101,7 +120,13 @@ class ContestListView extends GetView<ContestController> {
                     ] else if (controller.upcomingSegmentedControlValue.value == 1) ...[
                       if (controller.freeContestList.isEmpty)
                         NoDataFound(
-                          label: 'No Free Upcoming Contest!',
+                          image: Image.asset(
+                            AppImages.contestTrophy,
+                            height: 48,
+                            width: 48,
+                          ),
+                          label:
+                              'Oops! \nThere are no Free Upcoming Contest at the moment.\nPlease check Live Contest!',
                         ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -127,7 +152,13 @@ class ContestListView extends GetView<ContestController> {
                     if (controller.completedSegmentedControlValue.value == 0) ...[
                       if (controller.premiumCompletedContestList.isEmpty)
                         NoDataFound(
-                          label: 'No Premium Completed Contest!',
+                          image: Image.asset(
+                            AppImages.contestTrophy,
+                            height: 48,
+                            width: 48,
+                          ),
+                          label:
+                              'Oops! \nThere are no Premium Completed Contest at the moment.\nPlease check Live Contest!',
                         ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -155,7 +186,13 @@ class ContestListView extends GetView<ContestController> {
                     ] else if (controller.completedSegmentedControlValue.value == 1) ...[
                       if (controller.freeCompletedContestList.isEmpty)
                         NoDataFound(
-                          label: 'No Free Completed Contest!',
+                          image: Image.asset(
+                            AppImages.contestTrophy,
+                            height: 48,
+                            width: 48,
+                          ),
+                          label:
+                              'Oops! \nThere are no Free Completed Contest at the moment.\nPlease check Live Contest!',
                         ),
                       ListView.builder(
                         shrinkWrap: true,

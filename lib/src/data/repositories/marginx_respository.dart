@@ -125,4 +125,12 @@ class MarginXRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<GenericResponse>> getShareMarginX(String? id) async {
+    String apiURL = AppUrls.shareMarginX(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
 }

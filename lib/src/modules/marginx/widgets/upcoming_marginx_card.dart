@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:stoxhero/src/core/core.dart';
@@ -308,7 +309,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     ),
                   ),
                   child: Text(
-                    'View',
+                    'View Details',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.info,
                     ),
@@ -372,6 +373,13 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
             ),
             Expanded(
               child: GestureDetector(
+                onTap: () {
+                  controller.upComingMarginX(widget.marginx);
+                  controller.getShareMarginX(true);
+                  String url = 'https://stoxhero.com/marginxs';
+                  Clipboard.setData(ClipboardData(text: url));
+                  SnackbarHelper.showSnackbar('Share Link with your Friends');
+                },
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(6),

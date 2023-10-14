@@ -54,7 +54,9 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         Expanded(
                           child: CommonMarginNPNLCard(
                             label: 'Available Margin',
-                            value: controller.calculateMargin(),
+                            value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
+                                ? controller.calculateMargin().round()
+                                : controller.tenxPortfolioDetails.value.totalFund,
                           ),
                         ),
                         SizedBox(width: 4),
@@ -66,6 +68,52 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ),
                       ],
                     ),
+                  ),
+                  CommonCard(
+                    margin: EdgeInsets.only(left: 8, right: 8, top: 4),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '# of Trading Days : ${controller.tenxCountTradingDays[0].totalTradingDays}',
+                                  style: AppStyles.tsSecondaryMedium12,
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  'Subscribed On : ${FormatHelper.formatDateYear(controller.selectedTenXSub.value.userPurchaseDetail?[0].subscribedOn)}',
+                                  style: AppStyles.tsSecondaryMedium12,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '# of Trading Days Left : ${controller.tenxCountTradingDays[0].actualRemainingDay}',
+                                  style: AppStyles.tsWhiteMedium12.copyWith(
+                                    color: AppColors.success,
+                                  ),
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  'Expires On : ${FormatHelper.formatDateYear(controller.selectedTenXSub.value.userPurchaseDetail?[0].expiredOn)}',
+                                  style: AppStyles.tsWhiteMedium12.copyWith(
+                                    color: AppColors.success,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   CommonTile(
                     label: 'My Watchlist',
@@ -79,7 +127,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
+                              controller.tradingWatchlist.length >= 3 ? 250 : controller.tradingWatchlist.length * 115,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -147,7 +195,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ),
                   CommonTile(label: 'Portfolio Details'),
                   PortfolioDetailCardTile(
-                    label: 'Virtual Portfolio Value',
+                    label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.tenxPortfolioDetails.value.totalFund,
                   ),

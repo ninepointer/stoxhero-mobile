@@ -65,7 +65,6 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
             hasBorder: false,
             margin: EdgeInsets.all(8).copyWith(bottom: 0),
             padding: EdgeInsets.zero,
-            onTap: _updateWatchlistIndex,
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

@@ -45,7 +45,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
-
+  final tenxCountTradingDays = <CountTradingDays>[].obs;
+  final selectedTenXSub = TenXSubscription().obs;
+  final tenXSubscription = <TenXSubscription>[].obs;
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
   }
@@ -57,6 +59,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   Future loadTenxData() async {
     userDetails.value = AppStorage.getUserDetails();
+    await getTenxCountTradingDays();
     initSocketConnection();
     await socketConnection();
     await socketIndexConnection();
@@ -65,6 +68,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxTradingWatchlist();
     await getTenxPositionsList();
     await getTenxTradingPortfolioDetails();
+    await getTenXSubscriptionList();
   }
 
   Future initSocketConnection() async {
@@ -617,5 +621,43 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     } on Exception catch (e) {
       log(e.toString());
     }
+  }
+
+  Future getTenxCountTradingDays() async {
+    isLoading(true);
+    try {
+      final RepoResponse<CountTradingDaysResponse> response = await repository.getTenxCountTradingDays(
+        selectedSubscriptionId.value,
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          tenxCountTradingDays(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getTenXSubscriptionList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<TenXSubscriptionResponse> response = await repository.getTenXSubscriptionList();
+      if (response.data != null) {
+        tenXSubscription.clear();
+        tenXSubscription(response.data?.data ?? []);
+        if (tenXSubscription.isNotEmpty) selectedTenXSub(tenXSubscription.first);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
   }
 }

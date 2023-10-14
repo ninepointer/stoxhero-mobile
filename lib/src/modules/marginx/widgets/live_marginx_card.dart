@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
 class LiveMarginxCard extends GetView<MarginXController> {
@@ -250,7 +251,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                     ),
                   ),
                   child: Text(
-                    'View',
+                    'View Details',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.info,
                     ),
@@ -315,6 +316,13 @@ class LiveMarginxCard extends GetView<MarginXController> {
             ),
             Expanded(
               child: GestureDetector(
+                onTap: () {
+                  controller.liveMarginX(marginx);
+                  controller.getShareMarginX(true);
+                  String url = 'https://stoxhero.com/marginxs';
+                  Clipboard.setData(ClipboardData(text: url));
+                  SnackbarHelper.showSnackbar('Share Link with your Friends');
+                },
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(6),

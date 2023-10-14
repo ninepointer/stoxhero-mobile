@@ -31,7 +31,12 @@ class MarginXView extends GetView<MarginXController> {
                   if (controller.segmentedControlValue.value == 0) ...[
                     controller.liveMarginXList.isEmpty
                         ? NoDataFound(
-                            label: 'No Live MarginX!',
+                            image: Image.asset(
+                              AppImages.contestTrophy,
+                              height: 48,
+                              width: 48,
+                            ),
+                            label: 'Oops! \nThere are no live marginX at the moment.\nPlease check upcoming marginX!',
                           )
                         : ListView.builder(
                             shrinkWrap: true,
@@ -48,7 +53,12 @@ class MarginXView extends GetView<MarginXController> {
                   ] else if (controller.segmentedControlValue.value == 1) ...[
                     controller.upComingMarginXList.isEmpty
                         ? NoDataFound(
-                            label: 'No Upcoming MarginX!',
+                            image: Image.asset(
+                              AppImages.contestTrophy,
+                              height: 48,
+                              width: 48,
+                            ),
+                            label: 'Oops! \nThere are no Upcoming MarginX at the moment.\nPlease check Live MarginX!',
                           )
                         : ListView.builder(
                             shrinkWrap: true,
@@ -63,17 +73,26 @@ class MarginXView extends GetView<MarginXController> {
                           ),
                     SizedBox(height: 32),
                   ] else if (controller.segmentedControlValue.value == 2) ...[
-                    ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.completedMarginXList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return CompletedMarginxCard(
-                          completedMarginx: controller.completedMarginXList[index],
-                        );
-                      },
-                    ),
+                    controller.completedMarginXList.isEmpty
+                        ? NoDataFound(
+                            image: Image.asset(
+                              AppImages.contestTrophy,
+                              height: 48,
+                              width: 48,
+                            ),
+                            label: 'Oops! \nThere are no Completed MarginX at the moment.\nPlease check Live MarginX!',
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.completedMarginXList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return CompletedMarginxCard(
+                                completedMarginx: controller.completedMarginXList[index],
+                              );
+                            },
+                          ),
                     SizedBox(height: 32),
                   ]
                 ],

@@ -156,6 +156,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                       ),
                   ],
                 ),
+
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),

@@ -54,7 +54,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                         Expanded(
                           child: CommonMarginNPNLCard(
                             label: 'Available Margin',
-                            value: controller.calculateMargin(),
+                            value: controller.calculateMargin().round(),
                           ),
                         ),
                         SizedBox(width: 4),
@@ -79,7 +79,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
+                              controller.tradingWatchlist.length >= 3 ? 250 : controller.tradingWatchlist.length * 115,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -173,9 +173,10 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             );
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
+                  CommonTile(label: 'Portfolio Details',
+                  ),
                   PortfolioDetailCardTile(
-                    label: 'Virtual Portfolio Value',
+                    label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.contestPortfolio.value.totalFund,
                   ),

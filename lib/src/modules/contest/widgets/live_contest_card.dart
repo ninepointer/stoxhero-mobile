@@ -253,7 +253,7 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+                SizedBox(height: 12),
             ],
           ),
         ),

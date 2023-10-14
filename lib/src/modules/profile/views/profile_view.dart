@@ -82,11 +82,6 @@ class ProfileView extends GetView<ProfileController> {
               },
             ),
             ProfileListTile(
-              icon: Icons.school,
-              label: 'Careers',
-              onTap: () => Get.toNamed(AppRoutes.careers),
-            ),
-            ProfileListTile(
               icon: Icons.wallet_giftcard_rounded,
               label: 'Referrals',
               onTap: () {

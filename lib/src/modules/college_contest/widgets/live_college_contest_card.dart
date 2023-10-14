@@ -248,7 +248,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+                SizedBox(height: 12),
             ],
           ),
         ),

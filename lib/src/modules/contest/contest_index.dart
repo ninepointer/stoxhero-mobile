@@ -15,3 +15,4 @@ export 'widgets/contest_watchlist_card.dart';
 export 'widgets/live_contest_card.dart';
 export 'widgets/upcoming_contest_card.dart';
 export 'views/contest_live_leaderboard_view.dart';
+export 'views/completed_contest_leaderboard.dart';

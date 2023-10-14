@@ -296,7 +296,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                     ),
                   ],
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 12),
               ],
             ),
           ),
@@ -307,26 +307,29 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
             ),
             child: Row(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (isUserInterestedId) {
-                        SnackbarHelper.showSnackbar('Already interested in ${widget.contest?.contestName}');
-                      } else {
-                        controller.upComingCollegeContest(widget.contest);
-                        controller.getNotified();
-                        SnackbarHelper.showSnackbar('You are now interested in ${widget.contest?.contestName}');
-                      }
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(.25),
-                      ),
-                      child: Text(
-                        isUserInterestedId ? 'Notified' : 'Get Notified',
-                        style: AppStyles.tsPrimaryMedium12,
+                Visibility(
+                  visible: !isUserInterestedId,
+                  child: Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (isUserInterestedId) {
+                          SnackbarHelper.showSnackbar('Already interested in ${widget.contest?.contestName}');
+                        } else {
+                          controller.upComingCollegeContest(widget.contest);
+                          controller.getNotified();
+                          SnackbarHelper.showSnackbar('You are now interested in ${widget.contest?.contestName}');
+                        }
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(.25),
+                        ),
+                        child: Text(
+                          isUserInterestedId ? '' : 'Get Notified',
+                          style: AppStyles.tsPrimaryMedium12,
+                        ),
                       ),
                     ),
                   ),

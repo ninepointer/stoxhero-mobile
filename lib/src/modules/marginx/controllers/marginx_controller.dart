@@ -22,6 +22,7 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   final searchTextController = TextEditingController();
   final upComingMarginXList = <UpcomingMarginX>[].obs;
+  final upComingMarginX = UpcomingMarginX().obs;
   final liveMarginXList = <LiveMarginX>[].obs;
   final completedMarginXList = <CompletedMarginX>[].obs;
   final completedMarginXOrdersList = <CompletedMarginXOrders>[].obs;
@@ -709,6 +710,25 @@ class MarginXController extends BaseController<MarginXRepository> {
       log('Purchase Marginx: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
+    isLoading(false);
+  }
+
+  Future<void> getShareMarginX(bool isUpcoming) async {
+    isLoading(true);
+
+    try {
+      await repository.getShareMarginX(isUpcoming ? upComingMarginX.value.id : liveMarginX.value.id);
+
+      if (isUpcoming) {
+        getUpComingMarginXList();
+      } else {
+        getLiveMarginXList();
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+
     isLoading(false);
   }
 }

@@ -22,15 +22,16 @@ class InternshipInfoCard extends GetView<InternshipController> {
                 children: [
                   Text(
                     "Batch",
-                    style: Theme.of(context).textTheme.tsGreyMedium14,
+                    style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
+                  SizedBox(height: 2),
                   Text(
                     "${controller.internshipBatchDetails.value.batchName ?? '-'}",
-                    style: Theme.of(context).textTheme.tsMedium14,
+                    style: Theme.of(context).textTheme.tsMedium12,
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -38,12 +39,13 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Start Date",
-                        style: Theme.of(context).textTheme.tsGreyMedium14,
+                        "Starts",
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
+                      SizedBox(height: 2),
                       Text(
                         "${FormatHelper.formatDateYear(controller.internshipBatchDetails.value.batchStartDate)}",
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -51,18 +53,19 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        "End Date",
-                        style: Theme.of(context).textTheme.tsGreyMedium14,
+                        "Ends",
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
+                      SizedBox(height: 2),
                       Text(
                         "${FormatHelper.formatDateYear(controller.internshipBatchDetails.value.batchEndDate)}",
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -70,12 +73,13 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Portfolio",
-                        style: Theme.of(context).textTheme.tsGreyMedium14,
+                        "Virtual Margin Money",
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
+                      SizedBox(height: 2),
                       Text(
                         "${FormatHelper.formatNumbers(controller.internshipBatchDetails.value.portfolio?.portfolioValue)}",
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -84,11 +88,12 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     children: [
                       Text(
                         "Available Margin Money",
-                        style: Theme.of(context).textTheme.tsGreyMedium14,
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
+                      SizedBox(height: 2),
                       Text(
                         "${FormatHelper.formatNumbers(controller.calculateMargin().round())}",
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),

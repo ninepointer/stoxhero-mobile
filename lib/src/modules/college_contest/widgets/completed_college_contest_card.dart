@@ -137,7 +137,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Starts',
+                        'Started On',
                         style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 4),
@@ -151,7 +151,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Ends',
+                        'Ended On',
                         style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 4),
@@ -249,12 +249,37 @@ class CompletedCollegeContestCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 12),
             ],
           ),
         ),
         Row(
           children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  final controller = Get.find<ContestController>();
+                  controller.getCompletedContestLeaderboardList(completedContest?.id);
+                  Get.to(() => CompletedContestLeaderboard());
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8),
+                    ),
+                    color: AppColors.primary.withOpacity(.25),
+                  ),
+                  child: Text(
+                    'Leadboard',
+                    style: AppStyles.tsSecondaryMedium12.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: GestureDetector(
                 onTap: () {
@@ -266,15 +291,35 @@ class CompletedCollegeContestCard extends StatelessWidget {
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: AppColors.secondary.withOpacity(.25),
+                  ),
+                  child: Text(
+                    'Order Book',
+                    style: AppStyles.tsSecondaryMedium12.copyWith(
+                      color: AppColors.secondary.shade600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  // Get.find<CollegeContestController>().getContestOrderList(completedContest?.id);
+                  // Get.to(() => CompletedCollegeContestOrdersListView());
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: AppColors.success.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
                     ),
                   ),
                   child: Text(
-                    'View Orders',
+                    'Certificate',
                     style: AppStyles.tsSecondaryMedium12.copyWith(
-                      color: AppColors.secondary.shade600,
+                      color: AppColors.success,
                     ),
                   ),
                 ),

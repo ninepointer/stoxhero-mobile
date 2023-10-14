@@ -296,7 +296,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     ),
                   ],
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 12),
               ],
             ),
           ),

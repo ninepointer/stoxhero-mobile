@@ -52,8 +52,7 @@ class TenxTradingRepository extends BaseRepository {
         : RepoResponse(data: InstrumentLivePriceListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxTradingPortfolioDetailsResponse>> getTenxPortfolioDetails(
-      String subId) async {
+  Future<RepoResponse<TenxTradingPortfolioDetailsResponse>> getTenxPortfolioDetails(String subId) async {
     String apiURL = '${AppUrls.tenx}/$subId/trade/marginDetail';
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -107,5 +106,13 @@ class TenxTradingRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: TenXSubscriptionResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<CountTradingDaysResponse>> getTenxCountTradingDays(String id) async {
+    String apiURL = AppUrls.tenxCountTradingDays(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: CountTradingDaysResponse.fromJson(response));
   }
 }

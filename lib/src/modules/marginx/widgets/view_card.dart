@@ -38,7 +38,7 @@ class _ViewCardState extends State<ViewCard> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('View'),
+        title: Text('View Details'),
       ),
       body: Obx(
         () => Visibility(

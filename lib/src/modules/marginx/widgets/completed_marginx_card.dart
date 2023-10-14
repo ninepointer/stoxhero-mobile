@@ -129,7 +129,7 @@ class CompletedMarginxCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Starts',
+                        'Started On',
                         style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
@@ -143,7 +143,7 @@ class CompletedMarginxCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Ends',
+                        'Ended On',
                         style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
@@ -248,7 +248,7 @@ class CompletedMarginxCard extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'View',
+                    'View Details',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.info,
                     ),
@@ -269,7 +269,7 @@ class CompletedMarginxCard extends StatelessWidget {
                     color: AppColors.success.withOpacity(0.25),
                   ),
                   child: Text(
-                    'Orders',
+                    'Order Book',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.success,
                     ),

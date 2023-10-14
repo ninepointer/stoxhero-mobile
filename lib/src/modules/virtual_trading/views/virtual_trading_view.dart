@@ -51,7 +51,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         Expanded(
                           child: CommonMarginNPNLCard(
                             label: 'Available Margin',
-                            value: controller.calculateMargin(),
+                            value: controller.calculateMargin().round(),
                           ),
                         ),
                         SizedBox(width: 4),
@@ -72,23 +72,28 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     padding: EdgeInsets.only(left: 16),
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
-                  controller.tradingWatchlist.isEmpty
-                      ? NoDataFound()
-                      : SizedBox(
-                          height:
-                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            itemCount: controller.tradingWatchlist.length,
-                            itemBuilder: (context, index) {
-                              return VirtualWatchListCard(
-                                index: index,
-                                tradingWatchlist: controller.tradingWatchlist[index],
-                              );
-                            },
+                  Visibility(
+                    visible: !controller.isWatchlistLoadingStatus,
+                    replacement: CommonLoader(),
+                    child: controller.tradingWatchlist.isEmpty
+                        ? NoDataFound()
+                        : SizedBox(
+                            height: controller.tradingWatchlist.length >= 3
+                                ? 250
+                                : controller.tradingWatchlist.length * 115,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              itemCount: controller.tradingWatchlist.length,
+                              itemBuilder: (context, index) {
+                                return VirtualWatchListCard(
+                                  index: index,
+                                  tradingWatchlist: controller.tradingWatchlist[index],
+                                );
+                              },
+                            ),
                           ),
-                        ),
+                  ),
                   if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
@@ -150,7 +155,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   PortfolioDetailCardTile(
-                    label: 'Virtual Portfolio Value',
+                    label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.virtualPortfolio.value.totalFund,
                   ),

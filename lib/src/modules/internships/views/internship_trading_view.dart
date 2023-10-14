@@ -53,7 +53,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                         Expanded(
                           child: CommonMarginNPNLCard(
                             label: 'Available Margin',
-                            value: controller.calculateMargin(),
+                            value: controller.calculateMargin().round(),
                           ),
                         ),
                         SizedBox(width: 4),
@@ -78,7 +78,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
+                              controller.tradingWatchlist.length >= 3 ? 250 : controller.tradingWatchlist.length * 115,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -148,7 +148,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                         ),
                   CommonTile(label: 'Portfolio Details'),
                   PortfolioDetailCardTile(
-                    label: 'Virtual Portfolio Value',
+                    label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.internshipBatchPortfolio.value.totalFund,
                   ),

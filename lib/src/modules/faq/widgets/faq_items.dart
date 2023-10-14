@@ -66,8 +66,8 @@ No, you can only join a league with a single portfolio.
 Is There A Limit On The Number Of Portfolios I Can Use?
 Yes, as of now, StoxHero provides 1 Trading Portfolio and 2 battle portfolios at the time of registration, you can buy an additional portfolio by taking the subscription.
 
-What Is Virtual Portfolio Value? How Is It Different From Opening Balance?
-• Virtual Portfolio Value reflects the value of your portfolio after accounting for realized & unrealized profit or loss, transaction charges, and cash balance.
+What Is Virtual Margin Money? How Is It Different From Opening Balance?
+• Virtual Margin Money reflects the value of your portfolio after accounting for realized & unrealized profit or loss, transaction charges, and cash balance.
 • Opening balance reflects cash available before taking any trade for that day.
 ''',
   ),

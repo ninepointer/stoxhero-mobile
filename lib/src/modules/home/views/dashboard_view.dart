@@ -88,18 +88,20 @@ class _DashboardViewState extends State<DashboardView> {
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: CarouselSlider.builder(
                     itemCount: controller.dashboardCarouselList.length,
-                    itemBuilder: (context, int index, realIndex) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
+                    itemBuilder: (context, int index, _) {
+                      return GestureDetector(
+                        onTap: () => controller.navigateToCarousel(
+                          controller.dashboardCarouselList[index].linkToCarousel ?? '',
                         ),
-                        width: double.infinity,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            "${controller.dashboardCarouselList[index].carouselImage}",
-                            fit: BoxFit.fill,
-                            width: double.infinity,
+                        child: Container(
+                          width: double.infinity,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              "${controller.dashboardCarouselList[index].carouselImage}",
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                            ),
                           ),
                         ),
                       );
@@ -119,8 +121,10 @@ class _DashboardViewState extends State<DashboardView> {
                 ),
                 contestController.liveContestList.isEmpty
                     ? NoDataFound(label: 'No Live Contests')
-                    : Container(
-                        height: 275,
+                    : SizedBox(
+                        height: contestController.liveContestList.length >= 1
+                            ? 250
+                            : contestController.liveContestList.length * 120,
                         child: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
@@ -141,9 +145,10 @@ class _DashboardViewState extends State<DashboardView> {
                 contestController.upComingContestList.isEmpty
                     ? NoDataFound(label: 'No Upcoming Contests')
                     : SizedBox(
-                        height: 275,
+                        height: contestController.upComingContestList.length >= 1
+                            ? 250
+                            : contestController.upComingContestList.length * 120,
                         child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           itemCount: contestController.upComingContestList.length,

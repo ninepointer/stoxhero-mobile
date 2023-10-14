@@ -170,8 +170,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 label: 'Show Details',
                                 onPressed: () {
                                   if (controller.selectedTab.value == 0) {
-                                    controller.userDetailsData.designation ==
-                                            AppConstants.equityTraderType
+                                    controller.userDetailsData.designation == AppConstants.equityTraderType
                                         ? controller.getInfinityTradingDateWiseDetails()
                                         : controller.getTenxTradingDateWiseDetails();
                                   } else {
