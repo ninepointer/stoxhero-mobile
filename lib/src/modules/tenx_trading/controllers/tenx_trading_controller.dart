@@ -97,7 +97,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       }
     }
     return openCount;
-  } 
+  }
 
   int getClosePositionCount() {
     int closeCount = 0;
@@ -574,6 +574,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     Get.back();
     isLoading(true);
     var data = {
+      "bonusRedemption": 0,
+      "coupon": "",
       "subscriptionAmount": selectedSubscription.value.discountedPrice,
       "subscriptionName": selectedSubscription.value.planName,
       "subscribedId": selectedSubscription.value.sId,

@@ -8,12 +8,12 @@ class MarginXTradingView extends GetView<MarginXController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(' MarginX Trading'),
+        title: const Text('MarginX Trading'),
       ),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
+          replacement: TradingShimmer(),
           child: RefreshIndicator(
             onRefresh: controller.loadTradingData,
             child: SingleChildScrollView(
@@ -26,7 +26,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
-                            CommonStockInfo(
+                            TradingStockCard(
                               label: controller.getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
@@ -52,14 +52,14 @@ class MarginXTradingView extends GetView<MarginXController> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: CommonMarginNPNLCard(
+                          child: TradingMarginNpnlCard(
                             label: 'Available Margin',
                             value: controller.calculateMargin().round(),
                           ),
                         ),
                         SizedBox(width: 4),
                         Expanded(
-                          child: CommonMarginNPNLCard(
+                          child: TradingMarginNpnlCard(
                             label: 'Net P&L (Profit & Loss)',
                             value: controller.calculateTotalNetPNL(),
                           ),
@@ -79,7 +79,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 250 : controller.tradingWatchlist.length * 115,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -161,7 +161,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                         ],
                       ),
                     ),
-                CommonTile(
+                  CommonTile(
                     label: 'My Positions',
                     showSeeAllButton: true,
                     seeAllLabel:

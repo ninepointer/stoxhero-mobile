@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -111,6 +112,18 @@ class ContestController extends BaseController<ContestRepository> {
     await socketIndexConnection();
     await socketConnection();
     await socketLeaderboardConnection();
+  }
+
+  bool isUpcomingContestVisible(UpComingContest? contest) {
+    DateTime startTimeDateTime;
+    Duration remainingTime;
+    bool isVisible = true;
+    DateTime currentTime = DateTime.now();
+
+    startTimeDateTime = DateTime.parse(contest?.contestStartTime ?? '');
+    remainingTime = startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
+    isVisible = remainingTime == Duration.zero;
+    return isVisible;
   }
 
   bool isUserInterested(contest, userId) {

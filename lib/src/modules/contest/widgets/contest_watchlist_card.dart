@@ -108,12 +108,13 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TradeCardTile(
+                          hasBottomMargin: false,
                           isRightAlign: false,
                           label: 'Symbol',
                           value: widget.tradingWatchlist.symbol,
                         ),
-                        SizedBox(height: 4),
                         TradeCardTile(
+                          hasBottomMargin: false,
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(

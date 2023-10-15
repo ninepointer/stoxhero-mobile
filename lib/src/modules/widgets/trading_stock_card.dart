@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../core.dart';
+import '../../core/core.dart';
 
-class CommonStockInfo extends StatelessWidget {
+class TradingStockCard extends StatelessWidget {
   final String? label;
   final dynamic stockPrice;
   final String? stockLTP;
   final String? stockChange;
   final Color? stockColor;
   final Color? stockLTPColor;
-  const CommonStockInfo({
+  const TradingStockCard({
     Key? key,
     required this.label,
     required this.stockPrice,
@@ -27,7 +27,7 @@ class CommonStockInfo extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

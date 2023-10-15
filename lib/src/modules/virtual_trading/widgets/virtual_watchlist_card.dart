@@ -128,65 +128,63 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                   ],
                 ),
               ),
-              Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => openBottomSheet(context, TransactionType.buy),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: AppColors.success.withOpacity(.25),
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(8),
-                            ),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => openBottomSheet(context, TransactionType.buy),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.success.withOpacity(.25),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
                           ),
-                          child: Text(
-                            'BUY',
-                            style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.success),
-                          ),
+                        ),
+                        child: Text(
+                          'BUY',
+                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.success),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => openBottomSheet(context, TransactionType.sell),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: AppColors.danger.withOpacity(.25),
-                          ),
-                          child: Text(
-                            'SELL',
-                            style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.danger),
-                          ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => openBottomSheet(context, TransactionType.sell),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.danger.withOpacity(.25),
+                        ),
+                        child: Text(
+                          'SELL',
+                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.danger),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: AppColors.info.withOpacity(.25),
-                            borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(8),
-                            ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.info.withOpacity(.25),
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(8),
                           ),
-                          child: Text(
-                            'REMOVE',
-                            style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.info),
-                          ),
+                        ),
+                        child: Text(
+                          'REMOVE',
+                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.info),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -289,6 +289,8 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                                 onSubmit: () {
                                   Get.back();
                                   var data = {
+                                    "bonusRedemption": 0,
+                                    "coupon": "",
                                     "contestFee": contest?.entryFee,
                                     "contestId": contest?.id,
                                     "contestName": contest?.contestName,

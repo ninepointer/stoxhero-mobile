@@ -337,6 +337,8 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                               onSubmit: () {
                                 Get.back();
                                 var data = {
+                                  "bonusRedemption": 0,
+                                  "coupon": "",
                                   "entryFee": widget.marginx?.marginXTemplate?.entryFee,
                                   "marginXId": widget.marginx?.id,
                                   "marginXName": widget.marginx?.marginXName,

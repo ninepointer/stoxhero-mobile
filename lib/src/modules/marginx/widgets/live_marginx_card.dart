@@ -280,6 +280,8 @@ class LiveMarginxCard extends GetView<MarginXController> {
                               onSubmit: () {
                                 Get.back();
                                 var data = {
+                                  "bonusRedemption": 0,
+                                  "coupon": "",
                                   "entryFee": marginx?.marginXTemplate?.entryFee,
                                   "marginXId": marginx?.id,
                                   "marginXName": marginx?.marginXName,

@@ -8,12 +8,12 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(' Contest Trading'),
+        title: const Text('Contest Trading'),
       ),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
+          replacement: TradingShimmer(),
           child: RefreshIndicator(
             onRefresh: controller.loadTradingData,
             child: SingleChildScrollView(
@@ -26,7 +26,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
-                            CommonStockInfo(
+                            TradingStockCard(
                               label: controller.getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
@@ -52,14 +52,14 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: CommonMarginNPNLCard(
+                          child: TradingMarginNpnlCard(
                             label: 'Available Margin',
                             value: controller.calculateMargin().round(),
                           ),
                         ),
                         SizedBox(width: 4),
                         Expanded(
-                          child: CommonMarginNPNLCard(
+                          child: TradingMarginNpnlCard(
                             label: 'Net P&L (Profit & Loss)',
                             value: controller.calculateTotalNetPNL(),
                           ),
@@ -79,7 +79,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 250 : controller.tradingWatchlist.length * 115,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -159,7 +159,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                         ],
                       ),
                     ),
-               CommonTile(
+                  CommonTile(
                     label: 'My Positions',
                     showSeeAllButton: true,
                     seeAllLabel:
@@ -180,7 +180,8 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             );
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details',
+                  CommonTile(
+                    label: 'Portfolio Details',
                   ),
                   PortfolioDetailCardTile(
                     label: 'Virtual Margin Money',

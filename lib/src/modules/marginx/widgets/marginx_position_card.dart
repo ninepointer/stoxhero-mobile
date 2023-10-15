@@ -47,61 +47,55 @@ class MarginXPositionCard extends GetView<MarginXController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TradeCardTile(
-                          label: 'Symbol',
-                          value: position.id?.symbol,
-                        ),
-                        TradeCardTile(
-                          isRightAlign: true,
-                          label: 'Gross P&L (Profit & Loss)',
-                          valueColor: controller.getValueColor(
-                            controller.calculateGrossPNL(
-                              position.amount!,
-                              position.lots!.toInt(),
-                              controller.getInstrumentLastPrice(
-                                position.id!.instrumentToken!,
-                                position.id!.exchangeInstrumentToken!,
-                              ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TradeCardTile(
+                        label: 'Symbol',
+                        value: position.id?.symbol,
+                      ),
+                      TradeCardTile(
+                        isRightAlign: true,
+                        label: 'Gross P&L (Profit & Loss)',
+                        valueColor: controller.getValueColor(
+                          controller.calculateGrossPNL(
+                            position.amount!,
+                            position.lots!.toInt(),
+                            controller.getInstrumentLastPrice(
+                              position.id!.instrumentToken!,
+                              position.id!.exchangeInstrumentToken!,
                             ),
                           ),
-                          value: position.lots == 0
-                              ? FormatHelper.formatNumbers(position.amount)
-                              : FormatHelper.formatNumbers(
-                                  controller.calculateGrossPNL(
-                                    position.amount!,
-                                    position.lots!.toInt(),
-                                    controller.getInstrumentLastPrice(
-                                      position.id!.instrumentToken!,
-                                      position.id!.exchangeInstrumentToken!,
-                                    ),
+                        ),
+                        value: position.lots == 0
+                            ? FormatHelper.formatNumbers(position.amount)
+                            : FormatHelper.formatNumbers(
+                                controller.calculateGrossPNL(
+                                  position.amount!,
+                                  position.lots!.toInt(),
+                                  controller.getInstrumentLastPrice(
+                                    position.id!.instrumentToken!,
+                                    position.id!.exchangeInstrumentToken!,
                                   ),
                                 ),
-                        ),
-                      ],
-                    ),
+                              ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TradeCardTile(
-                          label: 'Average Price',
-                          value: FormatHelper.formatNumbers(position.lastaverageprice),
-                        ),
-                        TradeCardTile(
-                          isRightAlign: true,
-                          label: 'LTP (Last Traded Price)',
-                          valueColor: controller.getValueColor(position.lastaverageprice),
-                          value: FormatHelper.formatNumbers(position.lastaverageprice),
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TradeCardTile(
+                        label: 'Average Price',
+                        value: FormatHelper.formatNumbers(position.lastaverageprice),
+                      ),
+                      TradeCardTile(
+                        isRightAlign: true,
+                        label: 'LTP (Last Traded Price)',
+                        valueColor: controller.getValueColor(position.lastaverageprice),
+                        value: FormatHelper.formatNumbers(position.lastaverageprice),
+                      ),
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

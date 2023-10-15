@@ -354,6 +354,8 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                                   onSubmit: () {
                                     Get.back();
                                     var data = {
+                                      "bonusRedemption": 0,
+                                      "coupon": "",
                                       "contestFee": widget.contest?.entryFee,
                                       "contestId": widget.contest?.id,
                                       "contestName": widget.contest?.contestName,

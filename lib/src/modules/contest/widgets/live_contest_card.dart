@@ -10,17 +10,20 @@ class LiveContestCard extends GetView<ContestController> {
   final LiveContest? contest;
   final ContestPosition? contestPositionList;
   final ContestCreditData? contestPortfolio;
+  final EdgeInsets? margin;
   const LiveContestCard({
     Key? key,
     this.contest,
     this.contestPositionList,
     this.contestPortfolio,
+    this.margin,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     bool isParticipants = controller.participateUser(contest);
     return CommonCard(
+      margin: margin,
       padding: EdgeInsets.zero,
       children: [
         Container(

@@ -8,12 +8,12 @@ class TenxDashboardView extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(' Tenx Trading'),
+        title: const Text('Tenx Trading'),
       ),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
+          replacement: TradingShimmer(),
           child: RefreshIndicator(
             onRefresh: controller.loadTenxData,
             child: SingleChildScrollView(
@@ -26,7 +26,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
-                            CommonStockInfo(
+                            TradingStockCard(
                               label: controller.getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
@@ -52,7 +52,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: CommonMarginNPNLCard(
+                          child: TradingMarginNpnlCard(
                             label: 'Available Margin',
                             value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
                                 ? controller.calculateMargin().round()
@@ -61,7 +61,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ),
                         SizedBox(width: 4),
                         Expanded(
-                          child: CommonMarginNPNLCard(
+                          child: TradingMarginNpnlCard(
                             label: 'Net P&L (Profit & Loss)',
                             value: controller.calculateTotalNetPNL(),
                           ),
@@ -127,7 +127,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                       ? NoDataFound()
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 250 : controller.tradingWatchlist.length * 115,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,

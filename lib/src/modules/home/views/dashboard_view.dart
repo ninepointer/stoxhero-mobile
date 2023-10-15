@@ -50,7 +50,7 @@ class _DashboardViewState extends State<DashboardView> {
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
+          replacement: DashboardShimmer(),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +62,7 @@ class _DashboardViewState extends State<DashboardView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         for (var item in controller.stockIndexDetailsList) ...[
-                          CommonStockInfo(
+                          TradingStockCard(
                             label: controller.getStockIndexName(item.instrumentToken ?? 0),
                             stockPrice: FormatHelper.formatNumbers(
                               item.lastPrice,
@@ -95,6 +95,10 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                         child: Container(
                           width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppColors.grey.withOpacity(.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
@@ -109,6 +113,7 @@ class _DashboardViewState extends State<DashboardView> {
                     options: CarouselOptions(
                       viewportFraction: 1,
                       autoPlay: true,
+                      enlargeCenterPage: true,
                       autoPlayInterval: const Duration(seconds: 6),
                     ),
                   ),
@@ -120,20 +125,19 @@ class _DashboardViewState extends State<DashboardView> {
                   margin: EdgeInsets.only(bottom: 0, top: 8),
                 ),
                 contestController.liveContestList.isEmpty
-                    ? NoDataFound(label: 'No Live Contests')
-                    : SizedBox(
-                        height: contestController.liveContestList.length >= 1
-                            ? 250
-                            : contestController.liveContestList.length * 120,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          itemCount: contestController.liveContestList.length,
-                          itemBuilder: (context, index) {
-                            return LiveContestCard(
-                              contest: contestController.liveContestList[index],
+                    ? NoDataFound(label: 'No Live Contests!')
+                    : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: contestController.liveContestList.map((contest) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: LiveContestCard(
+                                contest: contest,
+                                margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                              ),
                             );
-                          },
+                          }).toList(),
                         ),
                       ),
                 CommonTile(
@@ -142,24 +146,26 @@ class _DashboardViewState extends State<DashboardView> {
                   onPressed: () => Get.to(() => ContestListView()),
                   margin: EdgeInsets.only(bottom: 0, top: 8),
                 ),
-                contestController.upComingContestList.isEmpty
-                    ? NoDataFound(label: 'No Upcoming Contests')
-                    : SizedBox(
-                        height: contestController.upComingContestList.length >= 1
-                            ? 250
-                            : contestController.upComingContestList.length * 120,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          itemCount: contestController.upComingContestList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return UpComingContestCard(
-                              contest: contestController.upComingContestList[index],
-                            );
-                          },
+                contestController.liveContestList.isEmpty
+                    ? NoDataFound(label: 'No Upcoming Contests!')
+                    : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: contestController.upComingContestList.map((contest) {
+                            bool isVisible = contestController.isUpcomingContestVisible(contest);
+                            return isVisible
+                                ? SizedBox()
+                                : Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: UpComingContestCard(
+                                      contest: contest,
+                                      margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                                    ),
+                                  );
+                          }).toList(),
                         ),
                       ),
-                SizedBox(height: 12),
+                SizedBox(height: 8),
                 CommonTile(
                   label: 'Return Summary',
                   margin: EdgeInsets.only(bottom: 8, top: 0),
@@ -289,7 +295,7 @@ class _DashboardViewState extends State<DashboardView> {
                                         : '0',
                                   ),
                           ),
-                          SizedBox(width: 4),
+                          SizedBox(width: 8),
                           Expanded(
                             child: controller.selectedTradeType == 'virtual'
                                 ? customCard(
@@ -331,7 +337,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   : '0',
                             ),
                           ),
-                          SizedBox(width: 4),
+                          SizedBox(width: 8),
                           Expanded(
                             child: customCard(
                               label: 'Loss Days',
@@ -361,7 +367,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   : '0',
                             ),
                           ),
-                          SizedBox(width: 4),
+                          SizedBox(width: 8),
                           Expanded(
                             child: customCard(
                               label: 'Portfolio',
@@ -389,7 +395,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   : '0',
                             ),
                           ),
-                          SizedBox(width: 4),
+                          SizedBox(width: 8),
                           Expanded(
                             child: customCard(
                               label: 'Max Loss',
@@ -418,7 +424,7 @@ class _DashboardViewState extends State<DashboardView> {
                                   : '0',
                             ),
                           ),
-                          SizedBox(width: 4),
+                          SizedBox(width: 8),
                           Expanded(
                             child: customCard(
                               label: 'Avg. Loss',
@@ -449,7 +455,7 @@ class _DashboardViewState extends State<DashboardView> {
                               valueColor: AppColors.success,
                             ),
                           ),
-                          SizedBox(width: 4),
+                          SizedBox(width: 8),
                           Expanded(
                             child: customCard(
                               label: 'Max Loss Streak',
@@ -465,7 +471,7 @@ class _DashboardViewState extends State<DashboardView> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: 100),
                     ],
                   ),
                 ),
@@ -491,6 +497,7 @@ class _DashboardViewState extends State<DashboardView> {
             Container(
               width: 24,
               height: 24,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: AppColors.secondary.withOpacity(.25),
                 shape: BoxShape.circle,
@@ -498,7 +505,7 @@ class _DashboardViewState extends State<DashboardView> {
               child: Icon(
                 Icons.trending_up_rounded,
                 color: AppColors.secondary,
-                size: 18,
+                size: 16,
               ),
             ),
             SizedBox(width: 12),

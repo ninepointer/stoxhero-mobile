@@ -343,6 +343,8 @@ class _ViewCardState extends State<ViewCard> {
                                             onSubmit: () {
                                               Get.back();
                                               var data = {
+                                                "bonusRedemption": 0,
+                                                "coupon": "",
                                                 "entryFee": widget.liveMarginX?.marginXTemplate?.entryFee,
                                                 "marginXId": widget.liveMarginX?.id,
                                                 "marginXName": widget.liveMarginX?.marginXName,
@@ -363,6 +365,8 @@ class _ViewCardState extends State<ViewCard> {
                                             onSubmit: () {
                                               Get.back();
                                               var data = {
+                                                "bonusRedemption": 0,
+                                                "coupon": "",
                                                 "entryFee": widget.upcomingMarginX?.marginXTemplate?.entryFee,
                                                 "marginXId": widget.upcomingMarginX?.id,
                                                 "marginXName": widget.upcomingMarginX?.marginXName,

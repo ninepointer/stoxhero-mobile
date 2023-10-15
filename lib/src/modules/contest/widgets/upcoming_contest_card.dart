@@ -11,10 +11,12 @@ import '../../../core/core.dart';
 
 class UpComingContestCard extends StatefulWidget {
   final UpComingContest? contest;
+  final EdgeInsets? margin;
 
   const UpComingContestCard({
     Key? key,
     this.contest,
+    this.margin,
   }) : super(key: key);
 
   @override
@@ -83,6 +85,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
       visible: !isVisible,
       replacement: SizedBox(),
       child: CommonCard(
+        margin: widget.margin,
         padding: EdgeInsets.zero,
         children: [
           Container(
@@ -351,6 +354,8 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                   onSubmit: () {
                                     Get.back();
                                     var data = {
+                                      "bonusRedemption": 0,
+                                      "coupon": "",
                                       "contestFee": widget.contest?.entryFee,
                                       "contestId": widget.contest?.id,
                                       "contestName": widget.contest?.contestName,

@@ -20,78 +20,6 @@ class _TenxTradingViewState extends State<TenxTradingView> {
     super.initState();
   }
 
-  Widget buildInfoCard() {
-    return Expanded(
-      child: Card(
-        elevation: 0,
-        margin: EdgeInsets.only(top: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: AppColors.grey.shade400,
-                    ),
-                    child: Icon(
-                      Icons.trending_up_rounded,
-                      size: 20,
-                      color: AppColors.white,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'NIFTY 50',
-                        style: AppStyles.tsGreyMedium10,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        '₹ 12,500.90',
-                        style: AppStyles.tsWhiteSemiBold14,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    'Today',
-                    style: AppStyles.tsGreyRegular12,
-                  ),
-                  Spacer(),
-                  Text(
-                    '₹ 125.87',
-                    style: Theme.of(context).textTheme.tsMedium12,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '(+ 0.25%)',
-                    style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                          color: AppColors.success,
-                        ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -103,26 +31,6 @@ class _TenxTradingViewState extends State<TenxTradingView> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 8),
-                //   child: Row(
-                //     children: [
-                //       buildInfoCard(),
-                //       SizedBox(width: 8),
-                //       buildInfoCard(),
-                //     ],
-                //   ),
-                // ),
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 8),
-                //   child: Row(
-                //     children: [
-                //       buildInfoCard(),
-                //       SizedBox(width: 8),
-                //       buildInfoCard(),
-                //     ],
-                //   ),
-                // )
                 CommonCard(
                   onTap: () => setState(() => isExpanded = !isExpanded),
                   children: [
@@ -156,7 +64,6 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                       ),
                   ],
                 ),
-
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),

@@ -41,7 +41,7 @@ class CommonCard extends StatelessWidget {
               )
             : null,
         child: Container(
-          padding: padding ?? EdgeInsets.all(12),
+          padding: padding ?? EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           width: double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,

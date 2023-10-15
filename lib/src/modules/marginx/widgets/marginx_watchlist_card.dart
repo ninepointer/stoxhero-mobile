@@ -104,7 +104,6 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -114,7 +113,6 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                           label: 'Symbol',
                           value: widget.tradingWatchlist.symbol,
                         ),
-                        SizedBox(height: 4),
                         TradeCardTile(
                           hasBottomMargin: false,
                           isRightAlign: true,

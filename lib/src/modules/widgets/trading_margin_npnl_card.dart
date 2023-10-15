@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../app/app.dart';
 
-class CommonMarginNPNLCard extends StatelessWidget {
+class TradingMarginNpnlCard extends StatelessWidget {
   final String? label;
   final dynamic value;
   final Color? valueColor;
-  const CommonMarginNPNLCard({
+  const TradingMarginNpnlCard({
     Key? key,
     this.label,
     this.value,
@@ -15,7 +15,7 @@ class CommonMarginNPNLCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       margin: EdgeInsets.zero,
       children: [
         Text(
