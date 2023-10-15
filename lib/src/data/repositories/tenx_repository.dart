@@ -1,6 +1,8 @@
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
+import '../models/response/tenx_my_active_subscribed_list_response.dart';
+import '../models/response/tenx_my_expired_subscription_list_response.dart';
 
 class TenxTradingRepository extends BaseRepository {
   Future<RepoResponse<GenericResponse>> postPurchaseIntent(Map<String, dynamic> data) async {
@@ -114,5 +116,45 @@ class TenxTradingRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: CountTradingDaysResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<TenxSubscriberCountListResponse>> getTenxSubcriberCount(String? id) async {
+    String apiURL = AppUrls.tenxSubscriberCount(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TenxSubscriberCountListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<TenxMyActiveSubscribedListResponse>> getTenxMyActiveSubscribed() async {
+    String apiURL = AppUrls.tenxMyActiveSubscribed;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TenxMyActiveSubscribedListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<TenxMyExpiredSubscriptionListResponse>> getTenxMyExpiredSubscription() async {
+    String apiURL = AppUrls.tenxMyExpiredSubscription;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TenxMyExpiredSubscriptionListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<TenxLeaderboardListResponse>> getTenxLeaderboard() async {
+    String apiURL = AppUrls.tenxleaderboard;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TenxLeaderboardListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> tenxRenewSubscription(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.tenxRenew;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
   }
 }

@@ -4,6 +4,9 @@ class AppImages {
   static const String appLogo = "$imagesDir/app_logo.png";
   static const String contestReward = "$imagesDir/contest_reward.png";
   static const String contestTrophy = "$imagesDir/contest_trophy.png";
+  static const String virtualTrade = "$imagesDir/onboarding1.png";
+  static const String contests = "$imagesDir/onboarding3.png";
+  static const String tenx = "$imagesDir/onboarding4.png";
   static const String referral = "$imagesDir/onboarding5.png";
   static const String faq = "$imagesDir/faq.png";
   static const String internship = "$imagesDir/internship.png";

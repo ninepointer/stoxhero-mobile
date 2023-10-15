@@ -37,13 +37,17 @@ class WalletView extends GetView<WalletController> {
                     ),
                   ),
                   WalletCard(
-                    label: 'Bonus',
+                    label: 'Hero Cash',
                     value: '₹ 0.00',
                     iconData: Icons.redeem_rounded,
                     buttonLabel: 'Redeem',
                     onPressed: null,
                   ),
-                  if (controller.walletTransactionsList.isNotEmpty) CommonTile(label: 'Recent Transactions'),
+                  if (controller.walletTransactionsList.isNotEmpty)
+                    CommonTile(
+                      label: 'Recent Transactions',
+                      margin: EdgeInsets.only(bottom: 0, top: 8),
+                    ),
                   if (controller.walletTransactionsList.isNotEmpty)
                     ListView.builder(
                       shrinkWrap: true,

@@ -170,22 +170,22 @@ List<OnBoardingContent> contents = [
   //   description: 'Enter trading battles, show your skills, and win \n exciting gifts and cash prizes!',
   // ),
   OnBoardingContent(
-    image: 'assets/images/onboarding1.png',
+    image: AppImages.virtualTrade,
     title: 'Learn with \n Virtual Trade',
     description: 'Explore the world of investing risk-free \n by practicing with virtual money.',
   ),
   OnBoardingContent(
-    image: 'assets/images/onboarding3.png',
+    image: AppImages.contests,
     title: 'Contests',
     description: "Trade in our virtual contest, earn real cash \n rewards based on your portfolio's value!",
   ),
   OnBoardingContent(
-    image: 'assets/images/onboarding4.png',
+    image: AppImages.tenx,
     title: 'Earn Real Money \n with 10x Trading',
     description: 'Harness your knowledge to fuel financial \n growth with strategic investments.',
   ),
   OnBoardingContent(
-    image: 'assets/images/onboarding5.png',
+    image: AppImages.referral,
     title: 'Grow Together \n with Referral',
     description: 'Gather your friends, claim rewards, and \n conquer milestones together!',
   ),

@@ -23,14 +23,6 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
     super.initState();
   }
 
-  void _updateWatchlistIndex() {
-    if (controller.selectedWatchlistIndex.value == widget.index) {
-      controller.selectedWatchlistIndex(-1);
-    } else {
-      controller.selectedWatchlistIndex(widget.index);
-    }
-  }
-
   void openBottomSheet(BuildContext context, TransactionType type) {
     FocusScope.of(context).unfocus();
 

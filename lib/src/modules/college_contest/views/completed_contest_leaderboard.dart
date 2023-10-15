@@ -39,11 +39,10 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                                   color: AppColors.secondary.withOpacity(.25),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Align(
-                                  child: Text(
-                                    '${contest.rank}',
-                                    style: AppStyles.tsSecondarySemiBold14,
-                                  ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${contest.rank.contains("-") ? index + 1 : contest.rank}',
+                                  style: AppStyles.tsSecondarySemiBold14,
                                 ),
                               ),
                               Text(

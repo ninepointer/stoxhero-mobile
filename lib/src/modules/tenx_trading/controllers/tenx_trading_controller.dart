@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:stoxhero/src/data/models/response/tenx_my_active_subscribed_list_response.dart';
+import 'package:stoxhero/src/data/models/response/tenx_my_expired_subscription_list_response.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
 import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
@@ -17,6 +19,20 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+
+  final isActiveLoading = false.obs;
+  bool get isActiveLoadingStatus => isActiveLoading.value;
+
+  final isSubscribeLoading = false.obs;
+  bool get isSubscribeLoadingStatus => isSubscribeLoading.value;
+
+  final isExpiredLoading = false.obs;
+  bool get isExpiredLoadingStatus => isExpiredLoading.value;
+
+  final isLeaderboardLoading = false.obs;
+  bool get isLeaderboardLoadingStatus => isLeaderboardLoading.value;
+
+  final selectedTabBarIndex = 0.obs;
 
   final searchTextController = TextEditingController();
   final selectedSubscriptionId = ''.obs;
@@ -48,6 +64,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxCountTradingDays = <CountTradingDays>[].obs;
   final selectedTenXSub = TenXSubscription().obs;
   final tenXSubscription = <TenXSubscription>[].obs;
+  final tenxMyActiveSubcribedList = <TenxMyActiveSubscribedList>[].obs;
+  final tenxMyActiveSubcribed = TenxMyActiveSubscribedList().obs;
+
+  final tenxMyExpiredSubcriptionList = <TenxMyExpiredSubscriptionList>[].obs;
+  final tenxMyExpiredSubcription = TenxMyExpiredSubscriptionList().obs;
+
+  final tenxLeaderboard = <TenxLeaderboardList>[].obs;
+
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
   }
@@ -55,6 +79,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getTenxTradingActiveSubs();
+    await getTenxMyActiveSubscribed();
+    await getTenxMyExpiredSubscription();
+    await getTenxLeaderboard();
   }
 
   Future loadTenxData() async {
@@ -68,8 +95,10 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxTradingWatchlist();
     await getTenxPositionsList();
     await getTenxTradingPortfolioDetails();
-    await getTenXSubscriptionList();
+    // await getTenXSubscriptionList();
   }
+
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   Future initSocketConnection() async {
     log('Socket : initSocketConnection');
@@ -97,7 +126,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       }
     }
     return openCount;
-  } 
+  }
 
   int getClosePositionCount() {
     int closeCount = 0;
@@ -107,6 +136,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       }
     }
     return closeCount;
+  }
+
+  double calculateSavingsPercentage(actualPrice, discountPrice) {
+    int savings = actualPrice - discountPrice;
+    double savingsPercentage = (savings / actualPrice) * 100;
+    return savingsPercentage;
   }
 
   String getStockIndexName(int instId) {
@@ -322,7 +357,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future getTenxTradingActiveSubs() async {
-    isLoading(true);
+    isActiveLoading(true);
     try {
       final RepoResponse<TenxTradingActiveResponse> response = await repository.getTenxActiveSubscriptions();
       if (response.data?.status?.toLowerCase() == "success") {
@@ -341,7 +376,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isActiveLoading(false);
   }
 
   Future getTenxTradingWatchlist() async {
@@ -577,6 +612,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       "subscriptionAmount": selectedSubscription.value.discountedPrice,
       "subscriptionName": selectedSubscription.value.planName,
       "subscribedId": selectedSubscription.value.sId,
+      "bonusRedemption": 0,
+      "coupon": "",
     };
     log(data.toString());
     try {
@@ -681,6 +718,94 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         if (tenXSubscription.isNotEmpty) selectedTenXSub(tenXSubscription.first);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getTenxMyActiveSubscribed() async {
+    isSubscribeLoading(true);
+    try {
+      final RepoResponse<TenxMyActiveSubscribedListResponse> response = await repository.getTenxMyActiveSubscribed();
+      if (response.data?.status?.toLowerCase() == "success") {
+        tenxMyActiveSubcribedList.clear();
+        userSubscriptionsIds.clear();
+        tenxMyActiveSubcribedList(response.data?.data ?? []);
+        for (var userSub in userDetails.value.subscription!) {
+          if (userSub.subscriptionId != null) {
+            userSubscriptionsIds.add(userSub.subscriptionId!.id!);
+          }
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isSubscribeLoading(false);
+  }
+
+  Future getTenxMyExpiredSubscription() async {
+    isExpiredLoading(true);
+    try {
+      final RepoResponse<TenxMyExpiredSubscriptionListResponse> response =
+          await repository.getTenxMyExpiredSubscription();
+      if (response.data?.status?.toLowerCase() == "success") {
+        tenxMyExpiredSubcriptionList.clear();
+        userSubscriptionsIds.clear();
+        tenxMyExpiredSubcriptionList(response.data?.data ?? []);
+        for (var userSub in userDetails.value.subscription!) {
+          if (userSub.subscriptionId != null) {
+            userSubscriptionsIds.add(userSub.subscriptionId!.id!);
+          }
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isExpiredLoading(false);
+  }
+
+  Future getTenxLeaderboard() async {
+    isLeaderboardLoading(true);
+    try {
+      final RepoResponse<TenxLeaderboardListResponse> response = await repository.getTenxLeaderboard();
+      if (response.data?.status?.toLowerCase() == "success") {
+        tenxLeaderboard(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLeaderboardLoading(false);
+  }
+
+  Future tenxRenewSubscription() async {
+    Get.back();
+    isLoading(true);
+    var data = {
+      "coupon": "",
+      "bonusRedemption": 0,
+      "subscriptionAmount": tenxMyActiveSubcribed.value.discountedPrice,
+      "subscriptionName": tenxMyActiveSubcribed.value.planName,
+      "subscriptionId": tenxMyActiveSubcribed.value.sId,
+    };
+    log(data.toString());
+    try {
+      final RepoResponse<GenericResponse> response = await repository.tenxRenewSubscription(
+        data,
+      );
+      if (response.data?.status == "success") {
+        SnackbarHelper.showSnackbar(response.data?.message ?? 'Subscription renewed successfully');
       }
     } catch (e) {
       log(e.toString());

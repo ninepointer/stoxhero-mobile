@@ -81,7 +81,6 @@ class BankController extends BaseController<ProfileRepository> {
   }
 
   PlatformFile? convertFile(UserImageDetails? doc) {
-    print(doc?.toJson().toString());
     PlatformFile? file = PlatformFile(name: '', size: 0);
     if (doc?.url != null) {
       file = PlatformFile(name: doc?.name ?? 'File', size: 0, path: '-');
@@ -90,7 +89,6 @@ class BankController extends BaseController<ProfileRepository> {
   }
 
   Future<PlatformFile?> downloadFileAsPlatformFile(UserImageDetails? doc) async {
-    print(userDetails.toJson());
     try {
       final dio = Dio();
       final response = await dio.get(
@@ -235,8 +233,7 @@ class BankController extends BaseController<ProfileRepository> {
         'panNumber': panCardNumberTextController.text,
         'passportNumber': passportCardNumberTextController.text,
         'drivingLicenseNumber': drivingLicenseNumberTextController.text,
-        'aadhaarCardFrontImage':
-            await convertPlatformFileToMultipartFile(aadhaarCardFrontFile.value),
+        'aadhaarCardFrontImage': await convertPlatformFileToMultipartFile(aadhaarCardFrontFile.value),
         'aadhaarCardBackImage': await convertPlatformFileToMultipartFile(aadhaarCardBackFile.value),
         'panCardFrontImage': await convertPlatformFileToMultipartFile(panCardFile.value),
         'passportPhoto': await convertPlatformFileToMultipartFile(passportSizePhotoFile.value),

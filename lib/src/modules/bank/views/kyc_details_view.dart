@@ -59,6 +59,11 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 8),
+                    Text(
+                      'Aadhaar Card Number',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       hintText: 'Aadhaar Card Number',
                       keyboardType: TextInputType.number,
@@ -67,15 +72,33 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                         LengthLimitingTextInputFormatter(12),
                         FilteringTextInputFormatter.digitsOnly,
                       ],
+                      padding: EdgeInsets.only(bottom: 8),
                     ),
+                    Text(
+                      'Pan Card Number',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       hintText: 'PAN Card Number',
                       controller: controller.panCardNumberTextController,
+                      padding: EdgeInsets.only(bottom: 8),
                     ),
+                    Text(
+                      'Passport Number',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       hintText: 'Passport Number',
                       controller: controller.passportCardNumberTextController,
+                      padding: EdgeInsets.only(bottom: 8),
                     ),
+                    Text(
+                      'Driving License Number',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       hintText: 'Driving License Number',
                       controller: controller.drivingLicenseNumberTextController,
@@ -168,9 +191,7 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: hasFile
-                      ? AppColors.success.withOpacity(.25)
-                      : AppColors.grey.withOpacity(.25),
+                  color: hasFile ? AppColors.success.withOpacity(.25) : AppColors.grey.withOpacity(.25),
                 ),
                 child: Icon(
                   hasFile ? Icons.verified_rounded : Icons.description_rounded,
