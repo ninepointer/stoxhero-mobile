@@ -46,7 +46,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
             margin: EdgeInsets.only(top: 4),
             color: Theme.of(context).cardColor,
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(16).copyWith(bottom: 100),
               child: AbsorbPointer(
                 absorbing: !controller.isEditEnabled.value,
                 child: Column(
@@ -58,15 +58,27 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
+                    Text(
+                      'Position',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       isDisabled: true,
                       controller: controller.positionTextController,
                       hintText: 'Position',
+                      padding: EdgeInsets.only(bottom: 8),
                     ),
+                    Text(
+                      'Username',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       isDisabled: true,
                       controller: controller.userNameTextController,
                       hintText: 'Username',
+                      padding: EdgeInsets.only(bottom: 8),
                     ),
                     Text(
                       'Personal Information',
@@ -76,27 +88,60 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     SizedBox(height: 12),
                     Row(
                       children: [
-                        Expanded(
-                          child: CommonTextField(
-                            prefixIcon: Icon(Icons.person),
-                            controller: controller.firstNameTextController,
-                            hintText: 'First Name',
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'First Name',
+                                style: Theme.of(context).textTheme.tsGreyMedium12,
+                              ),
+                              SizedBox(height: 4),
+                              CommonTextField(
+                                prefixIcon: Icon(Icons.person),
+                                controller: controller.firstNameTextController,
+                                hintText: 'First Name',
+                                padding: EdgeInsets.only(bottom: 8),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(width: 12),
-                        Expanded(
-                          child: CommonTextField(
-                            prefixIcon: Icon(Icons.person),
-                            controller: controller.lastNameTextController,
-                            hintText: 'Last Name',
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Last Name',
+                                style: Theme.of(context).textTheme.tsGreyMedium12,
+                              ),
+                              SizedBox(height: 4),
+                              CommonTextField(
+                                prefixIcon: Icon(Icons.person),
+                                controller: controller.lastNameTextController,
+                                hintText: 'Last Name',
+                                padding: EdgeInsets.only(bottom: 8),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
+                    Text(
+                      'Email',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       controller: controller.emailTextController,
                       hintText: 'Email',
+                      padding: EdgeInsets.only(bottom: 8),
                     ),
+                    Text(
+                      'Mobile',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       controller: controller.mobileTextController,
                       hintText: 'Mobile',
@@ -105,32 +150,53 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                         LengthLimitingTextInputFormatter(10),
                         FilteringTextInputFormatter.digitsOnly,
                       ],
+                      padding: EdgeInsets.only(bottom: 8),
                     ),
                     Row(
                       children: [
-                        Expanded(
-                          child: CommonDropdown(
-                            color: AppColors.grey.withOpacity(0.1),
-                            hint: 'Gender',
-                            value: controller.genderValue,
-                            dropdownItems: controller.dropdownItems,
-                            onChanged: (value) => setState(() => controller.genderValue = value),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Gender',
+                                style: Theme.of(context).textTheme.tsGreyMedium12,
+                              ),
+                              SizedBox(height: 4),
+                              CommonDropdown(
+                                color: AppColors.grey.withOpacity(0.1),
+                                hint: 'Gender',
+                                value: controller.genderValue,
+                                dropdownItems: controller.dropdownItems,
+                                onChanged: (value) => setState(() => controller.genderValue = value),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(width: 12),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => controller.showDateRangePicker(context),
-                            child: CommonTextField(
-                              padding: EdgeInsets.zero,
-                              isDisabled: true,
-                              controller: controller.dobTextController,
-                              hintText: 'Date of Birth',
-                              suffixIcon: Icon(
-                                Icons.calendar_month,
-                                color: AppColors.grey,
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'DOB',
+                                style: Theme.of(context).textTheme.tsGreyMedium12,
                               ),
-                            ),
+                              SizedBox(height: 4),
+                              GestureDetector(
+                                onTap: () => controller.showDateRangePicker(context),
+                                child: CommonTextField(
+                                  padding: EdgeInsets.zero,
+                                  isDisabled: true,
+                                  controller: controller.dobTextController,
+                                  hintText: 'Date of Birth',
+                                  suffixIcon: Icon(
+                                    Icons.calendar_month,
+                                    color: AppColors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -142,30 +208,58 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
+                    Text(
+                      'Address',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
                     CommonTextField(
                       prefixIcon: Icon(Icons.home),
                       controller: controller.addressTextController,
                       hintText: 'Address',
+                      padding: EdgeInsets.only(bottom: 8),
                     ),
                     Row(
                       children: [
-                        Expanded(
-                          child: CommonTextField(
-                            prefixIcon: Icon(Icons.location_city),
-                            controller: controller.cityTextController,
-                            hintText: 'City',
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'City',
+                                style: Theme.of(context).textTheme.tsGreyMedium12,
+                              ),
+                              SizedBox(height: 4),
+                              CommonTextField(
+                                prefixIcon: Icon(Icons.location_city),
+                                controller: controller.cityTextController,
+                                hintText: 'City',
+                                padding: EdgeInsets.only(bottom: 8),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(width: 12),
-                        Expanded(
-                          child: CommonTextField(
-                            controller: controller.pincodeTextController,
-                            hintText: 'Pincode',
-                            prefixIcon: Icon(Icons.pin),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(6),
-                              FilteringTextInputFormatter.digitsOnly,
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Pin Code',
+                                style: Theme.of(context).textTheme.tsGreyMedium12,
+                              ),
+                              SizedBox(height: 4),
+                              CommonTextField(
+                                controller: controller.pincodeTextController,
+                                hintText: 'Pincode',
+                                prefixIcon: Icon(Icons.pin),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(6),
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                                padding: EdgeInsets.only(bottom: 8),
+                              ),
                             ],
                           ),
                         ),
@@ -173,19 +267,41 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     ),
                     Row(
                       children: [
-                        Expanded(
-                          child: CommonTextField(
-                            prefixIcon: Icon(Icons.location_on),
-                            controller: controller.stateTextController,
-                            hintText: 'State',
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'State',
+                                style: Theme.of(context).textTheme.tsGreyMedium12,
+                              ),
+                              SizedBox(height: 4),
+                              CommonTextField(
+                                prefixIcon: Icon(Icons.location_on),
+                                controller: controller.stateTextController,
+                                hintText: 'State',
+                                padding: EdgeInsets.only(bottom: 8),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(width: 12),
-                        Expanded(
-                          child: CommonTextField(
-                            prefixIcon: Icon(Icons.public),
-                            controller: controller.countryTextController,
-                            hintText: 'Country',
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Country',
+                                style: Theme.of(context).textTheme.tsGreyMedium12,
+                              ),
+                              SizedBox(height: 4),
+                              CommonTextField(
+                                prefixIcon: Icon(Icons.public),
+                                controller: controller.countryTextController,
+                                hintText: 'Country',
+                                padding: EdgeInsets.only(bottom: 8),
+                              ),
+                            ],
                           ),
                         ),
                       ],

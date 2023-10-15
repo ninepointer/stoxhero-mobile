@@ -135,4 +135,9 @@ class AppUrls {
   static const String internshipTodayOrders = "$apiURL/internship/my/todayorders";
   static String tenxCountTradingDays(String? id) => "$apiURL/tenX/$id/trade/countTradingDays";
   static String shareMarginX(String? id) => "$apiURL/marginx/share/$id";
+  static String tenxSubscriberCount(String? id) => "$apiURL/tenX/subscribercount/$id";
+  static const String tenxMyActiveSubscribed = "$apiURL/tenX/myactivesubs";
+  static const String tenxMyExpiredSubscription = "$apiURL/tenX/myexpiredsubscription";
+  static const String tenxleaderboard = "$apiURL/tenX/tenxleaderboard";
+  static const String tenxRenew = "$apiURL/tenX/renew";
 }

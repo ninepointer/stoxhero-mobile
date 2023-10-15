@@ -29,27 +29,28 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                       children: [
                         Expanded(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
-                                height: 30,
-                                width: 30,
-                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                height: 32,
+                                width: 32,
                                 decoration: BoxDecoration(
                                   color: AppColors.secondary.withOpacity(.25),
                                   shape: BoxShape.circle,
                                 ),
-                                child: Align(
-                                  child: Text(
-                                    '${contest.rank.contains('-') ? index + 1 : contest.rank}',
-                                    style: AppStyles.tsSecondarySemiBold14,
-                                  ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${contest.rank.toString().contains('-') ? index + 1 : contest.rank}',
+                                  style: AppStyles.tsSecondarySemiBold14,
                                 ),
                               ),
-                              Text(
-                                '${contest.firstName?.capitalizeFirst} ${contest.lastName?.capitalizeFirst}',
-                                style: Theme.of(context).textTheme.tsMedium14,
+                              SizedBox(width: 16),
+                              Expanded(
+                                child: Text(
+                                  '${contest.firstName?.capitalizeFirst} ${contest.lastName?.capitalizeFirst}',
+                                  style: Theme.of(context).textTheme.tsMedium14,
+                                ),
                               ),
+                              SizedBox(width: 4),
                               Text(
                                 '${FormatHelper.formatNumbers(
                                   contest.payout,

@@ -48,6 +48,11 @@ class AppStrings {
   static const String invite = "Invite";
   static const String referrals = "Referrals";
 
+  static const availableTenxPlans = "Available TenX";
+  static const subscribedTenxPlans = "Subscribed TenX";
+  static const expiredTenxPlans = "Expired TenX";
+  static const tenxLeaderboard = "TenX Leaderboard";
+
   static const String noDataFoundForFreeLiveContest =
       "Oops! \nThere are no Free Live Contest at the moment.\nPlease check Upcoming Contest!";
   static const String noDataFoundForPremiumLiveContest =
@@ -87,6 +92,13 @@ class AppStrings {
 
   static const String noDataFoundContestLeaderboard = "";
   static const String noDataFoundCollegeContestLeaderboard = "";
+  static const String noDataFoundTenxActive =
+      "Oops!\nThere are no Active TenX at the moment.\nPlease check Subscribed TenX!";
+  static const String noDataFoundTenxSubscribed =
+      "Oops!\nThere are no Subscribed TenX at the moment.\nPlease check Active TenX!";
+  static const String noDataFoundTenxExpired =
+      "Oops!\nThere are no Expired TenX at the moment.\nPlease check Active TenX!";
+  static const String noDataFoundTenxLeaderboard = "Oops!\nThere are no Leaderboard for TenX at the moment.";
 }
 
 class ErrorMessages {

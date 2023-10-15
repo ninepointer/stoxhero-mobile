@@ -29,7 +29,7 @@ class WalletCard extends StatelessWidget {
         Row(
           children: [
             Container(
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: AppColors.secondary.withOpacity(.25),
                 shape: BoxShape.circle,
@@ -52,7 +52,7 @@ class WalletCard extends StatelessWidget {
                   SizedBox(height: 2),
                   Text(
                     value,
-                    style: AppStyles.tsPrimaryMedium20.copyWith(
+                    style: AppStyles.tsPrimaryMedium16.copyWith(
                       color: AppColors.success,
                     ),
                   ),

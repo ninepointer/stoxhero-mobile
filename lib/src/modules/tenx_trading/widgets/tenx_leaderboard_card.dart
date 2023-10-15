@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/core/core.dart';
-import 'package:stoxhero/src/data/data.dart';
+import '../../../app/app.dart';
 
-class CollegeContestLeaderboardCard extends StatelessWidget {
+class TenxLeaderboardCard extends StatelessWidget {
   final int index;
-  final CollegeContestLeaderboard? contestLeaderboard;
-  const CollegeContestLeaderboardCard({
+  final TenxLeaderboardList? leaderboard;
+  const TenxLeaderboardCard({
     Key? key,
-    this.contestLeaderboard,
+    this.leaderboard,
     required this.index,
   }) : super(key: key);
 
@@ -40,7 +38,7 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                         ),
                         child: ClipOval(
                           child: Image.network(
-                            contestLeaderboard?.traderProfilePhoto ?? '',
+                            leaderboard?.profilePic ?? '',
                             width: 48,
                             height: 48,
                             errorBuilder: (context, error, stackTrace) {
@@ -72,7 +70,7 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ], 
+                    ],
                   ),
                   SizedBox(width: 8),
                   Expanded(
@@ -80,12 +78,12 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${contestLeaderboard?.traderFirstName!.capitalizeFirst} ${contestLeaderboard?.traderLastName!.capitalizeFirst}',
+                          '${leaderboard?.firstName!.capitalizeFirst} ${leaderboard?.lastName!.capitalizeFirst}',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                         Text(
                           '${FormatHelper.formatNumbers(
-                            contestLeaderboard?.totalPayout,
+                            leaderboard?.earnings,
                             decimal: 0,
                           )}',
                           style: Theme.of(context).textTheme.tsMedium14.copyWith(
@@ -106,13 +104,13 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Contests Participated',
+                          'Subscriptions Total',
                           style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
                           '${FormatHelper.formatNumbers(
-                            contestLeaderboard?.contestParticipated,
+                            leaderboard?.subscriptions,
                             showSymbol: false,
                             decimal: 0,
                           )}',
@@ -125,13 +123,13 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Contests Won',
+                        'Subscriptions Won',
                         style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         '${FormatHelper.formatNumbers(
-                          contestLeaderboard?.contestWon,
+                          leaderboard?.subscriptionsWithPayout,
                           showSymbol: false,
                           decimal: 0,
                         )}',
@@ -150,7 +148,7 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                     style: AppStyles.tsGreyMedium12,
                   ),
                   Text(
-                    '${FormatHelper.formatNumbers(contestLeaderboard?.strikeRate, showSymbol: false)}%',
+                    '${((leaderboard?.strikeRate ?? 0) * 100).toStringAsFixed(0)}%',
                     style: Theme.of(context).textTheme.tsMedium12,
                   ),
                 ],

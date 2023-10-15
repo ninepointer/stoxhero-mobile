@@ -751,7 +751,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   }
 
   Future<void> getShareMarginX(bool isUpcoming) async {
-    isLoading(true);
+    isLiveLoading(true);
 
     try {
       await repository.getShareMarginX(isUpcoming ? upComingMarginX.value.id : liveMarginX.value.id);
@@ -766,6 +766,6 @@ class MarginXController extends BaseController<MarginXRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
 
-    isLoading(false);
+    isLiveLoading(false);
   }
 }

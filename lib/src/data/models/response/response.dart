@@ -62,3 +62,5 @@ export 'completed_college_contest_list_response.dart';
 export 'internship_order_list_response.dart';
 export 'count_trading_days_response.dart';
 export 'completed_contest_leaderboard_response.dart';
+export 'tenx_subscriber_count_list.dart';
+export 'tenx_leaderboard_list_response.dart';

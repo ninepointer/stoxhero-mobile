@@ -37,7 +37,7 @@ class BankDetailsView extends GetView<BankController> {
             color: Theme.of(context).cardColor,
             margin: EdgeInsets.only(top: 4),
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(16).copyWith(bottom: 100),
               child: AbsorbPointer(
                 absorbing: !controller.isEditEnabled.value,
                 child: Column(
@@ -49,36 +49,80 @@ class BankDetailsView extends GetView<BankController> {
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
-                    CommonTextField(
-                      prefixIcon: Icon(Icons.credit_card),
-                      hintText: 'UPI ID',
-                      controller: controller.upiIdTextController,
-                    ),
-                    CommonTextField(
-                      hintText: 'Google Pay Number',
-                      controller: controller.googlePayNumberTextController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                        FilteringTextInputFormatter.digitsOnly,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'UPI ID',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        CommonTextField(
+                          prefixIcon: Icon(Icons.credit_card),
+                          hintText: 'UPI ID',
+                          controller: controller.upiIdTextController,
+                          padding: EdgeInsets.only(bottom: 8),
+                        ),
                       ],
                     ),
-                    CommonTextField(
-                      hintText: 'PhonePe Number',
-                      controller: controller.phonePeNumberTextController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                        FilteringTextInputFormatter.digitsOnly,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Google Pay Number',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        CommonTextField(
+                          hintText: 'Google Pay Number',
+                          controller: controller.googlePayNumberTextController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10),
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          padding: EdgeInsets.only(bottom: 8),
+                        ),
                       ],
                     ),
-                    CommonTextField(
-                      hintText: 'Paytm Number',
-                      controller: controller.paytmNumberTextController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                        FilteringTextInputFormatter.digitsOnly,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'PhonePe Number',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        CommonTextField(
+                          hintText: 'PhonePe Number',
+                          controller: controller.phonePeNumberTextController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10),
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          padding: EdgeInsets.only(bottom: 8),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Paytm Number',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        CommonTextField(
+                          hintText: 'Paytm Number',
+                          controller: controller.paytmNumberTextController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(10),
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          padding: EdgeInsets.only(bottom: 8),
+                        ),
                       ],
                     ),
                     Text(
@@ -87,25 +131,69 @@ class BankDetailsView extends GetView<BankController> {
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
                     SizedBox(height: 12),
-                    CommonTextField(
-                      hintText: 'Your Name as per Bank Account',
-                      controller: controller.nameAsPerBankAccountTextController,
-                    ),
-                    CommonTextField(
-                      hintText: 'Bank Name',
-                      controller: controller.bankNameTextController,
-                    ),
-                    CommonTextField(
-                      hintText: 'Account Number',
-                      controller: controller.accountNumberTextController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Your Name as per Bank Account',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        CommonTextField(
+                          hintText: 'Your Name as per Bank Account',
+                          controller: controller.nameAsPerBankAccountTextController,
+                          padding: EdgeInsets.only(bottom: 8),
+                        ),
                       ],
                     ),
-                    CommonTextField(
-                      hintText: 'IFSC Code',
-                      controller: controller.ifscCodeTextController,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Bank Name',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        CommonTextField(
+                          hintText: 'Bank Name',
+                          controller: controller.bankNameTextController,
+                          padding: EdgeInsets.only(bottom: 8),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Account Number',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        CommonTextField(
+                          hintText: 'Account Number',
+                          controller: controller.accountNumberTextController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          padding: EdgeInsets.only(bottom: 8),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'IFSC Code',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        CommonTextField(
+                          hintText: 'IFSC Code',
+                          controller: controller.ifscCodeTextController,
+                          padding: EdgeInsets.only(bottom: 8),
+                        ),
+                      ],
                     ),
                   ],
                 ),

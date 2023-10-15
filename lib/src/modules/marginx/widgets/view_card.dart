@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
 class ViewCard extends StatefulWidget {
@@ -400,6 +401,13 @@ class _ViewCardState extends State<ViewCard> {
                           ),
                         Expanded(
                           child: GestureDetector(
+                            onTap: () {
+                              controller.upComingMarginX(widget.upcomingMarginX);
+                              controller.getShareMarginX(true);
+                              String url = 'https://stoxhero.com/marginxs';
+                              Clipboard.setData(ClipboardData(text: url));
+                              SnackbarHelper.showSnackbar('Share Link with your Friends');
+                            },
                             child: Container(
                               alignment: Alignment.center,
                               padding: EdgeInsets.all(6),

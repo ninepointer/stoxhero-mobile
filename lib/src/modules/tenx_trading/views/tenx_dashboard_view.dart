@@ -72,47 +72,48 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   CommonCard(
                     margin: EdgeInsets.only(left: 8, right: 8, top: 4),
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '# of Trading Days : ${controller.tenxCountTradingDays[0].totalTradingDays}',
-                                  style: AppStyles.tsSecondaryMedium12,
-                                ),
-                                SizedBox(height: 2),
-                                Text(
-                                  'Subscribed On : ${FormatHelper.formatDateYear(controller.selectedTenXSub.value.userPurchaseDetail?[0].subscribedOn)}',
-                                  style: AppStyles.tsSecondaryMedium12,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  '# of Trading Days Left : ${controller.tenxCountTradingDays[0].actualRemainingDay}',
-                                  style: AppStyles.tsWhiteMedium12.copyWith(
-                                    color: AppColors.success,
+                      if (controller.tenxCountTradingDays.isNotEmpty)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '# of Trading Days : ${controller.tenxCountTradingDays[0].totalTradingDays}',
+                                    style: AppStyles.tsSecondaryMedium12,
                                   ),
-                                ),
-                                SizedBox(height: 2),
-                                Text(
-                                  'Expires On : ${FormatHelper.formatDateYear(controller.selectedTenXSub.value.userPurchaseDetail?[0].expiredOn)}',
-                                  style: AppStyles.tsWhiteMedium12.copyWith(
-                                    color: AppColors.success,
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Subscribed On : ${FormatHelper.formatDateYear(controller.selectedTenXSub.value.userPurchaseDetail?[0].subscribedOn)}',
+                                    style: AppStyles.tsSecondaryMedium12,
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '# of Trading Days Left : ${controller.tenxCountTradingDays[0].actualRemainingDay}',
+                                    style: AppStyles.tsWhiteMedium12.copyWith(
+                                      color: AppColors.success,
+                                    ),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Expires On : ${FormatHelper.formatDateYear(controller.selectedTenXSub.value.userPurchaseDetail?[0].expiredOn)}',
+                                    style: AppStyles.tsWhiteMedium12.copyWith(
+                                      color: AppColors.success,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                   CommonTile(
