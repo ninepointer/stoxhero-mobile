@@ -14,20 +14,16 @@ class TutorialBinding implements Bindings {
 class TutorialController extends BaseController<TutorialRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
-  final segmentedControlValue = 0.obs;
+
+  final selectedTabBarIndex = 0.obs;
 
   final tutorialList = <TutorialList>[].obs;
+
   Future loadData() async {
     await getTutorialList();
   }
 
-  void changeSegment(int val) {
-    segmentedControlValue.value = val;
-  }
-
-  void handleSegmentChange(int val) {
-    changeSegment(val);
-  }
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   Future getTutorialList() async {
     isLoading(true);

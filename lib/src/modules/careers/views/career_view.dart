@@ -27,9 +27,6 @@ class CareerView extends GetView<CareerController> {
                     image: AppImages.internship,
                     onPressed: () {
                       controller.getCareerList('Job');
-                      // if (controller.careerList.isNotEmpty &&
-                      //     controller.careerList[0].listingType == 'Job') {
-                      // }
                       Get.to(() => InternshipView());
                     },
                   ),

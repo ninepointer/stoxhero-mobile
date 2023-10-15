@@ -16,10 +16,9 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: CommonCard(
-        margin: EdgeInsets.only(
-          left: 12,
-          right: 12,
-          bottom: 4,
+        margin: EdgeInsets.all(16).copyWith(
+          bottom: 0,
+          top: 8,
         ),
         children: [
           Column(

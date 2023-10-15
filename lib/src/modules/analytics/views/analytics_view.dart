@@ -16,51 +16,42 @@ class AnalyticsView extends GetView<AnalyticsController> {
       ),
       body: Obx(
         () => Visibility(
-          visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
-          child: DefaultTabController(
+          visible: controller.isLoadingStatus,
+          child: ListViewShimmer(),
+          replacement: DefaultTabController(
             length: 2,
             initialIndex: controller.selectedTab.value,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: const EdgeInsets.all(16),
                   height: 50,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
+                  width: double.infinity,
+                  padding: EdgeInsets.all(8).copyWith(top: 0),
+                  color: Theme.of(context).cardColor,
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
                       color: AppColors.grey.withOpacity(.25),
                     ),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
                     child: TabBar(
+                      labelColor: AppColors.white,
+                      unselectedLabelColor: AppColors.black,
+                      splashBorderRadius: BorderRadius.circular(50),
                       indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
                         color: AppColors.primary,
-                        border: Border.all(
-                          width: 1,
-                          color: AppColors.primary,
-                        ),
                       ),
-                      labelStyle: Theme.of(context).textTheme.tsWhiteMedium14.copyWith(
-                            color: AppColors.white,
-                          ),
-                      unselectedLabelStyle: Theme.of(context).textTheme.tsMedium14,
                       tabs: [
-                        controller.userDetailsData.designation == AppConstants.equityTraderType
-                            ? Tab(text: 'Infinity Trading')
-                            : Tab(text: 'TenX Trading'),
-                        Tab(text: 'Virtual Trading'),
-                      ],
-                      onTap: (value) {
-                        controller.selectedTab(value);
-                        controller.rangeCalculation();
-                      },
+                        AppStrings.tenX,
+                        AppStrings.virtual,
+                      ].map((label) => Tab(text: label)).toList(),
+                      onTap: (value) => controller.selectedTab(value),
                     ),
                   ),
                 ),
+                SizedBox(height: 16),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -78,7 +69,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   netValue: controller.overviewDetails.netPNLDaily,
                                 ),
                               ),
-                              SizedBox(width: 16),
+                              SizedBox(width: 8),
                               Expanded(
                                 child: AnalyticsInfoCard(
                                   title: "This Month",
@@ -90,7 +81,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 8),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Row(
@@ -103,7 +94,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   netValue: controller.overviewDetails.netPNLYearly,
                                 ),
                               ),
-                              SizedBox(width: 16),
+                              SizedBox(width: 8),
                               Expanded(
                                 child: AnalyticsInfoCard(
                                   title: "Lifetime",
@@ -116,7 +107,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(vertical: 16),
+                          margin: EdgeInsets.symmetric(vertical: 8),
                           padding: EdgeInsets.all(16),
                           color: Theme.of(context).cardColor,
                           width: double.infinity,
@@ -167,6 +158,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 ],
                               ),
                               CommonOutlinedButton(
+                                height: 42,
                                 label: 'Show Details',
                                 onPressed: () {
                                   if (controller.selectedTab.value == 0) {
@@ -195,16 +187,18 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                       style: Theme.of(context).textTheme.tsRegular14,
                                     ),
                                     SizedBox(height: 2),
-                                    Text(
-                                      FormatHelper.formatNumbers(
-                                        controller.rangeGrossAmount.value,
-                                      ),
-                                      style: AppStyles.tsPrimaryMedium14.copyWith(
-                                        color: controller.rangeGrossAmount.value == 0
-                                            ? AppColors.info
-                                            : controller.rangeGrossAmount.value < 0
-                                                ? AppColors.danger
-                                                : AppColors.success,
+                                    FittedBox(
+                                      child: Text(
+                                        FormatHelper.formatNumbers(
+                                          controller.rangeGrossAmount.value,
+                                        ),
+                                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                                          color: controller.rangeGrossAmount.value == 0
+                                              ? AppColors.info
+                                              : controller.rangeGrossAmount.value < 0
+                                                  ? AppColors.danger
+                                                  : AppColors.success,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -220,16 +214,18 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                       style: Theme.of(context).textTheme.tsRegular14,
                                     ),
                                     SizedBox(height: 2),
-                                    Text(
-                                      FormatHelper.formatNumbers(
-                                        controller.rangeNetAmount.value,
-                                      ),
-                                      style: AppStyles.tsPrimaryMedium14.copyWith(
-                                        color: controller.rangeNetAmount.value == 0
-                                            ? AppColors.info
-                                            : controller.rangeNetAmount.value < 0
-                                                ? AppColors.danger
-                                                : AppColors.success,
+                                    FittedBox(
+                                      child: Text(
+                                        FormatHelper.formatNumbers(
+                                          controller.rangeNetAmount.value,
+                                        ),
+                                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                                          color: controller.rangeNetAmount.value == 0
+                                              ? AppColors.info
+                                              : controller.rangeNetAmount.value < 0
+                                                  ? AppColors.danger
+                                                  : AppColors.success,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -245,16 +241,18 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                       style: Theme.of(context).textTheme.tsRegular14,
                                     ),
                                     SizedBox(height: 2),
-                                    Text(
-                                      FormatHelper.formatNumbers(
-                                        controller.rangeBrokerageAmount.value,
-                                      ),
-                                      style: AppStyles.tsPrimaryMedium14.copyWith(
-                                        color: controller.rangeBrokerageAmount.value == 0
-                                            ? AppColors.info
-                                            : controller.rangeBrokerageAmount.value < 0
-                                                ? AppColors.danger
-                                                : AppColors.success,
+                                    FittedBox(
+                                      child: Text(
+                                        FormatHelper.formatNumbers(
+                                          controller.rangeBrokerageAmount.value,
+                                        ),
+                                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                                          color: controller.rangeBrokerageAmount.value == 0
+                                              ? AppColors.info
+                                              : controller.rangeBrokerageAmount.value < 0
+                                                  ? AppColors.danger
+                                                  : AppColors.success,
+                                        ),
                                       ),
                                     ),
                                   ],

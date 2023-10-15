@@ -564,13 +564,13 @@ class InternshipParticipants {
   College? college;
   String? joiningDate;
   String? sId;
-  double? attendance;
-  double? payout;
-  int? referral;
-  int? tradingdays;
-  double? gpnl;
-  int? noOfTrade;
-  double? npnl;
+  num? attendance;
+  num? payout;
+  num? referral;
+  num? tradingdays;
+  num? gpnl;
+  num? noOfTrade;
+  num? npnl;
 
   InternshipParticipants(
       {this.user,

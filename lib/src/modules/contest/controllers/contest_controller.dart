@@ -18,6 +18,25 @@ class ContestController extends BaseController<ContestRepository> {
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+
+  final isLiveLoading = false.obs;
+  bool get isLiveLoadingStatus => isLiveLoading.value;
+
+  final isUpcomingLoading = false.obs;
+  bool get isUpcomingLoadingStatus => isUpcomingLoading.value;
+
+  final isCompletedLoading = false.obs;
+  bool get isCompletedLoadingStatus => isCompletedLoading.value;
+
+  final isOrdersLoading = false.obs;
+  bool get isOrdersLoadingStatus => isOrdersLoading.value;
+
+  final isleaderboardLoading = false.obs;
+  bool get isleaderboardLoadingStatus => isleaderboardLoading.value;
+
+  final selectedTabBarIndex = 0.obs;
+  final selectedSecondTabBarIndex = 0.obs;
+
   final segmentedControlValue = 0.obs;
   final liveSegmentedControlValue = 0.obs;
   final upcomingSegmentedControlValue = 0.obs;
@@ -26,11 +45,11 @@ class ContestController extends BaseController<ContestRepository> {
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingContest>[].obs;
   final upComingContest = UpComingContest().obs;
-  final premiumContestList = <UpComingContest>[].obs;
-  final freeContestList = <UpComingContest>[].obs;
+  final upcomingPremiumContestList = <UpComingContest>[].obs;
+  final upcomingFreeContestList = <UpComingContest>[].obs;
   final tempCompletedContestList = <CompletedContest>[].obs;
-  final premiumCompletedContestList = <CompletedContest>[].obs;
-  final freeCompletedContestList = <CompletedContest>[].obs;
+  final completedPremiumContestList = <CompletedContest>[].obs;
+  final completedFreeContestList = <CompletedContest>[].obs;
   final completedContestList = <CompletedContest>[].obs;
   final completedContestPnlList = <CompletedContestPnl>[].obs;
   final contestLeaderboardList = <ContestLeaderboard>[].obs;
@@ -92,7 +111,6 @@ class ContestController extends BaseController<ContestRepository> {
     await socketIndexConnection();
     await socketConnection();
     await socketLeaderboardConnection();
-    // await socketMyRankConnection();
   }
 
   bool isUserInterested(contest, userId) {
@@ -106,15 +124,16 @@ class ContestController extends BaseController<ContestRepository> {
     return false;
   }
 
-  bool participateUser(contest, userId) {
+  bool participateUser(contest) {
+    bool canParticipate = false;
     if (contest.participants != null) {
       for (Participants user in contest.participants) {
-        if (user.userId?.sId == userId) {
-          return true;
+        if (user.userId?.sId == userDetails.value.sId) {
+          canParticipate = true;
         }
       }
     }
-    return false;
+    return canParticipate;
   }
 
   Future initSocketConnection() async {
@@ -225,6 +244,8 @@ class ContestController extends BaseController<ContestRepository> {
     num payout = reward <= 0 ? 0 : reward / 100;
     return payout;
   }
+
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   void handleSegmentChange(int val) => changeSegment(val);
   void changeSegment(int val) => segmentedControlValue.value = val;
@@ -437,19 +458,19 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future getUpComingContestList() async {
-    isLoading(true);
+    isUpcomingLoading(true);
     try {
       final RepoResponse<UpComingContestListResponse> response = await repository.getUpComingContestList();
       if (response.data != null) {
         upComingContestList(response.data?.data ?? []);
         if (upComingContestList.isNotEmpty) {
-          freeContestList.clear();
-          premiumContestList.clear();
+          upcomingFreeContestList.clear();
+          upcomingPremiumContestList.clear();
 
           upComingContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
-                ? freeContestList.add(contest)
-                : premiumContestList.add(contest);
+                ? upcomingFreeContestList.add(contest)
+                : upcomingPremiumContestList.add(contest);
           });
         }
       } else {
@@ -459,23 +480,24 @@ class ContestController extends BaseController<ContestRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isUpcomingLoading(false);
   }
 
   Future getCompletedContestList() async {
-    isLoading(true);
+    isCompletedLoading(true);
+    await getCompletedContestPnlList();
     try {
       final RepoResponse<CompletedContestListResponse> response = await repository.getCompletedContestList();
       if (response.data != null) {
         tempCompletedContestList(response.data?.data ?? []);
         if (tempCompletedContestList.isNotEmpty) {
-          freeCompletedContestList.clear();
-          premiumCompletedContestList.clear();
+          completedFreeContestList.clear();
+          completedPremiumContestList.clear();
 
           tempCompletedContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
-                ? freeCompletedContestList.add(contest)
-                : premiumCompletedContestList.add(contest);
+                ? completedFreeContestList.add(contest)
+                : completedPremiumContestList.add(contest);
           });
         }
       } else {
@@ -485,7 +507,7 @@ class ContestController extends BaseController<ContestRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isCompletedLoading(false);
   }
 
   Future getCompletedContestPnlList() async {
@@ -515,7 +537,7 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future getContestLeaderboardList() async {
-    isLoading(true);
+    isleaderboardLoading(true);
     try {
       final RepoResponse<ContestLeaderboardResponse> response = await repository.getContestLeaderboardList();
       if (response.data != null) {
@@ -527,7 +549,7 @@ class ContestController extends BaseController<ContestRepository> {
       log('Leaderboard: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isleaderboardLoading(false);
   }
 
   Future getContestOrderList(String? id) async {
@@ -548,7 +570,7 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future getLiveContestList() async {
-    isLoading(true);
+    isLiveLoading(true);
     try {
       final RepoResponse<LiveContestListResponse> response = await repository.getLiveContestList();
       if (response.data != null) {
@@ -570,7 +592,7 @@ class ContestController extends BaseController<ContestRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isLiveLoading(false);
   }
 
   Future getContestPortfolio() async {
@@ -925,10 +947,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future participate() async {
     isLoading(true);
     try {
-      await repository.participate(
-        liveContest.value.id,
-      );
-      getLiveContestList();
+      await repository.participate(liveContest.value.id);
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

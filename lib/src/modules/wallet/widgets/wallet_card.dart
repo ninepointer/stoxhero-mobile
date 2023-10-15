@@ -15,7 +15,7 @@ class WalletCard extends StatelessWidget {
     required this.value,
     required this.iconData,
     required this.buttonLabel,
-    required this.onPressed,
+    this.onPressed,
   });
 
   @override

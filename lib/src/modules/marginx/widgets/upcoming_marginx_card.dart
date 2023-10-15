@@ -192,7 +192,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                     children: [
                       Image.asset(
                         AppImages.contestTrophy,
-                        width: 40,
+                        width: 36,
                       ),
                       Text(
                         'Reward',

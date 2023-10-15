@@ -24,7 +24,7 @@ class WalletView extends GetView<WalletController> {
                     value: '₹ 0.00',
                     iconData: Icons.account_balance_wallet_rounded,
                     buttonLabel: 'Add Money',
-                    onPressed: null,
+                    // onPressed: () => Get.to(PaymentView()),
                   ),
                   WalletCard(
                     label: 'Cash',

@@ -147,7 +147,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     children: [
                       Image.asset(
                         AppImages.contestTrophy,
-                        width: 40,
+                        width: 36,
                       ),
                       Text(
                         'Reward',
@@ -248,7 +248,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                   ),
                 ],
               ),
-                SizedBox(height: 12),
+              SizedBox(height: 12),
             ],
           ),
         ),
@@ -267,7 +267,6 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                               0
                       ? () {
                           if (isParticipants) {
-                            controller.participate();
                             controller.liveCollegeContest(contest);
                             controller.loadTradingData();
                             controller.liveLeaderboardList();

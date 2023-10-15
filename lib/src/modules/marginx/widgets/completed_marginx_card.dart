@@ -6,10 +6,10 @@ import 'package:stoxhero/src/modules/marginx/marginx_index.dart';
 import '../../../core/core.dart';
 
 class CompletedMarginxCard extends StatelessWidget {
-  final CompletedMarginX? completedMarginx;
+  final CompletedMarginX? marginx;
   const CompletedMarginxCard({
     Key? key,
-    this.completedMarginx,
+    this.marginx,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class CompletedMarginxCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  completedMarginx?.marginxName ?? '-',
+                  marginx?.marginxName ?? '-',
                   style: AppStyles.tsSecondaryMedium14,
                 ),
               ),
@@ -35,7 +35,7 @@ class CompletedMarginxCard extends StatelessWidget {
           child: Row(
             children: [
               Visibility(
-                visible: completedMarginx?.isNifty == true,
+                visible: marginx?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
@@ -50,7 +50,7 @@ class CompletedMarginxCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: completedMarginx?.isBankNifty == true,
+                visible: marginx?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
@@ -65,7 +65,7 @@ class CompletedMarginxCard extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Visibility(
-                visible: completedMarginx?.isFinNifty == true,
+                visible: marginx?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
@@ -86,7 +86,7 @@ class CompletedMarginxCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  completedMarginx?.marginxExpiry ?? '',
+                  marginx?.marginxExpiry ?? '',
                   style: AppStyles.tsWhiteMedium12,
                 ),
               ),
@@ -134,7 +134,7 @@ class CompletedMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(completedMarginx?.startTime),
+                        FormatHelper.formatDateTimeToIST(marginx?.startTime),
                         style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
@@ -148,7 +148,7 @@ class CompletedMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(completedMarginx?.endTime),
+                        FormatHelper.formatDateTimeToIST(marginx?.endTime),
                         style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
@@ -168,7 +168,7 @@ class CompletedMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(completedMarginx?.entryFee, decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.entryFee, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
@@ -182,7 +182,7 @@ class CompletedMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(completedMarginx?.portfolioValue, decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.portfolioValue, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
@@ -202,9 +202,9 @@ class CompletedMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(completedMarginx?.npnl ?? 0, decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.npnl ?? 0, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                              color: (completedMarginx?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
+                              color: (marginx?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
                             ),
                       ),
                     ],
@@ -218,9 +218,9 @@ class CompletedMarginxCard extends StatelessWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(completedMarginx?.earning ?? 0, decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.earning ?? 0, decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                              color: (completedMarginx?.earning ?? 0) >= 0 ? AppColors.success : AppColors.danger,
+                              color: (marginx?.earning ?? 0) >= 0 ? AppColors.success : AppColors.danger,
                             ),
                       )
                     ],
@@ -236,7 +236,7 @@ class CompletedMarginxCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => ViewCard(completedMarginX: completedMarginx));
+                  Get.to(() => ViewCard(completedMarginX: marginx));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -259,7 +259,7 @@ class CompletedMarginxCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  Get.find<MarginXController>().getCompletedMarginXOrders(completedMarginx?.marginxId);
+                  Get.find<MarginXController>().getCompletedMarginXOrders(marginx?.marginxId);
                   Get.to(() => CompletedMarginXOrdersListView());
                 },
                 child: Container(

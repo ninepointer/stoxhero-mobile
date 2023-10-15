@@ -14,6 +14,7 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.zero,
       children: [
         Padding(
@@ -88,7 +89,7 @@ class InfoCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: CommonFilledButton(
             label: 'Click here to Apply!',
-            height: 48,
+            height: 42,
             onPressed: () {
               Get.to(
                 () => ResponsibilitiesView(

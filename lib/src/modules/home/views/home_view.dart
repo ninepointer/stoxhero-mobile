@@ -34,21 +34,20 @@ class _HomeViewState extends State<HomeView> {
     switch (index) {
       case 0:
         Get.find<HomeController>().loadData();
-        Get.find<ContestController>().getUpComingContestList();
         Get.find<ContestController>().getLiveContestList();
+        Get.find<ContestController>().getUpComingContestList();
         break;
       case 1:
         Get.find<VirtualTradingController>().loadData();
         break;
       case 2:
-        // Get.toNamed(AppRoutes.payment);
-        Get.find<TenxTradingController>().getTenxTradingActiveSubs();
+        Get.find<TenxTradingController>().loadData();
         break;
       case 3:
         Get.find<MarginXController>().loadData();
         break;
       case 4:
-        Get.find<ContestController>().loadData();
+        // Blank
         break;
       default:
     }

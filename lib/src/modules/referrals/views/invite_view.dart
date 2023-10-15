@@ -11,113 +11,118 @@ class InviteView extends GetView<ReferralsController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Visibility(
-        visible: !controller.isLoadingStatus,
-        replacement: CommonLoader(),
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                Image.asset(
-                  AppImages.referral,
-                  height: 200,
+      () => SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: 100),
+        child: Container(
+          child: Column(
+            children: [
+              Image.asset(
+                AppImages.referral,
+                height: 200,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  "StoxHero Referral Program\n${controller.activeReferrals.value?.referralProgramName ?? ''}",
+                  textAlign: TextAlign.center,
+                  style: AppStyles.tsSecondaryRegular20,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    "StoxHero Referral Program\n${controller.activeReferrals.value?.referralProgramName ?? ''}",
-                    textAlign: TextAlign.center,
-                    style: AppStyles.tsSecondaryRegular20,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Card(
+                  margin: EdgeInsets.zero,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: AppColors.grey.withOpacity(.25),
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.all(14),
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        if (controller.activeReferrals.value != null)
+                          Text(
+                            'Get ${controller.activeReferrals.value?.currency ?? ''} ${controller.activeReferrals.value?.rewardPerReferral ?? ''} for every referral in\nyour StoxHero wallet',
+                            style: AppStyles.tsPrimaryRegular16,
+                            textAlign: TextAlign.center,
+                          ),
+                        if (controller.activeReferrals.value != null) SizedBox(height: 8),
+                        ReferralDetailsCardTile(
+                          label: 'Invite Your Friends',
+                          iconData: Icons.share,
+                        ),
+                        ReferralDetailsCardTile(
+                          label: 'Your friend gets 10 Lakhs Virtual Currency for Paper Trading (Virtual Trading).',
+                          iconData: Icons.share,
+                        ),
+                        ReferralDetailsCardTile(
+                          label:
+                              'Your friend gets two portfolios worth 10 Lakhs each to participate in daily free contests.',
+                          iconData: Icons.share,
+                        ),
+                        ReferralDetailsCardTile(
+                          label: 'You get INR 15 for each referral',
+                          iconData: Icons.share,
+                        ),
+                        SizedBox(height: 16),
+                        ReferralCodeCard(),
+                      ],
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Card(
-                    margin: EdgeInsets.zero,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: AppColors.grey.withOpacity(.25),
-                      ),
-                      borderRadius: BorderRadius.circular(8),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Card(
+                  margin: EdgeInsets.zero,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: AppColors.grey.withOpacity(.25),
                     ),
-                    child: Container(
-                      margin: EdgeInsets.all(14),
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          if (controller.activeReferrals.value != null)
-                            Text(
-                              'Get ${controller.activeReferrals.value?.currency ?? ''} ${controller.activeReferrals.value?.rewardPerReferral ?? ''} for every referral in\nyour StoxHero wallet',
-                              style: AppStyles.tsPrimaryRegular16,
-                              textAlign: TextAlign.center,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.all(14),
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'My Referral Code',
+                                  style: AppStyles.tsGreyRegular12,
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  controller.userDetailsData.myReferralCode ?? '-',
+                                  style: Theme.of(context).textTheme.tsMedium18,
+                                ),
+                              ],
                             ),
-                          if (controller.activeReferrals.value != null) SizedBox(height: 8),
-                          ReferralDetailsCardTile(
-                            label: 'Invite Your Friends',
-                            iconData: Icons.share,
+                            Spacer(),
+                            Icon(
+                              Icons.qr_code_2_rounded,
+                              size: 36,
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: AppColors.grey.withOpacity(.25),
+                            ),
                           ),
-                          ReferralDetailsCardTile(
-                            label: 'Your friend gets 10 Lakhs Virtual Currency for Paper Trading (Virtual Trading).',
-                            iconData: Icons.share,
-                          ),
-                          ReferralDetailsCardTile(
-                            label:
-                                'Your friend gets two portfolios worth 10 Lakhs each to participate in daily free contests.',
-                            iconData: Icons.share,
-                          ),
-                          ReferralDetailsCardTile(
-                            label: 'You get INR 15 for each referral',
-                            iconData: Icons.share,
-                          ),
-                          SizedBox(height: 16),
-                          ReferralCodeCard(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Card(
-                    margin: EdgeInsets.zero,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: AppColors.grey.withOpacity(.25),
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.all(14),
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'My Referral Code',
-                                    style: AppStyles.tsGreyRegular14,
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    controller.userDetailsData.myReferralCode ?? '-',
-                                    style: Theme.of(context).textTheme.tsMedium18,
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              Icon(
-                                Icons.qr_code_2_rounded,
-                                size: 36,
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          QrImageView(
+                          child: QrImageView(
                             data:
                                 'https://www.stoxhero.com/signup?referral=${controller.userDetailsData.myReferralCode}',
                             version: QrVersions.auto,
@@ -126,13 +131,13 @@ class InviteView extends GetView<ReferralsController> {
                             ),
                             size: 200,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -162,7 +167,7 @@ class ReferralDetailsCardTile extends StatelessWidget {
       leading: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.grey.withOpacity(.25),
+          color: AppColors.primary.withOpacity(.1),
           shape: BoxShape.circle,
         ),
         child: Icon(

@@ -18,7 +18,19 @@ class MarginXController extends BaseController<MarginXRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
-  final segmentedControlValue = 0.obs;
+  final isLiveLoading = false.obs;
+  bool get isLiveLoadingStatus => isLiveLoading.value;
+
+  final isUpcomingLoading = false.obs;
+  bool get isUpcomingLoadingStatus => isUpcomingLoading.value;
+
+  final isCompletedLoading = false.obs;
+  bool get isCompletedLoadingStatus => isCompletedLoading.value;
+
+  final isOrdersLoading = false.obs;
+  bool get isOrdersLoadingStatus => isOrdersLoading.value;
+
+  final selectedTabBarIndex = 0.obs;
 
   final searchTextController = TextEditingController();
   final upComingMarginXList = <UpcomingMarginX>[].obs;
@@ -241,7 +253,6 @@ class MarginXController extends BaseController<MarginXRepository> {
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
-    // log('totalNetPNL : ${totalNetPNL.toString()}');
     return totalNetPNL.round();
   }
 
@@ -287,9 +298,7 @@ class MarginXController extends BaseController<MarginXRepository> {
     return payout;
   }
 
-  void handleSegmentChange(int val) => changeSegment(val);
-
-  void changeSegment(int val) => segmentedControlValue.value = val;
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   num getInstrumentLastPrice(int instID, int exchID) {
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
@@ -556,7 +565,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   }
 
   Future getUpComingMarginXList() async {
-    isLoading(true);
+    isUpcomingLoading(true);
     try {
       final RepoResponse<UpComingMarginXListResponse> response = await repository.getUpComingMarginXList();
       if (response.data != null) {
@@ -568,11 +577,11 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isUpcomingLoading(false);
   }
 
   Future getLiveMarginXList() async {
-    isLoading(true);
+    isLiveLoading(true);
     try {
       final RepoResponse<LiveMarginxListResponse> response = await repository.getLiveMarginXList();
       if (response.data != null) {
@@ -584,11 +593,11 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isLiveLoading(false);
   }
 
   Future getCompletedMarginXList() async {
-    isLoading(true);
+    isCompletedLoading(true);
     try {
       final RepoResponse<CompletedMarginxListResponse> response = await repository.getCompletedMarginXList();
       if (response.data != null) {
@@ -600,11 +609,11 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isCompletedLoading(false);
   }
 
   Future getCompletedMarginXOrders(String? id) async {
-    isLoading(true);
+    isOrdersLoading(true);
     try {
       final RepoResponse<CompletedMarginXOrdersResponse> response = await repository.getCompletedMarginXOrders(id);
       if (response.data != null) {
@@ -616,7 +625,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isOrdersLoading(false);
   }
 
   Future socketConnection() async {

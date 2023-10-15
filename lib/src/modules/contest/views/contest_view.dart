@@ -57,12 +57,7 @@ class ContestView extends StatelessWidget {
               CollegeContestController collegeContestController = Get.find<CollegeContestController>();
               contestController.getContestLeaderboardList();
               collegeContestController.getCollegeContestLeaderboardList();
-              Get.to(
-                () => ContestLeaderboardView(
-                  contestController: contestController,
-                  collegeContestController: collegeContestController,
-                ),
-              );
+              Get.to(() => ContestLeaderboardView());
             },
           ),
           SizedBox(height: 16),
@@ -117,7 +112,7 @@ class ContestView extends StatelessWidget {
               SizedBox(height: 16),
               CommonFilledButton(
                 label: buttonLabel,
-                height: 48,
+                height: 42,
                 onPressed: onPressed,
               ),
             ],

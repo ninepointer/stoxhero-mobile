@@ -19,7 +19,19 @@ class InternshipController extends BaseController<InternshipRespository> {
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+
+  final isInternshipLoading = false.obs;
+  bool get isInternshipLoadingStatus => isInternshipLoading.value;
+
+  final isTodaysOrdersLoading = false.obs;
+  bool get isTodaysOrdersLoadingStatus => isTodaysOrdersLoading.value;
+
+  final isAllOrdersLoading = false.obs;
+  bool get isAllOrdersLoadingStatus => isAllOrdersLoading.value;
+
   final segmentedControlValue = 0.obs;
+
+  final selectedTabBarIndex = 0.obs;
 
   final searchTextController = TextEditingController();
   final startDateTextController = TextEditingController();
@@ -47,7 +59,6 @@ class InternshipController extends BaseController<InternshipRespository> {
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
   final selectedStringQuantity = "0".obs;
-  final careerList = <CareerList>[].obs;
 
   final rangeGrossAmount = 0.0.obs;
   final rangeNetAmount = 0.0.obs;
@@ -58,12 +69,17 @@ class InternshipController extends BaseController<InternshipRespository> {
   final rangeTotalRedDays = 0.obs;
 
   Future loadUserData() async {
+    userDetails.value = AppStorage.getUserDetails();
     await getInternshipBatchDetails();
-    await getInternshipBatchPortfolioDetails();
+    if (isParticipated()) {
+      await getInternshipBatchPortfolioDetails();
+    } else {
+      await Get.find<CareerController>().getCareerList('Job');
+    }
   }
 
   Future loadData() async {
-    userDetails(AppStorage.getUserDetails());
+    userDetails.value = AppStorage.getUserDetails();
     String date = DateFormat("dd-MM-yyyy").format(DateTime.now());
     startDateTextController.text = date;
     endDateTextController.text = date;
@@ -85,12 +101,28 @@ class InternshipController extends BaseController<InternshipRespository> {
 
   Future loadOrderData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await getInternshipAllOrdersList();
+    selectedTabBarIndex(0);
     await getInternshipTodayOrdersList();
+    await getInternshipAllOrdersList();
   }
+
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   void handleSegmentChange(int val) => changeSegment(val);
   void changeSegment(int val) => segmentedControlValue.value = val;
+
+  bool isParticipated() {
+    bool isParticipated = false;
+    String intershipId = internshipBatchDetails.value.id ?? '';
+    for (InternshipBatchList intership in userDetails.value.internshipBatch ?? []) {
+      if (intership.sId == intershipId) {
+        for (InternshipParticipants user in intership.participants ?? []) {
+          if (user.user == userDetails.value.sId) isParticipated = true;
+        }
+      }
+    }
+    return isParticipated;
+  }
 
   int getOpenPositionCount() {
     int openCount = 0;
@@ -422,7 +454,6 @@ class InternshipController extends BaseController<InternshipRespository> {
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
-    log('totalNetPNL : ${totalNetPNL.toString()}');
     return totalNetPNL.round();
   }
 
@@ -799,7 +830,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   Future getInternshipBatchDetails() async {
-    isLoading(true);
+    isInternshipLoading(true);
     try {
       final RepoResponse<InternshipBatchResponse> response = await repository.getInternshipBatchDetails();
       if (response.data != null) {
@@ -813,11 +844,11 @@ class InternshipController extends BaseController<InternshipRespository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isInternshipLoading(false);
   }
 
   Future getInternshipBatchPortfolioDetails() async {
-    isLoading(true);
+    isInternshipLoading(true);
     try {
       final RepoResponse<InternshipBatchPortfolioResponse> response =
           await repository.getInternshipBatchPortfolioDetails(
@@ -832,7 +863,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isInternshipLoading(false);
   }
 
   Future getInternshipAnalyticsOverview() async {
@@ -903,7 +934,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   Future getInternshipTodayOrdersList() async {
-    isLoading(true);
+    internshipTodayOrders.clear();
+    isTodaysOrdersLoading(true);
     try {
       final RepoResponse<InternshipOrdersListResponse> response = await repository.getInternshipTodayOrdersList();
       if (response.data != null) {
@@ -917,11 +949,12 @@ class InternshipController extends BaseController<InternshipRespository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isTodaysOrdersLoading(false);
   }
 
   Future getInternshipAllOrdersList() async {
-    isLoading(true);
+    internshipAllOrders.clear();
+    isAllOrdersLoading(true);
     try {
       final RepoResponse<InternshipOrdersListResponse> response = await repository.getInternshipAllOrdersList();
       if (response.data != null) {
@@ -935,6 +968,6 @@ class InternshipController extends BaseController<InternshipRespository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isAllOrdersLoading(false);
   }
 }

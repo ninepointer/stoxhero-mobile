@@ -8,6 +8,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      margin: EdgeInsets.symmetric(vertical: 16),
       padding: EdgeInsets.zero,
       children: [
         SizedBox(height: 12),

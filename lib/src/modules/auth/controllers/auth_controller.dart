@@ -163,7 +163,6 @@ class AuthController extends BaseController<AuthRepository> {
       final response = await repository.loginDetails();
       if (response.data != null) {
         await AppStorage.setUserDetails(response.data ?? LoginDetailsResponse());
-        log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         Get.find<HomeController>().loadUserDetails();
         if (navigate) Get.offAllNamed(AppRoutes.home);
         log('App ${AppStorage.getToken()}');

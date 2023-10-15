@@ -38,8 +38,11 @@ class HomeController extends BaseController<DashboardRepository> {
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
-    Get.find<TenxTradingController>().loadUserDetails();
-    Get.find<TenxTradingController>().getTenxTradingActiveSubs();
+    loadData();
+    Get.find<ContestController>().getLiveContestList();
+    Get.find<ContestController>().getUpComingContestList();
+    // Get.find<TenxTradingController>().loadUserDetails();
+    // Get.find<TenxTradingController>().getTenxTradingActiveSubs();
   }
 
   Future loadData() async {

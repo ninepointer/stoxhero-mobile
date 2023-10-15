@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,13 +24,13 @@ class SplashController extends GetxController {
 
   @override
   void onInit() async {
-    await checkForUpdate();
+    await getAppVersion();
+    if (isProd) await checkForUpdate();
     _startOnBoarding();
     super.onInit();
   }
 
   Future checkForUpdate() async {
-    await getAppVersion();
     print('App version : $_appVersion');
     print('Store version : $_storeAppVersion');
     if (_storeAppVersion.value.isNotEmpty) {
@@ -72,7 +71,7 @@ class SplashController extends GetxController {
                     Expanded(
                       child: CommonOutlinedButton(
                         width: double.infinity,
-                        height: 40,
+                        height: 42,
                         label: 'Cancel',
                         onPressed: Get.back,
                       ),
@@ -81,7 +80,7 @@ class SplashController extends GetxController {
                     Expanded(
                       child: CommonFilledButton(
                         width: double.infinity,
-                        height: 40,
+                        height: 42,
                         label: 'Update',
                         onPressed: openAppPage,
                       ),

@@ -54,7 +54,7 @@ class _InternshipViewState extends State<InternshipView> {
                 ),
                 ListView.builder(
                   shrinkWrap: true,
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.all(16),
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: controller.careerList.length,
                   itemBuilder: (BuildContext context, index) {

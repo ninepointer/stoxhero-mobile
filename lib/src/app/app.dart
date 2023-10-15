@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uni_links/uni_links.dart';
 
 import 'app.dart';
 import 'app_binding.dart';
@@ -21,6 +24,64 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  Uri? initialUri;
+  Uri? latestUri;
+  Object? err;
+  bool _initialUriIsHandled = false;
+
+  StreamSubscription? sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _handleInitialUri();
+    _handleIncomingLinks();
+  }
+
+  Future<void> _handleInitialUri() async {
+    if (!_initialUriIsHandled) {
+      _initialUriIsHandled = true;
+      try {
+        final uri = await getInitialUri();
+        if (uri == null) {
+          print('no initial uri');
+        } else {
+          print('got initial uri: $uri');
+        }
+        if (!mounted) return;
+        setState(() => initialUri = uri);
+      } on PlatformException {
+        print('falied to get initial uri');
+      } on FormatException catch (e) {
+        if (!mounted) return;
+        print('malformed initial uri');
+        setState(() => err = e);
+      }
+    }
+  }
+
+  void _handleIncomingLinks() {
+    sub = uriLinkStream.listen((Uri? uri) {
+      if (!mounted) return;
+      print('got uri: $uri');
+      setState(() {
+        latestUri = uri;
+        err = null;
+      });
+    }, onError: (Object e) {
+      if (!mounted) return;
+      print('got err: $err');
+      setState(() {
+        latestUri = null;
+        if (err is FormatException) {
+          err = e;
+        } else {
+          err = null;
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemUiOverlayStyle(

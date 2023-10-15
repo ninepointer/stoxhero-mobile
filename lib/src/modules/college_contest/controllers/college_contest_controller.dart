@@ -21,6 +21,24 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+  final isLiveLoading = false.obs;
+  bool get isLiveLoadingStatus => isLiveLoading.value;
+
+  final isUpcomingLoading = false.obs;
+  bool get isUpcomingLoadingStatus => isUpcomingLoading.value;
+
+  final isCompletedLoading = false.obs;
+  bool get isCompletedLoadingStatus => isCompletedLoading.value;
+
+  final isOrdersLoading = false.obs;
+  bool get isOrdersLoadingStatus => isOrdersLoading.value;
+
+  final isleaderboardLoading = false.obs;
+  bool get isleaderboardLoadingStatus => isleaderboardLoading.value;
+
+  final selectedTabBarIndex = 0.obs;
+  final selectedSecondTabBarIndex = 0.obs;
+
   final segmentedControlValue = 0.obs;
   final liveSegmentedControlValue = 0.obs;
   final upcomingSegmentedControlValue = 0.obs;
@@ -40,12 +58,12 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final upComingContestList = <UpComingCollegeContest>[].obs;
   final upComingCollegeContest = UpComingCollegeContest().obs;
   final tempCompletedContestList = <CompletedCollegeContest>[].obs;
-  final premiumCompletedContestList = <CompletedCollegeContest>[].obs;
-  final freeCompletedContestList = <CompletedCollegeContest>[].obs;
+  final completedPremiumCollegeContestList = <CompletedCollegeContest>[].obs;
+  final completedFreeCollegeContestList = <CompletedCollegeContest>[].obs;
   final collegeContestLeaderboardList = <CollegeContestLeaderboard>[].obs;
   final completedCollegeContestList = <CompletedCollegeContest>[].obs;
-  final premiumContestList = <UpComingCollegeContest>[].obs;
-  final freeContestList = <UpComingCollegeContest>[].obs;
+  final upcomingPremiumCollegeContestList = <UpComingCollegeContest>[].obs;
+  final upcomingFreeCollegeContestList = <UpComingCollegeContest>[].obs;
   final completedContestPnlList = <CompletedContestPnl>[].obs;
   final contestTodaysOrdersList = <ContestOrderList>[].obs;
   final liveCollegeContestList = <LiveCollegeContest>[].obs;
@@ -263,6 +281,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     int seatsLeft = maxParticipants - currentParticipants;
     return seatsLeft;
   }
+
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   void handleSegmentChange(int val) => changeSegment(val);
   void changeSegment(int val) => segmentedControlValue.value = val;
@@ -744,7 +764,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   Future getCollegeContestLeaderboardList() async {
-    isLoading(true);
+    isleaderboardLoading(true);
     try {
       final RepoResponse<CollegeContestLeaderboardResponse> response =
           await repository.getCollegeContestLeaderboardList();
@@ -757,24 +777,24 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log('College Leaderboard: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isleaderboardLoading(false);
   }
 
   Future getCompletedCollegeContestList() async {
-    isLoading(true);
+    isCompletedLoading(true);
     try {
       final RepoResponse<CompletedCollegeContestListResponse> response =
           await repository.getCompletedCollegeContestList();
       if (response.data != null) {
         tempCompletedContestList(response.data?.data ?? []);
         if (tempCompletedContestList.isNotEmpty) {
-          freeCompletedContestList.clear();
-          premiumCompletedContestList.clear();
+          completedFreeCollegeContestList.clear();
+          completedPremiumCollegeContestList.clear();
 
           tempCompletedContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
-                ? freeCompletedContestList.add(contest)
-                : premiumCompletedContestList.add(contest);
+                ? completedFreeCollegeContestList.add(contest)
+                : completedPremiumCollegeContestList.add(contest);
           });
         }
       } else {
@@ -784,7 +804,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isCompletedLoading(false);
   }
 
   Future getCompletedContestPnlList() async {
@@ -808,7 +828,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   Future getUpComingCollegeContestList() async {
-    isLoading(true);
+    isUpcomingLoading(true);
     try {
       final RepoResponse<UpComingCollegeContestListResponse> response =
           await repository.getUpComingCollegeContestList();
@@ -816,13 +836,13 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         upComingContestList(response.data?.data ?? []);
         log('upComingContestList : ${upComingContestList.length}');
         if (upComingContestList.isNotEmpty) {
-          freeContestList.clear();
-          premiumContestList.clear();
+          upcomingFreeCollegeContestList.clear();
+          upcomingPremiumCollegeContestList.clear();
 
           upComingContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
-                ? freeContestList.add(contest)
-                : premiumContestList.add(contest);
+                ? upcomingFreeCollegeContestList.add(contest)
+                : upcomingPremiumCollegeContestList.add(contest);
           });
         }
       } else {
@@ -832,7 +852,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isUpcomingLoading(false);
   }
 
   Future getContestOrderList(String? id) async {
@@ -852,7 +872,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   Future getLiveCollegeContestList() async {
-    isLoading(true);
+    isLiveLoading(true);
     try {
       final RepoResponse<LiveCollegeContestListResponse> response = await repository.getLiveCollegeContestList();
       if (response.data != null) {
@@ -874,7 +894,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isLiveLoading(false);
   }
 
   Future purchaseContest(Map<String, dynamic> data) async {

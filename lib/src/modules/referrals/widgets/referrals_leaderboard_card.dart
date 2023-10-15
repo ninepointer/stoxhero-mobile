@@ -17,11 +17,14 @@ class ReferralsLeaderboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      margin: EdgeInsets.all(16).copyWith(bottom: 0, top: 8),
       children: [
         Row(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              height: 36,
+              width: 36,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.secondary.withOpacity(0.25),
@@ -31,31 +34,47 @@ class ReferralsLeaderboardCard extends StatelessWidget {
                 style: AppStyles.tsSecondaryMedium16,
               ),
             ),
-            SizedBox(width: 8),
-            Text(
-              name ?? '-',
-              style: Theme.of(context).textTheme.tsRegular18,
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          name ?? '-',
+                          style: Theme.of(context).textTheme.tsRegular16,
+                        ),
+                      ),
+                      Text(
+                        FormatHelper.formatNumbers(earnings),
+                        style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                              color: AppColors.success,
+                            ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Total Referral's",
+                          style: Theme.of(context).textTheme.tsGreyRegular12,
+                        ),
+                      ),
+                      Text(
+                        count ?? '-',
+                        style: Theme.of(context).textTheme.tsRegular12,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CommonCardTile(
-              label: "Total Referral's",
-              value: count ?? '-',
-              valueColor: Theme.of(context).textTheme.tsRegular10.color,
-            ),
-            CommonCardTile(
-              isRightAlign: true,
-              isValueNumber: true,
-              label: "Total Earning's",
-              value: earnings,
-              valueColor: AppColors.success,
-            ),
-          ],
-        )
       ],
     );
   }

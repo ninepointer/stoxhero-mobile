@@ -19,11 +19,7 @@ class LiveContestCard extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isParticipants = controller.participateUser(
-      contest,
-      controller.userDetails.value.sId,
-    );
-    print(isParticipants);
+    bool isParticipants = controller.participateUser(contest);
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -152,7 +148,7 @@ class LiveContestCard extends GetView<ContestController> {
                     children: [
                       Image.asset(
                         AppImages.contestTrophy,
-                        width: 40,
+                        width: 36,
                       ),
                       Text(
                         'Reward',
@@ -253,7 +249,7 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ],
               ),
-                SizedBox(height: 12),
+              SizedBox(height: 12),
             ],
           ),
         ),
@@ -272,14 +268,14 @@ class LiveContestCard extends GetView<ContestController> {
                               0
                       ? () {
                           if (isParticipants) {
-                            controller.participate();
                             controller.liveContest(contest);
                             controller.liveLeaderboardList();
                             controller.loadTradingData();
                             Get.to(() => ContestTradingView());
                           } else {
                             SnackbarHelper.showSnackbar(
-                                'You can only participate in another contest once your current contest ends!');
+                              'You can only participate in another contest once your current contest ends!',
+                            );
                           }
                         }
                       : () {
@@ -295,6 +291,8 @@ class LiveContestCard extends GetView<ContestController> {
                                 onSubmit: () {
                                   Get.back();
                                   var data = {
+                                    "bonusRedemption": 0,
+                                    "coupon": "",
                                     "contestFee": contest?.entryFee,
                                     "contestId": contest?.id,
                                     "contestName": contest?.contestName,

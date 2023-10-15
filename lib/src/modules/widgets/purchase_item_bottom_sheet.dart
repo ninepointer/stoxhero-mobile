@@ -120,6 +120,7 @@ class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
                     children: [
                       SizedBox(height: 24),
                       CommonFilledButton(
+                        height: 42,
                         label: 'Proceed',
                         onPressed: widget.onSubmit,
                       ),

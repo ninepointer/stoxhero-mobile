@@ -25,79 +25,97 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
         title: Text('Internship Dashboard'),
       ),
       body: Obx(
-        () => Visibility(
-          visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
+        () => RefreshIndicator(
+          onRefresh: controller.loadUserData,
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                CommonCard(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                  onTap: () => setState(() => isExpanded = !isExpanded),
+            physics: AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.all(16).copyWith(
+              bottom: 100,
+            ),
+            child: Visibility(
+              visible: controller.isInternshipLoadingStatus,
+              child: Column(
+                children: [
+                  SmallCardShimmer(),
+                  MediumCardShimmer(),
+                  CustomCardShimmer(),
+                  CustomCardShimmer(),
+                  CustomCardShimmer(),
+                ],
+              ),
+              replacement: Visibility(
+                visible: controller.isParticipated(),
+                child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    CommonCard(
+                      margin: EdgeInsets.zero,
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                      onTap: () => setState(() => isExpanded = !isExpanded),
                       children: [
-                        Text(
-                          'What is StoxHero Internship Program ?',
-                          style: AppStyles.tsSecondaryRegular16,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'What is StoxHero Internship Program ?',
+                              style: AppStyles.tsSecondaryRegular16,
+                            ),
+                            Icon(
+                              isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                              color: AppColors.grey,
+                            ),
+                          ],
                         ),
-                        Icon(
-                          isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                          color: AppColors.grey,
+                        if (isExpanded) CommonInternshipInfo(),
+                      ],
+                    ),
+                    InternshipInfoCard(),
+                    Column(
+                      children: [
+                        CommonFilledButton(
+                          height: 42,
+                          label: 'Start Trading',
+                          onPressed: () {
+                            controller.loadTradingData();
+                            Get.to(() => InternshipTradingView());
+                          },
+                        ),
+                        SizedBox(height: 8),
+                        CommonFilledButton(
+                          height: 42,
+                          label: 'View Orders',
+                          onPressed: () {
+                            controller.loadOrderData();
+                            Get.to(() => InternshipOrdersView());
+                          },
+                        ),
+                        SizedBox(height: 8),
+                        CommonFilledButton(
+                          height: 42,
+                          label: 'View Analytics',
+                          onPressed: () {
+                            Get.to(() => InternshipAnalyticsView());
+                            Get.find<InternshipController>().loadData();
+                          },
                         ),
                       ],
                     ),
-                    if (isExpanded) CommonInternshipInfo(),
                   ],
                 ),
-                // if (controller.userDetails.value.internshipBatch!.isNotEmpty)
-                InternshipInfoCard(),
-                Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Column(
-                    children: [
-                      CommonFilledButton(
-                        label: 'Start Trading',
-                        onPressed: () {
-                          controller.loadTradingData();
-                          Get.to(() => InternshipTradingView());
-                        },
-                      ),
-                      SizedBox(height: 12),
-                      CommonFilledButton(
-                        label: 'View Orders',
-                        onPressed: () {
-                          controller.loadOrderData();
-                          Get.to(() => InternshipOrdersView());
-                        },
-                      ),
-                      SizedBox(height: 12),
-                      CommonFilledButton(
-                        label: 'View Analytics',
-                        onPressed: () {
-                          Get.to(() => InternshipAnalyticsView());
-                          Get.find<InternshipController>().loadData();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                ListView.builder(
+                replacement: ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.careerList.length,
-                  itemBuilder: (BuildContext context, index) {
-                    if (controller.careerList[index].listingType == 'Job') {
+                  itemCount: Get.find<CareerController>().careerList.length,
+                  itemBuilder: (context, index) {
+                    if (Get.find<CareerController>().careerList[index].listingType == 'Job') {
                       return InfoCard(
-                        career: controller.careerList[index],
+                        career: Get.find<CareerController>().careerList[index],
                       );
                     }
                     return SizedBox.shrink();
                   },
                 ),
-              ],
+              ),
             ),
           ),
         ),

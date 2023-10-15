@@ -3,26 +3,31 @@ import 'package:stoxhero/src/core/core.dart';
 
 class NoDataFound extends StatelessWidget {
   final String? label;
-  final Image? image;
+  final String? imagePath;
   const NoDataFound({
     Key? key,
     this.label,
-    this.image,
+    this.imagePath,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.all(16),
       child: Center(
         child: Column(
           children: [
-            image ??
-                Icon(
-                  Icons.error_outline_rounded,
-                  size: 36,
-                  color: AppColors.grey.shade100,
-                ),
+            imagePath == null
+                ? Icon(
+                    Icons.error_outline_rounded,
+                    size: 36,
+                    color: AppColors.grey.shade100,
+                  )
+                : Image.asset(
+                    imagePath ?? '',
+                    height: 48,
+                    width: 48,
+                  ),
             SizedBox(height: 8),
             Align(
               child: Text(
