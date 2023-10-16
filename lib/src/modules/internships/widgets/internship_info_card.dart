@@ -101,6 +101,41 @@ class InternshipInfoCard extends GetView<InternshipController> {
                 ],
               ),
               SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: CommonOutlinedButton(
+                      height: 42,
+                      label: 'View Orders',
+                      onPressed: () {
+                        controller.loadOrderData();
+                        Get.to(() => InternshipOrdersView());
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: CommonOutlinedButton(
+                      height: 42,
+                      label: 'View Analytics',
+                      onPressed: () {
+                        Get.to(() => InternshipAnalyticsView());
+                        Get.find<InternshipController>().loadInternshipAnalyticsData();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              CommonOutlinedButton(
+                height: 42,
+                label: 'Start Trading',
+                onPressed: () {
+                  controller.loadTradingData();
+                  Get.to(() => InternshipTradingView());
+                },
+              ),
+              SizedBox(height: 16),
             ],
           ),
         ),

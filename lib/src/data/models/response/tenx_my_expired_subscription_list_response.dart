@@ -28,11 +28,11 @@ class TenxMyExpiredSubscriptionList {
   String? sId;
   String? planName;
   int? expiryDays;
-  int? payoutPercentage;
+  num? payoutPercentage;
   List<Features>? features;
-  int? portfolioValue;
+  num? portfolioValue;
   String? user;
-  int? fee;
+  num? fee;
   String? status;
   String? subscribedOn;
   String? expiredOn;

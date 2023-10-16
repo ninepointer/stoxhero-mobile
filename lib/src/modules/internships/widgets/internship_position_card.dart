@@ -7,31 +7,49 @@ class InternshipPositionCard extends GetView<InternshipController> {
 
   const InternshipPositionCard({super.key, required this.position});
 
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      position.id!.instrumentToken!,
+      position.id!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    controller.generateLotsList(type: position.id?.symbol);
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: InternshipTransactionBottomSheet(
+        type: type,
+        tradingInstrument: TradingInstrument(
+          name: position.id?.symbol,
+          exchange: position.id?.exchange,
+          tradingsymbol: position.id?.symbol,
+          exchangeToken: position.id?.exchangeInstrumentToken,
+          instrumentToken: position.id?.instrumentToken,
+          lastPrice: lastPrice,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    void openBottomSheet(BuildContext context, TransactionType type) {
-      FocusScope.of(context).unfocus();
-      num lastPrice = controller.getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
-      );
-      controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-      controller.generateLotsList(type: position.id?.symbol);
-      BottomSheetHelper.openBottomSheet(
-        context: context,
-        child: InternshipTransactionBottomSheet(
-          type: type,
-          tradingInstrument: TradingInstrument(
-            name: position.id?.symbol,
-            exchange: position.id?.exchange,
-            tradingsymbol: position.id?.symbol,
-            exchangeToken: position.id?.exchangeInstrumentToken,
-            instrumentToken: position.id?.instrumentToken,
-            lastPrice: lastPrice,
-          ),
-        ),
-      );
-    }
+    num grossPnl = controller.calculateGrossPNL(
+      position.amount ?? 0,
+      position.lots?.toInt() ?? 0,
+      controller.getInstrumentLastPrice(
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
+      ),
+    );
+    num ltp = controller.getInstrumentLastPrice(
+      position.id?.instrumentToken ?? 0,
+      position.id?.exchangeInstrumentToken ?? 0,
+    );
+
+    String changes = controller.getInstrumentChanges(
+      position.id?.instrumentToken ?? 0,
+      position.id?.exchangeInstrumentToken ?? 0,
+    );
 
     return Column(
       children: [
@@ -55,28 +73,10 @@ class InternshipPositionCard extends GetView<InternshipController> {
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'Gross P&L (Profit & Loss)',
-                        valueColor: controller.getValueColor(
-                          controller.calculateGrossPNL(
-                            position.amount!,
-                            position.lots!.toInt(),
-                            controller.getInstrumentLastPrice(
-                              position.id!.instrumentToken!,
-                              position.id!.exchangeInstrumentToken!,
-                            ),
-                          ),
-                        ),
+                        valueColor: controller.getValueColor(position.lots == 0 ? position.amount : grossPnl),
                         value: position.lots == 0
                             ? FormatHelper.formatNumbers(position.amount)
-                            : FormatHelper.formatNumbers(
-                                controller.calculateGrossPNL(
-                                  position.amount!,
-                                  position.lots!.toInt(),
-                                  controller.getInstrumentLastPrice(
-                                    position.id!.instrumentToken!,
-                                    position.id!.exchangeInstrumentToken!,
-                                  ),
-                                ),
-                              ),
+                            : FormatHelper.formatNumbers(grossPnl),
                       ),
                     ],
                   ),
@@ -85,13 +85,15 @@ class InternshipPositionCard extends GetView<InternshipController> {
                     children: [
                       TradeCardTile(
                         label: 'Average Price',
-                        value: FormatHelper.formatNumbers(position.lastaverageprice),
+                        value: FormatHelper.formatNumbers(
+                          position.lastaverageprice,
+                        ),
                       ),
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'LTP (Last Traded Price)',
-                        valueColor: controller.getValueColor(position.lastaverageprice),
-                        value: FormatHelper.formatNumbers(position.lastaverageprice),
+                        valueColor: controller.getValueColor(ltp),
+                        value: FormatHelper.formatNumbers(ltp),
                       ),
                     ],
                   ),
@@ -107,16 +109,8 @@ class InternshipPositionCard extends GetView<InternshipController> {
                         hasBottomMargin: false,
                         isRightAlign: true,
                         label: 'Changes(%)',
-                        value: controller.getInstrumentChanges(
-                          position.id!.instrumentToken!,
-                          position.id!.exchangeInstrumentToken!,
-                        ),
-                        valueColor: controller.getValueColor(
-                          controller.getInstrumentChanges(
-                            position.id!.instrumentToken!,
-                            position.id!.exchangeInstrumentToken!,
-                          ),
-                        ),
+                        valueColor: controller.getValueColor(changes),
+                        value: changes,
                       ),
                     ],
                   ),
@@ -138,7 +132,7 @@ class InternshipPositionCard extends GetView<InternshipController> {
                         ),
                       ),
                       child: Text(
-                        position.lots == 0 ? 'ADD' : 'ADD MORE',
+                        position.lots == 0 ? 'BUY' : 'ADD MORE',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),
@@ -156,7 +150,7 @@ class InternshipPositionCard extends GetView<InternshipController> {
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'EXIT MORE',
+                        position.lots == 0 ? 'SELL' : 'EXIT SOME',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.danger,
                         ),

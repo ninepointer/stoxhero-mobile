@@ -1,4 +1,3 @@
-
 import 'app.dart';
 
 class AppBinding extends Bindings {

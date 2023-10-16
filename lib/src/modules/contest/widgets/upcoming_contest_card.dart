@@ -340,7 +340,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                             controller.calculateSeatsLeft(
                                     widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) >
                                 0
-                        ? () {}
+                        ? () => SnackbarHelper.showSnackbar('The Contest has not started yet!')
                         : () async {
                             if (controller.calculateSeatsLeft(
                                     widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) ==

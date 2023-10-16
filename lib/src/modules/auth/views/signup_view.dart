@@ -135,6 +135,37 @@ class _SignupViewState extends State<SignupView> {
                                 return null;
                               },
                             ),
+                            GestureDetector(
+                              onTap: () => controller.showDateRangePicker(context),
+                              child: CommonTextField(
+                                isDisabled: true,
+                                controller: controller.dobTextController,
+                                hintText: 'Date of Birth',
+                                prefixIcon: Icon(
+                                  Icons.calendar_month,
+                                  color: AppColors.grey,
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty || value.length == 0) {
+                                    return 'This field is required!';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            CommonTextField(
+                              controller: controller.referralTextController,
+                              hintText: 'Referral Code',
+                              prefixIcon: Icon(
+                                Icons.redeem_rounded,
+                                color: AppColors.grey,
+                              ),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(10),
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                            ),
                             CommonFilledButton(
                               label: 'Create account',
                               onPressed: () {

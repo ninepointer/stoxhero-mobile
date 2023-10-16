@@ -27,14 +27,6 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
     super.initState();
   }
 
-  void _updateWatchlistIndex() {
-    if (controller.selectedWatchlistIndex.value == widget.index) {
-      controller.selectedWatchlistIndex(-1);
-    } else {
-      controller.selectedWatchlistIndex(widget.index);
-    }
-  }
-
   void openBottomSheet(BuildContext context, TransactionType type) {
     log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
@@ -70,7 +62,6 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
             hasBorder: false,
             margin: EdgeInsets.all(8).copyWith(bottom: 0),
             padding: EdgeInsets.zero,
-            onTap: _updateWatchlistIndex,
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

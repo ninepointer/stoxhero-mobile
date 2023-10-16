@@ -26,7 +26,7 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
       ),
       body: Obx(
         () => RefreshIndicator(
-          onRefresh: controller.loadUserData,
+          onRefresh: controller.loadIntershipData,
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.all(16).copyWith(
@@ -69,36 +69,6 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                       ],
                     ),
                     InternshipInfoCard(),
-                    Column(
-                      children: [
-                        CommonFilledButton(
-                          height: 42,
-                          label: 'Start Trading',
-                          onPressed: () {
-                            controller.loadTradingData();
-                            Get.to(() => InternshipTradingView());
-                          },
-                        ),
-                        SizedBox(height: 8),
-                        CommonFilledButton(
-                          height: 42,
-                          label: 'View Orders',
-                          onPressed: () {
-                            controller.loadOrderData();
-                            Get.to(() => InternshipOrdersView());
-                          },
-                        ),
-                        SizedBox(height: 8),
-                        CommonFilledButton(
-                          height: 42,
-                          label: 'View Analytics',
-                          onPressed: () {
-                            Get.to(() => InternshipAnalyticsView());
-                            Get.find<InternshipController>().loadData();
-                          },
-                        ),
-                      ],
-                    ),
                   ],
                 ),
                 replacement: ListView.builder(

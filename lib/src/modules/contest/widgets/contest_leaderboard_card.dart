@@ -39,18 +39,25 @@ class ContestLeaderboardCard extends StatelessWidget {
                           ),
                         ),
                         child: ClipOval(
-                          child: Image.network(
-                            contestLeaderboard?.traderProfilePhoto ?? '',
-                            width: 48,
-                            height: 48,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                AppImages.appLogo,
-                                width: 48,
-                                height: 48,
-                              );
-                            },
-                          ),
+                          child: contestLeaderboard?.traderProfilePhoto == null ||
+                                  contestLeaderboard!.traderProfilePhoto!.isEmpty
+                              ? Image.asset(
+                                  AppImages.appLogo,
+                                  width: 48,
+                                  height: 48,
+                                )
+                              : Image.network(
+                                  contestLeaderboard?.traderProfilePhoto ?? '',
+                                  width: 48,
+                                  height: 48,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      AppImages.appLogo,
+                                      width: 48,
+                                      height: 48,
+                                    );
+                                  },
+                                ),
                         ),
                       ),
                       Positioned(

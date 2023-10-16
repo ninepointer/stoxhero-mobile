@@ -5,6 +5,7 @@ class VerifySignupRequest {
   String? mobile;
   String? mobileOtp;
   String? referrerCode;
+  String? dob;
 
   VerifySignupRequest({
     this.firstName,
@@ -13,6 +14,7 @@ class VerifySignupRequest {
     this.mobile,
     this.mobileOtp,
     this.referrerCode,
+    this.dob,
   });
 
   VerifySignupRequest.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class VerifySignupRequest {
     mobile = json['mobile'];
     mobileOtp = json['mobile_otp'];
     referrerCode = json['referrerCode'];
+    dob = json['dob'];
   }
 
   Map<String, dynamic> toJson() {
@@ -32,6 +35,7 @@ class VerifySignupRequest {
     data['mobile'] = this.mobile;
     data['mobile_otp'] = this.mobileOtp;
     data['referrerCode'] = this.referrerCode;
+    data['dob'] = this.dob;
     return data;
   }
 }

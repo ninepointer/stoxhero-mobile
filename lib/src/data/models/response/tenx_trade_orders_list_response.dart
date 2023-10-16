@@ -31,8 +31,8 @@ class TenxTradeOrder {
   String? sId;
   String? product;
   int? quantity;
-  int? amount;
-  double? averagePrice;
+  num? amount;
+  num? averagePrice;
   String? buyOrSell;
   String? orderId;
   String? status;
@@ -62,9 +62,7 @@ class TenxTradeOrder {
     buyOrSell = json['buyOrSell'];
     orderId = json['order_id'];
     status = json['status'];
-    subscriptionId = json['subscriptionId'] != null
-        ? new TenxSubscriptionId.fromJson(json['subscriptionId'])
-        : null;
+    subscriptionId = json['subscriptionId'] != null ? new TenxSubscriptionId.fromJson(json['subscriptionId']) : null;
     symbol = json['symbol'];
     tradeTimeUtc = json['trade_time_utc'];
   }

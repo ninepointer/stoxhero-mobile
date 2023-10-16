@@ -43,6 +43,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                         borderRadius: BorderRadius.circular(50),
                         color: AppColors.primary,
                       ),
+                      labelStyle: Theme.of(context).textTheme.tsFontFamily,
                       tabs: [
                         AppStrings.tenX,
                         AppStrings.virtual,

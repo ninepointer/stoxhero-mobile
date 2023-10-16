@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
 import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
@@ -40,14 +40,13 @@ class MarginXController extends BaseController<MarginXRepository> {
   final completedMarginXOrdersList = <CompletedMarginXOrders>[].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
   final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
-  final marginXTradingPosition = <MarginXTradingPosition>[].obs;
+  final marginXPositionList = <MarginXPositionList>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final marginXPortfolio = MarginXPortfolio().obs;
   final liveMarginX = LiveMarginX().obs;
   final completedMarginX = CompletedMarginX().obs;
   final contestWatchlistIds = <int>[].obs;
   final walletBalance = RxNum(0);
-  final isLivePriceLoaded = false.obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
   final selectedStringQuantity = "0".obs;
@@ -59,7 +58,6 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
-  // final marginx = LiveMarginX().obs;
 
   Future loadData() async {
     loadUserDetails();
@@ -74,18 +72,18 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   Future loadTradingData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await socketConnection();
-    await socketIndexConnection();
+    await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
     await getMarginXPortfolioDetails();
     await getMarginXPositions();
-    await getInstrumentLivePriceList();
     await getMarginXTradingWatchlist();
+    socketConnection();
+    socketIndexConnection();
   }
 
   int getOpenPositionCount() {
     int openCount = 0;
-    for (var position in marginXTradingPosition) {
+    for (var position in marginXPositionList) {
       if (position.lots != 0) {
         openCount++;
       }
@@ -95,7 +93,7 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   int getClosePositionCount() {
     int closeCount = 0;
-    for (var position in marginXTradingPosition) {
+    for (var position in marginXPositionList) {
       if (position.lots == 0) {
         closeCount++;
       }
@@ -105,9 +103,7 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   void gotoSearchInstrument() {
     searchTextController.text = 'Nifty';
-    searchInstruments(
-      searchTextController.text,
-    );
+    searchInstruments(searchTextController.text);
     Get.toNamed(AppRoutes.marginXSearchSymbol);
   }
 
@@ -120,7 +116,6 @@ class MarginXController extends BaseController<MarginXRepository> {
   }
 
   String getStockIndexName(int instId) {
-    // log('instToken : $instId');
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
@@ -173,8 +168,7 @@ class MarginXController extends BaseController<MarginXRepository> {
     num totalGross = 0;
     num totalNet = 0;
 
-    for (var position in marginXTradingPosition) {
-      log('postion : ${position.toJson()}');
+    for (var position in marginXPositionList) {
       totalLots += position.lots ?? 0;
       totalBrokerage += position.brokerage ?? 0;
       totalGross += position.lastaverageprice ?? 0;
@@ -189,7 +183,6 @@ class MarginXController extends BaseController<MarginXRepository> {
         net: totalNet,
       ),
     );
-    log('TenxTotalPositionDetails : ${tenxTotalPositionDetails.toJson()}');
   }
 
   Color getValueColor(dynamic value) {
@@ -214,42 +207,42 @@ class MarginXController extends BaseController<MarginXRepository> {
     return AppColors.grey;
   }
 
-  num calculateGrossPNL(num avg, int lots, num ltp) {
+  num calculateGrossPNL(num amount, int lots, num ltp) {
+    if (ltp == 0) return 0;
     num pnl = 0;
-    num value = (avg + (lots) * ltp);
+    num value = (amount + (lots * ltp));
     pnl += value;
     return pnl;
   }
 
   num calculateTotalGrossPNL() {
     num totalGross = 0;
-    for (var position in marginXTradingPosition) {
-      num avg = position.amount!;
-      int lots = position.lots!.toInt();
+    for (var position in marginXPositionList) {
+      num avg = position.amount ?? 0;
+      int lots = position.lots?.toInt() ?? 0;
       num ltp = getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
       );
-
-      num pnl = 0;
+      if (ltp == 0) return 0;
       num value = (avg + (lots) * ltp);
-      pnl += value;
-      totalGross += pnl;
+      totalGross += value;
     }
     return totalGross.round();
   }
 
   num calculateTotalNetPNL() {
     num totalNetPNL = 0;
-    for (var position in marginXTradingPosition) {
-      num avg = position.amount!;
-      int lots = position.lots!.toInt();
+    for (var position in marginXPositionList) {
+      num avg = position.amount ?? 0;
+      int lots = position.lots?.toInt() ?? 0;
       num ltp = getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
       );
+      if (ltp == 0) return 0;
       num value = (avg + (lots) * ltp);
-      num brokerage = position.brokerage!;
+      num brokerage = position.brokerage ?? 0;
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
@@ -257,22 +250,22 @@ class MarginXController extends BaseController<MarginXRepository> {
   }
 
   num calculateMargin() {
-    num pnl = 0;
+    num marginValue = 0;
     num amount = 0;
     num lots = 0;
-    for (var position in marginXTradingPosition) {
-      amount += position.amount ?? 0;
-      lots += position.lots ?? 0;
+    for (var position in marginXPositionList) {
+      if (position.lots != 0) {
+        amount += position.amount ?? 0;
+        lots += position.lots ?? 0;
+      }
     }
-    num openingBalance = marginXPortfolio.value.totalFund ?? 0;
-    if (lots == 0 || lots < 0) {
-      num margin1 = openingBalance + calculateTotalNetPNL();
-      return margin1;
+    num totalFund = marginXPortfolio.value.totalFund ?? 0;
+    if (lots == 0) {
+      marginValue = totalFund + calculateTotalNetPNL();
     } else {
-      pnl = openingBalance + amount;
-      num margin = pnl + calculateTotalNetPNL();
-      return margin;
+      marginValue = totalFund + amount;
     }
+    return marginValue;
   }
 
   num calculateReturn() {
@@ -281,18 +274,18 @@ class MarginXController extends BaseController<MarginXRepository> {
     if (entryFee == null) {
       return 0;
     }
-    num factor = marginXPortfolio.value.totalFund! / entryFee;
+    num factor = marginXPortfolio.value.totalFund ?? 0 / entryFee;
     num value = calculateTotalNetPNL() / factor;
     return value;
   }
 
   num calculateAccountBalance() {
     num? entryFee = liveMarginX.value.marginXTemplate?.entryFee;
-    num bal = entryFee! + calculateReturn();
+    num bal = entryFee ?? 0 + calculateReturn();
     return bal;
   }
 
-  num calculatePayout(int entryFee, num earning) {
+  num calculatePayout(num entryFee, num earning) {
     num pay = (entryFee - earning).toDouble();
     num payout = (pay / entryFee) * 100;
     return payout;
@@ -301,16 +294,25 @@ class MarginXController extends BaseController<MarginXRepository> {
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   num getInstrumentLastPrice(int instID, int exchID) {
+    num priceValue = 0;
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return 0;
-      num price = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
-      return price;
-    } else {
-      return 0;
+      if (index == -1) {
+        int index = instrumentLivePriceList.indexWhere(
+          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        );
+        if (index == -1) {
+          priceValue = 0;
+        } else {
+          priceValue = instrumentLivePriceList[index].lastPrice ?? 0;
+        }
+      } else {
+        priceValue = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
+      }
     }
+    return priceValue;
   }
 
   String getInstrumentChanges(int instID, int exchID) {
@@ -356,11 +358,11 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future getMarginXPositions() async {
     isLoading(true);
     try {
-      final RepoResponse<MarginXTradingPositionResponse> response =
+      final RepoResponse<MarginXPositionListResponse> response =
           await repository.getMarginXPositions(liveMarginX.value.id);
       if (response.data != null) {
         if (response.data?.data! != null) {
-          marginXTradingPosition(response.data?.data ?? []);
+          marginXPositionList(response.data?.data ?? []);
           calculateTotalPositionValues();
         }
       } else {
@@ -551,7 +553,6 @@ class MarginXController extends BaseController<MarginXRepository> {
       final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
-          isLivePriceLoaded(true);
           instrumentLivePriceList(response.data?.data ?? []);
         }
       } else {
@@ -631,24 +632,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future socketConnection() async {
     List<TradingInstrumentTradeDetails>? tempList = [];
     try {
-      IO.Socket socket;
-
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
-      socket.on('index-tick', (data) {
-        // print(data);
-        // log('Socket : index-tick $data');
-      });
-      socket.on('tick-room', (data) {
-        // log('Socket : tick-room $data');
+      socketService.socket.on('tick-room', (data) {
         tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
           if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -662,9 +646,6 @@ class MarginXController extends BaseController<MarginXRepository> {
           }
         });
       });
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -689,21 +670,9 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      IO.Socket socket;
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
-      socket.on(
+      socketService.socket.on(
         'index-tick',
         (data) {
-          // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
             if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -716,13 +685,8 @@ class MarginXController extends BaseController<MarginXRepository> {
               stockIndexDetailsList.add(element);
             }
           }
-
-          // log('Socket : ${stockIndexDetailsList.length}');
         },
       );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }

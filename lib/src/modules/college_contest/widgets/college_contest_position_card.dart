@@ -156,7 +156,7 @@ class CollegeContestPositionCard extends GetView<CollegeContestController> {
                         ),
                       ),
                       child: Text(
-                        position.lots == 0 ? 'ADD' : 'ADD MORE',
+                        position.lots == 0 ? 'BUY' : 'ADD MORE',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),

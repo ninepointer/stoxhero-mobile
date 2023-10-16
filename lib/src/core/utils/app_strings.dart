@@ -53,6 +53,8 @@ class AppStrings {
   static const expiredTenxPlans = "Expired TenX";
   static const tenxLeaderboard = "TenX Leaderboard";
 
+  static const noDataFound = 'Oops!, \nNo Data Found!';
+
   static const String noDataFoundForFreeLiveContest =
       "Oops! \nThere are no Free Live Contest at the moment.\nPlease check Upcoming Contest!";
   static const String noDataFoundForPremiumLiveContest =
@@ -90,8 +92,8 @@ class AppStrings {
   static const String noDataFoundForPremiumCompletedMarginX =
       "Oops!\nThere are no Completed MarginX at the moment.\nPlease check Live MarginX!";
 
-  static const String noDataFoundContestLeaderboard = "";
-  static const String noDataFoundCollegeContestLeaderboard = "";
+  static const String noDataFoundContestLeaderboard = "Oops!, \nNo Data Found!";
+  static const String noDataFoundCollegeContestLeaderboard = "Oops!, \nNo Data Found!";
   static const String noDataFoundTenxActive =
       "Oops!\nThere are no Active TenX at the moment.\nPlease check Subscribed TenX!";
   static const String noDataFoundTenxSubscribed =

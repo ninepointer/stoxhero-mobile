@@ -37,7 +37,7 @@ class UpComingContest {
   String? description;
   String? contestType;
   String? contestFor;
-  int? entryFee;
+  num? entryFee;
   num? payoutPercentage;
   ContestPortfolio? portfolio;
   int? maxParticipants;
@@ -153,7 +153,7 @@ class UpComingContest {
 class ContestPortfolio {
   String? id;
   String? portfolioName;
-  int? portfolioValue;
+  num? portfolioValue;
 
   ContestPortfolio({this.id, this.portfolioName, this.portfolioValue});
 

@@ -136,8 +136,8 @@ class LiveMarginX {
 class MarginXTemplate {
   String? id;
   String? templateName;
-  int? portfolioValue;
-  int? entryFee;
+  num? portfolioValue;
+  num? entryFee;
 
   MarginXTemplate({this.id, this.templateName, this.portfolioValue, this.entryFee});
 

@@ -125,8 +125,7 @@ class _InternshipOrdersViewState extends State<InternshipOrdersView> {
                   replacement: Visibility(
                     visible: controller.internshipTodayOrders.isEmpty,
                     child: NoDataFound(
-                      imagePath: AppImages.contestTrophy,
-                      label: AppStrings.noDataFoundForPremiumLiveMarginX,
+                      label: AppStrings.noDataFound,
                     ),
                     replacement: _buildOrdersListView(controller.internshipTodayOrders),
                   ),
@@ -146,8 +145,7 @@ class _InternshipOrdersViewState extends State<InternshipOrdersView> {
                   replacement: Visibility(
                     visible: controller.internshipAllOrders.isEmpty,
                     child: NoDataFound(
-                      imagePath: AppImages.contestTrophy,
-                      label: AppStrings.noDataFoundForPremiumLiveMarginX,
+                      label: AppStrings.noDataFound,
                     ),
                     replacement: _buildOrdersListView(controller.internshipAllOrders),
                   ),

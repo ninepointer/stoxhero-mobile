@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../app/app.dart';
 
 class TenxActiveCard extends GetView<TenxTradingController> {
@@ -27,14 +28,18 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                       : AppColors.primary,
         ),
         Divider(thickness: 1, height: 0),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: subscription.features?.length,
-          itemBuilder: (context, index) => TenxTradingCardTile(
-            label: subscription.features?[index].description ?? '-',
+        if (subscription.features?.isNotEmpty ?? false)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: subscription.features?.length,
+              itemBuilder: (context, index) => TenxTradingCardTile(
+                label: subscription.features?[index].description ?? '-',
+              ),
+            ),
           ),
-        ),
         SizedBox(height: 8),
         Column(
           children: [
@@ -60,7 +65,7 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                           children: [
                             Text(
                               '₹${subscription.actualPrice}',
-                              style: Theme.of(context).textTheme.tsRegular14.copyWith(
+                              style: Theme.of(context).textTheme.tsMedium14.copyWith(
                                     decoration: TextDecoration.lineThrough,
                                     decorationStyle: TextDecorationStyle.solid,
                                     color: AppColors.danger,
@@ -75,7 +80,7 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                             ),
                             Text(
                               'Save',
-                              style: AppStyles.tsSecondaryMedium12,
+                              style: AppStyles.tsSecondaryMedium14,
                             ),
                             SizedBox(width: 4),
                             Text(
@@ -103,7 +108,7 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                 ),
               ],
             ),
-            SizedBox(height: 4),
+            SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -122,7 +127,7 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                         children: [
                           Text(
                             'Potential Earnings',
-                            style: AppStyles.tsSecondaryMedium12,
+                            style: AppStyles.tsSecondaryMedium14,
                           ),
                           SizedBox(width: 4),
                           Text(
@@ -144,19 +149,24 @@ class TenxActiveCard extends GetView<TenxTradingController> {
             children: [
               Row(
                 children: [
-                  Expanded(
-                    child: CommonOutlinedButton(
-                      height: 40,
-                      label: 'Learn More',
-                      onPressed: () {},
-                    ),
-                  ),
-                  SizedBox(width: 4),
+                  // Expanded(
+                  //   child: CommonOutlinedButton(
+                  //     height: 40,
+                  //     label: 'Learn More',
+                  //     onPressed: () {},
+                  //   ),
+                  // ),
+                  // SizedBox(width: 4),
                   Expanded(
                     child: CommonOutlinedButton(
                       height: 40,
                       label: 'Watch Videos',
-                      onPressed: () => Get.toNamed(AppRoutes.tutorial),
+                      onPressed: () async {
+                        final Uri url = Uri.parse(AppUrls.tenxYoutubeVideoLink);
+                        if (!await launchUrl(url)) {
+                          throw Exception('Could not launch $url');
+                        }
+                      },
                     ),
                   ),
                 ],
@@ -179,6 +189,7 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                       },
                 label: isActive ? 'Already Subscribed' : 'Subscribe',
               ),
+              SizedBox(height: 4),
             ],
           ),
         ),

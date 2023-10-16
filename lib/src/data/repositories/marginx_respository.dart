@@ -35,12 +35,12 @@ class MarginXRepository extends BaseRepository {
         : RepoResponse(data: CompletedMarginXOrdersResponse.fromJson(response));
   }
 
-  Future<RepoResponse<MarginXTradingPositionResponse>> getMarginXPositions(String? id) async {
+  Future<RepoResponse<MarginXPositionListResponse>> getMarginXPositions(String? id) async {
     String apiURL = AppUrls.marginXPosition(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: MarginXTradingPositionResponse.fromJson(response));
+        : RepoResponse(data: MarginXPositionListResponse.fromJson(response));
   }
 
   Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(

@@ -48,8 +48,7 @@ class _TutorialViewState extends State<TutorialView> {
                   replacement: Visibility(
                     visible: controller.tutorialList.isEmpty,
                     child: NoDataFound(
-                      imagePath: AppImages.contestTrophy,
-                      label: AppStrings.noDataFoundForPremiumLiveMarginX,
+                      label: AppStrings.noDataFound,
                     ),
                     replacement: ListView.builder(
                       shrinkWrap: true,
@@ -58,7 +57,7 @@ class _TutorialViewState extends State<TutorialView> {
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         final tutorial = controller.tutorialList[index];
-                        if (tutorial.sId == controller.tutorialList[1].sId) {
+                        if (tutorial.sId == controller.tutorialList[0].sId) {
                           return AppTutorialCard(tutorial: tutorial);
                         }
                         return SizedBox.shrink();
@@ -81,8 +80,7 @@ class _TutorialViewState extends State<TutorialView> {
                   replacement: Visibility(
                     visible: controller.tutorialList.isEmpty,
                     child: NoDataFound(
-                      imagePath: AppImages.contestTrophy,
-                      label: AppStrings.noDataFoundForPremiumUpcomingMarginX,
+                      label: AppStrings.noDataFound,
                     ),
                     replacement: ListView.builder(
                       shrinkWrap: true,
@@ -91,7 +89,7 @@ class _TutorialViewState extends State<TutorialView> {
                       itemCount: controller.tutorialList.length,
                       itemBuilder: (context, index) {
                         final tutorial = controller.tutorialList[index];
-                        if (tutorial.sId == controller.tutorialList[0].sId) {
+                        if (tutorial.sId == controller.tutorialList[1].sId) {
                           return OptionTradingCard(tutorial: tutorial);
                         }
                         return SizedBox.shrink();

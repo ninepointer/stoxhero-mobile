@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../base/base.dart';
 import '../../../core/core.dart';
@@ -23,6 +24,8 @@ class AuthController extends BaseController<AuthRepository> {
   final emailTextController = TextEditingController();
   final mobileTextController = TextEditingController();
   final otpTextController = TextEditingController();
+  final dobTextController = TextEditingController();
+  final referralTextController = TextEditingController();
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
@@ -32,6 +35,20 @@ class AuthController extends BaseController<AuthRepository> {
   final token = ''.obs;
 
   void verifyOtp() => isSignup.value ? verifySignupOtp() : verifySigninOtp();
+
+  void showDateRangePicker(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      String date = DateFormat("dd-MM-yyyy").format(pickedDate);
+      dobTextController.text = date;
+    }
+  }
 
   Future userSignin() async {
     isLoading(true);
@@ -135,6 +152,8 @@ class AuthController extends BaseController<AuthRepository> {
       lastName: lastNameTextController.text,
       email: emailTextController.text,
       mobile: mobileTextController.text,
+      dob: dobTextController.text,
+      referrerCode: "",
     );
 
     try {
@@ -164,7 +183,10 @@ class AuthController extends BaseController<AuthRepository> {
       if (response.data != null) {
         await AppStorage.setUserDetails(response.data ?? LoginDetailsResponse());
         Get.find<HomeController>().loadUserDetails();
-        if (navigate) Get.offAllNamed(AppRoutes.home);
+        if (navigate) {
+          await SocketService().initSocket();
+          Get.offAllNamed(AppRoutes.home);
+        }
         log('App ${AppStorage.getToken()}');
       } else {
         if (navigate) Get.offAllNamed(AppRoutes.signin);

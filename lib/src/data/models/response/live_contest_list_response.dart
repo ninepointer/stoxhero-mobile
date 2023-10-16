@@ -36,7 +36,7 @@ class LiveContest {
   String? contestType;
   String? currentLiveStatus;
   String? contestFor;
-  int? entryFee;
+  num? entryFee;
   num? payoutPercentage;
   LiveContestPortfolio? portfolio;
   int? maxParticipants;
@@ -92,8 +92,7 @@ class LiveContest {
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
-    portfolio =
-        json['portfolio'] != null ? new LiveContestPortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null ? new LiveContestPortfolio.fromJson(json['portfolio']) : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -160,7 +159,7 @@ class LiveContest {
 class LiveContestPortfolio {
   String? sId;
   String? portfolioName;
-  int? portfolioValue;
+  num? portfolioValue;
 
   LiveContestPortfolio({this.sId, this.portfolioName, this.portfolioValue});
 

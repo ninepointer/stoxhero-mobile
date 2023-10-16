@@ -31,6 +31,23 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
 
   @override
   Widget build(BuildContext context) {
+    num grossPnl = controller.calculateGrossPNL(
+      position.amount ?? 0,
+      position.lots?.toInt() ?? 0,
+      controller.getInstrumentLastPrice(
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
+      ),
+    );
+    num ltp = controller.getInstrumentLastPrice(
+      position.id?.instrumentToken ?? 0,
+      position.id?.exchangeInstrumentToken ?? 0,
+    );
+
+    String changes = controller.getInstrumentChanges(
+      position.id?.instrumentToken ?? 0,
+      position.id?.exchangeInstrumentToken ?? 0,
+    );
     return Column(
       children: [
         CommonCard(
@@ -53,30 +70,10 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'Gross P&L (Profit & Loss)',
-                        valueColor: controller.getValueColor(
-                          position.lots == 0
-                              ? position.amount
-                              : controller.calculateGrossPNL(
-                                  position.amount!,
-                                  position.lots!.toInt(),
-                                  controller.getInstrumentLastPrice(
-                                    position.id!.instrumentToken!,
-                                    position.id!.exchangeInstrumentToken!,
-                                  ),
-                                ),
-                        ),
+                        valueColor: controller.getValueColor(position.lots == 0 ? position.amount : grossPnl),
                         value: position.lots == 0
                             ? FormatHelper.formatNumbers(position.amount)
-                            : FormatHelper.formatNumbers(
-                                controller.calculateGrossPNL(
-                                  position.amount!,
-                                  position.lots!.toInt(),
-                                  controller.getInstrumentLastPrice(
-                                    position.id!.instrumentToken!,
-                                    position.id!.exchangeInstrumentToken!,
-                                  ),
-                                ),
-                              ),
+                            : FormatHelper.formatNumbers(grossPnl),
                       ),
                     ],
                   ),
@@ -92,18 +89,8 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'LTP (Last Traded Price)',
-                        value: FormatHelper.formatNumbers(
-                          controller.getInstrumentLastPrice(
-                            position.id!.instrumentToken!,
-                            position.id!.exchangeInstrumentToken!,
-                          ),
-                        ),
-                        valueColor: controller.getValueColor(
-                          controller.getInstrumentLastPrice(
-                            position.id!.instrumentToken!,
-                            position.id!.exchangeInstrumentToken!,
-                          ),
-                        ),
+                        valueColor: controller.getValueColor(ltp),
+                        value: FormatHelper.formatNumbers(ltp),
                       ),
                     ],
                   ),
@@ -119,16 +106,8 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         hasBottomMargin: false,
                         isRightAlign: true,
                         label: 'Changes(%)',
-                        value: controller.getInstrumentChanges(
-                          position.id?.instrumentToken ?? 0,
-                          position.id?.exchangeInstrumentToken ?? 0,
-                        ),
-                        valueColor: controller.getValueColor(
-                          controller.getInstrumentChanges(
-                            position.id?.instrumentToken ?? 0,
-                            position.id?.exchangeInstrumentToken ?? 0,
-                          ),
-                        ),
+                        valueColor: controller.getValueColor(changes),
+                        value: changes,
                       ),
                     ],
                   ),
@@ -150,7 +129,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         ),
                       ),
                       child: Text(
-                        position.lots == 0 ? 'ADD' : 'ADD MORE',
+                        position.lots == 0 ? 'BUY' : 'ADD MORE',
                         style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.success,
                         ),

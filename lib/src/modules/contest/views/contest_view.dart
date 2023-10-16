@@ -32,6 +32,7 @@ class ContestView extends StatelessWidget {
             buttonLabel: 'Join Contest!',
             onPressed: () {
               Get.find<ContestController>().loadData();
+              Get.find<ContestController>().selectedTabBarIndex(0);
               Get.to(() => ContestListView());
             },
           ),
@@ -43,6 +44,7 @@ class ContestView extends StatelessWidget {
             buttonLabel: 'Join College Contest!',
             onPressed: () {
               Get.find<CollegeContestController>().loadData();
+              Get.find<CollegeContestController>().selectedTabBarIndex(0);
               Get.to(() => CollegeContestView());
             },
           ),
@@ -57,6 +59,7 @@ class ContestView extends StatelessWidget {
               CollegeContestController collegeContestController = Get.find<CollegeContestController>();
               contestController.getContestLeaderboardList();
               collegeContestController.getCollegeContestLeaderboardList();
+              Get.find<ContestController>().selectedTabBarIndex(0);
               Get.to(() => ContestLeaderboardView());
             },
           ),

@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../app/app.dart';
 import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
@@ -13,7 +12,6 @@ class ContestBinding implements Bindings {
 }
 
 class ContestController extends BaseController<ContestRepository> {
-  late IO.Socket socket;
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
@@ -82,7 +80,6 @@ class ContestController extends BaseController<ContestRepository> {
 
   final myRank = 0.obs;
 
-  final isLivePriceLoaded = false.obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
   final liveLeaderboardList = <LiveContestLeaderboard>[].obs;
   final liveLeaderboard = LiveContestLeaderboard().obs;
@@ -95,7 +92,6 @@ class ContestController extends BaseController<ContestRepository> {
     await getUpComingContestList();
     await getCompletedContestList();
     await getCompletedContestPnlList();
-    initSocketConnection();
   }
 
   Future loadUserDetails() async {
@@ -109,9 +105,9 @@ class ContestController extends BaseController<ContestRepository> {
     await getContestWatchList();
     await getContestPositions();
     await getContestPortfolio();
-    await socketIndexConnection();
-    await socketConnection();
-    await socketLeaderboardConnection();
+    socketConnection();
+    socketIndexConnection();
+    socketLeaderboardConnection();
   }
 
   bool isUpcomingContestVisible(UpComingContest? contest) {
@@ -149,33 +145,13 @@ class ContestController extends BaseController<ContestRepository> {
     return canParticipate;
   }
 
-  Future initSocketConnection() async {
-    log('Socket : initSocketConnection');
-    socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-      'autoConnect': false,
-      'transports': ['websocket'],
-    }).connect();
-
-    socket.onConnect((_) {
-      log('Socket : Connected');
-      socket.emit('userId', userDetails.value.sId);
-      socket.emit('user-ticks', userDetails.value.sId);
-    });
-
-    socket.onConnectError((e) => print(e));
-
-    log('Socket Status : ${socket.connected}');
-  }
-
   String getStockIndexName(int instId) {
-    // log('instToken : $instId');
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
   List<int> generateLotsList({String? type}) {
     List<int> result = [];
-
     if (type?.contains('BANK') ?? false) {
       for (int i = 15; i <= 900; i += 15) result.add(i);
     } else if (type?.contains('FIN') ?? false) {
@@ -183,7 +159,6 @@ class ContestController extends BaseController<ContestRepository> {
     } else {
       for (int i = 50; i <= 1800; i += 50) result.add(i);
     }
-
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
     return result;
@@ -216,7 +191,6 @@ class ContestController extends BaseController<ContestRepository> {
       gross: totalGross,
       net: totalNet,
     ));
-    log('ContestTotalPositionDetails : ${tenxTotalPositionDetails.toJson()}');
   }
 
   Color getValueColor(dynamic value) {
@@ -259,18 +233,6 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
-
-  void handleSegmentChange(int val) => changeSegment(val);
-  void changeSegment(int val) => segmentedControlValue.value = val;
-
-  void handleLiveSegmentChange(int val) => liveChangeSegment(val);
-  void liveChangeSegment(int val) => liveSegmentedControlValue.value = val;
-
-  void handleUpcomingSegmentChange(int val) => upcomingChangeSegment(val);
-  void upcomingChangeSegment(int val) => upcomingSegmentedControlValue.value = val;
-
-  void handleCompletedSegmentChange(int val) => completedChangeSegment(val);
-  void completedChangeSegment(int val) => completedSegmentedControlValue.value = val;
 
   int getOpenPositionCount() {
     int openCount = 0;
@@ -318,9 +280,10 @@ class ContestController extends BaseController<ContestRepository> {
     return isPurchased;
   }
 
-  num calculateGrossPNL(num avg, int lots, num ltp) {
+  num calculateGrossPNL(num amount, int lots, num ltp) {
+    if (ltp == 0) return 0;
     num pnl = 0;
-    num value = (avg + (lots) * ltp);
+    num value = (amount + (lots * ltp));
     pnl += value;
     return pnl;
   }
@@ -328,17 +291,15 @@ class ContestController extends BaseController<ContestRepository> {
   num calculateTotalGrossPNL() {
     num totalGross = 0;
     for (var position in contestPositionsList) {
-      num avg = position.amount!;
-      int lots = position.lots!.toInt();
+      num avg = position.amount ?? 0;
+      int lots = position.lots?.toInt() ?? 0;
       num ltp = getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
       );
-
-      num pnl = 0;
+      if (ltp == 0) return 0;
       num value = (avg + (lots) * ltp);
-      pnl += value;
-      totalGross += pnl;
+      totalGross += value;
     }
     return totalGross.round();
   }
@@ -346,14 +307,15 @@ class ContestController extends BaseController<ContestRepository> {
   num calculateTotalNetPNL() {
     num totalNetPNL = 0;
     for (var position in contestPositionsList) {
-      num avg = position.amount!;
-      int lots = position.lots!.toInt();
+      num avg = position.amount ?? 0;
+      int lots = position.lots?.toInt() ?? 0;
       num ltp = getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
       );
+      if (ltp == 0) return 0;
       num value = (avg + (lots) * ltp);
-      num brokerage = position.brokerage!;
+      num brokerage = position.brokerage ?? 0;
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
@@ -361,34 +323,44 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   num calculateMargin() {
-    num pnl = 0;
+    num marginValue = 0;
     num amount = 0;
     num lots = 0;
     for (var position in contestPositionsList) {
-      amount += position.amount ?? 0;
-      lots += position.lots ?? 0;
+      if (position.lots != 0) {
+        amount += position.amount ?? 0;
+        lots += position.lots ?? 0;
+      }
     }
-    num openingBalance = contestPortfolio.value.totalFund ?? 0;
-    pnl += openingBalance + amount;
+    num totalFund = contestPortfolio.value.totalFund ?? 0;
     if (lots == 0) {
-      num margin = openingBalance + calculateTotalNetPNL();
-      return margin;
+      marginValue = totalFund + calculateTotalNetPNL();
     } else {
-      return pnl;
+      marginValue = totalFund + amount;
     }
+    return marginValue;
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
+    num priceValue = 0;
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return 0;
-      num price = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
-      return price;
-    } else {
-      return 0;
+      if (index == -1) {
+        int index = instrumentLivePriceList.indexWhere(
+          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        );
+        if (index == -1) {
+          priceValue = 0;
+        } else {
+          priceValue = instrumentLivePriceList[index].lastPrice ?? 0;
+        }
+      } else {
+        priceValue = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
+      }
     }
+    return priceValue;
   }
 
   String getInstrumentChanges(int instID, int exchID) {
@@ -619,7 +591,6 @@ class ContestController extends BaseController<ContestRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log("port ${e.toString()}");
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -648,7 +619,6 @@ class ContestController extends BaseController<ContestRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log("watch ${e.toString()}");
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -730,7 +700,6 @@ class ContestController extends BaseController<ContestRepository> {
       await searchInstruments(
         searchTextController.text,
       );
-      log('getVirtualTradingWatchlist : ${contestWatchList.length}');
       // } else {
       SnackbarHelper.showSnackbar('Instrument Remove');
       // }
@@ -787,7 +756,6 @@ class ContestController extends BaseController<ContestRepository> {
       final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
-          isLivePriceLoaded(true);
           instrumentLivePriceList(response.data?.data ?? []);
         }
       } else {
@@ -803,7 +771,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future socketConnection() async {
     List<TradingInstrumentTradeDetails>? tempList = [];
     try {
-      socket.on('tick-room', (data) {
+      socketService.socket.on('tick-room', (data) {
         tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
           if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -817,9 +785,6 @@ class ContestController extends BaseController<ContestRepository> {
           }
         });
       });
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -844,10 +809,9 @@ class ContestController extends BaseController<ContestRepository> {
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      socket.on(
+      socketService.socket.on(
         'index-tick',
         (data) {
-          // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
             if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -862,9 +826,6 @@ class ContestController extends BaseController<ContestRepository> {
           }
         },
       );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -901,9 +862,9 @@ class ContestController extends BaseController<ContestRepository> {
       };
       log('Socket Emit RankData : $rankData');
 
-      socket.emit('dailyContestLeaderboard', rankData);
+      socketService.socket.emit('dailyContestLeaderboard', rankData);
 
-      socket.on(
+      socketService.socket.on(
         'contest-myrank${userDetails.value.sId}${liveContest.value.id}',
         (data) {
           log('Socket MyRank : contest-myrank${userDetails.value.sId}${liveContest.value.id} : $data');
@@ -911,16 +872,13 @@ class ContestController extends BaseController<ContestRepository> {
         },
       );
 
-      socket.on(
+      socketService.socket.on(
         'contest-leaderboardData${liveContest.value.id}',
         (data) {
           log('Socket Leaderboard : contest-leaderboardData${liveContest.value.id} $data');
           liveLeaderboardList.value = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
         },
       );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }

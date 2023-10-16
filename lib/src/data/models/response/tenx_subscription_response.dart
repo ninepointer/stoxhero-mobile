@@ -59,7 +59,7 @@ class UserPurchaseDetail {
   String? status;
   String? sId;
   String? expiredOn;
-  int? fee;
+  num? fee;
   num? payout;
   String? expiredBy;
 

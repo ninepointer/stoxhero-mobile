@@ -96,6 +96,7 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
+        elevation: 0,
         backgroundColor: AppColors.primary,
         onPressed: () => _updateTab(2),
         child: Icon(

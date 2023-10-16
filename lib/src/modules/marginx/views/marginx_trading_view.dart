@@ -92,8 +92,8 @@ class MarginXTradingView extends GetView<MarginXController> {
                             },
                           ),
                         ),
-                  if (controller.marginXTradingPosition.isNotEmpty) CommonTile(label: 'My Position Summary'),
-                  if (controller.marginXTradingPosition.isNotEmpty)
+                  if (controller.marginXPositionList.isNotEmpty) CommonTile(label: 'My Position Summary'),
+                  if (controller.marginXPositionList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
@@ -169,15 +169,15 @@ class MarginXTradingView extends GetView<MarginXController> {
                     sellAllColor: AppColors.grey,
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
-                  controller.marginXTradingPosition.isEmpty
+                  controller.marginXPositionList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.marginXTradingPosition.length,
+                          itemCount: controller.marginXPositionList.length,
                           itemBuilder: (context, index) {
-                            var item = controller.marginXTradingPosition[index];
+                            var item = controller.marginXPositionList[index];
                             return MarginXPositionCard(position: item);
                           },
                         ),

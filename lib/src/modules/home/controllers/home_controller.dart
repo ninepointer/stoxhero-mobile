@@ -57,12 +57,19 @@ class HomeController extends BaseController<DashboardRepository> {
   void navigateToCarousel(String link) {
     if (link == 'marginxs') {
       selectedIndex(3);
+      Get.find<MarginXController>().loadData();
     } else if (link == 'contests') {
       selectedIndex(4);
+      Get.find<ContestController>().loadData();
     } else if (link == 'tenxtrading') {
       selectedIndex(2);
+      Get.find<TenxTradingController>().loadData();
     } else if (link == 'referrals') {
+      Get.find<ReferralsController>().loadData();
       Get.toNamed(AppRoutes.referrals);
+    } else if (link == 'wallet') {
+      Get.find<WalletController>().loadData();
+      Get.toNamed(AppRoutes.wallet);
     }
   }
 

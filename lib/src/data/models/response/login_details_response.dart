@@ -542,7 +542,7 @@ class InternshipCareer {
 
 class InternshipPortfolio {
   String? sId;
-  int? portfolioValue;
+  num? portfolioValue;
 
   InternshipPortfolio({this.sId, this.portfolioValue});
 
@@ -673,7 +673,7 @@ class PortfolioId {
   String? portfolioAccount;
   String? portfolioName;
   String? portfolioType;
-  int? portfolioValue;
+  num? portfolioValue;
 
   PortfolioId({
     this.id,
@@ -805,7 +805,7 @@ class PortfolioDetails {
   String? portfolioAccount;
   String? portfolioName;
   String? portfolioType;
-  int? portfolioValue;
+  num? portfolioValue;
 
   PortfolioDetails({
     this.sId,

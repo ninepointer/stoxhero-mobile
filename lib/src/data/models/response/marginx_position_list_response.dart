@@ -1,15 +1,15 @@
-class MarginXTradingPositionResponse {
+class MarginXPositionListResponse {
   String? message;
-  List<MarginXTradingPosition>? data;
+  List<MarginXPositionList>? data;
 
-  MarginXTradingPositionResponse({this.message, this.data});
+  MarginXPositionListResponse({this.message, this.data});
 
-  MarginXTradingPositionResponse.fromJson(Map<String, dynamic> json) {
+  MarginXPositionListResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
-      data = <MarginXTradingPosition>[];
+      data = <MarginXPositionList>[];
       json['data'].forEach((v) {
-        data!.add(new MarginXTradingPosition.fromJson(v));
+        data!.add(new MarginXPositionList.fromJson(v));
       });
     }
   }
@@ -24,16 +24,16 @@ class MarginXTradingPositionResponse {
   }
 }
 
-class MarginXTradingPosition {
+class MarginXPositionList {
   Mid? id;
   num? amount;
   num? brokerage;
   int? lots;
   num? lastaverageprice;
 
-  MarginXTradingPosition({this.id, this.amount, this.brokerage, this.lots, this.lastaverageprice});
+  MarginXPositionList({this.id, this.amount, this.brokerage, this.lots, this.lastaverageprice});
 
-  MarginXTradingPosition.fromJson(Map<String, dynamic> json) {
+  MarginXPositionList.fromJson(Map<String, dynamic> json) {
     id = json['_id'] != null ? new Mid.fromJson(json['_id']) : null;
     amount = json['amount'];
     brokerage = json['brokerage'];

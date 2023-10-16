@@ -1,11 +1,8 @@
 import 'dart:developer';
-import 'dart:io';
+import 'package:get/get.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../main.dart';
 import '../../../core/core.dart';
@@ -33,74 +30,21 @@ class SplashController extends GetxController {
   Future checkForUpdate() async {
     print('App version : $_appVersion');
     print('Store version : $_storeAppVersion');
-    if (_storeAppVersion.value.isNotEmpty) {
-      if (_appVersion.value != _storeAppVersion.value) {
-        print('Need App Update!');
-        await Get.dialog(
-          AlertDialog(
-            contentPadding: EdgeInsets.all(16),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 42,
-                  width: 42,
-                  decoration: BoxDecoration(
-                    color: AppColors.grey.withOpacity(.25),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.update_rounded,
-                    color: AppColors.grey,
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Update Available',
-                  style: Theme.of(Get.context!).textTheme.tsPrimaryMedium18,
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Kindly update the StoxHero app to the latest version to continue!',
-                  style: Theme.of(Get.context!).textTheme.tsRegular16,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CommonOutlinedButton(
-                        width: double.infinity,
-                        height: 42,
-                        label: 'Cancel',
-                        onPressed: Get.back,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonFilledButton(
-                        width: double.infinity,
-                        height: 42,
-                        label: 'Update',
-                        onPressed: openAppPage,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
+
+    List<String> playStoreVersion = _appVersion.split("+");
+    List<String> currentVersion = _storeAppVersion.split("+");
+
+    int mainVersion = playStoreVersion[0].compareTo(currentVersion[0]);
+
+    if (mainVersion < 0) {
+      await Get.dialog(UpdateAlertDialog());
+    } else {
+      int playStoreBuild = int.parse(playStoreVersion[1]);
+      int currentBuild = int.parse(currentVersion[1]);
+      if (playStoreBuild < currentBuild) {
+        await Get.dialog(UpdateAlertDialog());
       }
     }
-  }
-
-  void openAppPage() {
-    final appId = Platform.isAndroid ? 'com.stoxhero.app' : 'com.stoxhero.app';
-    final url = Uri.parse(
-      Platform.isAndroid ? "market://details?id=$appId" : "https://apps.apple.com/app/id$appId",
-    );
-    launchUrl(url, mode: LaunchMode.externalApplication);
   }
 
   Future getAppVersion() async {

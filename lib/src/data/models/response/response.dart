@@ -53,7 +53,7 @@ export 'stock_index_instrument_list_response.dart';
 export 'internship_batch_response.dart';
 export 'internship_batch_portfolio_response.dart';
 export 'internship_position_response.dart';
-export 'marginx_trading_position_response.dart';
+export 'marginx_position_list_response.dart';
 export 'marginx_portfolio_response.dart';
 export 'tenx_subscription_response.dart';
 export 'tenx_trading_portfolio_margin_details_response.dart';

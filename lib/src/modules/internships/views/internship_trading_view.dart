@@ -159,7 +159,9 @@ class InternshipTradingView extends GetView<InternshipController> {
                   PortfolioDetailCardTile(
                     label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
-                    value: controller.calculateMargin(),
+                    value: (controller.internshipBatchPortfolio.value.openingBalance ?? 0) > 0
+                        ? controller.calculateMargin()
+                        : controller.internshipBatchPortfolio.value.totalFund,
                   ),
                   PortfolioDetailCardTile(
                     label: 'Used Margin Money',

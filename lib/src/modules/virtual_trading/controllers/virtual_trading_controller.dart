@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:uuid/uuid.dart';
 
 import '../../../app/app.dart';
@@ -13,7 +12,6 @@ class VirtualTradingBinding implements Bindings {
 }
 
 class VirtualTradingController extends BaseController<VirtualTradingRepository> {
-  late IO.Socket socket;
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
@@ -44,7 +42,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final selectedStringQuantity = "0".obs;
   final lotsValueList = <int>[0].obs;
 
-  final isLivePriceLoaded = false.obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
@@ -52,32 +49,13 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
-    initSocketConnection();
-    await socketConnection();
-    await socketIndexConnection();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
     await getVirtualTradingPortfolio();
-  }
-
-  Future initSocketConnection() async {
-    log('Socket : initSocketConnection');
-    socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-      'autoConnect': false,
-      'transports': ['websocket'],
-    }).connect();
-
-    socket.onConnect((_) {
-      log('Socket : Connected');
-      socket.emit('userId', userDetails.value.sId);
-      socket.emit('user-ticks', userDetails.value.sId);
-    });
-
-    socket.onConnectError((e) => print(e));
-
-    log('Socket Status : ${socket.connected}');
+    socketConnection();
+    socketIndexConnection();
   }
 
   int getOpenPositionCount() {
@@ -149,13 +127,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     Get.toNamed(AppRoutes.virtualSearchSymbol);
   }
 
-  num calculateGrossPNL(num avg, int lots, num ltp) {
-    num pnl = 0;
-    num value = (avg + (lots) * ltp);
-    pnl += value;
-    return pnl;
-  }
-
   void calculateTotalPositionValues() {
     int totalLots = 0;
     num totalBrokerage = 0;
@@ -169,7 +140,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       totalGross += position.lastaverageprice ?? 0;
       totalNet += position.amount ?? 0;
     }
-
     tenxTotalPositionDetails(
       TenxTotalPositionDetails(
         lots: totalLots,
@@ -178,23 +148,28 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         net: totalNet,
       ),
     );
-    log('ContestTotalPositionDetails : ${tenxTotalPositionDetails.toJson()}');
+  }
+
+  num calculateGrossPNL(num avg, int lots, num ltp) {
+    if (ltp == 0) return 0;
+    num pnl = 0;
+    num value = (avg + (lots) * ltp);
+    pnl += value;
+    return pnl;
   }
 
   num calculateTotalGrossPNL() {
     num totalGross = 0;
     for (var position in virtualPositionsList) {
-      num avg = position.amount!;
-      int lots = position.lots!.toInt();
+      num avg = position.amount ?? 0;
+      int lots = position.lots?.toInt() ?? 0;
       num ltp = getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
       );
-
-      num pnl = 0;
+      if (ltp == 0) return 0;
       num value = (avg + (lots) * ltp);
-      pnl += value;
-      totalGross += pnl;
+      totalGross += value;
     }
     return totalGross.round();
   }
@@ -202,14 +177,15 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   num calculateTotalNetPNL() {
     num totalNetPNL = 0;
     for (var position in virtualPositionsList) {
-      num avg = position.amount!;
-      int lots = position.lots!.toInt();
+      num avg = position.amount ?? 0;
+      int lots = position.lots?.toInt() ?? 0;
       num ltp = getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
+        position.id?.instrumentToken ?? 0,
+        position.id?.exchangeInstrumentToken ?? 0,
       );
+      if (ltp == 0) return 0;
       num value = (avg + (lots) * ltp);
-      num brokerage = position.brokerage!;
+      num brokerage = position.brokerage ?? 0;
       num broker = value - brokerage;
       totalNetPNL += broker;
     }
@@ -217,35 +193,44 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   num calculateMargin() {
-    num pnl = 0;
+    num marginValue = 0;
     num amount = 0;
     num lots = 0;
     for (var position in virtualPositionsList) {
-      amount += position.amount ?? 0;
-      lots += position.lots ?? 0;
+      if (position.lots != 0) {
+        amount += position.amount ?? 0;
+        lots += position.lots ?? 0;
+      }
     }
-    num openingBalance = virtualPortfolio.value.openingBalance ?? 0;
-    pnl += openingBalance + amount;
+    num totalFund = virtualPortfolio.value.openingBalance ?? 0;
     if (lots == 0) {
-      num margin = openingBalance + calculateTotalNetPNL();
-      return margin;
+      marginValue = totalFund + calculateTotalNetPNL();
     } else {
-      return pnl;
+      marginValue = totalFund + amount;
     }
+    return marginValue;
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
+    num priceValue = 0;
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return 0;
-      num price = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
-
-      return price;
-    } else {
-      return 0;
+      if (index == -1) {
+        int index = instrumentLivePriceList.indexWhere(
+          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        );
+        if (index == -1) {
+          priceValue = 0;
+        } else {
+          priceValue = instrumentLivePriceList[index].lastPrice ?? 0;
+        }
+      } else {
+        priceValue = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
+      }
     }
+    return priceValue;
   }
 
   String getInstrumentChanges(int instID, int exchID) {
@@ -267,7 +252,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
-          isLivePriceLoaded(true);
           instrumentLivePriceList(response.data?.data ?? []);
         }
       } else {
@@ -342,38 +326,25 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future socketConnection() async {
     List<TradingInstrumentTradeDetails>? tempList = [];
     try {
-      // IO.Socket socket;
-      // socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-      //   'autoConnect': false,
-      //   'transports': ['websocket'],
-      // });
-      // socket.connect();
-      // socket.onConnect((_) {
-      //   log('Socket : Connected');
-      //   socket.emit('userId', userDetails.value.sId);
-      //   socket.emit('user-ticks', userDetails.value.sId);
-      // });
-      // socket.on('index-tick', (data) {});
-      socket.on(
+      socketService.socket.on(
         'tick-room',
         (data) {
           tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
-          tempList?.forEach((element) {
-            if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
-              int index = tradingInstrumentTradeDetailsList.indexWhere(
-                (stock) => stock.instrumentToken == element.instrumentToken,
-              );
-              tradingInstrumentTradeDetailsList.removeAt(index);
-              tradingInstrumentTradeDetailsList.insert(index, element);
-            } else {
-              tradingInstrumentTradeDetailsList.add(element);
-            }
-          });
+          tempList?.forEach(
+            (element) {
+              if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+                int index = tradingInstrumentTradeDetailsList.indexWhere(
+                  (stock) => stock.instrumentToken == element.instrumentToken,
+                );
+                tradingInstrumentTradeDetailsList.removeAt(index);
+                tradingInstrumentTradeDetailsList.insert(index, element);
+              } else {
+                tradingInstrumentTradeDetailsList.add(element);
+              }
+            },
+          );
         },
       );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -542,21 +513,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      // IO.Socket socket;
-      // socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-      //   'autoConnect': false,
-      //   'transports': ['websocket'],
-      // });
-      // socket.connect();
-      // socket.onConnect((_) {
-      //   log('Socket : Connected');
-      //   socket.emit('userId', userDetails.value.sId);
-      //   socket.emit('user-ticks', userDetails.value.sId);
-      // });
-      socket.on(
+      socketService.socket.on(
         'index-tick',
         (data) {
-          // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
             if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -569,13 +528,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
               stockIndexDetailsList.add(element);
             }
           }
-
-          // log('Socket : ${stockIndexDetailsList.length}');
         },
       );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }

@@ -53,6 +53,7 @@ class _CommonTabBarState extends State<CommonTabBar> {
                   borderRadius: BorderRadius.circular(50),
                   color: AppColors.primary,
                 ),
+                labelStyle: Theme.of(context).textTheme.tsFontFamily,
                 tabs: widget.tabsTitle.map((label) => Tab(text: label)).toList(),
                 onTap: widget.onTap,
               ),

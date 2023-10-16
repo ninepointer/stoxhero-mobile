@@ -47,7 +47,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
         break;
       case 4:
         Get.toNamed(AppRoutes.Internship);
-        Get.find<InternshipController>().loadUserData();
+        Get.find<InternshipController>().loadIntershipData();
         break;
       case 5:
         ThemeService().switchTheme();

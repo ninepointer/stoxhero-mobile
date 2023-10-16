@@ -116,57 +116,68 @@ class CompletedContestCard extends StatelessWidget {
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(height: 6),
-              Image.asset(
-                AppImages.contestTrophy,
-                width: 40,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Started On',
+                      style: AppStyles.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
+                      style: Theme.of(context).textTheme.tsMedium12,
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 2),
-              Text(
-                'Reward',
-                style: AppStyles.tsGreyMedium12,
-              ),
-              Text(
-                '${contest?.payoutPercentage}% of the Net P&L',
-                style: Theme.of(context).textTheme.tsMedium12,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Started On',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
+                  Image.asset(
+                    AppImages.contestTrophy,
+                    width: 40,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Ended On',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
+                  SizedBox(height: 2),
+                  Text(
+                    'Reward',
+                    style: AppStyles.tsGreyMedium12,
+                  ),
+                  Text(
+                    '${contest?.payoutPercentage}% of the Net P&L',
+                    style: Theme.of(context).textTheme.tsMedium12,
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Ended On',
+                      style: AppStyles.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
+                      style: Theme.of(context).textTheme.tsMedium12,
+                      textAlign: TextAlign.end,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

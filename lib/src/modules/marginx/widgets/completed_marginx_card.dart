@@ -97,65 +97,68 @@ class CompletedMarginxCard extends StatelessWidget {
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Started On',
+                      style: AppStyles.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      FormatHelper.formatDateTimeToIST(marginx?.startTime),
+                      style: Theme.of(context).textTheme.tsMedium12,
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  Image.asset(
+                    AppImages.contestTrophy,
+                    width: 40,
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'Reward',
+                    style: AppStyles.tsGreyMedium12,
+                  ),
+                  Text(
+                    '% of your Investment',
+                    style: Theme.of(context).textTheme.tsMedium12,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Ended On',
+                      style: AppStyles.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      FormatHelper.formatDateTimeToIST(marginx?.endTime),
+                      style: Theme.of(context).textTheme.tsMedium12,
+                      textAlign: TextAlign.end,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          AppImages.contestTrophy,
-                          width: 40,
-                        ),
-                        Text(
-                          'Reward',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        Text(
-                          '% of your Investment',
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Started On',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatDateTimeToIST(marginx?.startTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Ended On',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatDateTimeToIST(marginx?.endTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

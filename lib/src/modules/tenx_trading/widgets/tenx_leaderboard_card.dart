@@ -37,18 +37,24 @@ class TenxLeaderboardCard extends StatelessWidget {
                           ),
                         ),
                         child: ClipOval(
-                          child: Image.network(
-                            leaderboard?.profilePic ?? '',
-                            width: 48,
-                            height: 48,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                AppImages.appLogo,
-                                width: 48,
-                                height: 48,
-                              );
-                            },
-                          ),
+                          child: leaderboard?.profilePic == null || leaderboard!.profilePic!.isEmpty
+                              ? Image.asset(
+                                  AppImages.appLogo,
+                                  width: 48,
+                                  height: 48,
+                                )
+                              : Image.network(
+                                  leaderboard?.profilePic ?? '',
+                                  width: 48,
+                                  height: 48,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      AppImages.appLogo,
+                                      width: 48,
+                                      height: 48,
+                                    );
+                                  },
+                                ),
                         ),
                       ),
                       Positioned(

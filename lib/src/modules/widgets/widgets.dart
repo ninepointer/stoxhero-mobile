@@ -9,3 +9,4 @@ export 'trading_shimmer.dart';
 export 'trading_margin_npnl_card.dart';
 export 'trading_stock_card.dart';
 export 'dashboard_shimmer.dart';
+export 'update_alert_dialog.dart';

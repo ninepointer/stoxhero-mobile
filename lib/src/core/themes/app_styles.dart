@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import '../core.dart';
 
 extension CustomStyles on TextTheme {
+  TextStyle get tsFontFamily => TextStyle(
+        fontWeight: FontWeight.w500,
+        fontFamily: AppTheme.fontFamily,
+      );
   TextStyle get tsRegular10 => TextStyle(
         fontFamily: AppTheme.fontFamily,
         fontWeight: FontWeight.w400,

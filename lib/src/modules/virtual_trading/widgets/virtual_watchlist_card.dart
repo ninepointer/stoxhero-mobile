@@ -78,14 +78,14 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                           label: 'LTP (Last Traded Price)',
                           value: FormatHelper.formatNumbers(
                             controller.getInstrumentLastPrice(
-                              widget.tradingWatchlist.instrumentToken!,
-                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                              widget.tradingWatchlist.instrumentToken ?? 0,
+                              widget.tradingWatchlist.exchangeInstrumentToken ?? 0,
                             ),
                           ),
                           valueColor: controller.getValueColor(
                             controller.getInstrumentLastPrice(
-                              widget.tradingWatchlist.instrumentToken!,
-                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                              widget.tradingWatchlist.instrumentToken ?? 0,
+                              widget.tradingWatchlist.exchangeInstrumentToken ?? 0,
                             ),
                           ),
                         ),
@@ -105,13 +105,13 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                           isRightAlign: true,
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
-                            widget.tradingWatchlist.instrumentToken!,
-                            widget.tradingWatchlist.exchangeInstrumentToken!,
+                            widget.tradingWatchlist.instrumentToken ?? 0,
+                            widget.tradingWatchlist.exchangeInstrumentToken ?? 0,
                           ),
                           valueColor: controller.getValueColor(
                             controller.getInstrumentChanges(
-                              widget.tradingWatchlist.instrumentToken!,
-                              widget.tradingWatchlist.exchangeInstrumentToken!,
+                              widget.tradingWatchlist.instrumentToken ?? 0,
+                              widget.tradingWatchlist.exchangeInstrumentToken ?? 0,
                             ),
                           ),
                         ),

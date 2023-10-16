@@ -125,7 +125,7 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                           height: 42,
                           label: 'Show Details',
                           onPressed: () {
-                            controller.getInternshipAnalyticsMonthlyPnLOverviewDetails();
+                            controller.getInternshipAnalyticsDateWisePnLOverviewDetails();
                           },
                         ),
                       ],

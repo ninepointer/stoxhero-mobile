@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../app/app.dart';
 
 class PurchaseItemBottomSheet extends StatefulWidget {
-  final int buyItemPrice;
+  final num buyItemPrice;
   final VoidCallback onSubmit;
 
   PurchaseItemBottomSheet({

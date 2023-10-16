@@ -152,7 +152,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                         ),
                       ),
                       child: Text(
-                       position.lots == 0 ? 'ADD' : 'ADD MORE',
+                        position.lots == 0 ? 'BUY' : 'ADD MORE',
                         style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.success,
                         ),

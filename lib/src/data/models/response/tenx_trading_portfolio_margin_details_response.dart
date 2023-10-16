@@ -21,7 +21,7 @@ class TenxTradingPortfolioMarginDetailsResponse {
 
 class TenxPortfolioMarginDetails {
   String? subscriptionId;
-  int? totalFund;
+  num? totalFund;
   double? npnl;
   double? openingBalance;
 

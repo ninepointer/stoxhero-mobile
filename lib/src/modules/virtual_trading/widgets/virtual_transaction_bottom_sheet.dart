@@ -247,12 +247,10 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                       : type == TransactionType.buy
                           ? 'BUY'
                           : 'SELL',
-                  onPressed: () {
-                    Get.find<VirtualTradingController>().placeVirtualTradingOrder(
-                      type,
-                      tradingInstrument,
-                    );
-                  },
+                  onPressed: () => Get.find<VirtualTradingController>().placeVirtualTradingOrder(
+                    type,
+                    tradingInstrument,
+                  ),
                 ),
               ],
             ),

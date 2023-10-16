@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class MarginXPositionCard extends GetView<MarginXController> {
-  final MarginXTradingPosition position;
+  final MarginXPositionList position;
 
   const MarginXPositionCard({super.key, required this.position});
 
@@ -140,7 +140,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
                         ),
                       ),
                       child: Text(
-                        position.lots == 0 ? 'ADD' : 'ADD MORE',
+                        position.lots == 0 ? 'BUY' : 'ADD MORE',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),

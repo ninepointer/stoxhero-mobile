@@ -57,7 +57,7 @@ class CompletedCollegeContest {
   String? lastModifiedOn;
   int? iV;
   String? payoutStatus;
-  int? entryFee;
+  num? entryFee;
   List<Null>? rewards;
   List<Null>? purchaseIntent;
 

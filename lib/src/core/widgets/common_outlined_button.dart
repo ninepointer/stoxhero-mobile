@@ -25,7 +25,7 @@ class CommonOutlinedButton extends StatelessWidget {
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           side: BorderSide(
-            width: 2,
+            width: 1,
             color: AppColors.primary,
           ),
           shape: RoundedRectangleBorder(
@@ -34,7 +34,7 @@ class CommonOutlinedButton extends StatelessWidget {
         ),
         child: Text(
           label ?? 'Label',
-          style: AppStyles.tsPrimaryRegular16,
+          style: AppStyles.tsPrimaryRegular14,
         ),
         onPressed: onPressed ?? null,
       ),

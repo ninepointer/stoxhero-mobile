@@ -37,7 +37,7 @@ class UpComingCollegeContest {
   String? currentLiveStatus;
   String? contestFor;
   String? collegeCode;
-  int? entryFee;
+  num? entryFee;
   num? payoutPercentage;
   Portfolio? portfolio;
   String? college;
@@ -178,7 +178,7 @@ class UpComingCollegeContest {
 class Portfolio {
   String? sId;
   String? portfolioName;
-  int? portfolioValue;
+  num? portfolioValue;
 
   Portfolio({this.sId, this.portfolioName, this.portfolioValue});
 

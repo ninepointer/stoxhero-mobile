@@ -36,7 +36,7 @@ class LiveCollegeContest {
   String? contestType;
   String? currentLiveStatus;
   String? contestFor;
-  int? entryFee;
+  num? entryFee;
   num? payoutPercentage;
   LiveCollegeContestPortfolio? portfolio;
   int? maxParticipants;
@@ -161,7 +161,7 @@ class LiveCollegeContest {
 class LiveCollegeContestPortfolio {
   String? sId;
   String? portfolioName;
-  int? portfolioValue;
+  num? portfolioValue;
 
   LiveCollegeContestPortfolio({this.sId, this.portfolioName, this.portfolioValue});
 

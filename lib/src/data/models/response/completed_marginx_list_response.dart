@@ -27,8 +27,8 @@ class CompletedMarginxListResponse {
 class CompletedMarginX {
   String? marginxId;
   num? npnl;
-  int? portfolioValue;
-  int? entryFee;
+  num? portfolioValue;
+  num? entryFee;
   String? startTime;
   String? endTime;
   String? marginxName;

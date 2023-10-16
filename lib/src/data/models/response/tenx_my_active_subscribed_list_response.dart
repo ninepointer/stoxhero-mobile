@@ -27,14 +27,14 @@ class TenxMyActiveSubscribedListResponse {
 class TenxMyActiveSubscribedList {
   String? sId;
   String? planName;
-  int? discountedPrice;
+  num? discountedPrice;
   int? expiryDays;
-  int? payoutPercentage;
+  num? payoutPercentage;
   List<Features>? features;
   bool? allowRenewal;
-  int? portfolioValue;
+  num? portfolioValue;
   String? user;
-  int? fee;
+  num? fee;
   String? status;
   String? subscribedOn;
 

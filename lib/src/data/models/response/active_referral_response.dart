@@ -30,7 +30,7 @@ class ActiveReferralResponse {
 class ActiveReferral {
   String? sId;
   String? referralProgramName;
-  int? rewardPerReferral;
+  num? rewardPerReferral;
   String? currency;
   String? description;
   String? referrralProgramId;
