@@ -11,7 +11,11 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contest Orders'),
+        title: Text(
+          '${controller.selectedContestName}\n Order Book',
+          style: Theme.of(context).textTheme.tsMedium16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Visibility(

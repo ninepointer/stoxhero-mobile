@@ -93,7 +93,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        "${FormatHelper.formatNumbers(controller.calculateMargin().round())}",
+                        "${FormatHelper.formatNumbers((controller.internshipBatchPortfolio.value.openingBalance ?? 0) > 0 ? controller.calculateMargin().round() : controller.internshipBatchPortfolio.value.totalFund)}",
                         style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],

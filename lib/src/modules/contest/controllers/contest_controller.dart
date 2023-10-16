@@ -77,6 +77,7 @@ class ContestController extends BaseController<ContestRepository> {
   final lotsValueList = <int>[0].obs;
   final selectedContest = UpComingContest().obs;
   final selectedContestId = ''.obs;
+  final selectedContestName = ''.obs;
 
   final myRank = 0.obs;
 
@@ -139,6 +140,7 @@ class ContestController extends BaseController<ContestRepository> {
       for (Participants user in contest.participants) {
         if (user.userId?.sId == userDetails.value.sId) {
           canParticipate = true;
+          log('canParticipate${user.userId?.sId} ');
         }
       }
     }

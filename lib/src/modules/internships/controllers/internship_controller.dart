@@ -461,6 +461,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     num totalFund = internshipBatchPortfolio.value.openingBalance ?? 0;
     if (lots == 0) {
       marginValue = totalFund + calculateTotalNetPNL();
+    } else if (lots < 0) {
+      marginValue = totalFund - amount;
     } else {
       marginValue = totalFund + amount;
     }

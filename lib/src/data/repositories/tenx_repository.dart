@@ -157,4 +157,12 @@ class TenxTradingRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<GenericResponse>> tenxTutorial(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.tenxTutorial;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
 }

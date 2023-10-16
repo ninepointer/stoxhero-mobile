@@ -8,8 +8,7 @@ import '../../modules.dart';
 class MonthlyAnalyticsChart extends StatefulWidget {
   final String title;
   final List<BarChartGroupData> barGroups;
-  const MonthlyAnalyticsChart({Key? key, required this.title, required this.barGroups})
-      : super(key: key);
+  const MonthlyAnalyticsChart({Key? key, required this.title, required this.barGroups}) : super(key: key);
 
   @override
   _MonthlyAnalyticsChartState createState() => _MonthlyAnalyticsChartState();

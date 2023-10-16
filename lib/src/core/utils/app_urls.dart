@@ -142,4 +142,5 @@ class AppUrls {
   static const String tenxMyExpiredSubscription = "$apiURL/tenX/myexpiredsubscription";
   static const String tenxleaderboard = "$apiURL/tenX/tenxleaderboard";
   static const String tenxRenew = "$apiURL/tenX/renew";
+  static const String tenxTutorial = "$apiURL/tenX/tenxtutorialview";
 }

@@ -1,13 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../../base/base.dart';
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class HomeBinding implements Bindings {
   @override
@@ -47,11 +40,11 @@ class HomeController extends BaseController<DashboardRepository> {
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await socketIndexConnection();
     await getStockIndexInstrumentsList();
     await getDashboardReturnSummary();
     await getDashboardCarousel();
     await getDashboard(selectedTradeType, selectedTimeFrame);
+    socketIndexConnection();
   }
 
   void navigateToCarousel(String link) {
@@ -121,7 +114,6 @@ class HomeController extends BaseController<DashboardRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('return ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -139,7 +131,6 @@ class HomeController extends BaseController<DashboardRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('trade ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -157,7 +148,6 @@ class HomeController extends BaseController<DashboardRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('car ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -173,7 +163,6 @@ class HomeController extends BaseController<DashboardRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('car ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -182,21 +171,9 @@ class HomeController extends BaseController<DashboardRepository> {
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      IO.Socket socket;
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
-      socket.on(
+      socketService.socket.on(
         'index-tick',
         (data) {
-          // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
             if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -209,15 +186,10 @@ class HomeController extends BaseController<DashboardRepository> {
               stockIndexDetailsList.add(element);
             }
           }
-
-          // log('Socket : ${stockIndexDetailsList.length}');
         },
       );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
-      log(e.toString());
+      print(e.toString());
     }
   }
 }

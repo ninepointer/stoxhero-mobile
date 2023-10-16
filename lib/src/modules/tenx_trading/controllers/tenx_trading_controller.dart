@@ -769,4 +769,16 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     }
     isLoading(false);
   }
+
+  Future tenxTutorial() async {
+    var data = {
+      "tenXSubscription": selectedSubscriptionId.value,
+      "tutorialViewedBy": userDetails.value.sId,
+    };
+    try {
+      await repository.tenxTutorial(data);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }

@@ -8,7 +8,11 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contest'),
+        title: Text(
+          '${controller.selectedContestName}\n Leaderboard',
+          style: Theme.of(context).textTheme.tsMedium16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => ListView.builder(
@@ -27,30 +31,69 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 32,
-                                width: 32,
+                        Stack(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black.withOpacity(.25),
+                                  width: 1,
+                                ),
+                              ),
+                              child: ClipOval(
+                                child: contest.image == null || contest.image!.isEmpty
+                                    ? Image.asset(
+                                        AppImages.appLogo,
+                                        width: 48,
+                                        height: 48,
+                                      )
+                                    : Image.network(
+                                        contest.image ?? '',
+                                        width: 48,
+                                        height: 48,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Image.asset(
+                                            AppImages.appLogo,
+                                            width: 48,
+                                            height: 48,
+                                          );
+                                        },
+                                      ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                height: 20,
+                                width: 20,
                                 decoration: BoxDecoration(
-                                  color: AppColors.secondary.withOpacity(.25),
+                                  color: AppColors.primary,
                                   shape: BoxShape.circle,
                                 ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '${contest.rank.toString().contains('-') ? index + 1 : contest.rank}',
-                                  style: AppStyles.tsSecondarySemiBold14,
+                                child: Align(
+                                  child: Text(
+                                    '${contest.rank.toString().contains('-') ? index + 1 : contest.rank}',
+                                    style: AppStyles.tsWhiteMedium10,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
-                              SizedBox(width: 16),
-                              Expanded(
-                                child: Text(
-                                  '${contest.firstName?.capitalizeFirst} ${contest.lastName?.capitalizeFirst}',
-                                  style: Theme.of(context).textTheme.tsMedium14,
-                                ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${contest.firstName!.capitalizeFirst} ${contest.lastName!.capitalizeFirst}',
+                                style: Theme.of(context).textTheme.tsMedium14,
                               ),
-                              SizedBox(width: 4),
                               Text(
                                 '${FormatHelper.formatNumbers(
                                   contest.payout,

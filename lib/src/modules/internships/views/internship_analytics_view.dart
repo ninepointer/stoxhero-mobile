@@ -360,7 +360,7 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                     ),
                   ),
                   MonthlyAnalyticsChart(
-                    title: 'Monthly Gross P&L',
+                    title: 'Monthly Net P&L',
                     barGroups: controller.getMonthlyNetPNLChartsData(
                       barColor: AppColors.secondary,
                     ),

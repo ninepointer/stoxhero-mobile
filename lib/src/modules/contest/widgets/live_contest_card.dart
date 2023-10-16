@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -21,7 +23,6 @@ class LiveContestCard extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isParticipants = controller.participateUser(contest);
     return CommonCard(
       margin: margin,
       padding: EdgeInsets.zero,
@@ -265,47 +266,48 @@ class LiveContestCard extends GetView<ContestController> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
-                          controller.calculateSeatsLeft(
-                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
-                              0
-                      ? () {
-                          if (isParticipants) {
-                            controller.liveContest(contest);
-                            controller.liveLeaderboardList();
-                            controller.loadTradingData();
-                            Get.to(() => ContestTradingView());
-                          } else {
-                            SnackbarHelper.showSnackbar(
-                              'You can only participate in another contest once your current contest ends!',
-                            );
-                          }
+                  onTap: () {
+                    final maxParticipants = contest?.maxParticipants ?? 0;
+                    final participantsCount = contest?.participants?.length ?? 0;
+                    bool isParticipants = controller.participateUser(contest);
+                    print('isParticipants : $isParticipants');
+
+                    if (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) {
+                      if (controller.calculateSeatsLeft(maxParticipants, participantsCount) > 0) {
+                        controller.participate();
+                        if (isParticipants) {
+                          controller.liveContest(contest);
+                          controller.liveLeaderboardList();
+                          controller.loadTradingData();
+                          Get.to(() => ContestTradingView());
+                        } else {
+                          SnackbarHelper.showSnackbar(
+                            'You can only participate in another contest once your current contest ends!',
+                          );
                         }
-                      : () {
-                          if (controller.calculateSeatsLeft(
-                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
-                              0) {
-                            SnackbarHelper.showSnackbar('Contest is Full');
-                          } else {
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: PurchaseItemBottomSheet(
-                                buyItemPrice: contest?.entryFee ?? 0,
-                                onSubmit: () {
-                                  Get.back();
-                                  var data = {
-                                    "bonusRedemption": 0,
-                                    "coupon": "",
-                                    "contestFee": contest?.entryFee,
-                                    "contestId": contest?.id,
-                                    "contestName": contest?.contestName,
-                                  };
-                                  controller.purchaseContest(data);
-                                },
-                              ),
-                            );
-                          }
-                        },
+                      } else {
+                        SnackbarHelper.showSnackbar('Contest is Full');
+                      }
+                    } else {
+                      BottomSheetHelper.openBottomSheet(
+                        context: context,
+                        child: PurchaseItemBottomSheet(
+                          buyItemPrice: contest?.entryFee ?? 0,
+                          onSubmit: () {
+                            Get.back();
+                            var data = {
+                              "bonusRedemption": 0,
+                              "coupon": "",
+                              "contestFee": contest?.entryFee,
+                              "contestId": contest?.id,
+                              "contestName": contest?.contestName,
+                            };
+                            controller.purchaseContest(data);
+                          },
+                        ),
+                      );
+                    }
+                  },
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(6),

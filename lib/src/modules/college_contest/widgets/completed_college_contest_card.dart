@@ -271,6 +271,7 @@ class CompletedCollegeContestCard extends StatelessWidget {
                 onTap: () {
                   final controller = Get.find<ContestController>();
                   controller.getCompletedContestLeaderboardList(contest?.id);
+                  controller.selectedContestName(contest?.contestName ?? '');
                   Get.to(() => CompletedContestLeaderboard());
                 },
                 child: Container(
@@ -294,7 +295,9 @@ class CompletedCollegeContestCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
+                  final controller = Get.find<CollegeContestController>();
                   Get.find<CollegeContestController>().getContestOrderList(contest?.id);
+                  controller.selectedContestName(contest?.contestName ?? '');
                   Get.to(() => CompletedCollegeContestOrdersListView());
                 },
                 child: Container(

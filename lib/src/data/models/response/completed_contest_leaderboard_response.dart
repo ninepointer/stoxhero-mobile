@@ -28,37 +28,34 @@ class CompletedContestLeaderboardListResponse {
 }
 
 class CompletedContestLeaderboardList {
-  String? id;
+  String? sId;
   String? userId;
   String? firstName;
   String? lastName;
+  String? image;
   dynamic rank;
   num? payout;
 
-  CompletedContestLeaderboardList({
-    this.id,
-    this.userId,
-    this.firstName,
-    this.lastName,
-    this.rank,
-    this.payout,
-  });
+  CompletedContestLeaderboardList(
+      {this.sId, this.userId, this.firstName, this.lastName, this.image, this.rank, this.payout});
 
   CompletedContestLeaderboardList.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
+    sId = json['_id'];
     userId = json['userId'];
     firstName = json['first_name'];
     lastName = json['last_name'];
+    image = json['image'];
     rank = json['rank'];
     payout = json['payout'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.id;
+    data['_id'] = this.sId;
     data['userId'] = this.userId;
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
+    data['image'] = this.image;
     data['rank'] = this.rank;
     data['payout'] = this.payout;
     return data;

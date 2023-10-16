@@ -162,6 +162,8 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                       height: 40,
                       label: 'Watch Videos',
                       onPressed: () async {
+                        controller.selectedSubscriptionId(subscription.sId);
+                        controller.tenxTutorial();
                         final Uri url = Uri.parse(AppUrls.tenxYoutubeVideoLink);
                         if (!await launchUrl(url)) {
                           throw Exception('Could not launch $url');

@@ -205,6 +205,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     num totalFund = virtualPortfolio.value.openingBalance ?? 0;
     if (lots == 0) {
       marginValue = totalFund + calculateTotalNetPNL();
+    } else if (lots < 0) {
+      marginValue = totalFund - amount;
     } else {
       marginValue = totalFund + amount;
     }

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:stoxhero/src/data/models/response/trading_instrument_trade_details_list_response.dart';
 import 'package:stoxhero/src/data/models/response/upcoming_college_contest_list_response.dart';
 
@@ -15,7 +14,6 @@ class CollegeContestBinding implements Bindings {
 }
 
 class CollegeContestController extends BaseController<CollegeContestRepository> {
-  late IO.Socket socket;
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
@@ -88,6 +86,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final lotsValueList = <int>[0].obs;
   final selectedContest = UpComingContest().obs;
   final selectedContestId = ''.obs;
+  final selectedContestName = ''.obs;
   final selectedStringQuantity = "0".obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
 
@@ -930,9 +929,9 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       };
       log('Socket Emit RankData : $rankData');
 
-      socket.emit('dailyContestLeaderboard', rankData);
+      socketService.socket.emit('dailyContestLeaderboard', rankData);
 
-      socket.on(
+      socketService.socket.on(
         'contest-myrank${userDetails.value.sId}${liveCollegeContest.value.id}',
         (data) {
           log('Socket MyRank : contest-myrank${userDetails.value.sId}${liveCollegeContest.value.id} : $data');
@@ -940,16 +939,13 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         },
       );
 
-      socket.on(
+      socketService.socket.on(
         'contest-leaderboardData${liveCollegeContest.value.id}',
         (data) {
           log('Socket Leaderboard : contest-leaderboardData${liveCollegeContest.value.id} $data');
           liveLeaderboardList.value = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
         },
       );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }
