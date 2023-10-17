@@ -1,3 +1,5 @@
+import 'package:stoxhero/src/app/app.dart';
+
 class VirtualTradingPlaceOrderRequest {
   String? exchange;
   String? symbol;
@@ -18,27 +20,30 @@ class VirtualTradingPlaceOrderRequest {
   int? instrumentToken;
   String? trader;
   bool? paperTrade;
+  DeviceDetails? deviceDetails;
 
-  VirtualTradingPlaceOrderRequest(
-      {this.exchange,
-      this.symbol,
-      this.buyOrSell,
-      this.quantity,
-      this.price,
-      this.product,
-      this.orderType,
-      this.triggerPrice,
-      this.stopLoss,
-      this.uId,
-      this.exchangeInstrumentToken,
-      this.validity,
-      this.variety,
-      this.createdBy,
-      this.orderId,
-      this.userId,
-      this.instrumentToken,
-      this.trader,
-      this.paperTrade});
+  VirtualTradingPlaceOrderRequest({
+    this.exchange,
+    this.symbol,
+    this.buyOrSell,
+    this.quantity,
+    this.price,
+    this.product,
+    this.orderType,
+    this.triggerPrice,
+    this.stopLoss,
+    this.uId,
+    this.exchangeInstrumentToken,
+    this.validity,
+    this.variety,
+    this.createdBy,
+    this.orderId,
+    this.userId,
+    this.instrumentToken,
+    this.trader,
+    this.paperTrade,
+    this.deviceDetails,
+  });
 
   VirtualTradingPlaceOrderRequest.fromJson(Map<String, dynamic> json) {
     exchange = json['exchange'];
@@ -60,6 +65,7 @@ class VirtualTradingPlaceOrderRequest {
     instrumentToken = json['instrumentToken'];
     trader = json['trader'];
     paperTrade = json['paperTrade'];
+    deviceDetails = json['deviceDetails'] != null ? new DeviceDetails.fromJson(json['deviceDetails']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -83,6 +89,9 @@ class VirtualTradingPlaceOrderRequest {
     data['instrumentToken'] = this.instrumentToken;
     data['trader'] = this.trader;
     data['paperTrade'] = this.paperTrade;
+    if (this.deviceDetails != null) {
+      data['deviceDetails'] = this.deviceDetails!.toJson();
+    }
     return data;
   }
 }

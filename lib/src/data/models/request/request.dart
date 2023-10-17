@@ -10,3 +10,4 @@ export 'internship_place_order_request.dart';
 export 'virtual_trading_place_order_request.dart';
 export 'college_contest_form_request.dart';
 export 'tenx_tutorial_request.dart';
+export 'device_details.dart';

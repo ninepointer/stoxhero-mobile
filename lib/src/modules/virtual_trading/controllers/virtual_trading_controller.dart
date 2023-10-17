@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -395,6 +396,10 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       uId: Uuid().v4(),
       createdBy: userDetailsData.name,
       instrumentToken: inst.instrumentToken,
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
     );
     log('placeVirtualTradingOrder : ${data.toJson()}');
     try {
