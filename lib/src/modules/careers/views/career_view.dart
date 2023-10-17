@@ -43,11 +43,14 @@ class CareerView extends GetView<CareerController> {
                   ),
                   SizedBox(height: 12),
                   customCard(
-                    context: context,
                     title: 'Jobs',
                     buttonLabel: 'View Opening',
                     image: AppImages.job,
-                    onPressed: () {},
+                    context: context,
+                    onPressed: () {
+                      controller.getCareerList('Job');
+                      Get.to(() => JobView());
+                    },
                   ),
                   SizedBox(height: 24),
                 ],

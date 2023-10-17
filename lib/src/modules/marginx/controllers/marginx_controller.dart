@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -262,8 +263,10 @@ class MarginXController extends BaseController<MarginXRepository> {
     num totalFund = marginXPortfolio.value.totalFund ?? 0;
     if (lots == 0) {
       marginValue = totalFund + calculateTotalNetPNL();
-    } else {
+    } else if (lots < 0) {
       marginValue = totalFund + amount;
+    } else {
+      marginValue = totalFund - amount;
     }
     return marginValue;
   }
@@ -523,6 +526,10 @@ class MarginXController extends BaseController<MarginXRepository> {
       userId: userDetailsData.email,
       validity: "DAY",
       variety: "regular",
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
     );
     log('placeVirtualTradingOrder : ${data.toJson()}');
     try {

@@ -1,4 +1,4 @@
-import 'package:stoxhero/src/app/app.dart';
+import '../../../app/app.dart';
 
 class VirtualTradingPlaceOrderRequest {
   String? exchange;

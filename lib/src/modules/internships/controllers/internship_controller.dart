@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -774,6 +776,10 @@ class InternshipController extends BaseController<InternshipRespository> {
       trader: userDetailsData.sId,
       validity: "DAY",
       variety: "regular",
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
     );
     print('placeVirtualTradingOrder : ${data.toJson()}');
     try {

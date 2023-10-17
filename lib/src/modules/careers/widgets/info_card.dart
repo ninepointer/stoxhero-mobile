@@ -64,7 +64,7 @@ class InfoCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  career?.jobType != '' ? 'Internship' : 'Workshop',
+                  career?.listingType == 'Workshop' ? '${career?.listingType}' : '${career?.jobType}',
                   textAlign: TextAlign.center,
                   style: AppStyles.tsWhiteMedium12,
                 ),

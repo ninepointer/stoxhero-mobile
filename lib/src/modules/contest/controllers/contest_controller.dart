@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -468,6 +469,10 @@ class ContestController extends BaseController<ContestRepository> {
       userId: userDetailsData.email,
       validity: "DAY",
       variety: "regular",
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
     );
     log('placeContestTradingOrder : ${data.toJson()}');
     try {

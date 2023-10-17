@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -362,8 +363,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     num totalFund = contestPortfolio.value.totalFund ?? 0;
     if (lots == 0) {
       marginValue = totalFund + calculateTotalNetPNL();
-    } else {
+    } else if (lots < 0) {
       marginValue = totalFund + amount;
+    } else {
+      marginValue = totalFund - amount;
     }
     return marginValue;
   }
@@ -511,6 +514,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       userId: userDetailsData.email,
       validity: "DAY",
       variety: "regular",
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
     );
     log('placeContestTradingOrder : ${data.toJson()}');
     try {

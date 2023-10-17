@@ -1,14 +1,16 @@
+import '../../../app/app.dart';
+
 class TenxTradingPlaceOrderRequest {
   String? exchange;
   String? symbol;
   String? buyOrSell;
   int? quantity;
-  String? stopLoss;
+  String? price;
   String? battleId;
   String? product;
   String? orderType;
   String? triggerPrice;
-  String? stopLossPrice;
+  String? stopLoss;
   String? uId;
   int? exchangeInstrumentToken;
   String? validity;
@@ -22,43 +24,46 @@ class TenxTradingPlaceOrderRequest {
   String? trader;
   bool? paperTrade;
   bool? tenxTraderPath;
+  DeviceDetails? deviceDetails;
 
-  TenxTradingPlaceOrderRequest(
-      {this.exchange,
-      this.symbol,
-      this.buyOrSell,
-      this.quantity,
-      this.stopLoss,
-      this.battleId,
-      this.product,
-      this.orderType,
-      this.triggerPrice,
-      this.stopLossPrice,
-      this.uId,
-      this.exchangeInstrumentToken,
-      this.validity,
-      this.variety,
-      this.createdBy,
-      this.orderId,
-      this.subscriptionId,
-      this.marginxId,
-      this.userId,
-      this.instrumentToken,
-      this.trader,
-      this.paperTrade,
-      this.tenxTraderPath});
+  TenxTradingPlaceOrderRequest({
+    this.exchange,
+    this.symbol,
+    this.buyOrSell,
+    this.quantity,
+    this.price,
+    this.battleId,
+    this.product,
+    this.orderType,
+    this.triggerPrice,
+    this.stopLoss,
+    this.uId,
+    this.exchangeInstrumentToken,
+    this.validity,
+    this.variety,
+    this.createdBy,
+    this.orderId,
+    this.subscriptionId,
+    this.marginxId,
+    this.userId,
+    this.instrumentToken,
+    this.trader,
+    this.paperTrade,
+    this.tenxTraderPath,
+    this.deviceDetails,
+  });
 
   TenxTradingPlaceOrderRequest.fromJson(Map<String, dynamic> json) {
     exchange = json['exchange'];
     symbol = json['symbol'];
     buyOrSell = json['buyOrSell'];
     quantity = json['Quantity'];
-    stopLoss = json['stopLoss'];
+    price = json['Price'];
     battleId = json['battleId'];
     product = json['Product'];
     orderType = json['OrderType'];
     triggerPrice = json['TriggerPrice'];
-    stopLossPrice = json['stopLossPrice'];
+    stopLoss = json['stopLoss'];
     uId = json['uId'];
     exchangeInstrumentToken = json['exchangeInstrumentToken'];
     validity = json['validity'];
@@ -72,6 +77,7 @@ class TenxTradingPlaceOrderRequest {
     trader = json['trader'];
     paperTrade = json['paperTrade'];
     tenxTraderPath = json['tenxTraderPath'];
+    deviceDetails = json['deviceDetails'] != null ? new DeviceDetails.fromJson(json['deviceDetails']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -80,12 +86,12 @@ class TenxTradingPlaceOrderRequest {
     data['symbol'] = this.symbol;
     data['buyOrSell'] = this.buyOrSell;
     data['Quantity'] = this.quantity;
-    data['stopLoss'] = this.stopLoss;
+    data['Price'] = this.price;
     data['battleId'] = this.battleId;
     data['Product'] = this.product;
     data['OrderType'] = this.orderType;
     data['TriggerPrice'] = this.triggerPrice;
-    data['stopLossPrice'] = this.stopLossPrice;
+    data['stopLoss'] = this.stopLoss;
     data['uId'] = this.uId;
     data['exchangeInstrumentToken'] = this.exchangeInstrumentToken;
     data['validity'] = this.validity;
@@ -99,6 +105,9 @@ class TenxTradingPlaceOrderRequest {
     data['trader'] = this.trader;
     data['paperTrade'] = this.paperTrade;
     data['tenxTraderPath'] = this.tenxTraderPath;
+    if (this.deviceDetails != null) {
+      data['deviceDetails'] = this.deviceDetails!.toJson();
+    }
     return data;
   }
 }

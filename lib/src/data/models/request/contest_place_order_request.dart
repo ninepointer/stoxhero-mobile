@@ -1,3 +1,5 @@
+import '../../../app/app.dart';
+
 class ContestPlaceOrderRequest {
   String? exchange;
   String? symbol;
@@ -22,31 +24,34 @@ class ContestPlaceOrderRequest {
   int? instrumentToken;
   String? trader;
   bool? paperTrade;
+  DeviceDetails? deviceDetails;
 
-  ContestPlaceOrderRequest(
-      {this.exchange,
-      this.symbol,
-      this.buyOrSell,
-      this.quantity,
-      this.price,
-      this.contestId,
-      this.battleId,
-      this.product,
-      this.orderType,
-      this.triggerPrice,
-      this.stopLoss,
-      this.uId,
-      this.exchangeInstrumentToken,
-      this.validity,
-      this.variety,
-      this.createdBy,
-      this.orderId,
-      this.subscriptionId,
-      this.marginxId,
-      this.userId,
-      this.instrumentToken,
-      this.trader,
-      this.paperTrade});
+  ContestPlaceOrderRequest({
+    this.exchange,
+    this.symbol,
+    this.buyOrSell,
+    this.quantity,
+    this.price,
+    this.contestId,
+    this.battleId,
+    this.product,
+    this.orderType,
+    this.triggerPrice,
+    this.stopLoss,
+    this.uId,
+    this.exchangeInstrumentToken,
+    this.validity,
+    this.variety,
+    this.createdBy,
+    this.orderId,
+    this.subscriptionId,
+    this.marginxId,
+    this.userId,
+    this.instrumentToken,
+    this.trader,
+    this.paperTrade,
+    this.deviceDetails,
+  });
 
   ContestPlaceOrderRequest.fromJson(Map<String, dynamic> json) {
     exchange = json['exchange'];
@@ -72,6 +77,7 @@ class ContestPlaceOrderRequest {
     instrumentToken = json['instrumentToken'];
     trader = json['trader'];
     paperTrade = json['paperTrade'];
+    deviceDetails = json['deviceDetails'] != null ? new DeviceDetails.fromJson(json['deviceDetails']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -99,6 +105,9 @@ class ContestPlaceOrderRequest {
     data['instrumentToken'] = this.instrumentToken;
     data['trader'] = this.trader;
     data['paperTrade'] = this.paperTrade;
+    if (this.deviceDetails != null) {
+      data['deviceDetails'] = this.deviceDetails!.toJson();
+    }
     return data;
   }
 }

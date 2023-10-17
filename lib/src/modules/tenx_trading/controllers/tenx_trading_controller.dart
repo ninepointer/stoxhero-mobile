@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/data/models/response/tenx_my_active_subscribed_list_response.dart';
 import 'package:stoxhero/src/data/models/response/tenx_my_expired_subscription_list_response.dart';
@@ -225,23 +226,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         lots += position.lots ?? 0;
       }
     }
-    print('Amount : $amount');
-    print('Amount : $lots');
-    print('Amount : $amount');
-    num totalFund = tenxPortfolioDetails.value.totalFund ?? 0;
-    print('Amount : $totalFund');
+    num totalFund = tenxPortfolioDetails.value.openingBalance ?? 0;
     if (lots == 0) {
       marginValue = totalFund + calculateTotalNetPNL();
-      print('Amount : $marginValue');
-      print('Amount : ${calculateTotalNetPNL()}');
     } else if (lots < 0) {
       marginValue = totalFund + amount;
-      print('Amount Margin : $marginValue');
     } else {
       marginValue = totalFund - amount;
-      print('Amount Margin : $marginValue');
     }
-    print('Amount Margin : $marginValue');
     return marginValue;
   }
 
@@ -486,15 +478,15 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       }
     }
     TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
-      orderType: "MARKET",
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       quantity: selectedQuantity.value,
+      price: "",
       product: "NRML",
+      orderType: "MARKET",
       triggerPrice: "",
       stopLoss: "",
-      stopLossPrice: "",
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
       validity: "DAY",
@@ -509,6 +501,10 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       tenxTraderPath: true,
       battleId: selectedSubscriptionId.value,
       marginxId: selectedSubscriptionId.value,
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
     );
     log('placeTenxTradingOrder : ${data.toJson()}');
     try {
