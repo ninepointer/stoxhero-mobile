@@ -123,6 +123,11 @@ class ContestController extends BaseController<ContestRepository> {
     return isVisible;
   }
 
+  // int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
+  //   int seatsLeft = maxParticipants - currentParticipants;
+  //   return seatsLeft;
+  // }
+
   bool isUserInterested(contest, userId) {
     if (contest.interestedUsers != null) {
       for (InterestedUsers user in contest.interestedUsers) {
@@ -145,6 +150,52 @@ class ContestController extends BaseController<ContestRepository> {
       }
     }
     return canParticipate;
+  }
+
+  // String checkSeatAvailabilityAndParticipation(contest, int maxParticipants) {
+  //   if (contest.participants != null) {
+  //     if (contest.participants.length >= maxParticipants) {
+  //       return "Contest is full. Sorry, you can't participate.";
+  //     }
+  //     if (contest.participants != null) {
+  //       for (Participants user in contest.participants) {
+  //         if (user.userId?.sId == userDetails.value.sId) {
+  //           log('canParticipate${user.userId?.sId} ');
+  //         }
+  //       }
+  //     }
+  //   }
+  //   if (participateUser(userDetails)) {
+  //     return "You have already participated in a free contest.";
+  //   }
+  //   return "You can participate in the contest.";
+  // }
+
+  void checkSeatAvailabilityAndParticipation(contest) {
+    if (contest.participants.length >= contest.maxParticipants) {
+      bool canParticipate = true; // Assume the user can participate by default
+      for (Participants user in contest.participants) {
+        if (user.userId?.sId == userDetails.value.sId) {
+          canParticipate = false; // If user ID matches, set canParticipate to false
+          break; // No need to check further, the user is already a participant
+        }
+      }
+      if (canParticipate) {
+        // If the user is not already a participant, they can participate
+        SnackbarHelper.showSnackbar('You can participate.');
+      } else {
+        // If the user is already a participant, show a message
+        SnackbarHelper.showSnackbar('You are already a participant.');
+      }
+    } else {
+      // If there are available seats, the user can participate
+      SnackbarHelper.showSnackbar('You can participate.');
+    }
+  }
+
+  int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
+    int seatsLeft = maxParticipants - currentParticipants;
+    return seatsLeft;
   }
 
   String getStockIndexName(int instId) {
@@ -215,11 +266,6 @@ class ContestController extends BaseController<ContestRepository> {
       }
     }
     return AppColors.success;
-  }
-
-  int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
-    int seatsLeft = maxParticipants - currentParticipants;
-    return seatsLeft;
   }
 
   num calculatePayout() {
@@ -337,8 +383,10 @@ class ContestController extends BaseController<ContestRepository> {
     num totalFund = contestPortfolio.value.totalFund ?? 0;
     if (lots == 0) {
       marginValue = totalFund + calculateTotalNetPNL();
-    } else {
+    } else if (lots < 0) {
       marginValue = totalFund + amount;
+    } else {
+      marginValue = totalFund - amount;
     }
     return marginValue;
   }

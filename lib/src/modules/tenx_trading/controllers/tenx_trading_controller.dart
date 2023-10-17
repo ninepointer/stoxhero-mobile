@@ -34,6 +34,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   final searchTextController = TextEditingController();
   final selectedSubscriptionId = ''.obs;
+  final selectSubscriptionName = ''.obs;
+  final selectSubscriptionAmount = 0.obs;
   final selectedSubscription = TenxActiveSubscription().obs;
   final walletBalance = RxNum(0);
   final selectedWatchlistIndex = RxInt(-1);
@@ -91,10 +93,16 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxTradingPortfolioDetails();
     socketConnection();
     socketIndexConnection();
-    // await getTenXSubscriptionList();
+    await getTenXSubscriptionList();
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+
+  DateTime date() {
+    DateTime subscribedOn = DateTime.parse(tenxMyActiveSubcribed.value.subscribedOn ?? '');
+    DateTime newExpiryDate = subscribedOn.add(Duration(days: tenxMyActiveSubcribed.value.expiryDays ?? 0));
+    return newExpiryDate;
+  }
 
   int getOpenPositionCount() {
     int openCount = 0;
@@ -217,14 +225,23 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         lots += position.lots ?? 0;
       }
     }
-    num totalFund = tenxPortfolioDetails.value.openingBalance ?? 0;
+    print('Amount : $amount');
+    print('Amount : $lots');
+    print('Amount : $amount');
+    num totalFund = tenxPortfolioDetails.value.totalFund ?? 0;
+    print('Amount : $totalFund');
     if (lots == 0) {
       marginValue = totalFund + calculateTotalNetPNL();
+      print('Amount : $marginValue');
+      print('Amount : ${calculateTotalNetPNL()}');
     } else if (lots < 0) {
-      marginValue = totalFund - amount;
-    } else {
       marginValue = totalFund + amount;
+      print('Amount Margin : $marginValue');
+    } else {
+      marginValue = totalFund - amount;
+      print('Amount Margin : $marginValue');
     }
+    print('Amount Margin : $marginValue');
     return marginValue;
   }
 
@@ -469,15 +486,15 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       }
     }
     TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
+      orderType: "MARKET",
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       quantity: selectedQuantity.value,
-      price: "",
       product: "NRML",
-      orderType: "MARKET",
       triggerPrice: "",
       stopLoss: "",
+      stopLossPrice: "",
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
       validity: "DAY",
@@ -771,6 +788,18 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future tenxTutorial() async {
+    var data = {
+      "tenXSubscription": selectedSubscriptionId.value,
+      "tutorialViewedBy": userDetails.value.sId,
+    };
+    try {
+      await repository.tenxTutorial(data);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future tenxCapturePurchaseIntent() async {
     var data = {
       "tenXSubscription": selectedSubscriptionId.value,
       "tutorialViewedBy": userDetails.value.sId,

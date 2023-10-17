@@ -14,6 +14,7 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
+    // print('New ${(FormatHelper.formatDateTimeToIST(controller.date().toString()))}');
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -72,6 +73,42 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                 ),
               ],
             ),
+            SizedBox(height: 4),
+            Padding(
+              padding: EdgeInsets.only(right: 12, left: 12),
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.grey.withOpacity(.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Subscribed On : ${FormatHelper.formatDateTimeToIST(subscription.subscribedOn)}',
+                          style: AppStyles.tsSecondaryMedium12,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Expanded(
+                        child: Text(
+                          '',
+                          // 'Expires On: ${FormatHelper.formatDateTimeToIST(controller.date().toString())}',
+                          textAlign: TextAlign.end,
+                          style: AppStyles.tsWhiteMedium12.copyWith(
+                            color: AppColors.success,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         Padding(
@@ -81,39 +118,48 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
               Row(
                 children: [
                   Expanded(
-                    child: CommonOutlinedButton(
+                    child: CommonFilledButton(
+                      backgroundColor: AppColors.secondary.withOpacity(.8),
                       height: 40,
                       label: 'Analytics',
                       onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
                     ),
                   ),
                   SizedBox(width: 4),
-                  Expanded(
-                    child: CommonOutlinedButton(
-                      height: 40,
-                      label: 'Renew',
-                      onPressed: () {
-                        controller.selectedSubscriptionId(subscription.sId);
-                        controller.tenxMyActiveSubcribed(subscription);
-                        BottomSheetHelper.openBottomSheet(
-                          context: context,
-                          child: PurchaseItemBottomSheet(
-                            buyItemPrice: controller.selectedSubscription.value.discountedPrice ?? 0,
-                            onSubmit: () => controller.tenxRenewSubscription(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  if (subscription.allowRenewal == true) ...[
+                    Expanded(
+                      child: CommonFilledButton(
+                        backgroundColor: AppColors.danger.withOpacity(.8),
+                        height: 40,
+                        label: 'Renew',
+                        onPressed: () {
+                          controller.selectedSubscriptionId(subscription.sId);
+                          controller.tenxMyActiveSubcribed(subscription);
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: PurchaseItemBottomSheet(
+                              buyItemPrice: controller.selectedSubscription.value.discountedPrice ?? 0,
+                              onSubmit: () => controller.tenxRenewSubscription(),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ] else
+                    Container(),
                 ],
               ),
               SizedBox(height: 4),
-              CommonOutlinedButton(
+              CommonFilledButton(
+                backgroundColor: AppColors.success.withOpacity(.8),
                 height: 40,
                 onPressed: () {
                   controller.selectedSubscriptionId(subscription.sId);
                   controller.tenxMyActiveSubcribed(subscription);
                   controller.loadTenxData();
+                  controller.selectSubscriptionName("");
+                  controller.selectSubscriptionName(subscription.planName ?? '');
+                  controller.tenxMyExpiredSubcription();
                   Get.toNamed(AppRoutes.tenxDashboard);
                 },
                 label: 'Start Trading',

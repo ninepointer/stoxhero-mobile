@@ -118,7 +118,7 @@ class OtpView extends GetView<AuthController> {
                       SizedBox(height: 24),
                       Center(
                         child: Text(
-                          'Didn\'t received the code?',
+                          'Didn\'t receive the code?',
                           style: Theme.of(context).textTheme.tsRegular16,
                           textAlign: TextAlign.center,
                         ),

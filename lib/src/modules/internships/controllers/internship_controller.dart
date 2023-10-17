@@ -462,9 +462,9 @@ class InternshipController extends BaseController<InternshipRespository> {
     if (lots == 0) {
       marginValue = totalFund + calculateTotalNetPNL();
     } else if (lots < 0) {
-      marginValue = totalFund - amount;
-    } else {
       marginValue = totalFund + amount;
+    } else {
+      marginValue = totalFund - amount;
     }
     return marginValue;
   }

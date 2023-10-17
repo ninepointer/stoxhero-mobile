@@ -37,12 +37,12 @@ class AnalyticsView extends GetView<AnalyticsController> {
                     ),
                     child: TabBar(
                       labelColor: AppColors.white,
-                      unselectedLabelColor: AppColors.black,
                       splashBorderRadius: BorderRadius.circular(50),
                       indicator: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
                         color: AppColors.primary,
                       ),
+                      unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
                       labelStyle: Theme.of(context).textTheme.tsFontFamily,
                       tabs: [
                         AppStrings.tenX,

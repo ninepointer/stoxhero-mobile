@@ -3,12 +3,12 @@ class TenxTradingPlaceOrderRequest {
   String? symbol;
   String? buyOrSell;
   int? quantity;
-  String? price;
+  String? stopLoss;
   String? battleId;
   String? product;
   String? orderType;
   String? triggerPrice;
-  String? stopLoss;
+  String? stopLossPrice;
   String? uId;
   int? exchangeInstrumentToken;
   String? validity;
@@ -28,12 +28,12 @@ class TenxTradingPlaceOrderRequest {
       this.symbol,
       this.buyOrSell,
       this.quantity,
-      this.price,
+      this.stopLoss,
       this.battleId,
       this.product,
       this.orderType,
       this.triggerPrice,
-      this.stopLoss,
+      this.stopLossPrice,
       this.uId,
       this.exchangeInstrumentToken,
       this.validity,
@@ -53,12 +53,12 @@ class TenxTradingPlaceOrderRequest {
     symbol = json['symbol'];
     buyOrSell = json['buyOrSell'];
     quantity = json['Quantity'];
-    price = json['Price'];
+    stopLoss = json['stopLoss'];
     battleId = json['battleId'];
     product = json['Product'];
     orderType = json['OrderType'];
     triggerPrice = json['TriggerPrice'];
-    stopLoss = json['stopLoss'];
+    stopLossPrice = json['stopLossPrice'];
     uId = json['uId'];
     exchangeInstrumentToken = json['exchangeInstrumentToken'];
     validity = json['validity'];
@@ -80,12 +80,12 @@ class TenxTradingPlaceOrderRequest {
     data['symbol'] = this.symbol;
     data['buyOrSell'] = this.buyOrSell;
     data['Quantity'] = this.quantity;
-    data['Price'] = this.price;
+    data['stopLoss'] = this.stopLoss;
     data['battleId'] = this.battleId;
     data['Product'] = this.product;
     data['OrderType'] = this.orderType;
     data['TriggerPrice'] = this.triggerPrice;
-    data['stopLoss'] = this.stopLoss;
+    data['stopLossPrice'] = this.stopLossPrice;
     data['uId'] = this.uId;
     data['exchangeInstrumentToken'] = this.exchangeInstrumentToken;
     data['validity'] = this.validity;

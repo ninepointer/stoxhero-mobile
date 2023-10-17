@@ -8,7 +8,11 @@ class TenxDashboardView extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tenx Trading'),
+        title: Text(
+          '${controller.selectSubscriptionName}',
+          style: Theme.of(context).textTheme.tsMedium16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Visibility(
@@ -86,7 +90,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                                   ),
                                   SizedBox(height: 2),
                                   Text(
-                                    'Subscribed On : ${FormatHelper.formatDateYear(controller.selectedTenXSub.value.userPurchaseDetail?[0].subscribedOn)}',
+                                    'Subscribed On : ${FormatHelper.formatDateTimeToIST(controller.tenxMyActiveSubcribed.value.subscribedOn)}',
                                     style: AppStyles.tsSecondaryMedium12,
                                   ),
                                 ],
@@ -104,7 +108,8 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                                   ),
                                   SizedBox(height: 2),
                                   Text(
-                                    'Expires On : ${FormatHelper.formatDateYear(controller.selectedTenXSub.value.userPurchaseDetail?[0].expiredOn)}',
+                                    'Expires On: ${FormatHelper.formatDateTimeToIST(controller.date().toString())}',
+                                    textAlign: TextAlign.end,
                                     style: AppStyles.tsWhiteMedium12.copyWith(
                                       color: AppColors.success,
                                     ),

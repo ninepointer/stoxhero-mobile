@@ -171,7 +171,9 @@ class InternshipTradingView extends GetView<InternshipController> {
                   PortfolioDetailCardTile(
                     label: 'Opening Balance',
                     info: 'Cash available at the beginning of the day',
-                    value: controller.internshipBatchPortfolio.value.openingBalance,
+                    value: (controller.internshipBatchPortfolio.value.openingBalance ?? 0) > 0
+                        ? controller.internshipBatchPortfolio.value.openingBalance
+                        : controller.internshipBatchPortfolio.value.totalFund,
                   ),
                   SizedBox(height: 56),
                 ],

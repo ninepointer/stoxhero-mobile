@@ -3,9 +3,8 @@ import '../models.dart';
 class TenxTradingActiveResponse {
   String? status;
   List<TenxActiveSubscription>? data;
-  int? results;
 
-  TenxTradingActiveResponse({this.status, this.data, this.results});
+  TenxTradingActiveResponse({this.status, this.data});
 
   TenxTradingActiveResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -15,7 +14,6 @@ class TenxTradingActiveResponse {
         data!.add(new TenxActiveSubscription.fromJson(v));
       });
     }
-    results = json['results'];
   }
 
   Map<String, dynamic> toJson() {
@@ -24,7 +22,6 @@ class TenxTradingActiveResponse {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['results'] = this.results;
     return data;
   }
 }
@@ -32,35 +29,34 @@ class TenxTradingActiveResponse {
 class TenxActiveSubscription {
   String? sId;
   String? planName;
-  num? actualPrice;
-  num? discountedPrice;
-  num? validity;
-  num? profitCap;
+  int? actualPrice;
+  int? discountedPrice;
+  int? validity;
+  int? expiryDays;
+  int? payoutPercentage;
+  int? profitCap;
   Portfolio? portfolio;
   String? validityPeriod;
   List<Features>? features;
   String? status;
-  String? createdOn;
-  String? createdBy;
-  String? lastModifiedOn;
-  String? lastModifiedBy;
+  bool? allowPurchase;
+  bool? allowRenewal;
 
-  TenxActiveSubscription({
-    this.sId,
-    this.planName,
-    this.actualPrice,
-    this.discountedPrice,
-    this.validity,
-    this.profitCap,
-    this.portfolio,
-    this.validityPeriod,
-    this.features,
-    this.status,
-    this.createdOn,
-    this.createdBy,
-    this.lastModifiedOn,
-    this.lastModifiedBy,
-  });
+  TenxActiveSubscription(
+      {this.sId,
+      this.planName,
+      this.actualPrice,
+      this.discountedPrice,
+      this.validity,
+      this.expiryDays,
+      this.payoutPercentage,
+      this.profitCap,
+      this.portfolio,
+      this.validityPeriod,
+      this.features,
+      this.status,
+      this.allowPurchase,
+      this.allowRenewal});
 
   TenxActiveSubscription.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -68,6 +64,8 @@ class TenxActiveSubscription {
     actualPrice = json['actual_price'];
     discountedPrice = json['discounted_price'];
     validity = json['validity'];
+    expiryDays = json['expiryDays'];
+    payoutPercentage = json['payoutPercentage'];
     profitCap = json['profitCap'];
     portfolio = json['portfolio'] != null ? new Portfolio.fromJson(json['portfolio']) : null;
     validityPeriod = json['validityPeriod'];
@@ -78,10 +76,8 @@ class TenxActiveSubscription {
       });
     }
     status = json['status'];
-    createdOn = json['createdOn'];
-    createdBy = json['createdBy'];
-    lastModifiedOn = json['lastModifiedOn'];
-    lastModifiedBy = json['lastModifiedBy'];
+    allowPurchase = json['allowPurchase'];
+    allowRenewal = json['allowRenewal'];
   }
 
   Map<String, dynamic> toJson() {
@@ -91,6 +87,8 @@ class TenxActiveSubscription {
     data['actual_price'] = this.actualPrice;
     data['discounted_price'] = this.discountedPrice;
     data['validity'] = this.validity;
+    data['expiryDays'] = this.expiryDays;
+    data['payoutPercentage'] = this.payoutPercentage;
     data['profitCap'] = this.profitCap;
     if (this.portfolio != null) {
       data['portfolio'] = this.portfolio!.toJson();
@@ -100,10 +98,8 @@ class TenxActiveSubscription {
       data['features'] = this.features!.map((v) => v.toJson()).toList();
     }
     data['status'] = this.status;
-    data['createdOn'] = this.createdOn;
-    data['createdBy'] = this.createdBy;
-    data['lastModifiedOn'] = this.lastModifiedOn;
-    data['lastModifiedBy'] = this.lastModifiedBy;
+    data['allowPurchase'] = this.allowPurchase;
+    data['allowRenewal'] = this.allowRenewal;
     return data;
   }
 }
@@ -113,11 +109,7 @@ class Features {
   String? description;
   String? sId;
 
-  Features({
-    this.orderNo,
-    this.description,
-    this.sId,
-  });
+  Features({this.orderNo, this.description, this.sId});
 
   Features.fromJson(Map<String, dynamic> json) {
     orderNo = json['orderNo'];

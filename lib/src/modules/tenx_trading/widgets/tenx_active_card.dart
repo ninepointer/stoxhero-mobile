@@ -149,16 +149,29 @@ class TenxActiveCard extends GetView<TenxTradingController> {
             children: [
               Row(
                 children: [
-                  // Expanded(
-                  //   child: CommonOutlinedButton(
-                  //     height: 40,
-                  //     label: 'Learn More',
-                  //     onPressed: () {},
-                  //   ),
-                  // ),
-                  // SizedBox(width: 4),
                   Expanded(
-                    child: CommonOutlinedButton(
+                    child: CommonFilledButton(
+                      backgroundColor: AppColors.info.withOpacity(.8),
+                      height: 40,
+                      label: 'Learn More',
+                      onPressed: () {
+                        controller.tenxCountTradingDays();
+                        controller.selectSubscriptionName("");
+                        controller.selectSubscriptionName(subscription.planName ?? '');
+                        controller.selectedSubscription(subscription);
+                        controller.selectSubscriptionAmount(subscription.portfolio?.portfolioValue?.toInt());
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => TenxLearnMoreInfo(),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Expanded(
+                    child: CommonFilledButton(
+                      backgroundColor: AppColors.danger.withOpacity(.8),
                       height: 40,
                       label: 'Watch Videos',
                       onPressed: () async {
@@ -174,23 +187,32 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                 ],
               ),
               SizedBox(height: 4),
-              CommonOutlinedButton(
-                height: 40,
-                onPressed: isActive
-                    ? () {}
-                    : () {
-                        controller.selectedSubscriptionId(subscription.sId);
-                        controller.selectedSubscription(subscription);
-                        BottomSheetHelper.openBottomSheet(
-                          context: context,
-                          child: PurchaseItemBottomSheet(
-                            buyItemPrice: controller.selectedSubscription.value.discountedPrice ?? 0,
-                            onSubmit: () => controller.purchaseSubscription(),
-                          ),
-                        );
-                      },
-                label: isActive ? 'Already Subscribed' : 'Subscribe',
-              ),
+              if (subscription.allowPurchase == true) ...[
+                CommonFilledButton(
+                  backgroundColor: AppColors.success.withOpacity(.8),
+                  height: 40,
+                  onPressed: isActive
+                      ? () {}
+                      : () {
+                          controller.selectedSubscriptionId(subscription.sId);
+                          controller.selectedSubscription(subscription);
+                          controller.purchaseIntent();
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: PurchaseItemBottomSheet(
+                              buyItemPrice: controller.selectedSubscription.value.discountedPrice ?? 0,
+                              onSubmit: () => controller.purchaseSubscription(),
+                            ),
+                          );
+                        },
+                  label: isActive ? 'Already Subscribed' : 'Subscribe',
+                )
+              ] else
+                CommonOutlinedButton(
+                  height: 40,
+                  onPressed: () {},
+                  label: 'Subscription Not Allowed',
+                ),
               SizedBox(height: 4),
             ],
           ),

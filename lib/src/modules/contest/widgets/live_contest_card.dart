@@ -264,49 +264,82 @@ class LiveContestCard extends GetView<ContestController> {
           ),
           child: Row(
             children: [
+              // Expanded(
+              //   child: GestureDetector(
+              //     onTap: () {
+              //       final maxParticipants = contest?.maxParticipants ?? 0;
+              //       final participantsCount = contest?.participants?.length ?? 0;
+              //       bool isParticipants = controller.participateUser(contest);
+              //       print('isParticipants : $isParticipants');
+
+              //       if (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) {
+              //         if (controller.calculateSeatsLeft(maxParticipants, participantsCount) > 0) {
+              //           controller.participate();
+              //           if (isParticipants) {
+              //             controller.liveContest(contest);
+              //             controller.liveLeaderboardList();
+              //             controller.loadTradingData();
+              //             Get.to(() => ContestTradingView());
+              //           } else {
+              //             SnackbarHelper.showSnackbar(
+              //               'You can only participate in another contest once your current contest ends!',
+              //             );
+              //           }
+              //         } else {
+              //           SnackbarHelper.showSnackbar('Contest is Full');
+              //         }
+              //       } else {
+              //         BottomSheetHelper.openBottomSheet(
+              //           context: context,
+              //           child: PurchaseItemBottomSheet(
+              //             buyItemPrice: contest?.entryFee ?? 0,
+              //             onSubmit: () {
+              //               Get.back();
+              //               var data = {
+              //                 "bonusRedemption": 0,
+              //                 "coupon": "",
+              //                 "contestFee": contest?.entryFee,
+              //                 "contestId": contest?.id,
+              //                 "contestName": contest?.contestName,
+              //               };
+              //               controller.purchaseContest(data);
+              //             },
+              //           ),
+              //         );
+              //       }
+              //     },
+              //     child: Container(
+              //       alignment: Alignment.center,
+              //       padding: EdgeInsets.all(6),
+              //       decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.only(
+              //           bottomLeft: Radius.circular(8),
+              //         ),
+              //         color: AppColors.success.withOpacity(.25),
+              //       ),
+              //       child: Text(
+              //         (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
+              //                 controller.calculateSeatsLeft(
+              //                         contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
+              //                     0
+              //             ? 'Start Trading'
+              //             : controller.calculateSeatsLeft(
+              //                         contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
+              //                     0
+              //                 ? 'Contest Full'
+              //                 : 'Pay Now',
+              //         style: AppStyles.tsWhiteMedium12.copyWith(
+              //           color: AppColors.success,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    final maxParticipants = contest?.maxParticipants ?? 0;
-                    final participantsCount = contest?.participants?.length ?? 0;
-                    bool isParticipants = controller.participateUser(contest);
-                    print('isParticipants : $isParticipants');
-
-                    if (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) {
-                      if (controller.calculateSeatsLeft(maxParticipants, participantsCount) > 0) {
-                        controller.participate();
-                        if (isParticipants) {
-                          controller.liveContest(contest);
-                          controller.liveLeaderboardList();
-                          controller.loadTradingData();
-                          Get.to(() => ContestTradingView());
-                        } else {
-                          SnackbarHelper.showSnackbar(
-                            'You can only participate in another contest once your current contest ends!',
-                          );
-                        }
-                      } else {
-                        SnackbarHelper.showSnackbar('Contest is Full');
-                      }
-                    } else {
-                      BottomSheetHelper.openBottomSheet(
-                        context: context,
-                        child: PurchaseItemBottomSheet(
-                          buyItemPrice: contest?.entryFee ?? 0,
-                          onSubmit: () {
-                            Get.back();
-                            var data = {
-                              "bonusRedemption": 0,
-                              "coupon": "",
-                              "contestFee": contest?.entryFee,
-                              "contestId": contest?.id,
-                              "contestName": contest?.contestName,
-                            };
-                            controller.purchaseContest(data);
-                          },
-                        ),
-                      );
-                    }
+                    controller.checkSeatAvailabilityAndParticipation(contest);
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -318,16 +351,7 @@ class LiveContestCard extends GetView<ContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
-                              controller.calculateSeatsLeft(
-                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
-                                  0
-                          ? 'Start Trading'
-                          : controller.calculateSeatsLeft(
-                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
-                                  0
-                              ? 'Contest Full'
-                              : 'Pay Now',
+                      'Start Trading',
                       style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
                       ),
@@ -335,6 +359,7 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ),
               ),
+
               Expanded(
                 child: GestureDetector(
                   onTap: () {
