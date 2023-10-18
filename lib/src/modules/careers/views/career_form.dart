@@ -41,40 +41,40 @@ class _CareerFormState extends State<CareerForm> {
                     style: AppStyles.tsGreyMedium16,
                   ),
                   SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CommonTextField(
-                          prefixIcon: Icon(Icons.person),
-                          controller: controller.firstNameTextController,
-                          hintText: 'First Name',
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: CommonTextField(
-                          prefixIcon: Icon(Icons.person),
-                          controller: controller.lastNameTextController,
-                          hintText: 'Last Name',
-                        ),
-                      ),
-                    ],
-                  ),
-                  CommonTextField(
-                    prefixIcon: Icon(Icons.mail),
-                    controller: controller.emailTextController,
-                    hintText: 'Email',
-                  ),
-                  CommonTextField(
-                    controller: controller.mobileTextController,
-                    prefixIcon: Icon(Icons.phone),
-                    hintText: 'Mobile',
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(10),
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: CommonTextField(
+                  //         prefixIcon: Icon(Icons.person),
+                  //         controller: controller.firstNameTextController,
+                  //         hintText: 'First Name',
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 12),
+                  //     Expanded(
+                  //       child: CommonTextField(
+                  //         prefixIcon: Icon(Icons.person),
+                  //         controller: controller.lastNameTextController,
+                  //         hintText: 'Last Name',
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // CommonTextField(
+                  //   prefixIcon: Icon(Icons.mail),
+                  //   controller: controller.emailTextController,
+                  //   hintText: 'Email',
+                  // ),
+                  // CommonTextField(
+                  //   controller: controller.mobileTextController,
+                  //   prefixIcon: Icon(Icons.phone),
+                  //   hintText: 'Mobile',
+                  //   keyboardType: TextInputType.number,
+                  //   inputFormatters: [
+                  //     LengthLimitingTextInputFormatter(10),
+                  //     FilteringTextInputFormatter.digitsOnly,
+                  //   ],
+                  // ),
                   // CommonDropdown(
                   //   color: AppColors.grey.withOpacity(0.1),
                   //   hint: 'College Name',
@@ -133,23 +133,21 @@ class _CareerFormState extends State<CareerForm> {
                     controller: controller.linkedInProfileTextController,
                   ),
                 ],
-                if (controller.isOtpVisible.value)
-                  CommonTextField(
-                    prefixIcon: Icon(Icons.password),
-                    hintText: 'OTP',
-                    controller: controller.otpTextController,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(6),
-                    ],
-                  ),
+                // if (controller.isOtpVisible.value)
+                //   CommonTextField(
+                //     prefixIcon: Icon(Icons.password),
+                //     hintText: 'OTP',
+                //     controller: controller.otpTextController,
+                //     inputFormatters: [
+                //       FilteringTextInputFormatter.digitsOnly,
+                //       LengthLimitingTextInputFormatter(6),
+                //     ],
+                //   ),
                 CommonFilledButton(
                   label: 'Submit',
                   onPressed: () {
                     print(controller.isOtpVisible.value);
-                    controller.isOtpVisible.value
-                        ? controller.validateCarrerOtp(widget.careerId)
-                        : controller.submitCareerForm(widget.careerId);
+                    controller.careerApply(widget.careerId);
                   },
                 ),
               ],

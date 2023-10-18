@@ -143,4 +143,5 @@ class AppUrls {
   static const String tenxleaderboard = "$apiURL/tenX/tenxleaderboard";
   static const String tenxRenew = "$apiURL/tenX/renew";
   static const String tenxTutorial = "$apiURL/tenX/tenxtutorialview";
+  static const String careerApply = "$apiURL/career/apply";
 }

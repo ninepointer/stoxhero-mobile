@@ -79,52 +79,56 @@ class CareerController extends BaseController<CareerRepository> {
     isLoading(false);
   }
 
-  void validateCarrerOtp(String? careerId) async {
-    isLoading(true);
-    if (otpTextController.text.isNotEmpty) {
-      FocusScope.of(Get.context!).unfocus();
+  // void validateCarrerOtp(String? careerId) async {
+  //   isLoading(true);
+  //   if (otpTextController.text.isNotEmpty) {
+  //     FocusScope.of(Get.context!).unfocus();
 
-      CareerFormRequest data = CareerFormRequest(
-        firstName: firstNameTextController.text,
-        lastName: lastNameTextController.text,
-        email: emailTextController.text,
-        mobile: mobileTextController.text,
-        collegeName: collegeNameTextController.text,
-        dob: selectedDOBDateTime.value,
-        priorTradingExperience: experienceSelectedValue,
-        source: hearAboutSelectedValue,
-        linkedInProfileLink: linkedInProfileTextController.text,
-        mobileOtp: otpTextController.text,
-        career: careerId,
-        campaignCode: "",
-      );
+  //     CareerFormRequest data = CareerFormRequest(
+  //       firstName: firstNameTextController.text,
+  //       lastName: lastNameTextController.text,
+  //       email: emailTextController.text,
+  //       mobile: mobileTextController.text,
+  //       collegeName: collegeNameTextController.text,
+  //       dob: selectedDOBDateTime.value,
+  //       priorTradingExperience: experienceSelectedValue,
+  //       source: hearAboutSelectedValue,
+  //       linkedInProfileLink: linkedInProfileTextController.text,
+  //       mobileOtp: otpTextController.text,
+  //       career: careerId,
+  //       campaignCode: "",
+  //     );
 
-      try {
-        final RepoResponse response = await repository.validateCareerOtp(
-          data.toJson(),
-        );
-        if (response.data != null) {
-          Get.back();
-          SnackbarHelper.showSnackbar(response.data['info']);
-        }
-      } catch (e) {
-        log(e.toString());
-        SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-      }
-    }
-    isLoading(false);
+  //     try {
+  //       final RepoResponse response = await repository.validateCareerOtp(
+  //         data.toJson(),
+  //       );
+  //       if (response.data != null) {
+  //         Get.back();
+  //         SnackbarHelper.showSnackbar(response.data['info']);
+  //       }
+  //     } catch (e) {
+  //       log(e.toString());
+  //       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //     }
+  //   }
+  //   isLoading(false);
+  // }
+
+  void clearForm() {
+    collegeNameTextController.clear();
+    selectedDOBDateTime.value = '';
+    experienceSelectedValue = experienceSelectedValue;
+    hearAboutSelectedValue = hearAboutSelectedValue;
+    linkedInProfileTextController.clear();
   }
 
-  void submitCareerForm(String? careerId) async {
+  void careerApply(String? careerId) async {
     isLoading(true);
 
     FocusScope.of(Get.context!).unfocus();
 
     CareerFormRequest data = CareerFormRequest(
-      firstName: firstNameTextController.text,
-      lastName: lastNameTextController.text,
-      email: emailTextController.text,
-      mobile: mobileTextController.text,
       collegeName: collegeNameTextController.text,
       dob: selectedDOBDateTime.value,
       priorTradingExperience: experienceSelectedValue,
@@ -135,12 +139,13 @@ class CareerController extends BaseController<CareerRepository> {
     );
 
     try {
-      final RepoResponse response = await repository.generateCareerOtp(
+      final RepoResponse<GenericResponse> response = await repository.careerApply(
         data.toJson(),
       );
-      if (response.data != null) {
-        SnackbarHelper.showSnackbar(response.data['info']);
-        isOtpVisible(true);
+      if (response.data?.status?.toLowerCase() == "success") {
+        Get.back();
+        SnackbarHelper.showSnackbar('Thank you for Applying');
+        clearForm();
       }
     } catch (e) {
       log(e.toString());

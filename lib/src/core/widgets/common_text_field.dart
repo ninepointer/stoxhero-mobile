@@ -66,7 +66,7 @@ class CommonTextField extends StatelessWidget {
                 filled: true,
                 fillColor: AppColors.grey.withOpacity(.1),
                 hintText: hintText,
-                hintStyle: AppStyles.tsGreyRegular16,
+                hintStyle: AppStyles.tsGreyRegular14,
                 suffixIcon: suffixIcon,
                 prefixIcon: prefixIcon,
                 errorStyle: AppStyles.tsGreyRegular12.copyWith(

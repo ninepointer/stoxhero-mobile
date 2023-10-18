@@ -216,7 +216,7 @@ class LoginDetailsResponse {
       json['internshipBatch'].forEach((v) {
         internshipBatch!.add(new InternshipBatchList.fromJson(v));
       });
-    }
+    } 
   }
 
   Map<String, dynamic> toJson() {

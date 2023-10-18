@@ -162,11 +162,11 @@ class ContestController extends BaseController<ContestRepository> {
           if (participant.userId?.sId == userDetails.value.sId) {
             userAlreadyInContest = true;
             liveContest(contest);
-            selectedContestName(contest?.contestName);
-            liveLeaderboardList();
-            participate();
-            loadTradingData();
-            Get.to(() => ContestTradingView());
+            // selectedContestName(contest?.contestName);
+            // liveLeaderboardList();
+            // participate();
+            // loadTradingData();
+            // Get.to(() => ContestTradingView());
           }
           canParticipate = false;
         }

@@ -1,61 +1,40 @@
 class CareerFormRequest {
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? mobile;
+  String? dob;
   String? collegeName;
   String? linkedInProfileLink;
+  String? priorTradingExperience;
   String? source;
   String? career;
-  String? dob;
-  String? priorTradingExperience;
   String? campaignCode;
-  String? mobileOtp;
 
-  CareerFormRequest({
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.mobile,
-    this.collegeName,
-    this.linkedInProfileLink,
-    this.source,
-    this.career,
-    this.dob,
-    this.priorTradingExperience,
-    this.campaignCode,
-    this.mobileOtp,
-  });
+  CareerFormRequest(
+      {this.dob,
+      this.collegeName,
+      this.linkedInProfileLink,
+      this.priorTradingExperience,
+      this.source,
+      this.career,
+      this.campaignCode});
 
   CareerFormRequest.fromJson(Map<String, dynamic> json) {
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    email = json['email'];
-    mobile = json['mobile'];
+    dob = json['dob'];
     collegeName = json['collegeName'];
     linkedInProfileLink = json['linkedInProfileLink'];
+    priorTradingExperience = json['priorTradingExperience'];
     source = json['source'];
     career = json['career'];
-    dob = json['dob'];
-    priorTradingExperience = json['priorTradingExperience'];
     campaignCode = json['campaignCode'];
-    mobileOtp = json['mobile_otp'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['email'] = this.email;
-    data['mobile'] = this.mobile;
+    data['dob'] = this.dob;
     data['collegeName'] = this.collegeName;
     data['linkedInProfileLink'] = this.linkedInProfileLink;
+    data['priorTradingExperience'] = this.priorTradingExperience;
     data['source'] = this.source;
     data['career'] = this.career;
-    data['dob'] = this.dob;
-    data['priorTradingExperience'] = this.priorTradingExperience;
     data['campaignCode'] = this.campaignCode;
-    data['mobile_otp'] = this.mobileOtp;
     return data;
   }
 }

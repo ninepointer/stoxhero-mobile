@@ -127,9 +127,12 @@ class ProfileController extends BaseController<ProfileRepository> {
     try {
       final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
       if (response.data != null) {
-        await AppStorage.setUserDetails(
-          LoginDetailsResponse.fromJson(response.data?.data),
-        );
+        if (response.data?.status?.toLowerCase() == "success") {
+          final loginDetailsResponse = await Get.find<AuthRepository>().loginDetails();
+          if (loginDetailsResponse.data != null) {
+            await AppStorage.setUserDetails(loginDetailsResponse.data!);
+          }
+        }
         log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         SnackbarHelper.showSnackbar(response.data?.message);
       } else {

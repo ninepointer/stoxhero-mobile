@@ -265,11 +265,14 @@ class LiveContestCard extends GetView<ContestController> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    if (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) {
-                      controller.canUserTrade(contest);
+                    if (controller.checkIfLivePurchased(contest) ||
+                        contest?.entryFee == 0 ||
+                        controller.canUserTrade(contest)) {
                       controller.liveContest(contest);
-                      // controller.participate();
-                      // Get.to(() => ContestTradingView());
+                      controller.selectedContestName(contest?.contestName);
+                      controller.liveLeaderboardList();
+                      controller.participate();
+                      Get.to(() => ContestTradingView());
                     } else {
                       BottomSheetHelper.openBottomSheet(
                         context: context,

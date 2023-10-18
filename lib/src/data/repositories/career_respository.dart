@@ -22,4 +22,12 @@ class CareerRepository extends BaseRepository {
     var response = await service.post(path: apiURL, data: data);
     return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
   }
+
+  Future<RepoResponse<GenericResponse>> careerApply(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.careerApply;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
 }
