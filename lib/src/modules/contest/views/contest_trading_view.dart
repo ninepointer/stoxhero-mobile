@@ -8,7 +8,11 @@ class ContestTradingView extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contest Trading'),
+        title: Text(
+          '${controller.selectedContestName}',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Visibility(
@@ -180,7 +184,10 @@ class ContestTradingView extends GetView<ContestController> {
                             );
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
+                  CommonTile(
+                    label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   PortfolioDetailCardTile(
                     label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',

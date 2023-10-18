@@ -150,7 +150,10 @@ class InternshipTradingView extends GetView<InternshipController> {
                             return InternshipPositionCard(position: item);
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
+                  CommonTile(
+                    label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   PortfolioDetailCardTile(
                     label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
@@ -159,9 +162,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                   PortfolioDetailCardTile(
                     label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
-                    value: (controller.internshipBatchPortfolio.value.openingBalance ?? 0) > 0
-                        ? controller.calculateMargin()
-                        : controller.internshipBatchPortfolio.value.totalFund,
+                    value: controller.calculateMargin(),
                   ),
                   PortfolioDetailCardTile(
                     label: 'Used Margin Money',

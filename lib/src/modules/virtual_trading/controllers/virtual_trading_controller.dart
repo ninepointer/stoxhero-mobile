@@ -194,24 +194,47 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   num calculateMargin() {
-    num marginValue = 0;
     num amount = 0;
     num lots = 0;
     for (var position in virtualPositionsList) {
       if (position.lots != 0) {
-        amount += position.amount ?? 0;
+        amount += position.amount!.abs();
         lots += position.lots ?? 0;
       }
     }
-    num totalFund = virtualPortfolio.value.openingBalance ?? 0;
-    if (lots == 0) {
-      marginValue = totalFund + calculateTotalNetPNL();
-    } else if (lots < 0) {
-      marginValue = totalFund + amount;
+    num openingBalance = 0;
+    num totalFund = virtualPortfolio.value.totalFund ?? 0;
+
+    if (virtualPortfolio.value.openingBalance != null) {
+      openingBalance = virtualPortfolio.value.openingBalance ?? 0;
+      // print('openingBalance1 $openingBalance');
     } else {
-      marginValue = totalFund - amount;
+      openingBalance = totalFund;
+      // print('openingBalance2 $openingBalance');
     }
-    return marginValue;
+
+    num availableMargin = openingBalance != 0
+        ? lots == 0
+            ? openingBalance + calculateTotalNetPNL()
+            : openingBalance - amount
+        : totalFund;
+
+    // print('Amount $amount');
+    // print('lots $lots');
+    // print('calculateTotalNetPNL${calculateTotalNetPNL()}');
+    // print('openingBalance $openingBalance');
+    // print('totalFund $totalFund');
+    // print('availableMargin $availableMargin');
+    // String availableMarginPnlString = availableMargin >= 0 ? "₹" + availableMargin.toStringAsFixed(2) ?? "₹0" : "₹0";
+
+    // if (lots == 0) {
+    //   marginValue = totalFund + calculateTotalNetPNL();
+    // } else if (lots < 0) {
+    //   marginValue = totalFund - amount;
+    // } else {
+    //   marginValue = totalFund + amount;
+    // }
+    return availableMargin;
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {

@@ -217,24 +217,47 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   num calculateMargin() {
-    num marginValue = 0;
     num amount = 0;
     num lots = 0;
     for (var position in tenxPositionsList) {
       if (position.lots != 0) {
-        amount += position.amount ?? 0;
+        amount += position.amount!.abs();
         lots += position.lots ?? 0;
       }
     }
-    num totalFund = tenxPortfolioDetails.value.openingBalance ?? 0;
-    if (lots == 0) {
-      marginValue = totalFund + calculateTotalNetPNL();
-    } else if (lots < 0) {
-      marginValue = totalFund + amount;
+    num openingBalance = 0;
+    num totalFund = tenxPortfolioDetails.value.totalFund ?? 0;
+
+    if (tenxPortfolioDetails.value.openingBalance != null) {
+      openingBalance = tenxPortfolioDetails.value.openingBalance ?? 0;
+      // print('openingBalance1 $openingBalance');
     } else {
-      marginValue = totalFund - amount;
+      openingBalance = totalFund;
+      // print('openingBalance2 $openingBalance');
     }
-    return marginValue;
+
+    num availableMargin = openingBalance != 0
+        ? lots == 0
+            ? openingBalance + calculateTotalNetPNL()
+            : openingBalance - amount
+        : totalFund;
+
+    // print('Amount $amount');
+    // print('lots $lots');
+    // print('calculateTotalNetPNL${calculateTotalNetPNL()}');
+    // print('openingBalance $openingBalance');
+    // print('totalFund $totalFund');
+    // print('availableMargin $availableMargin');
+    // String availableMarginPnlString = availableMargin >= 0 ? "₹" + availableMargin.toStringAsFixed(2) ?? "₹0" : "₹0";
+
+    // if (lots == 0) {
+    //   marginValue = totalFund + calculateTotalNetPNL();
+    // } else if (lots < 0) {
+    //   marginValue = totalFund - amount;
+    // } else {
+    //   marginValue = totalFund + amount;
+    // }
+    return availableMargin;
   }
 
   void gotoSearchInstrument() {
@@ -506,24 +529,24 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
       ),
     );
-    log('placeTenxTradingOrder : ${data.toJson()}');
+    print('placeTenxTradingOrder : ${data.toJson()}');
     try {
       final RepoResponse<GenericResponse> response = await repository.placeTenxTradingOrder(
         data.toJson(),
       );
-      log(response.data.toString());
+      print(response.data.toString());
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successfull');
         await getTenxPositionsList();
         await getTenxTradingPortfolioDetails();
       } else if (response.data?.status == "Failed") {
-        log(response.error!.message!.toString());
+        print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log(e.toString());
+      print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

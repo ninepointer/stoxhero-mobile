@@ -124,10 +124,10 @@ class ContestController extends BaseController<ContestRepository> {
     return isVisible;
   }
 
-  // int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
-  //   int seatsLeft = maxParticipants - currentParticipants;
-  //   return seatsLeft;
-  // }
+  int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
+    int seatsLeft = maxParticipants - currentParticipants;
+    return seatsLeft;
+  }
 
   bool isUserInterested(contest, userId) {
     if (contest.interestedUsers != null) {
@@ -153,50 +153,29 @@ class ContestController extends BaseController<ContestRepository> {
     return canParticipate;
   }
 
-  // String checkSeatAvailabilityAndParticipation(contest, int maxParticipants) {
-  //   if (contest.participants != null) {
-  //     if (contest.participants.length >= maxParticipants) {
-  //       return "Contest is full. Sorry, you can't participate.";
-  //     }
-  //     if (contest.participants != null) {
-  //       for (Participants user in contest.participants) {
-  //         if (user.userId?.sId == userDetails.value.sId) {
-  //           log('canParticipate${user.userId?.sId} ');
-  //         }
-  //       }
-  //     }
-  //   }
-  //   if (participateUser(userDetails)) {
-  //     return "You have already participated in a free contest.";
-  //   }
-  //   return "You can participate in the contest.";
-  // }
-
-  void checkSeatAvailabilityAndParticipation(contest) {
-    if (contest.participants.length >= contest.maxParticipants) {
-      bool canParticipate = true; // Assume the user can participate by default
-      for (Participants user in contest.participants) {
-        if (user.userId?.sId == userDetails.value.sId) {
-          canParticipate = false; // If user ID matches, set canParticipate to false
-          break; // No need to check further, the user is already a participant
+  bool canUserTrade(contest) {
+    bool canParticipate = false;
+    if (contest.participants != null) {
+      if (contest.entryFee == 0) {
+        bool userAlreadyInContest = false;
+        for (Participants participant in contest.participants) {
+          if (participant.userId?.sId == userDetails.value.sId) {
+            userAlreadyInContest = true;
+            liveContest(contest);
+            selectedContestName(contest?.contestName);
+            liveLeaderboardList();
+            participate();
+            loadTradingData();
+            Get.to(() => ContestTradingView());
+          }
+          canParticipate = false;
+        }
+        if (!userAlreadyInContest && contest.participants.length >= contest.maxParticipants) {
+          SnackbarHelper.showSnackbar("Contest is full, try another one.");
         }
       }
-      if (canParticipate) {
-        // If the user is not already a participant, they can participate
-        SnackbarHelper.showSnackbar('You can participate.');
-      } else {
-        // If the user is already a participant, show a message
-        SnackbarHelper.showSnackbar('You are already a participant.');
-      }
-    } else {
-      // If there are available seats, the user can participate
-      SnackbarHelper.showSnackbar('You can participate.');
     }
-  }
-
-  int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
-    int seatsLeft = maxParticipants - currentParticipants;
-    return seatsLeft;
+    return canParticipate;
   }
 
   String getStockIndexName(int instId) {
@@ -372,24 +351,28 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   num calculateMargin() {
-    num marginValue = 0;
     num amount = 0;
     num lots = 0;
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
-        amount += position.amount ?? 0;
+        amount += position.amount!.abs();
         lots += position.lots ?? 0;
       }
     }
+    num openingBalance = 0;
     num totalFund = contestPortfolio.value.totalFund ?? 0;
-    if (lots == 0) {
-      marginValue = totalFund + calculateTotalNetPNL();
-    } else if (lots < 0) {
-      marginValue = totalFund + amount;
+
+    if (contestPortfolio.value.openingBalance != null) {
+      openingBalance = contestPortfolio.value.openingBalance ?? 0;
     } else {
-      marginValue = totalFund - amount;
+      openingBalance = totalFund;
     }
-    return marginValue;
+    num availableMargin = openingBalance != 0
+        ? lots == 0
+            ? openingBalance + calculateTotalNetPNL()
+            : openingBalance - amount
+        : totalFund;
+    return availableMargin;
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
@@ -974,6 +957,7 @@ class ContestController extends BaseController<ContestRepository> {
     isLoading(true);
     try {
       await repository.participate(liveContest.value.id);
+      // SnackbarHelper.showSnackbar("You can only participate in another contest once your current contest ends!");
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

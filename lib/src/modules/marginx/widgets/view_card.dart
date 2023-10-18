@@ -402,8 +402,14 @@ class _ViewCardState extends State<ViewCard> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              controller.upComingMarginX(widget.upcomingMarginX);
-                              controller.getShareMarginX(true);
+                              if (isUpcoming) {
+                                controller.upComingMarginX(widget.upcomingMarginX);
+                                controller.getShareMarginX(true);
+                              } else if (isLive) {
+                                controller.liveMarginX(widget.liveMarginX);
+                                controller.getShareMarginX(false);
+                              }
+                              
                               String url = 'https://stoxhero.com/marginxs';
                               Clipboard.setData(ClipboardData(text: url));
                               SnackbarHelper.showSnackbar('Share Link with your Friends');

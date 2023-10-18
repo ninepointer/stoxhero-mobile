@@ -351,24 +351,29 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   num calculateMargin() {
-    num marginValue = 0;
     num amount = 0;
     num lots = 0;
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
-        amount += position.amount ?? 0;
+        amount += position.amount!.abs();
         lots += position.lots ?? 0;
       }
     }
+    num openingBalance = 0;
     num totalFund = contestPortfolio.value.totalFund ?? 0;
-    if (lots == 0) {
-      marginValue = totalFund + calculateTotalNetPNL();
-    } else if (lots < 0) {
-      marginValue = totalFund + amount;
+
+    if (contestPortfolio.value.openingBalance != null) {
+      openingBalance = contestPortfolio.value.openingBalance ?? 0;
     } else {
-      marginValue = totalFund - amount;
+      openingBalance = totalFund;
     }
-    return marginValue;
+
+    num availableMargin = openingBalance != 0
+        ? lots == 0
+            ? openingBalance + calculateTotalNetPNL()
+            : openingBalance - amount
+        : totalFund;
+    return availableMargin;
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {

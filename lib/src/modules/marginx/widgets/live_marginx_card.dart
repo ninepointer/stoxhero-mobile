@@ -240,7 +240,10 @@ class LiveMarginxCard extends GetView<MarginXController> {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () => Get.to(() => ViewCard(liveMarginX: marginx)),
+                onTap: () {
+                  controller.liveMarginX(marginx);
+                  Get.to(() => ViewCard(liveMarginX: marginx));
+                },
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(6),
@@ -253,7 +256,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                   child: Text(
                     'View Details',
                     style: AppStyles.tsWhiteMedium12.copyWith(
-                      color: AppColors.info,
+                      color: AppColors.primary,
                     ),
                   ),
                 ),
@@ -271,7 +274,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                         if (controller.calculateSeatsLeft(
                                 marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) ==
                             0) {
-                          SnackbarHelper.showSnackbar('Contest is Full');
+                          SnackbarHelper.showSnackbar('Marginx is Full');
                         } else {
                           BottomSheetHelper.openBottomSheet(
                             context: context,
@@ -320,7 +323,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
               child: GestureDetector(
                 onTap: () {
                   controller.liveMarginX(marginx);
-                  controller.getShareMarginX(true);
+                  controller.getShareMarginX(false);
                   String url = 'https://stoxhero.com/marginxs';
                   Clipboard.setData(ClipboardData(text: url));
                   SnackbarHelper.showSnackbar('Share Link with your Friends');

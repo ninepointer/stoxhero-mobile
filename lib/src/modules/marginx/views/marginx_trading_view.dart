@@ -181,7 +181,10 @@ class MarginXTradingView extends GetView<MarginXController> {
                             return MarginXPositionCard(position: item);
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
+                  CommonTile(
+                    label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   PortfolioDetailCardTile(
                     label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',

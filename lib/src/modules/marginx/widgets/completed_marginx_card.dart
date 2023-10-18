@@ -253,7 +253,7 @@ class CompletedMarginxCard extends StatelessWidget {
                   child: Text(
                     'View Details',
                     style: AppStyles.tsWhiteMedium12.copyWith(
-                      color: AppColors.info,
+                      color: AppColors.primary,
                     ),
                   ),
                 ),

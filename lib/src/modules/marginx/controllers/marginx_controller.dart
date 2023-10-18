@@ -271,6 +271,32 @@ class MarginXController extends BaseController<MarginXRepository> {
     return marginValue;
   }
 
+  // num calculateMargin() {
+  //   num amount = 0;
+  //   num lots = 0;
+  //   for (var position in marginXPositionList) {
+  //     if (position.lots != 0) {
+  //       amount += position.amount!.abs();
+  //       lots += position.lots ?? 0;
+  //     }
+  //   }
+  //   num openingBalance = 0;
+  //   num totalFund = marginXPortfolio.value.totalFund ?? 0;
+
+  //   if (marginXPortfolio.value.totalFund != null) {
+  //     totalFund = marginXPortfolio.value.totalFund ?? 0;
+  //   } else {
+  //     totalFund = totalFund;
+  //   }
+
+  //   num availableMargin = openingBalance != 0
+  //       ? lots == 0
+  //           ? openingBalance + calculateTotalNetPNL()
+  //           : openingBalance - amount
+  //       : totalFund;
+  //   return availableMargin;
+  // }
+
   num calculateReturn() {
     num? entryFee = liveMarginX.value.marginXTemplate?.entryFee;
 

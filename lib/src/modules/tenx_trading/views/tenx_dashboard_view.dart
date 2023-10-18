@@ -10,7 +10,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
       appBar: AppBar(
         title: Text(
           '${controller.selectSubscriptionName}',
-          style: Theme.of(context).textTheme.tsMedium16,
+          style: Theme.of(context).textTheme.tsRegular16,
           textAlign: TextAlign.center,
         ),
       ),
@@ -58,9 +58,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         Expanded(
                           child: TradingMarginNpnlCard(
                             label: 'Available Margin',
-                            value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
-                                ? controller.calculateMargin().round()
-                                : controller.tenxPortfolioDetails.value.totalFund,
+                            value: controller.calculateMargin().round(),
                           ),
                         ),
                         SizedBox(width: 4),
@@ -206,7 +204,10 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             );
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
+                  CommonTile(
+                    label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   PortfolioDetailCardTile(
                     label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
@@ -215,9 +216,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   PortfolioDetailCardTile(
                     label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
-                    value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
-                        ? controller.calculateMargin()
-                        : controller.tenxPortfolioDetails.value.totalFund,
+                    value: controller.calculateMargin(),
                   ),
                   PortfolioDetailCardTile(
                     label: 'Used Margin Money',

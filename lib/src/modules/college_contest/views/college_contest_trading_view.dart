@@ -182,6 +182,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                         ),
                   CommonTile(
                     label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   PortfolioDetailCardTile(
                     label: 'Virtual Margin Money',

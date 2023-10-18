@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stoxhero/src/core/core.dart';
 import 'package:uuid/uuid.dart';
 import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
@@ -96,9 +98,21 @@ class _PaymentViewState extends State<PaymentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: startPGTransaction,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: startPGTransaction,
+      // ),
+      body: Padding(
+        padding: const EdgeInsets.all(16).copyWith(bottom: 100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CommonFilledButton(
+              label: 'Start Transaction',
+              onPressed: startPGTransaction,
+            ),
+          ],
+        ),
       ),
     );
   }

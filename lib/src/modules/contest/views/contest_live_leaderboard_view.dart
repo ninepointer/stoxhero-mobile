@@ -8,7 +8,11 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contest Leaderboard'),
+        title: Text(
+          '${controller.selectedContestName} \nContest Trading',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Column(

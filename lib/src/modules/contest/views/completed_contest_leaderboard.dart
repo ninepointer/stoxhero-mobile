@@ -10,7 +10,7 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
       appBar: AppBar(
         title: Text(
           '${controller.selectedContestName}\n Leaderboard',
-          style: Theme.of(context).textTheme.tsMedium16,
+          style: Theme.of(context).textTheme.tsRegular16,
           textAlign: TextAlign.center,
         ),
       ),
