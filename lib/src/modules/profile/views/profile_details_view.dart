@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/core/core.dart';
-
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class ProfileDetailsView extends StatefulWidget {
   const ProfileDetailsView({Key? key}) : super(key: key);
@@ -16,9 +13,8 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
   late ProfileController controller;
   @override
   void initState() {
-    controller = Get.find<ProfileController>();
-
     super.initState();
+    controller = Get.find<ProfileController>();
   }
 
   @override
@@ -40,9 +36,12 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
           ],
         ),
         body: Visibility(
-          visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
-          child: Container(
+          visible: controller.isProfileLoadingStatus,
+          child: ListViewShimmer(
+            itemCount: 10,
+            shimmerCard: SmallCardShimmer(),
+          ),
+          replacement: Container(
             margin: EdgeInsets.only(top: 4),
             color: Theme.of(context).cardColor,
             child: SingleChildScrollView(
@@ -57,7 +56,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                       textAlign: TextAlign.start,
                       style: Theme.of(context).textTheme.tsMedium16,
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: 8),
                     Text(
                       'Position',
                       style: Theme.of(context).textTheme.tsGreyMedium12,
@@ -98,6 +97,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                               ),
                               SizedBox(height: 4),
                               CommonTextField(
+                                isDisabled: controller.userDetails.value.kYCStatus == 'Approved' ? true : false,
                                 prefixIcon: Icon(Icons.person),
                                 controller: controller.firstNameTextController,
                                 hintText: 'First Name',
@@ -117,11 +117,12 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                               ),
                               SizedBox(height: 4),
                               CommonTextField(
+                                isDisabled: controller.userDetails.value.kYCStatus == 'Approved' ? true : false,
                                 prefixIcon: Icon(Icons.person),
                                 controller: controller.lastNameTextController,
                                 hintText: 'Last Name',
                                 padding: EdgeInsets.only(bottom: 8),
-                              ),
+                              )
                             ],
                           ),
                         ),
@@ -133,6 +134,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     ),
                     SizedBox(height: 4),
                     CommonTextField(
+                      isDisabled: controller.userDetails.value.kYCStatus == 'Approved' ? true : false,
                       controller: controller.emailTextController,
                       hintText: 'Email',
                       padding: EdgeInsets.only(bottom: 8),
@@ -143,8 +145,25 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     ),
                     SizedBox(height: 4),
                     CommonTextField(
+                      isDisabled: true,
                       controller: controller.mobileTextController,
                       hintText: 'Mobile',
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(10),
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      padding: EdgeInsets.only(bottom: 8),
+                    ),
+                    Text(
+                      'WhatsApp',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
+                    CommonTextField(
+                      isDisabled: true,
+                      controller: controller.whatsAppTextController,
+                      hintText: 'WhatsApp',
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(10),
@@ -200,6 +219,23 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                           ),
                         ),
                       ],
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      'Profile Photo',
+                      style: Theme.of(context).textTheme.tsGreyMedium12,
+                    ),
+                    SizedBox(height: 4),
+                    CommonImageUpload(
+                      label: 'Profile Photo',
+                      file: controller.profilePhotoFile.value,
+                      selectFile: () => controller.filePicker(
+                        KycDocumentType.profilePhoto,
+                      ),
+                      removeFile: () => controller.filePicker(
+                        KycDocumentType.profilePhoto,
+                        removeFile: true,
+                      ),
                     ),
                     SizedBox(height: 12),
                     Text(

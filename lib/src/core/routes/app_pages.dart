@@ -48,7 +48,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.bankDetails,
       page: () => BankDetailsView(),
-      binding: BankBinding(),
+      binding: ProfileBinding(),
     ),
     GetPage(
       name: AppRoutes.kycDetails,

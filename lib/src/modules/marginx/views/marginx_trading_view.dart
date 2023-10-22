@@ -8,7 +8,11 @@ class MarginXTradingView extends GetView<MarginXController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MarginX Trading'),
+        title: Text(
+          '${controller.liveMarginX.value.marginXName ?? 'MarginX Trading'}',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Visibility(

@@ -265,32 +265,43 @@ class LiveContestCard extends GetView<ContestController> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    if (controller.checkIfLivePurchased(contest) ||
-                        contest?.entryFee == 0 ||
-                        controller.canUserTrade(contest)) {
-                      controller.liveContest(contest);
-                      controller.selectedContestName(contest?.contestName);
-                      controller.liveLeaderboardList();
-                      controller.participate();
-                      Get.to(() => ContestTradingView());
+                    controller.liveContest(contest);
+                    if (contest?.entryFee == 0) {
+                      if (contest?.maxParticipants == contest?.participants?.length) {
+                        if (controller.canUserTrade(contest)) {
+                          controller.gotoTradingView();
+                        } else {
+                          controller.participate(contest);
+                        }
+                      } else {
+                        if (controller.canUserTrade(contest)) {
+                          controller.gotoTradingView();
+                        } else {
+                          controller.participate(contest);
+                        }
+                      }
                     } else {
-                      BottomSheetHelper.openBottomSheet(
-                        context: context,
-                        child: PurchaseItemBottomSheet(
-                          buyItemPrice: contest?.entryFee ?? 0,
-                          onSubmit: () {
-                            Get.back();
-                            var data = {
-                              "bonusRedemption": 0,
-                              "coupon": "",
-                              "contestFee": contest?.entryFee,
-                              "contestId": contest?.id,
-                              "contestName": contest?.contestName,
-                            };
-                            controller.purchaseContest(data);
-                          },
-                        ),
-                      );
+                      if (controller.checkIfLivePurchased(contest)) {
+                        controller.gotoTradingView();
+                      } else {
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: PurchaseItemBottomSheet(
+                            buyItemPrice: contest?.entryFee ?? 0,
+                            onSubmit: () {
+                              Get.back();
+                              var data = {
+                                "bonusRedemption": 0,
+                                "coupon": "",
+                                "contestFee": contest?.entryFee,
+                                "contestId": contest?.id,
+                                "contestName": contest?.contestName,
+                              };
+                              controller.purchaseContest(data);
+                            },
+                          ),
+                        );
+                      }
                     }
                   },
                   child: Container(
@@ -347,3 +358,16 @@ class LiveContestCard extends GetView<ContestController> {
     );
   }
 }
+
+// 1st - Contest is full or not
+//  if(full){
+//  if user has parti... in this contest.
+// if(isParti...){
+// Trading...
+//} else{
+// Show msg...
+//}
+// }else{
+
+// }
+///

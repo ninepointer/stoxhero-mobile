@@ -180,4 +180,12 @@ class CollegeContestRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<GenericResponse>> verifyAndParticipate(String? id, data) async {
+    String apiURL = AppUrls.verifyAndParticipate(id);
+    var response = await service.putAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
 }

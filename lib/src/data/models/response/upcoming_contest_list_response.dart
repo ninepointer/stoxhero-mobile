@@ -51,7 +51,7 @@ class UpComingContest {
   bool? isAllIndex;
   String? createdOn;
   String? lastModifiedOn;
-  List<Participants>? participants;
+  List<CollegeParticipants>? participants;
   List<InterestedUsers>? interestedUsers;
   UpComingContest({
     this.id,
@@ -102,9 +102,9 @@ class UpComingContest {
     createdOn = json['createdOn'];
     lastModifiedOn = json['lastModifiedOn'];
     if (json['participants'] != null) {
-      participants = <Participants>[];
+      participants = <CollegeParticipants>[];
       json['participants'].forEach((v) {
-        participants!.add(new Participants.fromJson(v));
+        participants!.add(new CollegeParticipants.fromJson(v));
       });
     }
     if (json['interestedUsers'] != null) {

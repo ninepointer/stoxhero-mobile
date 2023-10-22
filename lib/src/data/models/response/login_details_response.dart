@@ -4,7 +4,7 @@ class LoginDetailsResponse {
   UserImageDetails? panCardFrontImage;
   UserImageDetails? passportPhoto;
   UserImageDetails? addressProofDocument;
-  String? profilePhoto;
+  UserImageDetails? profilePhoto;
   String? sId;
   String? kYCStatus;
   int? iV;
@@ -144,7 +144,7 @@ class LoginDetailsResponse {
             json['addressProofDocument'],
           )
         : null;
-    profilePhoto = json['profilePhoto'].toString();
+    profilePhoto = json['profilePhoto'] != null ? new UserImageDetails.fromJson(json['profilePhoto']) : null;
     sId = json['_id'];
     kYCStatus = json['KYCStatus'];
     iV = json['__v'];
@@ -216,7 +216,7 @@ class LoginDetailsResponse {
       json['internshipBatch'].forEach((v) {
         internshipBatch!.add(new InternshipBatchList.fromJson(v));
       });
-    } 
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -237,7 +237,7 @@ class LoginDetailsResponse {
       data['addressProofDocument'] = this.addressProofDocument!.toJson();
     }
     if (this.profilePhoto != null) {
-      data['profilePhoto'] = this.profilePhoto.toString();
+      data['profilePhoto'] = this.profilePhoto!.toJson();
     }
     data['_id'] = this.sId;
     data['KYCStatus'] = this.kYCStatus;
@@ -308,7 +308,7 @@ class LoginDetailsResponse {
     UserImageDetails? panCardFrontImage,
     UserImageDetails? passportPhoto,
     UserImageDetails? addressProofDocument,
-    String? profilePhoto,
+    UserImageDetails? profilePhoto,
     String? sId,
     String? kYCStatus,
     int? iV,

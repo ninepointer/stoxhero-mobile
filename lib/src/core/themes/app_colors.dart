@@ -22,6 +22,8 @@ class AppColors {
   static final MaterialColor warning = Color(0xFFF5C405).toMaterialColor();
   static final MaterialColor danger = Color(0xFFFF5630).toMaterialColor();
   static final MaterialColor cyan = Color(0xFF68F5E3).toMaterialColor();
+  static final MaterialColor lightGreen = Color(0xFF65BA0D).toMaterialColor();
+  static final MaterialColor darkGreen = Color(0xFF315c45).toMaterialColor();
 
   static final Color lightScaffoldBackgroundColor = Color(0xFFF5F6FA);
   static final Color darkScaffoldBackgroundColor = Color(0xFF171F2A);

@@ -4,3 +4,4 @@ export 'widgets/wallet_card.dart';
 export 'widgets/wallet_transaction_card.dart';
 export 'widgets/wallet_transaction_bottom_sheet.dart';
 export 'views/payment_view.dart';
+export 'widgets/withdrawal_transaction_card.dart';

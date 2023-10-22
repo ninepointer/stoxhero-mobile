@@ -18,6 +18,7 @@ class CommonTextField extends StatelessWidget {
   final bool isDisabled;
   final FocusNode? focusNode;
   final Function(String?)? onChanged;
+  final bool? enabled;
   const CommonTextField({
     Key? key,
     this.padding,
@@ -34,6 +35,7 @@ class CommonTextField extends StatelessWidget {
     this.isDisabled = false,
     this.focusNode,
     this.onChanged,
+    this.enabled,
   }) : super(key: key);
 
   @override
@@ -59,6 +61,7 @@ class CommonTextField extends StatelessWidget {
               inputFormatters: inputFormatters,
               keyboardType: keyboardType,
               obscureText: obscureText ?? false,
+              enabled: enabled,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               style: Theme.of(context).textTheme.tsRegular16,
               decoration: InputDecoration(

@@ -310,27 +310,29 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
             ),
             child: Row(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (isUserInterestedId) {
-                        SnackbarHelper.showSnackbar('Already interested in ${widget.contest?.contestName}');
-                      } else {
-                        controller.upComingContest(widget.contest);
-                        controller.getNotified();
-                        SnackbarHelper.showSnackbar(
-                            'Thanks for showing interest in the ${widget.contest?.contestName} Contest, you will be notified before the contest starts.');
-                      }
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(.25),
-                      ),
-                      child: Text(
-                        isUserInterestedId ? 'Notified' : 'Get Notified',
-                        style: AppStyles.tsPrimaryMedium12,
+                Visibility(
+                  visible: !isUserInterestedId,
+                  child: Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (isUserInterestedId) {
+                          SnackbarHelper.showSnackbar('Already interested in ${widget.contest?.contestName}');
+                        } else {
+                          controller.upComingContest(widget.contest);
+                          controller.getNotified();
+                          SnackbarHelper.showSnackbar('You are now interested in ${widget.contest?.contestName}');
+                        }
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(.25),
+                        ),
+                        child: Text(
+                          isUserInterestedId ? '' : 'Get Notified',
+                          style: AppStyles.tsPrimaryMedium12,
+                        ),
                       ),
                     ),
                   ),

@@ -26,7 +26,7 @@ class AppBinding extends Bindings {
     Get.put(HomeController(), permanent: true);
     Get.put(TenxTradingController(), permanent: true);
     Get.put(ProfileController(), permanent: true);
-    Get.put(BankController(), permanent: true);
+    // Get.put(BankController(), permanent: true);
 
     Get.put(PortfolioController(), permanent: true);
     Get.put(ReferralsController(), permanent: true);

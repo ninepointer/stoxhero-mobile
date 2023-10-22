@@ -55,8 +55,8 @@ class ContestView extends StatelessWidget {
             image: AppImages.contestLeaderboard,
             buttonLabel: 'See Contest Leaderboard!',
             onPressed: () {
-              ContestController contestController = Get.find<ContestController>();
-              CollegeContestController collegeContestController = Get.find<CollegeContestController>();
+              final contestController = Get.find<ContestController>();
+              final collegeContestController = Get.find<CollegeContestController>();
               contestController.getContestLeaderboardList();
               collegeContestController.getCollegeContestLeaderboardList();
               Get.find<ContestController>().selectedTabBarIndex(0);

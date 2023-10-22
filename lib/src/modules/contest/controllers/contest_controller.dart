@@ -48,6 +48,7 @@ class ContestController extends BaseController<ContestRepository> {
   final upcomingPremiumContestList = <UpComingContest>[].obs;
   final upcomingFreeContestList = <UpComingContest>[].obs;
   final tempCompletedContestList = <CompletedContest>[].obs;
+  final completedContest = CompletedContest().obs;
   final completedPremiumContestList = <CompletedContest>[].obs;
   final completedFreeContestList = <CompletedContest>[].obs;
   final completedContestList = <CompletedContest>[].obs;
@@ -112,6 +113,11 @@ class ContestController extends BaseController<ContestRepository> {
     socketLeaderboardConnection();
   }
 
+  void gotoTradingView() {
+    loadTradingData();
+    Get.to(() => ContestTradingView());
+  }
+
   bool isUpcomingContestVisible(UpComingContest? contest) {
     DateTime startTimeDateTime;
     Duration remainingTime;
@@ -140,39 +146,22 @@ class ContestController extends BaseController<ContestRepository> {
     return false;
   }
 
-  bool participateUser(contest) {
-    bool canParticipate = false;
-    if (contest.participants != null) {
-      for (Participants user in contest.participants) {
-        if (user.userId?.sId == userDetails.value.sId) {
-          canParticipate = true;
-          log('canParticipate${user.userId?.sId} ');
-        }
-      }
-    }
-    return canParticipate;
-  }
-
   bool canUserTrade(contest) {
     bool canParticipate = false;
     if (contest.participants != null) {
-      if (contest.entryFee == 0) {
-        bool userAlreadyInContest = false;
-        for (Participants participant in contest.participants) {
-          if (participant.userId?.sId == userDetails.value.sId) {
-            userAlreadyInContest = true;
-            liveContest(contest);
-            // selectedContestName(contest?.contestName);
-            // liveLeaderboardList();
-            // participate();
-            // loadTradingData();
-            // Get.to(() => ContestTradingView());
-          }
-          canParticipate = false;
+      for (Participants participant in contest.participants) {
+        if (participant.userId?.sId == userDetails.value.sId) {
+          canParticipate = true;
+          // liveContest(contest);
+          // selectedContestName(contest?.contestName);
+          // liveLeaderboardList();
+          // participate(contest);
+          // loadTradingData();
+          // Get.to(() => ContestTradingView());
         }
-        if (!userAlreadyInContest && contest.participants.length >= contest.maxParticipants) {
-          SnackbarHelper.showSnackbar("Contest is full, try another one.");
-        }
+        // if (!userAlreadyInContest && contest.participants.length >= contest.maxParticipants) {
+        //   SnackbarHelper.showSnackbar("Contest is full, try another one.");
+        // }
       }
     }
     return canParticipate;
@@ -288,7 +277,7 @@ class ContestController extends BaseController<ContestRepository> {
     Get.toNamed(AppRoutes.contestSearchSymbol);
   }
 
-  bool checkIfPurchased(UpComingContest? contest) {
+  bool checkIfPurchased(contest) {
     bool isPurchased = false;
     for (Participants? user in contest?.participants ?? []) {
       if (user?.userId?.sId == userDetails.value.sId) {
@@ -953,11 +942,17 @@ class ContestController extends BaseController<ContestRepository> {
     isLoading(false);
   }
 
-  Future participate() async {
+  Future participate(LiveContest? contest) async {
     isLoading(true);
     try {
-      await repository.participate(liveContest.value.id);
-      // SnackbarHelper.showSnackbar("You can only participate in another contest once your current contest ends!");
+      final response = await repository.participate(liveContest.value.id);
+      if (response.data?.status?.toLowerCase() == "success") {
+        liveLeaderboardList();
+        loadTradingData();
+        Get.to(() => ContestTradingView());
+      } else if (response.error != null) {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

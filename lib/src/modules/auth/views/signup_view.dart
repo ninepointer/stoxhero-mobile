@@ -167,6 +167,7 @@ class _SignupViewState extends State<SignupView> {
                               ],
                             ),
                             CommonFilledButton(
+                              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                               label: 'Create account',
                               onPressed: () {
                                 bool isValid = formKey.currentState?.validate() ?? false;
@@ -186,6 +187,8 @@ class _SignupViewState extends State<SignupView> {
                         ),
                         SizedBox(height: 24),
                         CommonOutlinedButton(
+                          backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                          labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                           label: 'Sign In',
                           onPressed: () => Get.toNamed(AppRoutes.signin),
                         ),

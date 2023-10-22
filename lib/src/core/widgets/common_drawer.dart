@@ -39,8 +39,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<PortfolioController>().loadData();
         break;
       case 2:
-        Get.find<OrdersController>().loadData();
         Get.toNamed(AppRoutes.orders);
+        Get.find<OrdersController>().loadData();
         break;
       case 3:
         Get.toNamed(AppRoutes.careers);
@@ -97,7 +97,15 @@ class _CommonDrawerState extends State<CommonDrawer> {
                     ),
                   ),
                   child: ClipOval(
-                    child: Image.asset(AppImages.appLogo),
+                    child: controller.userDetails.value.profilePhoto == null
+                        ? Image.asset(
+                            AppImages.appLogo,
+                            width: 48,
+                            height: 48,
+                          )
+                        : Image.network(
+                            controller.userDetails.value.profilePhoto?.url ?? '',
+                          ),
                   ),
                 ),
               ),
@@ -139,7 +147,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 1),
               ),
               ProfileListTile(
-                label: 'Orders Book',
+                label: 'Order Book',
                 onTap: () => selectedItem(context, 2),
               ),
               ProfileListTile(
@@ -153,8 +161,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 4),
               ),
               ProfileListTile(
-                icon: Icons.dark_mode,
-                label: 'Dark Mode',
+                icon: ThemeService().theme == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
+                label: ThemeService().theme == ThemeMode.dark ? 'Light Mode' : 'Dark Mode',
                 onTap: () => selectedItem(context, 5),
               ),
               ProfileListTile(

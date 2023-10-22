@@ -90,6 +90,7 @@ class _SigninViewState extends State<SigninView> {
                           ),
                           Obx(
                             () => CommonFilledButton(
+                              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                               isLoading: controller.isLoadingStatus,
                               label: 'Continue',
                               onPressed: () {
@@ -111,6 +112,8 @@ class _SigninViewState extends State<SigninView> {
                       ),
                       SizedBox(height: 24),
                       CommonOutlinedButton(
+                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         label: 'Create account',
                         onPressed: () => Get.toNamed(AppRoutes.signup),
                       ),

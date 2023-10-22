@@ -95,4 +95,15 @@ class FormatHelper {
       return '-';
     }
   }
+
+  static String formatDateToIST(String? value) {
+    if (value != null) {
+      DateTime dateTimeUTC = DateTime.parse(value);
+      DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
+      String formattedIST = DateFormat('dd/MM/yyyy').format(dateTimeIST);
+      return formattedIST;
+    } else {
+      return '-';
+    }
+  }
 }

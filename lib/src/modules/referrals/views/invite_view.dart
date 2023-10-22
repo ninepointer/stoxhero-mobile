@@ -46,7 +46,7 @@ class InviteView extends GetView<ReferralsController> {
                       children: [
                         if (controller.activeReferrals.value != null)
                           Text(
-                            'Get ${controller.activeReferrals.value?.currency ?? ''} ${controller.activeReferrals.value?.rewardPerReferral ?? ''} for every referral in\nyour StoxHero wallet',
+                            'Get ${FormatHelper.formatNumbers(controller.activeReferrals.value?.rewardPerReferral, decimal: 0)} for every referral in\nyour StoxHero wallet',
                             style: AppStyles.tsPrimaryRegular16,
                             textAlign: TextAlign.center,
                           ),
@@ -65,7 +65,8 @@ class InviteView extends GetView<ReferralsController> {
                           iconData: Icons.share,
                         ),
                         ReferralDetailsCardTile(
-                          label: 'You get INR 15 for each referral',
+                          label:
+                              'You get ${FormatHelper.formatNumbers(controller.activeReferrals.value?.rewardPerReferral, decimal: 0)} for each referral',
                           iconData: Icons.share,
                         ),
                         SizedBox(height: 16),

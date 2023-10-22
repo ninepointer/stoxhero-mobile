@@ -48,10 +48,14 @@ class AppStrings {
   static const String invite = "Invite";
   static const String referrals = "Referrals";
 
-  static const availableTenxPlans = "Available TenX";
-  static const subscribedTenxPlans = "Subscribed TenX";
-  static const expiredTenxPlans = "Expired TenX";
-  static const tenxLeaderboard = "TenX Leaderboard";
+  static const String availableTenxPlans = "Available TenX";
+  static const String subscribedTenxPlans = "Subscribed TenX";
+  static const String expiredTenxPlans = "Expired TenX";
+  static const String tenxLeaderboard = "TenX Leaderboard";
+  static const String wallet = "Wallet";
+  static const String transactions = "Transactions";
+  static const String sucessfullTransactions = "Sucessfull Transactions";
+  static const String recentTransactions = "Recent Transactions";
 
   static const noDataFound = 'Oops!, \nNo Data Found!';
 

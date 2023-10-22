@@ -107,6 +107,7 @@ class OtpView extends GetView<AuthController> {
                           SizedBox(height: 16),
                           Obx(
                             () => CommonFilledButton(
+                              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                               label: 'Verify',
                               onPressed: controller.verifyOtp,
                               isLoading: controller.isLoadingStatus,
@@ -125,6 +126,8 @@ class OtpView extends GetView<AuthController> {
                       ),
                       SizedBox(height: 24),
                       CommonOutlinedButton(
+                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         label: 'Send again',
                         onPressed: () => controller.resendSigninOtp(),
                       ),

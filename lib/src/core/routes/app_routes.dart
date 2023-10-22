@@ -7,8 +7,8 @@ class AppRoutes {
   static const String home = '/home';
   static const String profile = '/profile';
   static const String profileDetails = '/profile/profile_details';
-  static const String bankDetails = '/bank';
-  static const String kycDetails = '/bank/kyc_details';
+  static const String bankDetails = '/profile/bank_details';
+  static const String kycDetails = '/profile/kyc_details';
   static const String orders = '/orders';
   static const String funds = '/funds';
   static const String portfolio = '/portfolio';

@@ -35,7 +35,7 @@ class TenxActiveSubscription {
   int? expiryDays;
   int? payoutPercentage;
   int? profitCap;
-  Portfolio? portfolio;
+  CollegePortfolio? portfolio;
   String? validityPeriod;
   List<Features>? features;
   String? status;
@@ -67,7 +67,7 @@ class TenxActiveSubscription {
     expiryDays = json['expiryDays'];
     payoutPercentage = json['payoutPercentage'];
     profitCap = json['profitCap'];
-    portfolio = json['portfolio'] != null ? new Portfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null ? new CollegePortfolio.fromJson(json['portfolio']) : null;
     validityPeriod = json['validityPeriod'];
     if (json['features'] != null) {
       features = <Features>[];

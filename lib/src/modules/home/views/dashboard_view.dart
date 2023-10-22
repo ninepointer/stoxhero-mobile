@@ -120,21 +120,20 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  CommonTile(
-                    label: 'Live Contests',
-                    showSeeAllButton: true,
-                    onPressed: () {
-                      Get.find<ContestController>().loadData();
-                      Get.find<ContestController>().selectedTabBarIndex(0);
-                      Get.to(() => ContestListView());
-                    },
-                    margin: EdgeInsets.only(bottom: 0, top: 8),
-                  ),
                   contestController.liveContestList.isEmpty
-                      ? NoDataFound(
-                          imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForFreeLiveContest,
-                        )
+                      ? Container()
+                      : CommonTile(
+                          label: 'Live Contests',
+                          showSeeAllButton: true,
+                          onPressed: () {
+                            Get.find<ContestController>().loadData();
+                            Get.find<ContestController>().selectedTabBarIndex(0);
+                            Get.to(() => ContestListView());
+                          },
+                          margin: EdgeInsets.only(bottom: 0, top: 8),
+                        ),
+                  contestController.liveContestList.isEmpty
+                      ? Container()
                       : SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -149,21 +148,20 @@ class _DashboardViewState extends State<DashboardView> {
                             }).toList(),
                           ),
                         ),
-                  CommonTile(
-                    label: 'Upcoming Contests',
-                    showSeeAllButton: true,
-                    onPressed: () {
-                      Get.find<ContestController>().loadData();
-                      Get.find<ContestController>().selectedTabBarIndex(1);
-                      Get.to(() => ContestListView());
-                    },
-                    margin: EdgeInsets.only(bottom: 0, top: 8),
-                  ),
                   contestController.upComingContestList.isEmpty
-                      ? NoDataFound(
-                          imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForFreeUpcomingContest,
-                        )
+                      ? Container()
+                      : CommonTile(
+                          label: 'Upcoming Contests',
+                          showSeeAllButton: true,
+                          onPressed: () {
+                            Get.find<ContestController>().loadData();
+                            Get.find<ContestController>().selectedTabBarIndex(1);
+                            Get.to(() => ContestListView());
+                          },
+                          margin: EdgeInsets.only(bottom: 0, top: 8),
+                        ),
+                  contestController.upComingContestList.isEmpty
+                      ? Container()
                       : SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -226,10 +224,7 @@ class _DashboardViewState extends State<DashboardView> {
                             Expanded(
                               child: customCard(
                                 label: 'Trading',
-                                percent: '${FormatHelper.formatNumbers(
-                                  controller.userDashboardReturnSummary.value.tenxReturn,
-                                  showSymbol: false,
-                                )} %',
+                                percent: '0%',
                               ),
                             ),
                           ],

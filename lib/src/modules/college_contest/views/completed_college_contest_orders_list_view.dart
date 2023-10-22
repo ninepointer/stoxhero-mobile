@@ -12,7 +12,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${controller.selectedContestName}\n Order Book',
+          '${controller.completedCollegeContest.value.contestName}\n Order Book',
           style: Theme.of(context).textTheme.tsRegular16,
           textAlign: TextAlign.center,
         ),

@@ -109,6 +109,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
           child: Column(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
@@ -242,7 +243,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
               child: GestureDetector(
                 onTap: () {
                   controller.liveMarginX(marginx);
-                  Get.to(() => ViewCard(liveMarginX: marginx));
+                  Get.to(
+                    () => ViewCard(liveMarginX: marginx),
+                  );
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -307,11 +310,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                                     marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) >
                                 0
                         ? 'Start Trading'
-                        : controller.calculateSeatsLeft(
-                                    marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) ==
-                                0
-                            ? 'MarginX Full'
-                            : 'Pay Now',
+                        : 'Pay Now',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.success,
                     ),

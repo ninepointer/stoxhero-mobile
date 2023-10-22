@@ -456,12 +456,16 @@ class NetworkService {
     Map<String, dynamic>? data,
   }) async {
     try {
+      final headers = {
+        'Cookie': useTestToken ? 'jwtoken=${AppConstants.token}' : 'jwtoken=${AppStorage.getToken()}',
+      };
       final response = await _dio.download(
         path,
         filePath,
         data: data,
         options: Options(
-          method: 'POST',
+          method: 'GET',
+          headers: headers,
           responseType: ResponseType.bytes,
         ),
       );

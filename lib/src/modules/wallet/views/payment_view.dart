@@ -71,7 +71,7 @@ class _PaymentViewState extends State<PaymentView> {
       "redirectUrl": baseURL,
       "callbackUrl": baseURL,
       "redirectMode": "POST",
-      "mobileNumber": "9999999999",
+      "mobileNumber": "9767361687",
       "paymentInstrument": {"type": "PAY_PAGE"}
     };
 
@@ -97,12 +97,8 @@ class _PaymentViewState extends State<PaymentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: startPGTransaction,
-      // ),
       body: Padding(
-        padding: const EdgeInsets.all(16).copyWith(bottom: 100),
+        padding: const EdgeInsets.all(16).copyWith(bottom: 56),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

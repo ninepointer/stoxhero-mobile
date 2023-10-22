@@ -13,3 +13,4 @@ export 'widgets/upcoming_college_contest_card.dart';
 export 'views/college_contest_form_view.dart';
 export 'views/college_contest_register_view.dart';
 export 'views/college_contest_live_leaderboard_view.dart';
+export 'widgets/college_contest_code_bottomsheet.dart';

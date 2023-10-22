@@ -1,6 +1,6 @@
 name: stoxhero
 description: A new Flutter project.
-version: 1.0.0+17 # Dev
+version: 1.0.0+21 # Dev
 # version: 1.0.0+12 # Prod
 publish_to: "none"
 
@@ -42,6 +42,8 @@ dependencies:
   uni_links: ^0.5.1
   shimmer: ^3.0.0
   logger: ^2.0.2+1
+  path_provider: ^2.1.1
+  open_filex: ^4.3.4
 
 dev_dependencies:
   flutter_launcher_icons: any

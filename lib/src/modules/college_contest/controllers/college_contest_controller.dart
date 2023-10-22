@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:stoxhero/src/data/models/response/trading_instrument_trade_details_list_response.dart';
 import 'package:stoxhero/src/data/models/response/upcoming_college_contest_list_response.dart';
@@ -52,7 +54,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final collegeNameTextController = TextEditingController();
   final otpTextController = TextEditingController();
   final linkedInProfileTextController = TextEditingController();
-
+  final collegeCodeTextController = TextEditingController();
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingCollegeContest>[].obs;
   final upComingCollegeContest = UpComingCollegeContest().obs;
@@ -61,6 +63,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final completedFreeCollegeContestList = <CompletedCollegeContest>[].obs;
   final collegeContestLeaderboardList = <CollegeContestLeaderboard>[].obs;
   final completedCollegeContestList = <CompletedCollegeContest>[].obs;
+  final completedCollegeContest = CompletedCollegeContest().obs;
   final upcomingPremiumCollegeContestList = <UpComingCollegeContest>[].obs;
   final upcomingFreeCollegeContestList = <UpComingCollegeContest>[].obs;
   final completedContestPnlList = <CompletedContestPnl>[].obs;
@@ -147,6 +150,24 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future loadRegisterData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getUpComingCollegeContestList();
+  }
+
+  void gotoTradingView() {
+    loadTradingData();
+    Get.to(() => CollegeContestTradingView());
+  }
+
+  void downloadFile() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+
+    String path = dir.path;
+    String docsFolderPath = '$path/StoxHero/docs';
+    String filePath = '$docsFolderPath/Certificate.pdf';
+    String apiUrl = '${AppUrls.completedCollegeContestCertificate(completedCollegeContest.value.id)}';
+
+    await File(filePath).create(recursive: true);
+    Get.find<NetworkService>().downloadFile(path: apiUrl, filePath: filePath);
+    await OpenFilex.open(filePath);
   }
 
   bool isUserInterested(contest, userId) {
@@ -298,14 +319,37 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     return isPurchased;
   }
 
-  bool checkIfLivePurchased(LiveCollegeContest? contest) {
+  bool checkIfLivePurchased(contest) {
     bool isPurchased = false;
-    for (CollegeParticipants? user in contest?.participants ?? []) {
+    for (CollegeParticipants? user in contest?.participants) {
       if (user?.userId?.sId == userDetails.value.sId) {
         isPurchased = true;
       }
     }
     return isPurchased;
+  }
+
+  bool canUserTrade(contest) {
+    bool canParticipate = false;
+    if (contest.participants != null) {
+      for (CollegeParticipants participant in contest.participants) {
+        if (participant.userId?.sId == userDetails.value.sId) {
+          // if (liveCollegeContest.value.collegeCode == collegeCodeTextController.text) {
+          // }
+          canParticipate = true;
+          // liveContest(contest);
+          // selectedContestName(contest?.contestName);
+          // liveLeaderboardList();
+          // participate(contest);
+          // loadTradingData();
+          // Get.to(() => ContestTradingView());
+        }
+        // if (!userAlreadyInContest && contest.participants.length >= contest.maxParticipants) {
+        //   SnackbarHelper.showSnackbar("Contest is full, try another one.");
+        // }
+      }
+    }
+    return canParticipate;
   }
 
   num calculateGrossPNL(num amount, int lots, num ltp) {
@@ -367,7 +411,6 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     } else {
       openingBalance = totalFund;
     }
-
     num availableMargin = openingBalance != 0
         ? lots == 0
             ? openingBalance + calculateTotalNetPNL()
@@ -994,15 +1037,39 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isLoading(false);
   }
 
-  Future participate() async {
+  // Future participate() async {
+  //   isLoading(true);
+  //   try {
+  //     await repository.participate(
+  //       liveCollegeContest.value.id,
+  //     );
+  //     getLiveCollegeContestList();
+  //   } catch (e) {
+  //     log(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //   }
+  //   isLoading(false);
+  // }
+
+  Future verifyAndParticipate(LiveCollegeContest? contest) async {
     isLoading(true);
+    CollegeContestCodeRequest data = CollegeContestCodeRequest(
+      collegeCode: collegeCodeTextController.text,
+    );
     try {
-      await repository.participate(
+      final response = await repository.verifyAndParticipate(
         liveCollegeContest.value.id,
+        data.toJson(),
       );
-      getLiveCollegeContestList();
+      if (response.data?.status?.toLowerCase() == "success") {
+        liveLeaderboardList();
+        loadTradingData();
+        Get.to(() => CollegeContestTradingView());
+      } else if (response.error != null) {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
     } catch (e) {
-      log(e.toString());
+      print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

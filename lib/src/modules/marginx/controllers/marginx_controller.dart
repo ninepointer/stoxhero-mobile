@@ -121,20 +121,20 @@ class MarginXController extends BaseController<MarginXRepository> {
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
-  bool checkIfPurchased(UpcomingMarginX? marginx) {
+  bool checkIfPurchased(marginx) {
     bool isPurchased = false;
-    for (MParticipants? user in marginx?.participants ?? []) {
-      if (user?.userId == userDetails.value.sId) {
+    for (MParticipants user in marginx.participants) {
+      if (user.userId == userDetails.value.sId) {
         isPurchased = true;
       }
     }
     return isPurchased;
   }
 
-  bool checkIfLivePurchased(LiveMarginX? marginx) {
+  bool checkIfLivePurchased(marginx) {
     bool isPurchased = false;
-    for (Participantss? user in marginx?.participants ?? []) {
-      if (user?.userId == userDetails.value.sId) {
+    for (Participantss user in marginx.participants) {
+      if (user.userId == userDetails.value.sId) {
         isPurchased = true;
       }
     }
@@ -251,24 +251,28 @@ class MarginXController extends BaseController<MarginXRepository> {
   }
 
   num calculateMargin() {
-    num marginValue = 0;
     num amount = 0;
     num lots = 0;
     for (var position in marginXPositionList) {
       if (position.lots != 0) {
-        amount += position.amount ?? 0;
+        amount += position.amount!.abs();
         lots += position.lots ?? 0;
       }
     }
+    num openingBalance = 0;
     num totalFund = marginXPortfolio.value.totalFund ?? 0;
-    if (lots == 0) {
-      marginValue = totalFund + calculateTotalNetPNL();
-    } else if (lots < 0) {
-      marginValue = totalFund + amount;
+
+    if (marginXPortfolio.value.totalFund != null) {
+      openingBalance = marginXPortfolio.value.totalFund ?? 0;
     } else {
-      marginValue = totalFund - amount;
+      openingBalance = totalFund;
     }
-    return marginValue;
+    num availableMargin = openingBalance != 0
+        ? lots == 0
+            ? openingBalance + calculateTotalNetPNL()
+            : openingBalance - amount
+        : totalFund;
+    return availableMargin;
   }
 
   // num calculateMargin() {
@@ -299,18 +303,17 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   num calculateReturn() {
     num? entryFee = liveMarginX.value.marginXTemplate?.entryFee;
-
     if (entryFee == null) {
       return 0;
     }
-    num factor = marginXPortfolio.value.totalFund ?? 0 / entryFee;
+    num factor = marginXPortfolio.value.totalFund! / entryFee;
     num value = calculateTotalNetPNL() / factor;
     return value;
   }
 
   num calculateAccountBalance() {
     num? entryFee = liveMarginX.value.marginXTemplate?.entryFee;
-    num bal = entryFee ?? 0 + calculateReturn();
+    num bal = entryFee! + calculateReturn();
     return bal;
   }
 

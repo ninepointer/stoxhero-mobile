@@ -83,7 +83,9 @@ class _HomeViewState extends State<HomeView> {
             splashRadius: 24,
             icon: Icon(Icons.account_balance_wallet_rounded),
             onPressed: () {
-              Get.find<WalletController>().loadData();
+              final controller = Get.find<WalletController>();
+              controller.loadData();
+              controller.selectedTabBarIndex(0);
               Get.toNamed(AppRoutes.wallet);
             },
           ),

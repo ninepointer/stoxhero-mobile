@@ -15,10 +15,6 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isParticipants = controller.participateUser(
-      contest,
-      controller.userDetails.value.sId,
-    );
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -261,46 +257,55 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
-                          controller.calculateSeatsLeft(
-                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
-                              0
-                      ? () {
-                          if (isParticipants) {
-                            controller.liveCollegeContest(contest);
-                            controller.loadTradingData();
-                            controller.liveLeaderboardList();
-                            Get.to(() => CollegeContestTradingView());
-                          } else {
-                            SnackbarHelper.showSnackbar(
-                                'You can only participate in another contest once your current contest ends!');
-                          }
+                  onTap: () {
+                    controller.liveCollegeContest(contest);
+                    if (contest?.entryFee == 0) {
+                      if (contest?.maxParticipants == contest?.participants?.length) {
+                        if (controller.canUserTrade(contest)) {
+                          controller.gotoTradingView();
+                        } else {
+                          controller.verifyAndParticipate(contest);
                         }
-                      : () {
-                          if (controller.calculateSeatsLeft(
-                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
-                              0) {
-                            SnackbarHelper.showSnackbar('Contest is Full');
-                          } else {
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: PurchaseItemBottomSheet(
-                                buyItemPrice: contest?.entryFee ?? 0,
-                                onSubmit: () {
-                                  Get.back();
-                                  var data = {
-                                    "bonusRedemption": 0,
-                                    "coupon": "",
-                                    "contestFee": contest?.entryFee,
-                                    "contestId": contest?.id,
-                                    "contestName": contest?.contestName,
-                                  };
-                                  controller.purchaseContest(data);
-                                },
-                              ),
-                            );
-                          }
-                        },
+                      } else if (controller.canUserTrade(contest)) {
+                        controller.gotoTradingView();
+                      } else {
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: CollegeContestCodeBottomsheet(
+                            onSubmit: () {
+                              Get.back();
+                              if (contest?.collegeCode == controller.collegeCodeTextController.text) {
+                                controller.verifyAndParticipate(contest);
+                              }
+                              controller.collegeCodeTextController.clear();
+                            },
+                          ),
+                        );
+                      }
+                    } else {
+                      if (controller.checkIfLivePurchased(contest)) {
+                        controller.gotoTradingView();
+                      } else {
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: PurchaseItemBottomSheet(
+                            buyItemPrice: contest?.entryFee ?? 0,
+                            onSubmit: () {
+                              Get.back();
+                              var data = {
+                                "bonusRedemption": 0,
+                                "coupon": "",
+                                "contestFee": contest?.entryFee,
+                                "contestId": contest?.id,
+                                "contestName": contest?.contestName,
+                              };
+                              controller.purchaseContest(data);
+                            },
+                          ),
+                        );
+                      }
+                    }
+                  },
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(6),
@@ -311,16 +316,9 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
-                              controller.calculateSeatsLeft(
-                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
-                                  0
+                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0)
                           ? 'Start Trading'
-                          : controller.calculateSeatsLeft(
-                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
-                                  0
-                              ? 'Contest Full'
-                              : 'Pay Now',
+                          : 'Pay Now',
                       style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
                       ),

@@ -9,7 +9,7 @@ class ContestTradingView extends GetView<ContestController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${controller.selectedContestName}',
+          '${controller.liveContest.value.contestName ?? 'Contest'}',
           style: Theme.of(context).textTheme.tsRegular16,
           textAlign: TextAlign.center,
         ),

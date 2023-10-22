@@ -9,7 +9,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${controller.selectSubscriptionName}',
+          '${controller.tenxMyActiveSubcribed.value.planName ?? 'TenX Trading'}',
           style: Theme.of(context).textTheme.tsRegular16,
           textAlign: TextAlign.center,
         ),

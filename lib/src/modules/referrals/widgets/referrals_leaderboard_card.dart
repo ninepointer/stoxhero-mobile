@@ -60,7 +60,7 @@ class ReferralsLeaderboardCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          "Total Referral's",
+                          "Total Referrals",
                           style: Theme.of(context).textTheme.tsGreyRegular12,
                         ),
                       ),

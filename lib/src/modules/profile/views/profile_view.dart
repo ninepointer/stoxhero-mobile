@@ -22,13 +22,52 @@ class ProfileView extends GetView<ProfileController> {
         ),
         child: Column(
           children: [
-            Container(
-              height: 80,
-              width: 80,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.asset(AppImages.appLogo),
-              ),
+            Stack(
+              children: [
+                Container(
+                  height: 80,
+                  width: 80,
+                  child: ClipOval(
+                    child: controller.userDetails.value.profilePhoto == null
+                        ? Image.asset(
+                            AppImages.appLogo,
+                            width: 48,
+                            height: 48,
+                          )
+                        : Image.network(
+                            controller.userDetails.value.profilePhoto?.url ?? '',
+                          ),
+                  ),
+                ),
+                // Positioned(
+                //   right: 0,
+                //   bottom: 0,
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       controller.profilePhotoFile.value;
+                //       controller.filePicker(
+                //         KycDocumentType.profilePhoto,
+                //       );
+                //     },
+                //     child: Container(
+                //       width: 24,
+                //       height: 24,
+                //       decoration: BoxDecoration(
+                //         shape: BoxShape.circle,
+                //         color: AppColors.primary,
+                //       ),
+                //       child: Align(
+                //         alignment: Alignment.center,
+                //         child: Icon(
+                //           Icons.edit,
+                //           color: Colors.white,
+                //           size: 16,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
             ),
             SizedBox(height: 12),
             Text(
@@ -61,7 +100,7 @@ class ProfileView extends GetView<ProfileController> {
               icon: Icons.person,
               label: 'My Profile',
               onTap: () {
-                controller.loadData();
+                controller.loadProfileDetails();
                 Get.toNamed(AppRoutes.profileDetails);
               },
             ),
@@ -69,7 +108,7 @@ class ProfileView extends GetView<ProfileController> {
               icon: Icons.account_balance,
               label: 'Bank Details',
               onTap: () {
-                Get.find<BankController>().loadData();
+                controller.loadBankDetails();
                 Get.toNamed(AppRoutes.bankDetails);
               },
             ),
@@ -77,7 +116,7 @@ class ProfileView extends GetView<ProfileController> {
               icon: Icons.account_balance,
               label: 'KYC Details',
               onTap: () {
-                Get.find<BankController>().loadData();
+                controller.loadBankDetails();
                 Get.toNamed(AppRoutes.kycDetails);
               },
             ),

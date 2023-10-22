@@ -18,7 +18,7 @@ class CareerController extends BaseController<CareerRepository> {
   bool get isLoadingStatus => isLoading.value;
 
   final isOtpVisible = false.obs;
-
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
   final emailTextController = TextEditingController();
@@ -135,7 +135,7 @@ class CareerController extends BaseController<CareerRepository> {
       source: hearAboutSelectedValue,
       linkedInProfileLink: linkedInProfileTextController.text,
       career: careerId,
-      campaignCode: "",
+      campaignCode: " ",
     );
 
     try {

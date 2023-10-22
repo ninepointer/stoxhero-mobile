@@ -12,6 +12,14 @@ class WalletRepository extends BaseRepository {
         : RepoResponse(data: WalletTransactionsListResponse.fromJson(response));
   }
 
+  Future<RepoResponse<MyWithdrawalsListResponse>> getMyWithdrawalsTransactionsList() async {
+    String apiURL = AppUrls.myWithdrawals;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: MyWithdrawalsListResponse.fromJson(response));
+  }
+
   Future<RepoResponse<GenericResponse>> withdrawals(Map<String, dynamic> data) async {
     String apiURL = AppUrls.withdrawal;
     var response = await service.postAuth(path: apiURL, data: data);

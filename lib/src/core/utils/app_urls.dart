@@ -72,7 +72,7 @@ class AppUrls {
 
   static const String purchaseContestIntent = "$apiURL/dailycontest/purchaseintent/";
   static const String purchaseContest = "$apiURL/dailycontest/feededuct";
-  static const String upComingContests = "$apiURL/dailycontest/contests/upcoming";
+  static const String upComingContests = "$apiURL/dailycontest/contests/userupcoming";
   static const String liveContests = "$apiURL/dailycontest/contests/userlive";
   static const String completedContests = "$apiURL/dailycontest/contests/completed";
   static const String allContestPnl = "$apiURL/dailycontest/trade/allcontestPnl";
@@ -81,7 +81,7 @@ class AppUrls {
   static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
   static String completedContestLeaderboard(String? id) => "$apiURL/dailycontest/contestleaderboard/$id";
   static String completedContestOrders(String? id) => '$apiURL/dailycontest/trade/$id/my/todayorders';
-  static String completedCollegeContestCertificate(String? id) => "apiURL/dailycontest/download/$id";
+  static String completedCollegeContestCertificate(String? id) => "$apiURL/dailycontest/download/$id";
   static String contestInstrumentWatchList(bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
 
@@ -144,4 +144,6 @@ class AppUrls {
   static const String tenxRenew = "$apiURL/tenX/renew";
   static const String tenxTutorial = "$apiURL/tenX/tenxtutorialview";
   static const String careerApply = "$apiURL/career/apply";
+  static const String myWithdrawals = "$apiURL/withdrawals/mywithdrawals";
+  static String verifyAndParticipate(String? id) => "$apiURL/dailycontest/contest/$id/varifycodeandparticipate";
 }

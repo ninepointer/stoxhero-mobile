@@ -14,16 +14,29 @@ class WalletBinding implements Bindings {
 }
 
 class WalletController extends BaseController<WalletRepository> {
-  final isLoading = false.obs;
-  bool get isLoadingStatus => isLoading.value;
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
   final token = ''.obs;
+  final isLoading = false.obs;
+  bool get isLoadingStatus => isLoading.value;
+
+  final isRecentLoading = false.obs;
+  bool get isRecentLoadingStatus => isRecentLoading.value;
+
+  final isSuccessLoading = false.obs;
+  bool get isSuccessLoadingStatus => isSuccessLoading.value;
 
   final totalCashAmount = RxNum(0);
   final walletTransactionsList = <WalletTransaction>[].obs;
+  final withdrawalTransactionsList = <MyWithdrawalsList>[].obs;
   final amountTextController = TextEditingController();
   final amount = 0.obs;
+
+  final selectedTabBarIndex = 0.obs;
+  final selectedSecondTabBarIndex = 0.obs;
+
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+  void changeSecondTabBarIndex(int val) => selectedSecondTabBarIndex.value = val;
 
   void onConfirm() {
     if (amountTextController.text.isEmpty) {
@@ -34,16 +47,15 @@ class WalletController extends BaseController<WalletRepository> {
     }
   }
 
-  void onCancel() {
-    Get.back();
-  }
+  void onCancel() => Get.back();
 
   void loadData() async {
     getWalletTransactionsList();
+    getMyWithdrawalsTransactionsList();
   }
 
   Future getWalletTransactionsList() async {
-    isLoading(true);
+    isRecentLoading(true);
     try {
       final RepoResponse<WalletTransactionsListResponse> response = await repository.getWalletTransactionsList();
       if (response.data != null) {
@@ -59,7 +71,23 @@ class WalletController extends BaseController<WalletRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isRecentLoading(false);
+  }
+
+  Future getMyWithdrawalsTransactionsList() async {
+    isSuccessLoading(true);
+    try {
+      final RepoResponse<MyWithdrawalsListResponse> response = await repository.getMyWithdrawalsTransactionsList();
+      if (response.data != null) {
+        withdrawalTransactionsList((response.data?.data ?? []));
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isSuccessLoading(false);
   }
 
   Future withdrawals() async {

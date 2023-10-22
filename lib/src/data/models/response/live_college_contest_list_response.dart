@@ -36,9 +36,11 @@ class LiveCollegeContest {
   String? contestType;
   String? currentLiveStatus;
   String? contestFor;
-  num? entryFee;
-  num? payoutPercentage;
-  LiveCollegeContestPortfolio? portfolio;
+  String? collegeCode;
+  int? entryFee;
+  int? payoutPercentage;
+  CollegePortfolio? portfolio;
+  String? college;
   int? maxParticipants;
   String? contestStatus;
   String? createdBy;
@@ -48,7 +50,7 @@ class LiveCollegeContest {
   bool? isBankNifty;
   bool? isFinNifty;
   bool? isAllIndex;
-  List<LiveCollegeInterestedUsers>? interestedUsers;
+  String? product;
   List<CollegeParticipants>? participants;
   String? createdOn;
   String? lastModifiedOn;
@@ -63,9 +65,11 @@ class LiveCollegeContest {
       this.contestType,
       this.currentLiveStatus,
       this.contestFor,
+      this.collegeCode,
       this.entryFee,
       this.payoutPercentage,
       this.portfolio,
+      this.college,
       this.maxParticipants,
       this.contestStatus,
       this.createdBy,
@@ -75,7 +79,7 @@ class LiveCollegeContest {
       this.isBankNifty,
       this.isFinNifty,
       this.isAllIndex,
-      this.interestedUsers,
+      this.product,
       this.participants,
       this.createdOn,
       this.lastModifiedOn,
@@ -90,9 +94,11 @@ class LiveCollegeContest {
     contestType = json['contestType'];
     currentLiveStatus = json['currentLiveStatus'];
     contestFor = json['contestFor'];
+    collegeCode = json['collegeCode'];
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
-    portfolio = json['portfolio'] != null ? new LiveCollegeContestPortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null ? new CollegePortfolio.fromJson(json['portfolio']) : null;
+    college = json['college'];
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -102,13 +108,7 @@ class LiveCollegeContest {
     isBankNifty = json['isBankNifty'];
     isFinNifty = json['isFinNifty'];
     isAllIndex = json['isAllIndex'];
-
-    if (json['interestedUsers'] != null) {
-      interestedUsers = <LiveCollegeInterestedUsers>[];
-      json['interestedUsers'].forEach((v) {
-        interestedUsers!.add(new LiveCollegeInterestedUsers.fromJson(v));
-      });
-    }
+    product = json['product'];
     if (json['participants'] != null) {
       participants = <CollegeParticipants>[];
       json['participants'].forEach((v) {
@@ -130,11 +130,13 @@ class LiveCollegeContest {
     data['contestType'] = this.contestType;
     data['currentLiveStatus'] = this.currentLiveStatus;
     data['contestFor'] = this.contestFor;
+    data['collegeCode'] = this.collegeCode;
     data['entryFee'] = this.entryFee;
     data['payoutPercentage'] = this.payoutPercentage;
     if (this.portfolio != null) {
       data['portfolio'] = this.portfolio!.toJson();
     }
+    data['college'] = this.college;
     data['maxParticipants'] = this.maxParticipants;
     data['contestStatus'] = this.contestStatus;
     data['createdBy'] = this.createdBy;
@@ -144,10 +146,8 @@ class LiveCollegeContest {
     data['isBankNifty'] = this.isBankNifty;
     data['isFinNifty'] = this.isFinNifty;
     data['isAllIndex'] = this.isAllIndex;
+    data['product'] = this.product;
 
-    if (this.interestedUsers != null) {
-      data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
-    }
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
     }
@@ -158,14 +158,14 @@ class LiveCollegeContest {
   }
 }
 
-class LiveCollegeContestPortfolio {
+class CollegePortfolio {
   String? sId;
   String? portfolioName;
-  num? portfolioValue;
+  int? portfolioValue;
 
-  LiveCollegeContestPortfolio({this.sId, this.portfolioName, this.portfolioValue});
+  CollegePortfolio({this.sId, this.portfolioName, this.portfolioValue});
 
-  LiveCollegeContestPortfolio.fromJson(Map<String, dynamic> json) {
+  CollegePortfolio.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     portfolioName = json['portfolioName'];
     portfolioValue = json['portfolioValue'];
@@ -180,76 +180,16 @@ class LiveCollegeContestPortfolio {
   }
 }
 
-class LiveCollegeInterestedUsers {
-  UserIdd? userId;
-  String? registeredOn;
-  String? status;
-  String? sId;
-
-  LiveCollegeInterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
-
-  LiveCollegeInterestedUsers.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new UserIdd.fromJson(json['userId']) : null;
-    registeredOn = json['registeredOn'];
-    status = json['status'];
-    sId = json['_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.userId != null) {
-      data['userId'] = this.userId!.toJson();
-    }
-    data['registeredOn'] = this.registeredOn;
-    data['status'] = this.status;
-    data['_id'] = this.sId;
-    return data;
-  }
-}
-
-class UserIdd {
-  String? sId;
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? mobile;
-  String? creationProcess;
-
-  UserIdd({this.sId, this.firstName, this.lastName, this.email, this.mobile, this.creationProcess});
-
-  UserIdd.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    firstName = json['first_name'];
-    lastName = json['last_name'];
-    email = json['email'];
-    mobile = json['mobile'];
-    creationProcess = json['creationProcess'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['first_name'] = this.firstName;
-    data['last_name'] = this.lastName;
-    data['email'] = this.email;
-    data['mobile'] = this.mobile;
-    data['creationProcess'] = this.creationProcess;
-    return data;
-  }
-}
-
 class CollegeParticipants {
-  UserIdd? userId;
+  CollegeUserId? userId;
   String? participatedOn;
-  bool? isLive;
   String? sId;
 
-  CollegeParticipants({this.userId, this.participatedOn, this.isLive, this.sId});
+  CollegeParticipants({this.userId, this.participatedOn, this.sId});
 
   CollegeParticipants.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new UserIdd.fromJson(json['userId']) : null;
+    userId = json['userId'] != null ? new CollegeUserId.fromJson(json['userId']) : null;
     participatedOn = json['participatedOn'];
-    isLive = json['isLive'];
     sId = json['_id'];
   }
 
@@ -259,8 +199,35 @@ class CollegeParticipants {
       data['userId'] = this.userId!.toJson();
     }
     data['participatedOn'] = this.participatedOn;
-    data['isLive'] = this.isLive;
     data['_id'] = this.sId;
+    return data;
+  }
+}
+
+class CollegeUserId {
+  String? sId;
+  String? email;
+  String? firstName;
+  String? lastName;
+  String? mobile;
+
+  CollegeUserId({this.sId, this.email, this.firstName, this.lastName, this.mobile});
+
+  CollegeUserId.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    email = json['email'];
+    firstName = json['first_name'];
+    lastName = json['last_name'];
+    mobile = json['mobile'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['email'] = this.email;
+    data['first_name'] = this.firstName;
+    data['last_name'] = this.lastName;
+    data['mobile'] = this.mobile;
     return data;
   }
 }

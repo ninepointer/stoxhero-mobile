@@ -276,8 +276,7 @@ class CompletedContestCard extends StatelessWidget {
                 onTap: () {
                   final controller = Get.find<ContestController>();
                   controller.getCompletedContestLeaderboardList(contest?.id);
-                  controller.selectedContestName("");
-                  controller.selectedContestName(contest?.contestName ?? '');
+                  controller.completedContest(contest);
                   Get.to(() => CompletedContestLeaderboard());
                 },
                 child: Container(
