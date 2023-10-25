@@ -23,6 +23,8 @@ class _TenxTradingViewState extends State<TenxTradingView> {
   @override
   Widget build(BuildContext context) {
     return Obx(
+
+      
       () => CommonTabBar(
         isScrollable: true,
         index: controller.selectedTabBarIndex.value,

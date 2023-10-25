@@ -47,7 +47,7 @@ class _WalletViewState extends State<WalletView> {
                     label: 'Cash',
                     value: FormatHelper.formatNumbers(controller.totalCashAmount.value),
                     iconData: Icons.payments_rounded,
-                    buttonLabel: 'Withdrawal',
+                    buttonLabel: 'Withdraw',
                     onPressed: () => BottomSheetHelper.openBottomSheet(
                       context: context,
                       child: WalletTransactionBottomSheet(),

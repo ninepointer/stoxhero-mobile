@@ -64,7 +64,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                         SizedBox(width: 4),
                         Expanded(
                           child: TradingMarginNpnlCard(
-                            label: 'Net P&L (Profit & Loss)',
+                            label: 'Net P&L',
                             value: controller.calculateTotalNetPNL(),
                           ),
                         ),
@@ -80,7 +80,9 @@ class MarginXTradingView extends GetView<MarginXController> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: 'Nothing here! \nClick on + icon to add instruments',
+                        )
                       : SizedBox(
                           height:
                               controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,

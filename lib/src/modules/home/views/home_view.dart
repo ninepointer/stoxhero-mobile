@@ -68,11 +68,9 @@ class _HomeViewState extends State<HomeView> {
                   'Hello,',
                   style: AppStyles.tsGreyRegular12,
                 ),
-                Obx(
-                  () => Text(
-                    controller.userDetailsData.firstName?.capitalizeFirst ?? '-',
-                    style: Theme.of(context).textTheme.tsMedium16,
-                  ),
+                Text(
+                  controller.userDetailsData.firstName?.capitalizeFirst ?? '-',
+                  style: Theme.of(context).textTheme.tsMedium16,
                 ),
               ],
             ),
