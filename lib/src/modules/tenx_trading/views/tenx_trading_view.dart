@@ -12,8 +12,6 @@ class TenxTradingView extends StatefulWidget {
 class _TenxTradingViewState extends State<TenxTradingView> {
   late TenxTradingController controller;
 
-  bool isExpanded = false;
-
   @override
   void initState() {
     super.initState();
@@ -23,8 +21,6 @@ class _TenxTradingViewState extends State<TenxTradingView> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-
-      
       () => CommonTabBar(
         isScrollable: true,
         index: controller.selectedTabBarIndex.value,
@@ -41,31 +37,36 @@ class _TenxTradingViewState extends State<TenxTradingView> {
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(bottom: 100),
-              child: Visibility(
-                visible: controller.isActiveLoadingStatus,
-                child: ListViewShimmer(
-                  itemCount: 10,
-                  shimmerCard: LargeCardShimmer(),
-                ),
-                replacement: Visibility(
-                  visible: controller.tenxActiveSub.isEmpty,
-                  child: NoDataFound(
-                    imagePath: AppImages.contestTrophy,
-                    label: AppStrings.noDataFoundTenxActive,
+              child: Column(
+                children: [
+                  TenxInfoCard(),
+                  Visibility(
+                    visible: controller.isActiveLoadingStatus,
+                    child: ListViewShimmer(
+                      itemCount: 10,
+                      shimmerCard: LargeCardShimmer(),
+                    ),
+                    replacement: Visibility(
+                      visible: controller.tenxActiveSub.isEmpty,
+                      child: NoDataFound(
+                        imagePath: AppImages.contestTrophy,
+                        label: AppStrings.noDataFoundTenxActive,
+                      ),
+                      replacement: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: controller.tenxActiveSub.length,
+                        itemBuilder: (context, index) {
+                          var sub = controller.tenxActiveSub[index];
+                          return TenxActiveCard(
+                            subscription: sub,
+                            isActive: controller.userSubscriptionsIds.contains(sub.sId),
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                  replacement: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: controller.tenxActiveSub.length,
-                    itemBuilder: (context, index) {
-                      var sub = controller.tenxActiveSub[index];
-                      return TenxActiveCard(
-                        subscription: sub,
-                        isActive: controller.userSubscriptionsIds.contains(sub.sId),
-                      );
-                    },
-                  ),
-                ),
+                ],
               ),
             ),
           ),

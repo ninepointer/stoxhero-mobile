@@ -99,38 +99,33 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
               ],
             ),
             SizedBox(height: 4),
-            Padding(
-              padding: EdgeInsets.only(right: 12, left: 12),
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.grey.withOpacity(.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Subscribed On : ${FormatHelper.formatDateTimeToIST(subscription.subscribedOn)}',
-                          style: AppStyles.tsSecondaryMedium12,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Expanded(
-                        child: Text(
-                          'Expires On: ${FormatHelper.formatDateTimeToIST(subscription.expiredOn)}',
-                          textAlign: TextAlign.end,
-                          style: AppStyles.tsWhiteMedium12.copyWith(
-                            color: AppColors.success,
-                          ),
-                        ),
-                      ),
-                    ],
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.grey.withOpacity(.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Subscribed On :\n${FormatHelper.formatDateTimeToIST(subscription.subscribedOn)}',
+                      style: AppStyles.tsSecondaryMedium12,
+                    ),
                   ),
-                ),
+                  SizedBox(height: 2),
+                  Expanded(
+                    child: Text(
+                      'Expired On :\n${FormatHelper.formatDateTimeToIST(subscription.expiredOn)}',
+                      textAlign: TextAlign.end,
+                      style: AppStyles.tsWhiteMedium12.copyWith(
+                        color: AppColors.success,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -14,3 +14,4 @@ export 'widgets/tenx_trading_card_header.dart';
 export 'widgets/tenx_expired_card.dart';
 export 'widgets/tenx_leaderboard_card.dart';
 export 'widgets/tenx_learn_more_info.dart';
+export 'widgets/tenx_info_card.dart';

@@ -213,7 +213,6 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                   onPressed: () {},
                   label: 'Subscription Not Allowed',
                 ),
-              SizedBox(height: 4),
             ],
           ),
         ),

@@ -58,6 +58,9 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CommonDrawer(),
+      onDrawerChanged: (isOpened) {
+        if (isOpened) controller.userDetails(AppStorage.getUserDetails());
+      },
       appBar: AppBar(
         title: Row(
           children: [

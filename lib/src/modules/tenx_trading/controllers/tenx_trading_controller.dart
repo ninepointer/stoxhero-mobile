@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stoxhero/src/data/models/response/tenx_my_active_subscribed_list_response.dart';
 import 'package:stoxhero/src/data/models/response/tenx_my_expired_subscription_list_response.dart';
 import 'package:uuid/uuid.dart';
@@ -119,6 +120,18 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+
+  String getFormattedExpiryDate(String? subscribedOn, int? expiryDays) {
+    if (subscribedOn != null) {
+      DateTime subscribedDateTimeUTC = DateTime.parse(subscribedOn);
+      DateTime expiryDateTimeUTC = subscribedDateTimeUTC.add(Duration(days: expiryDays ?? 0));
+      DateTime expiryDateTimeIST = expiryDateTimeUTC.add(Duration(hours: 5, minutes: 30));
+      String formattedIST = DateFormat('d MMM yyyy hh:mm a').format(expiryDateTimeIST);
+      return formattedIST;
+    } else {
+      return '-';
+    }
+  }
 
   String date() {
     DateTime subscribedOn = DateTime.parse(tenxMyActiveSubcribed.value.subscribedOn ?? '');
