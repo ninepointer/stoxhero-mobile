@@ -29,12 +29,12 @@ class TenxTradingActiveResponse {
 class TenxActiveSubscription {
   String? sId;
   String? planName;
-  int? actualPrice;
-  int? discountedPrice;
+  num? actualPrice;
+  num? discountedPrice;
   int? validity;
   int? expiryDays;
-  int? payoutPercentage;
-  int? profitCap;
+  num? payoutPercentage;
+  num? profitCap;
   CollegePortfolio? portfolio;
   String? validityPeriod;
   List<Features>? features;

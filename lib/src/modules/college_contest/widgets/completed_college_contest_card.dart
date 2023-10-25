@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app.dart';
 
-class CompletedCollegeContestCard extends StatelessWidget {
+class CompletedCollegeContestCard extends GetView<CollegeContestController> {
   final String? id;
   final CompletedCollegeContest? contest;
   final CompletedContestPnl? completedContestPnl;
@@ -15,8 +15,6 @@ class CompletedCollegeContestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<CollegeContestController>();
-
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -271,10 +269,9 @@ class CompletedCollegeContestCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  final controller = Get.find<ContestController>();
+                  controller.completedCollegeContest(contest);
                   controller.getCompletedContestLeaderboardList(contest?.id);
-                  controller.selectedContestName(contest?.contestName ?? '');
-                  Get.to(() => CompletedContestLeaderboard());
+                  Get.to(() => CollegeCompletedContestLeaderboard());
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -297,8 +294,8 @@ class CompletedCollegeContestCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  controller.getContestOrderList(contest?.id);
                   controller.completedCollegeContest(contest);
+                  controller.getContestOrderList(contest?.id);
                   Get.to(() => CompletedCollegeContestOrdersListView());
                 },
                 child: Container(

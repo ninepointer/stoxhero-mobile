@@ -9,7 +9,11 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MarginX Order Book'),
+        title: Text(
+          '${controller.completedMarginX.value.marginxName} \n Order Book',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Visibility(

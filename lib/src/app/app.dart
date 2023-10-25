@@ -43,19 +43,16 @@ class _AppState extends State<App> {
       _initialUriIsHandled = true;
       try {
         final uri = await getInitialUri();
-        if (uri == null) {
-          print('no initial uri');
-        } else {
+        if (uri != null) {
           print('got initial uri: $uri');
+          // if (uri.path.contains('/contest')) {
+          //   Get.toNamed(AppRoutes.contest);
+          // }
         }
         if (!mounted) return;
         setState(() => initialUri = uri);
-      } on PlatformException {
-        print('falied to get initial uri');
-      } on FormatException catch (e) {
-        if (!mounted) return;
-        print('malformed initial uri');
-        setState(() => err = e);
+      } catch (e) {
+        print('error : $e');
       }
     }
   }
@@ -64,21 +61,11 @@ class _AppState extends State<App> {
     sub = uriLinkStream.listen((Uri? uri) {
       if (!mounted) return;
       print('got uri: $uri');
-      setState(() {
-        latestUri = uri;
-        err = null;
-      });
+      latestUri = uri;
     }, onError: (Object e) {
       if (!mounted) return;
       print('got err: $err');
-      setState(() {
-        latestUri = null;
-        if (err is FormatException) {
-          err = e;
-        } else {
-          err = null;
-        }
-      });
+      latestUri = null;
     });
   }
 

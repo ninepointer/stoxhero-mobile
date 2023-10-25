@@ -28,6 +28,21 @@ class InternshipController extends BaseController<InternshipRespository> {
   final isAllOrdersLoading = false.obs;
   bool get isAllOrdersLoadingStatus => isAllOrdersLoading.value;
 
+  final isTradingOrderSheetLoading = false.obs;
+  bool get isTradingOrderSheetLoadingStatus => isTradingOrderSheetLoading.value;
+
+  final isWatchlistStateLoading = false.obs;
+  bool get isWatchlistStateLoadingStatus => isWatchlistStateLoading.value;
+
+  final isPositionStateLoading = false.obs;
+  bool get isPositionStateLoadingStatus => isPositionStateLoading.value;
+
+  final isPortfolioStateLoading = false.obs;
+  bool get isPortfolioStateLoadingStatus => isPortfolioStateLoading.value;
+
+  final isInstrumentListLoading = false.obs;
+  bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
+
   final segmentedControlValue = 0.obs;
 
   final selectedTabBarIndex = 0.obs;
@@ -612,7 +627,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   Future addInstrument(TradingInstrument inst) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
       instrument: inst.name,
       exchange: inst.exchange,
@@ -636,29 +651,25 @@ class InternshipController extends BaseController<InternshipRespository> {
         data.toJson(),
       );
       if (response.data?.message == "Instrument Added") {
-        tradingWatchlist.clear();
-        tradingInstruments.clear();
         await getInternshipWatchlist();
-        await searchInstruments(searchTextController.text);
+        await searchInstruments(searchTextController.text, showShimmer: false);
         SnackbarHelper.showSnackbar("Instrument Added");
       }
     } catch (e) {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future removeInstrument(int? instToken) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       await repository.removeInstrument(instToken ?? 0);
       // if (response.data != null) {
       selectedWatchlistIndex(-1);
-      tradingWatchlist.clear();
-      tradingInstruments.clear();
       await getInternshipWatchlist();
-      await searchInstruments(searchTextController.text);
+      await searchInstruments(searchTextController.text, showShimmer: false);
       print('getInternshipWatchlist : ${tradingWatchlist.length}');
       SnackbarHelper.showSnackbar('Instrument Remove');
       // } else {
@@ -667,11 +678,11 @@ class InternshipController extends BaseController<InternshipRespository> {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future getInternshipWatchlist() async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingWatchlistResponse> response = await repository.getInternshipWatchlist();
       if (response.data != null) {
@@ -690,11 +701,11 @@ class InternshipController extends BaseController<InternshipRespository> {
       print("watch ${e.toString()}");
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future getInternshipPositions() async {
-    isLoading(true);
+    isPositionStateLoading(true);
     try {
       final RepoResponse<InternshipPositionResponse> response =
           await repository.getInternshipPositions(internshipBatchDetails.value.id);
@@ -710,7 +721,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPositionStateLoading(false);
   }
 
   Future socketIndexConnection() async {
@@ -738,8 +749,9 @@ class InternshipController extends BaseController<InternshipRespository> {
     }
   }
 
-  Future searchInstruments(String? value) async {
-    isLoading(true);
+  Future searchInstruments(String? value, {bool showShimmer = true}) async {
+    showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
+
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
       if (response.data != null) {
@@ -754,12 +766,11 @@ class InternshipController extends BaseController<InternshipRespository> {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
   }
 
   Future placeInternshipOrder(TransactionType type, TradingInstrument inst) async {
-    Get.back();
-    isLoading(true);
+    isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
@@ -810,8 +821,9 @@ class InternshipController extends BaseController<InternshipRespository> {
         data.toJson(),
       );
       print(response.data.toString());
+      Get.back();
       if (response.data?.status == "Complete") {
-        SnackbarHelper.showSnackbar('Trade Successfull');
+        SnackbarHelper.showSnackbar('Trade Successful');
         await getInternshipPositions();
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
@@ -823,7 +835,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isTradingOrderSheetLoading(false);
   }
 
   Future getInternshipBatchDetails() async {
@@ -843,7 +855,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   Future getInternshipBatchPortfolioDetails() async {
-    isLoading(true);
+    isPortfolioStateLoading(true);
     try {
       final RepoResponse<InternshipBatchPortfolioResponse> response =
           await repository.getInternshipBatchPortfolioDetails(
@@ -858,7 +870,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPortfolioStateLoading(false);
   }
 
   Future getInternshipAnalyticsOverview() async {

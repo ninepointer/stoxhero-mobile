@@ -37,7 +37,7 @@ class CommonRadioButtonTile extends StatelessWidget {
             ),
             Text(
               label,
-              style: Theme.of(context).textTheme.tsRegular14,
+              style: Theme.of(context).textTheme.tsMedium12,
             ),
           ],
         ),

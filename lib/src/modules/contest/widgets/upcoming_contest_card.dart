@@ -10,11 +10,13 @@ import 'package:stoxhero/src/modules/contest/contest_index.dart';
 import '../../../core/core.dart';
 
 class UpComingContestCard extends StatefulWidget {
+  final String userId;
   final UpComingContest? contest;
   final EdgeInsets? margin;
 
   const UpComingContestCard({
     Key? key,
+    required this.userId,
     this.contest,
     this.margin,
   }) : super(key: key);
@@ -79,7 +81,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
   Widget build(BuildContext context) {
     bool isUserInterestedId = controller.isUserInterested(
       widget.contest,
-      controller.userDetails.value.sId,
+      widget.userId,
     );
     return Visibility(
       visible: !isVisible,
@@ -205,9 +207,23 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           'Reward',
                           style: AppStyles.tsGreyMedium12,
                         ),
-                        Text(
-                          '${widget.contest?.payoutPercentage}% of the Net P&L',
-                          style: Theme.of(context).textTheme.tsMedium12,
+                        Row(
+                          children: [
+                            Text(
+                              '${widget.contest?.payoutPercentage}% of the Net P&L',
+                              style: Theme.of(context).textTheme.tsMedium12,
+                            ),
+                            if (widget.contest?.payoutCapPercentage != null)
+                              Text(
+                                ' (Upto ${controller.getPaidCapAmount(
+                                  widget.contest?.entryFee == 0
+                                      ? widget.contest?.portfolio?.portfolioValue ?? 0
+                                      : widget.contest?.entryFee ?? 0,
+                                  widget.contest?.payoutCapPercentage ?? 0,
+                                )})',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                              ),
+                          ],
                         ),
                       ],
                     ),
@@ -339,7 +355,8 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: (controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0) &&
+                    onTap: (controller.checkIfPurchased(widget.contest, widget.userId) ||
+                                widget.contest?.entryFee == 0) &&
                             controller.calculateSeatsLeft(
                                     widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) >
                                 0
@@ -378,7 +395,8 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       child: Text(
                         widget.contest?.entryFee == 0
                             ? 'Start Trading'
-                            : (controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0) &&
+                            : (controller.checkIfPurchased(widget.contest, widget.userId) ||
+                                        widget.contest?.entryFee == 0) &&
                                     controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
                                             widget.contest?.participants?.length ?? 0) >
                                         0
@@ -402,7 +420,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       controller.getShareContest(true);
                       String url = 'https://stoxhero.com/contest';
                       Clipboard.setData(ClipboardData(text: url));
-                      SnackbarHelper.showSnackbar('Share Link with your Friends');
+                      SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
                     },
                     child: Container(
                       alignment: Alignment.center,

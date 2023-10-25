@@ -63,23 +63,24 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: controller.onCancel,
-                    child: Text(
-                      'Cancel',
-                      style: Theme.of(context).textTheme.tsRegular16,
+                  Expanded(
+                    child: CommonOutlinedButton(
+                      height: 42,
+                      onPressed: controller.onCancel,
+                      label: 'Cancel',
                     ),
                   ),
                   SizedBox(width: 8),
-                  CommonFilledButton(
-                    height: 42,
-                    width: 120,
-                    label: 'Confirm',
-                    onPressed: controller.onConfirm,
+                  Expanded(
+                    child: CommonFilledButton(
+                      height: 42,
+                      width: 120,
+                      label: 'Confirm',
+                      onPressed: controller.onConfirm,
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 56),
             ],
           ),
         ),

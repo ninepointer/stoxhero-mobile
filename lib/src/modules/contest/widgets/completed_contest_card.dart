@@ -18,6 +18,7 @@ class CompletedContestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ContestController>();
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -274,9 +275,8 @@ class CompletedContestCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  final controller = Get.find<ContestController>();
-                  controller.getCompletedContestLeaderboardList(contest?.id);
                   controller.completedContest(contest);
+                  controller.getCompletedContestLeaderboardList(contest?.id);
                   Get.to(() => CompletedContestLeaderboard());
                 },
                 child: Container(
@@ -300,7 +300,8 @@ class CompletedContestCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  Get.find<ContestController>().getContestOrderList(contest?.id);
+                  controller.completedContest(contest);
+                  controller.getCompletedContestOrders(contest?.id);
                   Get.to(() => CompletedContestOrdersListView());
                 },
                 child: Container(

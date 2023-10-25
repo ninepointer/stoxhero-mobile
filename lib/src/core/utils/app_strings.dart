@@ -54,7 +54,7 @@ class AppStrings {
   static const String tenxLeaderboard = "TenX Leaderboard";
   static const String wallet = "Wallet";
   static const String transactions = "Transactions";
-  static const String sucessfullTransactions = "Sucessfull Transactions";
+  static const String successfulTransactions = "Successful Transactions";
   static const String recentTransactions = "Recent Transactions";
 
   static const noDataFound = 'Oops!, \nNo Data Found!';
@@ -115,7 +115,7 @@ class ErrorMessages {
   static String noInternet = 'Please check your internet connection';
   static String connectionTimeout = 'Connection timeout, Please try again later.';
   static String networkGeneral = 'Something went wrong. Please try again later.';
-  static String somethingWentWrong = "Something went wrong!";
+  static String somethingWentWrong = "Error : Something went wrong!";
   static String passwordNotMatched = "Password doesn't match!";
 }
 

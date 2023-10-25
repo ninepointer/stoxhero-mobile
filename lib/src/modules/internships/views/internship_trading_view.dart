@@ -67,11 +67,11 @@ class InternshipTradingView extends GetView<InternshipController> {
                     ),
                   ),
                   CommonTile(
+                    isLoading: controller.isWatchlistStateLoadingStatus,
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
-                    padding: EdgeInsets.only(left: 16),
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
@@ -131,6 +131,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                       ),
                     ),
                   CommonTile(
+                    isLoading: controller.isPositionStateLoadingStatus,
                     label: 'My Positions',
                     showSeeAllButton: true,
                     seeAllLabel:
@@ -151,6 +152,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                           },
                         ),
                   CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
                     label: 'Portfolio Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
@@ -168,6 +170,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
+                    valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   PortfolioDetailCardTile(
                     label: 'Opening Balance',

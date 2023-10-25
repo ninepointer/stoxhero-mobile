@@ -2,21 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class ProfileDetailsView extends StatefulWidget {
-  const ProfileDetailsView({Key? key}) : super(key: key);
-
-  @override
-  State<ProfileDetailsView> createState() => _ProfileDetailsViewState();
-}
-
-class _ProfileDetailsViewState extends State<ProfileDetailsView> {
-  late ProfileController controller;
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.find<ProfileController>();
-  }
-
+class ProfileDetailsView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -97,7 +83,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                               ),
                               SizedBox(height: 4),
                               CommonTextField(
-                                isDisabled: controller.userDetails.value.kYCStatus == 'Approved' ? true : false,
+                                isDisabled: controller.isKYCApproved,
                                 prefixIcon: Icon(Icons.person),
                                 controller: controller.firstNameTextController,
                                 hintText: 'First Name',
@@ -117,7 +103,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                               ),
                               SizedBox(height: 4),
                               CommonTextField(
-                                isDisabled: controller.userDetails.value.kYCStatus == 'Approved' ? true : false,
+                                isDisabled: controller.isKYCApproved,
                                 prefixIcon: Icon(Icons.person),
                                 controller: controller.lastNameTextController,
                                 hintText: 'Last Name',
@@ -134,7 +120,7 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     ),
                     SizedBox(height: 4),
                     CommonTextField(
-                      isDisabled: controller.userDetails.value.kYCStatus == 'Approved' ? true : false,
+                      isDisabled: controller.isKYCApproved,
                       controller: controller.emailTextController,
                       hintText: 'Email',
                       padding: EdgeInsets.only(bottom: 8),
@@ -145,7 +131,6 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     ),
                     SizedBox(height: 4),
                     CommonTextField(
-                      isDisabled: true,
                       controller: controller.mobileTextController,
                       hintText: 'Mobile',
                       keyboardType: TextInputType.number,
@@ -161,7 +146,6 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                     ),
                     SizedBox(height: 4),
                     CommonTextField(
-                      isDisabled: true,
                       controller: controller.whatsAppTextController,
                       hintText: 'WhatsApp',
                       keyboardType: TextInputType.number,
@@ -187,35 +171,38 @@ class _ProfileDetailsViewState extends State<ProfileDetailsView> {
                                 hint: 'Gender',
                                 value: controller.genderValue,
                                 dropdownItems: controller.dropdownItems,
-                                onChanged: (value) => setState(() => controller.genderValue = value),
+                                onChanged: (value) => controller.genderValue = value,
                               ),
                             ],
                           ),
                         ),
                         SizedBox(width: 12),
                         Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'DOB',
-                                style: Theme.of(context).textTheme.tsGreyMedium12,
-                              ),
-                              SizedBox(height: 4),
-                              GestureDetector(
-                                onTap: () => controller.showDateRangePicker(context),
-                                child: CommonTextField(
-                                  padding: EdgeInsets.zero,
-                                  isDisabled: true,
-                                  controller: controller.dobTextController,
-                                  hintText: 'Date of Birth',
-                                  suffixIcon: Icon(
-                                    Icons.calendar_month,
-                                    color: AppColors.grey,
+                          child: AbsorbPointer(
+                            absorbing: controller.isKYCApproved,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'DOB',
+                                  style: Theme.of(context).textTheme.tsGreyMedium12,
+                                ),
+                                SizedBox(height: 4),
+                                GestureDetector(
+                                  onTap: () => controller.showDateRangePicker(context),
+                                  child: CommonTextField(
+                                    padding: EdgeInsets.zero,
+                                    isDisabled: true,
+                                    controller: controller.dobTextController,
+                                    hintText: 'Date of Birth',
+                                    suffixIcon: Icon(
+                                      Icons.calendar_month,
+                                      color: AppColors.grey,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],

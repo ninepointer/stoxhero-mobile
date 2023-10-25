@@ -20,36 +20,34 @@ class ResponsibilitiesView extends GetView<CareerController> {
       appBar: AppBar(
         title: Text('Roles & Responsibilities'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Job Description',
-                style: AppStyles.tsSecondaryMedium20,
-              ),
-              SizedBox(height: 16),
-              CommonCard(
-                margin: EdgeInsets.zero,
-                children: [
-                  if (selectedCareer != null)
-                    ...selectedCareer.rolesAndResponsibilities
-                            ?.map((responsibility) => _buildResponsibilityRow(responsibility, context))
-                            .toList() ??
-                        [], // Use map to create rows
-                ],
-              ),
-              SizedBox(height: 16),
-              CommonFilledButton(
-                label: 'Apply',
-                onPressed: () {
-                  Get.to(() => CareerForm(careerId: careerId));
-                },
-              ),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Job Description',
+              style: AppStyles.tsSecondaryMedium20,
+            ),
+            SizedBox(height: 16),
+            CommonCard(
+              margin: EdgeInsets.zero,
+              children: [
+                if (selectedCareer != null)
+                  ...selectedCareer.rolesAndResponsibilities
+                          ?.map((responsibility) => _buildResponsibilityRow(responsibility, context))
+                          .toList() ??
+                      [], // Use map to create rows
+              ],
+            ),
+            SizedBox(height: 16),
+            CommonFilledButton(
+              label: 'Apply',
+              onPressed: () {
+                Get.to(() => CareerForm(careerId: careerId));
+              },
+            ),
+          ],
         ),
       ),
     );

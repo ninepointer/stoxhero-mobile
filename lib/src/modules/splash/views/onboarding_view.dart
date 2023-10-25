@@ -102,10 +102,10 @@ class _OnBoardingViewState extends State<OnBoardingView> {
           SizedBox(height: 36),
           if (currentIndex == contents.length - 1)
             CommonFilledButton(
+              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
               width: 250,
               height: 52,
               label: (currentIndex == contents.length - 1 ? 'Get Started' : 'Next'),
-              backgroundColor: AppColors.primary,
               onPressed: navigateToNextScreen,
             )
           else
@@ -114,7 +114,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               child: FittedBox(
                 child: FloatingActionButton(
                   elevation: 0,
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                   child: Icon(
                     Icons.chevron_right_rounded,
                     color: AppColors.white,

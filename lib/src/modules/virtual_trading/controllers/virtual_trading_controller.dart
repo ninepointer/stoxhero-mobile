@@ -19,11 +19,20 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
-  final isWatchlistLoading = false.obs;
-  bool get isWatchlistLoadingStatus => isLoading.value;
+  final isTradingOrderSheetLoading = false.obs;
+  bool get isTradingOrderSheetLoadingStatus => isTradingOrderSheetLoading.value;
 
-  final isPositionLoading = false.obs;
-  bool get isPositionLoadingStatus => isPositionLoading.value;
+  final isWatchlistStateLoading = false.obs;
+  bool get isWatchlistStateLoadingStatus => isWatchlistStateLoading.value;
+
+  final isPositionStateLoading = false.obs;
+  bool get isPositionStateLoadingStatus => isPositionStateLoading.value;
+
+  final isPortfolioStateLoading = false.obs;
+  bool get isPortfolioStateLoadingStatus => isPortfolioStateLoading.value;
+
+  final isInstrumentListLoading = false.obs;
+  bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
 
   final searchTextController = TextEditingController();
   final virtualPortfolio = VirtualTradingPortfolio().obs;
@@ -52,9 +61,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     userDetails.value = AppStorage.getUserDetails();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
+    await getVirtualTradingPortfolio();
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
-    await getVirtualTradingPortfolio();
     socketConnection();
     socketIndexConnection();
   }
@@ -291,7 +300,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   Future addInstrument(TradingInstrument inst) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
       instrument: inst.name,
       exchange: inst.exchange,
@@ -315,30 +324,27 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         data.toJson(),
       );
       if (response.data?.message == "Instrument Added") {
-        tradingWatchlist.clear();
-        tradingInstruments.clear();
         await getVirtualTradingWatchlist();
-        await searchInstruments(searchTextController.text);
+        await searchInstruments(searchTextController.text, showShimmer: false);
         SnackbarHelper.showSnackbar("Instrument Added");
       }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future removeInstrument(int? instToken) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       await repository.removeInstrument(instToken ?? 0);
-      // if (response.data != null) {
       selectedWatchlistIndex(-1);
-      tradingWatchlist.clear();
-      tradingInstruments.clear();
+      // if (response.data != null) {
+      // tradingWatchlist.clear();
+      // tradingInstruments.clear();
       await getVirtualTradingWatchlist();
-      await searchInstruments(searchTextController.text);
-      log('getVirtualTradingWatchlist : ${tradingWatchlist.length}');
+      await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Instrument Remove');
       // } else {
       // }
@@ -346,7 +352,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future socketConnection() async {
@@ -377,9 +383,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   Future placeVirtualTradingOrder(TransactionType type, TradingInstrument inst) async {
-    print(type);
-    Get.back();
-    isLoading(true);
+    isTradingOrderSheetLoading(true);
 
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
@@ -396,8 +400,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         }
       }
     }
-
-    log(type.toString());
 
     VirtualTradingPlaceOrderRequest data = VirtualTradingPlaceOrderRequest(
       orderType: "MARKET",
@@ -429,9 +431,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       final RepoResponse<GenericResponse> response = await repository.paperPlaceOrder(
         data.toJson(),
       );
-      log(response.data.toString());
+      Get.back();
       if (response.data?.status == "Complete") {
-        SnackbarHelper.showSnackbar('Trade Successfull');
+        SnackbarHelper.showSnackbar('Trade Successful');
         await getVirtualPositionsList();
         await getVirtualTradingPortfolio();
       } else if (response.data?.status == "Failed") {
@@ -444,11 +446,11 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isTradingOrderSheetLoading(false);
   }
 
   Future getVirtualTradingPortfolio() async {
-    isLoading(true);
+    isPortfolioStateLoading(true);
     try {
       final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolio();
       if (response.data != null) {
@@ -460,16 +462,15 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log("port ${e.toString()}");
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPortfolioStateLoading(false);
   }
 
   Future getVirtualTradingWatchlist() async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingWatchlistResponse> response = await repository.getVirtualTradingWatchlist();
       if (response.data != null) {
         if (response.data?.data! != null) {
-          tradingWatchlist.clear();
           tradingWatchlistIds.clear();
           tradingWatchlist(response.data?.data ?? []);
           for (var element in tradingWatchlist) {
@@ -483,11 +484,11 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log("watch ${e.toString()}");
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future getVirtualPositionsList() async {
-    isLoading(true);
+    isPositionStateLoading(true);
     try {
       final RepoResponse<VirtualTradingPositionListResponse> response = await repository.getVirtualPositions();
       if (response.data != null) {
@@ -502,11 +503,11 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPositionStateLoading(false);
   }
 
-  Future searchInstruments(String? value) async {
-    isLoading(true);
+  Future searchInstruments(String? value, {bool showShimmer = true}) async {
+    showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
       if (response.data != null) {
@@ -521,7 +522,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
   }
 
   Future getStockIndexInstrumentsList() async {

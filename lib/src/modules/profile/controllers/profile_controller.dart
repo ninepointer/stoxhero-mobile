@@ -41,6 +41,8 @@ class ProfileController extends BaseController<ProfileRepository> {
   final isBankLoading = false.obs;
   bool get isBankLoadingStatus => isBankLoading.value;
 
+  bool get isKYCApproved => userDetails.value.kYCStatus == 'Approved';
+
   final isEditEnabled = false.obs;
   final isKYCEditEnabled = false.obs;
   File? image;
@@ -87,6 +89,7 @@ class ProfileController extends BaseController<ProfileRepository> {
 
   void loadData() {
     loadProfileDetails();
+    isEditEnabled(false);
   }
 
   String getUserFullName() {
@@ -101,7 +104,7 @@ class ProfileController extends BaseController<ProfileRepository> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(2050),
+      lastDate: DateTime.now(),
     );
 
     if (pickedDate != null) {
@@ -132,7 +135,7 @@ class ProfileController extends BaseController<ProfileRepository> {
     emailTextController.text = userDetails.value.email ?? '';
     mobileTextController.text = userDetails.value.mobile ?? '';
     whatsAppTextController.text = userDetails.value.whatsAppNumber ?? '';
-    dobTextController.text = FormatHelper.formatDateToIST(userDetails.value.dob);
+    dobTextController.text = FormatHelper.formatDateOfBirthToIST(userDetails.value.dob);
     genderValue = userDetails.value.gender ?? '';
     addressTextController.text = userDetails.value.address ?? '';
     cityTextController.text = userDetails.value.city ?? '';
@@ -218,7 +221,8 @@ class ProfileController extends BaseController<ProfileRepository> {
   String getMediaTypeFromFile(File file) {
     final fileExtension = file.path.split('.').last;
     final mediaType = lookupMimeType(fileExtension);
-    return mediaType ?? 'image/jpeg';
+    print(mediaType);
+    return mediaType ?? 'image/$fileExtension';
   }
 
   Future<bool> isFileSizeLessThan2MB(File file) async {
@@ -240,15 +244,14 @@ class ProfileController extends BaseController<ProfileRepository> {
 
   void filePicker(KycDocumentType type, {bool removeFile = false}) async {
     PlatformFile? file = PlatformFile(name: '', size: 0);
+    bool isValid = false;
     if (!removeFile) {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.image,
       );
       file = result?.files.first;
+      isValid = await isFileSizeLessThan2MB(File(file?.path ?? ''));
     }
-
-    print(file?.path ?? '');
-    bool isValid = await isFileSizeLessThan2MB(File(file?.path ?? ''));
 
     if (!isValid && file?.path != null) {
       SnackbarHelper.showSnackbar('Select image less than 2 MB');
@@ -278,14 +281,21 @@ class ProfileController extends BaseController<ProfileRepository> {
   }
 
   Future saveUserProfileDetails() async {
+    if (profilePhotoFile.value?.path == null || profilePhotoFile.value!.name.isEmpty) {
+      isEditEnabled(false);
+      SnackbarHelper.showSnackbar('Select profile picture to continue!');
+      return;
+    }
+
     isProfileLoading(true);
+    DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     Map<String, dynamic> data = {
       "first_name": firstNameTextController.text,
       "last_name": lastNameTextController.text,
       "email": emailTextController.text,
       "mobile": mobileTextController.text,
       "gender": genderValue,
-      "dob": FormatHelper.formatDateTimeToIST(selectedDOBDateTime.value),
+      "dob": DateFormat('yyyy-MM-dd').format(date),
       "address": addressTextController.text,
       "city": cityTextController.text,
       "pincode": pincodeTextController.text,

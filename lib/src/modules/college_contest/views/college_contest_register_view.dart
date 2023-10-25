@@ -127,9 +127,9 @@ class CollegeContestRegisterView extends StatelessWidget {
               CommonFilledButton(
                 label: 'Register',
                 onPressed: () {
-                  Get.to(() => CollegeContestFormView(
-                        contestId: contest?.id,
-                      ));
+                  Get.to(
+                    () => CollegeContestFormView(contestId: contest?.id),
+                  );
                 },
               ),
             ],

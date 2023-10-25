@@ -17,6 +17,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   void initState() {
+    super.initState();
     controller = Get.find<HomeController>();
     contestController = Get.find<ContestController>();
     DateTime now = DateTime.now();
@@ -30,7 +31,6 @@ class _DashboardViewState extends State<DashboardView> {
       nextMonth,
     ];
     selectedValue2 = currentMonth;
-    super.initState();
   }
 
   String getProductMonth(String? label) {
@@ -134,18 +134,22 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                   contestController.liveContestList.isEmpty
                       ? Container()
-                      : SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: contestController.liveContestList.map((contest) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: LiveContestCard(
-                                  contest: contest,
-                                  margin: EdgeInsets.all(8).copyWith(bottom: 0),
-                                ),
-                              );
-                            }).toList(),
+                      : Obx(
+                          () => SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: contestController.liveContestList.map((contest) {
+                                String userId = controller.userDetailsData.sId ?? '';
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: LiveContestCard(
+                                    userId: userId,
+                                    contest: contest,
+                                    margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
                   contestController.upComingContestList.isEmpty
@@ -162,21 +166,25 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                   contestController.upComingContestList.isEmpty
                       ? Container()
-                      : SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: contestController.upComingContestList.map((contest) {
-                              bool isVisible = contestController.isUpcomingContestVisible(contest);
-                              return isVisible
-                                  ? SizedBox()
-                                  : Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: UpComingContestCard(
-                                        contest: contest,
-                                        margin: EdgeInsets.all(8).copyWith(bottom: 0),
-                                      ),
-                                    );
-                            }).toList(),
+                      : Obx(
+                          () => SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: contestController.upComingContestList.map((contest) {
+                                bool isVisible = contestController.isUpcomingContestVisible(contest);
+                                String userId = controller.userDetailsData.sId ?? '';
+                                return isVisible
+                                    ? SizedBox()
+                                    : Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        child: UpComingContestCard(
+                                          userId: userId,
+                                          contest: contest,
+                                          margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                                        ),
+                                      );
+                              }).toList(),
+                            ),
                           ),
                         ),
                   SizedBox(height: 8),

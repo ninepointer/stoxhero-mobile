@@ -7,12 +7,14 @@ import '../../../data/data.dart';
 import '../../modules.dart';
 
 class LiveContestCard extends GetView<ContestController> {
+  final String userId;
   final LiveContest? contest;
   final ContestPosition? contestPositionList;
   final ContestCreditData? contestPortfolio;
   final EdgeInsets? margin;
   const LiveContestCard({
     Key? key,
+    required this.userId,
     this.contest,
     this.contestPositionList,
     this.contestPortfolio,
@@ -156,9 +158,23 @@ class LiveContestCard extends GetView<ContestController> {
                         'Reward',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      Text(
-                        '${contest?.payoutPercentage}% of the Net P&L',
-                        style: Theme.of(context).textTheme.tsMedium12,
+                      Row(
+                        children: [
+                          Text(
+                            '${contest?.payoutPercentage}% of the Net P&L',
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                          if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                            Text(
+                              ' (Upto ${controller.getPaidCapAmount(
+                                contest?.entryFee == 0
+                                    ? contest?.portfolio?.portfolioValue ?? 0
+                                    : contest?.entryFee ?? 0,
+                                contest?.payoutCapPercentage ?? 0,
+                              )})',
+                              style: Theme.of(context).textTheme.tsMedium12,
+                            ),
+                        ],
                       ),
                     ],
                   ),
@@ -265,23 +281,24 @@ class LiveContestCard extends GetView<ContestController> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+                    controller.userDetails.value = AppStorage.getUserDetails();
                     controller.liveContest(contest);
                     if (contest?.entryFee == 0) {
                       if (contest?.maxParticipants == contest?.participants?.length) {
-                        if (controller.canUserTrade(contest)) {
+                        if (controller.canUserTrade(contest, userId)) {
                           controller.gotoTradingView();
                         } else {
                           controller.participate(contest);
                         }
                       } else {
-                        if (controller.canUserTrade(contest)) {
+                        if (controller.canUserTrade(contest, userId)) {
                           controller.gotoTradingView();
                         } else {
                           controller.participate(contest);
                         }
                       }
                     } else {
-                      if (controller.checkIfLivePurchased(contest)) {
+                      if (controller.checkIfLivePurchased(contest, userId)) {
                         controller.gotoTradingView();
                       } else {
                         BottomSheetHelper.openBottomSheet(
@@ -314,7 +331,7 @@ class LiveContestCard extends GetView<ContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0)
+                      (controller.checkIfLivePurchased(contest, userId) || contest?.entryFee == 0)
                           ? 'Start Trading'
                           : 'Pay Now',
                       style: AppStyles.tsWhiteMedium12.copyWith(
@@ -331,7 +348,7 @@ class LiveContestCard extends GetView<ContestController> {
                     controller.getShareContest(false);
                     String url = 'https://stoxhero.com/contest';
                     Clipboard.setData(ClipboardData(text: url));
-                    SnackbarHelper.showSnackbar('Share Link with your Friends');
+                    SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
                   },
                   child: Container(
                     alignment: Alignment.center,

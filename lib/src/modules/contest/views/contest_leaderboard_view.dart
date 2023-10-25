@@ -43,7 +43,7 @@ class _ContestLeaderboardViewState extends State<ContestLeaderboardView> {
                 physics: AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.only(bottom: 100),
                 child: Visibility(
-                  visible: contestController.isleaderboardLoadingStatus,
+                  visible: contestController.isLeaderboardLoadingStatus,
                   child: ListViewShimmer(
                     itemCount: 10,
                     shimmerCard: MediumCardShimmer(),
@@ -75,7 +75,7 @@ class _ContestLeaderboardViewState extends State<ContestLeaderboardView> {
                 physics: AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.only(bottom: 100),
                 child: Visibility(
-                  visible: collegeContestController.isleaderboardLoadingStatus,
+                  visible: collegeContestController.isLeaderboardLoadingStatus,
                   child: ListViewShimmer(
                     itemCount: 10,
                     shimmerCard: MediumCardShimmer(),

@@ -380,7 +380,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                   controller.getShareMarginX(true);
                   String url = 'https://stoxhero.com/marginxs';
                   Clipboard.setData(ClipboardData(text: url));
-                  SnackbarHelper.showSnackbar('Share Link with your Friends');
+                  SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
                 },
                 child: Container(
                   alignment: Alignment.center,

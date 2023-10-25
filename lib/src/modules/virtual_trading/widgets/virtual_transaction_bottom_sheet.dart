@@ -236,6 +236,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                   ],
                 ),
                 CommonFilledButton(
+                  isLoading: controller.isTradingOrderSheetLoading.value,
                   backgroundColor: type == TransactionType.exit
                       ? AppColors.warning
                       : type == TransactionType.buy

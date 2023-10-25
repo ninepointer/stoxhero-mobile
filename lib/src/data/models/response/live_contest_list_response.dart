@@ -53,33 +53,36 @@ class LiveContest {
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
+  num? payoutCapPercentage;
 
-  LiveContest(
-      {this.id,
-      this.contestName,
-      this.contestStartTime,
-      this.contestEndTime,
-      this.description,
-      this.contestType,
-      this.currentLiveStatus,
-      this.contestFor,
-      this.entryFee,
-      this.payoutPercentage,
-      this.portfolio,
-      this.maxParticipants,
-      this.contestStatus,
-      this.createdBy,
-      this.lastModifiedBy,
-      this.contestExpiry,
-      this.isNifty,
-      this.isBankNifty,
-      this.isFinNifty,
-      this.isAllIndex,
-      this.interestedUsers,
-      this.participants,
-      this.createdOn,
-      this.lastModifiedOn,
-      this.iV});
+  LiveContest({
+    this.id,
+    this.contestName,
+    this.contestStartTime,
+    this.contestEndTime,
+    this.description,
+    this.contestType,
+    this.currentLiveStatus,
+    this.contestFor,
+    this.entryFee,
+    this.payoutPercentage,
+    this.portfolio,
+    this.maxParticipants,
+    this.contestStatus,
+    this.createdBy,
+    this.lastModifiedBy,
+    this.contestExpiry,
+    this.isNifty,
+    this.isBankNifty,
+    this.isFinNifty,
+    this.isAllIndex,
+    this.interestedUsers,
+    this.participants,
+    this.createdOn,
+    this.lastModifiedOn,
+    this.iV,
+    this.payoutCapPercentage,
+  });
 
   LiveContest.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -117,6 +120,7 @@ class LiveContest {
     createdOn = json['createdOn'];
     lastModifiedOn = json['lastModifiedOn'];
     iV = json['__v'];
+    payoutCapPercentage = json['payoutCapPercentage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -152,6 +156,7 @@ class LiveContest {
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['__v'] = this.iV;
+    data['payoutCapPercentage'] = this.payoutCapPercentage;
     return data;
   }
 }

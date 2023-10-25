@@ -146,13 +146,13 @@ class AuthController extends BaseController<AuthRepository> {
 
   Future userSignup() async {
     isLoading(true);
-
+    DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     SignupRequest data = SignupRequest(
       firstName: firstNameTextController.text,
       lastName: lastNameTextController.text,
       email: emailTextController.text,
       mobile: mobileTextController.text,
-      dob: dobTextController.text,
+      dob: DateFormat('yyyy-MM-dd').format(date),
       referrerCode: "",
     );
 

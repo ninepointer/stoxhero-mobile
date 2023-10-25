@@ -38,10 +38,10 @@ class _WalletViewState extends State<WalletView> {
                 children: [
                   WalletCard(
                     label: 'Deposit',
-                    value: '₹ 0.00',
+                    value: '₹0.00',
                     iconData: Icons.account_balance_wallet_rounded,
                     buttonLabel: 'Add Money',
-                    onPressed: () => Get.to(PaymentView()),
+                    // onPressed: () => Get.to(() => PaymentView()),
                   ),
                   WalletCard(
                     label: 'Cash',
@@ -55,7 +55,7 @@ class _WalletViewState extends State<WalletView> {
                   ),
                   WalletCard(
                     label: 'HeroCash',
-                    value: '0',
+                    value: '₹0.00',
                     iconData: Icons.redeem_rounded,
                     buttonLabel: 'Redeem',
                     onPressed: null,
@@ -69,7 +69,7 @@ class _WalletViewState extends State<WalletView> {
               onTap: controller.changeSecondTabBarIndex,
               tabsTitle: [
                 AppStrings.recentTransactions,
-                AppStrings.sucessfullTransactions,
+                AppStrings.successfulTransactions,
               ],
               tabs: [
                 RefreshIndicator(
@@ -80,7 +80,7 @@ class _WalletViewState extends State<WalletView> {
                     child: Visibility(
                       visible: controller.isRecentLoadingStatus,
                       child: ListViewShimmer(
-                        shimmerCard: LargeCardShimmer(),
+                        shimmerCard: SmallCardShimmer(),
                       ),
                       replacement: Visibility(
                         visible: controller.walletTransactionsList.isEmpty,
@@ -97,7 +97,7 @@ class _WalletViewState extends State<WalletView> {
                             return WalletTransactionCard(
                               label: trans.title,
                               subtitle: trans.description,
-                              dateTime: FormatHelper.formatDateTime(trans.transactionDate),
+                              dateTime: FormatHelper.formatDateTimeToIST(trans.transactionDate),
                               amount: trans.amount,
                             );
                           },
@@ -114,7 +114,7 @@ class _WalletViewState extends State<WalletView> {
                     child: Visibility(
                       visible: controller.isSuccessLoadingStatus,
                       child: ListViewShimmer(
-                        shimmerCard: LargeCardShimmer(),
+                        shimmerCard: SmallCardShimmer(),
                       ),
                       replacement: Visibility(
                         visible: controller.withdrawalTransactionsList.isEmpty,
@@ -132,7 +132,7 @@ class _WalletViewState extends State<WalletView> {
                               return WithdrawalTransactionCard(
                                 label: trans.withdrawalStatus,
                                 walletTransactionId: trans.walletTransactionId,
-                                dateTime: FormatHelper.formatDateTime(trans.withdrawalRequestDate),
+                                dateTime: FormatHelper.formatDateTimeToIST(trans.withdrawalRequestDate),
                                 amount: trans.amount,
                                 mode: trans.settlementMethod,
                                 transferTransactionId: trans.settlementTransactionId,

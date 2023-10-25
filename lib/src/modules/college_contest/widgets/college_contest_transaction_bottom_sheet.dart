@@ -226,6 +226,7 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                   ],
                 ),
                 CommonFilledButton(
+                  isLoading: controller.isTradingOrderSheetLoading.value,
                   backgroundColor: type == TransactionType.exit
                       ? AppColors.warning
                       : type == TransactionType.buy

@@ -43,7 +43,7 @@ class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
               physics: AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(bottom: 100),
               child: Visibility(
-                visible: controller.isreferralLoadingStatus,
+                visible: controller.isReferralLoadingStatus,
                 child: ListViewShimmer(
                   itemCount: 10,
                   shimmerCard: SmallCardShimmer(),
@@ -72,7 +72,7 @@ class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
               physics: AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(bottom: 100),
               child: Visibility(
-                visible: controller.isreferralLoadingStatus,
+                visible: controller.isReferralLoadingStatus,
                 child: ListViewShimmer(
                   itemCount: 10,
                   shimmerCard: SmallCardShimmer(),

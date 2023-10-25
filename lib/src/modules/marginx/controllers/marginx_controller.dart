@@ -31,6 +31,21 @@ class MarginXController extends BaseController<MarginXRepository> {
   final isOrdersLoading = false.obs;
   bool get isOrdersLoadingStatus => isOrdersLoading.value;
 
+  final isTradingOrderSheetLoading = false.obs;
+  bool get isTradingOrderSheetLoadingStatus => isTradingOrderSheetLoading.value;
+
+  final isWatchlistStateLoading = false.obs;
+  bool get isWatchlistStateLoadingStatus => isWatchlistStateLoading.value;
+
+  final isPositionStateLoading = false.obs;
+  bool get isPositionStateLoadingStatus => isPositionStateLoading.value;
+
+  final isPortfolioStateLoading = false.obs;
+  bool get isPortfolioStateLoadingStatus => isPortfolioStateLoading.value;
+
+  final isInstrumentListLoading = false.obs;
+  bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
+
   final selectedTabBarIndex = 0.obs;
 
   final searchTextController = TextEditingController();
@@ -361,7 +376,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   }
 
   Future getMarginXTradingWatchlist() async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingWatchlistResponse> response = await repository.getMarginXWatchlist(
         liveMarginX.value.isNifty,
@@ -370,7 +385,6 @@ class MarginXController extends BaseController<MarginXRepository> {
       );
       if (response.data != null) {
         if (response.data?.data! != null) {
-          tradingWatchlist.clear();
           tradingWatchlistIds.clear();
           tradingWatchlist(response.data?.data ?? []);
           for (var element in tradingWatchlist) {
@@ -384,11 +398,11 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future getMarginXPositions() async {
-    isLoading(true);
+    isPositionStateLoading(true);
     try {
       final RepoResponse<MarginXPositionListResponse> response =
           await repository.getMarginXPositions(liveMarginX.value.id);
@@ -404,11 +418,11 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPositionStateLoading(false);
   }
 
   Future getMarginXPortfolioDetails() async {
-    isLoading(true);
+    isPortfolioStateLoading(true);
     try {
       final RepoResponse<MarginXPortfolioResponse> response =
           await repository.getMarginXPortfolioDetails(liveMarginX.value.id);
@@ -421,13 +435,11 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPortfolioStateLoading(false);
   }
 
-  Future searchInstruments(
-    String? value,
-  ) async {
-    isLoading(true);
+  Future searchInstruments(String? value, {bool showShimmer = true}) async {
+    showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
         value,
@@ -437,7 +449,6 @@ class MarginXController extends BaseController<MarginXRepository> {
       );
       if (response.data != null) {
         if (response.data?.data != null) {
-          tradingInstruments.clear();
           tradingInstruments.addAll(response.data?.data ?? []);
         }
       } else {
@@ -447,11 +458,11 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
   }
 
   Future addInstrument(TradingInstrument inst) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
       chartInstrument: inst.chartInstrument,
       instrument: inst.name,
@@ -472,12 +483,8 @@ class MarginXController extends BaseController<MarginXRepository> {
     try {
       await repository.addInstrument(data.toJson());
       // if (response.data?.message == "Instrument Added") {
-      tradingWatchlist.clear();
-      tradingInstruments.clear();
       await getMarginXTradingWatchlist();
-      await searchInstruments(
-        searchTextController.text,
-      );
+      await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Instrument Added');
       // } else {
       // }
@@ -485,37 +492,31 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future removeInstrument(int? instToken) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       await repository.removeInstrument(instToken ?? 0);
-      // if (response.data != null) {
       selectedWatchlistIndex(-1);
-      tradingWatchlist.clear();
-      tradingInstruments.clear();
+      // if (response.data != null) {
+      // tradingWatchlist.clear();
+      // tradingInstruments.clear();
       await getMarginXTradingWatchlist();
-      await searchInstruments(
-        searchTextController.text,
-      );
-      log('MarginX WatchList : ${tradingWatchlist.length}');
+      await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Instrument Remove');
-
       // } else {
-      //   SnackbarHelper.showSnackbar(response.error?.message);
       // }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future placeMarginXOrder(TransactionType type, TradingInstrument inst) async {
-    Get.back();
-    isLoading(true);
+    isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
@@ -566,8 +567,9 @@ class MarginXController extends BaseController<MarginXRepository> {
         data.toJson(),
       );
       log(response.data.toString());
+      Get.back();
       if (response.data?.status == "Complete") {
-        SnackbarHelper.showSnackbar('Trade Successfull');
+        SnackbarHelper.showSnackbar('Trade Successful');
         await getMarginXPositions();
         await getMarginXPortfolioDetails();
       } else if (response.data?.status == "Failed") {
@@ -580,7 +582,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isTradingOrderSheetLoading(false);
   }
 
   Future getInstrumentLivePriceList() async {
@@ -697,7 +699,7 @@ class MarginXController extends BaseController<MarginXRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('car ${e.toString()}');
+      log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -744,7 +746,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       getUpComingMarginXList();
       getLiveMarginXList();
     } catch (e) {
-      log('Purchase Marginx: ${e.toString()}');
+      log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -755,7 +757,6 @@ class MarginXController extends BaseController<MarginXRepository> {
 
     try {
       await repository.getShareMarginX(isUpcoming ? upComingMarginX.value.id : liveMarginX.value.id);
-
       if (isUpcoming) {
         getUpComingMarginXList();
       } else {

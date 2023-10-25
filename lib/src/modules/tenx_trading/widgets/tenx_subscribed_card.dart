@@ -14,7 +14,6 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
-    // print('New ${(FormatHelper.formatDateTimeToIST(controller.date().toString()))}');
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -97,7 +96,7 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                       Expanded(
                         child: Text(
                           '',
-                          // 'Expires On: ${FormatHelper.formatDateTimeToIST(controller.date().toString())}',
+                          // 'Expires On: ${FormatHelper.formatDateTimeToIST(controller.date())}',
                           textAlign: TextAlign.end,
                           style: AppStyles.tsWhiteMedium12.copyWith(
                             color: AppColors.success,

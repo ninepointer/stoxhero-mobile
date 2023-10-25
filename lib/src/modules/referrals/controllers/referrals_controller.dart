@@ -15,11 +15,11 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
-  final isinviteLoading = false.obs;
-  bool get isinviteLoadingStatus => isinviteLoading.value;
+  final isInviteLoading = false.obs;
+  bool get isInviteLoadingStatus => isInviteLoading.value;
 
-  final isreferralLoading = false.obs;
-  bool get isreferralLoadingStatus => isreferralLoading.value;
+  final isReferralLoading = false.obs;
+  bool get isReferralLoadingStatus => isReferralLoading.value;
 
   final segmentedControlValue = 0.obs;
 
@@ -112,7 +112,7 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   }
 
   Future getReferralsLeaderboard() async {
-    isreferralLoading(true);
+    isReferralLoading(true);
     try {
       final RepoResponse<ReferralsLeaderboardResponse> response = await repository.getReferralsLeaderboard();
       if (response.data != null) {
@@ -124,6 +124,6 @@ class ReferralsController extends BaseController<ReferralsRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isreferralLoading(false);
+    isReferralLoading(false);
   }
 }

@@ -15,6 +15,7 @@ class _CareerFormState extends State<CareerForm> {
   @override
   void initState() {
     controller = Get.find<CareerController>();
+    controller.loadData();
     controller.isOtpVisible(false);
     super.initState();
   }
@@ -64,23 +65,27 @@ class _CareerFormState extends State<CareerForm> {
                     ),
                     SizedBox(width: 12),
                     Expanded(
-                      child: GestureDetector(
-                        onTap: () => controller.showDateRangePicker(context),
-                        child: CommonTextField(
-                          padding: EdgeInsets.zero,
-                          isDisabled: true,
-                          controller: controller.dobTextController,
-                          hintText: 'Date of Birth',
-                          suffixIcon: Icon(
-                            Icons.calendar_month,
-                            color: AppColors.grey,
+                      child: AbsorbPointer(
+                        absorbing:
+                            controller.userDetails.value.dob == null || controller.userDetails.value.dob!.isNotEmpty,
+                        child: GestureDetector(
+                          onTap: () => controller.showDateRangePicker(context),
+                          child: CommonTextField(
+                            isDisabled: true,
+                            padding: EdgeInsets.zero,
+                            controller: controller.dobTextController,
+                            hintText: 'Date of Birth',
+                            suffixIcon: Icon(
+                              Icons.calendar_month,
+                              color: AppColors.grey,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your DOB';
+                              }
+                              return null;
+                            },
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your DOB';
-                            }
-                            return null;
-                          },
                         ),
                       ),
                     ),

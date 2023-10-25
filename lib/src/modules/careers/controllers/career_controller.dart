@@ -14,6 +14,9 @@ class CareerBinding implements Bindings {
 }
 
 class CareerController extends BaseController<CareerRepository> {
+  final userDetails = LoginDetailsResponse().obs;
+  LoginDetailsResponse get userDetailsData => userDetails.value;
+
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
@@ -33,12 +36,17 @@ class CareerController extends BaseController<CareerRepository> {
 
   final selectedDOBDateTime = ''.obs;
 
+  void loadData() {
+    userDetails.value = AppStorage.getUserDetails();
+    dobTextController.text = FormatHelper.formatDateOfBirthToIST(userDetails.value.dob);
+  }
+
   void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(2050),
+      lastDate: DateTime.now(),
     );
 
     if (pickedDate != null) {
@@ -127,10 +135,10 @@ class CareerController extends BaseController<CareerRepository> {
     isLoading(true);
 
     FocusScope.of(Get.context!).unfocus();
-
+    DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     CareerFormRequest data = CareerFormRequest(
       collegeName: collegeNameTextController.text,
-      dob: selectedDOBDateTime.value,
+      dob: DateFormat('yyyy-MM-dd').format(date),
       priorTradingExperience: experienceSelectedValue,
       source: hearAboutSelectedValue,
       linkedInProfileLink: linkedInProfileTextController.text,
@@ -146,6 +154,8 @@ class CareerController extends BaseController<CareerRepository> {
         Get.back();
         SnackbarHelper.showSnackbar('Thank you for Applying');
         clearForm();
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
       log(e.toString());

@@ -18,12 +18,18 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
         ),
       ),
       body: Obx(
-        () {
-          return ListView.builder(
+        () => Visibility(
+          visible: controller.isCompletedOrdersLoadingStatus,
+          child: ListViewShimmer(
+            itemCount: 10,
+            padding: EdgeInsets.all(12),
+            shimmerCard: LargeCardShimmer(),
+          ),
+          replacement: ListView.builder(
             shrinkWrap: true,
-            itemCount: controller.contestTodaysOrdersList.length,
+            itemCount: controller.contestOrdersList.length,
             itemBuilder: (context, index) {
-              var order = controller.contestTodaysOrdersList[index];
+              var order = controller.contestOrdersList[index];
               return CommonCard(
                 margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
                 children: [
@@ -94,8 +100,8 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                 ],
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

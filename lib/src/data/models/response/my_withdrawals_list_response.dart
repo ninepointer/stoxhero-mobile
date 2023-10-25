@@ -26,7 +26,7 @@ class MyWithdrawalsListResponse {
 
 class MyWithdrawalsList {
   String? sId;
-  int? amount;
+  num? amount;
   String? user;
   String? userWallet;
   String? walletTransactionId;

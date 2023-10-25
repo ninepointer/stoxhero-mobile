@@ -51,8 +51,10 @@ class UpComingContest {
   bool? isAllIndex;
   String? createdOn;
   String? lastModifiedOn;
-  List<CollegeParticipants>? participants;
+  List<Participants>? participants;
   List<InterestedUsers>? interestedUsers;
+  num? payoutCapPercentage;
+
   UpComingContest({
     this.id,
     this.contestName,
@@ -77,6 +79,7 @@ class UpComingContest {
     this.lastModifiedOn,
     this.participants,
     this.interestedUsers,
+    this.payoutCapPercentage,
   });
 
   UpComingContest.fromJson(Map<String, dynamic> json) {
@@ -102,9 +105,9 @@ class UpComingContest {
     createdOn = json['createdOn'];
     lastModifiedOn = json['lastModifiedOn'];
     if (json['participants'] != null) {
-      participants = <CollegeParticipants>[];
+      participants = <Participants>[];
       json['participants'].forEach((v) {
-        participants!.add(new CollegeParticipants.fromJson(v));
+        participants!.add(new Participants.fromJson(v));
       });
     }
     if (json['interestedUsers'] != null) {
@@ -113,6 +116,7 @@ class UpComingContest {
         interestedUsers!.add(new InterestedUsers.fromJson(v));
       });
     }
+    payoutCapPercentage = json['payoutCapPercentage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -146,6 +150,7 @@ class UpComingContest {
     if (this.interestedUsers != null) {
       data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
     }
+    data['payoutCapPercentage'] = this.payoutCapPercentage;
     return data;
   }
 }

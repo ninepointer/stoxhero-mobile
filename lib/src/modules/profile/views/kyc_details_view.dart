@@ -28,7 +28,7 @@ class _KycDetailsViewState extends State<KycDetailsView> {
             IconButton(
               splashRadius: 24,
               icon: controller.isKYCEditEnabled.value ? Icon(Icons.save) : Icon(Icons.edit),
-              onPressed: controller.userDetails.value.kYCStatus == 'Approved'
+              onPressed: controller.isKYCApproved
                   ? null
                   : () {
                       if (controller.isKYCEditEnabled.value) {

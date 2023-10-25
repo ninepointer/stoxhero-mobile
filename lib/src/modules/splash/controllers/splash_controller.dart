@@ -55,10 +55,11 @@ class SplashController extends GetxController {
       String build = packageInfo.buildNumber;
 
       _appVersion('$version+$build');
-
-      final response = await Get.find<AuthController>().repository.getAppVersion();
-      if (response.data != null) {
-        _storeAppVersion(response.data?.data ?? '');
+      if (isProd) {
+        final response = await Get.find<AuthController>().repository.getAppVersion();
+        if (response.data != null) {
+          _storeAppVersion(response.data?.data ?? '');
+        }
       }
     } catch (e) {
       log(e.toString());

@@ -12,7 +12,6 @@ export 'common_search_instrument_card.dart';
 export 'common_segmented_control.dart';
 export 'common_text_field.dart';
 export 'common_tile.dart';
-export 'common_transcation_bottom_sheet_card.dart';
 export 'no_data_found.dart';
 export 'common_internship_info.dart';
 export 'common_tab_bar.dart';

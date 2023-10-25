@@ -149,9 +149,23 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                         'Reward',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      Text(
-                        '${contest?.payoutPercentage}% of the Net P&L',
-                        style: Theme.of(context).textTheme.tsMedium12,
+                      Row(
+                        children: [
+                          Text(
+                            '${contest?.payoutPercentage}% of the Net P&L',
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                          if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                            Text(
+                              ' (Upto ${controller.getPaidCapAmount(
+                                contest?.entryFee == 0
+                                    ? contest?.portfolio?.portfolioValue ?? 0
+                                    : contest?.entryFee ?? 0,
+                                contest?.payoutCapPercentage ?? 0,
+                              )})',
+                              style: Theme.of(context).textTheme.tsMedium12,
+                            ),
+                        ],
                       ),
                     ],
                   ),
@@ -264,7 +278,11 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                         if (controller.canUserTrade(contest)) {
                           controller.gotoTradingView();
                         } else {
-                          controller.verifyAndParticipate(contest);
+                          if (controller.collegeCodeTextController.text.isNotEmpty) {
+                            Get.back();
+                            controller.verifyAndParticipate(contest);
+                            controller.collegeCodeTextController.clear();
+                          }
                         }
                       } else if (controller.canUserTrade(contest)) {
                         controller.gotoTradingView();
@@ -273,11 +291,11 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                           context: context,
                           child: CollegeContestCodeBottomsheet(
                             onSubmit: () {
-                              Get.back();
-                              if (contest?.collegeCode == controller.collegeCodeTextController.text) {
+                              if (controller.collegeCodeTextController.text.isNotEmpty) {
+                                Get.back();
                                 controller.verifyAndParticipate(contest);
+                                controller.collegeCodeTextController.clear();
                               }
-                              controller.collegeCodeTextController.clear();
                             },
                           ),
                         );
@@ -333,7 +351,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     controller.getShareContest(false);
                     String url = 'https://stoxhero.com/contest';
                     Clipboard.setData(ClipboardData(text: url));
-                    SnackbarHelper.showSnackbar('Share Link with your Friends');
+                    SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
                   },
                   child: Container(
                     alignment: Alignment.center,

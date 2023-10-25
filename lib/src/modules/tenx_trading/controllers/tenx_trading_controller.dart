@@ -19,6 +19,27 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
+  final isTradingOrderSheetLoading = false.obs;
+  bool get isTradingOrderSheetLoadingStatus => isTradingOrderSheetLoading.value;
+
+  final isWatchlistStateLoading = false.obs;
+  bool get isWatchlistStateLoadingStatus => isWatchlistStateLoading.value;
+
+  final isPositionStateLoading = false.obs;
+  bool get isPositionStateLoadingStatus => isPositionStateLoading.value;
+
+  final isPortfolioStateLoading = false.obs;
+  bool get isPortfolioStateLoadingStatus => isPortfolioStateLoading.value;
+
+  final isInstrumentListLoading = false.obs;
+  bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
+
+  final isWatchlistLoading = false.obs;
+  bool get isWatchlistLoadingStatus => isWatchlistLoading.value;
+
+  final isPositionLoading = false.obs;
+  bool get isPositionLoadingStatus => isPositionLoading.value;
+
   final isActiveLoading = false.obs;
   bool get isActiveLoadingStatus => isActiveLoading.value;
 
@@ -89,20 +110,20 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxCountTradingDays();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
-    await getTenxTradingWatchlist();
+    await getTenXSubscriptionList();
     await getTenxPositionsList();
+    await getTenxTradingWatchlist();
     await getTenxTradingPortfolioDetails();
     socketConnection();
     socketIndexConnection();
-    await getTenXSubscriptionList();
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
-  DateTime date() {
+  String date() {
     DateTime subscribedOn = DateTime.parse(tenxMyActiveSubcribed.value.subscribedOn ?? '');
     DateTime newExpiryDate = subscribedOn.add(Duration(days: tenxMyActiveSubcribed.value.expiryDays ?? 0));
-    return newExpiryDate;
+    return newExpiryDate.toString();
   }
 
   int getOpenPositionCount() {
@@ -383,7 +404,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future getTenxTradingWatchlist() async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingWatchlistResponse> response = await repository.getTenxWatchlist();
       if (response.data != null) {
@@ -402,11 +423,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
-  Future searchInstruments(String? value) async {
-    isLoading(true);
+  Future searchInstruments(String? value, {bool showShimmer = true}) async {
+    showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
       if (response.data != null) {
@@ -421,7 +442,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
   }
 
   Future getTenxPositionsList() async {
@@ -464,7 +485,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future getTenxTradingPortfolioDetails() async {
-    isLoading(true);
+    isPortfolioStateLoading(true);
     try {
       final RepoResponse<TenxTradingPortfolioDetailsResponse> response = await repository.getTenxPortfolioDetails(
         selectedSubscriptionId.value,
@@ -479,12 +500,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPortfolioStateLoading(false);
   }
 
   Future placeTenxTradingOrder(TransactionType type, TradingInstrument inst) async {
-    Get.back();
-    isLoading(true);
+    isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
@@ -534,9 +554,10 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       final RepoResponse<GenericResponse> response = await repository.placeTenxTradingOrder(
         data.toJson(),
       );
+      Get.back();
       print(response.data.toString());
       if (response.data?.status == "Complete") {
-        SnackbarHelper.showSnackbar('Trade Successfull');
+        SnackbarHelper.showSnackbar('Trade Successful');
         await getTenxPositionsList();
         await getTenxTradingPortfolioDetails();
       } else if (response.data?.status == "Failed") {
@@ -549,11 +570,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isTradingOrderSheetLoading(false);
   }
 
   Future addInstrument(TradingInstrument inst) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
       chartInstrument: inst.chartInstrument,
       instrument: inst.name,
@@ -574,10 +595,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     try {
       await repository.addInstrument(data.toJson());
       // if (response.data?.message == "Instrument Added") {
-      tradingWatchlist.clear();
-      tradingInstruments.clear();
       await getTenxTradingWatchlist();
-      await searchInstruments(searchTextController.text);
+      await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Instrument Added');
       // } else {
       // }
@@ -585,20 +604,19 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future removeInstrument(int? instToken) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       await repository.removeInstrument(instToken ?? 0);
       // if (response.data != null) {
-      selectedWatchlistIndex(-1);
-      tradingWatchlist.clear();
-      tradingInstruments.clear();
+      // selectedWatchlistIndex(-1);
+      // tradingWatchlist.clear();
+      // tradingInstruments.clear();
       await getTenxTradingWatchlist();
-      await searchInstruments(searchTextController.text);
-      log('getTenxTradingWatchlist : ${tradingWatchlist.length}');
+      await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Instrument Remove');
 
       // } else {
@@ -608,7 +626,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future purchaseSubscription() async {

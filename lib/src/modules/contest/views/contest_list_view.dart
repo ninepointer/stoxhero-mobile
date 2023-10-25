@@ -61,7 +61,9 @@ class _ContestListViewState extends State<ContestListView> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.liveFreeContestList.length,
                           itemBuilder: (BuildContext context, index) {
+                            String userId = controller.userDetailsData.sId ?? '';
                             return LiveContestCard(
+                              userId: userId,
                               contest: controller.liveFreeContestList[index],
                             );
                           },
@@ -92,7 +94,9 @@ class _ContestListViewState extends State<ContestListView> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.livePremiumContestList.length,
                           itemBuilder: (BuildContext context, index) {
+                            String userId = controller.userDetailsData.sId ?? '';
                             return LiveContestCard(
+                              userId: userId,
                               contest: controller.livePremiumContestList[index],
                             );
                           },
@@ -131,7 +135,9 @@ class _ContestListViewState extends State<ContestListView> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.upcomingFreeContestList.length,
                           itemBuilder: (BuildContext context, index) {
+                            String userId = controller.userDetailsData.sId ?? '';
                             return UpComingContestCard(
+                              userId: userId,
                               contest: controller.upcomingFreeContestList[index],
                             );
                           },
@@ -162,7 +168,9 @@ class _ContestListViewState extends State<ContestListView> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.upcomingPremiumContestList.length,
                           itemBuilder: (BuildContext context, index) {
+                            String userId = controller.userDetailsData.sId ?? '';
                             return UpComingContestCard(
+                              userId: userId,
                               contest: controller.upcomingPremiumContestList[index],
                             );
                           },

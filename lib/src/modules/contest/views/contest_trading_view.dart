@@ -72,11 +72,11 @@ class ContestTradingView extends GetView<ContestController> {
                     ),
                   ),
                   CommonTile(
+                    isLoading: controller.isWatchlistStateLoadingStatus,
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
-                    padding: EdgeInsets.only(left: 16),
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
@@ -164,6 +164,7 @@ class ContestTradingView extends GetView<ContestController> {
                       ),
                     ),
                   CommonTile(
+                    isLoading: controller.isPositionStateLoadingStatus,
                     label: 'My Positions',
                     showSeeAllButton: true,
                     seeAllLabel:
@@ -185,6 +186,7 @@ class ContestTradingView extends GetView<ContestController> {
                           },
                         ),
                   CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
                     label: 'Portfolio Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),

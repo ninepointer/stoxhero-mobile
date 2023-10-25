@@ -315,125 +315,123 @@ class _ViewCardState extends State<ViewCard> {
                     ],
                   ),
                 ),
-                Obx(
-                  () => Row(
-                    children: [
-                      if (isLive || isUpcoming)
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: isLive
-                                ? () {
-                                    if (controller.checkIfLivePurchased(widget.liveMarginX)) {
-                                      controller.loadTradingData();
-                                      controller.liveMarginX(widget.liveMarginX);
-                                      Get.to(() => MarginXTradingView());
-                                    } else {
-                                      BottomSheetHelper.openBottomSheet(
-                                        context: context,
-                                        child: PurchaseItemBottomSheet(
-                                          buyItemPrice: widget.liveMarginX?.marginXTemplate?.entryFee ?? 0,
-                                          onSubmit: () {
-                                            Get.back();
-                                            var data = {
-                                              "bonusRedemption": 0,
-                                              "coupon": "",
-                                              "entryFee": widget.liveMarginX?.marginXTemplate?.entryFee,
-                                              "marginXId": widget.liveMarginX?.id,
-                                              "marginXName": widget.liveMarginX?.marginXName,
-                                            };
-                                            controller.purchaseMarginX(data);
-                                            Get.back();
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  }
-                                : () {
-                                    if (controller.checkIfPurchased(widget.upcomingMarginX)) {
-                                    } else {
-                                      BottomSheetHelper.openBottomSheet(
-                                        context: context,
-                                        child: PurchaseItemBottomSheet(
-                                          buyItemPrice: widget.upcomingMarginX?.marginXTemplate?.entryFee ?? 0,
-                                          onSubmit: () {
-                                            Get.back();
-                                            var data = {
-                                              "bonusRedemption": 0,
-                                              "coupon": "",
-                                              "entryFee": widget.upcomingMarginX?.marginXTemplate?.entryFee,
-                                              "marginXId": widget.upcomingMarginX?.id,
-                                              "marginXName": widget.upcomingMarginX?.marginXName,
-                                            };
-                                            controller.purchaseMarginX(data);
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  },
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: AppColors.success.withOpacity(.25),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(8),
-                                ),
-                              ),
-                              child: Text(
-                                isLive
-                                    ? controller.checkIfLivePurchased(widget.liveMarginX) &&
-                                            controller.calculateSeatsLeft(widget.liveMarginX?.maxParticipants ?? 0,
-                                                    widget.liveMarginX?.participants?.length ?? 0) >
-                                                0
-                                        ? 'Start Trading'
-                                        : 'Pay Now'
-                                    : controller.checkIfPurchased(widget.upcomingMarginX) &&
-                                            controller.calculateSeatsLeft(widget.upcomingMarginX?.maxParticipants ?? 0,
-                                                    widget.upcomingMarginX?.participants?.length ?? 0) >
-                                                0
-                                        ? 'Purchased'
-                                        : 'Pay Now',
-                                style: AppStyles.tsWhiteMedium12.copyWith(
-                                  color: AppColors.success,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                Row(
+                  children: [
+                    if (isLive || isUpcoming)
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            if (isUpcoming) {
-                              controller.upComingMarginX(widget.upcomingMarginX);
-                              controller.getShareMarginX(true);
-                            } else if (isLive) {
-                              controller.liveMarginX(widget.liveMarginX);
-                              controller.getShareMarginX(false);
-                            }
-                            String url = 'https://stoxhero.com/marginxs';
-                            Clipboard.setData(ClipboardData(text: url));
-                            SnackbarHelper.showSnackbar('Share Link with your Friends');
-                          },
+                          onTap: isLive
+                              ? () {
+                                  if (controller.checkIfLivePurchased(widget.liveMarginX)) {
+                                    controller.loadTradingData();
+                                    controller.liveMarginX(widget.liveMarginX);
+                                    Get.to(() => MarginXTradingView());
+                                  } else {
+                                    BottomSheetHelper.openBottomSheet(
+                                      context: context,
+                                      child: PurchaseItemBottomSheet(
+                                        buyItemPrice: widget.liveMarginX?.marginXTemplate?.entryFee ?? 0,
+                                        onSubmit: () {
+                                          Get.back();
+                                          var data = {
+                                            "bonusRedemption": 0,
+                                            "coupon": "",
+                                            "entryFee": widget.liveMarginX?.marginXTemplate?.entryFee,
+                                            "marginXId": widget.liveMarginX?.id,
+                                            "marginXName": widget.liveMarginX?.marginXName,
+                                          };
+                                          controller.purchaseMarginX(data);
+                                          Get.back();
+                                        },
+                                      ),
+                                    );
+                                  }
+                                }
+                              : () {
+                                  if (controller.checkIfPurchased(widget.upcomingMarginX)) {
+                                  } else {
+                                    BottomSheetHelper.openBottomSheet(
+                                      context: context,
+                                      child: PurchaseItemBottomSheet(
+                                        buyItemPrice: widget.upcomingMarginX?.marginXTemplate?.entryFee ?? 0,
+                                        onSubmit: () {
+                                          Get.back();
+                                          var data = {
+                                            "bonusRedemption": 0,
+                                            "coupon": "",
+                                            "entryFee": widget.upcomingMarginX?.marginXTemplate?.entryFee,
+                                            "marginXId": widget.upcomingMarginX?.id,
+                                            "marginXName": widget.upcomingMarginX?.marginXName,
+                                          };
+                                          controller.purchaseMarginX(data);
+                                        },
+                                      ),
+                                    );
+                                  }
+                                },
                           child: Container(
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: AppColors.secondary.withOpacity(.25),
+                              color: AppColors.success.withOpacity(.25),
                               borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(8),
+                                bottomLeft: Radius.circular(8),
                               ),
                             ),
                             child: Text(
-                              'Share',
+                              isLive
+                                  ? controller.checkIfLivePurchased(widget.liveMarginX) &&
+                                          controller.calculateSeatsLeft(widget.liveMarginX?.maxParticipants ?? 0,
+                                                  widget.liveMarginX?.participants?.length ?? 0) >
+                                              0
+                                      ? 'Start Trading'
+                                      : 'Pay Now'
+                                  : controller.checkIfPurchased(widget.upcomingMarginX) &&
+                                          controller.calculateSeatsLeft(widget.upcomingMarginX?.maxParticipants ?? 0,
+                                                  widget.upcomingMarginX?.participants?.length ?? 0) >
+                                              0
+                                      ? 'Purchased'
+                                      : 'Pay Now',
                               style: AppStyles.tsWhiteMedium12.copyWith(
-                                color: AppColors.secondary.shade600,
+                                color: AppColors.success,
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (isUpcoming) {
+                            controller.upComingMarginX(widget.upcomingMarginX);
+                            controller.getShareMarginX(true);
+                          } else if (isLive) {
+                            controller.liveMarginX(widget.liveMarginX);
+                            controller.getShareMarginX(false);
+                          }
+                          String url = 'https://stoxhero.com/marginxs';
+                          Clipboard.setData(ClipboardData(text: url));
+                          SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.secondary.withOpacity(.25),
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            'Share',
+                            style: AppStyles.tsWhiteMedium12.copyWith(
+                              color: AppColors.secondary.shade600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

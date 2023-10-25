@@ -101,7 +101,9 @@ class WalletController extends BaseController<WalletRepository> {
         data.toJson(),
       );
       if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {}
+        if (response.data?.status?.toLowerCase() == "success") {
+          SnackbarHelper.showSnackbar(response.data?.message);
+        }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

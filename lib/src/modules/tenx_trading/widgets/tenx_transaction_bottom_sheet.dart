@@ -238,6 +238,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   ],
                 ),
                 CommonFilledButton(
+                  isLoading: controller.isTradingOrderSheetLoading.value,
                   backgroundColor: type == TransactionType.exit
                       ? AppColors.warning
                       : type == TransactionType.buy

@@ -14,6 +14,19 @@ class MarginXSearchSymbolView extends GetView<MarginXController> {
       () => Scaffold(
         appBar: AppBar(
           title: Text('Start Trading'),
+          actions: [
+            if (controller.isWatchlistStateLoadingStatus)
+              Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
+              ),
+            SizedBox(width: 16),
+          ],
         ),
         body: SafeArea(
           bottom: false,
@@ -38,9 +51,12 @@ class MarginXSearchSymbolView extends GetView<MarginXController> {
                 SizedBox(height: 8),
                 Expanded(
                   child: Visibility(
-                    visible: !controller.isLoadingStatus,
-                    replacement: CommonLoader(),
-                    child: ListView.builder(
+                    visible: controller.isInstrumentListLoadingStatus,
+                    child: ListViewShimmer(
+                      itemCount: 10,
+                      shimmerCard: SmallCardShimmer(),
+                    ),
+                    replacement: ListView.builder(
                       shrinkWrap: true,
                       itemCount: controller.tradingInstruments.length,
                       itemBuilder: (context, index) {

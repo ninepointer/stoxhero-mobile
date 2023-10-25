@@ -202,9 +202,23 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                           'Reward',
                           style: AppStyles.tsGreyMedium12,
                         ),
-                        Text(
-                          '${widget.contest?.payoutPercentage}% of the Net P&L',
-                          style: Theme.of(context).textTheme.tsMedium12,
+                        Row(
+                          children: [
+                            Text(
+                              '${widget.contest?.payoutPercentage}% of the Net P&L',
+                              style: Theme.of(context).textTheme.tsMedium12,
+                            ),
+                            if (widget.contest?.payoutCapPercentage != null)
+                              Text(
+                                ' (Upto ${controller.getPaidCapAmount(
+                                  widget.contest?.entryFee == 0
+                                      ? widget.contest?.portfolio?.portfolioValue ?? 0
+                                      : widget.contest?.entryFee ?? 0,
+                                  widget.contest?.payoutCapPercentage ?? 0,
+                                )})',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                              ),
+                          ],
                         ),
                       ],
                     ),
@@ -399,7 +413,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                       controller.getShareContest(true);
                       String url = 'https://stoxhero.com/contest';
                       Clipboard.setData(ClipboardData(text: url));
-                      SnackbarHelper.showSnackbar('Share Link with your Friends');
+                      SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
                     },
                     child: Container(
                       alignment: Alignment.center,

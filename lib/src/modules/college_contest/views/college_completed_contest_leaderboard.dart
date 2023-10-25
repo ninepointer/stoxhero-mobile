@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class CompletedContestLeaderboard extends GetView<ContestController> {
-  const CompletedContestLeaderboard({Key? key}) : super(key: key);
+class CollegeCompletedContestLeaderboard extends GetView<CollegeContestController> {
+  const CollegeCompletedContestLeaderboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${controller.completedContest.value.contestName}\n Leaderboard',
+          '${controller.completedCollegeContest.value.contestName}\n Leaderboard',
           style: Theme.of(context).textTheme.tsRegular16,
           textAlign: TextAlign.center,
         ),
@@ -45,7 +45,7 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Colors.grey.withOpacity(.25),
+                                    color: Colors.black.withOpacity(.25),
                                     width: 1,
                                   ),
                                 ),

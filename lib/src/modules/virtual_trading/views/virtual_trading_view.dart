@@ -9,9 +9,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
     return Scaffold(
       body: Obx(
         () => Visibility(
-          visible: !controller.isLoadingStatus,
-          replacement: TradingShimmer(),
-          child: RefreshIndicator(
+          visible: controller.isLoadingStatus,
+          child: TradingShimmer(),
+          replacement: RefreshIndicator(
             onRefresh: controller.loadData,
             child: SingleChildScrollView(
               child: Column(
@@ -65,35 +65,30 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     ),
                   ),
                   CommonTile(
+                    isLoading: controller.isWatchlistStateLoadingStatus,
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
-                    padding: EdgeInsets.only(left: 16),
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
-                  Visibility(
-                    visible: !controller.isWatchlistLoadingStatus,
-                    replacement: CommonLoader(),
-                    child: controller.tradingWatchlist.isEmpty
-                        ? NoDataFound()
-                        : SizedBox(
-                            height: controller.tradingWatchlist.length >= 3
-                                ? 260
-                                : controller.tradingWatchlist.length * 130,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,
-                              itemCount: controller.tradingWatchlist.length,
-                              itemBuilder: (context, index) {
-                                return VirtualWatchListCard(
-                                  index: index,
-                                  tradingWatchlist: controller.tradingWatchlist[index],
-                                );
-                              },
-                            ),
+                  controller.tradingWatchlist.isEmpty
+                      ? NoDataFound()
+                      : SizedBox(
+                          height:
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.tradingWatchlist.length,
+                            itemBuilder: (context, index) {
+                              return VirtualWatchListCard(
+                                index: index,
+                                tradingWatchlist: controller.tradingWatchlist[index],
+                              );
+                            },
                           ),
-                  ),
+                        ),
                   if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
@@ -134,6 +129,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                       ),
                     ),
                   CommonTile(
+                    isLoading: controller.isPositionStateLoadingStatus,
                     label: 'My Positions',
                     showSeeAllButton: true,
                     seeAllLabel:
@@ -155,6 +151,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           },
                         ),
                   CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
                     label: 'Portfolio Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),

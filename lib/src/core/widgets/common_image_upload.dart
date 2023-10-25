@@ -28,7 +28,7 @@ class CommonImageUpload extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: hasFile ? AppColors.success.withOpacity(.25) : AppColors.grey.withOpacity(.25),
@@ -39,7 +39,7 @@ class CommonImageUpload extends StatelessWidget {
                   color: hasFile ? AppColors.success : AppColors.grey,
                 ),
               ),
-              SizedBox(width: 12),
+              SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +49,6 @@ class CommonImageUpload extends StatelessWidget {
                       style: Theme.of(context).textTheme.tsRegular16,
                     ),
                     if (hasFile) ...[
-                      SizedBox(height: 4),
                       Text(
                         file?.name ?? '',
                         style: AppStyles.tsGreyRegular14,

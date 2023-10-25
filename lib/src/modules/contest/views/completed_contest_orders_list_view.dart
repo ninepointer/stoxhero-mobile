@@ -19,14 +19,17 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
       ),
       body: Obx(
         () => Visibility(
-          visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
-          child: controller.contestTodaysOrdersList.isEmpty
+          visible: controller.isCompletedOrdersLoadingStatus,
+          child: ListViewShimmer(
+            itemCount: 10,
+            shimmerCard: LargeCardShimmer(),
+          ),
+          replacement: controller.contestOrdersList.isEmpty
               ? NoDataFound()
               : ListView.builder(
-                  itemCount: controller.contestTodaysOrdersList.length,
+                  itemCount: controller.contestOrdersList.length,
                   itemBuilder: (context, index) {
-                    var order = controller.contestTodaysOrdersList[index];
+                    var order = controller.contestOrdersList[index];
                     return CommonCard(
                       margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
                       children: [
@@ -34,7 +37,7 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                           label: 'Contract',
                           value: order.symbol,
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -49,7 +52,7 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -68,7 +71,7 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -86,7 +89,7 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

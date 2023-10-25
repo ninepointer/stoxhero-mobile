@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/data/data.dart';
 import 'package:stoxhero/src/modules/marginx/marginx_index.dart';
 
 import '../../../core/core.dart';
 
-class CompletedMarginxCard extends StatelessWidget {
+class CompletedMarginxCard extends GetView<MarginXController> {
   final CompletedMarginX? marginx;
   const CompletedMarginxCard({
     Key? key,
@@ -262,7 +263,9 @@ class CompletedMarginxCard extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  Get.find<MarginXController>().getCompletedMarginXOrders(marginx?.marginxId);
+                  final controller = Get.find<MarginXController>();
+                  controller.getCompletedMarginXOrders(marginx?.marginxId);
+                  controller.completedMarginX(marginx);
                   Get.to(() => CompletedMarginXOrdersListView());
                 },
                 child: Container(
@@ -282,6 +285,11 @@ class CompletedMarginxCard extends StatelessWidget {
             ),
             Expanded(
               child: GestureDetector(
+                onTap: () {
+                  String url = 'https://stoxhero.com/marginxs';
+                  Clipboard.setData(ClipboardData(text: url));
+                  SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                },
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(6),

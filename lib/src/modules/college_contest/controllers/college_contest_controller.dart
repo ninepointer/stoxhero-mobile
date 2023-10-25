@@ -22,6 +22,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+
   final isLiveLoading = false.obs;
   bool get isLiveLoadingStatus => isLiveLoading.value;
 
@@ -34,8 +35,29 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final isOrdersLoading = false.obs;
   bool get isOrdersLoadingStatus => isOrdersLoading.value;
 
-  final isleaderboardLoading = false.obs;
-  bool get isleaderboardLoadingStatus => isleaderboardLoading.value;
+  final isLeaderboardLoading = false.obs;
+  bool get isLeaderboardLoadingStatus => isLeaderboardLoading.value;
+
+  final isCompletedLeaderboardLoading = false.obs;
+  bool get isCompletedLeaderboardLoadingStatus => isCompletedLeaderboardLoading.value;
+
+  final isCompletedOrdersLoading = false.obs;
+  bool get isCompletedOrdersLoadingStatus => isCompletedOrdersLoading.value;
+
+  final isTradingOrderSheetLoading = false.obs;
+  bool get isTradingOrderSheetLoadingStatus => isTradingOrderSheetLoading.value;
+
+  final isWatchlistStateLoading = false.obs;
+  bool get isWatchlistStateLoadingStatus => isWatchlistStateLoading.value;
+
+  final isPositionStateLoading = false.obs;
+  bool get isPositionStateLoadingStatus => isPositionStateLoading.value;
+
+  final isPortfolioStateLoading = false.obs;
+  bool get isPortfolioStateLoadingStatus => isPortfolioStateLoading.value;
+
+  final isInstrumentListLoading = false.obs;
+  bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
 
   final selectedTabBarIndex = 0.obs;
   final selectedSecondTabBarIndex = 0.obs;
@@ -67,7 +89,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final upcomingPremiumCollegeContestList = <UpComingCollegeContest>[].obs;
   final upcomingFreeCollegeContestList = <UpComingCollegeContest>[].obs;
   final completedContestPnlList = <CompletedContestPnl>[].obs;
-  final contestTodaysOrdersList = <ContestOrderList>[].obs;
+  final contestOrdersList = <ContestOrderDetails>[].obs;
   final liveCollegeContestList = <LiveCollegeContest>[].obs;
   final livePremiumCollegeContestList = <LiveCollegeContest>[].obs;
   final liveFreeCollegeContestList = <LiveCollegeContest>[].obs;
@@ -98,6 +120,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final liveLeaderboardList = <LiveContestLeaderboard>[].obs;
   final liveLeaderboard = LiveContestLeaderboard().obs;
 
+  final completedContestLeaderboardList = <CompletedContestLeaderboardList>[].obs;
+  final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
   String? experienceSelectedValue;
   String? hearAboutSelectedValue;
 
@@ -129,10 +153,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await getCompletedCollegeContestList();
-    await getUpComingCollegeContestList();
-    await getCompletedContestPnlList();
     await getLiveCollegeContestList();
+    await getUpComingCollegeContestList();
+    await getCompletedCollegeContestList();
+    await getCompletedContestPnlList();
   }
 
   Future loadTradingData() async {
@@ -190,6 +214,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       }
     }
     return false;
+  }
+
+  String getPaidCapAmount(num fees, num cap) {
+    num percentage = (fees * cap) / 100;
+    return FormatHelper.formatNumbers(percentage);
   }
 
   String getStockIndexName(int instId) {
@@ -455,7 +484,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   Future getContestPortfolio() async {
-    isLoading(true);
+    isPortfolioStateLoading(true);
     try {
       final RepoResponse<ContestPortfolioResponse> response =
           await repository.getContestPortfolio(liveCollegeContest.value.id);
@@ -465,14 +494,13 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log("port ${e.toString()}");
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPortfolioStateLoading(false);
   }
 
   Future getContestWatchList() async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingWatchlistResponse> response = await repository.getContestWatchList(
         liveCollegeContest.value.isNifty,
@@ -481,7 +509,6 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       );
       if (response.data != null) {
         if (response.data?.data! != null) {
-          tradingWatchlist.clear();
           tradingWatchlistIds.clear();
           tradingWatchlist(response.data?.data ?? []);
           for (var element in tradingWatchlist) {
@@ -494,14 +521,14 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log("watch ${e.toString()}");
+      log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future getContestPositions() async {
-    isLoading(true);
+    isPositionStateLoading(true);
     try {
       final RepoResponse<ContestPositionListResponse> response =
           await repository.getContestPositions(liveCollegeContest.value.id);
@@ -517,12 +544,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPositionStateLoading(false);
   }
 
   Future placeContestOrder(TransactionType type, TradingInstrument inst) async {
-    Get.back();
-    isLoading(true);
+    isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
@@ -573,8 +599,9 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         data.toJson(),
       );
       log(response.data.toString());
+      Get.back();
       if (response.data?.status == "Complete") {
-        SnackbarHelper.showSnackbar('Trade Successfull');
+        SnackbarHelper.showSnackbar('Trade Successful');
         await getContestPositions();
         await getContestPortfolio();
       } else if (response.data?.status == "Failed") {
@@ -587,13 +614,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isTradingOrderSheetLoading(false);
   }
 
-  Future searchInstruments(
-    String? value,
-  ) async {
-    isLoading(true);
+  Future searchInstruments(String? value, {bool showShimmer = true}) async {
+    showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
         value,
@@ -604,7 +629,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       if (response.data != null) {
         if (response.data?.data != null) {
           tradingInstruments.clear();
-          tradingInstruments.addAll(response.data?.data ?? []);
+          tradingInstruments(response.data?.data ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -613,34 +638,31 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
   }
 
   Future removeInstrument(int? instToken) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       await repository.removeInstrument(instToken ?? 0);
-      // if (response.data != null) {
       selectedWatchlistIndex(-1);
-      contestWatchList.clear();
-      tradingInstruments.clear();
+      // if (response.data != null) {
+      // tradingWatchlist.clear();
+      // tradingInstruments.clear();
       await getContestWatchList();
-      await searchInstruments(
-        searchTextController.text,
-      );
-      log('getVirtualTradingWatchlist : ${contestWatchList.length}');
-      // } else {
+      await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Instrument Remove');
+      // } else {
       // }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future addInstrument(TradingInstrument inst) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
       instrument: inst.name,
       exchange: inst.exchange,
@@ -658,14 +680,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     );
 
     log('addInstrument : ${data.toJson()}');
-
     try {
       final RepoResponse<GenericResponse> response = await repository.addInstrument(
         data.toJson(),
       );
       if (response.data?.message == "Instrument Added") {
-        tradingWatchlist.clear();
-        tradingInstruments.clear();
         await getContestWatchList();
         await searchInstruments(searchTextController.text);
         SnackbarHelper.showSnackbar("Instrument Added");
@@ -674,7 +693,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future getInstrumentLivePriceList() async {
@@ -759,7 +778,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   Future getCollegeContestLeaderboardList() async {
-    isleaderboardLoading(true);
+    isLeaderboardLoading(true);
+    collegeContestLeaderboardList.clear();
     try {
       final RepoResponse<CollegeContestLeaderboardResponse> response =
           await repository.getCollegeContestLeaderboardList();
@@ -772,20 +792,19 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log('College Leaderboard: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isleaderboardLoading(false);
+    isLeaderboardLoading(false);
   }
 
   Future getCompletedCollegeContestList() async {
     isCompletedLoading(true);
+    completedFreeCollegeContestList.clear();
+    completedPremiumCollegeContestList.clear();
     try {
       final RepoResponse<CompletedCollegeContestListResponse> response =
           await repository.getCompletedCollegeContestList();
       if (response.data != null) {
         tempCompletedContestList(response.data?.data ?? []);
         if (tempCompletedContestList.isNotEmpty) {
-          completedFreeCollegeContestList.clear();
-          completedPremiumCollegeContestList.clear();
-
           tempCompletedContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
                 ? completedFreeCollegeContestList.add(contest)
@@ -811,7 +830,6 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         completedContestPnlList(response.data?.data ?? []);
         if (tempCompletedContestList.isNotEmpty && completedContestPnlList.isNotEmpty) {}
         completedCollegeContestList(tempList);
-        log('tempCompletedContestList : ${completedCollegeContestList.length.toString()}');
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -824,16 +842,14 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   Future getUpComingCollegeContestList() async {
     isUpcomingLoading(true);
+    upcomingFreeCollegeContestList.clear();
+    upcomingPremiumCollegeContestList.clear();
     try {
       final RepoResponse<UpComingCollegeContestListResponse> response =
           await repository.getUpComingCollegeContestList();
       if (response.data != null) {
         upComingContestList(response.data?.data ?? []);
-        log('upComingContestList : ${upComingContestList.length}');
         if (upComingContestList.isNotEmpty) {
-          upcomingFreeCollegeContestList.clear();
-          upcomingPremiumCollegeContestList.clear();
-
           upComingContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
                 ? upcomingFreeCollegeContestList.add(contest)
@@ -851,31 +867,30 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   Future getContestOrderList(String? id) async {
-    isLoading(true);
+    isCompletedOrdersLoading(true);
     try {
       final RepoResponse<ContestOrderResponse> response = await repository.getContestOrderList(id);
       if (response.data != null) {
-        contestTodaysOrdersList(response.data?.data ?? []);
+        contestOrdersList(response.data?.data ?? []);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('Orders: ${e.toString()}');
+      log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isCompletedOrdersLoading(false);
   }
 
   Future getLiveCollegeContestList() async {
     isLiveLoading(true);
+    liveFreeCollegeContestList.clear();
+    livePremiumCollegeContestList.clear();
     try {
       final RepoResponse<LiveCollegeContestListResponse> response = await repository.getLiveCollegeContestList();
       if (response.data != null) {
         liveCollegeContestList(response.data?.data ?? []);
         if (liveCollegeContestList.isNotEmpty) {
-          liveFreeCollegeContestList.clear();
-          livePremiumCollegeContestList.clear();
-
           liveCollegeContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
                 ? liveFreeCollegeContestList.add(contest)
@@ -906,7 +921,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       getUpComingCollegeContestList();
       getLiveCollegeContestList();
     } catch (e) {
-      log('Purchase Contest: ${e.toString()}');
+      log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
@@ -1037,24 +1052,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isLoading(false);
   }
 
-  // Future participate() async {
-  //   isLoading(true);
-  //   try {
-  //     await repository.participate(
-  //       liveCollegeContest.value.id,
-  //     );
-  //     getLiveCollegeContestList();
-  //   } catch (e) {
-  //     log(e.toString());
-  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-  //   }
-  //   isLoading(false);
-  // }
-
   Future verifyAndParticipate(LiveCollegeContest? contest) async {
     isLoading(true);
     CollegeContestCodeRequest data = CollegeContestCodeRequest(
-      collegeCode: collegeCodeTextController.text,
+      collegeCode: collegeCodeTextController.text.trim(),
     );
     try {
       final response = await repository.verifyAndParticipate(
@@ -1062,10 +1063,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         data.toJson(),
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        liveLeaderboardList();
+        getLiveCollegeContestList();
+        collegeCodeTextController.clear();
         loadTradingData();
         Get.to(() => CollegeContestTradingView());
-      } else if (response.error != null) {
+      } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
@@ -1073,5 +1075,23 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getCompletedContestLeaderboardList(String? id) async {
+    isCompletedLeaderboardLoading(true);
+    completedContestLeaderboardList.clear();
+    try {
+      final RepoResponse<CompletedContestLeaderboardListResponse> response =
+          await repository.getCompletedContestLeaderboardList(id);
+      if (response.data != null) {
+        completedContestLeaderboardList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isCompletedLeaderboardLoading(false);
   }
 }

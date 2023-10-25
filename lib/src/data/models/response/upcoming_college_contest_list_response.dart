@@ -56,36 +56,39 @@ class UpComingCollegeContest {
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
+  num? payoutCapPercentage;
 
-  UpComingCollegeContest(
-      {this.id,
-      this.contestName,
-      this.contestStartTime,
-      this.contestEndTime,
-      this.description,
-      this.contestType,
-      this.currentLiveStatus,
-      this.contestFor,
-      this.collegeCode,
-      this.entryFee,
-      this.payoutPercentage,
-      this.portfolio,
-      this.college,
-      this.maxParticipants,
-      this.contestStatus,
-      this.createdBy,
-      this.lastModifiedBy,
-      this.contestExpiry,
-      this.isNifty,
-      this.isBankNifty,
-      this.isFinNifty,
-      this.isAllIndex,
-      this.rewards,
-      this.interestedUsers,
-      this.participants,
-      this.createdOn,
-      this.lastModifiedOn,
-      this.iV});
+  UpComingCollegeContest({
+    this.id,
+    this.contestName,
+    this.contestStartTime,
+    this.contestEndTime,
+    this.description,
+    this.contestType,
+    this.currentLiveStatus,
+    this.contestFor,
+    this.collegeCode,
+    this.entryFee,
+    this.payoutPercentage,
+    this.portfolio,
+    this.college,
+    this.maxParticipants,
+    this.contestStatus,
+    this.createdBy,
+    this.lastModifiedBy,
+    this.contestExpiry,
+    this.isNifty,
+    this.isBankNifty,
+    this.isFinNifty,
+    this.isAllIndex,
+    this.rewards,
+    this.interestedUsers,
+    this.participants,
+    this.createdOn,
+    this.lastModifiedOn,
+    this.iV,
+    this.payoutCapPercentage,
+  });
 
   UpComingCollegeContest.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -131,6 +134,7 @@ class UpComingCollegeContest {
     createdOn = json['createdOn'];
     lastModifiedOn = json['lastModifiedOn'];
     iV = json['__v'];
+    payoutCapPercentage = json['payoutCapPercentage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -171,6 +175,7 @@ class UpComingCollegeContest {
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['__v'] = this.iV;
+    data['payoutCapPercentage'] = this.payoutCapPercentage;
     return data;
   }
 }
