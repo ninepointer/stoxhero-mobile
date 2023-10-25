@@ -218,7 +218,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   String getPaidCapAmount(num fees, num cap) {
     num percentage = (fees * cap) / 100;
-    return FormatHelper.formatNumbers(percentage);
+    return FormatHelper.formatNumbers(percentage, showDecimal: false);
   }
 
   String getStockIndexName(int instId) {
