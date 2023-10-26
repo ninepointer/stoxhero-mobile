@@ -15,3 +15,7 @@ export 'widgets/tenx_expired_card.dart';
 export 'widgets/tenx_leaderboard_card.dart';
 export 'widgets/tenx_learn_more_info.dart';
 export 'widgets/tenx_info_card.dart';
+export 'widgets/stoploss_executed_order_card.dart';
+export 'widgets/stoploss_pending_order_card.dart';
+export 'widgets/stoploss_edit_price_bottom_sheet.dart';
+export 'widgets/stoploss_modify_price_bottom_sheet.dart';

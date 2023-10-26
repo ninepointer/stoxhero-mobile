@@ -1,21 +1,17 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../../../app/app.dart';
 
-class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
-  final TransactionType type;
-  final TradingInstrument tradingInstrument;
-
-  const TenxTransactionBottomSheet({
-    super.key,
-    required this.type,
-    required this.tradingInstrument,
-  });
+class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
+  final TradingInstrument stopLoss;
+  const StoplossModifyPriceBottomSheet({
+    Key? key,
+    required this.stopLoss,
+  }) : super(key: key);
 
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Obx(
       () => Wrap(
         children: [
@@ -36,8 +32,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Regular',
-                        style: Theme.of(context).textTheme.tsMedium18,
+                        'Modify Order',
+                        style: Theme.of(context).textTheme.tsMedium16,
                       ),
                       Icon(
                         Icons.cancel,
@@ -48,53 +44,77 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 ),
                 Divider(
                   thickness: 1,
-                  height: 36,
+                  height: 24,
                   color: AppColors.grey.shade50.withOpacity(0.5),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      tradingInstrument.name ?? '-',
-                      style: AppStyles.tsSecondaryMedium16,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Symbol',
+                          style: AppStyles.tsGreyMedium12,
+                        ),
+                        Text(
+                          stopLoss.name ?? '-',
+                          style: AppStyles.tsSecondaryMedium14,
+                        ),
+                      ],
                     ),
-                    Text(
-                      type == TransactionType.buy
-                          ? FormatHelper.formatNumbers(
-                              controller.getInstrumentLastPrice(
-                                tradingInstrument.instrumentToken!,
-                                tradingInstrument.exchangeToken!,
-                              ),
-                            )
-                          : type == TransactionType.sell
-                              ? FormatHelper.formatNumbers(
-                                  controller.getInstrumentLastPrice(
-                                    tradingInstrument.instrumentToken!,
-                                    tradingInstrument.exchangeToken!,
-                                  ),
-                                )
-                              : tradingInstrument.lotSize.toString(),
-                      style: AppStyles.tsSecondaryMedium16,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'LTP (Last Traded Price)',
+                          style: AppStyles.tsGreyMedium12,
+                        ),
+                        Text(
+                          FormatHelper.formatNumbers(
+                            controller.getInstrumentLastPrice(
+                              stopLoss.instrumentToken ?? 0,
+                              stopLoss.exchangeToken ?? 0,
+                            ),
+                          ),
+                          style: AppStyles.tsSecondaryMedium14,
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                SizedBox(height: 24),
+                SizedBox(height: 4),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 2,
-                        groupValue: 1,
-                        label: 'Interaday (MIS)',
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Open Lots',
+                          style: AppStyles.tsGreyMedium12,
+                        ),
+                        Text(
+                          stopLoss.lotSize.toString(),
+                          style: AppStyles.tsSecondaryMedium14,
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 1,
-                        groupValue: 1,
-                        label: 'Overnight (NRML)',
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Changes (%)',
+                          style: AppStyles.tsGreyMedium12,
+                        ),
+                        Text(
+                          controller.getInstrumentChanges(
+                            stopLoss.instrumentToken ?? 0,
+                            stopLoss.exchangeToken ?? 0,
+                          ),
+                          style: AppStyles.tsSecondaryMedium14,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -153,28 +173,24 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
                       child: CommonTextField(
-                        isDisabled: controller.selectedGroupValue.value != 3,
                         hintText: 'StopLoss Price',
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                         ],
-                        controller: controller.stopLossPriceTextController,
                       ),
                     ),
-                    SizedBox(width: 16),
+                    SizedBox(width: 8),
                     Expanded(
                       child: CommonTextField(
-                        isDisabled: controller.selectedGroupValue.value != 3,
                         hintText: 'StopProfit Price',
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                         ],
-                        controller: controller.stopProfitPriceTextController,
                       ),
                     ),
                   ],
@@ -184,83 +200,22 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     Expanded(
                       child: CommonRadioButtonTile(
                         value: 2,
-                        groupValue: controller.selectedGroupValue.value,
-                        label: 'MARKET',
-                        onChanged: (int value) {
-                          controller.handleRadioValueChanged(value, 'MARKET');
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 1,
                         groupValue: 2,
-                        label: 'LIMIT',
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 3,
-                        groupValue: controller.selectedGroupValue.value,
                         label: 'SL/SP-M',
-                        onChanged: (int value) {
-                          controller.handleRadioValueChanged(value, 'SL/SP-M');
-                        },
                       ),
                     ),
                   ],
                 ),
                 SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 3,
-                        groupValue: 3,
-                        label: 'Day',
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 4,
-                        groupValue: 3,
-                        label: 'Immediate',
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 1,
-                        groupValue: 3,
-                        label: 'Minutes',
-                      ),
-                    ),
-                  ],
+                Text(
+                  AppStrings.noteModify,
+                  style: Theme.of(context).textTheme.tsGreyMedium12,
                 ),
+                SizedBox(height: 12),
                 CommonFilledButton(
-                  isLoading: controller.isTradingOrderSheetLoading.value,
-                  backgroundColor: type == TransactionType.exit
-                      ? AppColors.warning
-                      : type == TransactionType.buy
-                          ? AppColors.success
-                          : AppColors.danger,
-                  margin: EdgeInsets.symmetric(vertical: 24),
-                  label: type == TransactionType.exit
-                      ? 'Exit'
-                      : type == TransactionType.buy
-                          ? 'BUY'
-                          : 'SELL',
-                  onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(
-                    type,
-                    tradingInstrument,
-                  ),
+                  label: 'MODIFY',
+                  onPressed: () {},
+                  backgroundColor: AppColors.secondary,
                 ),
               ],
             ),

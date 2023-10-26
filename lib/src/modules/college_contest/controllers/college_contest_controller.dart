@@ -686,7 +686,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       );
       if (response.data?.message == "Instrument Added") {
         await getContestWatchList();
-        await searchInstruments(searchTextController.text);
+        await searchInstruments(searchTextController.text, showShimmer: false);
         SnackbarHelper.showSnackbar("Instrument Added");
       }
     } catch (e) {

@@ -65,3 +65,6 @@ export 'completed_contest_leaderboard_response.dart';
 export 'tenx_subscriber_count_list.dart';
 export 'tenx_leaderboard_list_response.dart';
 export 'my_withdrawals_list_response.dart';
+export 'stoploss_excuted_order_list_response.dart';
+export 'stoploss_pending_order_list_response.dart';
+export 'stoploss_pending_cancel_order_response.dart';

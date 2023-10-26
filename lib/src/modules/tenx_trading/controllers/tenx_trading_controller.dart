@@ -56,6 +56,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedTabBarIndex = 0.obs;
 
   final searchTextController = TextEditingController();
+  final stopLossPriceTextController = TextEditingController();
+  final stopProfitPriceTextController = TextEditingController();
   final selectedSubscriptionId = ''.obs;
   final selectSubscriptionName = ''.obs;
   final selectSubscriptionAmount = 0.obs;
@@ -93,6 +95,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxMyExpiredSubcription = TenxMyExpiredSubscriptionList().obs;
 
   final tenxLeaderboard = <TenxLeaderboardList>[].obs;
+  final stopLossExecutedOrdersList = <StopLossExecutedOrdersList>[].obs;
+  final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
+  final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final selectedType = "".obs;
+  final selectedGroupValue = 0.obs;
 
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
@@ -115,11 +122,18 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxPositionsList();
     await getTenxTradingWatchlist();
     await getTenxTradingPortfolioDetails();
+    await getStopLossExecutedOrder();
+    await getStopLossPendingOrder();
     socketConnection();
     socketIndexConnection();
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+
+  void handleRadioValueChanged(int newValue, String labelText) {
+    selectedGroupValue.value = newValue;
+    selectedType.value = labelText;
+  }
 
   String getFormattedExpiryDate(String? subscribedOn, int? expiryDays) {
     if (subscribedOn != null) {
@@ -516,6 +530,76 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isPortfolioStateLoading(false);
   }
 
+  // Future placeTenxTradingOrder(TransactionType type, TradingInstrument inst) async {
+  //   isTradingOrderSheetLoading(true);
+  //   if (type == TransactionType.exit) {
+  //     if (selectedStringQuantity.value.contains('-')) {
+  //       type = TransactionType.buy;
+  //     } else {
+  //       type = TransactionType.sell;
+  //     }
+  //   } else {
+  //     if (selectedStringQuantity.value.contains('-')) {
+  //       if (type == TransactionType.buy) {
+  //         type = TransactionType.sell;
+  //       } else {
+  //         type = TransactionType.buy;
+  //       }
+  //     }
+  //   }
+  //   TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
+  //     exchange: inst.exchange,
+  //     symbol: inst.tradingsymbol,
+  //     buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+  //     quantity: selectedQuantity.value,
+  //     price: "",
+  //     product: "NRML",
+  //     orderType: "MARKET",
+  //     triggerPrice: "",
+  //     stopLoss: "",
+  //     uId: Uuid().v4(),
+  //     exchangeInstrumentToken: inst.exchangeToken,
+  //     validity: "DAY",
+  //     variety: "regular",
+  //     createdBy: userDetails.value.name,
+  //     orderId: Uuid().v4(),
+  //     subscriptionId: selectedSubscriptionId.value,
+  //     userId: userDetails.value.email,
+  //     instrumentToken: inst.instrumentToken,
+  //     trader: userDetails.value.sId,
+  //     paperTrade: false,
+  //     tenxTraderPath: true,
+  //     battleId: selectedSubscriptionId.value,
+  //     marginxId: selectedSubscriptionId.value,
+  //     deviceDetails: DeviceDetails(
+  //       deviceType: 'Mobile',
+  //       platformType: Platform.isAndroid ? 'Android' : 'iOS',
+  //     ),
+  //   );
+  //   print('placeTenxTradingOrder : ${data.toJson()}');
+  //   try {
+  //     final RepoResponse<GenericResponse> response = await repository.placeTenxTradingOrder(
+  //       data.toJson(),
+  //     );
+  //     Get.back();
+  //     print(response.data.toString());
+  //     if (response.data?.status == "Complete") {
+  //       SnackbarHelper.showSnackbar('Trade Successful');
+  //       await getTenxPositionsList();
+  //       await getTenxTradingPortfolioDetails();
+  //     } else if (response.data?.status == "Failed") {
+  //       print(response.error!.message!.toString());
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     } else {
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //   }
+  //   isTradingOrderSheetLoading(false);
+  // }
+
   Future placeTenxTradingOrder(TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
@@ -538,11 +622,10 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       symbol: inst.tradingsymbol,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       quantity: selectedQuantity.value,
-      price: "",
       product: "NRML",
-      orderType: "MARKET",
-      triggerPrice: "",
-      stopLoss: "",
+      orderType: selectedType.value,
+      stopLossPrice: stopLossPriceTextController.text,
+      stopProfitPrice: stopProfitPriceTextController.text,
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
       validity: "DAY",
@@ -859,5 +942,70 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     } catch (e) {
       log(e.toString());
     }
+  }
+
+  Future getStopLossExecutedOrder() async {
+    isLoading(true);
+    try {
+      final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
+        selectedSubscriptionId.value,
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        stopLossExecutedOrdersList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getStopLossPendingOrder() async {
+    isLoading(true);
+    try {
+      final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
+        selectedSubscriptionId.value,
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        stopLossPendingOrderList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  // Future getStopLossPendingCancelOrder() async {
+  //   isLoading(true);
+  //   try {
+  //     final RepoResponse<StopLossPendingCancelOrderResponse> response = await repository.getStopLossPendingCancelOrder(
+  //       selectedSubscriptionId.value,
+  //     );
+  //     if (response.data?.status?.toLowerCase() == "success") {
+  //       stopLossPendingCancelOrder(response.data?.data);
+  //     } else {
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //   }
+  //   isLoading(false);
+  // }
+  Future getStopLossPendingCancelOrder(String? id) async {
+    isWatchlistStateLoading(true);
+    try {
+      await repository.getStopLossPendingCancelOrder(id ?? '');
+      await getStopLossPendingOrder();
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isWatchlistStateLoading(false);
   }
 }

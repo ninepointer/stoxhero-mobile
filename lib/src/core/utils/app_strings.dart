@@ -58,6 +58,8 @@ class AppStrings {
   static const String recentTransactions = "Recent Transactions";
 
   static const noDataFound = 'Oops!, \nNo Data Found!';
+  static const noteModify =
+      'Note: After modifying this order, all existing pending stop loss orders will be cancelled.';
 
   static const String noDataFoundForFreeLiveContest =
       "Oops! \nThere are no Free Live Contest at the moment.\nPlease check Upcoming Contest!";
