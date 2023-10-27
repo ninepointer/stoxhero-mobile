@@ -115,6 +115,7 @@ class AppUrls {
 
   static const String careerApply = "$apiURL/career/apply";
   static const String myWithdrawals = "$apiURL/withdrawals/mywithdrawals";
+  static const String pendingOrderModify = "$apiURL/pendingorder/modify";
 
   static String tenxPortfolio(String? id) => "$apiURL/tenX/$id/trade/marginDetail";
   static String tenxTradeTodaysOrders(String? subscriptionId) => "$apiURL/tenX/my/todayorders/$subscriptionId";
@@ -164,4 +165,5 @@ class AppUrls {
       '$apiURL/pendingorder/my/todaysProcessed/$id/TenX?skip=0&limit=5';
   static String tenxStopLossPendingOrder(String? id) => '$apiURL/pendingorder/my/todaysPending/$id/TenX?skip=0&limit=5';
   static String tenxStopLossPendingCancelOrder(String? id) => '$apiURL/pendingorder/$id';
+  static String tenxStopLossEditOrder(String? id) => '$apiURL/pendingorder/editprice/$id';
 }

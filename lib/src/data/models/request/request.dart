@@ -12,3 +12,5 @@ export 'college_contest_form_request.dart';
 export 'tenx_tutorial_request.dart';
 export 'device_details.dart';
 export 'college_contest_code_request.dart';
+export 'pending_order_modify_request.dart';
+export 'pending_edit_order_request.dart';

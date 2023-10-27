@@ -11,6 +11,10 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
+    final ltp = controller.getInstrumentLastPrice(
+      stopLoss.instrumentToken ?? 0,
+      stopLoss.exchangeInstrumentToken ?? 0,
+    );
     return Obx(
       () => Wrap(
         children: [
@@ -97,25 +101,94 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                        controller: controller.quanitityTextController,
                       ),
                     ),
                     SizedBox(width: 16),
+                    // Expanded(
+                    //   child: (stopLoss.type == 'StopLoss')
+                    //       ? CommonTextField(
+                    //           hintText: 'StopLoss Price',
+                    //           inputFormatters: [
+                    //             FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                    //           ],
+                    //           controller: controller.stopLossPriceTextController,
+                    //           validator: (value) {
+                    //             final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
+                    //             if (stopLossPrice != null && stopLossPrice >= ltp) {
+                    //               return 'Stop Loss price should \n be less than LTP.';
+                    //             }
+                    //             return null;
+                    //           },
+                    //         )
+                    //       : (stopLoss.type == 'Sell')
+                    //           ? CommonTextField(
+                    //               hintText: 'StopLoss Price',
+                    //               inputFormatters: [
+                    //                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                    //               ],
+                    //               controller: controller.stopLossPriceTextController,
+                    //               validator: (value) {
+                    //                 final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
+                    //                 if (stopLossPrice != null && stopLossPrice <= ltp) {
+                    //                   return 'Stop Loss price should \n be less than LTP.';
+                    //                 }
+                    //                 return null;
+                    //               },
+                    //             )
+                    //           : CommonTextField(
+                    //               hintText: 'StopProfit Price',
+                    //               inputFormatters: [
+                    //                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                    //               ],
+                    //               controller: controller.stopProfitPriceTextController,
+                    //               validator: (value) {
+                    //                 final stopProfitPrice =
+                    //                     double.tryParse(controller.stopProfitPriceTextController.text);
+                    //                 if (stopProfitPrice != null && stopProfitPrice >= ltp) {
+                    //                   return 'Stop Profit price should \n be less than LTP.';
+                    //                 }
+                    //                 return null;
+                    //               },
+                    //             ),
                     Expanded(
-                      child: CommonTextField(
-                        hintText: 'StopLoss Price',
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                        ],
-                        controller: controller.stopLossPriceTextController,
-                      ),
-                    ),
+                      child: (stopLoss.buyOrSell == 'SELL')
+                          ? (stopLoss.type == 'StopLoss')
+                              ? CommonTextField(
+                                  hintText: 'StopLoss Price',
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                  ],
+                                  controller: controller.stopLossPriceTextController,
+                                )
+                              : CommonTextField(
+                                  hintText: 'StopProfit Price',
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                  ],
+                                  controller: controller.stopProfitPriceTextController,
+                                  validator: (value) {
+                                    
+                                  },
+                                )
+                          : CommonTextField(
+                              hintText: 'StopProfit Price',
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                              ],
+                              controller: controller.stopProfitPriceTextController,
+                            ),
+                    )
                   ],
                 ),
                 CommonFilledButton(
-                  isLoading: controller.isTradingOrderSheetLoading.value,
+                  isLoading: controller.isPendingOrderStateLoading.value,
                   label: 'Edit',
                   backgroundColor: AppColors.secondary,
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.getStopLossEditOrder(stopLoss.id);
+                    controller.stopLossPriceTextController.clear();
+                  },
                 ),
               ],
             ),

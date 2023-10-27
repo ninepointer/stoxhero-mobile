@@ -16,6 +16,10 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
 
   @override
   build(BuildContext context) {
+    final ltp = controller.getInstrumentLastPrice(
+      tradingInstrument.instrumentToken ?? 0,
+      tradingInstrument.exchangeToken ?? 0,
+    );
     return Obx(
       () => Wrap(
         children: [
@@ -28,241 +32,274 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                 topRight: Radius.circular(4),
               ),
             ),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: Get.back,
-                  child: Row(
+            child: Form(
+              key: controller.stopLossFormKey,
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                      controller.stopLossPriceTextController.clear();
+                      controller.stopProfitPriceTextController.clear();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Regular',
+                          style: Theme.of(context).textTheme.tsMedium18,
+                        ),
+                        Icon(
+                          Icons.cancel,
+                          color: AppColors.secondary,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    thickness: 1,
+                    height: 36,
+                    color: AppColors.grey.shade50.withOpacity(0.5),
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Regular',
-                        style: Theme.of(context).textTheme.tsMedium18,
+                        tradingInstrument.name ?? '-',
+                        style: AppStyles.tsSecondaryMedium16,
                       ),
-                      Icon(
-                        Icons.cancel,
-                        color: AppColors.secondary,
+                      Text(
+                        type == TransactionType.buy
+                            ? FormatHelper.formatNumbers(ltp)
+                            : type == TransactionType.sell
+                                ? FormatHelper.formatNumbers(ltp)
+                                : tradingInstrument.lotSize.toString(),
+                        style: AppStyles.tsSecondaryMedium16,
                       ),
                     ],
                   ),
-                ),
-                Divider(
-                  thickness: 1,
-                  height: 36,
-                  color: AppColors.grey.shade50.withOpacity(0.5),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      tradingInstrument.name ?? '-',
-                      style: AppStyles.tsSecondaryMedium16,
-                    ),
-                    Text(
-                      type == TransactionType.buy
-                          ? FormatHelper.formatNumbers(
-                              controller.getInstrumentLastPrice(
-                                tradingInstrument.instrumentToken!,
-                                tradingInstrument.exchangeToken!,
-                              ),
-                            )
-                          : type == TransactionType.sell
-                              ? FormatHelper.formatNumbers(
-                                  controller.getInstrumentLastPrice(
-                                    tradingInstrument.instrumentToken!,
-                                    tradingInstrument.exchangeToken!,
-                                  ),
-                                )
-                              : tradingInstrument.lotSize.toString(),
-                      style: AppStyles.tsSecondaryMedium16,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 2,
-                        groupValue: 1,
-                        label: 'Interaday (MIS)',
+                  SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 2,
+                          groupValue: 1,
+                          label: 'Interaday (MIS)',
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 1,
-                        groupValue: 1,
-                        label: 'Overnight (NRML)',
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 1,
+                          groupValue: 1,
+                          label: 'Overnight (NRML)',
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                DropdownButtonFormField2<int>(
-                  value: controller.selectedQuantity.value,
-                  onChanged: (value) => controller.selectedQuantity(value),
-                  isDense: true,
-                  items: controller.lotsValueList.map((int number) {
-                    return DropdownMenuItem<int>(
-                      value: number,
-                      child: Text(number >= 0 ? number.toString() : number.toString()),
-                    );
-                  }).toList(),
-                  dropdownStyleData: DropdownStyleData(
-                    maxHeight: 250,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    ],
                   ),
-                  menuItemStyleData: MenuItemStyleData(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                  ),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(16).copyWith(left: 0),
-                    filled: true,
-                    fillColor: AppColors.grey.withOpacity(.1),
-                    hintText: 'Quantity',
-                    hintStyle: AppStyles.tsGreyRegular14,
-                    errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                      color: AppColors.danger.shade700,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
+                  SizedBox(height: 16),
+                  DropdownButtonFormField2<int>(
+                    value: controller.selectedQuantity.value,
+                    onChanged: (value) => controller.selectedQuantity(value),
+                    isDense: true,
+                    items: controller.lotsValueList.map((int number) {
+                      return DropdownMenuItem<int>(
+                        value: number,
+                        child: Text(number >= 0 ? number.toString() : number.toString()),
+                      );
+                    }).toList(),
+                    dropdownStyleData: DropdownStyleData(
+                      maxHeight: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                    menuItemStyleData: MenuItemStyleData(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.primary,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(16).copyWith(left: 0),
+                      filled: true,
+                      fillColor: AppColors.grey.withOpacity(.1),
+                      hintText: 'Quantity',
+                      hintStyle: AppStyles.tsGreyRegular14,
+                      errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                        color: AppColors.danger.shade700,
                       ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.danger,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.danger,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CommonTextField(
-                        isDisabled: controller.selectedGroupValue.value != 3,
-                        hintText: 'StopLoss Price',
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                        ],
-                        controller: controller.stopLossPriceTextController,
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CommonTextField(
+                          isDisabled: controller.selectedGroupValue.value != 3,
+                          hintText: 'StopLoss Price',
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                          ],
+                          controller: controller.stopLossPriceTextController,
+                          validator: (value) {
+                            final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
+                            if (stopLossPrice != null) {
+                              if (type == TransactionType.buy) {
+                                if (stopLossPrice >= ltp) {
+                                  return 'Stop Loss price should \n be less than LTP.';
+                                }
+                              } else if (type == TransactionType.sell) {
+                                if (stopLossPrice <= ltp) {
+                                  return 'Stop Loss price should \n be greater than LTP.';
+                                }
+                              }
+                            }
+                            return null;
+                          },
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: CommonTextField(
-                        isDisabled: controller.selectedGroupValue.value != 3,
-                        hintText: 'StopProfit Price',
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                        ],
-                        controller: controller.stopProfitPriceTextController,
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: CommonTextField(
+                          isDisabled: controller.selectedGroupValue.value != 3,
+                          hintText: 'StopProfit Price',
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                          ],
+                          controller: controller.stopProfitPriceTextController,
+                          validator: (value) {
+                            final stopProfitPrice = double.tryParse(controller.stopProfitPriceTextController.text);
+                            if (stopProfitPrice != null) {
+                              if (type == TransactionType.buy) {
+                                if (stopProfitPrice <= ltp) {
+                                  return 'Stop Profit price should \n be greater than LTP.';
+                                }
+                              } else if (type == TransactionType.sell) {
+                                if (stopProfitPrice >= ltp) {
+                                  return 'Stop Profit price should \n be less than LTP.';
+                                }
+                              }
+                            }
+                            return null;
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 2,
-                        groupValue: controller.selectedGroupValue.value,
-                        label: 'MARKET',
-                        onChanged: (int value) {
-                          controller.handleRadioValueChanged(value, 'MARKET');
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 1,
-                        groupValue: 2,
-                        label: 'LIMIT',
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 3,
-                        groupValue: controller.selectedGroupValue.value,
-                        label: 'SL/SP-M',
-                        onChanged: (int value) {
-                          controller.handleRadioValueChanged(value, 'SL/SP-M');
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 3,
-                        groupValue: 3,
-                        label: 'Day',
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 4,
-                        groupValue: 3,
-                        label: 'Immediate',
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: CommonRadioButtonTile(
-                        value: 1,
-                        groupValue: 3,
-                        label: 'Minutes',
-                      ),
-                    ),
-                  ],
-                ),
-                CommonFilledButton(
-                  isLoading: controller.isTradingOrderSheetLoading.value,
-                  backgroundColor: type == TransactionType.exit
-                      ? AppColors.warning
-                      : type == TransactionType.buy
-                          ? AppColors.success
-                          : AppColors.danger,
-                  margin: EdgeInsets.symmetric(vertical: 24),
-                  label: type == TransactionType.exit
-                      ? 'Exit'
-                      : type == TransactionType.buy
-                          ? 'BUY'
-                          : 'SELL',
-                  onPressed: () => Get.find<TenxTradingController>().placeTenxTradingOrder(
-                    type,
-                    tradingInstrument,
+                    ],
                   ),
-                ),
-              ],
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 2,
+                          groupValue: controller.selectedGroupValue.value,
+                          label: 'MARKET',
+                          onChanged: (int value) {
+                            controller.handleRadioValueChanged(value, 'MARKET');
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 1,
+                          groupValue: 2,
+                          label: 'LIMIT',
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 3,
+                          groupValue: controller.selectedGroupValue.value,
+                          label: 'SL/SP-M',
+                          onChanged: (int value) {
+                            controller.handleRadioValueChanged(value, 'SL/SP-M');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 3,
+                          groupValue: 3,
+                          label: 'Day',
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 4,
+                          groupValue: 3,
+                          label: 'Immediate',
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 1,
+                          groupValue: 3,
+                          label: 'Minutes',
+                        ),
+                      ),
+                    ],
+                  ),
+                  CommonFilledButton(
+                    isLoading: controller.isTradingOrderSheetLoading.value,
+                    backgroundColor: type == TransactionType.exit
+                        ? AppColors.warning
+                        : type == TransactionType.buy
+                            ? AppColors.success
+                            : AppColors.danger,
+                    margin: EdgeInsets.symmetric(vertical: 24),
+                    label: type == TransactionType.exit
+                        ? 'Exit'
+                        : type == TransactionType.buy
+                            ? 'BUY'
+                            : 'SELL',
+                    onPressed: () {
+                      if (controller.stopLossFormKey.currentState!.validate()) {
+                        Get.find<TenxTradingController>().placeTenxTradingOrder(
+                          type,
+                          tradingInstrument,
+                        );
+                      }
+                      controller.stopLossPriceTextController.clear();
+                      controller.stopProfitPriceTextController.clear();
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],

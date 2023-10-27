@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
@@ -31,7 +29,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
     );
   }
 
-  void openModifyBottomSheet(BuildContext context) {
+  void openModifyBottomSheet(BuildContext context, TransactionType type) {
     FocusScope.of(context).unfocus();
     num lastPrice = controller.getInstrumentLastPrice(
       position.id!.instrumentToken!,
@@ -42,6 +40,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: StoplossModifyPriceBottomSheet(
+        type: type,
         stopLoss: TradingInstrument(
           name: position.id?.symbol,
           exchange: position.id?.exchange,
@@ -209,12 +208,9 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       List<int> lots = controller.generateLotsList(type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
                       int maxLots = lots.last;
-
                       if (exitLots == 0) {
                         SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
-                        log(exitLots.toString());
-                        log(maxLots.toString());
                         if (exitLots.toString().contains('-')) {
                           if (exitLots < 0) {
                             exitLots = -exitLots;
@@ -267,7 +263,15 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => openModifyBottomSheet(context),
+                    onTap: () {
+                      if (position.lots!.toInt() == 0) {
+                        // SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                      } else if (controller.selectedQuantity.value.toString().contains('-')) {
+                        openModifyBottomSheet(context, TransactionType.sell);
+                      } else {
+                        openModifyBottomSheet(context, TransactionType.buy);
+                      }
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(6),

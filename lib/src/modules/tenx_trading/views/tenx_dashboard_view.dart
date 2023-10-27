@@ -208,7 +208,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           },
                         ),
                   CommonTile(
-                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    isLoading: controller.isPendingOrderStateLoadingStatus,
                     label: 'My Pending Orders',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
@@ -248,6 +248,30 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                               return StoplossExecutedOrderCard(
                                 stopLoss: controller.stopLossExecutedOrdersList[index],
                               );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'My Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.tenxTradeTodaysOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.tenxTradeTodaysOrdersList.length >= 3
+                              ? 180
+                              : controller.tenxTradeTodaysOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.tenxTradeTodaysOrdersList.length,
+                            itemBuilder: (context, index) {
+                              // return StoplossExecutedOrderCard(
+                              //     // stopLoss: controller.tenxTradeTodaysOrdersList[index],
+                              //     );
                             },
                           ),
                         ),

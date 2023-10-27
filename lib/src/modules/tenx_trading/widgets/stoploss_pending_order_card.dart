@@ -25,6 +25,7 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
         child: StoplossEditPriceBottomSheet(
           //   type: type,
           stopLoss: StopLossPendingOrdersList(
+            id: stopLoss.id,
             symbol: stopLoss.symbol,
             exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
             instrumentToken: stopLoss.instrumentToken,
