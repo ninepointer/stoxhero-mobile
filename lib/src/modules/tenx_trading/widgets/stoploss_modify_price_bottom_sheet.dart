@@ -182,15 +182,17 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                         ],
+                        controller: controller.stopLossPriceTextController,
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: 16),
                     Expanded(
                       child: CommonTextField(
                         hintText: 'StopProfit Price',
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                         ],
+                        controller: controller.stopProfitPriceTextController,
                       ),
                     ),
                   ],
@@ -200,7 +202,7 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
                     Expanded(
                       child: CommonRadioButtonTile(
                         value: 2,
-                        groupValue: 2,
+                        groupValue: controller.selectedGroupValue.value,
                         label: 'SL/SP-M',
                       ),
                     ),

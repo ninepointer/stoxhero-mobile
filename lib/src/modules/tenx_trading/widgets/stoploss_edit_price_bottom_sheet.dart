@@ -102,10 +102,11 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                     SizedBox(width: 16),
                     Expanded(
                       child: CommonTextField(
-                        hintText: 'StopProfit Price',
+                        hintText: 'StopLoss Price',
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                         ],
+                        controller: controller.stopLossPriceTextController,
                       ),
                     ),
                   ],
