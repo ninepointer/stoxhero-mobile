@@ -1,17 +1,15 @@
-import '../models.dart';
-
-class TenxTradingActiveResponse {
+class TenxExpiredPlanListResponse {
   String? status;
-  List<TenxActiveSubscription>? data;
+  List<TenxExpiredPlan>? data;
 
-  TenxTradingActiveResponse({this.status, this.data});
+  TenxExpiredPlanListResponse({this.status, this.data});
 
-  TenxTradingActiveResponse.fromJson(Map<String, dynamic> json) {
+  TenxExpiredPlanListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <TenxActiveSubscription>[];
+      data = <TenxExpiredPlan>[];
       json['data'].forEach((v) {
-        data!.add(new TenxActiveSubscription.fromJson(v));
+        data!.add(new TenxExpiredPlan.fromJson(v));
       });
     }
   }
@@ -26,80 +24,71 @@ class TenxTradingActiveResponse {
   }
 }
 
-class TenxActiveSubscription {
+class TenxExpiredPlan {
   String? sId;
   String? planName;
-  num? actualPrice;
-  num? discountedPrice;
-  int? validity;
   int? expiryDays;
   num? payoutPercentage;
-  num? profitCap;
-  CollegePortfolio? portfolio;
-  String? validityPeriod;
   List<Features>? features;
+  num? portfolioValue;
+  String? user;
+  num? fee;
   String? status;
-  bool? allowPurchase;
-  bool? allowRenewal;
+  String? subscribedOn;
+  String? expiredOn;
+  int? validity;
 
-  TenxActiveSubscription(
-      {this.sId,
-      this.planName,
-      this.actualPrice,
-      this.discountedPrice,
-      this.validity,
-      this.expiryDays,
-      this.payoutPercentage,
-      this.profitCap,
-      this.portfolio,
-      this.validityPeriod,
-      this.features,
-      this.status,
-      this.allowPurchase,
-      this.allowRenewal});
+  TenxExpiredPlan({
+    this.sId,
+    this.planName,
+    this.expiryDays,
+    this.payoutPercentage,
+    this.features,
+    this.portfolioValue,
+    this.user,
+    this.fee,
+    this.status,
+    this.subscribedOn,
+    this.expiredOn,
+    this.validity,
+  });
 
-  TenxActiveSubscription.fromJson(Map<String, dynamic> json) {
+  TenxExpiredPlan.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     planName = json['plan_name'];
-    actualPrice = json['actual_price'];
-    discountedPrice = json['discounted_price'];
-    validity = json['validity'];
     expiryDays = json['expiryDays'];
     payoutPercentage = json['payoutPercentage'];
-    profitCap = json['profitCap'];
-    portfolio = json['portfolio'] != null ? new CollegePortfolio.fromJson(json['portfolio']) : null;
-    validityPeriod = json['validityPeriod'];
     if (json['features'] != null) {
       features = <Features>[];
       json['features'].forEach((v) {
         features!.add(new Features.fromJson(v));
       });
     }
+    portfolioValue = json['portfolioValue'];
+    user = json['user'];
+    fee = json['fee'];
     status = json['status'];
-    allowPurchase = json['allowPurchase'];
-    allowRenewal = json['allowRenewal'];
+    subscribedOn = json['subscribedOn'];
+    expiredOn = json['expiredOn'];
+    validity = json['validity'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
     data['plan_name'] = this.planName;
-    data['actual_price'] = this.actualPrice;
-    data['discounted_price'] = this.discountedPrice;
-    data['validity'] = this.validity;
     data['expiryDays'] = this.expiryDays;
     data['payoutPercentage'] = this.payoutPercentage;
-    data['profitCap'] = this.profitCap;
-    if (this.portfolio != null) {
-      data['portfolio'] = this.portfolio!.toJson();
-    }
-    data['validityPeriod'] = this.validityPeriod;
     if (this.features != null) {
       data['features'] = this.features!.map((v) => v.toJson()).toList();
     }
+    data['portfolioValue'] = this.portfolioValue;
+    data['user'] = this.user;
+    data['fee'] = this.fee;
     data['status'] = this.status;
-    data['allowPurchase'] = this.allowPurchase;
-    data['allowRenewal'] = this.allowRenewal;
+    data['subscribedOn'] = this.subscribedOn;
+    data['expiredOn'] = this.expiredOn;
+    data['validity'] = this.validity;
     return data;
   }
 }

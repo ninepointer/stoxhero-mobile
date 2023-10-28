@@ -31,7 +31,7 @@ export 'portfolio_reponse.dart';
 export 'referrals_leaderboard_response.dart';
 export 'stock_index_instrument_details_list_response.dart';
 export 'tenx_trade_orders_list_response.dart';
-export 'tenx_trading_active_response.dart';
+export 'tenx_active_list_response.dart';
 export 'trading_instrument_list_response.dart';
 export 'tenx_trading_instrument_trade_details_list_response.dart';
 export 'tenx_trading_portfolio__details_response.dart';

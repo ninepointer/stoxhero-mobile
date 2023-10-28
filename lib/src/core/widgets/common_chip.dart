@@ -36,7 +36,7 @@ class CommonChip extends StatelessWidget {
               : null,
           label: Text(
             label ?? 'Label',
-            style: isSelected ? AppStyles.tsWhiteRegular14 : AppStyles.tsPrimaryRegular14,
+            style: isSelected ? AppStyles.tsWhiteMedium12 : AppStyles.tsPrimaryMedium12,
           ),
           backgroundColor: isSelected ? AppColors.primary : Theme.of(context).cardColor,
         ),

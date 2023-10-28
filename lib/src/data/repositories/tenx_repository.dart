@@ -1,8 +1,8 @@
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
-import '../models/response/tenx_my_active_subscribed_list_response.dart';
-import '../models/response/tenx_my_expired_subscription_list_response.dart';
+import '../models/response/tenx_subscribed_list_response.dart';
+import '../models/response/tenx_expired_list_response.dart';
 
 class TenxTradingRepository extends BaseRepository {
   Future<RepoResponse<GenericResponse>> postPurchaseIntent(Map<String, dynamic> data) async {
@@ -22,12 +22,12 @@ class TenxTradingRepository extends BaseRepository {
         : RepoResponse(data: TradingInstrumentListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxTradingActiveResponse>> getTenxActiveSubscriptions() async {
+  Future<RepoResponse<TenxActivePlanListResponse>> getTenxActiveSubscriptions() async {
     String apiURL = AppUrls.tenxActive;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: TenxTradingActiveResponse.fromJson(response));
+        : RepoResponse(data: TenxActivePlanListResponse.fromJson(response));
   }
 
   Future<RepoResponse<TradingWatchlistResponse>> getTenxWatchlist() async {
@@ -126,20 +126,20 @@ class TenxTradingRepository extends BaseRepository {
         : RepoResponse(data: TenxSubscriberCountListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxMyActiveSubscribedListResponse>> getTenxMyActiveSubscribed() async {
+  Future<RepoResponse<TenxSubscribedPlanListResponse>> getTenxMyActiveSubscribed() async {
     String apiURL = AppUrls.tenxMyActiveSubscribed;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: TenxMyActiveSubscribedListResponse.fromJson(response));
+        : RepoResponse(data: TenxSubscribedPlanListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxMyExpiredSubscriptionListResponse>> getTenxMyExpiredSubscription() async {
+  Future<RepoResponse<TenxExpiredPlanListResponse>> getTenxMyExpiredSubscription() async {
     String apiURL = AppUrls.tenxMyExpiredSubscription;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: TenxMyExpiredSubscriptionListResponse.fromJson(response));
+        : RepoResponse(data: TenxExpiredPlanListResponse.fromJson(response));
   }
 
   Future<RepoResponse<TenxLeaderboardListResponse>> getTenxLeaderboard() async {

@@ -1,15 +1,17 @@
-class TenxMyActiveSubscribedListResponse {
+import '../models.dart';
+
+class TenxActivePlanListResponse {
   String? status;
-  List<TenxMyActiveSubscribedList>? data;
+  List<TenxActivePlan>? data;
 
-  TenxMyActiveSubscribedListResponse({this.status, this.data});
+  TenxActivePlanListResponse({this.status, this.data});
 
-  TenxMyActiveSubscribedListResponse.fromJson(Map<String, dynamic> json) {
+  TenxActivePlanListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <TenxMyActiveSubscribedList>[];
+      data = <TenxActivePlan>[];
       json['data'].forEach((v) {
-        data!.add(new TenxMyActiveSubscribedList.fromJson(v));
+        data!.add(new TenxActivePlan.fromJson(v));
       });
     }
   }
@@ -24,75 +26,80 @@ class TenxMyActiveSubscribedListResponse {
   }
 }
 
-class TenxMyActiveSubscribedList {
+class TenxActivePlan {
   String? sId;
   String? planName;
+  num? actualPrice;
   num? discountedPrice;
+  int? validity;
   int? expiryDays;
   num? payoutPercentage;
+  num? profitCap;
+  CollegePortfolio? portfolio;
+  String? validityPeriod;
   List<Features>? features;
-  bool? allowRenewal;
-  num? portfolioValue;
-  String? user;
-  num? fee;
   String? status;
-  String? subscribedOn;
-  int? validity;
+  bool? allowPurchase;
+  bool? allowRenewal;
 
-  TenxMyActiveSubscribedList({
-    this.sId,
-    this.planName,
-    this.discountedPrice,
-    this.expiryDays,
-    this.payoutPercentage,
-    this.features,
-    this.allowRenewal,
-    this.portfolioValue,
-    this.user,
-    this.fee,
-    this.status,
-    this.subscribedOn,
-    this.validity,
-  });
+  TenxActivePlan(
+      {this.sId,
+      this.planName,
+      this.actualPrice,
+      this.discountedPrice,
+      this.validity,
+      this.expiryDays,
+      this.payoutPercentage,
+      this.profitCap,
+      this.portfolio,
+      this.validityPeriod,
+      this.features,
+      this.status,
+      this.allowPurchase,
+      this.allowRenewal});
 
-  TenxMyActiveSubscribedList.fromJson(Map<String, dynamic> json) {
+  TenxActivePlan.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     planName = json['plan_name'];
+    actualPrice = json['actual_price'];
     discountedPrice = json['discounted_price'];
+    validity = json['validity'];
     expiryDays = json['expiryDays'];
     payoutPercentage = json['payoutPercentage'];
+    profitCap = json['profitCap'];
+    portfolio = json['portfolio'] != null ? new CollegePortfolio.fromJson(json['portfolio']) : null;
+    validityPeriod = json['validityPeriod'];
     if (json['features'] != null) {
       features = <Features>[];
       json['features'].forEach((v) {
         features!.add(new Features.fromJson(v));
       });
     }
-    allowRenewal = json['allowRenewal'];
-    portfolioValue = json['portfolioValue'];
-    user = json['user'];
-    fee = json['fee'];
     status = json['status'];
-    subscribedOn = json['subscribedOn'];
-    validity = json['validity'];
+    allowPurchase = json['allowPurchase'];
+    allowRenewal = json['allowRenewal'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
     data['plan_name'] = this.planName;
+    data['actual_price'] = this.actualPrice;
     data['discounted_price'] = this.discountedPrice;
+    data['validity'] = this.validity;
     data['expiryDays'] = this.expiryDays;
     data['payoutPercentage'] = this.payoutPercentage;
+    data['profitCap'] = this.profitCap;
+    if (this.portfolio != null) {
+      data['portfolio'] = this.portfolio!.toJson();
+    }
+    data['validityPeriod'] = this.validityPeriod;
     if (this.features != null) {
       data['features'] = this.features!.map((v) => v.toJson()).toList();
     }
-    data['allowRenewal'] = this.allowRenewal;
-    data['portfolioValue'] = this.portfolioValue;
-    data['user'] = this.user;
-    data['fee'] = this.fee;
     data['status'] = this.status;
-    data['subscribedOn'] = this.subscribedOn;
-    data['validity'] = this.validity;
+    data['allowPurchase'] = this.allowPurchase;
+    data['allowRenewal'] = this.allowRenewal;
     return data;
   }
 }

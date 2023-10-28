@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/data/models/response/tenx_my_active_subscribed_list_response.dart';
+import 'package:stoxhero/src/data/models/response/tenx_subscribed_list_response.dart';
 import '../../../app/app.dart';
 
 class TenxSubscribedCard extends GetView<TenxTradingController> {
-  final TenxMyActiveSubscribedList subscription;
+  final TenxSubscribedPlan subscription;
   final bool isActive;
 
   const TenxSubscribedCard({
@@ -94,7 +94,7 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                   SizedBox(height: 2),
                   Expanded(
                     child: Text(
-                      'Expired On :\n${controller.getFormattedExpiryDate(subscription.subscribedOn, subscription.expiryDays)}',
+                      'Expires On :\n${controller.getFormattedExpiryDate(subscription.subscribedOn, subscription.expiryDays)}',
                       textAlign: TextAlign.end,
                       style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
@@ -140,7 +140,7 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                         label: 'Renew',
                         onPressed: () {
                           controller.selectedSubscriptionId(subscription.sId);
-                          controller.tenxMyActiveSubcribed(subscription);
+                          controller.tenxSubscribedPlanSelected(subscription);
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: PurchaseItemBottomSheet(
@@ -163,11 +163,11 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                 height: 32,
                 onPressed: () {
                   controller.selectedSubscriptionId(subscription.sId);
-                  controller.tenxMyActiveSubcribed(subscription);
+                  controller.tenxSubscribedPlanSelected(subscription);
                   controller.loadTenxData();
                   controller.selectSubscriptionName("");
                   controller.selectSubscriptionName(subscription.planName ?? '');
-                  controller.tenxMyExpiredSubcription();
+                  controller.tenxExpiredPlanSelected();
                   Get.toNamed(AppRoutes.tenxDashboard);
                 },
                 label: 'Start Trading',

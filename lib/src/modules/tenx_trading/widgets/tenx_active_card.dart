@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../app/app.dart';
 
 class TenxActiveCard extends GetView<TenxTradingController> {
-  final TenxActiveSubscription subscription;
+  final TenxActivePlan subscription;
   final bool isActive;
 
   const TenxActiveCard({
