@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/app/app.dart';
 
-class StoplossExecutedOrderCard extends StatelessWidget {
-  final StopLossExecutedOrdersList stopLoss;
-  const StoplossExecutedOrderCard({
+import '../../../app/app.dart';
+
+class TenxTodayOrderCard extends StatelessWidget {
+  final TenxTradeOrder order;
+  const TenxTodayOrderCard({
     Key? key,
-    required this.stopLoss,
+    required this.order,
   }) : super(key: key);
 
   @override
@@ -25,14 +26,12 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                 children: [
                   TradeCardTile(
                     label: 'Symbol',
-                    value: stopLoss.symbol,
+                    value: order.symbol,
                   ),
                   TradeCardTile(
                     isRightAlign: true,
-                    label: 'SL/SP Price',
-                    value: FormatHelper.formatNumbers(
-                      stopLoss.executionPrice,
-                    ),
+                    label: 'Quantity',
+                    value: order.quantity.toString(),
                   ),
                 ],
               ),
@@ -40,14 +39,16 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TradeCardTile(
-                    label: 'Quantity',
-                    value: stopLoss.quantity.toString(),
+                    label: 'Average Price',
+                    value: FormatHelper.formatNumbers(
+                      order.averagePrice,
+                    ),
                   ),
                   TradeCardTile(
                     isRightAlign: true,
                     label: 'Amount',
                     value: FormatHelper.formatNumbers(
-                      stopLoss.amount,
+                      order.amount,
                     ),
                   ),
                 ],
@@ -57,32 +58,27 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                 children: [
                   TradeCardTile(
                     hasBottomMargin: false,
-                    label: 'Stop Type',
-                    value: stopLoss.type,
+                    label: 'Transaction',
+                    value: order.buyOrSell,
+                    valueColor: order.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
                   ),
                   TradeCardTile(
                     isRightAlign: true,
+                    label: 'Status',
+                    value: order.status,
+                    valueColor: order.status == "COMPLETE" ? AppColors.success : AppColors.danger,
                     hasBottomMargin: false,
-                    label: 'Type',
-                    value: stopLoss.buyOrSell,
-                    valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
                   ),
                 ],
               ),
+              SizedBox(height: 2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TradeCardTile(
-                    label: 'Status',
-                    value: stopLoss.status,
-                    valueColor: stopLoss.status == "Executed" ? AppColors.success : AppColors.danger,
-                    hasBottomMargin: false,
-                  ),
-                  TradeCardTile(
-                    isRightAlign: true,
                     hasBottomMargin: true,
                     label: 'Time',
-                    value: FormatHelper.formatDateTimeToIST(stopLoss.time),
+                    value: FormatHelper.formatDateTimeToIST(order.tradeTimeUtc),
                   ),
                 ],
               )

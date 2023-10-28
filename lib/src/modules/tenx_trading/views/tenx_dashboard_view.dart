@@ -269,9 +269,9 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             padding: EdgeInsets.zero,
                             itemCount: controller.tenxTradeTodaysOrdersList.length,
                             itemBuilder: (context, index) {
-                              // return StoplossExecutedOrderCard(
-                              //     // stopLoss: controller.tenxTradeTodaysOrdersList[index],
-                              //     );
+                              return TenxTodayOrderCard(
+                                order: controller.tenxTradeTodaysOrdersList[index],
+                              );
                             },
                           ),
                         ),

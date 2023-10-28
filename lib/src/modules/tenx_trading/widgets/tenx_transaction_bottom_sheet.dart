@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +22,10 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
       tradingInstrument.instrumentToken ?? 0,
       tradingInstrument.exchangeToken ?? 0,
     );
+    log('tradingInstrument.lotSize ${tradingInstrument.lotSize}');
+    log('POstioon.lotSize ${controller.tenxPosition.value.lots}');
+    log('POstioon.lotSize ${controller.selectedQuantity.value}');
+    log('Type $type');
     return Obx(
       () => Wrap(
         children: [
@@ -307,3 +313,46 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
     );
   }
 }
+
+// if (transaction.lotSize==position.lots){ 
+// type==TransactionType.buy
+// TextField enable
+// }
+
+//else if(transaction.lotSize<postiton.lots){
+// type==TransactionType.buy
+// TextField enable
+// }
+
+//else if(transcation.lotssize==position.lots){
+// type==TransactionType.sell
+// TextField disable
+// }
+
+//else if(transaction.lotSize<position.lots){
+// type==TransactionType.sell
+// TextField disable
+// }
+
+//else if(transaction.lotSize.contain('-')==postion.lots){
+// type==TransactionType.buy
+// TextField disable
+// }
+
+//else if(transaction.lotSize.contrain('-')<postion.lots){
+// type==TransactionType.buy
+// TextField enable
+// }
+
+//else if(transaction.lotSize.contrain('-')==postion.lots){
+// type==TransactionType.sell
+// TextField enable
+// }
+
+//else if(transaction.lotSize.contrain('-')<postion.lots){
+// type==TransactionType.sell
+// TextField enable
+// }
+
+
+

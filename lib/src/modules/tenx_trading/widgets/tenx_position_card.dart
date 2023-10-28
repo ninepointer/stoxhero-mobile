@@ -24,6 +24,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
           exchangeToken: position.id?.exchangeInstrumentToken,
           instrumentToken: position.id?.instrumentToken,
           lastPrice: lastPrice,
+          lotSize: position.lots,
         ),
       ),
     );

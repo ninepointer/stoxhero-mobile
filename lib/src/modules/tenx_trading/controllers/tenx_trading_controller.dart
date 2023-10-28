@@ -131,6 +131,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxTradingPortfolioDetails();
     await getStopLossExecutedOrder();
     await getStopLossPendingOrder();
+    await getTenxTradeTodaysOrdersList();
     socketConnection();
     socketIndexConnection();
   }
@@ -1088,7 +1089,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isLoading(true);
     try {
       final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeTodaysOrdersList(
-        selectedTenXSub.value.subscriptionId,
+        selectedSubscriptionId.value,
       );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
