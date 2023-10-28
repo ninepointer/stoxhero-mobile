@@ -70,6 +70,10 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   final tenxAvailablePlans = <TenxActiveSubscription>[].obs;
   final tenxAvailablePlansUnFiltered = <TenxActiveSubscription>[].obs;
+
+  final tenxMyActivePlans = <TenxMyActiveSubscribedList>[].obs;
+  final tenxMyActivePlansUnFiltered = <TenxMyActiveSubscribedList>[].obs;
+
   final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
   final tenxPositionsList = <TenxTradingPosition>[].obs;
   final tenxPosition = TenxTradingPosition().obs;
@@ -87,6 +91,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxCountTradingDays = <CountTradingDays>[].obs;
   final selectedTenXSub = TenXSubscription().obs;
   final tenXSubscription = <TenXSubscription>[].obs;
+
   final tenxMyActiveSubcribedList = <TenxMyActiveSubscribedList>[].obs;
   final tenxMyActiveSubcribed = TenxMyActiveSubscribedList().obs;
 
@@ -95,8 +100,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   final tenxLeaderboard = <TenxLeaderboardList>[].obs;
 
-  final validityValuesList = <PlanValidity>[].obs;
-  final validitySelectedValue = PlanValidity(label: 'All', validity: 0).obs;
+  final tenxAvailableValidityList = <PlanValidity>[].obs;
+  final tenxAvailableValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
 
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
@@ -127,16 +132,30 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   void updateAvailableTenxValidityPlans() {
     var filteredList = <TenxActiveSubscription>[];
-    if (validitySelectedValue.value.label == 'All') {
+    if (tenxAvailableValiditySelected.value.label == 'All') {
       filteredList = tenxAvailablePlansUnFiltered;
     } else {
       for (var plan in tenxAvailablePlansUnFiltered) {
-        if (plan.validity == validitySelectedValue.value.validity) {
+        if (plan.validity == tenxAvailableValiditySelected.value.validity) {
           filteredList.add(plan);
         }
       }
     }
     tenxAvailablePlans(filteredList);
+  }
+
+  void updateMyActiveValidityPlans() {
+    var filteredList = <TenxMyActiveSubscribedList>[];
+    if (tenxAvailableValiditySelected.value.label == 'All') {
+      filteredList = tenxMyActivePlansUnFiltered;
+    } else {
+      for (var plan in tenxMyActivePlansUnFiltered) {
+        if (plan.validity == tenxAvailableValiditySelected.value.validity) {
+          filteredList.add(plan);
+        }
+      }
+    }
+    tenxMyActivePlans(filteredList);
   }
 
   String getFormattedExpiryDate(String? subscribedOn, int? expiryDays) {
@@ -431,7 +450,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         for (TenxActiveSubscription sub in tenxAvailablePlans) {
           if (sub.validity != null) {
             if (sub.validity != 0 && uniqueValues.add(sub.validity!)) {
-              // result.add('${sub.validity} Days');
               result.add(PlanValidity(
                 label: '${sub.validity} Days',
                 validity: sub.validity!,
@@ -439,8 +457,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
             }
           }
         }
+        result.sort(
+          (a, b) => a.validity!.compareTo(b.validity!),
+        );
         result.insert(0, PlanValidity(label: 'All', validity: 0));
-        validityValuesList(result);
+        tenxAvailableValidityList(result);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

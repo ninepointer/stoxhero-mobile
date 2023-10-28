@@ -38,19 +38,19 @@ class _TenxTradingViewState extends State<TenxTradingView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (controller.validityValuesList.isNotEmpty)
+                if (controller.tenxAvailableValidityList.isNotEmpty)
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        for (PlanValidity item in controller.validityValuesList)
+                        for (PlanValidity item in controller.tenxAvailableValidityList)
                           CommonChip(
                             margin: EdgeInsets.only(right: 8),
                             label: item.label,
-                            isSelected: item.label == controller.validitySelectedValue.value.label,
+                            isSelected: item.label == controller.tenxAvailableValiditySelected.value.label,
                             onTap: () {
-                              controller.validitySelectedValue(item);
+                              controller.tenxAvailableValiditySelected(item);
                               controller.updateAvailableTenxValidityPlans();
                             },
                           ),

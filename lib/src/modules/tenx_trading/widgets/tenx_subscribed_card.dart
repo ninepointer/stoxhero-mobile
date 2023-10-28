@@ -36,7 +36,7 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
             label: subscription.features?[index].description ?? '-',
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 12),
         Column(
           children: [
             SizedBox(height: 4),
@@ -57,13 +57,15 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Subscription',
-                            style: AppStyles.tsSecondaryMedium12,
+                            'Subscription Price',
+                            style: AppStyles.tsSecondaryMedium14,
                           ),
                           SizedBox(width: 4),
                           Text(
                             '₹${subscription.discountedPrice}',
-                            style: AppStyles.tsSecondaryMedium14,
+                            style: AppStyles.tsSecondaryMedium14.copyWith(
+                              color: AppColors.success,
+                            ),
                           ),
                         ],
                       ),
@@ -104,26 +106,37 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.all(12).copyWith(bottom: 8, top: 8),
+        SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
           child: Column(
             children: [
               Row(
                 children: [
                   Expanded(
                     child: CommonFilledButton(
-                      backgroundColor: AppColors.secondary.withOpacity(.8),
-                      height: 40,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      labelColor: AppColors.secondary,
+                      backgroundColor: AppColors.secondary.withOpacity(.25),
+                      height: 32,
                       label: 'Analytics',
                       onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
                     ),
                   ),
-                  SizedBox(width: 4),
                   if (subscription.allowRenewal == true) ...[
                     Expanded(
                       child: CommonFilledButton(
-                        backgroundColor: AppColors.danger.withOpacity(.8),
-                        height: 40,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        labelColor: AppColors.danger,
+                        backgroundColor: AppColors.danger.withOpacity(.25),
+                        height: 32,
                         label: 'Renew',
                         onPressed: () {
                           controller.selectedSubscriptionId(subscription.sId);
@@ -138,14 +151,16 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                         },
                       ),
                     )
-                  ] else
-                    Container(),
+                  ]
                 ],
               ),
-              SizedBox(height: 4),
               CommonFilledButton(
-                backgroundColor: AppColors.success.withOpacity(.8),
-                height: 40,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                labelColor: AppColors.success,
+                backgroundColor: AppColors.success.withOpacity(.25),
+                height: 32,
                 onPressed: () {
                   controller.selectedSubscriptionId(subscription.sId);
                   controller.tenxMyActiveSubcribed(subscription);

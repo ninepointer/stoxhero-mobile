@@ -64,36 +64,10 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '₹${subscription.actualPrice}',
-                              style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                                    decoration: TextDecoration.lineThrough,
-                                    decorationStyle: TextDecorationStyle.solid,
-                                    color: AppColors.danger,
-                                  ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Icon(
-                                Icons.circle,
-                                size: 8,
-                              ),
-                            ),
-                            Text(
-                              'Save',
+                              'Subscription Price',
                               style: AppStyles.tsSecondaryMedium14,
                             ),
                             SizedBox(width: 4),
-                            Text(
-                              '${controller.calculateSavingsPercentage(subscription.actualPrice, subscription.discountedPrice).toStringAsFixed(0)}%',
-                              style: AppStyles.tsSecondaryMedium14,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Icon(
-                                Icons.circle,
-                                size: 8,
-                              ),
-                            ),
                             Text(
                               '₹${subscription.discountedPrice}',
                               style: AppStyles.tsSecondaryMedium14.copyWith(
