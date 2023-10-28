@@ -81,10 +81,9 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
               ),
               IconButton(
                 onPressed: () {
-                  showModalBottomSheet(
+                  BottomSheetHelper.openBottomSheet(
                     context: context,
-                    isScrollControlled: true,
-                    builder: (context) => MarginxInfoBottomSheet(),
+                    child: MarginxInfoBottomSheet(),
                   );
                 },
                 icon: Icon(

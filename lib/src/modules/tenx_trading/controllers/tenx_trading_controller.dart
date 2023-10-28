@@ -68,7 +68,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
 
-  final tenxActiveSub = <TenxActiveSubscription>[].obs;
+  final tenxAvailablePlans = <TenxActiveSubscription>[].obs;
+  final tenxAvailablePlansUnFiltered = <TenxActiveSubscription>[].obs;
   final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
   final tenxPositionsList = <TenxTradingPosition>[].obs;
   final tenxPosition = TenxTradingPosition().obs;
@@ -93,6 +94,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxMyExpiredSubcription = TenxMyExpiredSubscriptionList().obs;
 
   final tenxLeaderboard = <TenxLeaderboardList>[].obs;
+
+  final validityValuesList = <PlanValidity>[].obs;
+  final validitySelectedValue = PlanValidity(label: 'All', validity: 0).obs;
 
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
@@ -120,7 +124,20 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
-  
+
+  void updateAvailableTenxValidityPlans() {
+    var filteredList = <TenxActiveSubscription>[];
+    if (validitySelectedValue.value.label == 'All') {
+      filteredList = tenxAvailablePlansUnFiltered;
+    } else {
+      for (var plan in tenxAvailablePlansUnFiltered) {
+        if (plan.validity == validitySelectedValue.value.validity) {
+          filteredList.add(plan);
+        }
+      }
+    }
+    tenxAvailablePlans(filteredList);
+  }
 
   String getFormattedExpiryDate(String? subscribedOn, int? expiryDays) {
     if (subscribedOn != null) {
@@ -399,14 +416,31 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     try {
       final RepoResponse<TenxTradingActiveResponse> response = await repository.getTenxActiveSubscriptions();
       if (response.data?.status?.toLowerCase() == "success") {
-        tenxActiveSub.clear();
+        tenxAvailablePlans.clear();
         userSubscriptionsIds.clear();
-        tenxActiveSub(response.data?.data ?? []);
+        tenxAvailablePlans(response.data?.data ?? []);
+        tenxAvailablePlansUnFiltered(response.data?.data ?? []);
         for (var userSub in userDetails.value.subscription!) {
           if (userSub.subscriptionId != null) {
             userSubscriptionsIds.add(userSub.subscriptionId!.id!);
           }
         }
+        Set<int> uniqueValues = Set<int>();
+        List<PlanValidity> result = [];
+
+        for (TenxActiveSubscription sub in tenxAvailablePlans) {
+          if (sub.validity != null) {
+            if (sub.validity != 0 && uniqueValues.add(sub.validity!)) {
+              // result.add('${sub.validity} Days');
+              result.add(PlanValidity(
+                label: '${sub.validity} Days',
+                validity: sub.validity!,
+              ));
+            }
+          }
+        }
+        result.insert(0, PlanValidity(label: 'All', validity: 0));
+        validityValuesList(result);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -505,7 +539,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         selectedSubscriptionId.value,
       );
       if (response.data?.data != null) {
-        log('getTenxTradingPortfolioDetails');
         tenxPortfolioDetails(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -739,7 +772,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       if (response.data != null) {
         tenXSubscription.clear();
         tenXSubscription(response.data?.data ?? []);
-        if (tenXSubscription.isNotEmpty) selectedTenXSub(tenXSubscription.first);
+        if (tenXSubscription.isNotEmpty) {
+          selectedTenXSub(tenXSubscription.first);
+        }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

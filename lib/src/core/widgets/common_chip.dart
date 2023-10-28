@@ -5,35 +5,41 @@ class CommonChip extends StatelessWidget {
   final String? label;
   final VoidCallback? onTap;
   final bool isSelected;
+  final EdgeInsets? margin;
   const CommonChip({
     Key? key,
     this.onTap,
     this.label,
     this.isSelected = false,
+    this.margin,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Chip(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: AppColors.primary,
+    return Container(
+      margin: margin,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Chip(
+          visualDensity: VisualDensity.compact,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: AppColors.primary,
+            ),
+            borderRadius: BorderRadius.circular(50),
           ),
-          borderRadius: BorderRadius.circular(50),
+          avatar: isSelected
+              ? Icon(
+                  Icons.check,
+                  color: AppColors.white,
+                )
+              : null,
+          label: Text(
+            label ?? 'Label',
+            style: isSelected ? AppStyles.tsWhiteRegular14 : AppStyles.tsPrimaryRegular14,
+          ),
+          backgroundColor: isSelected ? AppColors.primary : Theme.of(context).cardColor,
         ),
-        avatar: isSelected
-            ? Icon(
-                Icons.check,
-                color: AppColors.white,
-              )
-            : null,
-        label: Text(
-          label ?? 'Label',
-          style: isSelected ? AppStyles.tsWhiteRegular14 : AppStyles.tsPrimaryRegular14,
-        ),
-        backgroundColor: isSelected ? AppColors.primary : Colors.transparent,
       ),
     );
   }

@@ -143,16 +143,24 @@ class TenxActiveCard extends GetView<TenxTradingController> {
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.all(12).copyWith(bottom: 8, top: 8),
+        SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
           child: Column(
             children: [
               Row(
                 children: [
                   Expanded(
                     child: CommonFilledButton(
-                      backgroundColor: AppColors.info.withOpacity(.8),
-                      height: 40,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      labelColor: AppColors.info,
+                      backgroundColor: AppColors.info.withOpacity(.25),
+                      height: 32,
                       label: 'Learn More',
                       onPressed: () {
                         controller.tenxCountTradingDays();
@@ -160,19 +168,21 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                         controller.selectSubscriptionName(subscription.planName ?? '');
                         controller.selectedSubscription(subscription);
                         controller.selectSubscriptionAmount(subscription.portfolio?.portfolioValue?.toInt());
-                        showModalBottomSheet(
+                        BottomSheetHelper.openBottomSheet(
                           context: context,
-                          isScrollControlled: true,
-                          builder: (context) => TenxLearnMoreInfo(),
+                          child: TenxLearnMoreInfo(),
                         );
                       },
                     ),
                   ),
-                  SizedBox(width: 4),
                   Expanded(
                     child: CommonFilledButton(
-                      backgroundColor: AppColors.danger.withOpacity(.8),
-                      height: 40,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      labelColor: AppColors.danger,
+                      backgroundColor: AppColors.danger.withOpacity(.25),
+                      height: 32,
                       label: 'Watch Videos',
                       onPressed: () async {
                         controller.selectedSubscriptionId(subscription.sId);
@@ -186,11 +196,14 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                   ),
                 ],
               ),
-              SizedBox(height: 4),
               if (subscription.allowPurchase == true) ...[
                 CommonFilledButton(
-                  backgroundColor: AppColors.success.withOpacity(.8),
-                  height: 40,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  labelColor: AppColors.success,
+                  backgroundColor: AppColors.success.withOpacity(.25),
+                  height: 32,
                   onPressed: isActive
                       ? () {}
                       : () {
@@ -207,12 +220,7 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                         },
                   label: isActive ? 'Already Subscribed' : 'Subscribe',
                 )
-              ] else
-                CommonOutlinedButton(
-                  height: 40,
-                  onPressed: () {},
-                  label: 'Subscription Not Allowed',
-                ),
+              ]
             ],
           ),
         ),

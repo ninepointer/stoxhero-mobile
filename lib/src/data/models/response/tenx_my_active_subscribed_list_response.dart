@@ -37,20 +37,23 @@ class TenxMyActiveSubscribedList {
   num? fee;
   String? status;
   String? subscribedOn;
+  int? validity;
 
-  TenxMyActiveSubscribedList(
-      {this.sId,
-      this.planName,
-      this.discountedPrice,
-      this.expiryDays,
-      this.payoutPercentage,
-      this.features,
-      this.allowRenewal,
-      this.portfolioValue,
-      this.user,
-      this.fee,
-      this.status,
-      this.subscribedOn});
+  TenxMyActiveSubscribedList({
+    this.sId,
+    this.planName,
+    this.discountedPrice,
+    this.expiryDays,
+    this.payoutPercentage,
+    this.features,
+    this.allowRenewal,
+    this.portfolioValue,
+    this.user,
+    this.fee,
+    this.status,
+    this.subscribedOn,
+    this.validity,
+  });
 
   TenxMyActiveSubscribedList.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -70,6 +73,7 @@ class TenxMyActiveSubscribedList {
     fee = json['fee'];
     status = json['status'];
     subscribedOn = json['subscribedOn'];
+    validity = json['validity'];
   }
 
   Map<String, dynamic> toJson() {
@@ -88,6 +92,7 @@ class TenxMyActiveSubscribedList {
     data['fee'] = this.fee;
     data['status'] = this.status;
     data['subscribedOn'] = this.subscribedOn;
+    data['validity'] = this.validity;
     return data;
   }
 }

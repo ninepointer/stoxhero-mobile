@@ -35,52 +35,63 @@ class _TenxTradingViewState extends State<TenxTradingView> {
         tabs: [
           RefreshIndicator(
             onRefresh: controller.getTenxTradingActiveSubs,
-            child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.only(bottom: 100),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      CommonChip(
-                        label: 'All',
-                        isSelected: true,
-                      ),
-                      SizedBox(width: 8),
-                      CommonChip(
-                        label: '10 Days',
-                      ),
-                    ],
-                  ),
-                  TenxInfoCard(),
-                  Visibility(
-                    visible: controller.isActiveLoadingStatus,
-                    child: ListViewShimmer(
-                      itemCount: 10,
-                      shimmerCard: LargeCardShimmer(),
-                    ),
-                    replacement: Visibility(
-                      visible: controller.tenxActiveSub.isEmpty,
-                      child: NoDataFound(
-                        imagePath: AppImages.contestTrophy,
-                        label: AppStrings.noDataFoundTenxActive,
-                      ),
-                      replacement: ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: controller.tenxActiveSub.length,
-                        itemBuilder: (context, index) {
-                          var sub = controller.tenxActiveSub[index];
-                          return TenxActiveCard(
-                            subscription: sub,
-                            isActive: controller.userSubscriptionsIds.contains(sub.sId),
-                          );
-                        },
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (controller.validityValuesList.isNotEmpty)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        for (PlanValidity item in controller.validityValuesList)
+                          CommonChip(
+                            margin: EdgeInsets.only(right: 8),
+                            label: item.label,
+                            isSelected: item.label == controller.validitySelectedValue.value.label,
+                            onTap: () {
+                              controller.validitySelectedValue(item);
+                              controller.updateAvailableTenxValidityPlans();
+                            },
+                          ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                SizedBox(height: 8),
+                TenxInfoCard(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.only(bottom: 100),
+                    child: Visibility(
+                      visible: controller.isActiveLoadingStatus,
+                      child: ListViewShimmer(
+                        itemCount: 10,
+                        shimmerCard: LargeCardShimmer(),
+                      ),
+                      replacement: Visibility(
+                        visible: controller.tenxAvailablePlans.isEmpty,
+                        child: NoDataFound(
+                          imagePath: AppImages.contestTrophy,
+                          label: AppStrings.noDataFoundTenxActive,
+                        ),
+                        replacement: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.tenxAvailablePlans.length,
+                          itemBuilder: (context, index) {
+                            var sub = controller.tenxAvailablePlans[index];
+                            return TenxActiveCard(
+                              subscription: sub,
+                              isActive: controller.userSubscriptionsIds.contains(sub.sId),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           RefreshIndicator(
@@ -95,7 +106,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                   shimmerCard: LargeCardShimmer(),
                 ),
                 replacement: Visibility(
-                  visible: controller.tenxActiveSub.isEmpty,
+                  visible: controller.tenxAvailablePlans.isEmpty,
                   child: NoDataFound(
                     imagePath: AppImages.contestTrophy,
                     label: AppStrings.noDataFoundTenxSubscribed,
@@ -128,7 +139,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                   shimmerCard: LargeCardShimmer(),
                 ),
                 replacement: Visibility(
-                  visible: controller.tenxActiveSub.isEmpty,
+                  visible: controller.tenxAvailablePlans.isEmpty,
                   child: NoDataFound(
                     imagePath: AppImages.contestTrophy,
                     label: AppStrings.noDataFoundTenxExpired,
@@ -160,7 +171,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                   shimmerCard: MediumCardShimmer(),
                 ),
                 replacement: Visibility(
-                  visible: controller.tenxActiveSub.isEmpty,
+                  visible: controller.tenxAvailablePlans.isEmpty,
                   child: NoDataFound(
                     imagePath: AppImages.contestTrophy,
                     label: AppStrings.noDataFoundTenxLeaderboard,

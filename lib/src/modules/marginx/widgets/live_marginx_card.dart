@@ -25,10 +25,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
               ),
               IconButton(
                 onPressed: () {
-                  showModalBottomSheet(
+                  BottomSheetHelper.openBottomSheet(
                     context: context,
-                    isScrollControlled: true,
-                    builder: (context) => MarginxInfoBottomSheet(),
+                    child: MarginxInfoBottomSheet(),
                   );
                 },
                 icon: Icon(

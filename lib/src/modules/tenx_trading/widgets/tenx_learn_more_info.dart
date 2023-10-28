@@ -22,9 +22,9 @@ class TenxLearnMoreInfo extends GetView<TenxTradingController> {
     }
 
     return Container(
-      height: 500,
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      height: MediaQuery.of(context).size.height / 1.5,
       child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
