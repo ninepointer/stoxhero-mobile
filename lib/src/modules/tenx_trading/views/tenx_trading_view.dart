@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/core/widgets/common_chip.dart';
 
 import '../../../app/app.dart';
 
@@ -39,6 +40,18 @@ class _TenxTradingViewState extends State<TenxTradingView> {
               padding: EdgeInsets.only(bottom: 100),
               child: Column(
                 children: [
+                  Row(
+                    children: [
+                      CommonChip(
+                        label: 'All',
+                        isSelected: true,
+                      ),
+                      SizedBox(width: 8),
+                      CommonChip(
+                        label: '10 Days',
+                      ),
+                    ],
+                  ),
                   TenxInfoCard(),
                   Visibility(
                     visible: controller.isActiveLoadingStatus,

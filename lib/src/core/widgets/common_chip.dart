@@ -2,28 +2,38 @@ import 'package:flutter/material.dart';
 import '../../app/app.dart';
 
 class CommonChip extends StatelessWidget {
-  final VoidCallback? onTap;
   final String? label;
-  final Color? color;
-  const CommonChip({Key? key, this.onTap, this.label, this.color}) : super(key: key);
+  final VoidCallback? onTap;
+  final bool isSelected;
+  const CommonChip({
+    Key? key,
+    this.onTap,
+    this.label,
+    this.isSelected = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
-      child: Container(
-        width: 100,
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Align(
-          child: Text(
-            label ?? '-',
-            style: AppStyles.tsWhiteMedium14,
+      child: Chip(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: AppColors.primary,
           ),
+          borderRadius: BorderRadius.circular(50),
         ),
+        avatar: isSelected
+            ? Icon(
+                Icons.check,
+                color: AppColors.white,
+              )
+            : null,
+        label: Text(
+          label ?? 'Label',
+          style: isSelected ? AppStyles.tsWhiteRegular14 : AppStyles.tsPrimaryRegular14,
+        ),
+        backgroundColor: isSelected ? AppColors.primary : Colors.transparent,
       ),
     );
   }

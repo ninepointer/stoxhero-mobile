@@ -120,6 +120,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+  
 
   String getFormattedExpiryDate(String? subscribedOn, int? expiryDays) {
     if (subscribedOn != null) {
