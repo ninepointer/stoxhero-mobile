@@ -56,6 +56,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final isPendingOrderStateLoading = false.obs;
   bool get isPendingOrderStateLoadingStatus => isPendingOrderStateLoading.value;
 
+  final isOrderStateLoading = false.obs;
+  bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
+
+  final isExecutedOrderStateLoading = false.obs;
+  bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
+
   final selectedTabBarIndex = 0.obs;
 
   final stopLossFormKey = GlobalKey<FormState>();
@@ -106,6 +112,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
+  final isMarketSelected = true.obs;
   final tenxTradeTodaysOrdersList = <TenxTradeOrder>[].obs;
 
   void loadUserDetails() {
@@ -125,18 +132,42 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxCountTradingDays();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
-    await getTenXSubscriptionList();
-    await getTenxPositionsList();
+    // await getTenXSubscriptionList();
     await getTenxTradingWatchlist();
-    await getTenxTradingPortfolioDetails();
-    await getStopLossExecutedOrder();
+    await getTenxPositionList();
     await getStopLossPendingOrder();
-    await getTenxTradeTodaysOrdersList();
+    await getStopLossExecutedOrder();
+    await getTenxTodayOrdersList();
+    await getTenxTradingPortfolioDetails();
     socketConnection();
     socketIndexConnection();
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+
+  bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
+    bool isDisabled = false;
+
+    if (type == TransactionType.buy) {
+      if (transactionLotSize < 0 && transactionLotSize.abs() == positionLots) {
+        isDisabled = true;
+        log("BUY - Disable TextField");
+      } else {
+        isDisabled = false;
+        log("BUY - Enable TextField");
+      }
+    } else if (type == TransactionType.sell) {
+      if (transactionLotSize < 0 || transactionLotSize.abs() < positionLots) {
+        isDisabled = false;
+        log("SELL - Enable TextField");
+      } else {
+        isDisabled = true;
+        log("SELL - Disable TextField");
+      }
+    }
+
+    return isDisabled;
+  }
 
   void handleRadioValueChanged(int newValue, String labelText) {
     selectedGroupValue.value = newValue;
@@ -480,8 +511,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
   }
 
-  Future getTenxPositionsList() async {
-    isLoading(true);
+  Future getTenxPositionList() async {
+    isPositionStateLoading(true);
     try {
       final RepoResponse<TenxTradingPositionListResponse> response = await repository.getTenxPositions(
         selectedSubscriptionId.value,
@@ -498,11 +529,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPositionStateLoading(false);
   }
 
   Future getInstrumentLivePriceList() async {
-    isLoading(true);
+    isInstrumentListLoading(true);
     try {
       final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
@@ -516,7 +547,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isInstrumentListLoading(false);
   }
 
   Future getTenxTradingPortfolioDetails() async {
@@ -648,6 +679,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       tenxTraderPath: true,
       battleId: selectedSubscriptionId.value,
       marginxId: selectedSubscriptionId.value,
+      price: "",
+      triggerPrice: "",
+      stopLoss: "",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
@@ -662,8 +696,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       print(response.data.toString());
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successful');
-        await getTenxPositionsList();
+        await getTenxPositionList();
         await getTenxTradingPortfolioDetails();
+        await getStopLossPendingOrder();
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -762,7 +797,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future getStockIndexInstrumentsList() async {
-    isLoading(true);
+    isInstrumentListLoading(true);
     try {
       final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
@@ -774,7 +809,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log('car ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isInstrumentListLoading(false);
   }
 
   Future socketIndexConnection() async {
@@ -953,7 +988,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future getStopLossExecutedOrder() async {
-    isLoading(true);
+    isExecutedOrderStateLoading(true);
     try {
       final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
         selectedSubscriptionId.value,
@@ -967,11 +1002,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isExecutedOrderStateLoading(false);
   }
 
   Future getStopLossPendingOrder() async {
-    isLoading(true);
+    isPendingOrderStateLoading(true);
     try {
       final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
         selectedSubscriptionId.value,
@@ -985,11 +1020,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPendingOrderStateLoading(false);
   }
 
   Future getStopLossPendingCancelOrder(String? id) async {
-    isWatchlistStateLoading(true);
+    isPendingOrderStateLoading(true);
     try {
       await repository.getStopLossPendingCancelOrder(id ?? '');
       await getStopLossPendingOrder();
@@ -997,11 +1032,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isWatchlistStateLoading(false);
+    isPendingOrderStateLoading(false);
   }
 
   Future pendingOrderModify(TransactionType type, TradingInstrument inst) async {
-    isTradingOrderSheetLoading(true);
+    isPendingOrderStateLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
@@ -1058,16 +1093,16 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isTradingOrderSheetLoading(false);
+    isPendingOrderStateLoading(false);
   }
 
-  Future getStopLossEditOrder(String? id) async {
+  Future getStopLossEditOrder(String? id, String? type) async {
     isPendingOrderStateLoading(true);
     PendingEditOrderRequest data = PendingEditOrderRequest(
-      executionPrice: stopLossPendingOrder.value.type == 'StopLoss'
-          ? stopLossPriceTextController.text
-          : stopProfitPriceTextController.text,
+      executionPrice: type == "StopLoss" ? stopLossPriceTextController.text : stopProfitPriceTextController.text,
     );
+    log(stopLossPriceTextController.text);
+    log(type.toString());
     try {
       final response = await repository.getStopLossEditOrder(
         id,
@@ -1085,8 +1120,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isPendingOrderStateLoading(false);
   }
 
-  Future getTenxTradeTodaysOrdersList() async {
-    isLoading(true);
+  Future getTenxTodayOrdersList() async {
+    isOrderStateLoading(true);
     try {
       final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeTodaysOrdersList(
         selectedSubscriptionId.value,
@@ -1102,7 +1137,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     } finally {
-      isLoading(false);
+      isOrderStateLoading(false);
     }
   }
 }

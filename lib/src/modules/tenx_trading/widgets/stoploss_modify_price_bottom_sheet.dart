@@ -18,6 +18,11 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
       stopLoss.instrumentToken ?? 0,
       stopLoss.exchangeToken ?? 0,
     );
+    List<int> openLotsList = [];
+
+    if (stopLoss.lotSize != null) {
+      openLotsList.add(stopLoss.lotSize!);
+    }
     return Obx(
       () => Wrap(
         children: [
@@ -208,7 +213,7 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
                           },
                         ),
                       ),
-                      SizedBox(width: 16),
+                      SizedBox(width: 8),
                       Expanded(
                         child: CommonTextField(
                           hintText: 'StopProfit Price',
@@ -256,7 +261,10 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
                   CommonFilledButton(
                     label: 'MODIFY',
                     onPressed: () {
-                      if (controller.stopLossFormKey.currentState!.validate()) {
+                      if (controller.stopLossPriceTextController.text.isEmpty &&
+                          controller.stopProfitPriceTextController.text.isEmpty) {
+                        SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                      } else if (controller.stopLossFormKey.currentState!.validate()) {
                         controller.pendingOrderModify(type, stopLoss);
                       }
                       controller.stopLossPriceTextController.clear();

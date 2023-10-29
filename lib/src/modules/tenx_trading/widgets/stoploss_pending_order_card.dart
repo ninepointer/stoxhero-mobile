@@ -13,25 +13,18 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     void openBottomSheet(BuildContext context) {
       FocusScope.of(context).unfocus();
-      // num lastPrice = controller.getInstrumentLastPrice(
-      //   position.id!.instrumentToken!,
-      //   position.id!.exchangeInstrumentToken!,
-      // );
-      // controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-      // controller.generateLotsList(type: position.id?.symbol);
       BottomSheetHelper.openBottomSheet(
         context: context,
-        // child: StoplossModifyPriceBottomSheet(),
         child: StoplossEditPriceBottomSheet(
-          //   type: type,
           stopLoss: StopLossPendingOrdersList(
             id: stopLoss.id,
-            symbol: stopLoss.symbol,
-            exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
-            instrumentToken: stopLoss.instrumentToken,
             type: stopLoss.type,
+            symbol: stopLoss.symbol,
+            quantity: stopLoss.quantity,
             buyOrSell: stopLoss.buyOrSell,
-            // lastPrice: lastPrice,
+            instrumentToken: stopLoss.instrumentToken,
+            exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
+            executionPrice: stopLoss.executionPrice,
           ),
         ),
       );
@@ -150,9 +143,7 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  Get.find<TenxTradingController>().getStopLossPendingCancelOrder(stopLoss.id);
-                },
+                onTap: () => controller.getStopLossPendingCancelOrder(stopLoss.id),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(6),

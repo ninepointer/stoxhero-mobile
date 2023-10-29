@@ -23,9 +23,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
       tradingInstrument.exchangeToken ?? 0,
     );
     log('tradingInstrument.lotSize ${tradingInstrument.lotSize}');
-    log('POstioon.lotSize ${controller.tenxPosition.value.lots}');
     log('POstioon.lotSize ${controller.selectedQuantity.value}');
     log('Type $type');
+    log(controller.selectedGroupValue.value.toString());
     return Obx(
       () => Wrap(
         children: [
@@ -45,6 +45,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   GestureDetector(
                     onTap: () {
                       Get.back();
+                      controller.selectedGroupValue.value = 2;
                       controller.stopLossPriceTextController.clear();
                       controller.stopProfitPriceTextController.clear();
                     },
@@ -160,61 +161,72 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CommonTextField(
-                          isDisabled: controller.selectedGroupValue.value != 3,
-                          hintText: 'StopLoss Price',
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                          ],
-                          controller: controller.stopLossPriceTextController,
-                          validator: (value) {
-                            final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
-                            if (stopLossPrice != null) {
-                              if (type == TransactionType.buy) {
-                                if (stopLossPrice >= ltp) {
-                                  return 'Stop Loss price should \n be less than LTP.';
-                                }
-                              } else if (type == TransactionType.sell) {
-                                if (stopLossPrice <= ltp) {
-                                  return 'Stop Loss price should \n be greater than LTP.';
-                                }
-                              }
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: CommonTextField(
-                          isDisabled: controller.selectedGroupValue.value != 3,
-                          hintText: 'StopProfit Price',
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                          ],
-                          controller: controller.stopProfitPriceTextController,
-                          validator: (value) {
-                            final stopProfitPrice = double.tryParse(controller.stopProfitPriceTextController.text);
-                            if (stopProfitPrice != null) {
-                              if (type == TransactionType.buy) {
-                                if (stopProfitPrice <= ltp) {
-                                  return 'Stop Profit price should \n be greater than LTP.';
-                                }
-                              } else if (type == TransactionType.sell) {
-                                if (stopProfitPrice >= ltp) {
-                                  return 'Stop Profit price should \n be less than LTP.';
+                  if (type != TransactionType.exit)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CommonTextField(
+                            isDisabled: controller.handleTextField(
+                                  type,
+                                  tradingInstrument.lotSize ?? 0,
+                                  controller.selectedQuantity.value,
+                                ) ||
+                                controller.selectedGroupValue.value == 2,
+                            hintText: 'StopLoss Price',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                            ],
+                            controller: controller.stopLossPriceTextController,
+                            validator: (value) {
+                              final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
+                              if (stopLossPrice != null) {
+                                if (type == TransactionType.buy) {
+                                  if (stopLossPrice >= ltp) {
+                                    return 'Stop Loss price should \n be less than LTP.';
+                                  }
+                                } else if (type == TransactionType.sell) {
+                                  if (stopLossPrice <= ltp) {
+                                    return 'Stop Loss price should \n be greater than LTP.';
+                                  }
                                 }
                               }
-                            }
-                            return null;
-                          },
+                              return null;
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CommonTextField(
+                            isDisabled: controller.handleTextField(
+                                  type,
+                                  tradingInstrument.lotSize ?? 0,
+                                  controller.selectedQuantity.value,
+                                ) ||
+                                controller.selectedGroupValue.value == 2,
+                            hintText: 'StopProfit Price',
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                            ],
+                            controller: controller.stopProfitPriceTextController,
+                            validator: (value) {
+                              final stopProfitPrice = double.tryParse(controller.stopProfitPriceTextController.text);
+                              if (stopProfitPrice != null) {
+                                if (type == TransactionType.buy) {
+                                  if (stopProfitPrice <= ltp) {
+                                    return 'Stop Profit price should \n be greater than LTP.';
+                                  }
+                                } else if (type == TransactionType.sell) {
+                                  if (stopProfitPrice >= ltp) {
+                                    return 'Stop Profit price should \n be less than LTP.';
+                                  }
+                                }
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   Row(
                     children: [
                       Expanded(
@@ -235,11 +247,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           label: 'LIMIT',
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
+                      SizedBox(width: 8),
                       Expanded(
                         child: CommonRadioButtonTile(
                           value: 3,
@@ -294,14 +302,19 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                             ? 'BUY'
                             : 'SELL',
                     onPressed: () {
-                      if (controller.stopLossFormKey.currentState!.validate()) {
+                      if (controller.selectedGroupValue.value == 3 &&
+                          controller.stopLossPriceTextController.text.isEmpty &&
+                          controller.stopProfitPriceTextController.text.isEmpty) {
+                        SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                      } else if (controller.stopLossFormKey.currentState!.validate()) {
                         Get.find<TenxTradingController>().placeTenxTradingOrder(
                           type,
                           tradingInstrument,
                         );
+                        controller.selectedGroupValue.value = 2;
+                        controller.stopLossPriceTextController.clear();
+                        controller.stopProfitPriceTextController.clear();
                       }
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
                     },
                   ),
                 ],
@@ -313,46 +326,3 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
     );
   }
 }
-
-// if (transaction.lotSize==position.lots){ 
-// type==TransactionType.buy
-// TextField enable
-// }
-
-//else if(transaction.lotSize<postiton.lots){
-// type==TransactionType.buy
-// TextField enable
-// }
-
-//else if(transcation.lotssize==position.lots){
-// type==TransactionType.sell
-// TextField disable
-// }
-
-//else if(transaction.lotSize<position.lots){
-// type==TransactionType.sell
-// TextField disable
-// }
-
-//else if(transaction.lotSize.contain('-')==postion.lots){
-// type==TransactionType.buy
-// TextField disable
-// }
-
-//else if(transaction.lotSize.contrain('-')<postion.lots){
-// type==TransactionType.buy
-// TextField enable
-// }
-
-//else if(transaction.lotSize.contrain('-')==postion.lots){
-// type==TransactionType.sell
-// TextField enable
-// }
-
-//else if(transaction.lotSize.contrain('-')<postion.lots){
-// type==TransactionType.sell
-// TextField enable
-// }
-
-
-

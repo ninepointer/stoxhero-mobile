@@ -15,6 +15,7 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
       stopLoss.instrumentToken ?? 0,
       stopLoss.exchangeInstrumentToken ?? 0,
     );
+    controller.quanitityTextController.text = stopLoss.quantity.toString();
     return Obx(
       () => Wrap(
         children: [
@@ -99,6 +100,7 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                     children: [
                       Expanded(
                         child: CommonTextField(
+                          isDisabled: true,
                           hintText: 'Quantity',
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
@@ -106,7 +108,7 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                           controller: controller.quanitityTextController,
                         ),
                       ),
-                      SizedBox(width: 16),
+                      SizedBox(width: 8),
                       Expanded(
                         child: (stopLoss.buyOrSell == 'SELL')
                             ? (stopLoss.type == 'StopLoss')
@@ -169,10 +171,17 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                     label: 'Edit',
                     backgroundColor: AppColors.secondary,
                     onPressed: () {
-                      if (controller.stopLossFormKey.currentState!.validate()) {
-                        controller.getStopLossEditOrder(stopLoss.id);
+                      if (controller.stopLossPriceTextController.text.isEmpty &&
+                          controller.stopProfitPriceTextController.text.isEmpty) {
+                        SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                      } else if (controller.stopLossFormKey.currentState!.validate()) {
+                        controller.getStopLossEditOrder(
+                          stopLoss.id,
+                          stopLoss.type,
+                        );
                       }
                       controller.stopLossPriceTextController.clear();
+                      controller.stopProfitPriceTextController.clear();
                     },
                   ),
                 ],
