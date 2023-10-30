@@ -1,3 +1,5 @@
+import '../../../app/app.dart';
+
 class TenxExpiredPlanListResponse {
   String? status;
   List<TenxExpiredPlan>? data;
@@ -89,28 +91,6 @@ class TenxExpiredPlan {
     data['subscribedOn'] = this.subscribedOn;
     data['expiredOn'] = this.expiredOn;
     data['validity'] = this.validity;
-    return data;
-  }
-}
-
-class Features {
-  int? orderNo;
-  String? description;
-  String? sId;
-
-  Features({this.orderNo, this.description, this.sId});
-
-  Features.fromJson(Map<String, dynamic> json) {
-    orderNo = json['orderNo'];
-    description = json['description'];
-    sId = json['_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['orderNo'] = this.orderNo;
-    data['description'] = this.description;
-    data['_id'] = this.sId;
     return data;
   }
 }

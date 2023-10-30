@@ -114,7 +114,6 @@ class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
                       ),
                     ],
                   ),
-
                   CommonCard(
                     margin: EdgeInsets.only(top: 8),
                     padding: EdgeInsets.all(12),
@@ -170,34 +169,35 @@ class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
                         ),
                       ),
                     ),
-                  if (!controller.isCouponCodeAdded.value)
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CommonTextField(
-                            controller: controller.couponCodeTextController,
-                            padding: EdgeInsets.only(top: 16),
-                            hintText: 'Enter your Coupon code',
-                            inputFormatters: [
-                              UpperCaseTextFormatter(),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: 100,
-                          padding: EdgeInsets.only(top: 16, left: 8),
-                          child: CommonOutlinedButton(
-                            isLoading: controller.isCouponCodeLoadingStatus,
-                            label: 'APPLY',
-                            onPressed: () => controller.verifyCouponCode(
-                              context,
-                              widget.productType,
-                              widget.buyItemPrice,
+                  if (walletBalance == null || widget.buyItemPrice <= walletBalance!)
+                    if (!controller.isCouponCodeAdded.value)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CommonTextField(
+                              controller: controller.couponCodeTextController,
+                              padding: EdgeInsets.only(top: 16),
+                              hintText: 'Enter your Coupon code',
+                              inputFormatters: [
+                                UpperCaseTextFormatter(),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                          Container(
+                            width: 100,
+                            padding: EdgeInsets.only(top: 16, left: 8),
+                            child: CommonOutlinedButton(
+                              isLoading: controller.isCouponCodeLoadingStatus,
+                              label: 'APPLY',
+                              onPressed: () => controller.verifyCouponCode(
+                                context,
+                                widget.productType,
+                                widget.buyItemPrice,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                   // CommonCard(
                   //   onTap: () async {
                   //     var data = await Get.toNamed(AppRoutes.payment);

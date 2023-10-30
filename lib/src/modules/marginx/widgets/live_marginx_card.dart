@@ -293,8 +293,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                                   "marginXId": marginx?.id,
                                   "marginXName": marginx?.marginXName,
                                 };
-                                print(data);
-                                // controller.purchaseMarginX(data);
+                                controller.purchaseMarginX(data);
                               },
                             ),
                           );

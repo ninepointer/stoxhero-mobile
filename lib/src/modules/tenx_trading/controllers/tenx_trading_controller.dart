@@ -2,11 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:stoxhero/src/data/models/response/tenx_subscribed_list_response.dart';
-import 'package:stoxhero/src/data/models/response/tenx_expired_list_response.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
 class TenxTradingBinding implements Bindings {
   @override
@@ -75,7 +72,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedSubscription = TenxActivePlan().obs;
   final walletBalance = RxNum(0);
   final selectedWatchlistIndex = RxInt(-1);
-  final selectedSubscription = TenxActiveSubscription().obs;
 
   final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
   final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
@@ -83,8 +79,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
 
-  final tenxActiveSub = <TenxActiveSubscription>[].obs;
-  final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
   final tenxPositionsList = <TenxTradingPosition>[].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
   final tenxPosition = TenxTradingPosition().obs;

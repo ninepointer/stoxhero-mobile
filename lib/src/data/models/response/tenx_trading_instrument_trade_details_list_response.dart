@@ -1,3 +1,5 @@
+import '../../data.dart';
+
 class TenxTradingInstrumentTradeDetailsListResponse {
   List<TenxTradingInstrumentTradeDetails>? data;
 
@@ -67,36 +69,6 @@ class TenxTradingInstrumentTradeDetails {
     if (this.ohlc != null) {
       data['ohlc'] = this.ohlc!.toJson();
     }
-    return data;
-  }
-}
-
-class Ohlc {
-  num? open;
-  num? high;
-  num? low;
-  num? close;
-
-  Ohlc({
-    this.open,
-    this.high,
-    this.low,
-    this.close,
-  });
-
-  Ohlc.fromJson(Map<String, dynamic> json) {
-    open = json['open'];
-    high = json['high'];
-    low = json['low'];
-    close = json['close'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['open'] = this.open;
-    data['high'] = this.high;
-    data['low'] = this.low;
-    data['close'] = this.close;
     return data;
   }
 }
