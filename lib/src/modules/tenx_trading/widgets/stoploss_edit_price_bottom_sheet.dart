@@ -11,10 +11,6 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
-    final ltp = controller.getInstrumentLastPrice(
-      stopLoss.instrumentToken ?? 0,
-      stopLoss.exchangeInstrumentToken ?? 0,
-    );
     controller.quanitityTextController.text = stopLoss.quantity.toString();
     return Obx(
       () => Wrap(
@@ -86,8 +82,8 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                       Text(
                         FormatHelper.formatNumbers(
                           controller.getInstrumentLastPrice(
-                            stopLoss.instrumentToken ?? 0,
-                            stopLoss.exchangeInstrumentToken ?? 0,
+                            stopLoss.instrumentToken!,
+                            stopLoss.exchangeInstrumentToken!,
                           ),
                         ),
                         // '',
@@ -122,7 +118,11 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                                       final stopLossPrice =
                                           double.tryParse(controller.stopLossPriceTextController.text);
                                       if (stopLossPrice != null) {
-                                        if (stopLossPrice >= ltp) {
+                                        if (stopLossPrice >=
+                                            controller.getInstrumentLastPrice(
+                                              stopLoss.instrumentToken!,
+                                              stopLoss.exchangeInstrumentToken!,
+                                            )) {
                                           return 'Stop Loss price should \n be less than LTP.';
                                         }
                                       }
@@ -139,7 +139,11 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                                       final stopProfitPrice =
                                           double.tryParse(controller.stopProfitPriceTextController.text);
                                       if (stopProfitPrice != null) {
-                                        if (stopProfitPrice <= ltp) {
+                                        if (stopProfitPrice <=
+                                            controller.getInstrumentLastPrice(
+                                              stopLoss.instrumentToken!,
+                                              stopLoss.exchangeInstrumentToken!,
+                                            )) {
                                           return 'Stop Profit price should \n be greater than LTP.';
                                         }
                                       }
@@ -156,7 +160,11 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                                   final stopProfitPrice =
                                       double.tryParse(controller.stopProfitPriceTextController.text);
                                   if (stopProfitPrice != null) {
-                                    if (stopProfitPrice <= ltp) {
+                                    if (stopProfitPrice <=
+                                        controller.getInstrumentLastPrice(
+                                          stopLoss.instrumentToken!,
+                                          stopLoss.exchangeInstrumentToken!,
+                                        )) {
                                       return 'Stop Profit price should \n be greater than LTP.';
                                     }
                                   }

@@ -18,14 +18,12 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
 
   @override
   build(BuildContext context) {
-    final ltp = controller.getInstrumentLastPrice(
-      tradingInstrument.instrumentToken ?? 0,
-      tradingInstrument.exchangeToken ?? 0,
-    );
     log('tradingInstrument.lotSize ${tradingInstrument.lotSize}');
     log('POstioon.lotSize ${controller.selectedQuantity.value}');
     log('Type $type');
     log(controller.selectedGroupValue.value.toString());
+    controller.selectedGroupValue.value = 2;
+    controller.selectedType.value = 'MARKET';
     return Obx(
       () => Wrap(
         children: [
@@ -77,9 +75,19 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                       ),
                       Text(
                         type == TransactionType.buy
-                            ? FormatHelper.formatNumbers(ltp)
+                            ? FormatHelper.formatNumbers(
+                                controller.getInstrumentLastPrice(
+                                  tradingInstrument.instrumentToken!,
+                                  tradingInstrument.exchangeToken!,
+                                ),
+                              )
                             : type == TransactionType.sell
-                                ? FormatHelper.formatNumbers(ltp)
+                                ? FormatHelper.formatNumbers(
+                                    controller.getInstrumentLastPrice(
+                                      tradingInstrument.instrumentToken!,
+                                      tradingInstrument.exchangeToken!,
+                                    ),
+                                  )
                                 : tradingInstrument.lotSize.toString(),
                         style: AppStyles.tsSecondaryMedium16,
                       ),
@@ -181,11 +189,19 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                               final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
                               if (stopLossPrice != null) {
                                 if (type == TransactionType.buy) {
-                                  if (stopLossPrice >= ltp) {
+                                  if (stopLossPrice >=
+                                      controller.getInstrumentLastPrice(
+                                        tradingInstrument.instrumentToken!,
+                                        tradingInstrument.exchangeToken!,
+                                      )) {
                                     return 'Stop Loss price should \n be less than LTP.';
                                   }
                                 } else if (type == TransactionType.sell) {
-                                  if (stopLossPrice <= ltp) {
+                                  if (stopLossPrice <=
+                                      controller.getInstrumentLastPrice(
+                                        tradingInstrument.instrumentToken!,
+                                        tradingInstrument.exchangeToken!,
+                                      )) {
                                     return 'Stop Loss price should \n be greater than LTP.';
                                   }
                                 }
@@ -212,11 +228,19 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                               final stopProfitPrice = double.tryParse(controller.stopProfitPriceTextController.text);
                               if (stopProfitPrice != null) {
                                 if (type == TransactionType.buy) {
-                                  if (stopProfitPrice <= ltp) {
+                                  if (stopProfitPrice <=
+                                      controller.getInstrumentLastPrice(
+                                        tradingInstrument.instrumentToken!,
+                                        tradingInstrument.exchangeToken!,
+                                      )) {
                                     return 'Stop Profit price should \n be greater than LTP.';
                                   }
                                 } else if (type == TransactionType.sell) {
-                                  if (stopProfitPrice >= ltp) {
+                                  if (stopProfitPrice >=
+                                      controller.getInstrumentLastPrice(
+                                        tradingInstrument.instrumentToken!,
+                                        tradingInstrument.exchangeToken!,
+                                      )) {
                                     return 'Stop Profit price should \n be less than LTP.';
                                   }
                                 }

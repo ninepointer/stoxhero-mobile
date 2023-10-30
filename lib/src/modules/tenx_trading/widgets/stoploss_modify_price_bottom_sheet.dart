@@ -14,15 +14,6 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
-    final ltp = controller.getInstrumentLastPrice(
-      stopLoss.instrumentToken ?? 0,
-      stopLoss.exchangeToken ?? 0,
-    );
-    List<int> openLotsList = [];
-
-    if (stopLoss.lotSize != null) {
-      openLotsList.add(stopLoss.lotSize!);
-    }
     return Obx(
       () => Wrap(
         children: [
@@ -88,7 +79,12 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
                             style: AppStyles.tsGreyMedium12,
                           ),
                           Text(
-                            FormatHelper.formatNumbers(ltp),
+                            FormatHelper.formatNumbers(
+                              controller.getInstrumentLastPrice(
+                                stopLoss.instrumentToken!,
+                                stopLoss.exchangeToken!,
+                              ),
+                            ),
                             style: AppStyles.tsSecondaryMedium14,
                           ),
                         ],
@@ -121,8 +117,8 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
                           ),
                           Text(
                             controller.getInstrumentChanges(
-                              stopLoss.instrumentToken ?? 0,
-                              stopLoss.exchangeToken ?? 0,
+                              stopLoss.instrumentToken!,
+                              stopLoss.exchangeToken!,
                             ),
                             style: AppStyles.tsSecondaryMedium14,
                           ),
@@ -199,8 +195,17 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
                             final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
                             if (stopLossPrice != null) {
                               final isLotSizeNegative = stopLoss.lotSize.toString().contains('-');
-                              final isInvalidPrice =
-                                  isLotSizeNegative ? (stopLossPrice <= ltp) : (stopLossPrice >= ltp);
+                              final isInvalidPrice = isLotSizeNegative
+                                  ? (stopLossPrice <=
+                                      controller.getInstrumentLastPrice(
+                                        stopLoss.instrumentToken!,
+                                        stopLoss.exchangeToken!,
+                                      ))
+                                  : (stopLossPrice >=
+                                      controller.getInstrumentLastPrice(
+                                        stopLoss.instrumentToken!,
+                                        stopLoss.exchangeToken!,
+                                      ));
 
                               if (isInvalidPrice) {
                                 final message = isLotSizeNegative
@@ -225,8 +230,17 @@ class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
                             final stopLossPrice = double.tryParse(controller.stopProfitPriceTextController.text);
                             if (stopLossPrice != null) {
                               final isLotSizeNegative = stopLoss.lotSize.toString().contains('-');
-                              final isInvalidPrice =
-                                  isLotSizeNegative ? (stopLossPrice >= ltp) : (stopLossPrice <= ltp);
+                              final isInvalidPrice = isLotSizeNegative
+                                  ? (stopLossPrice >=
+                                      controller.getInstrumentLastPrice(
+                                        stopLoss.instrumentToken!,
+                                        stopLoss.exchangeToken!,
+                                      ))
+                                  : (stopLossPrice <=
+                                      controller.getInstrumentLastPrice(
+                                        stopLoss.instrumentToken!,
+                                        stopLoss.exchangeToken!,
+                                      ));
 
                               if (isInvalidPrice) {
                                 final message = isLotSizeNegative

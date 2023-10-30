@@ -114,6 +114,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedGroupValue = 0.obs;
   final isMarketSelected = true.obs;
   final tenxTradeTodaysOrdersList = <TenxTradeOrder>[].obs;
+  final sendOrder = SendOrderResponse().obs;
+  final sendOrderList = <SendOrderResponse>[].obs;
 
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
@@ -141,6 +143,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxTradingPortfolioDetails();
     socketConnection();
     socketIndexConnection();
+    socketSendConnection();
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
@@ -699,6 +702,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         await getTenxPositionList();
         await getTenxTradingPortfolioDetails();
         await getStopLossPendingOrder();
+        await getTenxTodayOrdersList();
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1082,6 +1086,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       if (response.data?.status == "Success") {
         SnackbarHelper.showSnackbar(response.data?.message);
         await getStopLossPendingOrder();
+        await getTenxTodayOrdersList();
+
         // await getTenxTradingPortfolioDetails();
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
@@ -1131,6 +1137,54 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
           tenxTradeTodaysOrdersList(response.data?.data ?? []);
         } else {
           SnackbarHelper.showSnackbar(response.error?.message);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isOrderStateLoading(false);
+    }
+  }
+
+  Future socketSendConnection() async {
+    isPendingOrderStateLoading(true);
+    try {
+      socketService.socket.on(
+        'sendOrderResponse${userDetails.value.sId}',
+        (data) {
+          print('sendOrderResponse${userDetails.value.sId} : $data');
+        },
+      );
+      socketService.socket.on(
+        'sendOrderResponse${userDetails.value.sId}',
+        (data) {
+          print('sendOrderResponse${userDetails.value.sId} $data');
+          if (data.containsKey("message")) {
+            String message = data["message"].toString();
+            SnackbarHelper.showSnackbar(message);
+          }
+          getTenxPositionList();
+          getStopLossPendingOrder();
+          getStopLossExecutedOrder();
+          getTenxTodayOrdersList();
+        },
+      );
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future getSendOrder() async {
+    isOrderStateLoading(true);
+    try {
+      final response = SendOrderResponse();
+      if (response.data != null) {
+        if (response.status == "Success") {
+          sendOrder(response.message as SendOrderResponse?);
+        } else {
+          SnackbarHelper.showSnackbar(response.message);
         }
       }
     } catch (e) {

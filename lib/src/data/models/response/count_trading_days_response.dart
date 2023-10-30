@@ -26,8 +26,8 @@ class CountTradingDaysResponse {
 
 class CountTradingDays {
   String? subscriptionId;
-  int? totalTradingDays;
-  int? actualRemainingDay;
+  num? totalTradingDays;
+  num? actualRemainingDay;
 
   CountTradingDays({this.subscriptionId, this.totalTradingDays, this.actualRemainingDay});
 
