@@ -42,7 +42,8 @@ class WalletController extends BaseController<WalletRepository> {
   final couponCodeTextController = TextEditingController();
   final isCouponCodeAdded = false.obs;
   final couponCodeSuccessText = "".obs;
-  final subscriptionAmount = "".obs;
+  final actualSubscriptionAmount = 0.0.obs;
+  final subscriptionAmount = 0.0.obs;
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
   void changeSecondTabBarIndex(int val) => selectedSecondTabBarIndex.value = val;
@@ -66,6 +67,7 @@ class WalletController extends BaseController<WalletRepository> {
   void removeCouponCode() {
     couponCodeSuccessText("");
     isCouponCodeAdded(false);
+    subscriptionAmount(actualSubscriptionAmount.value);
     couponCodeTextController.clear();
   }
 
@@ -75,21 +77,31 @@ class WalletController extends BaseController<WalletRepository> {
     String? rewardType,
     num? discount,
     num? maxDiscount = 1000,
+    num? planAmount,
   }) {
     if (rewardType == 'Discount') {
       if (discountType == 'Flat') {
-        // setDiscountAmount(discount);
+        subscriptionAmount((planAmount! - discount!).toDouble());
       } else if (discountType == 'Percentage') {
-        // setDiscountAmount((amount * discount / 100).clamp(0, maxDiscount));
+        double maxDiscountAmount = (planAmount! * (discount! / 100)).toDouble();
+        if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
+          subscriptionAmount((planAmount - maxDiscount).toDouble());
+        } else {
+          subscriptionAmount(planAmount - (planAmount * (discount / 100))).clamp(0, maxDiscount).toDouble();
+        }
       }
     } else {
       if (discountType == 'Flat') {
-        // setCashbackAmount(discount);
-      } else {
-        // setCashbackAmount((amount * discount / 100).clamp(0, maxDiscount));
+        subscriptionAmount((planAmount! - discount!).toDouble());
+      } else if (discountType == 'Percentage') {
+        double maxDiscountAmount = (planAmount! * (discount! / 100)).toDouble();
+        if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
+          subscriptionAmount((planAmount - maxDiscount).toDouble());
+        } else {
+          subscriptionAmount(planAmount - (planAmount * (discount / 100))).clamp(0, maxDiscount).toDouble();
+        }
       }
     }
-
     couponCodeSuccessText("Applied $couponCode - (₹$discount% off upto ₹$maxDiscount)");
   }
 
@@ -192,6 +204,7 @@ class WalletController extends BaseController<WalletRepository> {
           rewardType: couponData?.rewardType,
           discount: couponData?.discount,
           maxDiscount: couponData?.maxDiscount,
+          planAmount: amount,
         );
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

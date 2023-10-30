@@ -285,14 +285,16 @@ class LiveMarginxCard extends GetView<MarginXController> {
                               buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
                               onSubmit: () {
                                 Get.back();
+                                var walletController = Get.find<WalletController>();
                                 var data = {
                                   "bonusRedemption": 0,
-                                  "coupon": "",
-                                  "entryFee": marginx?.marginXTemplate?.entryFee,
+                                  "coupon": walletController.couponCodeTextController.text,
+                                  "entryFee": walletController.subscriptionAmount.value,
                                   "marginXId": marginx?.id,
                                   "marginXName": marginx?.marginXName,
                                 };
-                                controller.purchaseMarginX(data);
+                                print(data);
+                                // controller.purchaseMarginX(data);
                               },
                             ),
                           );

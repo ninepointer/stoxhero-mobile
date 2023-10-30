@@ -676,17 +676,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isWatchlistStateLoading(false);
   }
 
-  Future purchaseSubscription() async {
-    Get.back();
+  Future purchaseSubscription(Map<String, dynamic> data) async {
     isLoading(true);
-    var data = {
-      "bonusRedemption": 0,
-      "coupon": "",
-      "subscriptionAmount": selectedSubscription.value.discountedPrice,
-      "subscriptionName": selectedSubscription.value.planName,
-      "subscribedId": selectedSubscription.value.sId,
-    };
-    log(data.toString());
     try {
       final RepoResponse<GenericResponse> response = await repository.purchaseSubscription(
         data,
@@ -939,17 +930,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isLeaderboardLoading(false);
   }
 
-  Future tenxRenewSubscription() async {
-    Get.back();
+  Future tenxRenewSubscription(Map<String, dynamic> data) async {
     isLoading(true);
-    var data = {
-      "bonusRedemption": 0,
-      "coupon": "",
-      "subscriptionAmount": tenxSubscribedPlanSelected.value.discountedPrice,
-      "subscriptionName": tenxSubscribedPlanSelected.value.planName,
-      "subscriptionId": tenxSubscribedPlanSelected.value.sId,
-    };
-    log(data.toString());
     try {
       final RepoResponse<GenericResponse> response = await repository.tenxRenewSubscription(
         data,

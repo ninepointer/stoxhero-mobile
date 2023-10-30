@@ -27,6 +27,8 @@ class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
     super.initState();
     controller = Get.find<WalletController>();
     controller.removeCouponCode();
+    controller.subscriptionAmount(widget.buyItemPrice.toDouble());
+    controller.actualSubscriptionAmount(widget.buyItemPrice.toDouble());
     calculateUserWalletAmount();
   }
 
@@ -103,7 +105,6 @@ class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
                           Text(
                             FormatHelper.formatNumbers(
                               walletBalance,
-                              decimal: 0,
                             ),
                             style: Theme.of(context).textTheme.tsMedium20.copyWith(
                                   color: AppColors.success,
@@ -113,6 +114,7 @@ class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
                       ),
                     ],
                   ),
+
                   CommonCard(
                     margin: EdgeInsets.only(top: 8),
                     padding: EdgeInsets.all(12),
@@ -120,14 +122,15 @@ class _PurchaseItemBottomSheetState extends State<PurchaseItemBottomSheet> {
                       Row(
                         children: [
                           Text(
-                            'Subscription Price',
+                            'Transaction Amount',
                             style: Theme.of(context).textTheme.tsRegular16,
                           ),
                           Spacer(),
                           Text(
                             FormatHelper.formatNumbers(
-                              widget.buyItemPrice,
-                              decimal: 0,
+                              controller.couponCodeSuccessText.isNotEmpty
+                                  ? controller.subscriptionAmount.value
+                                  : widget.buyItemPrice,
                             ),
                             style: Theme.of(context).textTheme.tsMedium20.copyWith(
                                   color: AppColors.success,

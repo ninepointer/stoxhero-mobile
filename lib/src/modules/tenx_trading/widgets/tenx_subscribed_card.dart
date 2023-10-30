@@ -141,12 +141,24 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                         onPressed: () {
                           controller.selectedSubscriptionId(subscription.sId);
                           controller.tenxSubscribedPlanSelected(subscription);
+                          print(subscription.toJson());
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: PurchaseItemBottomSheet(
                               productType: ProductType.tenx,
-                              buyItemPrice: controller.selectedSubscription.value.discountedPrice ?? 0,
-                              onSubmit: () => controller.tenxRenewSubscription(),
+                              buyItemPrice: subscription.discountedPrice ?? 0,
+                              onSubmit: () {
+                                Get.back();
+                                var walletController = Get.find<WalletController>();
+                                var data = {
+                                  "bonusRedemption": 0,
+                                  "coupon": walletController.couponCodeTextController.text,
+                                  "subscriptionAmount": walletController.subscriptionAmount.value,
+                                  "subscriptionName": subscription.planName,
+                                  "subscriptionId": subscription.sId,
+                                };
+                                controller.tenxRenewSubscription(data);
+                              },
                             ),
                           );
                         },

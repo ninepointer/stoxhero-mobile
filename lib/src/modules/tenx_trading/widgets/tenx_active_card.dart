@@ -184,12 +184,24 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                           controller.selectedSubscriptionId(subscription.sId);
                           controller.selectedSubscription(subscription);
                           controller.purchaseIntent();
+
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: PurchaseItemBottomSheet(
                               productType: ProductType.tenx,
-                              buyItemPrice: controller.selectedSubscription.value.discountedPrice ?? 0,
-                              onSubmit: () => controller.purchaseSubscription(),
+                              buyItemPrice: subscription.discountedPrice ?? 0,
+                              onSubmit: () {
+                                Get.back();
+                                var walletController = Get.find<WalletController>();
+                                var data = {
+                                  "bonusRedemption": 0,
+                                  "coupon": walletController.couponCodeTextController.text,
+                                  "subscriptionAmount": walletController.subscriptionAmount.value,
+                                  "subscriptionName": subscription.planName,
+                                  "subscribedId": subscription.sId,
+                                };
+                                controller.purchaseSubscription(data);
+                              },
                             ),
                           );
                         },

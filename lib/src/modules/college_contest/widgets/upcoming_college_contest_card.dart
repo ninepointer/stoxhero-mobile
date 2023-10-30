@@ -368,10 +368,11 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                                   buyItemPrice: widget.contest?.entryFee ?? 0,
                                   onSubmit: () {
                                     Get.back();
+                                    var walletController = Get.find<WalletController>();
                                     var data = {
                                       "bonusRedemption": 0,
-                                      "coupon": "",
-                                      "contestFee": widget.contest?.entryFee,
+                                      "coupon": walletController.couponCodeTextController.text,
+                                      "contestFee": walletController.subscriptionAmount.value,
                                       "contestId": widget.contest?.id,
                                       "contestName": widget.contest?.contestName,
                                     };
