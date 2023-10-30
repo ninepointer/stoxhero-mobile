@@ -364,6 +364,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                               BottomSheetHelper.openBottomSheet(
                                 context: context,
                                 child: PurchaseItemBottomSheet(
+                                  productType: ProductType.collegeContest,
                                   buyItemPrice: widget.contest?.entryFee ?? 0,
                                   onSubmit: () {
                                     Get.back();

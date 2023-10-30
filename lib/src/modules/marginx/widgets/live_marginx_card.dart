@@ -281,6 +281,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: PurchaseItemBottomSheet(
+                              productType: ProductType.marginx,
                               buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
                               onSubmit: () {
                                 Get.back();

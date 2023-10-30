@@ -370,6 +370,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                               BottomSheetHelper.openBottomSheet(
                                 context: context,
                                 child: PurchaseItemBottomSheet(
+                                  productType: ProductType.contest,
                                   buyItemPrice: widget.contest?.entryFee ?? 0,
                                   onSubmit: () {
                                     Get.back();

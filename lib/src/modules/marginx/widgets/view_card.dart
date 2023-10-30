@@ -330,6 +330,7 @@ class _ViewCardState extends State<ViewCard> {
                                     BottomSheetHelper.openBottomSheet(
                                       context: context,
                                       child: PurchaseItemBottomSheet(
+                                        productType: ProductType.marginx,
                                         buyItemPrice: widget.liveMarginX?.marginXTemplate?.entryFee ?? 0,
                                         onSubmit: () {
                                           Get.back();
@@ -353,6 +354,7 @@ class _ViewCardState extends State<ViewCard> {
                                     BottomSheetHelper.openBottomSheet(
                                       context: context,
                                       child: PurchaseItemBottomSheet(
+                                        productType: ProductType.marginx,
                                         buyItemPrice: widget.upcomingMarginX?.marginXTemplate?.entryFee ?? 0,
                                         onSubmit: () {
                                           Get.back();

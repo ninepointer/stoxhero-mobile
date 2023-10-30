@@ -35,6 +35,7 @@ class AppUrls {
   static const String withdrawal = "$apiURL/withdrawals";
   static const String infinityTradeTodaysOrders = "$apiURL/infinityTrade/my/todayorders";
   static const String infinityTradeAllOrders = "$apiURL/infinityTrade/my/historyorders";
+  static const String verifyCouponCode = "$apiURL/coupons/verify";
 
   static String tenxTradeTodaysOrders(String? subscriptionId) => "$apiURL/tenX/my/todayorders/$subscriptionId";
   static String tenxTradeAllOrders(String? subId, String? subscribedOn, String? expiredOn) =>

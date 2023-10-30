@@ -23,16 +23,6 @@ class _WalletViewState extends State<WalletView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Wallet'),
-        actions: [
-          IconButton(
-            splashRadius: 24,
-            icon: Icon(
-              Icons.circle,
-              color: Colors.transparent,
-            ),
-            onPressed: () => Get.to(() => PaymentView()),
-          ),
-        ],
       ),
       body: Obx(
         () => CommonTabBar(

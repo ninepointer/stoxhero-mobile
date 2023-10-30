@@ -17,4 +17,17 @@ class AppConstants {
   static const String complete = "COMPLETE";
 }
 
-enum TransactionType { buy, sell, exit }
+enum TransactionType {
+  buy,
+  sell,
+  exit,
+}
+
+enum ProductType {
+  tenx,
+  virtual,
+  marginx,
+  contest,
+  collegeContest,
+  internship,
+}

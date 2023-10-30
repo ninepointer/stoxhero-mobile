@@ -27,4 +27,12 @@ class WalletRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<VerifyCouponCodeResponse>> verifyCouponCode(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.verifyCouponCode;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: VerifyCouponCodeResponse.fromJson(response));
+  }
 }

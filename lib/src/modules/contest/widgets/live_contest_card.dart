@@ -304,6 +304,7 @@ class LiveContestCard extends GetView<ContestController> {
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: PurchaseItemBottomSheet(
+                            productType: ProductType.contest,
                             buyItemPrice: contest?.entryFee ?? 0,
                             onSubmit: () {
                               Get.back();
@@ -375,16 +376,3 @@ class LiveContestCard extends GetView<ContestController> {
     );
   }
 }
-
-// 1st - Contest is full or not
-//  if(full){
-//  if user has parti... in this contest.
-// if(isParti...){
-// Trading...
-//} else{
-// Show msg...
-//}
-// }else{
-
-// }
-///

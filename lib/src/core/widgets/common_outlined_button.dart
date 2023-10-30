@@ -10,6 +10,7 @@ class CommonOutlinedButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Color? backgroundColor;
   final Color? labelColor;
+  final bool isLoading;
   const CommonOutlinedButton({
     Key? key,
     this.label,
@@ -19,6 +20,7 @@ class CommonOutlinedButton extends StatelessWidget {
     this.onPressed,
     this.backgroundColor,
     this.labelColor,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -36,12 +38,23 @@ class CommonOutlinedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        child: Text(
-          label ?? 'Label',
-          style: AppStyles.tsPrimaryRegular14.copyWith(
-            color: labelColor,
-          ),
-        ),
+        child: isLoading
+            ? Center(
+                child: SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    color: AppColors.primary,
+                    strokeWidth: 2,
+                  ),
+                ),
+              )
+            : Text(
+                label ?? 'Label',
+                style: AppStyles.tsPrimaryRegular14.copyWith(
+                  color: labelColor,
+                ),
+              ),
         onPressed: onPressed ?? null,
       ),
     );
