@@ -165,4 +165,59 @@ class TenxTradingRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<StopLossExecutedOrdersListResponse>> getStopLossExecutedOrder(String id) async {
+    String apiURL = AppUrls.tenxStopLossExecutedOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossExecutedOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StopLossPendingOrdersListResponse>> getStopLossPendingOrder(String id) async {
+    String apiURL = AppUrls.tenxStopLossPendingOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossPendingOrdersListResponse.fromJson(response));
+  }
+
+  // Future<RepoResponse<StopLossPendingCancelOrderResponse>> getStopLossPendingCancelOrder(String id) async {
+  //   String apiURL = AppUrls.tenxStopLossPendingCancelOrder(id);
+  //   var response = await service.patchAuth(path: apiURL);
+  //   return response is APIException
+  //       ? RepoResponse(error: response)
+  //       : RepoResponse(data: StopLossPendingCancelOrderResponse.fromJson(response));
+  // }
+  Future<RepoResponse<GenericResponse>> getStopLossPendingCancelOrder(String id) async {
+    String apiURL = AppUrls.tenxStopLossPendingCancelOrder(id);
+    var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> pendingOrderModify(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.pendingOrderModify;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossEditOrder(String? id, Map<String, dynamic> data) async {
+    String apiURL = AppUrls.tenxStopLossEditOrder(id);
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<TenxTradeOrdersListResponse>> getTenxTradeTodaysOrdersList(String? subscriptionId) async {
+    String apiURL = AppUrls.tenxTradeTodaysOrders(subscriptionId);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: TenxTradeOrdersListResponse.fromJson(response));
+  }
 }

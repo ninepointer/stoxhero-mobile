@@ -8,7 +8,11 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contest Trading'),
+        title: Text(
+          '${controller.liveCollegeContest.value.contestName ?? 'Contest'}',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Visibility(

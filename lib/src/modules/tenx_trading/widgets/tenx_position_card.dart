@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
@@ -26,6 +24,32 @@ class TenxPositionCard extends GetView<TenxTradingController> {
           exchangeToken: position.id?.exchangeInstrumentToken,
           instrumentToken: position.id?.instrumentToken,
           lastPrice: lastPrice,
+          lotSize: position.lots,
+        ),
+      ),
+    );
+  }
+
+  void openModifyBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      position.id!.instrumentToken!,
+      position.id!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    controller.generateLotsList(type: position.id?.symbol);
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: StoplossModifyPriceBottomSheet(
+        type: type,
+        stopLoss: TradingInstrument(
+          name: position.id?.symbol,
+          exchange: position.id?.exchange,
+          tradingsymbol: position.id?.symbol,
+          exchangeToken: position.id?.exchangeInstrumentToken,
+          instrumentToken: position.id?.instrumentToken,
+          lastPrice: lastPrice,
+          lotSize: position.lots,
         ),
       ),
     );
@@ -120,7 +144,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       TradeCardTile(
                         hasBottomMargin: false,
                         isRightAlign: true,
-                        label: 'Changes(%)',
+                        label: 'Changes (%)',
                         value: controller.getInstrumentChanges(
                           position.id?.instrumentToken ?? 0,
                           position.id?.exchangeInstrumentToken ?? 0,
@@ -185,12 +209,9 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       List<int> lots = controller.generateLotsList(type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
                       int maxLots = lots.last;
-
                       if (exitLots == 0) {
                         SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
-                        log(exitLots.toString());
-                        log(maxLots.toString());
                         if (exitLots.toString().contains('-')) {
                           if (exitLots < 0) {
                             exitLots = -exitLots;
@@ -231,14 +252,40 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.secondary.withOpacity(.25),
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(8),
-                        ),
                       ),
                       child: Text(
                         'EXIT ALL',
                         style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.secondary.shade600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (position.lots!.toInt() == 0) {
+                        // SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                      } else if (controller.selectedQuantity.value.toString().contains('-')) {
+                        openModifyBottomSheet(context, TransactionType.sell);
+                      } else {
+                        openModifyBottomSheet(context, TransactionType.buy);
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.info.withOpacity(.25),
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        'MODIFY',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
+                          color: AppColors.info,
                         ),
                       ),
                     ),

@@ -895,9 +895,7 @@ class ContestController extends BaseController<ContestRepository> {
         "id": liveContest.value.id,
       };
       log('Socket Emit RankData : $rankData');
-
       socketService.socket.emit('dailyContestLeaderboard', rankData);
-
       socketService.socket.on(
         'contest-myrank${userDetails.value.sId}${liveContest.value.id}',
         (data) {
