@@ -1,6 +1,6 @@
 class MarginRequiredResponse {
   String? status;
-  num? margin;
+  String? margin;
 
   MarginRequiredResponse({this.status, this.margin});
 

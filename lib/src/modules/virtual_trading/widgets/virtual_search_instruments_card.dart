@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
@@ -13,38 +11,28 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
   });
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${tradingInstrument.toJson()}');
     FocusScope.of(context).unfocus();
     num lastPrice = controller.getInstrumentLastPrice(
       tradingInstrument.instrumentToken!,
       tradingInstrument.exchangeToken!,
     );
     controller.generateLotsList(type: tradingInstrument.name);
+
+    TradingInstrument trading = TradingInstrument(
+      name: tradingInstrument.tradingsymbol,
+      instrumentType: tradingInstrument.instrumentType,
+      exchange: tradingInstrument.exchange,
+      tradingsymbol: tradingInstrument.tradingsymbol,
+      exchangeToken: tradingInstrument.exchangeToken,
+      instrumentToken: tradingInstrument.instrumentToken,
+      lastPrice: lastPrice,
+    );
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: tradingInstrument.tradingsymbol,
-          instrumentType: tradingInstrument.instrumentType,
-          exchange: tradingInstrument.exchange,
-          tradingsymbol: tradingInstrument.tradingsymbol,
-          exchangeToken: tradingInstrument.exchangeToken,
-          instrumentToken: tradingInstrument.instrumentToken,
-          lastPrice: lastPrice,
-        ),
-        margin: controller.getMarginRequired(
-          type,
-          TradingInstrument(
-            name: tradingInstrument.tradingsymbol,
-            instrumentType: tradingInstrument.instrumentType,
-            exchange: tradingInstrument.exchange,
-            tradingsymbol: tradingInstrument.tradingsymbol,
-            exchangeToken: tradingInstrument.exchangeToken,
-            instrumentToken: tradingInstrument.instrumentToken,
-            lastPrice: lastPrice,
-          ),
-        ),
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
       ),
     );
   }

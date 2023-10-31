@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,18 +8,21 @@ import '../../../app/app.dart';
 
 class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
   final TransactionType type;
+  final dynamic marginRequired;
   final TradingInstrument tradingInstrument;
+
   const TenxTransactionBottomSheet({
     super.key,
     required this.type,
     required this.tradingInstrument,
+    required this.marginRequired,
   });
 
   @override
   build(BuildContext context) {
     controller.selectedGroupValue.value = 2;
     controller.selectedType.value = 'MARKET';
-    controller.getMarginRequired(type, tradingInstrument);
+    print('${tradingInstrument.lotSize} ${controller.selectedQuantity.value}');
     return Obx(
       () => Wrap(
         children: [
@@ -322,7 +327,14 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           Row(
                             children: [
                               Text(
-                                FormatHelper.formatNumbers(controller.marginRequired.value.margin),
+                                (type == TransactionType.sell || type == TransactionType.exit) &&
+                                        tradingInstrument.lotSize == controller.selectedQuantity.value
+                                    ? "₹0.0"
+                                    : (type == TransactionType.buy ||
+                                            (tradingInstrument.lotSize.toString().contains('-') ==
+                                                controller.selectedQuantity.value))
+                                        ? "₹0.0"
+                                        : FormatHelper.formatNumbers(controller.marginRequired.value.margin),
                                 style: Theme.of(context).textTheme.tsMedium14,
                               ),
                               IconButton(

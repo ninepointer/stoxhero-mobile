@@ -30,7 +30,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
       widget.tradingWatchlist.instrumentToken!,
       widget.tradingWatchlist.exchangeInstrumentToken!,
     );
-    TradingInstrument trading = TradingInstrument(
+    TradingInstrument tradingInstrument = TradingInstrument(
       name: widget.tradingWatchlist.symbol,
       instrumentType: widget.tradingWatchlist.instrument,
       exchange: widget.tradingWatchlist.exchange,
@@ -44,8 +44,8 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
       context: context,
       child: VirtualTransactionBottomSheet(
         type: type,
-        tradingInstrument: trading,
-        margin: controller.getMarginRequired(type, trading),
+        tradingInstrument: tradingInstrument,
+        marginRequired: controller.getMarginRequired(type, tradingInstrument),
       ),
     );
   }

@@ -13,19 +13,21 @@ class TenxPositionCard extends GetView<TenxTradingController> {
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
     controller.generateLotsList(type: position.id?.symbol);
+    TradingInstrument trading = TradingInstrument(
+      name: position.id?.symbol,
+      exchange: position.id?.exchange,
+      tradingsymbol: position.id?.symbol,
+      exchangeToken: position.id?.exchangeInstrumentToken,
+      instrumentToken: position.id?.instrumentToken,
+      lastPrice: lastPrice,
+      lotSize: position.lots,
+    );
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: TenxTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: position.id?.symbol,
-          exchange: position.id?.exchange,
-          tradingsymbol: position.id?.symbol,
-          exchangeToken: position.id?.exchangeInstrumentToken,
-          instrumentToken: position.id?.instrumentToken,
-          lastPrice: lastPrice,
-          lotSize: position.lots,
-        ),
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
       ),
     );
   }
@@ -231,18 +233,20 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                         }
                         controller.lotsValueList.assignAll(lots);
                         controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+                        var trading = TradingInstrument(
+                          name: position.id?.symbol,
+                          exchange: position.id?.exchange,
+                          tradingsymbol: position.id?.symbol,
+                          exchangeToken: position.id?.exchangeInstrumentToken,
+                          instrumentToken: position.id?.instrumentToken,
+                          lotSize: position.lots,
+                        );
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: TenxTransactionBottomSheet(
                             type: TransactionType.exit,
-                            tradingInstrument: TradingInstrument(
-                              name: position.id?.symbol,
-                              exchange: position.id?.exchange,
-                              tradingsymbol: position.id?.symbol,
-                              exchangeToken: position.id?.exchangeInstrumentToken,
-                              instrumentToken: position.id?.instrumentToken,
-                              lotSize: position.lots,
-                            ),
+                            tradingInstrument: trading,
+                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
                           ),
                         );
                       }

@@ -13,29 +13,20 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
     controller.generateLotsList(type: position.id?.symbol);
+    TradingInstrument tradingInstrument = TradingInstrument(
+      name: position.id?.symbol,
+      exchange: position.id?.exchange,
+      tradingsymbol: position.id?.symbol,
+      exchangeToken: position.id?.exchangeInstrumentToken,
+      instrumentToken: position.id?.instrumentToken,
+      lastPrice: lastPrice,
+    );
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: position.id?.symbol,
-          exchange: position.id?.exchange,
-          tradingsymbol: position.id?.symbol,
-          exchangeToken: position.id?.exchangeInstrumentToken,
-          instrumentToken: position.id?.instrumentToken,
-          lastPrice: lastPrice,
-        ),
-        margin: controller.getMarginRequired(
-          type,
-          TradingInstrument(
-            name: position.id?.symbol,
-            exchange: position.id?.exchange,
-            tradingsymbol: position.id?.symbol,
-            exchangeToken: position.id?.exchangeInstrumentToken,
-            instrumentToken: position.id?.instrumentToken,
-            lastPrice: lastPrice,
-          ),
-        ),
+        tradingInstrument: tradingInstrument,
+        marginRequired: controller.getMarginRequired(type, tradingInstrument),
       ),
     );
   }
@@ -195,28 +186,22 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
                         print(controller.selectedStringQuantity.value);
                         controller.lotsValueList.assignAll(lots);
+                        TradingInstrument tradingInstrument = TradingInstrument(
+                          name: position.id?.symbol,
+                          exchange: position.id?.exchange,
+                          tradingsymbol: position.id?.symbol,
+                          exchangeToken: position.id?.exchangeInstrumentToken,
+                          instrumentToken: position.id?.instrumentToken,
+                          lotSize: position.lots,
+                        );
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: VirtualTransactionBottomSheet(
                             type: TransactionType.exit,
-                            tradingInstrument: TradingInstrument(
-                              name: position.id?.symbol,
-                              exchange: position.id?.exchange,
-                              tradingsymbol: position.id?.symbol,
-                              exchangeToken: position.id?.exchangeInstrumentToken,
-                              instrumentToken: position.id?.instrumentToken,
-                              lotSize: position.lots,
-                            ),
-                            margin: controller.getMarginRequired(
+                            tradingInstrument: tradingInstrument,
+                            marginRequired: controller.getMarginRequired(
                               TransactionType.exit,
-                              TradingInstrument(
-                                name: position.id?.symbol,
-                                exchange: position.id?.exchange,
-                                tradingsymbol: position.id?.symbol,
-                                exchangeToken: position.id?.exchangeInstrumentToken,
-                                instrumentToken: position.id?.instrumentToken,
-                                lotSize: position.lots,
-                              ),
+                              tradingInstrument,
                             ),
                           ),
                         );

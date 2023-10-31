@@ -4,13 +4,13 @@ import '../../../app/app.dart';
 
 class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
   final TransactionType type;
-  final dynamic margin;
+  final dynamic marginRequired;
   final TradingInstrument tradingInstrument;
   const VirtualTransactionBottomSheet({
     super.key,
     required this.type,
     required this.tradingInstrument,
-    required this.margin,
+    required this.marginRequired,
   });
 
   @override
