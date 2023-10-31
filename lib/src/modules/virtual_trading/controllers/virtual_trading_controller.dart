@@ -56,6 +56,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
+  final marginRequired = MarginRequiredResponse().obs;
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
@@ -563,6 +564,37 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       );
     } on Exception catch (e) {
       log(e.toString());
+    }
+  }
+
+  Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
+    isTradingOrderSheetLoading(true);
+    MarginRequiredRequest data = MarginRequiredRequest(
+      exchange: inst.exchange,
+      symbol: inst.tradingsymbol,
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      quantity: selectedQuantity.value,
+      product: "NRML",
+      orderType: "MARKET",
+      validity: "DAY",
+      variety: "regular",
+      price: "",
+      lastPrice: inst.lastPrice.toString(),
+    );
+    try {
+      final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          marginRequired(response.data);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isTradingOrderSheetLoading(false);
     }
   }
 }

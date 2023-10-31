@@ -33,6 +33,18 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
           instrumentToken: tradingInstrument.instrumentToken,
           lastPrice: lastPrice,
         ),
+        margin: controller.getMarginRequired(
+          type,
+          TradingInstrument(
+            name: tradingInstrument.tradingsymbol,
+            instrumentType: tradingInstrument.instrumentType,
+            exchange: tradingInstrument.exchange,
+            tradingsymbol: tradingInstrument.tradingsymbol,
+            exchangeToken: tradingInstrument.exchangeToken,
+            instrumentToken: tradingInstrument.instrumentToken,
+            lastPrice: lastPrice,
+          ),
+        ),
       ),
     );
   }

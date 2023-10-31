@@ -25,6 +25,17 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
           instrumentToken: position.id?.instrumentToken,
           lastPrice: lastPrice,
         ),
+        margin: controller.getMarginRequired(
+          type,
+          TradingInstrument(
+            name: position.id?.symbol,
+            exchange: position.id?.exchange,
+            tradingsymbol: position.id?.symbol,
+            exchangeToken: position.id?.exchangeInstrumentToken,
+            instrumentToken: position.id?.instrumentToken,
+            lastPrice: lastPrice,
+          ),
+        ),
       ),
     );
   }
@@ -195,6 +206,17 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                               exchangeToken: position.id?.exchangeInstrumentToken,
                               instrumentToken: position.id?.instrumentToken,
                               lotSize: position.lots,
+                            ),
+                            margin: controller.getMarginRequired(
+                              TransactionType.exit,
+                              TradingInstrument(
+                                name: position.id?.symbol,
+                                exchange: position.id?.exchange,
+                                tradingsymbol: position.id?.symbol,
+                                exchangeToken: position.id?.exchangeInstrumentToken,
+                                instrumentToken: position.id?.instrumentToken,
+                                lotSize: position.lots,
+                              ),
                             ),
                           ),
                         );

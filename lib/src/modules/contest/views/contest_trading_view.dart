@@ -208,6 +208,11 @@ class ContestTradingView extends GetView<ContestController> {
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
+                  PortfolioDetailCardTile(
+                    label: 'UnRealised Profit & Loss',
+                    info: 'Increased value of your investment',
+                    value: '0',
+                  ),
                   SizedBox(height: 56),
                 ],
               ),

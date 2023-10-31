@@ -114,9 +114,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedGroupValue = 0.obs;
   final isMarketSelected = true.obs;
   final tenxTradeTodaysOrdersList = <TenxTradeOrder>[].obs;
-  final sendOrder = SendOrderResponse().obs;
-  final sendOrderList = <SendOrderResponse>[].obs;
-
+  final marginRequired = MarginRequiredResponse().obs;
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
   }
@@ -1176,22 +1174,36 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isPendingOrderStateLoading(false);
   }
 
-  Future getSendOrder() async {
-    isOrderStateLoading(true);
+  Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
+    isTradingOrderSheetLoading(true);
+    MarginRequiredRequest data = MarginRequiredRequest(
+      exchange: inst.exchange,
+      symbol: inst.tradingsymbol,
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      quantity: selectedQuantity.value,
+      product: "NRML",
+      orderType: selectedType.value,
+      validity: "DAY",
+      variety: "regular",
+      price: "",
+      lastPrice: inst.lastPrice.toString(),
+    );
     try {
-      final response = SendOrderResponse();
+      final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
+        data.toJson(),
+      );
       if (response.data != null) {
-        if (response.status == "Success") {
-          sendOrder(response.message as SendOrderResponse?);
+        if (response.data?.status?.toLowerCase() == "success") {
+          marginRequired(response.data);
         } else {
-          SnackbarHelper.showSnackbar(response.message);
+          SnackbarHelper.showSnackbar(response.error?.message);
         }
       }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     } finally {
-      isOrderStateLoading(false);
+      isTradingOrderSheetLoading(false);
     }
   }
 }

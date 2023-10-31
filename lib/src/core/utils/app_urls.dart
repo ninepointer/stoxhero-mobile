@@ -116,6 +116,7 @@ class AppUrls {
   static const String careerApply = "$apiURL/career/apply";
   static const String myWithdrawals = "$apiURL/withdrawals/mywithdrawals";
   static const String pendingOrderModify = "$apiURL/pendingorder/modify";
+  static const String marginRequired = "$apiURL/marginrequired";
 
   static String tenxPortfolio(String? id) => "$apiURL/tenX/$id/trade/marginDetail";
   static String tenxTradeTodaysOrders(String? subscriptionId) => "$apiURL/tenX/my/todayorders/$subscriptionId";

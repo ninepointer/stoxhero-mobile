@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
-  final TradingInstrument tradingInstrument;
   final TransactionType type;
+  final dynamic margin;
+  final TradingInstrument tradingInstrument;
   const VirtualTransactionBottomSheet({
     super.key,
     required this.type,
     required this.tradingInstrument,
+    required this.margin,
   });
 
   @override
@@ -232,6 +234,35 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                         groupValue: 3,
                         label: 'Minutes',
                       ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+                CommonCard(
+                  margin: EdgeInsets.only(),
+                  padding: EdgeInsets.zero.copyWith(left: 12),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Margin Required',
+                          style: Theme.of(context).textTheme.tsMedium14,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              FormatHelper.formatNumbers(controller.marginRequired.value.margin),
+                              style: Theme.of(context).textTheme.tsMedium14,
+                            ),
+                            IconButton(
+                              onPressed: () => controller.getMarginRequired(type, tradingInstrument),
+                              icon: Icon(Icons.refresh, size: 18),
+                              splashRadius: 18,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),

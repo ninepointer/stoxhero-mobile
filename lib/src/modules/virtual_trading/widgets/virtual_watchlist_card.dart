@@ -30,20 +30,22 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
       widget.tradingWatchlist.instrumentToken!,
       widget.tradingWatchlist.exchangeInstrumentToken!,
     );
+    TradingInstrument trading = TradingInstrument(
+      name: widget.tradingWatchlist.symbol,
+      instrumentType: widget.tradingWatchlist.instrument,
+      exchange: widget.tradingWatchlist.exchange,
+      tradingsymbol: widget.tradingWatchlist.symbol,
+      exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
+      instrumentToken: widget.tradingWatchlist.instrumentToken,
+      lastPrice: lastPrice,
+    );
     controller.generateLotsList(type: widget.tradingWatchlist.symbol);
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: widget.tradingWatchlist.symbol,
-          instrumentType: widget.tradingWatchlist.instrument,
-          exchange: widget.tradingWatchlist.exchange,
-          tradingsymbol: widget.tradingWatchlist.symbol,
-          exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
-          instrumentToken: widget.tradingWatchlist.instrumentToken,
-          lastPrice: lastPrice,
-        ),
+        tradingInstrument: trading,
+        margin: controller.getMarginRequired(type, trading),
       ),
     );
   }

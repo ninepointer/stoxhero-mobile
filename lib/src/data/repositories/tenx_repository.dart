@@ -220,4 +220,12 @@ class TenxTradingRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: TenxTradeOrdersListResponse.fromJson(response));
   }
+
+  Future<RepoResponse<MarginRequiredResponse>> getMarginRequired(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.marginRequired;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: MarginRequiredResponse.fromJson(response));
+  }
 }

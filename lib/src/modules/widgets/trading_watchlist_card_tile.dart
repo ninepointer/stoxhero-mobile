@@ -40,6 +40,18 @@ class _TradingWatchlistCardTileState extends State<TradingWatchlistCardTile> {
           instrumentToken: widget.tradingWatchlist.instrumentToken,
           lastPrice: lastPrice,
         ),
+        margin: controller.getMarginRequired(
+          type,
+          TradingInstrument(
+            name: widget.tradingWatchlist.symbol,
+            instrumentType: widget.tradingWatchlist.instrument,
+            exchange: widget.tradingWatchlist.exchange,
+            tradingsymbol: widget.tradingWatchlist.symbol,
+            exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
+            instrumentToken: widget.tradingWatchlist.instrumentToken,
+            lastPrice: lastPrice,
+          ),
+        ),
       ),
     );
   }

@@ -181,6 +181,11 @@ class InternshipTradingView extends GetView<InternshipController> {
                         ? controller.internshipBatchPortfolio.value.openingBalance
                         : controller.internshipBatchPortfolio.value.totalFund,
                   ),
+                  PortfolioDetailCardTile(
+                    label: 'UnRealised Profit & Loss',
+                    info: 'Increased value of your investment',
+                    value: '0',
+                  ),
                   SizedBox(height: 56),
                 ],
               ),
