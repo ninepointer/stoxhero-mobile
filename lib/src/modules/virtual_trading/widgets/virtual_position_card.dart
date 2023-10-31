@@ -20,6 +20,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
       exchangeToken: position.id?.exchangeInstrumentToken,
       instrumentToken: position.id?.instrumentToken,
       lastPrice: lastPrice,
+      lotSize: position.lots,
     );
     BottomSheetHelper.openBottomSheet(
       context: context,
@@ -33,23 +34,6 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
 
   @override
   Widget build(BuildContext context) {
-    num grossPnl = controller.calculateGrossPNL(
-      position.amount ?? 0,
-      position.lots?.toInt() ?? 0,
-      controller.getInstrumentLastPrice(
-        position.id?.instrumentToken ?? 0,
-        position.id?.exchangeInstrumentToken ?? 0,
-      ),
-    );
-    num ltp = controller.getInstrumentLastPrice(
-      position.id?.instrumentToken ?? 0,
-      position.id?.exchangeInstrumentToken ?? 0,
-    );
-
-    String changes = controller.getInstrumentChanges(
-      position.id?.instrumentToken ?? 0,
-      position.id?.exchangeInstrumentToken ?? 0,
-    );
     return Column(
       children: [
         CommonCard(
@@ -72,10 +56,30 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'Gross P&L (Profit & Loss)',
-                        valueColor: controller.getValueColor(position.lots == 0 ? position.amount : grossPnl),
+                        valueColor: controller.getValueColor(
+                          position.lots == 0
+                              ? position.amount
+                              : controller.calculateGrossPNL(
+                                  position.amount!,
+                                  position.lots!.toInt(),
+                                  controller.getInstrumentLastPrice(
+                                    position.id!.instrumentToken!,
+                                    position.id!.exchangeInstrumentToken!,
+                                  ),
+                                ),
+                        ),
                         value: position.lots == 0
                             ? FormatHelper.formatNumbers(position.amount)
-                            : FormatHelper.formatNumbers(grossPnl),
+                            : FormatHelper.formatNumbers(
+                                controller.calculateGrossPNL(
+                                  position.amount!,
+                                  position.lots!.toInt(),
+                                  controller.getInstrumentLastPrice(
+                                    position.id!.instrumentToken!,
+                                    position.id!.exchangeInstrumentToken!,
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ),
@@ -91,8 +95,18 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'LTP (Last Traded Price)',
-                        valueColor: controller.getValueColor(ltp),
-                        value: FormatHelper.formatNumbers(ltp),
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        ),
+                        value: FormatHelper.formatNumbers(
+                          controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -108,8 +122,16 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         hasBottomMargin: false,
                         isRightAlign: true,
                         label: 'Changes(%)',
-                        valueColor: controller.getValueColor(changes),
-                        value: changes,
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentChanges(
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
+                          ),
+                        ),
+                        value: controller.getInstrumentChanges(
+                          position.id?.instrumentToken ?? 0,
+                          position.id?.exchangeInstrumentToken ?? 0,
+                        ),
                       ),
                     ],
                   ),
@@ -193,16 +215,17 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                           exchangeToken: position.id?.exchangeInstrumentToken,
                           instrumentToken: position.id?.instrumentToken,
                           lotSize: position.lots,
+                          lastPrice: controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
                         );
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: VirtualTransactionBottomSheet(
                             type: TransactionType.exit,
                             tradingInstrument: tradingInstrument,
-                            marginRequired: controller.getMarginRequired(
-                              TransactionType.exit,
-                              tradingInstrument,
-                            ),
+                            marginRequired: controller.getMarginRequired(TransactionType.exit, tradingInstrument),
                           ),
                         );
                       }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
@@ -21,8 +19,8 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
 
   @override
   void initState() {
-    controller = Get.find<ContestController>();
     super.initState();
+    controller = Get.find<ContestController>();
   }
 
   void _updateWatchlistIndex() {
@@ -34,28 +32,27 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
   }
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
-
     num lastPrice = controller.getInstrumentLastPrice(
       widget.tradingWatchlist.instrumentToken!,
       widget.tradingWatchlist.exchangeInstrumentToken!,
     );
+    TradingInstrument tradingInstrument = TradingInstrument(
+      name: widget.tradingWatchlist.symbol,
+      instrumentType: widget.tradingWatchlist.instrument,
+      exchange: widget.tradingWatchlist.exchange,
+      tradingsymbol: widget.tradingWatchlist.symbol,
+      exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
+      instrumentToken: widget.tradingWatchlist.instrumentToken,
+      lastPrice: lastPrice,
+    );
     controller.generateLotsList(type: widget.tradingWatchlist.symbol);
-    log(lastPrice.toString());
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: ContestTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: widget.tradingWatchlist.symbol,
-          instrumentType: widget.tradingWatchlist.instrument,
-          exchange: widget.tradingWatchlist.exchange,
-          tradingsymbol: widget.tradingWatchlist.symbol,
-          exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
-          instrumentToken: widget.tradingWatchlist.instrumentToken,
-          lastPrice: lastPrice,
-        ),
+        tradingInstrument: tradingInstrument,
+        marginRequired: controller.getMarginRequired(type, tradingInstrument),
       ),
     );
   }

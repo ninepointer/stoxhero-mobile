@@ -20,7 +20,6 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
   build(BuildContext context) {
     controller.selectedGroupValue.value = 2;
     controller.selectedType.value = 'MARKET';
-    print('${tradingInstrument.lotSize} ${controller.selectedQuantity.value}');
     return Obx(
       () => Wrap(
         children: [
@@ -325,21 +324,29 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                             'Margin Required',
                             style: Theme.of(context).textTheme.tsMedium14,
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                ((type == TransactionType.sell || type == TransactionType.exit) &&
-                                        (tradingInstrument.lotSize == controller.selectedQuantity.value))
-                                    ? "₹0.0"
-                                    : FormatHelper.formatNumbers(controller.marginRequired.value.margin),
-                                style: Theme.of(context).textTheme.tsMedium14,
+                          Visibility(
+                            visible: controller.isMarginStateLoadingStatus,
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                child: CommonLoader(),
+                                height: 24,
+                                width: 24,
                               ),
-                              IconButton(
-                                onPressed: () => controller.getMarginRequired(type, tradingInstrument),
-                                icon: Icon(Icons.refresh, size: 18),
-                                splashRadius: 18,
-                              ),
-                            ],
+                            ),
+                            replacement: Row(
+                              children: [
+                                Text(
+                                  FormatHelper.formatNumbers(controller.marginRequired.value.margin),
+                                  style: Theme.of(context).textTheme.tsMedium14,
+                                ),
+                                IconButton(
+                                  onPressed: () => controller.getMarginRequired(type, tradingInstrument),
+                                  icon: Icon(Icons.refresh, size: 18),
+                                  splashRadius: 18,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -349,17 +356,17 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     isLoading: controller.isTradingOrderSheetLoading.value,
                     backgroundColor: type == TransactionType.exit
                         ? AppColors.warning
-                        : controller.selectedStringQuantity.contains('-')
-                            ? type == TransactionType.sell
-                                ? AppColors.success
-                                : AppColors.danger
+                        : tradingInstrument.lotSize.toString().contains('-')
+                            ? type == TransactionType.buy
+                                ? AppColors.danger
+                                : AppColors.success
                             : type == TransactionType.buy
                                 ? AppColors.success
                                 : AppColors.danger,
                     margin: EdgeInsets.symmetric(vertical: 24),
                     label: type == TransactionType.exit
                         ? 'Exit'
-                        : controller.selectedStringQuantity.contains('-')
+                        : tradingInstrument.lotSize.toString().contains('-')
                             ? type == TransactionType.buy
                                 ? 'SELL'
                                 : 'BUY'

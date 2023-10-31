@@ -59,6 +59,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final isExecutedOrderStateLoading = false.obs;
   bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
 
+  final isMarginStateLoading = false.obs;
+  bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
+
   final selectedTabBarIndex = 0.obs;
 
   final stopLossFormKey = GlobalKey<FormState>();
@@ -1271,27 +1274,37 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isPendingOrderStateLoading(false);
   }
 
+  int calculateQuantity(TransactionType type, int tradingLots, int selectQuantity) {
+    if (type == TransactionType.buy) {
+      if (tradingLots.toString().contains('-')) {
+        if (tradingLots.toString().contains('-') == selectQuantity) {
+          return 0;
+        }
+      }
+    } else if (type == TransactionType.sell || type == TransactionType.exit) {
+      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
+        return 0;
+      } else if (tradingLots.abs() <= selectQuantity) {
+        return selectQuantity - tradingLots.abs();
+      }
+    }
+    return selectQuantity;
+  }
+
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
-    isTradingOrderSheetLoading(true);
+    isMarginStateLoading(true);
+
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
-      buyOrSell: selectedStringQuantity.contains('-')
+      buyOrSell: inst.lotSize.toString().contains('-')
           ? type == TransactionType.buy
               ? 'SELL'
               : 'BUY'
           : type == TransactionType.buy
               ? 'BUY'
               : 'SELL',
-      quantity: selectedQuantity.value.toString().contains('-')
-          ? type == TransactionType.buy
-              ? selectedQuantity.value < 0
-                  ? 0
-                  : selectedQuantity.value
-              : selectedQuantity.value > 0
-                  ? 0
-                  : selectedQuantity.value
-          : selectedQuantity.value,
+      quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
       orderType: selectedType.value,
       validity: "DAY",
@@ -1315,7 +1328,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     } finally {
-      isTradingOrderSheetLoading(false);
+      isMarginStateLoading(false);
     }
   }
 }

@@ -13,20 +13,23 @@ class ContestPositionCard extends GetView<ContestController> {
       position.id!.instrumentToken!,
       position.id!.exchangeInstrumentToken!,
     );
-    controller.generateLotsList(type: position.id?.symbol);
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    controller.generateLotsList(type: position.id?.symbol);
+    TradingInstrument trading = TradingInstrument(
+      name: position.id?.symbol,
+      exchange: position.id?.exchange,
+      tradingsymbol: position.id?.symbol,
+      exchangeToken: position.id?.exchangeInstrumentToken,
+      instrumentToken: position.id?.instrumentToken,
+      lastPrice: lastPrice,
+      lotSize: position.lots,
+    );
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: ContestTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: position.id?.symbol,
-          exchange: position.id?.exchange,
-          tradingsymbol: position.id?.symbol,
-          exchangeToken: position.id?.exchangeInstrumentToken,
-          instrumentToken: position.id?.instrumentToken,
-          lastPrice: lastPrice,
-        ),
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
       ),
     );
   }
@@ -210,18 +213,25 @@ class ContestPositionCard extends GetView<ContestController> {
                         }
                         controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
                         controller.lotsValueList.assignAll(lots);
+
+                        TradingInstrument trading = TradingInstrument(
+                          name: position.id?.symbol,
+                          exchange: position.id?.exchange,
+                          tradingsymbol: position.id?.symbol,
+                          exchangeToken: position.id?.exchangeInstrumentToken,
+                          instrumentToken: position.id?.instrumentToken,
+                          lotSize: position.lots,
+                          lastPrice: controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        );
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: ContestTransactionBottomSheet(
                             type: TransactionType.exit,
-                            tradingInstrument: TradingInstrument(
-                              name: position.id?.symbol,
-                              exchange: position.id?.exchange,
-                              tradingsymbol: position.id?.symbol,
-                              exchangeToken: position.id?.exchangeInstrumentToken,
-                              instrumentToken: position.id?.instrumentToken,
-                              lotSize: position.lots,
-                            ),
+                            tradingInstrument: trading,
+                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
                           ),
                         );
                       }

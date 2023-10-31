@@ -9,32 +9,35 @@ class MarginXPositionCard extends GetView<MarginXController> {
 
   const MarginXPositionCard({super.key, required this.position});
 
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      position.id!.instrumentToken!,
+      position.id!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    controller.generateLotsList(type: position.id?.symbol);
+    TradingInstrument trading = TradingInstrument(
+      name: position.id?.symbol,
+      exchange: position.id?.exchange,
+      tradingsymbol: position.id?.symbol,
+      exchangeToken: position.id?.exchangeInstrumentToken,
+      instrumentToken: position.id?.instrumentToken,
+      lastPrice: lastPrice,
+      lotSize: position.lots,
+    );
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: MarginXTransactionBottomSheet(
+        type: type,
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    void openBottomSheet(BuildContext context, TransactionType type) {
-      FocusScope.of(context).unfocus();
-      num lastPrice = controller.getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
-      );
-      controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-      controller.generateLotsList(type: position.id?.symbol);
-      BottomSheetHelper.openBottomSheet(
-        context: context,
-        child: MarginXTransactionBottomSheet(
-          type: type,
-          tradingInstrument: TradingInstrument(
-            name: position.id?.symbol,
-            exchange: position.id?.exchange,
-            tradingsymbol: position.id?.symbol,
-            exchangeToken: position.id?.exchangeInstrumentToken,
-            instrumentToken: position.id?.instrumentToken,
-            lastPrice: lastPrice,
-          ),
-        ),
-      );
-    }
-
     return Column(
       children: [
         CommonCard(
@@ -198,18 +201,24 @@ class MarginXPositionCard extends GetView<MarginXController> {
                         }
                         controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
                         controller.lotsValueList.assignAll(lots);
+                        TradingInstrument trading = TradingInstrument(
+                          name: position.id?.symbol,
+                          exchange: position.id?.exchange,
+                          tradingsymbol: position.id?.symbol,
+                          exchangeToken: position.id?.exchangeInstrumentToken,
+                          instrumentToken: position.id?.instrumentToken,
+                          lotSize: position.lots,
+                          lastPrice: controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        );
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: MarginXTransactionBottomSheet(
                             type: TransactionType.exit,
-                            tradingInstrument: TradingInstrument(
-                              name: position.id?.symbol,
-                              exchange: position.id?.exchange,
-                              tradingsymbol: position.id?.symbol,
-                              exchangeToken: position.id?.exchangeInstrumentToken,
-                              instrumentToken: position.id?.instrumentToken,
-                              lotSize: position.lots,
-                            ),
+                            tradingInstrument: trading,
+                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
                           ),
                         );
                       }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:fl_chart/fl_chart.dart';
@@ -42,6 +43,9 @@ class InternshipController extends BaseController<InternshipRespository> {
   final isInstrumentListLoading = false.obs;
   bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
 
+  final isMarginStateLoading = false.obs;
+  bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
+
   final segmentedControlValue = 0.obs;
 
   final selectedTabBarIndex = 0.obs;
@@ -56,7 +60,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   final internshipBatchDetails = InternshipBatch().obs;
   final internshipBatchPortfolio = InternshipBatchPortfolio().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
-  final internshipPositionList = <InternshipPosition>[].obs;
+  final internshipPositionList = <TradingPosition>[].obs;
   final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
@@ -67,7 +71,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   final selectedQuantity = 0.obs;
   final lotsValueList = <int>[0].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
-
+  final marginRequired = MarginRequiredResponse().obs;
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
   final selectedStringQuantity = "0".obs;
@@ -465,12 +469,12 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   num calculateMargin() {
-    num amount = 0;
     num lots = 0;
+    num margin = 0;
     for (var position in internshipPositionList) {
       if (position.lots != 0) {
-        amount += position.amount!.abs();
         lots += position.lots ?? 0;
+        margin += position.margin ?? 0;
       }
     }
     num openingBalance = 0;
@@ -483,28 +487,9 @@ class InternshipController extends BaseController<InternshipRespository> {
       openingBalance = totalFund;
       // print('openingBalance2 $openingBalance');
     }
-
-    num availableMargin = openingBalance != 0
-        ? lots == 0
-            ? openingBalance + calculateTotalNetPNL()
-            : openingBalance - amount
-        : totalFund;
-
-    // print('Amount $amount');
-    // print('lots $lots');
-    // print('calculateTotalNetPNL${calculateTotalNetPNL()}');
-    // print('openingBalance $openingBalance');
-    // print('totalFund $totalFund');
-    // print('availableMargin $availableMargin');
-    // String availableMarginPnlString = availableMargin >= 0 ? "₹" + availableMargin.toStringAsFixed(2) ?? "₹0" : "₹0";
-
-    // if (lots == 0) {
-    //   marginValue = totalFund + calculateTotalNetPNL();
-    // } else if (lots < 0) {
-    //   marginValue = totalFund - amount;
-    // } else {
-    //   marginValue = totalFund + amount;
-    // }
+    num availableMargin = (calculateTotalNetPNL() < 0)
+        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        : (openingBalance - margin);
     return availableMargin;
   }
 
@@ -715,7 +700,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future getInternshipPositions() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<InternshipPositionResponse> response =
+      final RepoResponse<TradingPositionListResponse> response =
           await repository.getInternshipPositions(internshipBatchDetails.value.id);
       if (response.data != null) {
         if (response.data?.data! != null) {
@@ -974,5 +959,63 @@ class InternshipController extends BaseController<InternshipRespository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isAllOrdersLoading(false);
+  }
+
+  int calculateQuantity(TransactionType type, int tradingLots, int selectQuantity) {
+    if (type == TransactionType.buy) {
+      if (tradingLots.toString().contains('-')) {
+        if (tradingLots.toString().contains('-') == selectQuantity) {
+          return 0;
+        }
+      }
+    } else if (type == TransactionType.sell || type == TransactionType.exit) {
+      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
+        return 0;
+      } else if (tradingLots.abs() <= selectQuantity) {
+        return selectQuantity - tradingLots.abs();
+      }
+    }
+    return selectQuantity;
+  }
+
+  Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
+    isMarginStateLoading(true);
+
+    MarginRequiredRequest data = MarginRequiredRequest(
+      exchange: inst.exchange,
+      symbol: inst.tradingsymbol,
+      buyOrSell: inst.lotSize.toString().contains('-')
+          ? type == TransactionType.buy
+              ? 'SELL'
+              : 'BUY'
+          : type == TransactionType.buy
+              ? 'BUY'
+              : 'SELL',
+      quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
+      product: "NRML",
+      orderType: "MARKET",
+      validity: "DAY",
+      variety: "regular",
+      price: "",
+      lastPrice: inst.lastPrice.toString(),
+    );
+
+    try {
+      final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          marginRequired(response.data);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isMarginStateLoading(false);
+    }
   }
 }
