@@ -110,12 +110,12 @@ class InternshipRespository extends BaseRepository {
         : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
-  Future<RepoResponse<InternshipPositionResponse>> getInternshipPositions(String? id) async {
+  Future<RepoResponse<TradingPositionListResponse>> getInternshipPositions(String? id) async {
     String apiURL = AppUrls.internshipPosition(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: InternshipPositionResponse.fromJson(response));
+        : RepoResponse(data: TradingPositionListResponse.fromJson(response));
   }
 
   Future<RepoResponse<InternshipOrdersListResponse>> getInternshipAllOrdersList() async {
@@ -132,5 +132,13 @@ class InternshipRespository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: InternshipOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<MarginRequiredResponse>> getMarginRequired(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.marginRequired;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: MarginRequiredResponse.fromJson(response));
   }
 }

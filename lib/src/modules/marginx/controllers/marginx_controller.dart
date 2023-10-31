@@ -45,6 +45,9 @@ class MarginXController extends BaseController<MarginXRepository> {
   final isInstrumentListLoading = false.obs;
   bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
 
+  final isMarginStateLoading = false.obs;
+  bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
+
   final selectedTabBarIndex = 0.obs;
 
   final searchTextController = TextEditingController();
@@ -73,6 +76,7 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
+  final marginRequired = MarginRequiredResponse().obs;
 
   Future loadData() async {
     loadUserDetails();
@@ -766,5 +770,63 @@ class MarginXController extends BaseController<MarginXRepository> {
     }
 
     isLiveLoading(false);
+  }
+
+  int calculateQuantity(TransactionType type, int tradingLots, int selectQuantity) {
+    if (type == TransactionType.buy) {
+      if (tradingLots.toString().contains('-')) {
+        if (tradingLots.toString().contains('-') == selectQuantity) {
+          return 0;
+        }
+      }
+    } else if (type == TransactionType.sell || type == TransactionType.exit) {
+      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
+        return 0;
+      } else if (tradingLots.abs() <= selectQuantity) {
+        return selectQuantity - tradingLots.abs();
+      }
+    }
+    return selectQuantity;
+  }
+
+  Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
+    isMarginStateLoading(true);
+
+    MarginRequiredRequest data = MarginRequiredRequest(
+      exchange: inst.exchange,
+      symbol: inst.tradingsymbol,
+      buyOrSell: inst.lotSize.toString().contains('-')
+          ? type == TransactionType.buy
+              ? 'SELL'
+              : 'BUY'
+          : type == TransactionType.buy
+              ? 'BUY'
+              : 'SELL',
+      quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
+      product: "NRML",
+      orderType: "MARKET",
+      validity: "DAY",
+      variety: "regular",
+      price: "",
+      lastPrice: inst.lastPrice.toString(),
+    );
+
+    try {
+      final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          marginRequired(response.data);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isMarginStateLoading(false);
+    }
   }
 }

@@ -252,18 +252,29 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                           'Margin Required',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              FormatHelper.formatNumbers(controller.marginRequired.value.margin),
-                              style: Theme.of(context).textTheme.tsMedium14,
+                        Visibility(
+                          visible: controller.isMarginStateLoadingStatus,
+                          child: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: SizedBox(
+                              child: CommonLoader(),
+                              height: 24,
+                              width: 24,
                             ),
-                            IconButton(
-                              onPressed: () => controller.getMarginRequired(type, tradingInstrument),
-                              icon: Icon(Icons.refresh, size: 18),
-                              splashRadius: 18,
-                            ),
-                          ],
+                          ),
+                          replacement: Row(
+                            children: [
+                              Text(
+                                FormatHelper.formatNumbers(controller.marginRequired.value.margin),
+                                style: Theme.of(context).textTheme.tsMedium14,
+                              ),
+                              IconButton(
+                                onPressed: () => controller.getMarginRequired(type, tradingInstrument),
+                                icon: Icon(Icons.refresh, size: 18),
+                                splashRadius: 18,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -273,15 +284,23 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                   isLoading: controller.isTradingOrderSheetLoading.value,
                   backgroundColor: type == TransactionType.exit
                       ? AppColors.warning
-                      : type == TransactionType.buy
-                          ? AppColors.success
-                          : AppColors.danger,
+                      : tradingInstrument.lotSize.toString().contains('-')
+                          ? type == TransactionType.buy
+                              ? AppColors.danger
+                              : AppColors.success
+                          : type == TransactionType.buy
+                              ? AppColors.success
+                              : AppColors.danger,
                   margin: EdgeInsets.symmetric(vertical: 24),
                   label: type == TransactionType.exit
-                      ? 'EXIT'
-                      : type == TransactionType.buy
-                          ? 'BUY'
-                          : 'SELL',
+                      ? 'Exit'
+                      : tradingInstrument.lotSize.toString().contains('-')
+                          ? type == TransactionType.buy
+                              ? 'SELL'
+                              : 'BUY'
+                          : type == TransactionType.buy
+                              ? 'BUY'
+                              : 'SELL',
                   onPressed: () => Get.find<VirtualTradingController>().placeVirtualTradingOrder(
                     type,
                     tradingInstrument,

@@ -5,10 +5,12 @@ import '../../../app/app.dart';
 class ContestTransactionBottomSheet extends GetView<ContestController> {
   final TradingInstrument tradingInstrument;
   final TransactionType type;
+  final dynamic marginRequired;
   const ContestTransactionBottomSheet({
     super.key,
     required this.type,
     required this.tradingInstrument,
+    required this.marginRequired,
   });
 
   @override
@@ -57,9 +59,19 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                     ),
                     Text(
                       type == TransactionType.buy
-                          ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
+                          ? FormatHelper.formatNumbers(
+                              controller.getInstrumentLastPrice(
+                                tradingInstrument.instrumentToken!,
+                                tradingInstrument.exchangeToken!,
+                              ),
+                            )
                           : type == TransactionType.sell
-                              ? FormatHelper.formatNumbers(tradingInstrument.lastPrice)
+                              ? FormatHelper.formatNumbers(
+                                  controller.getInstrumentLastPrice(
+                                    tradingInstrument.instrumentToken!,
+                                    tradingInstrument.exchangeToken!,
+                                  ),
+                                )
                               : tradingInstrument.lotSize.toString(),
                       style: AppStyles.tsSecondaryMedium16,
                     ),
@@ -88,7 +100,10 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                 SizedBox(height: 16),
                 DropdownButtonFormField2<int>(
                   value: controller.selectedQuantity.value,
-                  onChanged: (value) => controller.selectedQuantity(value),
+                  onChanged: (value) {
+                    controller.selectedQuantity(value);
+                    controller.getMarginRequired(type, tradingInstrument);
+                  },
                   isDense: true,
                   items: controller.lotsValueList.map((int number) {
                     return DropdownMenuItem<int>(
@@ -225,19 +240,67 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                     ),
                   ],
                 ),
+                SizedBox(height: 8),
+                CommonCard(
+                  margin: EdgeInsets.only(),
+                  padding: EdgeInsets.zero.copyWith(left: 12),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Margin Required',
+                          style: Theme.of(context).textTheme.tsMedium14,
+                        ),
+                        Visibility(
+                          visible: controller.isMarginStateLoadingStatus,
+                          child: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: SizedBox(
+                              child: CommonLoader(),
+                              height: 24,
+                              width: 24,
+                            ),
+                          ),
+                          replacement: Row(
+                            children: [
+                              Text(
+                                FormatHelper.formatNumbers(controller.marginRequired.value.margin),
+                                style: Theme.of(context).textTheme.tsMedium14,
+                              ),
+                              IconButton(
+                                onPressed: () => controller.getMarginRequired(type, tradingInstrument),
+                                icon: Icon(Icons.refresh, size: 18),
+                                splashRadius: 18,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
                 CommonFilledButton(
                   isLoading: controller.isTradingOrderSheetLoading.value,
                   backgroundColor: type == TransactionType.exit
                       ? AppColors.warning
-                      : type == TransactionType.buy
-                          ? AppColors.success
-                          : AppColors.danger,
+                      : tradingInstrument.lotSize.toString().contains('-')
+                          ? type == TransactionType.buy
+                              ? AppColors.danger
+                              : AppColors.success
+                          : type == TransactionType.buy
+                              ? AppColors.success
+                              : AppColors.danger,
                   margin: EdgeInsets.symmetric(vertical: 24),
                   label: type == TransactionType.exit
                       ? 'Exit'
-                      : type == TransactionType.buy
-                          ? 'BUY'
-                          : 'SELL',
+                      : tradingInstrument.lotSize.toString().contains('-')
+                          ? type == TransactionType.buy
+                              ? 'SELL'
+                              : 'BUY'
+                          : type == TransactionType.buy
+                              ? 'BUY'
+                              : 'SELL',
                   onPressed: () {
                     Get.find<ContestController>().placeContestOrder(
                       type,

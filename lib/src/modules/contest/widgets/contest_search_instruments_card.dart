@@ -21,19 +21,21 @@ class ContestSearchInstrumentsCard extends GetView<ContestController> {
       tradingInstrument.exchangeToken!,
     );
     controller.generateLotsList(type: tradingInstrument.name);
+    TradingInstrument trading = TradingInstrument(
+      name: tradingInstrument.tradingsymbol,
+      instrumentType: tradingInstrument.instrumentType,
+      exchange: tradingInstrument.exchange,
+      tradingsymbol: tradingInstrument.tradingsymbol,
+      exchangeToken: tradingInstrument.exchangeToken,
+      instrumentToken: tradingInstrument.instrumentToken,
+      lastPrice: lastPrice,
+    );
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: ContestTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: tradingInstrument.tradingsymbol,
-          instrumentType: tradingInstrument.instrumentType,
-          exchange: tradingInstrument.exchange,
-          tradingsymbol: tradingInstrument.tradingsymbol,
-          exchangeToken: tradingInstrument.exchangeToken,
-          instrumentToken: tradingInstrument.instrumentToken,
-          lastPrice: lastPrice,
-        ),
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
       ),
     );
   }

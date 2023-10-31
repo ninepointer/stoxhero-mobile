@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import '../../../app/app.dart';
@@ -28,27 +26,27 @@ class _InternshipWatchlistCardState extends State<InternshipWatchlistCard> {
   }
 
   void openBottomSheet(BuildContext context, TransactionType type) {
-    log('data: ${widget.tradingWatchlist.toJson()}');
     FocusScope.of(context).unfocus();
-
     num lastPrice = controller.getInstrumentLastPrice(
       widget.tradingWatchlist.instrumentToken!,
       widget.tradingWatchlist.exchangeInstrumentToken!,
+    );
+    TradingInstrument tradingInstrument = TradingInstrument(
+      name: widget.tradingWatchlist.symbol,
+      instrumentType: widget.tradingWatchlist.instrument,
+      exchange: widget.tradingWatchlist.exchange,
+      tradingsymbol: widget.tradingWatchlist.symbol,
+      exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
+      instrumentToken: widget.tradingWatchlist.instrumentToken,
+      lastPrice: lastPrice,
     );
     controller.generateLotsList(type: widget.tradingWatchlist.symbol);
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: InternshipTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: widget.tradingWatchlist.symbol,
-          instrumentType: widget.tradingWatchlist.instrument,
-          exchange: widget.tradingWatchlist.exchange,
-          tradingsymbol: widget.tradingWatchlist.symbol,
-          exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
-          instrumentToken: widget.tradingWatchlist.instrumentToken,
-          lastPrice: lastPrice,
-        ),
+        tradingInstrument: tradingInstrument,
+        marginRequired: controller.getMarginRequired(type, tradingInstrument),
       ),
     );
   }

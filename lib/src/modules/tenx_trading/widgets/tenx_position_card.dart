@@ -233,13 +233,17 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                         }
                         controller.lotsValueList.assignAll(lots);
                         controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-                        var trading = TradingInstrument(
+                        TradingInstrument trading = TradingInstrument(
                           name: position.id?.symbol,
                           exchange: position.id?.exchange,
                           tradingsymbol: position.id?.symbol,
                           exchangeToken: position.id?.exchangeInstrumentToken,
                           instrumentToken: position.id?.instrumentToken,
                           lotSize: position.lots,
+                          lastPrice: controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
                         );
                         BottomSheetHelper.openBottomSheet(
                           context: context,

@@ -33,6 +33,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final isInstrumentListLoading = false.obs;
   bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
 
+  final isMarginStateLoading = false.obs;
+  bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
+
   final searchTextController = TextEditingController();
   final virtualPortfolio = VirtualTradingPortfolio().obs;
 
@@ -556,13 +559,37 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     }
   }
 
+  int calculateQuantity(type, int tradingLots, int selectQuantity) {
+    if (type == TransactionType.buy) {
+      if (tradingLots.toString().contains('-')) {
+        if (tradingLots.toString().contains('-') == selectQuantity) {
+          return 0;
+        }
+      }
+    } else if (type == TransactionType.sell || type == TransactionType.exit) {
+      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
+        return 0;
+      } else if (tradingLots.abs() <= selectQuantity) {
+        return selectQuantity - tradingLots.abs();
+      }
+    }
+    return selectQuantity;
+  }
+
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
-    isTradingOrderSheetLoading(true);
+    isMarginStateLoading(true);
+
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
-      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      buyOrSell: inst.lotSize.toString().contains('-')
+          ? type == TransactionType.buy
+              ? 'SELL'
+              : 'BUY'
+          : type == TransactionType.buy
+              ? 'BUY'
+              : 'SELL',
+      quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
       orderType: "MARKET",
       validity: "DAY",
@@ -570,6 +597,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       price: "",
       lastPrice: inst.lastPrice.toString(),
     );
+
     try {
       final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
         data.toJson(),
@@ -577,13 +605,15 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           marginRequired(response.data);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
         }
       }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     } finally {
-      isTradingOrderSheetLoading(false);
+      isMarginStateLoading(false);
     }
   }
 }

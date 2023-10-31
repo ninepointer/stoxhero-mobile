@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class InternshipPositionCard extends GetView<InternshipController> {
-  final InternshipPosition position;
+  final TradingPosition position;
 
   const InternshipPositionCard({super.key, required this.position});
 
@@ -15,42 +15,27 @@ class InternshipPositionCard extends GetView<InternshipController> {
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
     controller.generateLotsList(type: position.id?.symbol);
+    TradingInstrument trading = TradingInstrument(
+      name: position.id?.symbol,
+      exchange: position.id?.exchange,
+      tradingsymbol: position.id?.symbol,
+      exchangeToken: position.id?.exchangeInstrumentToken,
+      instrumentToken: position.id?.instrumentToken,
+      lastPrice: lastPrice,
+      lotSize: position.lots,
+    );
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: InternshipTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: position.id?.symbol,
-          exchange: position.id?.exchange,
-          tradingsymbol: position.id?.symbol,
-          exchangeToken: position.id?.exchangeInstrumentToken,
-          instrumentToken: position.id?.instrumentToken,
-          lastPrice: lastPrice,
-        ),
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    num grossPnl = controller.calculateGrossPNL(
-      position.amount ?? 0,
-      position.lots?.toInt() ?? 0,
-      controller.getInstrumentLastPrice(
-        position.id?.instrumentToken ?? 0,
-        position.id?.exchangeInstrumentToken ?? 0,
-      ),
-    );
-    num ltp = controller.getInstrumentLastPrice(
-      position.id?.instrumentToken ?? 0,
-      position.id?.exchangeInstrumentToken ?? 0,
-    );
-
-    String changes = controller.getInstrumentChanges(
-      position.id?.instrumentToken ?? 0,
-      position.id?.exchangeInstrumentToken ?? 0,
-    );
-
     return Column(
       children: [
         CommonCard(
@@ -73,10 +58,30 @@ class InternshipPositionCard extends GetView<InternshipController> {
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'Gross P&L (Profit & Loss)',
-                        valueColor: controller.getValueColor(position.lots == 0 ? position.amount : grossPnl),
+                        valueColor: controller.getValueColor(
+                          position.lots == 0
+                              ? position.amount
+                              : controller.calculateGrossPNL(
+                                  position.amount ?? 0,
+                                  position.lots?.toInt() ?? 0,
+                                  controller.getInstrumentLastPrice(
+                                    position.id?.instrumentToken ?? 0,
+                                    position.id?.exchangeInstrumentToken ?? 0,
+                                  ),
+                                ),
+                        ),
                         value: position.lots == 0
                             ? FormatHelper.formatNumbers(position.amount)
-                            : FormatHelper.formatNumbers(grossPnl),
+                            : FormatHelper.formatNumbers(
+                                controller.calculateGrossPNL(
+                                  position.amount ?? 0,
+                                  position.lots?.toInt() ?? 0,
+                                  controller.getInstrumentLastPrice(
+                                    position.id?.instrumentToken ?? 0,
+                                    position.id?.exchangeInstrumentToken ?? 0,
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ),
@@ -92,8 +97,18 @@ class InternshipPositionCard extends GetView<InternshipController> {
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'LTP (Last Traded Price)',
-                        valueColor: controller.getValueColor(ltp),
-                        value: FormatHelper.formatNumbers(ltp),
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentLastPrice(
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
+                          ),
+                        ),
+                        value: FormatHelper.formatNumbers(
+                          controller.getInstrumentLastPrice(
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -109,8 +124,16 @@ class InternshipPositionCard extends GetView<InternshipController> {
                         hasBottomMargin: false,
                         isRightAlign: true,
                         label: 'Changes(%)',
-                        valueColor: controller.getValueColor(changes),
-                        value: changes,
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentChanges(
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
+                          ),
+                        ),
+                        value: controller.getInstrumentChanges(
+                          position.id?.instrumentToken ?? 0,
+                          position.id?.exchangeInstrumentToken ?? 0,
+                        ),
                       ),
                     ],
                   ),
@@ -189,18 +212,25 @@ class InternshipPositionCard extends GetView<InternshipController> {
                         controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
                         print(controller.selectedStringQuantity.value);
                         controller.lotsValueList.assignAll(lots);
+
+                        TradingInstrument trading = TradingInstrument(
+                          name: position.id?.symbol,
+                          exchange: position.id?.exchange,
+                          tradingsymbol: position.id?.symbol,
+                          exchangeToken: position.id?.exchangeInstrumentToken,
+                          instrumentToken: position.id?.instrumentToken,
+                          lotSize: position.lots,
+                          lastPrice: controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        );
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: InternshipTransactionBottomSheet(
                             type: TransactionType.exit,
-                            tradingInstrument: TradingInstrument(
-                              name: position.id?.symbol,
-                              exchange: position.id?.exchange,
-                              tradingsymbol: position.id?.symbol,
-                              exchangeToken: position.id?.exchangeInstrumentToken,
-                              instrumentToken: position.id?.instrumentToken,
-                              lotSize: position.lots,
-                            ),
+                            tradingInstrument: trading,
+                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
                           ),
                         );
                       }
