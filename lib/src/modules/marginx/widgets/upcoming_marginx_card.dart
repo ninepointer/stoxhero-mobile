@@ -81,10 +81,9 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
               ),
               IconButton(
                 onPressed: () {
-                  showModalBottomSheet(
+                  BottomSheetHelper.openBottomSheet(
                     context: context,
-                    isScrollControlled: true,
-                    builder: (context) => MarginxInfoBottomSheet(),
+                    child: MarginxInfoBottomSheet(),
                   );
                 },
                 icon: Icon(
@@ -333,13 +332,15 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: PurchaseItemBottomSheet(
+                              productType: ProductType.marginx,
                               buyItemPrice: widget.marginx?.marginXTemplate?.entryFee ?? 0,
                               onSubmit: () {
                                 Get.back();
+                                var walletController = Get.find<WalletController>();
                                 var data = {
                                   "bonusRedemption": 0,
-                                  "coupon": "",
-                                  "entryFee": widget.marginx?.marginXTemplate?.entryFee,
+                                  "coupon": walletController.couponCodeTextController.text,
+                                  "entryFee": walletController.subscriptionAmount.value,
                                   "marginXId": widget.marginx?.id,
                                   "marginXName": widget.marginx?.marginXName,
                                 };

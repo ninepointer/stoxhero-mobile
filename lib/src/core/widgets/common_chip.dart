@@ -2,27 +2,43 @@ import 'package:flutter/material.dart';
 import '../../app/app.dart';
 
 class CommonChip extends StatelessWidget {
-  final VoidCallback? onTap;
   final String? label;
-  final Color? color;
-  const CommonChip({Key? key, this.onTap, this.label, this.color}) : super(key: key);
+  final VoidCallback? onTap;
+  final bool isSelected;
+  final EdgeInsets? margin;
+  const CommonChip({
+    Key? key,
+    this.onTap,
+    this.label,
+    this.isSelected = false,
+    this.margin,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 100,
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Align(
-          child: Text(
-            label ?? '-',
-            style: AppStyles.tsWhiteMedium14,
+    return Container(
+      margin: margin,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Chip(
+          visualDensity: VisualDensity.compact,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: AppColors.primary,
+            ),
+            borderRadius: BorderRadius.circular(50),
           ),
+          avatar: isSelected
+              ? Icon(
+                  Icons.check,
+                  color: AppColors.white,
+                )
+              : null,
+          label: Text(
+            label ?? 'Label',
+            style: isSelected ? AppStyles.tsWhiteMedium12 : AppStyles.tsPrimaryMedium12,
+          ),
+          backgroundColor: isSelected ? AppColors.primary : Theme.of(context).cardColor,
         ),
       ),
     );

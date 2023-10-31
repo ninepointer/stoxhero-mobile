@@ -2,11 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:stoxhero/src/data/models/response/tenx_my_active_subscribed_list_response.dart';
-import 'package:stoxhero/src/data/models/response/tenx_my_expired_subscription_list_response.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
 class TenxTradingBinding implements Bindings {
   @override
@@ -72,9 +69,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedSubscriptionId = ''.obs;
   final selectSubscriptionName = ''.obs;
   final selectSubscriptionAmount = 0.obs;
+  final selectedSubscription = TenxActivePlan().obs;
   final walletBalance = RxNum(0);
   final selectedWatchlistIndex = RxInt(-1);
-  final selectedSubscription = TenxActiveSubscription().obs;
 
   final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
   final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
@@ -82,7 +79,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
 
-  final tenxActiveSub = <TenxActiveSubscription>[].obs;
   final tenxPositionsList = <TenxTradingPosition>[].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
   final tenxPosition = TenxTradingPosition().obs;
@@ -94,16 +90,13 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedStringQuantity = "0".obs;
   final lotsValueList = <int>[0].obs;
 
+  final defaultSelectedValidity = PlanValidity(label: 'All', validity: 0);
+
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
   final tenxCountTradingDays = <CountTradingDays>[].obs;
   final selectedTenXSub = TenXSubscription().obs;
   final tenXSubscription = <TenXSubscription>[].obs;
-  final tenxMyActiveSubcribedList = <TenxMyActiveSubscribedList>[].obs;
-  final tenxMyActiveSubcribed = TenxMyActiveSubscribedList().obs;
-
-  final tenxMyExpiredSubcriptionList = <TenxMyExpiredSubscriptionList>[].obs;
-  final tenxMyExpiredSubcription = TenxMyExpiredSubscriptionList().obs;
 
   final tenxLeaderboard = <TenxLeaderboardList>[].obs;
   final stopLossExecutedOrdersList = <StopLossExecutedOrdersList>[].obs;
@@ -114,6 +107,29 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedGroupValue = 0.obs;
   final isMarketSelected = true.obs;
   final tenxTradeTodaysOrdersList = <TenxTradeOrder>[].obs;
+  final sendOrder = SendOrderResponse().obs;
+  final sendOrderList = <SendOrderResponse>[].obs;
+
+  final tenxAvailablePlans = <TenxActivePlan>[].obs;
+  final tenxAvailablePlansUnFiltered = <TenxActivePlan>[].obs;
+
+  final tenxSubscribedPlans = <TenxSubscribedPlan>[].obs;
+  final tenxSubscribedPlansUnFiltered = <TenxSubscribedPlan>[].obs;
+  final tenxSubscribedPlanSelected = TenxSubscribedPlan().obs;
+
+  final tenxExpiredPlans = <TenxExpiredPlan>[].obs;
+  final tenxExpiredPlansUnFiltered = <TenxExpiredPlan>[].obs;
+  final tenxExpiredPlanSelected = TenxExpiredPlan().obs;
+
+  final tenxAvailableValidityList = <PlanValidity>[].obs;
+  final tenxAvailableValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
+
+  final tenxSubscribedValidityList = <PlanValidity>[].obs;
+  final tenxSubscribedValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
+
+  final tenxExpiredValidityList = <PlanValidity>[].obs;
+  final tenxExpiredValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
+
   final marginRequired = MarginRequiredResponse().obs;
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
@@ -121,9 +137,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await getTenxTradingActiveSubs();
-    await getTenxMyActiveSubscribed();
-    await getTenxMyExpiredSubscription();
+    await getTenxActivePlans();
+    await getTenxSubscribedPlans();
+    await getTenxExpiredPlans();
     await getTenxLeaderboard();
   }
 
@@ -145,6 +161,48 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+
+  void updateTenxAvailablePlanValidity() {
+    var filteredList = <TenxActivePlan>[];
+    if (tenxAvailableValiditySelected.value.label == 'All') {
+      filteredList = tenxAvailablePlansUnFiltered;
+    } else {
+      for (var plan in tenxAvailablePlansUnFiltered) {
+        if (plan.validity == tenxAvailableValiditySelected.value.validity) {
+          filteredList.add(plan);
+        }
+      }
+    }
+    tenxAvailablePlans(filteredList);
+  }
+
+  void updateTenxSubscribedPlanValidity() {
+    var filteredList = <TenxSubscribedPlan>[];
+    if (tenxSubscribedValiditySelected.value.label == 'All') {
+      filteredList = tenxSubscribedPlansUnFiltered;
+    } else {
+      for (var plan in tenxSubscribedPlansUnFiltered) {
+        if (plan.validity == tenxSubscribedValiditySelected.value.validity) {
+          filteredList.add(plan);
+        }
+      }
+    }
+    tenxSubscribedPlans(filteredList);
+  }
+
+  void updateTenxExpiredPlanValidity() {
+    var filteredList = <TenxExpiredPlan>[];
+    if (tenxExpiredValiditySelected.value.label == 'All') {
+      filteredList = tenxExpiredPlansUnFiltered;
+    } else {
+      for (var plan in tenxExpiredPlansUnFiltered) {
+        if (plan.validity == tenxExpiredValiditySelected.value.validity) {
+          filteredList.add(plan);
+        }
+      }
+    }
+    tenxExpiredPlans(filteredList);
+  }
 
   bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
     bool isDisabled = false;
@@ -188,8 +246,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   String date() {
-    DateTime subscribedOn = DateTime.parse(tenxMyActiveSubcribed.value.subscribedOn ?? '');
-    DateTime newExpiryDate = subscribedOn.add(Duration(days: tenxMyActiveSubcribed.value.expiryDays ?? 0));
+    DateTime subscribedOn = DateTime.parse(tenxSubscribedPlanSelected.value.subscribedOn ?? '');
+    DateTime newExpiryDate = subscribedOn.add(Duration(days: tenxSubscribedPlanSelected.value.expiryDays ?? 0));
     return newExpiryDate.toString();
   }
 
@@ -447,29 +505,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     }
   }
 
-  Future getTenxTradingActiveSubs() async {
-    isActiveLoading(true);
-    try {
-      final RepoResponse<TenxTradingActiveResponse> response = await repository.getTenxActiveSubscriptions();
-      if (response.data?.status?.toLowerCase() == "success") {
-        tenxActiveSub.clear();
-        userSubscriptionsIds.clear();
-        tenxActiveSub(response.data?.data ?? []);
-        for (var userSub in userDetails.value.subscription!) {
-          if (userSub.subscriptionId != null) {
-            userSubscriptionsIds.add(userSub.subscriptionId!.id!);
-          }
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isActiveLoading(false);
-  }
-
   Future getTenxTradingWatchlist() async {
     isWatchlistStateLoading(true);
     try {
@@ -558,7 +593,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         selectedSubscriptionId.value,
       );
       if (response.data?.data != null) {
-        log('getTenxTradingPortfolioDetails');
         tenxPortfolioDetails(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -770,17 +804,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isWatchlistStateLoading(false);
   }
 
-  Future purchaseSubscription() async {
-    Get.back();
+  Future purchaseSubscription(Map<String, dynamic> data) async {
     isLoading(true);
-    var data = {
-      "bonusRedemption": 0,
-      "coupon": "",
-      "subscriptionAmount": selectedSubscription.value.discountedPrice,
-      "subscriptionName": selectedSubscription.value.planName,
-      "subscribedId": selectedSubscription.value.sId,
-    };
-    log(data.toString());
     try {
       final RepoResponse<GenericResponse> response = await repository.purchaseSubscription(
         data,
@@ -790,7 +815,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       }
       await Get.find<AuthController>().getUserDetails(navigate: false);
       loadUserDetails();
-      await getTenxTradingActiveSubs();
+      await getTenxActivePlans();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -866,7 +891,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       if (response.data != null) {
         tenXSubscription.clear();
         tenXSubscription(response.data?.data ?? []);
-        if (tenXSubscription.isNotEmpty) selectedTenXSub(tenXSubscription.first);
+        if (tenXSubscription.isNotEmpty) {
+          selectedTenXSub(tenXSubscription.first);
+        }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -877,18 +904,87 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isLoading(false);
   }
 
-  Future getTenxMyActiveSubscribed() async {
-    isSubscribeLoading(true);
+  Future getTenxActivePlans() async {
+    isActiveLoading(true);
     try {
-      final RepoResponse<TenxMyActiveSubscribedListResponse> response = await repository.getTenxMyActiveSubscribed();
+      final RepoResponse<TenxActivePlanListResponse> response = await repository.getTenxActiveSubscriptions();
       if (response.data?.status?.toLowerCase() == "success") {
-        tenxMyActiveSubcribedList.clear();
+        tenxAvailablePlans.clear();
         userSubscriptionsIds.clear();
-        tenxMyActiveSubcribedList(response.data?.data ?? []);
+        tenxAvailablePlans(response.data?.data ?? []);
+        tenxAvailablePlansUnFiltered(response.data?.data ?? []);
         for (var userSub in userDetails.value.subscription!) {
           if (userSub.subscriptionId != null) {
             userSubscriptionsIds.add(userSub.subscriptionId!.id!);
           }
+        }
+        Set<int> uniqueValues = Set<int>();
+        List<PlanValidity> result = [];
+
+        for (TenxActivePlan sub in tenxAvailablePlans) {
+          if (sub.validity != null) {
+            if (sub.validity != 0 && uniqueValues.add(sub.validity!)) {
+              result.add(PlanValidity(
+                label: '${sub.validity} Days',
+                validity: sub.validity!,
+              ));
+            }
+          }
+        }
+        result.sort(
+          (a, b) => a.validity!.compareTo(b.validity!),
+        );
+        result.insert(0, defaultSelectedValidity);
+        if (result.length.isGreaterThan(1)) {
+          tenxAvailableValidityList.clear();
+          tenxAvailableValiditySelected(defaultSelectedValidity);
+          tenxAvailableValidityList(result);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isActiveLoading(false);
+  }
+
+  Future getTenxSubscribedPlans() async {
+    isSubscribeLoading(true);
+    try {
+      final RepoResponse<TenxSubscribedPlanListResponse> response = await repository.getTenxMyActiveSubscribed();
+      if (response.data?.status?.toLowerCase() == "success") {
+        tenxSubscribedPlans.clear();
+        userSubscriptionsIds.clear();
+        tenxSubscribedPlans(response.data?.data ?? []);
+        tenxSubscribedPlansUnFiltered(response.data?.data ?? []);
+        for (var userSub in userDetails.value.subscription!) {
+          if (userSub.subscriptionId != null) {
+            userSubscriptionsIds.add(userSub.subscriptionId!.id!);
+          }
+        }
+        Set<int> uniqueValues = Set<int>();
+        List<PlanValidity> result = [];
+
+        for (TenxSubscribedPlan sub in tenxSubscribedPlans) {
+          if (sub.validity != null) {
+            if (sub.validity != 0 && uniqueValues.add(sub.validity!)) {
+              result.add(PlanValidity(
+                label: '${sub.validity} Days',
+                validity: sub.validity!,
+              ));
+            }
+          }
+        }
+        result.sort(
+          (a, b) => a.validity!.compareTo(b.validity!),
+        );
+        result.insert(0, defaultSelectedValidity);
+        if (result.length.isGreaterThan(1)) {
+          tenxSubscribedValidityList.clear();
+          tenxSubscribedValiditySelected(defaultSelectedValidity);
+          tenxSubscribedValidityList(result);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -900,19 +996,41 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isSubscribeLoading(false);
   }
 
-  Future getTenxMyExpiredSubscription() async {
+  Future getTenxExpiredPlans() async {
     isExpiredLoading(true);
     try {
-      final RepoResponse<TenxMyExpiredSubscriptionListResponse> response =
-          await repository.getTenxMyExpiredSubscription();
+      final RepoResponse<TenxExpiredPlanListResponse> response = await repository.getTenxMyExpiredSubscription();
       if (response.data?.status?.toLowerCase() == "success") {
-        tenxMyExpiredSubcriptionList.clear();
+        tenxExpiredPlans.clear();
         userSubscriptionsIds.clear();
-        tenxMyExpiredSubcriptionList(response.data?.data ?? []);
+        tenxExpiredPlans(response.data?.data ?? []);
+        tenxExpiredPlansUnFiltered(response.data?.data ?? []);
         for (var userSub in userDetails.value.subscription!) {
           if (userSub.subscriptionId != null) {
             userSubscriptionsIds.add(userSub.subscriptionId!.id!);
           }
+        }
+        Set<int> uniqueValues = Set<int>();
+        List<PlanValidity> result = [];
+
+        for (TenxExpiredPlan sub in tenxExpiredPlans) {
+          if (sub.validity != null) {
+            if (sub.validity != 0 && uniqueValues.add(sub.validity!)) {
+              result.add(PlanValidity(
+                label: '${sub.validity} Days',
+                validity: sub.validity!,
+              ));
+            }
+          }
+        }
+        result.sort(
+          (a, b) => a.validity!.compareTo(b.validity!),
+        );
+        result.insert(0, defaultSelectedValidity);
+        if (result.length.isGreaterThan(1)) {
+          tenxExpiredValidityList.clear();
+          tenxExpiredValiditySelected(defaultSelectedValidity);
+          tenxExpiredValidityList(result);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -940,17 +1058,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isLeaderboardLoading(false);
   }
 
-  Future tenxRenewSubscription() async {
-    Get.back();
+  Future tenxRenewSubscription(Map<String, dynamic> data) async {
     isLoading(true);
-    var data = {
-      "bonusRedemption": 0,
-      "coupon": "",
-      "subscriptionAmount": tenxMyActiveSubcribed.value.discountedPrice,
-      "subscriptionName": tenxMyActiveSubcribed.value.planName,
-      "subscriptionId": tenxMyActiveSubcribed.value.sId,
-    };
-    log(data.toString());
     try {
       final RepoResponse<GenericResponse> response = await repository.tenxRenewSubscription(
         data,

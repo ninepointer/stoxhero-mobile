@@ -25,10 +25,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
               ),
               IconButton(
                 onPressed: () {
-                  showModalBottomSheet(
+                  BottomSheetHelper.openBottomSheet(
                     context: context,
-                    isScrollControlled: true,
-                    builder: (context) => MarginxInfoBottomSheet(),
+                    child: MarginxInfoBottomSheet(),
                   );
                 },
                 icon: Icon(
@@ -282,13 +281,15 @@ class LiveMarginxCard extends GetView<MarginXController> {
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: PurchaseItemBottomSheet(
+                              productType: ProductType.marginx,
                               buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
                               onSubmit: () {
                                 Get.back();
+                                var walletController = Get.find<WalletController>();
                                 var data = {
                                   "bonusRedemption": 0,
-                                  "coupon": "",
-                                  "entryFee": marginx?.marginXTemplate?.entryFee,
+                                  "coupon": walletController.couponCodeTextController.text,
+                                  "entryFee": walletController.subscriptionAmount.value,
                                   "marginXId": marginx?.id,
                                   "marginXName": marginx?.marginXName,
                                 };

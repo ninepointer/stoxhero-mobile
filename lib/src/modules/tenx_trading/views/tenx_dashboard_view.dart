@@ -9,7 +9,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${controller.tenxMyActiveSubcribed.value.planName ?? 'TenX Trading'}',
+          '${controller.tenxSubscribedPlanSelected.value.planName ?? 'TenX Trading'}',
           style: Theme.of(context).textTheme.tsRegular16,
           textAlign: TextAlign.center,
         ),
@@ -88,7 +88,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                                   ),
                                   SizedBox(height: 2),
                                   Text(
-                                    'Subscribed On : ${FormatHelper.formatDateTimeToIST(controller.tenxMyActiveSubcribed.value.subscribedOn)}',
+                                    'Subscribed On : ${FormatHelper.formatDateTimeToIST(controller.tenxSubscribedPlanSelected.value.subscribedOn)}',
                                     style: AppStyles.tsSecondaryMedium12,
                                   ),
                                 ],

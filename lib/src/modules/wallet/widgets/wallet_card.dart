@@ -60,12 +60,13 @@ class WalletCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: 12),
-            CommonFilledButton(
-              height: 32,
-              width: 120,
-              label: buttonLabel,
-              onPressed: onPressed,
-            )
+            if (onPressed != null)
+              CommonFilledButton(
+                height: 32,
+                width: 120,
+                label: buttonLabel,
+                onPressed: onPressed,
+              )
           ],
         )
       ],

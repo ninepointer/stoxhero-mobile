@@ -1,15 +1,17 @@
-class TenxMyExpiredSubscriptionListResponse {
+import '../../../app/app.dart';
+
+class TenxExpiredPlanListResponse {
   String? status;
-  List<TenxMyExpiredSubscriptionList>? data;
+  List<TenxExpiredPlan>? data;
 
-  TenxMyExpiredSubscriptionListResponse({this.status, this.data});
+  TenxExpiredPlanListResponse({this.status, this.data});
 
-  TenxMyExpiredSubscriptionListResponse.fromJson(Map<String, dynamic> json) {
+  TenxExpiredPlanListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <TenxMyExpiredSubscriptionList>[];
+      data = <TenxExpiredPlan>[];
       json['data'].forEach((v) {
-        data!.add(new TenxMyExpiredSubscriptionList.fromJson(v));
+        data!.add(new TenxExpiredPlan.fromJson(v));
       });
     }
   }
@@ -24,7 +26,7 @@ class TenxMyExpiredSubscriptionListResponse {
   }
 }
 
-class TenxMyExpiredSubscriptionList {
+class TenxExpiredPlan {
   String? sId;
   String? planName;
   int? expiryDays;
@@ -36,21 +38,24 @@ class TenxMyExpiredSubscriptionList {
   String? status;
   String? subscribedOn;
   String? expiredOn;
+  int? validity;
 
-  TenxMyExpiredSubscriptionList(
-      {this.sId,
-      this.planName,
-      this.expiryDays,
-      this.payoutPercentage,
-      this.features,
-      this.portfolioValue,
-      this.user,
-      this.fee,
-      this.status,
-      this.subscribedOn,
-      this.expiredOn});
+  TenxExpiredPlan({
+    this.sId,
+    this.planName,
+    this.expiryDays,
+    this.payoutPercentage,
+    this.features,
+    this.portfolioValue,
+    this.user,
+    this.fee,
+    this.status,
+    this.subscribedOn,
+    this.expiredOn,
+    this.validity,
+  });
 
-  TenxMyExpiredSubscriptionList.fromJson(Map<String, dynamic> json) {
+  TenxExpiredPlan.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     planName = json['plan_name'];
     expiryDays = json['expiryDays'];
@@ -67,6 +72,7 @@ class TenxMyExpiredSubscriptionList {
     status = json['status'];
     subscribedOn = json['subscribedOn'];
     expiredOn = json['expiredOn'];
+    validity = json['validity'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,28 +90,7 @@ class TenxMyExpiredSubscriptionList {
     data['status'] = this.status;
     data['subscribedOn'] = this.subscribedOn;
     data['expiredOn'] = this.expiredOn;
-    return data;
-  }
-}
-
-class Features {
-  int? orderNo;
-  String? description;
-  String? sId;
-
-  Features({this.orderNo, this.description, this.sId});
-
-  Features.fromJson(Map<String, dynamic> json) {
-    orderNo = json['orderNo'];
-    description = json['description'];
-    sId = json['_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['orderNo'] = this.orderNo;
-    data['description'] = this.description;
-    data['_id'] = this.sId;
+    data['validity'] = this.validity;
     return data;
   }
 }

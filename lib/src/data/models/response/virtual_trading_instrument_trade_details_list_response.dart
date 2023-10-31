@@ -1,3 +1,5 @@
+import '../../../app/app.dart';
+
 class VirtualTradingInstrumentTradeDetailsListResponse {
   List<VirtualTradingInstrumentTradeDetails>? data;
 
@@ -21,7 +23,7 @@ class VirtualTradingInstrumentTradeDetails {
   int? volumeTraded;
   int? totalBuyQuantity;
   int? totalSellQuantity;
-  VOhlc? ohlc;
+  Ohlc? ohlc;
   num? change;
   String? lastTradeTime;
   String? exchangeTimestamp;
@@ -59,7 +61,7 @@ class VirtualTradingInstrumentTradeDetails {
     volumeTraded = json['volume_traded'];
     totalBuyQuantity = json['total_buy_quantity'];
     totalSellQuantity = json['total_sell_quantity'];
-    ohlc = json['ohlc'] != null ? new VOhlc.fromJson(json['ohlc']) : null;
+    ohlc = json['ohlc'] != null ? new Ohlc.fromJson(json['ohlc']) : null;
     change = json['change'];
     lastTradeTime = json['last_trade_time'];
     exchangeTimestamp = json['exchange_timestamp'];
@@ -92,108 +94,6 @@ class VirtualTradingInstrumentTradeDetails {
     if (this.depth != null) {
       data['depth'] = this.depth!.toJson();
     }
-    return data;
-  }
-}
-
-class VOhlc {
-  num? open;
-  num? high;
-  num? low;
-  num? close;
-
-  VOhlc({this.open, this.high, this.low, this.close});
-
-  VOhlc.fromJson(Map<String, dynamic> json) {
-    open = json['open'];
-    high = json['high'];
-    low = json['low'];
-    close = json['close'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['open'] = this.open;
-    data['high'] = this.high;
-    data['low'] = this.low;
-    data['close'] = this.close;
-    return data;
-  }
-}
-
-class Depth {
-  List<Buy>? buy;
-  List<Sell>? sell;
-
-  Depth({this.buy, this.sell});
-
-  Depth.fromJson(Map<String, dynamic> json) {
-    if (json['buy'] != null) {
-      buy = <Buy>[];
-      json['buy'].forEach((v) {
-        buy!.add(new Buy.fromJson(v));
-      });
-    }
-    if (json['sell'] != null) {
-      sell = <Sell>[];
-      json['sell'].forEach((v) {
-        sell!.add(new Sell.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.buy != null) {
-      data['buy'] = this.buy!.map((v) => v.toJson()).toList();
-    }
-    if (this.sell != null) {
-      data['sell'] = this.sell!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Buy {
-  int? quantity;
-  num? price;
-  int? orders;
-
-  Buy({this.quantity, this.price, this.orders});
-
-  Buy.fromJson(Map<String, dynamic> json) {
-    quantity = json['quantity'];
-    price = json['price'];
-    orders = json['orders'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['quantity'] = this.quantity;
-    data['price'] = this.price;
-    data['orders'] = this.orders;
-    return data;
-  }
-}
-
-class Sell {
-  int? quantity;
-  num? price;
-  int? orders;
-
-  Sell({this.quantity, this.price, this.orders});
-
-  Sell.fromJson(Map<String, dynamic> json) {
-    quantity = json['quantity'];
-    price = json['price'];
-    orders = json['orders'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['quantity'] = this.quantity;
-    data['price'] = this.price;
-    data['orders'] = this.orders;
     return data;
   }
 }

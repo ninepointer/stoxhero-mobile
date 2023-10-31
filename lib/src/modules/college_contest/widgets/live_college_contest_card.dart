@@ -307,13 +307,15 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: PurchaseItemBottomSheet(
+                            productType: ProductType.collegeContest,
                             buyItemPrice: contest?.entryFee ?? 0,
                             onSubmit: () {
                               Get.back();
+                              var walletController = Get.find<WalletController>();
                               var data = {
                                 "bonusRedemption": 0,
-                                "coupon": "",
-                                "contestFee": contest?.entryFee,
+                                "coupon": walletController.couponCodeTextController.text,
+                                "contestFee": walletController.subscriptionAmount.value,
                                 "contestId": contest?.id,
                                 "contestName": contest?.contestName,
                               };

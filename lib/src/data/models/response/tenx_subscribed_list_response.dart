@@ -1,15 +1,17 @@
-class TenxMyActiveSubscribedListResponse {
+import '../../../app/app.dart';
+
+class TenxSubscribedPlanListResponse {
   String? status;
-  List<TenxMyActiveSubscribedList>? data;
+  List<TenxSubscribedPlan>? data;
 
-  TenxMyActiveSubscribedListResponse({this.status, this.data});
+  TenxSubscribedPlanListResponse({this.status, this.data});
 
-  TenxMyActiveSubscribedListResponse.fromJson(Map<String, dynamic> json) {
+  TenxSubscribedPlanListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <TenxMyActiveSubscribedList>[];
+      data = <TenxSubscribedPlan>[];
       json['data'].forEach((v) {
-        data!.add(new TenxMyActiveSubscribedList.fromJson(v));
+        data!.add(new TenxSubscribedPlan.fromJson(v));
       });
     }
   }
@@ -24,7 +26,7 @@ class TenxMyActiveSubscribedListResponse {
   }
 }
 
-class TenxMyActiveSubscribedList {
+class TenxSubscribedPlan {
   String? sId;
   String? planName;
   num? discountedPrice;
@@ -37,22 +39,25 @@ class TenxMyActiveSubscribedList {
   num? fee;
   String? status;
   String? subscribedOn;
+  int? validity;
 
-  TenxMyActiveSubscribedList(
-      {this.sId,
-      this.planName,
-      this.discountedPrice,
-      this.expiryDays,
-      this.payoutPercentage,
-      this.features,
-      this.allowRenewal,
-      this.portfolioValue,
-      this.user,
-      this.fee,
-      this.status,
-      this.subscribedOn});
+  TenxSubscribedPlan({
+    this.sId,
+    this.planName,
+    this.discountedPrice,
+    this.expiryDays,
+    this.payoutPercentage,
+    this.features,
+    this.allowRenewal,
+    this.portfolioValue,
+    this.user,
+    this.fee,
+    this.status,
+    this.subscribedOn,
+    this.validity,
+  });
 
-  TenxMyActiveSubscribedList.fromJson(Map<String, dynamic> json) {
+  TenxSubscribedPlan.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     planName = json['plan_name'];
     discountedPrice = json['discounted_price'];
@@ -70,6 +75,7 @@ class TenxMyActiveSubscribedList {
     fee = json['fee'];
     status = json['status'];
     subscribedOn = json['subscribedOn'];
+    validity = json['validity'];
   }
 
   Map<String, dynamic> toJson() {
@@ -88,28 +94,7 @@ class TenxMyActiveSubscribedList {
     data['fee'] = this.fee;
     data['status'] = this.status;
     data['subscribedOn'] = this.subscribedOn;
-    return data;
-  }
-}
-
-class Features {
-  int? orderNo;
-  String? description;
-  String? sId;
-
-  Features({this.orderNo, this.description, this.sId});
-
-  Features.fromJson(Map<String, dynamic> json) {
-    orderNo = json['orderNo'];
-    description = json['description'];
-    sId = json['_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['orderNo'] = this.orderNo;
-    data['description'] = this.description;
-    data['_id'] = this.sId;
+    data['validity'] = this.validity;
     return data;
   }
 }

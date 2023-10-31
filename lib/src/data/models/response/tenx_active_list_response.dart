@@ -1,17 +1,17 @@
 import '../models.dart';
 
-class TenxTradingActiveResponse {
+class TenxActivePlanListResponse {
   String? status;
-  List<TenxActiveSubscription>? data;
+  List<TenxActivePlan>? data;
 
-  TenxTradingActiveResponse({this.status, this.data});
+  TenxActivePlanListResponse({this.status, this.data});
 
-  TenxTradingActiveResponse.fromJson(Map<String, dynamic> json) {
+  TenxActivePlanListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <TenxActiveSubscription>[];
+      data = <TenxActivePlan>[];
       json['data'].forEach((v) {
-        data!.add(new TenxActiveSubscription.fromJson(v));
+        data!.add(new TenxActivePlan.fromJson(v));
       });
     }
   }
@@ -26,7 +26,7 @@ class TenxTradingActiveResponse {
   }
 }
 
-class TenxActiveSubscription {
+class TenxActivePlan {
   String? sId;
   String? planName;
   num? actualPrice;
@@ -42,7 +42,7 @@ class TenxActiveSubscription {
   bool? allowPurchase;
   bool? allowRenewal;
 
-  TenxActiveSubscription(
+  TenxActivePlan(
       {this.sId,
       this.planName,
       this.actualPrice,
@@ -58,7 +58,7 @@ class TenxActiveSubscription {
       this.allowPurchase,
       this.allowRenewal});
 
-  TenxActiveSubscription.fromJson(Map<String, dynamic> json) {
+  TenxActivePlan.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     planName = json['plan_name'];
     actualPrice = json['actual_price'];

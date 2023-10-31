@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,9 @@ class WalletController extends BaseController<WalletRepository> {
   final isSuccessLoading = false.obs;
   bool get isSuccessLoadingStatus => isSuccessLoading.value;
 
+  final isCouponCodeLoading = false.obs;
+  bool get isCouponCodeLoadingStatus => isCouponCodeLoading.value;
+
   final totalCashAmount = RxNum(0);
   final walletTransactionsList = <WalletTransaction>[].obs;
   final withdrawalTransactionsList = <MyWithdrawalsList>[].obs;
@@ -34,6 +38,12 @@ class WalletController extends BaseController<WalletRepository> {
 
   final selectedTabBarIndex = 0.obs;
   final selectedSecondTabBarIndex = 0.obs;
+
+  final couponCodeTextController = TextEditingController();
+  final isCouponCodeAdded = false.obs;
+  final couponCodeSuccessText = "".obs;
+  final actualSubscriptionAmount = 0.0.obs;
+  final subscriptionAmount = 0.0.obs;
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
   void changeSecondTabBarIndex(int val) => selectedSecondTabBarIndex.value = val;
@@ -52,6 +62,47 @@ class WalletController extends BaseController<WalletRepository> {
   void loadData() async {
     getWalletTransactionsList();
     getMyWithdrawalsTransactionsList();
+  }
+
+  void removeCouponCode() {
+    couponCodeSuccessText("");
+    isCouponCodeAdded(false);
+    subscriptionAmount(actualSubscriptionAmount.value);
+    couponCodeTextController.clear();
+  }
+
+  void calculateDiscount({
+    String? couponCode,
+    String? discountType,
+    String? rewardType,
+    num? discount,
+    num? maxDiscount = 1000,
+    num? planAmount,
+  }) {
+    if (rewardType == 'Discount') {
+      if (discountType == 'Flat') {
+        subscriptionAmount((planAmount! - discount!).toDouble());
+      } else if (discountType == 'Percentage') {
+        double maxDiscountAmount = (planAmount! * (discount! / 100)).toDouble();
+        if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
+          subscriptionAmount((planAmount - maxDiscount).toDouble());
+        } else {
+          subscriptionAmount(planAmount - (planAmount * (discount / 100))).clamp(0, maxDiscount).toDouble();
+        }
+      }
+    } else {
+      if (discountType == 'Flat') {
+        subscriptionAmount((planAmount! - discount!).toDouble());
+      } else if (discountType == 'Percentage') {
+        double maxDiscountAmount = (planAmount! * (discount! / 100)).toDouble();
+        if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
+          subscriptionAmount((planAmount - maxDiscount).toDouble());
+        } else {
+          subscriptionAmount(planAmount - (planAmount * (discount / 100))).clamp(0, maxDiscount).toDouble();
+        }
+      }
+    }
+    couponCodeSuccessText("Applied $couponCode - (₹$discount% off upto ₹$maxDiscount)");
   }
 
   Future getWalletTransactionsList() async {
@@ -113,5 +164,55 @@ class WalletController extends BaseController<WalletRepository> {
     }
 
     isLoading(false);
+  }
+
+  Future verifyCouponCode(BuildContext context, ProductType productType, num amount) async {
+    isCouponCodeAdded(false);
+    if (couponCodeTextController.text.isEmpty) {
+      SnackbarHelper.showSnackbar('Enter valid coupon code!');
+      return;
+    }
+    FocusScope.of(context).unfocus();
+    isCouponCodeLoading(true);
+
+    String product = '';
+
+    if (productType == ProductType.contest) {
+      product = '6517d48d3aeb2bb27d650de5';
+    } else if (productType == ProductType.tenx) {
+      product = '6517d3803aeb2bb27d650de0';
+    } else if (productType == ProductType.marginx) {
+      product = '6517d40e3aeb2bb27d650de1';
+    }
+
+    var data = VerifyCouponCodeRequest(
+      code: couponCodeTextController.text.trim(),
+      product: product,
+      orderValue: amount,
+      paymentMode: 'wallet',
+      platform: Platform.isAndroid ? 'Android' : 'iOS',
+    );
+
+    try {
+      final RepoResponse<VerifyCouponCodeResponse> response = await repository.verifyCouponCode(data.toJson());
+      if (response.data != null && response.data?.status == 'success') {
+        var couponData = response.data?.data;
+        isCouponCodeAdded(true);
+        calculateDiscount(
+          couponCode: couponCodeTextController.text.trim(),
+          discountType: couponData?.discountType,
+          rewardType: couponData?.rewardType,
+          discount: couponData?.discount,
+          maxDiscount: couponData?.maxDiscount,
+          planAmount: amount,
+        );
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isCouponCodeLoading(false);
   }
 }

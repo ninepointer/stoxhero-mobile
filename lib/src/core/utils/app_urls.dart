@@ -45,6 +45,7 @@ class AppUrls {
 
   static const String infinityTradeTodaysOrders = "$apiURL/infinityTrade/my/todayorders";
   static const String infinityTradeAllOrders = "$apiURL/infinityTrade/my/historyorders";
+  static const String verifyCouponCode = "$apiURL/coupons/verify";
 
   static const String paperTradeTodaysOrders = "$apiURL/paperTrade/my/todayorders";
   static const String paperTradeAllOrders = "$apiURL/paperTrade/my/historyorders";

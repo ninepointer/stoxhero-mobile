@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/tenx_my_expired_subscription_list_response.dart';
+import '../../../data/models/response/tenx_expired_list_response.dart';
 
 class TenxExpiredCard extends GetView<TenxTradingController> {
-  final TenxMyExpiredSubscriptionList subscription;
+  final TenxExpiredPlan subscription;
 
   const TenxExpiredCard({
     super.key,
@@ -34,7 +34,7 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
             label: subscription.features?[index].description ?? '-',
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 12),
         Column(
           children: [
             Row(
@@ -54,13 +54,15 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Subscription',
+                            'Subscription Price',
                             style: AppStyles.tsSecondaryMedium12,
                           ),
                           SizedBox(width: 4),
                           Text(
                             '₹${subscription.fee}',
-                            style: AppStyles.tsSecondaryMedium14,
+                            style: AppStyles.tsSecondaryMedium14.copyWith(
+                              color: AppColors.success,
+                            ),
                           ),
                         ],
                       ),
@@ -130,26 +132,35 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.all(12).copyWith(bottom: 8, top: 8),
+        SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
           child: Row(
             children: [
               Expanded(
                 child: CommonFilledButton(
-                  backgroundColor: AppColors.secondary.withOpacity(.8),
-                  height: 40,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  labelColor: AppColors.secondary,
+                  backgroundColor: AppColors.secondary.withOpacity(.25),
+                  height: 32,
                   label: 'Analytics',
                   onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
                 ),
               ),
-              SizedBox(width: 4),
               Expanded(
                 child: CommonFilledButton(
-                  backgroundColor: AppColors.info.withOpacity(.8),
-                  height: 40,
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.orders);
-                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  labelColor: AppColors.info,
+                  backgroundColor: AppColors.info.withOpacity(.25),
+                  height: 32,
+                  onPressed: () => Get.toNamed(AppRoutes.orders),
                   label: 'Order Book',
                 ),
               ),

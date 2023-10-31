@@ -35,6 +35,7 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
               SizedBox(height: 16),
               CommonCard(
                 margin: EdgeInsets.zero,
+                padding: EdgeInsets.all(12),
                 children: [
                   Row(
                     children: [
@@ -48,7 +49,9 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
                           controller.totalCashAmount.value,
                           decimal: 0,
                         ),
-                        style: Theme.of(context).textTheme.tsMedium20,
+                        style: Theme.of(context).textTheme.tsMedium20.copyWith(
+                              color: AppColors.success,
+                            ),
                       ),
                     ],
                   ),

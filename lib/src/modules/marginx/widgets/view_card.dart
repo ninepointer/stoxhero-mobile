@@ -330,18 +330,19 @@ class _ViewCardState extends State<ViewCard> {
                                     BottomSheetHelper.openBottomSheet(
                                       context: context,
                                       child: PurchaseItemBottomSheet(
+                                        productType: ProductType.marginx,
                                         buyItemPrice: widget.liveMarginX?.marginXTemplate?.entryFee ?? 0,
                                         onSubmit: () {
                                           Get.back();
+                                          var walletController = Get.find<WalletController>();
                                           var data = {
                                             "bonusRedemption": 0,
-                                            "coupon": "",
-                                            "entryFee": widget.liveMarginX?.marginXTemplate?.entryFee,
+                                            "coupon": walletController.couponCodeTextController.text,
+                                            "entryFee": walletController.subscriptionAmount.value,
                                             "marginXId": widget.liveMarginX?.id,
                                             "marginXName": widget.liveMarginX?.marginXName,
                                           };
                                           controller.purchaseMarginX(data);
-                                          Get.back();
                                         },
                                       ),
                                     );
@@ -353,13 +354,15 @@ class _ViewCardState extends State<ViewCard> {
                                     BottomSheetHelper.openBottomSheet(
                                       context: context,
                                       child: PurchaseItemBottomSheet(
+                                        productType: ProductType.marginx,
                                         buyItemPrice: widget.upcomingMarginX?.marginXTemplate?.entryFee ?? 0,
                                         onSubmit: () {
                                           Get.back();
+                                          var walletController = Get.find<WalletController>();
                                           var data = {
                                             "bonusRedemption": 0,
-                                            "coupon": "",
-                                            "entryFee": widget.upcomingMarginX?.marginXTemplate?.entryFee,
+                                            "coupon": walletController.couponCodeTextController.text,
+                                            "entryFee": walletController.subscriptionAmount.value,
                                             "marginXId": widget.upcomingMarginX?.id,
                                             "marginXName": widget.upcomingMarginX?.marginXName,
                                           };

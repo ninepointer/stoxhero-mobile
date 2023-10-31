@@ -8,6 +8,7 @@ import 'package:stoxhero/src/data/data.dart';
 import 'package:stoxhero/src/modules/contest/contest_index.dart';
 
 import '../../../core/core.dart';
+import '../../modules.dart';
 
 class UpComingContestCard extends StatefulWidget {
   final String userId;
@@ -370,13 +371,15 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                               BottomSheetHelper.openBottomSheet(
                                 context: context,
                                 child: PurchaseItemBottomSheet(
+                                  productType: ProductType.contest,
                                   buyItemPrice: widget.contest?.entryFee ?? 0,
                                   onSubmit: () {
                                     Get.back();
+                                    var walletController = Get.find<WalletController>();
                                     var data = {
                                       "bonusRedemption": 0,
-                                      "coupon": "",
-                                      "contestFee": widget.contest?.entryFee,
+                                      "coupon": walletController.couponCodeTextController.text,
+                                      "contestFee": walletController.subscriptionAmount.value,
                                       "contestId": widget.contest?.id,
                                       "contestName": widget.contest?.contestName,
                                     };

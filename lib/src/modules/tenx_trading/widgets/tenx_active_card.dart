@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../app/app.dart';
 
 class TenxActiveCard extends GetView<TenxTradingController> {
-  final TenxActiveSubscription subscription;
+  final TenxActivePlan subscription;
   final bool isActive;
 
   const TenxActiveCard({
@@ -64,36 +64,10 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '₹${subscription.actualPrice}',
-                              style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                                    decoration: TextDecoration.lineThrough,
-                                    decorationStyle: TextDecorationStyle.solid,
-                                    color: AppColors.danger,
-                                  ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Icon(
-                                Icons.circle,
-                                size: 8,
-                              ),
-                            ),
-                            Text(
-                              'Save',
+                              'Subscription Price',
                               style: AppStyles.tsSecondaryMedium14,
                             ),
                             SizedBox(width: 4),
-                            Text(
-                              '${controller.calculateSavingsPercentage(subscription.actualPrice, subscription.discountedPrice).toStringAsFixed(0)}%',
-                              style: AppStyles.tsSecondaryMedium14,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Icon(
-                                Icons.circle,
-                                size: 8,
-                              ),
-                            ),
                             Text(
                               '₹${subscription.discountedPrice}',
                               style: AppStyles.tsSecondaryMedium14.copyWith(
@@ -143,16 +117,24 @@ class TenxActiveCard extends GetView<TenxTradingController> {
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.all(12).copyWith(bottom: 8, top: 8),
+        SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(8),
+            bottomRight: Radius.circular(8),
+          ),
           child: Column(
             children: [
               Row(
                 children: [
                   Expanded(
                     child: CommonFilledButton(
-                      backgroundColor: AppColors.info.withOpacity(.8),
-                      height: 40,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      labelColor: AppColors.info,
+                      backgroundColor: AppColors.info.withOpacity(.25),
+                      height: 32,
                       label: 'Learn More',
                       onPressed: () {
                         controller.tenxCountTradingDays();
@@ -160,19 +142,21 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                         controller.selectSubscriptionName(subscription.planName ?? '');
                         controller.selectedSubscription(subscription);
                         controller.selectSubscriptionAmount(subscription.portfolio?.portfolioValue?.toInt());
-                        showModalBottomSheet(
+                        BottomSheetHelper.openBottomSheet(
                           context: context,
-                          isScrollControlled: true,
-                          builder: (context) => TenxLearnMoreInfo(),
+                          child: TenxLearnMoreInfo(),
                         );
                       },
                     ),
                   ),
-                  SizedBox(width: 4),
                   Expanded(
                     child: CommonFilledButton(
-                      backgroundColor: AppColors.danger.withOpacity(.8),
-                      height: 40,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      labelColor: AppColors.danger,
+                      backgroundColor: AppColors.danger.withOpacity(.25),
+                      height: 32,
                       label: 'Watch Videos',
                       onPressed: () async {
                         controller.selectedSubscriptionId(subscription.sId);
@@ -186,33 +170,44 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                   ),
                 ],
               ),
-              SizedBox(height: 4),
               if (subscription.allowPurchase == true) ...[
                 CommonFilledButton(
-                  backgroundColor: AppColors.success.withOpacity(.8),
-                  height: 40,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  labelColor: AppColors.success,
+                  backgroundColor: AppColors.success.withOpacity(.25),
+                  height: 32,
                   onPressed: isActive
                       ? () {}
                       : () {
                           controller.selectedSubscriptionId(subscription.sId);
                           controller.selectedSubscription(subscription);
                           controller.purchaseIntent();
+
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: PurchaseItemBottomSheet(
-                              buyItemPrice: controller.selectedSubscription.value.discountedPrice ?? 0,
-                              onSubmit: () => controller.purchaseSubscription(),
+                              productType: ProductType.tenx,
+                              buyItemPrice: subscription.discountedPrice ?? 0,
+                              onSubmit: () {
+                                Get.back();
+                                var walletController = Get.find<WalletController>();
+                                var data = {
+                                  "bonusRedemption": 0,
+                                  "coupon": walletController.couponCodeTextController.text,
+                                  "subscriptionAmount": walletController.subscriptionAmount.value,
+                                  "subscriptionName": subscription.planName,
+                                  "subscribedId": subscription.sId,
+                                };
+                                controller.purchaseSubscription(data);
+                              },
                             ),
                           );
                         },
                   label: isActive ? 'Already Subscribed' : 'Subscribe',
                 )
-              ] else
-                CommonOutlinedButton(
-                  height: 40,
-                  onPressed: () {},
-                  label: 'Subscription Not Allowed',
-                ),
+              ]
             ],
           ),
         ),

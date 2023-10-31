@@ -15,6 +15,7 @@ class _TenxInfoCardState extends State<TenxInfoCard> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      margin: EdgeInsets.symmetric(horizontal: 16),
       onTap: () => setState(() => isExpanded = !isExpanded),
       children: [
         Row(
@@ -22,7 +23,7 @@ class _TenxInfoCardState extends State<TenxInfoCard> {
           children: [
             Text(
               'What is TenX Trading / TenX ट्रेडिंग क्या है?',
-              style: AppStyles.tsSecondaryRegular16,
+              style: AppStyles.tsSecondaryRegular14,
             ),
             Icon(
               isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
