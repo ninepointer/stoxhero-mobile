@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/data/data.dart';
-import 'package:stoxhero/src/modules/contest/contest_index.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';

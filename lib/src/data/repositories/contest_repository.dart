@@ -101,12 +101,12 @@ class ContestRepository extends BaseRepository {
         : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestPositionListResponse>> getContestPositions(String? id) async {
+  Future<RepoResponse<TradingPositionListResponse>> getContestPositions(String? id) async {
     String apiURL = AppUrls.contestPosition(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: ContestPositionListResponse.fromJson(response));
+        : RepoResponse(data: TradingPositionListResponse.fromJson(response));
   }
 
   Future<RepoResponse<ContestOrderResponse>> getCompletedContestOrders(String? id) async {

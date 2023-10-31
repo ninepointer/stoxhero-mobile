@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class TenxPositionCard extends GetView<TenxTradingController> {
-  final TenxTradingPosition position;
+  final TradingPosition position;
   const TenxPositionCard({super.key, required this.position});
 
   void openBottomSheet(BuildContext context, TransactionType type) {

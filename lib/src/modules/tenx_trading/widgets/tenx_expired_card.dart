@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/tenx_expired_list_response.dart';
 
 class TenxExpiredCard extends GetView<TenxTradingController> {
   final TenxExpiredPlan subscription;

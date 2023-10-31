@@ -27,12 +27,12 @@ class VirtualTradingRepository extends BaseRepository {
         : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
-  Future<RepoResponse<VirtualTradingPositionListResponse>> getVirtualPositions() async {
+  Future<RepoResponse<TradingPositionListResponse>> getVirtualPositions() async {
     String apiURL = AppUrls.paperTradePosition;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: VirtualTradingPositionListResponse.fromJson(response));
+        : RepoResponse(data: TradingPositionListResponse.fromJson(response));
   }
 
   Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(String? value) async {

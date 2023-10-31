@@ -9,7 +9,7 @@ import '../../modules.dart';
 class LiveContestCard extends GetView<ContestController> {
   final String userId;
   final LiveContest? contest;
-  final ContestPosition? contestPositionList;
+  final TradingPosition? contestPositionList;
   final ContestCreditData? contestPortfolio;
   final EdgeInsets? margin;
   const LiveContestCard({

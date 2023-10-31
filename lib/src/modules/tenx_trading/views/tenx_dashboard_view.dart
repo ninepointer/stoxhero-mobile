@@ -304,10 +304,10 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         : controller.tenxPortfolioDetails.value.totalFund,
                   ),
                   PortfolioDetailCardTile(
-                    label: 'UnRealised Profit & Loss',
+                    label: 'Unrealised Profit & Loss',
                     info: 'Increased value of your investment',
-                    value: '0',
-                  ), 
+                    value: controller.calculateUnRealisedPNL(),
+                  ),
                   SizedBox(height: 56),
                 ],
               ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class MarginXPositionCard extends GetView<MarginXController> {
-  final MarginXPositionList position;
+  final TradingPosition position;
 
   const MarginXPositionCard({super.key, required this.position});
 

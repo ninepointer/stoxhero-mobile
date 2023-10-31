@@ -86,6 +86,18 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                                 instrumentToken: data.instrumentToken,
                                 lastPrice: lastPrice,
                               ),
+                              marginRequired: controller.getMarginRequired(
+                                type,
+                                TradingInstrument(
+                                  name: data.tradingsymbol,
+                                  instrumentType: data.instrumentType,
+                                  exchange: data.exchange,
+                                  tradingsymbol: data.tradingsymbol,
+                                  exchangeToken: data.exchangeToken,
+                                  instrumentToken: data.instrumentToken,
+                                  lastPrice: lastPrice,
+                                ),
+                              ),
                             ),
                           );
                         }

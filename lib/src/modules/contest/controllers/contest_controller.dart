@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
 class ContestBinding implements Bindings {
   @override
@@ -82,7 +81,7 @@ class ContestController extends BaseController<ContestRepository> {
   final livePremiumContestList = <LiveContest>[].obs;
   final liveFreeContestList = <LiveContest>[].obs;
   final contestWatchList = <ContestWatchList>[].obs;
-  final contestPositionsList = <ContestPosition>[].obs;
+  final contestPositionsList = <TradingPosition>[].obs;
   final contestPortfolio = ContestCreditData().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final contestRequest = ContestPlaceOrderRequest().obs;
@@ -357,12 +356,12 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   num calculateMargin() {
-    num amount = 0;
     num lots = 0;
+    num margin = 0;
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
-        amount += position.amount!.abs();
         lots += position.lots ?? 0;
+        margin += position.lots ?? 0;
       }
     }
     num openingBalance = 0;
@@ -373,11 +372,9 @@ class ContestController extends BaseController<ContestRepository> {
     } else {
       openingBalance = totalFund;
     }
-    num availableMargin = openingBalance != 0
-        ? lots == 0
-            ? openingBalance + calculateTotalNetPNL()
-            : openingBalance - amount
-        : totalFund;
+    num availableMargin = (calculateTotalNetPNL() < 0)
+        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        : (openingBalance - margin);
     return availableMargin;
   }
 
@@ -668,7 +665,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestPositions() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<ContestPositionListResponse> response =
+      final RepoResponse<TradingPositionListResponse> response =
           await repository.getContestPositions(liveContest.value.id);
       if (response.data != null) {
         if (response.data?.data! != null) {

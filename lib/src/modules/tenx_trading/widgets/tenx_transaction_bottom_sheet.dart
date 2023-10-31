@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -115,7 +113,10 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   SizedBox(height: 16),
                   DropdownButtonFormField2<int>(
                     value: controller.selectedQuantity.value,
-                    onChanged: (value) => controller.selectedQuantity(value),
+                    onChanged: (value) {
+                      controller.selectedQuantity(value);
+                      controller.getMarginRequired(type, tradingInstrument);
+                    },
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
                       return DropdownMenuItem<int>(
@@ -327,14 +328,10 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           Row(
                             children: [
                               Text(
-                                (type == TransactionType.sell || type == TransactionType.exit) &&
-                                        tradingInstrument.lotSize == controller.selectedQuantity.value
+                                ((type == TransactionType.sell || type == TransactionType.exit) &&
+                                        (tradingInstrument.lotSize == controller.selectedQuantity.value))
                                     ? "₹0.0"
-                                    : (type == TransactionType.buy ||
-                                            (tradingInstrument.lotSize.toString().contains('-') ==
-                                                controller.selectedQuantity.value))
-                                        ? "₹0.0"
-                                        : FormatHelper.formatNumbers(controller.marginRequired.value.margin),
+                                    : FormatHelper.formatNumbers(controller.marginRequired.value.margin),
                                 style: Theme.of(context).textTheme.tsMedium14,
                               ),
                               IconButton(
@@ -352,15 +349,23 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     isLoading: controller.isTradingOrderSheetLoading.value,
                     backgroundColor: type == TransactionType.exit
                         ? AppColors.warning
-                        : type == TransactionType.buy
-                            ? AppColors.success
-                            : AppColors.danger,
+                        : controller.selectedStringQuantity.contains('-')
+                            ? type == TransactionType.sell
+                                ? AppColors.success
+                                : AppColors.danger
+                            : type == TransactionType.buy
+                                ? AppColors.success
+                                : AppColors.danger,
                     margin: EdgeInsets.symmetric(vertical: 24),
                     label: type == TransactionType.exit
                         ? 'Exit'
-                        : type == TransactionType.buy
-                            ? 'BUY'
-                            : 'SELL',
+                        : controller.selectedStringQuantity.contains('-')
+                            ? type == TransactionType.buy
+                                ? 'SELL'
+                                : 'BUY'
+                            : type == TransactionType.buy
+                                ? 'BUY'
+                                : 'SELL',
                     onPressed: () {
                       if (controller.selectedGroupValue.value == 3 &&
                           controller.stopLossPriceTextController.text.isEmpty &&

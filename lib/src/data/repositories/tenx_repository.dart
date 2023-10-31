@@ -1,8 +1,6 @@
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
-import '../models/response/tenx_subscribed_list_response.dart';
-import '../models/response/tenx_expired_list_response.dart';
 
 class TenxTradingRepository extends BaseRepository {
   Future<RepoResponse<GenericResponse>> postPurchaseIntent(Map<String, dynamic> data) async {
@@ -38,12 +36,12 @@ class TenxTradingRepository extends BaseRepository {
         : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxTradingPositionListResponse>> getTenxPositions(String id) async {
+  Future<RepoResponse<TradingPositionListResponse>> getTenxPositions(String id) async {
     String apiURL = '${AppUrls.tenx}/$id/trade/pnl';
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: TenxTradingPositionListResponse.fromJson(response));
+        : RepoResponse(data: TradingPositionListResponse.fromJson(response));
   }
 
   Future<RepoResponse<InstrumentLivePriceListResponse>> getInstrumentLivePrices() async {

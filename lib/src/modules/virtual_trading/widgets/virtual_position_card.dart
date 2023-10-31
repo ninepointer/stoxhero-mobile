@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class VirtualPositionCard extends GetView<VirtualTradingController> {
-  final VirtualTradingPosition position;
+  final TradingPosition position;
   const VirtualPositionCard({super.key, required this.position});
 
   void openBottomSheet(BuildContext context, TransactionType type) {

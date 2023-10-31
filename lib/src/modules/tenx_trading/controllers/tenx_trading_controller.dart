@@ -79,9 +79,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
 
-  final tenxPositionsList = <TenxTradingPosition>[].obs;
+  final tenxPositionsList = <TradingPosition>[].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
-  final tenxPosition = TenxTradingPosition().obs;
+  final tenxPosition = TradingPosition().obs;
 
   final tenxPortfolioDetails = TenxTradingPortfolioDetails().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
@@ -363,12 +363,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   num calculateMargin() {
-    num amount = 0;
     num lots = 0;
+    num margin = 0;
     for (var position in tenxPositionsList) {
       if (position.lots != 0) {
-        amount += position.amount!.abs();
         lots += position.lots ?? 0;
+        margin += position.margin ?? 0;
       }
     }
     num openingBalance = 0;
@@ -376,34 +376,22 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
     if (tenxPortfolioDetails.value.openingBalance != null) {
       openingBalance = tenxPortfolioDetails.value.openingBalance ?? 0;
-      // print('openingBalance1 $openingBalance');
     } else {
       openingBalance = totalFund;
-      // print('openingBalance2 $openingBalance');
     }
-
-    num availableMargin = openingBalance != 0
-        ? lots == 0
-            ? openingBalance + calculateTotalNetPNL()
-            : openingBalance - amount
-        : totalFund;
-
-    // print('Amount $amount');
-    // print('lots $lots');
-    // print('calculateTotalNetPNL${calculateTotalNetPNL()}');
-    // print('openingBalance $openingBalance');
-    // print('totalFund $totalFund');
-    // print('availableMargin $availableMargin');
-    // String availableMarginPnlString = availableMargin >= 0 ? "₹" + availableMargin.toStringAsFixed(2) ?? "₹0" : "₹0";
-
-    // if (lots == 0) {
-    //   marginValue = totalFund + calculateTotalNetPNL();
-    // } else if (lots < 0) {
-    //   marginValue = totalFund - amount;
-    // } else {
-    //   marginValue = totalFund + amount;
-    // }
+    num availableMargin = (calculateTotalNetPNL() < 0)
+        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        : (openingBalance - margin);
     return availableMargin;
+  }
+
+  num calculateUnRealisedPNL() {
+    num pnl = calculateTotalNetPNL();
+    if (pnl >= 0) {
+      return pnl;
+    } else {
+      return 0;
+    }
   }
 
   void gotoSearchInstrument() {
@@ -550,7 +538,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getTenxPositionList() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<TenxTradingPositionListResponse> response = await repository.getTenxPositions(
+      final RepoResponse<TradingPositionListResponse> response = await repository.getTenxPositions(
         selectedSubscriptionId.value,
       );
       if (response.data != null) {
@@ -1288,8 +1276,22 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
-      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      buyOrSell: selectedStringQuantity.contains('-')
+          ? type == TransactionType.buy
+              ? 'SELL'
+              : 'BUY'
+          : type == TransactionType.buy
+              ? 'BUY'
+              : 'SELL',
+      quantity: selectedQuantity.value.toString().contains('-')
+          ? type == TransactionType.buy
+              ? selectedQuantity.value < 0
+                  ? 0
+                  : selectedQuantity.value
+              : selectedQuantity.value > 0
+                  ? 0
+                  : selectedQuantity.value
+          : selectedQuantity.value,
       product: "NRML",
       orderType: selectedType.value,
       validity: "DAY",
@@ -1297,6 +1299,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       price: "",
       lastPrice: inst.lastPrice.toString(),
     );
+
     try {
       final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
         data.toJson(),

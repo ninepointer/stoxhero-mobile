@@ -1,18 +1,15 @@
-class TenxTradingPositionListResponse {
+class TradingPositionListResponse {
   String? message;
-  List<TenxTradingPosition>? data;
+  List<TradingPosition>? data;
 
-  TenxTradingPositionListResponse({
-    this.message,
-    this.data,
-  });
+  TradingPositionListResponse({this.message, this.data});
 
-  TenxTradingPositionListResponse.fromJson(Map<String, dynamic> json) {
+  TradingPositionListResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['data'] != null) {
-      data = <TenxTradingPosition>[];
+      data = <TradingPosition>[];
       json['data'].forEach((v) {
-        data!.add(new TenxTradingPosition.fromJson(v));
+        data!.add(new TradingPosition.fromJson(v));
       });
     }
   }
@@ -27,27 +24,23 @@ class TenxTradingPositionListResponse {
   }
 }
 
-class TenxTradingPosition {
+class TradingPosition {
   IdDetails? id;
   num? amount;
   num? brokerage;
   int? lots;
   num? lastaverageprice;
+  num? margin;
 
-  TenxTradingPosition({
-    this.id,
-    this.amount,
-    this.brokerage,
-    this.lots,
-    this.lastaverageprice,
-  });
+  TradingPosition({this.id, this.amount, this.brokerage, this.lots, this.lastaverageprice, this.margin});
 
-  TenxTradingPosition.fromJson(Map<String, dynamic> json) {
+  TradingPosition.fromJson(Map<String, dynamic> json) {
     id = json['_id'] != null ? new IdDetails.fromJson(json['_id']) : null;
     amount = json['amount'];
     brokerage = json['brokerage'];
     lots = json['lots'];
     lastaverageprice = json['lastaverageprice'];
+    margin = json['margin'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +52,7 @@ class TenxTradingPosition {
     data['brokerage'] = this.brokerage;
     data['lots'] = this.lots;
     data['lastaverageprice'] = this.lastaverageprice;
+    data['margin'] = this.margin;
     return data;
   }
 }
@@ -69,14 +63,17 @@ class IdDetails {
   int? instrumentToken;
   int? exchangeInstrumentToken;
   String? exchange;
+  String? validity;
+  String? variety;
 
-  IdDetails({
-    this.symbol,
-    this.product,
-    this.instrumentToken,
-    this.exchangeInstrumentToken,
-    this.exchange,
-  });
+  IdDetails(
+      {this.symbol,
+      this.product,
+      this.instrumentToken,
+      this.exchangeInstrumentToken,
+      this.exchange,
+      this.validity,
+      this.variety});
 
   IdDetails.fromJson(Map<String, dynamic> json) {
     symbol = json['symbol'];
@@ -84,6 +81,8 @@ class IdDetails {
     instrumentToken = json['instrumentToken'];
     exchangeInstrumentToken = json['exchangeInstrumentToken'];
     exchange = json['exchange'];
+    validity = json['validity'];
+    variety = json['variety'];
   }
 
   Map<String, dynamic> toJson() {
@@ -93,6 +92,8 @@ class IdDetails {
     data['instrumentToken'] = this.instrumentToken;
     data['exchangeInstrumentToken'] = this.exchangeInstrumentToken;
     data['exchange'] = this.exchange;
+    data['validity'] = this.validity;
+    data['variety'] = this.variety;
     return data;
   }
 }

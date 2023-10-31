@@ -4,7 +4,7 @@ import 'package:stoxhero/src/app/app.dart';
 
 class LiveCollegeContestCard extends GetView<CollegeContestController> {
   final LiveCollegeContest? contest;
-  final ContestPosition? contestPositionList;
+  final TradingPosition? contestPositionList;
   final ContestCreditData? contestPortfolio;
   const LiveCollegeContestCard({
     Key? key,

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class CollegeContestPositionCard extends GetView<CollegeContestController> {
-  final ContestPosition position;
+  final TradingPosition position;
   const CollegeContestPositionCard({super.key, required this.position});
 
   void openBottomSheet(BuildContext context, TransactionType type) {

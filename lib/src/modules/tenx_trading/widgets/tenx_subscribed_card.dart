@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/data/models/response/tenx_subscribed_list_response.dart';
 import '../../../app/app.dart';
 
 class TenxSubscribedCard extends GetView<TenxTradingController> {

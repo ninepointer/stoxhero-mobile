@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
 class MarginXBinding implements Bindings {
   @override
@@ -56,7 +55,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   final completedMarginXOrdersList = <CompletedMarginXOrders>[].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
   final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
-  final marginXPositionList = <MarginXPositionList>[].obs;
+  final marginXPositionList = <TradingPosition>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final marginXPortfolio = MarginXPortfolio().obs;
   final liveMarginX = LiveMarginX().obs;
@@ -266,12 +265,12 @@ class MarginXController extends BaseController<MarginXRepository> {
   }
 
   num calculateMargin() {
-    num amount = 0;
     num lots = 0;
+    num margin = 0;
     for (var position in marginXPositionList) {
       if (position.lots != 0) {
-        amount += position.amount!.abs();
         lots += position.lots ?? 0;
+        margin += position.margin ?? 0;
       }
     }
     num openingBalance = 0;
@@ -282,11 +281,10 @@ class MarginXController extends BaseController<MarginXRepository> {
     } else {
       openingBalance = totalFund;
     }
-    num availableMargin = openingBalance != 0
-        ? lots == 0
-            ? openingBalance + calculateTotalNetPNL()
-            : openingBalance - amount
-        : totalFund;
+    num availableMargin = (calculateTotalNetPNL() < 0)
+        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        : (openingBalance - margin);
+
     return availableMargin;
   }
 
@@ -404,7 +402,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future getMarginXPositions() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<MarginXPositionListResponse> response =
+      final RepoResponse<TradingPositionListResponse> response =
           await repository.getMarginXPositions(liveMarginX.value.id);
       if (response.data != null) {
         if (response.data?.data! != null) {

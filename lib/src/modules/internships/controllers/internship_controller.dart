@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
 class InternshipBinding implements Bindings {
   @override
@@ -507,6 +506,15 @@ class InternshipController extends BaseController<InternshipRespository> {
     //   marginValue = totalFund + amount;
     // }
     return availableMargin;
+  }
+
+  num calculateUnRealisedPNL() {
+    num pnl = calculateTotalNetPNL();
+    if (pnl >= 0) {
+      return pnl;
+    } else {
+      return 0;
+    }
   }
 
   Color getValueColor(dynamic value) {

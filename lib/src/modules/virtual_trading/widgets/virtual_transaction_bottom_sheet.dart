@@ -100,7 +100,10 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                 SizedBox(height: 16),
                 DropdownButtonFormField2<int>(
                   value: controller.selectedQuantity.value,
-                  onChanged: (value) => controller.selectedQuantity(value),
+                  onChanged: (value) {
+                    controller.getMarginRequired(type, tradingInstrument);
+                    controller.selectedQuantity(value);
+                  },
                   isDense: true,
                   items: controller.lotsValueList.map((int number) {
                     return DropdownMenuItem<int>(

@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
-import 'package:stoxhero/src/data/models/response/trading_instrument_trade_details_list_response.dart';
 import 'package:stoxhero/src/data/models/response/upcoming_college_contest_list_response.dart';
 
 import '../../../app/app.dart';
@@ -94,7 +93,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final livePremiumCollegeContestList = <LiveCollegeContest>[].obs;
   final liveFreeCollegeContestList = <LiveCollegeContest>[].obs;
   final liveCollegeContest = LiveCollegeContest().obs;
-  final contestPositionsList = <ContestPosition>[].obs;
+  final contestPositionsList = <TradingPosition>[].obs;
   final contestPortfolio = ContestCreditData().obs;
   final contestWatchList = <ContestWatchList>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
@@ -424,12 +423,12 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   num calculateMargin() {
-    num amount = 0;
     num lots = 0;
+    num margin = 0;
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
-        amount += position.amount!.abs();
         lots += position.lots ?? 0;
+        margin += position.margin ?? 0;
       }
     }
     num openingBalance = 0;
@@ -440,11 +439,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     } else {
       openingBalance = totalFund;
     }
-    num availableMargin = openingBalance != 0
-        ? lots == 0
-            ? openingBalance + calculateTotalNetPNL()
-            : openingBalance - amount
-        : totalFund;
+    num availableMargin = (calculateTotalNetPNL() < 0)
+        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        : (openingBalance - margin);
+
     return availableMargin;
   }
 
@@ -530,7 +528,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getContestPositions() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<ContestPositionListResponse> response =
+      final RepoResponse<TradingPositionListResponse> response =
           await repository.getContestPositions(liveCollegeContest.value.id);
       if (response.data != null) {
         if (response.data?.data! != null) {

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../app/app.dart';
-import '../../../data/models/response/trading_instrument_trade_details_list_response.dart';
 
 class VirtualTradingBinding implements Bindings {
   @override
@@ -43,8 +42,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final tradingWatch = TradingWatchlist().obs;
   final tradingWatchlistIds = <int>[].obs;
 
-  final virtualPositionsList = <VirtualTradingPosition>[].obs;
-  final virtualPosition = VirtualTradingPosition().obs;
+  final virtualPositionsList = <TradingPosition>[].obs;
+  final virtualPosition = TradingPosition().obs;
   final virtualInstrumentTradeDetails = <VirtualTradingInstrumentTradeDetails>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final selectedWatchlistIndex = RxInt(-1);
@@ -204,12 +203,12 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   num calculateMargin() {
-    num amount = 0;
     num lots = 0;
+    num margin = 0;
     for (var position in virtualPositionsList) {
       if (position.lots != 0) {
-        amount += position.amount!.abs();
         lots += position.lots ?? 0;
+        margin += position.margin ?? 0;
       }
     }
     num openingBalance = 0;
@@ -217,34 +216,24 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
     if (virtualPortfolio.value.openingBalance != null) {
       openingBalance = virtualPortfolio.value.openingBalance ?? 0;
-      // print('openingBalance1 $openingBalance');
     } else {
       openingBalance = totalFund;
-      // print('openingBalance2 $openingBalance');
     }
 
-    num availableMargin = openingBalance != 0
-        ? lots == 0
-            ? openingBalance + calculateTotalNetPNL()
-            : openingBalance - amount
-        : totalFund;
+    num availableMargin = (calculateTotalNetPNL() < 0)
+        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        : (openingBalance - margin);
 
-    // print('Amount $amount');
-    // print('lots $lots');
-    // print('calculateTotalNetPNL${calculateTotalNetPNL()}');
-    // print('openingBalance $openingBalance');
-    // print('totalFund $totalFund');
-    // print('availableMargin $availableMargin');
-    // String availableMarginPnlString = availableMargin >= 0 ? "₹" + availableMargin.toStringAsFixed(2) ?? "₹0" : "₹0";
-
-    // if (lots == 0) {
-    //   marginValue = totalFund + calculateTotalNetPNL();
-    // } else if (lots < 0) {
-    //   marginValue = totalFund - amount;
-    // } else {
-    //   marginValue = totalFund + amount;
-    // }
     return availableMargin;
+  }
+
+  num calculateUnRealisedPNL() {
+    num pnl = calculateTotalNetPNL();
+    if (pnl >= 0) {
+      return pnl;
+    } else {
+      return 0;
+    }
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
@@ -491,7 +480,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualPositionsList() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<VirtualTradingPositionListResponse> response = await repository.getVirtualPositions();
+      final RepoResponse<TradingPositionListResponse> response = await repository.getVirtualPositions();
       if (response.data != null) {
         if (response.data?.data! != null) {
           virtualPositionsList(response.data?.data ?? []);

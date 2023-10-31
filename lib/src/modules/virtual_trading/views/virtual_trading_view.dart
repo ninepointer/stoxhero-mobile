@@ -166,7 +166,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
-                  ), 
+                  ),
                   PortfolioDetailCardTile(
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
@@ -174,9 +174,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   PortfolioDetailCardTile(
-                    label: 'UnRealised Profit & Loss',
+                    label: 'Unrealised Profit & Loss',
                     info: 'Increased value of your investment',
-                    value: '0',
+                    value: controller.calculateUnRealisedPNL(),
                   ),
                   SizedBox(height: 56),
                 ],
