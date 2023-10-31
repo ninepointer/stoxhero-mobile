@@ -57,7 +57,7 @@ class _SignupViewState extends State<SignupView> {
                                 style: Theme.of(context).textTheme.tsMedium20,
                               ),
                             ),
-                            SizedBox(height: 36),
+                            SizedBox(height: 24),
                             Align(
                               child: Text(
                                 'Please provide your details, confirmation will be send on the given email.',
@@ -140,7 +140,7 @@ class _SignupViewState extends State<SignupView> {
                               child: CommonTextField(
                                 isDisabled: true,
                                 controller: controller.dobTextController,
-                                hintText: 'Date of Birth',
+                                hintText: 'Enter your date of birth',
                                 prefixIcon: Icon(
                                   Icons.calendar_month,
                                   color: AppColors.grey,
@@ -155,17 +155,25 @@ class _SignupViewState extends State<SignupView> {
                             ),
                             CommonTextField(
                               controller: controller.referralTextController,
-                              hintText: 'Referral Code',
+                              hintText: 'Enter Referral/Invite code',
                               prefixIcon: Icon(
                                 Icons.redeem_rounded,
                                 color: AppColors.grey,
                               ),
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(10),
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
                             ),
+                            if (controller.inviteCode.value.campaignCode != null &&
+                                controller.inviteCode.value.campaignCode!.isNotEmpty) ...[
+                              Text(
+                                'Unlock your welcome bonus! Use code ${controller.inviteCode.value.campaignCode} & grab ₹${controller.inviteCode.value.campaignSignupBonus?.amount ?? 0} in your StoxHero wallet!',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.success,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 16),
+                            ],
                             CommonFilledButton(
                               backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                               label: 'Create account',
@@ -192,7 +200,7 @@ class _SignupViewState extends State<SignupView> {
                           label: 'Sign In',
                           onPressed: () => Get.toNamed(AppRoutes.signin),
                         ),
-                        SizedBox(height: 24),
+                        SizedBox(height: 16),
                       ],
                     ),
                   ),

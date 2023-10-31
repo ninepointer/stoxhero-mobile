@@ -1,15 +1,15 @@
 class CareerResponse {
   String? status;
-  List<CareerList>? data;
+  List<CareerData>? data;
 
   CareerResponse({this.status, this.data});
 
   CareerResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <CareerList>[];
+      data = <CareerData>[];
       json['data'].forEach((v) {
-        data!.add(new CareerList.fromJson(v));
+        data!.add(new CareerData.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class CareerResponse {
   }
 }
 
-class CareerList {
+class CareerData {
   String? id;
   String? jobTitle;
   String? jobDescription;
@@ -39,7 +39,7 @@ class CareerList {
   String? lastModifiedOn;
   int? iV;
 
-  CareerList(
+  CareerData(
       {this.id,
       this.jobTitle,
       this.jobDescription,
@@ -54,7 +54,7 @@ class CareerList {
       this.lastModifiedOn,
       this.iV});
 
-  CareerList.fromJson(Map<String, dynamic> json) {
+  CareerData.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     jobTitle = json['jobTitle'];
     jobDescription = json['jobDescription'];
@@ -81,8 +81,7 @@ class CareerList {
     data['jobTitle'] = this.jobTitle;
     data['jobDescription'] = this.jobDescription;
     if (this.rolesAndResponsibilities != null) {
-      data['rolesAndResponsibilities'] =
-          this.rolesAndResponsibilities!.map((v) => v.toJson()).toList();
+      data['rolesAndResponsibilities'] = this.rolesAndResponsibilities!.map((v) => v.toJson()).toList();
     }
     data['jobType'] = this.jobType;
     data['jobLocation'] = this.jobLocation;

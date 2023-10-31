@@ -115,7 +115,10 @@ class _SigninViewState extends State<SigninView> {
                         backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         label: 'Create account',
-                        onPressed: () => Get.toNamed(AppRoutes.signup),
+                        onPressed: () {
+                          controller.getDefaultInviteCode();
+                          Get.toNamed(AppRoutes.signup);
+                        },
                       ),
                     ],
                   ),

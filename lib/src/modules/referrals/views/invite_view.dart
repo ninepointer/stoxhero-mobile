@@ -124,8 +124,7 @@ class InviteView extends GetView<ReferralsController> {
                             ),
                           ),
                           child: QrImageView(
-                            data:
-                                'https://www.stoxhero.com/signup?referral=${controller.userDetailsData.myReferralCode}',
+                            data: '${AppUrls.referralWebUrl}${controller.userDetailsData.myReferralCode}',
                             version: QrVersions.auto,
                             eyeStyle: QrEyeStyle(
                               color: AppColors.primary,

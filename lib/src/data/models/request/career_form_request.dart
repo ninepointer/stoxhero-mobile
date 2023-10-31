@@ -1,5 +1,6 @@
 class CareerFormRequest {
   String? dob;
+  String? college;
   String? collegeName;
   String? linkedInProfileLink;
   String? priorTradingExperience;
@@ -7,17 +8,20 @@ class CareerFormRequest {
   String? career;
   String? campaignCode;
 
-  CareerFormRequest(
-      {this.dob,
-      this.collegeName,
-      this.linkedInProfileLink,
-      this.priorTradingExperience,
-      this.source,
-      this.career,
-      this.campaignCode});
+  CareerFormRequest({
+    this.dob,
+    this.college,
+    this.collegeName,
+    this.linkedInProfileLink,
+    this.priorTradingExperience,
+    this.source,
+    this.career,
+    this.campaignCode,
+  });
 
   CareerFormRequest.fromJson(Map<String, dynamic> json) {
     dob = json['dob'];
+    college = json['college'];
     collegeName = json['collegeName'];
     linkedInProfileLink = json['linkedInProfileLink'];
     priorTradingExperience = json['priorTradingExperience'];
@@ -29,6 +33,7 @@ class CareerFormRequest {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['dob'] = this.dob;
+    data['college'] = this.college;
     data['collegeName'] = this.collegeName;
     data['linkedInProfileLink'] = this.linkedInProfileLink;
     data['priorTradingExperience'] = this.priorTradingExperience;

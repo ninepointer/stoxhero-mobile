@@ -33,6 +33,7 @@ class AuthController extends BaseController<AuthRepository> {
   final isSignup = false.obs;
 
   final token = ''.obs;
+  final inviteCode = CampaignCodeData().obs;
 
   void verifyOtp() => isSignup.value ? verifySignupOtp() : verifySigninOtp();
 
@@ -113,14 +114,15 @@ class AuthController extends BaseController<AuthRepository> {
     isLoading(true);
 
     FocusScope.of(Get.context!).unfocus();
-
+    DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     VerifySignupRequest data = VerifySignupRequest(
       firstName: firstNameTextController.text,
       lastName: lastNameTextController.text,
       email: emailTextController.text,
       mobile: mobileTextController.text,
       mobileOtp: otpTextController.text,
-      referrerCode: "",
+      dob: DateFormat('yyyy-MM-dd').format(date),
+      referrerCode: referralTextController.text,
     );
 
     try {
@@ -153,7 +155,7 @@ class AuthController extends BaseController<AuthRepository> {
       email: emailTextController.text,
       mobile: mobileTextController.text,
       dob: DateFormat('yyyy-MM-dd').format(date),
-      referrerCode: "",
+      referrerCode: referralTextController.text,
     );
 
     try {
@@ -223,6 +225,19 @@ class AuthController extends BaseController<AuthRepository> {
       }
     } catch (e) {
       log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getDefaultInviteCode() async {
+    isLoading(true);
+    try {
+      final RepoResponse<CampaignCodeResponse> response = await repository.getDefaultInviteCode();
+      if (response.data != null) {
+        inviteCode(response.data?.data);
+      }
+    } catch (e) {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

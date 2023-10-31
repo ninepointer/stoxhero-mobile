@@ -20,6 +20,9 @@ class CareerController extends BaseController<CareerRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
+  final isFormLoading = false.obs;
+  bool get isFormLoadingStatus => isFormLoading.value;
+
   final isOtpVisible = false.obs;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final firstNameTextController = TextEditingController();
@@ -31,8 +34,11 @@ class CareerController extends BaseController<CareerRepository> {
   final otpTextController = TextEditingController();
   final linkedInProfileTextController = TextEditingController();
 
-  final careerList = <CareerList>[].obs;
-  final careerDetails = CareerList().obs;
+  final careerList = <CareerData>[].obs;
+  final careerDetails = CareerData().obs;
+
+  final collegeList = <CollegeData>[].obs;
+  final collegeDetails = CollegeData().obs;
 
   final selectedDOBDateTime = ''.obs;
 
@@ -87,6 +93,22 @@ class CareerController extends BaseController<CareerRepository> {
     isLoading(false);
   }
 
+  Future getCollegesList() async {
+    isFormLoading(true);
+    try {
+      final RepoResponse<CollegeListResponse> response = await repository.getCollegeList();
+      if (response.data != null) {
+        collegeList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('College: ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isFormLoading(false);
+  }
+
   // void validateCarrerOtp(String? careerId) async {
   //   isLoading(true);
   //   if (otpTextController.text.isNotEmpty) {
@@ -132,12 +154,13 @@ class CareerController extends BaseController<CareerRepository> {
   }
 
   void careerApply(String? careerId) async {
-    isLoading(true);
+    isFormLoading(true);
 
     FocusScope.of(Get.context!).unfocus();
     DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     CareerFormRequest data = CareerFormRequest(
-      collegeName: collegeNameTextController.text,
+      college: collegeDetails.value.id,
+      collegeName: collegeDetails.value.collegeName,
       dob: DateFormat('yyyy-MM-dd').format(date),
       priorTradingExperience: experienceSelectedValue,
       source: hearAboutSelectedValue,
@@ -161,6 +184,6 @@ class CareerController extends BaseController<CareerRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isFormLoading(false);
   }
 }

@@ -4,14 +4,19 @@ class AppUrls {
   static const String baseURL = isProd ? 'https://stoxhero.com' : 'http://43.204.7.180';
   static const String apiURL = '$baseURL/api/v1';
 
+  static const String referralWebUrl = 'https://www.stoxhero.com/?referral=';
+
   static const String tenxYoutubeVideoLink = 'https://www.youtube.com/watch?v=a3_bmjv5tXQ';
 
   static const String appVersion = '$apiURL/mobileappversion';
+  static const String defaultInviteCode = "$apiURL/campaign/defaultinvite";
 
   static const String tenx = '$apiURL/tenX';
   static const String tradeMarginDetails = 'trade/marginDetail';
 
   static const String stockIndex = "$apiURL/stockindex";
+
+  static const String collegeList = "$apiURL/college/collegeList";
 
   static const String signup = "$apiURL/signup";
   static const String phoneLogin = "$apiURL/phonelogin";

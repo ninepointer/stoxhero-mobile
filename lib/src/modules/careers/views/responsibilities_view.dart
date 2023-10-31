@@ -12,7 +12,7 @@ class ResponsibilitiesView extends GetView<CareerController> {
 
   @override
   Widget build(BuildContext context) {
-    final CareerList? selectedCareer = controller.careerList.firstWhere(
+    final CareerData? selectedCareer = controller.careerList.firstWhere(
       (item) => item.id == careerId,
     );
 
@@ -44,6 +44,7 @@ class ResponsibilitiesView extends GetView<CareerController> {
             CommonFilledButton(
               label: 'Apply',
               onPressed: () {
+                controller.getCollegesList();
                 Get.to(() => CareerForm(careerId: careerId));
               },
             ),

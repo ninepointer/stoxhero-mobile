@@ -5,7 +5,7 @@ import '../../../core/core.dart';
 import '../../modules.dart';
 
 class InfoCard extends StatelessWidget {
-  final CareerList? career;
+  final CareerData? career;
   const InfoCard({
     Key? key,
     this.career,

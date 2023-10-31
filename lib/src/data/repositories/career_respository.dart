@@ -30,4 +30,12 @@ class CareerRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<CollegeListResponse>> getCollegeList() async {
+    String apiURL = AppUrls.collegeList;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: CollegeListResponse.fromJson(response));
+  }
 }

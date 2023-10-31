@@ -74,3 +74,5 @@ export 'margin_required_response.dart';
 export 'trading_instrument_trade_details_list_response.dart';
 export 'tenx_subscribed_list_response.dart';
 export 'tenx_expired_list_response.dart';
+export 'college_list_response.dart';
+export 'campaign_code_response.dart';
