@@ -25,14 +25,12 @@ class CareerController extends BaseController<CareerRepository> {
 
   final isOtpVisible = false.obs;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final firstNameTextController = TextEditingController();
-  final lastNameTextController = TextEditingController();
-  final emailTextController = TextEditingController();
-  final mobileTextController = TextEditingController();
+
   final dobTextController = TextEditingController();
   final collegeNameTextController = TextEditingController();
   final otpTextController = TextEditingController();
   final linkedInProfileTextController = TextEditingController();
+  final passoutYearProfileTextController = TextEditingController();
 
   final careerList = <CareerData>[].obs;
   final careerDetails = CareerData().obs;
@@ -63,9 +61,11 @@ class CareerController extends BaseController<CareerRepository> {
   }
 
   String? experienceSelectedValue;
+  String? courseSelectedValue;
   String? hearAboutSelectedValue;
 
   final List<String> experienceDropdown = ['Yes', 'No'];
+
   final List<String> hearAboutDropdown = [
     'LinkedIn',
     'Facebook',
@@ -75,7 +75,25 @@ class CareerController extends BaseController<CareerRepository> {
     'Friend',
     'Others',
   ];
-  final List<String> dropdownItems3 = [];
+
+  final List<String> courseList = [
+    "Bachelor of Technology(BTech)",
+    "Bachelor of Commerce(BCom)",
+    "Bachelor of Science(BSc)",
+    "Bachelor of Computer Application",
+    "Bachelor of Architecture(BA)",
+    "Bachelor of Education(BEd)",
+    "Bachelor of Business Administration(BBA)",
+    "Bachelor of Arts(BA)",
+    "Bachelor of Medicine, Bachelor of Surgery(MBBS)",
+    "Master of Business Administration(MBA)",
+    "Master of Technology(MTech)",
+    "Master of Science(MSc)",
+    "Hotel Management(HM)",
+    "Corporate",
+    "School",
+    "Others",
+  ];
 
   Future getCareerList(String? type) async {
     isLoading(true);
@@ -155,7 +173,6 @@ class CareerController extends BaseController<CareerRepository> {
 
   void careerApply(String? careerId) async {
     isFormLoading(true);
-
     FocusScope.of(Get.context!).unfocus();
     DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     CareerFormRequest data = CareerFormRequest(
@@ -167,6 +184,9 @@ class CareerController extends BaseController<CareerRepository> {
       linkedInProfileLink: linkedInProfileTextController.text,
       career: careerId,
       campaignCode: " ",
+      course: courseSelectedValue,
+      passingoutyear: passoutYearProfileTextController.text,
+      gender: userDetails.value.gender,
     );
 
     try {

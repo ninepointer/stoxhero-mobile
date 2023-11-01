@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../app/app.dart';
 
@@ -126,7 +127,32 @@ class _CareerFormState extends State<CareerForm> {
                         controller.collegeDetails(value);
                       },
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 12),
+                    CommonDropdown(
+                      color: AppColors.grey.withOpacity(0.1),
+                      hint: 'Course',
+                      value: controller.courseSelectedValue,
+                      dropdownItems: controller.courseList,
+                      onChanged: (value) => setState(() => controller.courseSelectedValue = value!),
+                    ),
+                    SizedBox(height: 12),
+                    CommonTextField(
+                      padding: EdgeInsets.zero,
+                      hintText: 'Year of passing out',
+                      controller: controller.passoutYearProfileTextController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(4),
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required!';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
