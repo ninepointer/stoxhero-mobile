@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
@@ -41,7 +42,6 @@ class _WalletViewState extends State<WalletView> {
                     value: '₹0.00',
                     iconData: Icons.account_balance_wallet_rounded,
                     buttonLabel: 'Add Money',
-                    onPressed: () => Get.to(() => PaymentView()),
                   ),
                   WalletCard(
                     label: 'Cash',
@@ -58,7 +58,39 @@ class _WalletViewState extends State<WalletView> {
                     value: '₹0.00',
                     iconData: Icons.redeem_rounded,
                     buttonLabel: 'Redeem',
-                    onPressed: null,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      const url = 'https://stoxhero.com/';
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        await launchUrl(Uri.parse(url));
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: AppStyles.tsGreyRegular14,
+                          children: [
+                            TextSpan(
+                              text: 'Currently payment method is only available on the web, visit ',
+                            ),
+                            TextSpan(
+                              text: 'www.stoxhero.com',
+                              style: AppStyles.tsPrimaryMedium14.copyWith(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' to top-up your wallet.',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

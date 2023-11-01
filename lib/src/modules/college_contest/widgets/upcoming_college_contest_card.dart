@@ -196,7 +196,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                       children: [
                         Image.asset(
                           AppImages.contestTrophy,
-                          width: 40,
+                          width: 36,
                         ),
                         Text(
                           'Reward',
@@ -227,8 +227,9 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'Remaining',
+                            'Remaining Time',
                             style: AppStyles.tsGreyMedium12,
+                            textAlign: TextAlign.end,
                           ),
                           SizedBox(height: 2),
                           Text(

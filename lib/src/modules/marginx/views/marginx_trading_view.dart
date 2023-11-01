@@ -209,6 +209,11 @@ class MarginXTradingView extends GetView<MarginXController> {
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
+                  PortfolioDetailCardTile(
+                    label: 'Unrealised Profit & Loss',
+                    info: 'Increased value of your investment',
+                    value: controller.calculateUnRealisedPNL(),
+                  ),
                   SizedBox(height: 56),
                 ],
               ),

@@ -25,11 +25,11 @@ class _PaymentViewState extends State<PaymentView> {
 
   Object? result;
 
-  @override
-  void initState() {
-    super.initState();
-    initPaymentSDK();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initPaymentSDK();
+  // }
 
   Future initPaymentSDK() async {
     await PhonePePaymentSdk.init(
@@ -188,12 +188,22 @@ class _PaymentViewState extends State<PaymentView> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            CommonFilledButton(
-              label: 'Start Transaction',
-              onPressed: startPGTransaction,
-            ),
+            CommonCard(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'Currently payment method is only available on the web,\nvisit  to top-up your wallet.',
+                    ),
+                  ],
+                ),
+              ],
+            )
+            // CommonFilledButton(
+            //   label: 'Start Transaction',
+            //   onPressed: startPGTransaction,
+            // ),
           ],
         ),
       ),

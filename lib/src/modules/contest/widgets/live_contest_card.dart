@@ -185,6 +185,7 @@ class LiveContestCard extends GetView<ContestController> {
                         Text(
                           'Remaining Time',
                           style: AppStyles.tsGreyMedium12,
+                          textAlign: TextAlign.end,
                         ),
                         SizedBox(height: 2),
                         Text(

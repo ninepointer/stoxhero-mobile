@@ -382,6 +382,15 @@ class ContestController extends BaseController<ContestRepository> {
     return availableMargin;
   }
 
+  num calculateUnRealisedPNL() {
+    num pnl = calculateTotalNetPNL();
+    if (pnl >= 0) {
+      return pnl;
+    } else {
+      return 0;
+    }
+  }
+
   num getInstrumentLastPrice(int instID, int exchID) {
     num priceValue = 0;
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {

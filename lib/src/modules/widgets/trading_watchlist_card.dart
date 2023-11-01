@@ -1,60 +1,42 @@
 import 'package:flutter/material.dart';
 import '../../app/app.dart';
 
-class TradingWatchlistCardTile extends StatefulWidget {
-  final int index;
+class TradingWatchlistCard extends StatelessWidget {
   final TradingWatchlist tradingWatchlist;
-  const TradingWatchlistCardTile({Key? key, required this.index, required this.tradingWatchlist}) : super(key: key);
+  const TradingWatchlistCard({
+    Key? key,
+    required this.tradingWatchlist,
+  }) : super(key: key);
 
-  @override
-  _TradingWatchlistCardTileState createState() => _TradingWatchlistCardTileState();
-}
+  // void openBottomSheet(BuildContext context, TransactionType type) {
+  //   FocusScope.of(context).unfocus();
 
-class _TradingWatchlistCardTileState extends State<TradingWatchlistCardTile> {
-  late VirtualTradingController controller;
-
-  @override
-  void initState() {
-    controller = Get.find<VirtualTradingController>();
-    super.initState();
-  }
-
-  void openBottomSheet(BuildContext context, TransactionType type) {
-    FocusScope.of(context).unfocus();
-
-    num lastPrice = controller.getInstrumentLastPrice(
-      widget.tradingWatchlist.instrumentToken!,
-      widget.tradingWatchlist.exchangeInstrumentToken!,
-    );
-    controller.generateLotsList(type: widget.tradingWatchlist.symbol);
-    BottomSheetHelper.openBottomSheet(
-      context: context,
-      child: VirtualTransactionBottomSheet(
-        type: type,
-        tradingInstrument: TradingInstrument(
-          name: widget.tradingWatchlist.symbol,
-          instrumentType: widget.tradingWatchlist.instrument,
-          exchange: widget.tradingWatchlist.exchange,
-          tradingsymbol: widget.tradingWatchlist.symbol,
-          exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
-          instrumentToken: widget.tradingWatchlist.instrumentToken,
-          lastPrice: lastPrice,
-        ),
-        marginRequired: controller.getMarginRequired(
-          type,
-          TradingInstrument(
-            name: widget.tradingWatchlist.symbol,
-            instrumentType: widget.tradingWatchlist.instrument,
-            exchange: widget.tradingWatchlist.exchange,
-            tradingsymbol: widget.tradingWatchlist.symbol,
-            exchangeToken: widget.tradingWatchlist.exchangeInstrumentToken,
-            instrumentToken: widget.tradingWatchlist.instrumentToken,
-            lastPrice: lastPrice,
-          ),
-        ),
-      ),
-    );
-  }
+  //   num lastPrice = controller.getInstrumentLastPrice(
+  //     tradingWatchlist.instrumentToken!,
+  //     tradingWatchlist.exchangeInstrumentToken!,
+  //   );
+  //   controller.generateLotsList(type: tradingWatchlist.symbol);
+  //   TradingInstrument tradingInstrument = TradingInstrument(
+  //     name: tradingWatchlist.symbol,
+  //     instrumentType: tradingWatchlist.instrument,
+  //     exchange: tradingWatchlist.exchange,
+  //     tradingsymbol: tradingWatchlist.symbol,
+  //     exchangeToken: tradingWatchlist.exchangeInstrumentToken,
+  //     instrumentToken: tradingWatchlist.instrumentToken,
+  //     lastPrice: lastPrice,
+  //   );
+  //   BottomSheetHelper.openBottomSheet(
+  //     context: context,
+  //     child: VirtualTransactionBottomSheet(
+  //       type: type,
+  //       tradingInstrument: tradingInstrument,
+  //       marginRequired: controller.getMarginRequired(
+  //         type,
+  //         tradingInstrument,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -78,24 +60,24 @@ class _TradingWatchlistCardTileState extends State<TradingWatchlistCardTile> {
                           isRightAlign: false,
                           label: 'Contract Expiry Date',
                           value: FormatHelper.formatDateByMonth(
-                            widget.tradingWatchlist.contractDate,
+                            tradingWatchlist.contractDate,
                           ),
                         ),
                         TradeCardTile(
                           isRightAlign: true,
                           label: 'LTP (Last Traded Price)',
-                          value: FormatHelper.formatNumbers(
-                            controller.getInstrumentLastPrice(
-                              widget.tradingWatchlist.instrumentToken!,
-                              widget.tradingWatchlist.exchangeInstrumentToken!,
-                            ),
-                          ),
-                          valueColor: controller.getValueColor(
-                            controller.getInstrumentLastPrice(
-                              widget.tradingWatchlist.instrumentToken!,
-                              widget.tradingWatchlist.exchangeInstrumentToken!,
-                            ),
-                          ),
+                          // value: FormatHelper.formatNumbers(
+                          //   // controller.getInstrumentLastPrice(
+                          //   //   tradingWatchlist.instrumentToken!,
+                          //   //   tradingWatchlist.exchangeInstrumentToken!,
+                          //   // ),
+                          // ),
+                          // valueColor: controller.getValueColor(
+                          //   controller.getInstrumentLastPrice(
+                          //     widget.tradingWatchlist.instrumentToken!,
+                          //     widget.tradingWatchlist.exchangeInstrumentToken!,
+                          //   ),
+                          // ),
                         ),
                       ],
                     ),
@@ -106,22 +88,22 @@ class _TradingWatchlistCardTileState extends State<TradingWatchlistCardTile> {
                           hasBottomMargin: false,
                           isRightAlign: false,
                           label: 'Symbol',
-                          value: widget.tradingWatchlist.symbol,
+                          value: tradingWatchlist.symbol,
                         ),
                         TradeCardTile(
                           hasBottomMargin: false,
                           isRightAlign: true,
                           label: 'Changes(%)',
-                          value: controller.getInstrumentChanges(
-                            widget.tradingWatchlist.instrumentToken!,
-                            widget.tradingWatchlist.exchangeInstrumentToken!,
-                          ),
-                          valueColor: controller.getValueColor(
-                            controller.getInstrumentChanges(
-                              widget.tradingWatchlist.instrumentToken!,
-                              widget.tradingWatchlist.exchangeInstrumentToken!,
-                            ),
-                          ),
+                          // value: controller.getInstrumentChanges(
+                          //   widget.tradingWatchlist.instrumentToken!,
+                          //   widget.tradingWatchlist.exchangeInstrumentToken!,
+                          // ),
+                          // valueColor: controller.getValueColor(
+                          //   controller.getInstrumentChanges(
+                          //     widget.tradingWatchlist.instrumentToken!,
+                          //     widget.tradingWatchlist.exchangeInstrumentToken!,
+                          //   ),
+                          // ),
                         ),
                       ],
                     ),
@@ -133,7 +115,7 @@ class _TradingWatchlistCardTileState extends State<TradingWatchlistCardTile> {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => openBottomSheet(context, TransactionType.buy),
+                        // onTap: () => openBottomSheet(context, TransactionType.buy),
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(6),
@@ -152,7 +134,7 @@ class _TradingWatchlistCardTileState extends State<TradingWatchlistCardTile> {
                     ),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => openBottomSheet(context, TransactionType.sell),
+                        // onTap: () => openBottomSheet(context, TransactionType.sell),
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(6),
@@ -168,7 +150,7 @@ class _TradingWatchlistCardTileState extends State<TradingWatchlistCardTile> {
                     ),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                        // onTap: () => controller.removeInstrument(tradingWatchlist.instrumentToken),
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(6),

@@ -29,7 +29,7 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                   ),
                   TradeCardTile(
                     isRightAlign: true,
-                    label: 'SL/SP Price',
+                    label: 'Price',
                     value: FormatHelper.formatNumbers(
                       stopLoss.executionPrice,
                     ),
@@ -57,13 +57,13 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                 children: [
                   TradeCardTile(
                     hasBottomMargin: false,
-                    label: 'Stop Type',
+                    label: 'Type',
                     value: stopLoss.type,
                   ),
                   TradeCardTile(
                     isRightAlign: true,
                     hasBottomMargin: false,
-                    label: 'Type',
+                    label: 'Transaction Type',
                     value: stopLoss.buyOrSell,
                     valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
                   ),

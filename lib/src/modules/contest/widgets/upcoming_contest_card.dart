@@ -201,7 +201,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       children: [
                         Image.asset(
                           AppImages.contestTrophy,
-                          width: 40,
+                          width: 36,
                         ),
                         Text(
                           'Reward',
@@ -234,6 +234,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           Text(
                             'Remaining Time',
                             style: AppStyles.tsGreyMedium12,
+                            textAlign: TextAlign.end,
                           ),
                           SizedBox(height: 2),
                           Text(

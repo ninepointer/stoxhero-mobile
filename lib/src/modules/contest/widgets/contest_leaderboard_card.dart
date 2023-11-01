@@ -167,6 +167,7 @@ class ContestLeaderboardCard extends StatelessWidget {
         ],
       ),
     );
+
     // return CommonCard(
     //   margin: EdgeInsets.all(16).copyWith(
     //     bottom: 0,

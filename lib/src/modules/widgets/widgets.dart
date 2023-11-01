@@ -9,5 +9,6 @@ export 'trading_instrument_search_card.dart';
 export 'trading_margin_npnl_card.dart';
 export 'trading_shimmer.dart';
 export 'trading_stock_card.dart';
-export 'trading_watchlist_card_tile.dart';
+export 'trading_watchlist_card.dart';
 export 'update_alert_dialog.dart';
+export 'trading_position_card.dart';

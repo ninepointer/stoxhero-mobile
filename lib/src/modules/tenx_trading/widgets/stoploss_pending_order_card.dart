@@ -50,7 +50,7 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
                     ),
                     TradeCardTile(
                       isRightAlign: true,
-                      label: 'SL/SP Price',
+                      label: 'Price',
                       value: FormatHelper.formatNumbers(
                         stopLoss.executionPrice,
                       ),
@@ -87,13 +87,13 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
                   children: [
                     TradeCardTile(
                       hasBottomMargin: false,
-                      label: 'Stop Type',
+                      label: 'Type',
                       value: stopLoss.type,
                     ),
                     TradeCardTile(
                       isRightAlign: true,
                       hasBottomMargin: false,
-                      label: 'Type',
+                      label: 'Transaction Type',
                       value: stopLoss.buyOrSell,
                       valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
                     ),

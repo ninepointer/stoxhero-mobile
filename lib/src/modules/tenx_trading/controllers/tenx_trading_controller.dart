@@ -69,6 +69,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final stopLossPriceTextController = TextEditingController();
   final stopProfitPriceTextController = TextEditingController();
   final quanitityTextController = TextEditingController();
+  final limitPriceTextController = TextEditingController();
   final selectedSubscriptionId = ''.obs;
   final selectSubscriptionName = ''.obs;
   final selectSubscriptionAmount = 0.obs;

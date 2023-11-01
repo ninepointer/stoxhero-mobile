@@ -47,7 +47,14 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   void changeReferralTabBarIndex(int val) => selectedReferralTabBarIndex.value = val;
 
   String getReferralMessage() {
-    return "AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR Join me at StoxHero - Options Trading and Investment Platform 🤝 👉 Get 10,00,000 virtual currency in your account to start option trading using my referral code 👉 Join the community of ace traders and learn real-time options trading 👉 Participate in TenX Trading and earn 10% real cash on the profit you will make on the platform 📲 Visit ${AppUrls.referralWebUrl}${userDetailsData.myReferralCode} Use my below invitation code 👇 and get INR ₹10,00,000 in your wallet and start trading My Referral Code to join the StoxHero: ${userDetailsData.myReferralCode}";
+    return '''AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR 
+    Join me at StoxHero - Options Trading and Investment Platform 🤝 
+    👉 Get 10,00,000 virtual currency in your account to start option trading using my referral code 
+    👉 Join the community of ace traders and learn real-time options trading 
+    👉 Participate in TenX Trading and earn 10% real cash on the profit you will make on the platform 
+    📲 Visit ${AppUrls.referralWebUrl}${userDetailsData.myReferralCode} Use my below invitation code 
+    👇 and get virtual currency of ₹10,00,000 in your wallet and start trading
+    My Referral Code to join the StoxHero: ${userDetailsData.myReferralCode}''';
   }
 
   void loadUserDetails() {

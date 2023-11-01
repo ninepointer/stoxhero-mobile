@@ -48,7 +48,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                       children: [
                         Text(
                           'Regular',
-                          style: Theme.of(context).textTheme.tsMedium18,
+                          style: Theme.of(context).textTheme.tsMedium16,
                         ),
                         Icon(
                           Icons.cancel,
@@ -59,7 +59,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   ),
                   Divider(
                     thickness: 1,
-                    height: 36,
+                    height: 24,
                     color: AppColors.grey.shade50.withOpacity(0.5),
                   ),
                   Row(
@@ -89,7 +89,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 24),
+                  SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
@@ -109,7 +109,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 8),
                   DropdownButtonFormField2<int>(
                     value: controller.selectedQuantity.value,
                     onChanged: (value) {
@@ -167,13 +167,49 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
-                  if (controller.selectedGroupValue.value == 3)
+                  if (controller.selectedGroupValue.value == 1) ...[
+                    SizedBox(height: 8),
+                    CommonTextField(
+                      padding: EdgeInsets.zero,
+                      hintText: 'Limit Price',
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      ],
+                      controller: controller.limitPriceTextController,
+                      validator: (value) {
+                        final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                        if (limitPrice != null) {
+                          if (type == TransactionType.buy) {
+                            if (limitPrice >=
+                                controller.getInstrumentLastPrice(
+                                  tradingInstrument.instrumentToken!,
+                                  tradingInstrument.exchangeToken!,
+                                )) {
+                              return 'Price should be less than LTP.';
+                            }
+                          } else if (type == TransactionType.sell) {
+                            if (limitPrice <=
+                                controller.getInstrumentLastPrice(
+                                  tradingInstrument.instrumentToken!,
+                                  tradingInstrument.exchangeToken!,
+                                )) {
+                              return 'Price should be greater than LTP.';
+                            }
+                          }
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                  if (controller.selectedGroupValue.value == 3) ...[
+                    SizedBox(height: 8),
                     if (type != TransactionType.exit)
                       Row(
                         children: [
                           Expanded(
                             child: CommonTextField(
+                              padding: EdgeInsets.zero,
                               isDisabled: controller.handleTextField(
                                     type,
                                     tradingInstrument.lotSize ?? 0,
@@ -181,6 +217,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                   ) ||
                                   controller.selectedGroupValue.value == 2,
                               hintText: 'StopLoss Price',
+                              keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                               ],
@@ -213,6 +250,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           SizedBox(width: 8),
                           Expanded(
                             child: CommonTextField(
+                              padding: EdgeInsets.zero,
                               isDisabled: controller.handleTextField(
                                     type,
                                     tradingInstrument.lotSize ?? 0,
@@ -220,6 +258,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                   ) ||
                                   controller.selectedGroupValue.value == 2,
                               hintText: 'StopProfit Price',
+                              keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                               ],
@@ -251,6 +290,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           ),
                         ],
                       ),
+                  ],
+                  SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
@@ -259,7 +300,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           groupValue: controller.selectedGroupValue.value,
                           label: 'MARKET',
                           onChanged: (int value) {
-                            controller.handleRadioValueChanged(value, 'MARKET');
+                            controller.handleRadioValueChanged(value, "MARKET");
                           },
                         ),
                       ),
@@ -271,6 +312,16 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           label: 'LIMIT',
                         ),
                       ),
+                      // Expanded(
+                      //   child: CommonRadioButtonTile(
+                      //     value: 1,
+                      //     groupValue: controller.selectedGroupValue.value,
+                      //     label: 'LIMIT',
+                      //     onChanged: (int value) {
+                      //       controller.handleRadioValueChanged(value, "LIMIT");
+                      //     },
+                      //   ),
+                      // ),
                       SizedBox(width: 8),
                       Expanded(
                         child: CommonRadioButtonTile(
@@ -278,7 +329,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           groupValue: controller.selectedGroupValue.value,
                           label: 'SL/SP-M',
                           onChanged: (int value) {
-                            controller.handleRadioValueChanged(value, 'SL/SP-M');
+                            controller.handleRadioValueChanged(value, "SL/SP-M");
                           },
                         ),
                       ),
@@ -363,7 +414,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                             : type == TransactionType.buy
                                 ? AppColors.success
                                 : AppColors.danger,
-                    margin: EdgeInsets.symmetric(vertical: 24),
+                    margin: EdgeInsets.only(top: 12, bottom: 18),
                     label: type == TransactionType.exit
                         ? 'Exit'
                         : tradingInstrument.lotSize.toString().contains('-')
