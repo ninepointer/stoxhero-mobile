@@ -327,13 +327,10 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                   child: Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        if (isUserInterestedId) {
-                          SnackbarHelper.showSnackbar('Already interested in ${widget.contest?.contestName}');
-                        } else {
-                          controller.upComingCollegeContest(widget.contest);
-                          controller.getNotified();
-                          SnackbarHelper.showSnackbar('You are now interested in ${widget.contest?.contestName}');
-                        }
+                        controller.upComingCollegeContest(widget.contest);
+                        controller.getNotified();
+                        SnackbarHelper.showSnackbar(
+                            'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the contest starts');
                       },
                       child: Container(
                         alignment: Alignment.center,

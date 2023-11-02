@@ -151,37 +151,85 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                                     },
                                   )
                             : CommonTextField(
-                                hintText: 'StopProfit Price',
+                                hintText: 'Limit Price',
+                                keyboardType: TextInputType.number,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                                 ],
-                                controller: controller.stopProfitPriceTextController,
+                                controller: controller.limitPriceTextController,
                                 validator: (value) {
-                                  final stopProfitPrice =
-                                      double.tryParse(controller.stopProfitPriceTextController.text);
-                                  if (stopProfitPrice != null) {
-                                    if (stopProfitPrice <=
-                                        controller.getInstrumentLastPrice(
-                                          stopLoss.instrumentToken!,
-                                          stopLoss.exchangeInstrumentToken!,
-                                        )) {
-                                      return 'Stop Profit price should \n be greater than LTP.';
+                                  final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                                  if (limitPrice != null) {
+                                    if (stopLoss.buyOrSell == 'BUY') {
+                                      if (limitPrice >=
+                                          controller.getInstrumentLastPrice(
+                                            stopLoss.instrumentToken!,
+                                            stopLoss.exchangeInstrumentToken!,
+                                          )) {
+                                        return 'Price should be \nless than LTP.';
+                                      }
+                                    } else if (stopLoss.buyOrSell == 'SELL') {
+                                      if (limitPrice <=
+                                          controller.getInstrumentLastPrice(
+                                            stopLoss.instrumentToken!,
+                                            stopLoss.exchangeInstrumentToken!,
+                                          )) {
+                                        return 'Price should be \ngreater than LTP.';
+                                      }
                                     }
                                   }
                                   return null;
                                 },
                               ),
-                      )
+                      ),
                     ],
                   ),
+                  //       child: CommonTextField(
+                  //         hintText: 'Limit Price',
+                  //         keyboardType: TextInputType.number,
+                  //         inputFormatters: [
+                  //           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                  //         ],
+                  //         controller: controller.limitPriceTextController,
+                  //         validator: (value) {
+                  //           final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                  //           if (limitPrice != null) {
+                  //             if (stopLoss.buyOrSell == 'BUY') {
+                  //               if (limitPrice >=
+                  //                   controller.getInstrumentLastPrice(
+                  //                     stopLoss.instrumentToken!,
+                  //                     stopLoss.exchangeInstrumentToken!,
+                  //                   )) {
+                  //                 return 'Price should be less than LTP.';
+                  //               }
+                  //             } else if (stopLoss.buyOrSell == 'SELL') {
+                  //               if (limitPrice <=
+                  //                   controller.getInstrumentLastPrice(
+                  //                     stopLoss.instrumentToken!,
+                  //                     stopLoss.exchangeInstrumentToken!,
+                  //                   )) {
+                  //                 return 'Price should be greater than LTP.';
+                  //               }
+                  //             }
+                  //           }
+                  //           return null;
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   CommonFilledButton(
                     isLoading: controller.isPendingOrderStateLoading.value,
                     label: 'Edit',
                     backgroundColor: AppColors.secondary,
                     onPressed: () {
-                      if (controller.stopLossPriceTextController.text.isEmpty &&
-                          controller.stopProfitPriceTextController.text.isEmpty) {
-                        SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                      if (stopLoss.type == 'StopLoss' || stopLoss.type == 'StopProfit') {
+                        if (controller.stopLossPriceTextController.text.isEmpty ||
+                            controller.stopProfitPriceTextController.text.isEmpty) {
+                          SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                        }
+                      } else if (controller.limitPriceTextController.text.isEmpty) {
+                        SnackbarHelper.showSnackbar('Please Enter Price');
                       } else if (controller.stopLossFormKey.currentState!.validate()) {
                         controller.getStopLossEditOrder(
                           stopLoss.id,

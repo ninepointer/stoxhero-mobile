@@ -126,8 +126,8 @@ class _DashboardViewState extends State<DashboardView> {
                           label: 'Live Contests',
                           showSeeAllButton: true,
                           onPressed: () {
-                            Get.find<ContestController>().loadData();
-                            Get.find<ContestController>().selectedTabBarIndex(0);
+                            contestController.loadData();
+                            contestController.selectedTabBarIndex(0);
                             Get.to(() => ContestListView());
                           },
                           margin: EdgeInsets.only(bottom: 0, top: 8),
@@ -158,8 +158,8 @@ class _DashboardViewState extends State<DashboardView> {
                           label: 'Upcoming Contests',
                           showSeeAllButton: true,
                           onPressed: () {
-                            Get.find<ContestController>().loadData();
-                            Get.find<ContestController>().selectedTabBarIndex(1);
+                            contestController.loadData();
+                            contestController.selectedTabBarIndex(1);
                             Get.to(() => ContestListView());
                           },
                           margin: EdgeInsets.only(bottom: 0, top: 8),

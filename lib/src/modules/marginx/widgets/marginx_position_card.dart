@@ -62,7 +62,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
                         label: 'Gross P&L (Profit & Loss)',
                         valueColor: controller.getValueColor(
                           controller.calculateGrossPNL(
-                            position.amount!,
+                            position.amount ?? 0,
                             position.lots!.toInt(),
                             controller.getInstrumentLastPrice(
                               position.id!.instrumentToken!,
@@ -74,7 +74,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
                             ? FormatHelper.formatNumbers(position.amount)
                             : FormatHelper.formatNumbers(
                                 controller.calculateGrossPNL(
-                                  position.amount!,
+                                  position.amount ?? 0,
                                   position.lots!.toInt(),
                                   controller.getInstrumentLastPrice(
                                     position.id!.instrumentToken!,

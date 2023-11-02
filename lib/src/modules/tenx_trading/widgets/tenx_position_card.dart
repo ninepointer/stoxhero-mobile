@@ -3,7 +3,12 @@ import '../../../app/app.dart';
 
 class TenxPositionCard extends GetView<TenxTradingController> {
   final TradingPosition position;
-  const TenxPositionCard({super.key, required this.position});
+  final bool isLimit;
+  const TenxPositionCard({
+    super.key,
+    required this.position,
+    this.isLimit = false,
+  });
 
   void openBottomSheet(BuildContext context, TransactionType type) {
     FocusScope.of(context).unfocus();
@@ -85,7 +90,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                           position.lots == 0
                               ? position.amount
                               : controller.calculateGrossPNL(
-                                  position.amount!,
+                                  position.amount ?? 0,
                                   position.lots!.toInt(),
                                   controller.getInstrumentLastPrice(
                                     position.id!.instrumentToken!,
@@ -97,7 +102,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                             ? FormatHelper.formatNumbers(position.amount)
                             : FormatHelper.formatNumbers(
                                 controller.calculateGrossPNL(
-                                  position.amount!,
+                                  position.amount ?? 0,
                                   position.lots!.toInt(),
                                   controller.getInstrumentLastPrice(
                                     position.id!.instrumentToken!,

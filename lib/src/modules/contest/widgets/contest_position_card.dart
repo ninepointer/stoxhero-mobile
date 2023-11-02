@@ -62,7 +62,7 @@ class ContestPositionCard extends GetView<ContestController> {
                           position.lots == 0
                               ? position.amount
                               : controller.calculateGrossPNL(
-                                  position.amount!,
+                                  position.amount ?? 0,
                                   position.lots!.toInt(),
                                   controller.getInstrumentLastPrice(
                                     position.id!.instrumentToken!,
@@ -74,7 +74,7 @@ class ContestPositionCard extends GetView<ContestController> {
                             ? FormatHelper.formatNumbers(position.amount)
                             : FormatHelper.formatNumbers(
                                 controller.calculateGrossPNL(
-                                  position.amount!,
+                                  position.amount ?? 0,
                                   position.lots!.toInt(),
                                   controller.getInstrumentLastPrice(
                                     position.id!.instrumentToken!,

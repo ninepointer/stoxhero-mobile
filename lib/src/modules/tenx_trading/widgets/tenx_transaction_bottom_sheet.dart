@@ -42,6 +42,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                       controller.selectedGroupValue.value = 2;
                       controller.stopLossPriceTextController.clear();
                       controller.stopProfitPriceTextController.clear();
+                      controller.limitPriceTextController.clear();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -305,23 +306,23 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                         ),
                       ),
                       SizedBox(width: 8),
-                      Expanded(
-                        child: CommonRadioButtonTile(
-                          value: 1,
-                          groupValue: 2,
-                          label: 'LIMIT',
-                        ),
-                      ),
                       // Expanded(
                       //   child: CommonRadioButtonTile(
                       //     value: 1,
-                      //     groupValue: controller.selectedGroupValue.value,
+                      //     groupValue: 2,
                       //     label: 'LIMIT',
-                      //     onChanged: (int value) {
-                      //       controller.handleRadioValueChanged(value, "LIMIT");
-                      //     },
                       //   ),
                       // ),
+                      Expanded(
+                        child: CommonRadioButtonTile(
+                          value: 1,
+                          groupValue: controller.selectedGroupValue.value,
+                          label: 'LIMIT',
+                          onChanged: (int value) {
+                            controller.handleRadioValueChanged(value, "LIMIT");
+                          },
+                        ),
+                      ),
                       SizedBox(width: 8),
                       Expanded(
                         child: CommonRadioButtonTile(
@@ -437,6 +438,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                         controller.selectedGroupValue.value = 2;
                         controller.stopLossPriceTextController.clear();
                         controller.stopProfitPriceTextController.clear();
+                        controller.limitPriceTextController.clear();
                       }
                     },
                   ),

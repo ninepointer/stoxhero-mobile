@@ -65,15 +65,18 @@ class IdDetails {
   String? exchange;
   String? validity;
   String? variety;
+  bool? isLimit;
 
-  IdDetails(
-      {this.symbol,
-      this.product,
-      this.instrumentToken,
-      this.exchangeInstrumentToken,
-      this.exchange,
-      this.validity,
-      this.variety});
+  IdDetails({
+    this.symbol,
+    this.product,
+    this.instrumentToken,
+    this.exchangeInstrumentToken,
+    this.exchange,
+    this.validity,
+    this.variety,
+    this.isLimit,
+  });
 
   IdDetails.fromJson(Map<String, dynamic> json) {
     symbol = json['symbol'];
@@ -83,6 +86,7 @@ class IdDetails {
     exchange = json['exchange'];
     validity = json['validity'];
     variety = json['variety'];
+    isLimit = json['isLimit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +98,7 @@ class IdDetails {
     data['exchange'] = this.exchange;
     data['validity'] = this.validity;
     data['variety'] = this.variety;
+    data['isLimit'] = this.isLimit;
     return data;
   }
 }

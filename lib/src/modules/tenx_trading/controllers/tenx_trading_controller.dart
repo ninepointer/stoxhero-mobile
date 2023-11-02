@@ -135,7 +135,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxExpiredValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
 
   final marginRequired = MarginRequiredResponse().obs;
-
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
   }
@@ -707,7 +706,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       tenxTraderPath: true,
       battleId: selectedSubscriptionId.value,
       marginxId: selectedSubscriptionId.value,
-      price: "",
+      price: limitPriceTextController.text,
       triggerPrice: "",
       stopLoss: "",
       deviceDetails: DeviceDetails(
@@ -725,8 +724,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successful');
         await getTenxPositionList();
-        await getTenxTradingPortfolioDetails();
         await getStopLossPendingOrder();
+        await getTenxTradingPortfolioDetails();
         await getTenxTodayOrdersList();
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
@@ -1161,7 +1160,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       quantity: selectedQuantity.value,
       product: "NRML",
-      orderType: "SL/SP-M",
+      orderType: selectedType.value,
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
@@ -1253,15 +1252,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       socketService.socket.on(
         'sendOrderResponse${userDetails.value.sId}',
         (data) {
-          print('sendOrderResponse${userDetails.value.sId} : $data');
-        },
-      );
-      socketService.socket.on(
-        'sendOrderResponse${userDetails.value.sId}',
-        (data) {
           print('sendOrderResponse${userDetails.value.sId} $data');
           if (data.containsKey("message")) {
-            String message = data["message"].toString();
+            String message = data["message"];
             SnackbarHelper.showSnackbar(message);
           }
           getTenxPositionList();

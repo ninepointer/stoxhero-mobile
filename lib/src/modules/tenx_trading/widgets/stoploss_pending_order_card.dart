@@ -13,6 +13,7 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     void openBottomSheet(BuildContext context) {
       FocusScope.of(context).unfocus();
+      print(stopLoss.type);
       BottomSheetHelper.openBottomSheet(
         context: context,
         child: StoplossEditPriceBottomSheet(
@@ -24,7 +25,7 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
             buyOrSell: stopLoss.buyOrSell,
             instrumentToken: stopLoss.instrumentToken,
             exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
-            executionPrice: stopLoss.executionPrice,
+            price: stopLoss.price,
           ),
         ),
       );
@@ -52,7 +53,7 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
                       isRightAlign: true,
                       label: 'Price',
                       value: FormatHelper.formatNumbers(
-                        stopLoss.executionPrice,
+                        stopLoss.price,
                       ),
                     ),
                   ],
