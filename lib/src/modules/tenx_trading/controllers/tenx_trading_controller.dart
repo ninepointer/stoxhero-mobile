@@ -135,6 +135,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxExpiredValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
 
   final marginRequired = MarginRequiredResponse().obs;
+
   void loadUserDetails() {
     userDetails.value = AppStorage.getUserDetails();
   }
