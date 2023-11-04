@@ -57,6 +57,9 @@ class AppStrings {
   static const String successfulTransactions = "Successful Transactions";
   static const String recentTransactions = "Recent Transactions";
 
+  static const String todayOrders = 'Today Orders';
+  static const String allOrders = 'All Orders';
+
   static const noDataFound = 'Oops!, \nNo Data Found!';
   static const noteModify =
       'Note: After modifying this order, all existing pending stop loss orders will be cancelled.';

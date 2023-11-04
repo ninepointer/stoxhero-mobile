@@ -178,6 +178,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                         FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                       ],
                       controller: controller.limitPriceTextController,
+                      onChanged: (value) => controller.getMarginRequired(type, tradingInstrument),
                       validator: (value) {
                         final limitPrice = double.tryParse(controller.limitPriceTextController.text);
                         if (limitPrice != null) {
@@ -232,7 +233,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                           tradingInstrument.instrumentToken!,
                                           tradingInstrument.exchangeToken!,
                                         )) {
-                                      return 'Stop Loss price should \n be less than LTP.';
+                                      return 'Stop Loss price should \nbe less than LTP.';
                                     }
                                   } else if (type == TransactionType.sell) {
                                     if (stopLossPrice <=
@@ -240,7 +241,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                           tradingInstrument.instrumentToken!,
                                           tradingInstrument.exchangeToken!,
                                         )) {
-                                      return 'Stop Loss price should \n be greater than LTP.';
+                                      return 'Stop Loss price should \nbe greater than LTP.';
                                     }
                                   }
                                 }
@@ -273,7 +274,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                           tradingInstrument.instrumentToken!,
                                           tradingInstrument.exchangeToken!,
                                         )) {
-                                      return 'Stop Profit price should \n be greater than LTP.';
+                                      return 'Stop Profit price should \nbe greater than LTP.';
                                     }
                                   } else if (type == TransactionType.sell) {
                                     if (stopProfitPrice >=
@@ -281,7 +282,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                           tradingInstrument.instrumentToken!,
                                           tradingInstrument.exchangeToken!,
                                         )) {
-                                      return 'Stop Profit price should \n be less than LTP.';
+                                      return 'Stop Profit price should \nbe less than LTP.';
                                     }
                                   }
                                 }
@@ -302,6 +303,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           label: 'MARKET',
                           onChanged: (int value) {
                             controller.handleRadioValueChanged(value, "MARKET");
+                            controller.getMarginRequired(type, tradingInstrument);
                           },
                         ),
                       ),
@@ -320,6 +322,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           label: 'LIMIT',
                           onChanged: (int value) {
                             controller.handleRadioValueChanged(value, "LIMIT");
+                            controller.getMarginRequired(type, tradingInstrument);
                           },
                         ),
                       ),
@@ -430,6 +433,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           controller.stopLossPriceTextController.text.isEmpty &&
                           controller.stopProfitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                      } else if (controller.selectedGroupValue.value == 1 &&
+                          controller.limitPriceTextController.text.isEmpty) {
+                        SnackbarHelper.showSnackbar('Please Enter Price');
                       } else if (controller.stopLossFormKey.currentState!.validate()) {
                         controller.placeTenxTradingOrder(
                           type,

@@ -51,3 +51,42 @@ class OrdersView extends GetView<OrdersController> {
     );
   }
 }
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Orders'),
+//       ),
+//       body: Obx(
+//         () => CommonTabBar(
+//           index: controller.selectedTabBarIndex.value,
+//           onTap: controller.changeTabBarIndex,
+//           tabsTitle: [
+//             AppStrings.tenX,
+//             AppStrings.virtual,
+//           ],
+//           tabs: [
+//             CommonTabBar(
+//               tabsTitle: [
+//                 AppStrings.todayOrders,
+//                 AppStrings.allOrders,
+//               ],
+//               tabs: [
+//                 Visibility(
+//                   visible: !controller.isLoadingStatus,
+//                   replacement: CommonLoader(),
+//                   child: TabBarView(
+//                     children: [
+//                       TenxTradeOrdersTabView(
+//                         tenxSub: controller.tenxTrade.value.sId,
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

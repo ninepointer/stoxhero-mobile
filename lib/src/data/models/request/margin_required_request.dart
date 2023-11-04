@@ -28,7 +28,7 @@ class MarginRequiredRequest {
     buyOrSell = json['buyOrSell'];
     quantity = json['Quantity'];
     product = json['Product'];
-    orderType = json['OrderType'];
+    orderType = json['order_type'];
     validity = json['validity'];
     variety = json['variety'];
     price = json['price'];
@@ -42,7 +42,7 @@ class MarginRequiredRequest {
     data['buyOrSell'] = this.buyOrSell;
     data['Quantity'] = this.quantity;
     data['Product'] = this.product;
-    data['OrderType'] = this.orderType;
+    data['order_type'] = this.orderType;
     data['validity'] = this.validity;
     data['variety'] = this.variety;
     data['price'] = this.price;

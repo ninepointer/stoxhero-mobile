@@ -42,6 +42,7 @@ class _WalletViewState extends State<WalletView> {
                     value: '₹0.00',
                     iconData: Icons.account_balance_wallet_rounded,
                     buttonLabel: 'Add Money',
+                    onPressed: () => Get.to(() => PaymentView()),
                   ),
                   WalletCard(
                     label: 'Cash',

@@ -62,7 +62,7 @@ class ContestPlaceOrderRequest {
     contestId = json['contestId'];
     battleId = json['battleId'];
     product = json['Product'];
-    orderType = json['OrderType'];
+    orderType = json['order_type'];
     triggerPrice = json['TriggerPrice'];
     stopLoss = json['stopLoss'];
     uId = json['uId'];
@@ -90,7 +90,7 @@ class ContestPlaceOrderRequest {
     data['contestId'] = this.contestId;
     data['battleId'] = this.battleId;
     data['Product'] = this.product;
-    data['OrderType'] = this.orderType;
+    data['order_type'] = this.orderType;
     data['TriggerPrice'] = this.triggerPrice;
     data['stopLoss'] = this.stopLoss;
     data['uId'] = this.uId;

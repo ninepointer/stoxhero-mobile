@@ -29,7 +29,12 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: Get.back,
+                    onTap: () {
+                      Get.back();
+                      controller.stopLossPriceTextController.clear();
+                      controller.stopProfitPriceTextController.clear();
+                      controller.limitPriceTextController.clear();
+                    },
                     child: Column(
                       children: [
                         Row(
@@ -224,7 +229,7 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                     backgroundColor: AppColors.secondary,
                     onPressed: () {
                       if (stopLoss.type == 'StopLoss' || stopLoss.type == 'StopProfit') {
-                        if (controller.stopLossPriceTextController.text.isEmpty ||
+                        if (controller.stopLossPriceTextController.text.isEmpty &&
                             controller.stopProfitPriceTextController.text.isEmpty) {
                           SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
                         }
@@ -238,8 +243,10 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                       }
                       controller.stopLossPriceTextController.clear();
                       controller.stopProfitPriceTextController.clear();
+                      controller.limitPriceTextController.clear();
                     },
                   ),
+                  SizedBox(height: 36),
                 ],
               ),
             ),

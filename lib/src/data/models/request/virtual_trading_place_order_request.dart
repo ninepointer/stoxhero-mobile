@@ -52,7 +52,7 @@ class VirtualTradingPlaceOrderRequest {
     quantity = json['Quantity'];
     price = json['Price'];
     product = json['Product'];
-    orderType = json['OrderType'];
+    orderType = json['order_type'];
     triggerPrice = json['TriggerPrice'];
     stopLoss = json['stopLoss'];
     uId = json['uId'];
@@ -76,7 +76,7 @@ class VirtualTradingPlaceOrderRequest {
     data['Quantity'] = this.quantity;
     data['Price'] = this.price;
     data['Product'] = this.product;
-    data['OrderType'] = this.orderType;
+    data['order_type'] = this.orderType;
     data['TriggerPrice'] = this.triggerPrice;
     data['stopLoss'] = this.stopLoss;
     data['uId'] = this.uId;

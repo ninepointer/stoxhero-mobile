@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
@@ -25,11 +26,11 @@ class _PaymentViewState extends State<PaymentView> {
 
   Object? result;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   initPaymentSDK();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    initPaymentSDK();
+  }
 
   Future initPaymentSDK() async {
     await PhonePePaymentSdk.init(
@@ -48,6 +49,9 @@ class _PaymentViewState extends State<PaymentView> {
       handleError(error);
       return <dynamic>{};
     });
+    String appSignuatre = await PhonePePaymentSdk.getPackageSignatureForAndroid() ?? '';
+    print('appSignuatre : $appSignuatre');
+    log('appSignuatre : $appSignuatre');
     getInstalledUpiAppsForAndroid();
   }
 
@@ -182,28 +186,46 @@ class _PaymentViewState extends State<PaymentView> {
     });
   }
 
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Padding(
+//         padding: const EdgeInsets.all(16),
+//         child: Column(
+//           children: [
+//             // CommonCard(
+//             //   children: [
+//             //     Row(
+//             //       children: [
+//             //         Text(
+//             //           'Currently payment method is only available on the web,\nvisit  to top-up your wallet.',
+//             //         ),
+//             //       ],
+//             //     ),
+//             //   ],
+//             // )
+//             CommonFilledButton(
+//               label: 'Start Transaction',
+//               onPressed: startPGTransaction,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            CommonCard(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Currently payment method is only available on the web,\nvisit  to top-up your wallet.',
-                    ),
-                  ],
-                ),
-              ],
-            )
-            // CommonFilledButton(
-            //   label: 'Start Transaction',
-            //   onPressed: startPGTransaction,
-            // ),
+            CommonFilledButton(
+              label: 'Start Transaction',
+              onPressed: startPGTransaction,
+            ),
           ],
         ),
       ),

@@ -28,29 +28,30 @@ class StopLossPendingOrdersList {
   String? id;
   String? type;
   String? status;
-  int? price;
+  num? price;
   int? quantity;
   String? buyOrSell;
   String? symbol;
   int? instrumentToken;
   int? exchangeInstrumentToken;
   String? executionTime;
-  int? amount;
+  num? amount;
   String? time;
 
-  StopLossPendingOrdersList(
-      {this.id,
-      this.type,
-      this.status,
-      this.price,
-      this.quantity,
-      this.buyOrSell,
-      this.symbol,
-      this.instrumentToken,
-      this.exchangeInstrumentToken,
-      this.executionTime,
-      this.amount,
-      this.time});
+  StopLossPendingOrdersList({
+    this.id,
+    this.type,
+    this.status,
+    this.price,
+    this.quantity,
+    this.buyOrSell,
+    this.symbol,
+    this.instrumentToken,
+    this.exchangeInstrumentToken,
+    this.executionTime,
+    this.amount,
+    this.time,
+  });
 
   StopLossPendingOrdersList.fromJson(Map<String, dynamic> json) {
     id = json['_id'];

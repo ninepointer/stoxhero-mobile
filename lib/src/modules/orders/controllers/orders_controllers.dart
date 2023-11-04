@@ -17,6 +17,8 @@ class OrdersController extends BaseController<OrdersRepository> {
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+  final selectedTabBarIndex = 0.obs;
+  final selectedSecondTabBarIndex = 0.obs;
   final segmentedControlValue = 0.obs;
   final selectedItem1 = ''.obs;
   final selectedItem2 = ''.obs;
@@ -39,6 +41,8 @@ class OrdersController extends BaseController<OrdersRepository> {
 
   void changeSegment(int val) => segmentedControlValue.value = val;
   void handleSegmentChange(int val) => changeSegment(val);
+
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   void loadData() async {
     loadUserDetails();

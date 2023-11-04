@@ -202,9 +202,14 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.tenxPositionsList.length,
                           itemBuilder: (context, index) {
-                            return TenxPositionCard(
-                              position: controller.tenxPositionsList[index],
-                            );
+                            final position = controller.tenxPositionsList[index];
+                            if (position.id?.isLimit != true) {
+                              return TenxPositionCard(
+                                position: position,
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
                           },
                         ),
                   CommonTile(

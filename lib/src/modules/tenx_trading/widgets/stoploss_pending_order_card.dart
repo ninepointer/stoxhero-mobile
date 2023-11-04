@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../../app/app.dart';
@@ -13,7 +15,7 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     void openBottomSheet(BuildContext context) {
       FocusScope.of(context).unfocus();
-      print(stopLoss.type);
+      log(stopLoss.type.toString());
       BottomSheetHelper.openBottomSheet(
         context: context,
         child: StoplossEditPriceBottomSheet(

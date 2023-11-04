@@ -258,7 +258,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   int getOpenPositionCount() {
     int openCount = 0;
     for (var position in tenxPositionsList) {
-      if (position.lots != 0) {
+      if (position.id?.isLimit ?? false) {
+      } else if (position.lots != 0) {
         openCount++;
       }
     }
@@ -268,7 +269,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   int getClosePositionCount() {
     int closeCount = 0;
     for (var position in tenxPositionsList) {
-      if (position.lots == 0) {
+      if (position.id?.isLimit ?? false) {
+      } else if (position.lots == 0) {
         closeCount++;
       }
     }
@@ -308,12 +310,19 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num totalNet = 0;
 
     for (var position in tenxPositionsList) {
-      totalLots += position.lots ?? 0;
-      totalBrokerage += position.brokerage ?? 0;
-      totalGross += position.lastaverageprice ?? 0;
-      totalNet += position.amount ?? 0;
-    }
+      if (position.id?.isLimit ?? false) {
+      } else {
+        totalLots += position.lots ?? 0;
+        totalBrokerage += position.brokerage ?? 0;
+        totalGross += position.lastaverageprice ?? 0;
+        totalNet += position.amount ?? 0;
+      }
 
+      // totalLots += position.lots ?? 0;
+      // totalBrokerage += position.brokerage ?? 0;
+      // totalGross += position.lastaverageprice ?? 0;
+      // totalNet += position.amount ?? 0;
+    }
     tenxTotalPositionDetails(
       TenxTotalPositionDetails(
         lots: totalLots,
@@ -332,18 +341,37 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     return pnl;
   }
 
+  // num calculateTotalGrossPNL() {
+  //   num totalGross = 0;
+  //   for (var position in tenxPositionsList) {
+  //     num avg = position.amount ?? 0;
+  //     int lots = position.lots?.toInt() ?? 0;
+  //     num ltp = getInstrumentLastPrice(
+  //       position.id?.instrumentToken ?? 0,
+  //       position.id?.exchangeInstrumentToken ?? 0,
+  //     );
+  //     if (ltp == 0) return 0;
+  //     num value = (avg + (lots) * ltp);
+  //     totalGross += value;
+  //   }
+  //   return totalGross.round();
+  // }
+
   num calculateTotalGrossPNL() {
     num totalGross = 0;
     for (var position in tenxPositionsList) {
-      num avg = position.amount ?? 0;
-      int lots = position.lots?.toInt() ?? 0;
-      num ltp = getInstrumentLastPrice(
-        position.id?.instrumentToken ?? 0,
-        position.id?.exchangeInstrumentToken ?? 0,
-      );
-      if (ltp == 0) return 0;
-      num value = (avg + (lots) * ltp);
-      totalGross += value;
+      if (position.id?.isLimit != true) {
+        // Check if isLimit is not true
+        num avg = position.amount ?? 0;
+        int lots = position.lots?.toInt() ?? 0;
+        num ltp = getInstrumentLastPrice(
+          position.id?.instrumentToken ?? 0,
+          position.id?.exchangeInstrumentToken ?? 0,
+        );
+        if (ltp == 0) return 0;
+        num value = (avg + (lots) * ltp);
+        totalGross += value;
+      }
     }
     return totalGross.round();
   }
@@ -351,20 +379,40 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   num calculateTotalNetPNL() {
     num totalNetPNL = 0;
     for (var position in tenxPositionsList) {
-      num avg = position.amount ?? 0;
-      int lots = position.lots?.toInt() ?? 0;
-      num ltp = getInstrumentLastPrice(
-        position.id?.instrumentToken ?? 0,
-        position.id?.exchangeInstrumentToken ?? 0,
-      );
-      if (ltp == 0) return 0;
-      num value = (avg + (lots) * ltp);
-      num brokerage = position.brokerage ?? 0;
-      num broker = value - brokerage;
-      totalNetPNL += broker;
+      if (position.id?.isLimit != true) {
+        num avg = position.amount ?? 0;
+        int lots = position.lots?.toInt() ?? 0;
+        num ltp = getInstrumentLastPrice(
+          position.id?.instrumentToken ?? 0,
+          position.id?.exchangeInstrumentToken ?? 0,
+        );
+        if (ltp == 0) return 0;
+        num value = (avg + (lots) * ltp);
+        num brokerage = position.brokerage ?? 0;
+        num broker = value - brokerage;
+        totalNetPNL += broker;
+      }
     }
     return totalNetPNL.round();
   }
+
+  // num calculateTotalNetPNL() {
+  //   num totalNetPNL = 0;
+  //   for (var position in tenxPositionsList) {
+  //     num avg = position.amount ?? 0;
+  //     int lots = position.lots?.toInt() ?? 0;
+  //     num ltp = getInstrumentLastPrice(
+  //       position.id?.instrumentToken ?? 0,
+  //       position.id?.exchangeInstrumentToken ?? 0,
+  //     );
+  //     if (ltp == 0) return 0;
+  //     num value = (avg + (lots) * ltp);
+  //     num brokerage = position.brokerage ?? 0;
+  //     num broker = value - brokerage;
+  //     totalNetPNL += broker;
+  //   }
+  //   return totalNetPNL.round();
+  // }
 
   num calculateMargin() {
     num lots = 0;
@@ -386,6 +434,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
         : (openingBalance - margin);
+    print(availableMargin);
+    print(calculateTotalNetPNL());
+    print(margin);
     return availableMargin;
   }
 
@@ -725,8 +776,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         SnackbarHelper.showSnackbar('Trade Successful');
         await getTenxPositionList();
         await getStopLossPendingOrder();
-        await getTenxTradingPortfolioDetails();
         await getTenxTodayOrdersList();
+        await getTenxTradingPortfolioDetails();
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1131,6 +1182,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     try {
       await repository.getStopLossPendingCancelOrder(id ?? '');
       await getStopLossPendingOrder();
+      await getStopLossExecutedOrder();
+      await getTenxTradingPortfolioDetails();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1204,10 +1257,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getStopLossEditOrder(String? id, String? type) async {
     isPendingOrderStateLoading(true);
     PendingEditOrderRequest data = PendingEditOrderRequest(
-      executionPrice: type == "StopLoss" ? stopLossPriceTextController.text : stopProfitPriceTextController.text,
+      executionPrice: type == "StopLoss"
+          ? stopLossPriceTextController.text
+          : (type == "StopProfit"
+              ? stopProfitPriceTextController.text
+              : (type == "Limit" ? limitPriceTextController.text : '0')),
     );
-    log(stopLossPriceTextController.text);
-    log(type.toString());
     try {
       final response = await repository.getStopLossEditOrder(
         id,
@@ -1270,13 +1325,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   int calculateQuantity(TransactionType type, int tradingLots, int selectQuantity) {
-    if (type == TransactionType.buy) {
-      if (tradingLots.toString().contains('-')) {
-        if (tradingLots.toString().contains('-') == selectQuantity) {
-          return 0;
-        }
-      }
-    } else if (type == TransactionType.sell || type == TransactionType.exit) {
+    if (type == TransactionType.sell || type == TransactionType.exit) {
       if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
         return 0;
       } else if (tradingLots.abs() <= selectQuantity) {
@@ -1304,7 +1353,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       orderType: selectedType.value,
       validity: "DAY",
       variety: "regular",
-      price: "",
+      price: limitPriceTextController.text,
       lastPrice: inst.lastPrice.toString(),
     );
 

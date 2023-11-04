@@ -42,7 +42,7 @@ class PendingOrderModifyRequest {
     quantity = json['Quantity'];
     id = json['id'];
     product = json['Product'];
-    orderType = json['OrderType'];
+    orderType = json['order_type'];
     stopProfitPrice = json['stopProfitPrice'];
     stopLossPrice = json['stopLossPrice'];
     exchangeInstrumentToken = json['exchangeInstrumentToken'];
@@ -61,7 +61,7 @@ class PendingOrderModifyRequest {
     data['Quantity'] = this.quantity;
     data['id'] = this.id;
     data['Product'] = this.product;
-    data['OrderType'] = this.orderType;
+    data['order_type'] = this.orderType;
     data['stopProfitPrice'] = this.stopProfitPrice;
     data['stopLossPrice'] = this.stopLossPrice;
     data['exchangeInstrumentToken'] = this.exchangeInstrumentToken;
