@@ -434,9 +434,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
         : (openingBalance - margin);
-    print(availableMargin);
-    print(calculateTotalNetPNL());
-    print(margin);
+    print('availableMargin $availableMargin');
+    print('calculateTotalNetPNL ${calculateTotalNetPNL()}');
+    print('margin$margin');
     return availableMargin;
   }
 
@@ -779,7 +779,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         await getTenxTodayOrdersList();
         await getTenxTradingPortfolioDetails();
       } else if (response.data?.status == "Failed") {
-        print(response.error!.message!.toString());
+        log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

@@ -169,8 +169,10 @@ class AppUrls {
   static String verifyAndParticipate(String? id) => "$apiURL/dailycontest/contest/$id/varifycodeandparticipate";
 
   static String tenxStopLossExecutedOrder(String? id) =>
-      '$apiURL/pendingorder/my/todaysProcessed/$id/TenX?skip=0&limit=5';
-  static String tenxStopLossPendingOrder(String? id) => '$apiURL/pendingorder/my/todaysPending/$id/TenX?skip=0&limit=5';
-  static String tenxStopLossPendingCancelOrder(String? id) => '$apiURL/pendingorder/$id';
+      '$apiURL/pendingorder/my/todaysProcessed/$id/TenX%20Trader?skip=0&limit=5';
+  // static String tenxStopLossPendingOrder(String? id) => '$apiURL/pendingorder/my/todaysPending/$id/TenX?skip=0&limit=5';
+  static String tenxStopLossPendingOrder(String? id) =>
+      '$apiURL/pendingorder/my/todaysPending/$id/TenX%20Trader?skip=0&limit=5';
+  static String tenxStopLossPendingCancelOrder(String? id) => '$apiURL/pendingorder/$id/TenX%20Trader';
   static String tenxStopLossEditOrder(String? id) => '$apiURL/pendingorder/editprice/$id';
 }

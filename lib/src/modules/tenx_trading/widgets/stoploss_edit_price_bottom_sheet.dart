@@ -128,64 +128,98 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                                               stopLoss.instrumentToken!,
                                               stopLoss.exchangeInstrumentToken!,
                                             )) {
-                                          return 'Stop Loss price should \n be less than LTP.';
+                                          return 'Stop Loss price should \nbe less than LTP.';
+                                        }
+                                      }
+                                      return null;
+                                    },
+                                  )
+                                : (stopLoss.type == 'StopProfit')
+                                    ? CommonTextField(
+                                        hintText: 'StopProfit Price',
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                        ],
+                                        controller: controller.stopProfitPriceTextController,
+                                        validator: (value) {
+                                          final stopProfitPrice =
+                                              double.tryParse(controller.stopProfitPriceTextController.text);
+                                          if (stopProfitPrice != null) {
+                                            if (stopProfitPrice <=
+                                                controller.getInstrumentLastPrice(
+                                                  stopLoss.instrumentToken!,
+                                                  stopLoss.exchangeInstrumentToken!,
+                                                )) {
+                                              return 'Stop Profit price should \nbe greater than LTP.';
+                                            }
+                                          }
+                                          return null;
+                                        },
+                                      )
+                                    : CommonTextField(
+                                        hintText: 'Limit Price',
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                        ],
+                                        controller: controller.limitPriceTextController,
+                                        validator: (value) {
+                                          final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                                          if (limitPrice != null) {
+                                            if (limitPrice <=
+                                                controller.getInstrumentLastPrice(
+                                                  stopLoss.instrumentToken!,
+                                                  stopLoss.exchangeInstrumentToken!,
+                                                )) {
+                                              return 'Price should be \ngreater than LTP.';
+                                            }
+                                          }
+                                          return null;
+                                        },
+                                      )
+                            : (stopLoss.type == 'Limit' && stopLoss.buyOrSell == 'BUY')
+                                ? CommonTextField(
+                                    hintText: 'Limit Price',
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                    ],
+                                    controller: controller.limitPriceTextController,
+                                    validator: (value) {
+                                      final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                                      if (limitPrice != null) {
+                                        if (limitPrice >=
+                                            controller.getInstrumentLastPrice(
+                                              stopLoss.instrumentToken!,
+                                              stopLoss.exchangeInstrumentToken!,
+                                            )) {
+                                          return 'Price should be \nless than LTP.';
                                         }
                                       }
                                       return null;
                                     },
                                   )
                                 : CommonTextField(
-                                    hintText: 'StopProfit Price',
+                                    hintText: 'Limit Price',
+                                    keyboardType: TextInputType.number,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                                     ],
-                                    controller: controller.stopProfitPriceTextController,
+                                    controller: controller.limitPriceTextController,
                                     validator: (value) {
-                                      final stopProfitPrice =
-                                          double.tryParse(controller.stopProfitPriceTextController.text);
-                                      if (stopProfitPrice != null) {
-                                        if (stopProfitPrice <=
+                                      final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                                      if (limitPrice != null) {
+                                        if (limitPrice <=
                                             controller.getInstrumentLastPrice(
                                               stopLoss.instrumentToken!,
                                               stopLoss.exchangeInstrumentToken!,
                                             )) {
-                                          return 'Stop Profit price should \n be greater than LTP.';
+                                          return 'Price should be \ngreater than LTP.';
                                         }
                                       }
                                       return null;
                                     },
-                                  )
-                            : CommonTextField(
-                                hintText: 'Limit Price',
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                                ],
-                                controller: controller.limitPriceTextController,
-                                validator: (value) {
-                                  final limitPrice = double.tryParse(controller.limitPriceTextController.text);
-                                  if (limitPrice != null) {
-                                    if (stopLoss.buyOrSell == 'BUY') {
-                                      if (limitPrice >=
-                                          controller.getInstrumentLastPrice(
-                                            stopLoss.instrumentToken!,
-                                            stopLoss.exchangeInstrumentToken!,
-                                          )) {
-                                        return 'Price should be \nless than LTP.';
-                                      }
-                                    } else if (stopLoss.buyOrSell == 'SELL') {
-                                      if (limitPrice <=
-                                          controller.getInstrumentLastPrice(
-                                            stopLoss.instrumentToken!,
-                                            stopLoss.exchangeInstrumentToken!,
-                                          )) {
-                                        return 'Price should be \ngreater than LTP.';
-                                      }
-                                    }
-                                  }
-                                  return null;
-                                },
-                              ),
+                                  ),
                       ),
                     ],
                   ),
@@ -232,6 +266,11 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                         if (controller.stopLossPriceTextController.text.isEmpty &&
                             controller.stopProfitPriceTextController.text.isEmpty) {
                           SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                        } else {
+                          controller.getStopLossEditOrder(
+                            stopLoss.id,
+                            stopLoss.type,
+                          );
                         }
                       } else if (controller.limitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar('Please Enter Price');

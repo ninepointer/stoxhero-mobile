@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -437,6 +439,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           controller.limitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar('Please Enter Price');
                       } else if (controller.stopLossFormKey.currentState!.validate()) {
+                        log('CalCualte Margin ${controller.calculateMargin()}');
+                        log('CalCualte Margin ${controller.marginRequired.value.margin}');
                         controller.placeTenxTradingOrder(
                           type,
                           tradingInstrument,
@@ -457,3 +461,37 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
     );
   }
 }
+
+
+// onPressed: () {
+//   if (controller.selectedGroupValue.value == 3) {
+//     if (controller.stopLossPriceTextController.text.isEmpty &&
+//         controller.stopProfitPriceTextController.text.isEmpty) {
+//       SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+//     } else if (controller.stopLossFormKey.currentState!.validate()) {
+//       // Perform action specific to StopLoss or StopProfit
+//       controller.placeTenxTradingOrder(
+//         type,
+//         tradingInstrument,
+//       );
+//       controller.selectedGroupValue.value = 2;
+//       // Clear all text fields
+//       controller.stopLossPriceTextController.clear();
+//       controller.stopProfitPriceTextController.clear();
+//       controller.limitPriceTextController.clear();
+//     }
+//   } else if (controller.selectedGroupValue.value == 1) {
+//     if (controller.limitPriceTextController.text.isEmpty) {
+//       SnackbarHelper.showSnackbar('Please Enter Price');
+//     } else if (controller.stopLossFormKey.currentState!.validate()) {
+//       // Perform action for Limit
+//       controller.placeTenxTradingOrder(
+//         type,
+//         tradingInstrument,
+//       );
+//       controller.selectedGroupValue.value = 2;
+//       // Clear the limit price text field
+//       controller.limitPriceTextController.clear();
+//     }
+//   }
+// },
