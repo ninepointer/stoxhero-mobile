@@ -18,6 +18,7 @@ class WalletController extends BaseController<WalletRepository> {
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
   final token = ''.obs;
+
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
@@ -39,11 +40,16 @@ class WalletController extends BaseController<WalletRepository> {
   final selectedTabBarIndex = 0.obs;
   final selectedSecondTabBarIndex = 0.obs;
 
+  final addMoneyAmountTextController = TextEditingController();
+
   final couponCodeTextController = TextEditingController();
   final isCouponCodeAdded = false.obs;
   final couponCodeSuccessText = "".obs;
   final actualSubscriptionAmount = 0.0.obs;
   final subscriptionAmount = 0.0.obs;
+
+  final paymentGroupValue = 'wallet'.obs;
+  final selectedPaymentValue = 'wallet'.obs;
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
   void changeSecondTabBarIndex(int val) => selectedSecondTabBarIndex.value = val;
@@ -59,7 +65,7 @@ class WalletController extends BaseController<WalletRepository> {
 
   void onCancel() => Get.back();
 
-  void loadData() async {
+  Future loadData() async {
     getWalletTransactionsList();
     getMyWithdrawalsTransactionsList();
   }
@@ -214,5 +220,45 @@ class WalletController extends BaseController<WalletRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isCouponCodeLoading(false);
+  }
+
+  Future<bool> initPaymentRequest(PaymentRequest data) async {
+    try {
+      final RepoResponse<GenericResponse> response = await repository.makePayment(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          return true;
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+      return false;
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    return false;
+  }
+
+  Future<bool> checkPaymentStatus(String id) async {
+    try {
+      final RepoResponse<GenericResponse> response = await repository.checkPaymentStatus(
+        id,
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          return true;
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+      return false;
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    return false;
   }
 }

@@ -331,7 +331,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                         } else {
                           BottomSheetHelper.openBottomSheet(
                             context: context,
-                            child: PurchaseItemBottomSheet(
+                            child: PaymentBottomSheet(
                               productType: ProductType.marginx,
                               buyItemPrice: widget.marginx?.marginXTemplate?.entryFee ?? 0,
                               onSubmit: () {

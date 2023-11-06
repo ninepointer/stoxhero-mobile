@@ -307,7 +307,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       } else {
                         BottomSheetHelper.openBottomSheet(
                           context: context,
-                          child: PurchaseItemBottomSheet(
+                          child: PaymentBottomSheet(
                             productType: ProductType.collegeContest,
                             buyItemPrice: contest?.entryFee ?? 0,
                             onSubmit: () {

@@ -18,6 +18,11 @@ class AppConstants {
   static const String complete = "COMPLETE";
 }
 
+enum PaymentTransactionType {
+  credit,
+  debit,
+}
+
 enum TransactionType {
   buy,
   sell,
@@ -31,4 +36,5 @@ enum ProductType {
   contest,
   collegeContest,
   internship,
+  wallet,
 }

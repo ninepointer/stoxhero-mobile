@@ -143,7 +143,7 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                           print(subscription.toJson());
                           BottomSheetHelper.openBottomSheet(
                             context: context,
-                            child: PurchaseItemBottomSheet(
+                            child: PaymentBottomSheet(
                               productType: ProductType.tenx,
                               buyItemPrice: subscription.discountedPrice ?? 0,
                               onSubmit: () {

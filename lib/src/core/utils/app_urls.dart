@@ -6,10 +6,14 @@ class AppUrls {
 
   static const String referralWebUrl = 'https://www.stoxhero.com/?referral=';
 
+  static const String paymentCallBackUrl = "https://stoxhero.com/api/v1/payment/callback";
+
   static const String tenxYoutubeVideoLink = 'https://www.youtube.com/watch?v=a3_bmjv5tXQ';
 
   static const String appVersion = '$apiURL/mobileappversion';
   static const String defaultInviteCode = "$apiURL/campaign/defaultinvite";
+  static const String makePayment = "$apiURL/payment/makepayment";
+  static const String checkPaymentStatus = "$apiURL/payment/checkstatus";
 
   static const String tenx = '$apiURL/tenX';
   static const String tradeMarginDetails = 'trade/marginDetail';

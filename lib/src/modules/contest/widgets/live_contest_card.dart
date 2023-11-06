@@ -304,7 +304,7 @@ class LiveContestCard extends GetView<ContestController> {
                       } else {
                         BottomSheetHelper.openBottomSheet(
                           context: context,
-                          child: PurchaseItemBottomSheet(
+                          child: PaymentBottomSheet(
                             productType: ProductType.contest,
                             buyItemPrice: contest?.entryFee ?? 0,
                             onSubmit: () {

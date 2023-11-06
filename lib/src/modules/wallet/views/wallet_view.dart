@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
@@ -34,66 +33,112 @@ class _WalletViewState extends State<WalletView> {
             AppStrings.transactions,
           ],
           tabs: [
-            Container(
-              child: Column(
-                children: [
-                  WalletCard(
-                    label: 'Deposit',
-                    value: '₹0.00',
-                    iconData: Icons.account_balance_wallet_rounded,
-                    buttonLabel: 'Add Money',
-                    onPressed: () => Get.to(() => PaymentView()),
+            RefreshIndicator(
+              onRefresh: controller.loadData,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.only(bottom: 100),
+                child: Visibility(
+                  visible: controller.isRecentLoadingStatus,
+                  child: ListViewShimmer(
+                    shimmerCard: SmallCardShimmer(),
                   ),
-                  WalletCard(
-                    label: 'Cash',
-                    value: FormatHelper.formatNumbers(controller.totalCashAmount.value),
-                    iconData: Icons.payments_rounded,
-                    buttonLabel: 'Withdraw',
-                    onPressed: () => BottomSheetHelper.openBottomSheet(
-                      context: context,
-                      child: WalletTransactionBottomSheet(),
-                    ),
-                  ),
-                  WalletCard(
-                    label: 'HeroCash',
-                    value: '₹0.00',
-                    iconData: Icons.redeem_rounded,
-                    buttonLabel: 'Redeem',
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      const url = 'https://stoxhero.com/';
-                      if (await canLaunchUrl(Uri.parse(url))) {
-                        await launchUrl(Uri.parse(url));
-                      } else {
-                        throw 'Could not launch $url';
-                      }
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          style: AppStyles.tsGreyRegular14,
+                  replacement: Container(
+                    margin: EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Row(
                           children: [
-                            TextSpan(
-                              text: 'Currently payment method is only available on the web, visit ',
-                            ),
-                            TextSpan(
-                              text: 'www.stoxhero.com',
-                              style: AppStyles.tsPrimaryMedium14.copyWith(
-                                decoration: TextDecoration.underline,
+                            Expanded(
+                              child: WalletCard(
+                                label: 'Cash',
+                                value: FormatHelper.formatNumbers(controller.totalCashAmount.value),
+                                iconData: Icons.payments_rounded,
+                                buttonLabel: 'Withdraw',
                               ),
                             ),
-                            TextSpan(
-                              text: ' to top-up your wallet.',
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: WalletCard(
+                                label: 'HeroCash',
+                                value: '₹0.00',
+                                iconData: Icons.redeem_rounded,
+                                buttonLabel: 'Redeem',
+                              ),
                             ),
                           ],
                         ),
-                      ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CommonFilledButton(
+                                backgroundColor: AppColors.success,
+                                height: 42,
+                                label: 'Withdraw',
+                                onPressed: () => BottomSheetHelper.openBottomSheet(
+                                  context: context,
+                                  child: WalletTransactionBottomSheet(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: CommonFilledButton(
+                                height: 42,
+                                label: 'Add Money',
+                                onPressed: () => BottomSheetHelper.openBottomSheet(
+                                  context: context,
+                                  child: PaymentBottomSheet(
+                                    productType: ProductType.wallet,
+                                    paymentTransactionType: PaymentTransactionType.credit,
+                                    buyItemPrice: 0,
+                                    onSubmit: () {},
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     const url = 'https://stoxhero.com/';
+                        //     if (await canLaunchUrl(Uri.parse(url))) {
+                        //       await launchUrl(Uri.parse(url));
+                        //     } else {
+                        //       throw 'Could not launch $url';
+                        //     }
+                        //   },
+                        //   child: Padding(
+                        //     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16).copyWith(
+                        //       top: 0,
+                        //     ),
+                        //     child: RichText(
+                        //       textAlign: TextAlign.center,
+                        //       text: TextSpan(
+                        //         style: AppStyles.tsGreyRegular14,
+                        //         children: [
+                        //           TextSpan(
+                        //             text: 'Currently payment method is only available on the web, visit ',
+                        //           ),
+                        //           TextSpan(
+                        //             text: 'www.stoxhero.com',
+                        //             style: AppStyles.tsPrimaryMedium14.copyWith(
+                        //               decoration: TextDecoration.underline,
+                        //             ),
+                        //           ),
+                        //           TextSpan(
+                        //             text: ' to top-up your wallet.',
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
             CommonTabBar(
@@ -184,67 +229,6 @@ class _WalletViewState extends State<WalletView> {
           ],
         ),
       ),
-
-      // body: Obx(
-      //   () => Visibility(
-      //     visible: !controller.isLoadingStatus,
-      //     replacement: CommonLoader(),
-      //     child: SingleChildScrollView(
-      //       child: Container(
-      //         child: Column(
-      //           children: [
-      //             WalletCard(
-      //               label: 'Deposit',
-      //               value: '₹ 0.00',
-      //               iconData: Icons.account_balance_wallet_rounded,
-      //               buttonLabel: 'Add Money',
-      //               // onPressed: () => Get.to(PaymentView()),
-      //             ),
-      //             WalletCard(
-      //               label: 'Cash',
-      //               value: FormatHelper.formatNumbers(controller.totalCashAmount.value),
-      //               iconData: Icons.payments_rounded,
-      //               buttonLabel: 'Withdrawal',
-      //               onPressed: () => BottomSheetHelper.openBottomSheet(
-      //                 context: context,
-      //                 child: WalletTransactionBottomSheet(),
-      //               ),
-      //             ),
-      //             WalletCard(
-      //               label: 'HeroCash',
-      //               value: '0',
-      //               iconData: Icons.redeem_rounded,
-      //               buttonLabel: 'Redeem',
-      //               onPressed: null,
-      //             ),
-      //             if (controller.walletTransactionsList.isNotEmpty)
-      //               CommonTile(
-      //                 label: 'Recent Transactions',
-      //                 margin: EdgeInsets.only(bottom: 0, top: 8),
-      //               ),
-      //             if (controller.walletTransactionsList.isNotEmpty)
-      //               ListView.builder(
-      //                 shrinkWrap: true,
-      //                 physics: NeverScrollableScrollPhysics(),
-      //                 padding: EdgeInsets.zero,
-      //                 itemCount: controller.walletTransactionsList.length,
-      //                 itemBuilder: (context, index) {
-      //                   var trans = controller.walletTransactionsList[index];
-      //                   return WalletTransactionCard(
-      //                     label: trans.title,
-      //                     subtitle: trans.description,
-      //                     dateTime: FormatHelper.formatDateTime(trans.transactionDate),
-      //                     amount: trans.amount,
-      //                   );
-      //                 },
-      //               ),
-      //             SizedBox(height: 36),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

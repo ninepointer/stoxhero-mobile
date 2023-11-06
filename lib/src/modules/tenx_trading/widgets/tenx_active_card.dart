@@ -187,7 +187,7 @@ class TenxActiveCard extends GetView<TenxTradingController> {
 
                           BottomSheetHelper.openBottomSheet(
                             context: context,
-                            child: PurchaseItemBottomSheet(
+                            child: PaymentBottomSheet(
                               productType: ProductType.tenx,
                               buyItemPrice: subscription.discountedPrice ?? 0,
                               onSubmit: () {

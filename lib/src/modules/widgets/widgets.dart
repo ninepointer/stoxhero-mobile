@@ -2,7 +2,7 @@ export 'buy_sell_exit_buttons.dart';
 export 'dashboard_shimmer.dart';
 export 'portfolio_detail_card_tile.dart';
 export 'position_detail_card_tile.dart';
-export 'purchase_item_bottom_sheet.dart';
+export 'payment_bottom_sheet.dart';
 export 'referral_code_card.dart';
 export 'trade_card_tile.dart';
 export 'trading_instrument_search_card.dart';

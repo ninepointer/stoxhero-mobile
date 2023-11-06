@@ -21,10 +21,7 @@ class WalletCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.all(16).copyWith(
-        top: 8,
-        bottom: 0,
-      ),
+      margin: EdgeInsets.zero,
       children: [
         Row(
           children: [
