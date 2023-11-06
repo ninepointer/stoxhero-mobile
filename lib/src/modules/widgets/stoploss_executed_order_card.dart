@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
 
-import '../../../app/app.dart';
-
-class TenxTodayOrderCard extends StatelessWidget {
-  final TenxTradeOrder order;
-  const TenxTodayOrderCard({
+class StoplossExecutedOrderCard extends StatelessWidget {
+  final StopLossExecutedOrdersList stopLoss;
+  const StoplossExecutedOrderCard({
     Key? key,
-    required this.order,
+    required this.stopLoss,
   }) : super(key: key);
 
   @override
@@ -26,29 +25,29 @@ class TenxTodayOrderCard extends StatelessWidget {
                 children: [
                   TradeCardTile(
                     label: 'Symbol',
-                    value: order.symbol,
+                    value: stopLoss.symbol,
                   ),
                   TradeCardTile(
                     isRightAlign: true,
+                    label: 'Execution Price',
+                    value: FormatHelper.formatNumbers(
+                      stopLoss.executionPrice,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TradeCardTile(
                     label: 'Quantity',
-                    value: order.quantity.toString(),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TradeCardTile(
-                    label: 'Average Price',
-                    value: FormatHelper.formatNumbers(
-                      order.averagePrice,
-                    ),
+                    value: stopLoss.quantity.toString(),
                   ),
                   TradeCardTile(
                     isRightAlign: true,
-                    label: 'Amount',
+                    label: 'LTP (Last Traded Price)',
                     value: FormatHelper.formatNumbers(
-                      order.amount,
+                      stopLoss.amount,
                     ),
                   ),
                 ],
@@ -57,28 +56,33 @@ class TenxTodayOrderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TradeCardTile(
+                    hasBottomMargin: false,
+                    label: 'Type',
+                    value: stopLoss.type,
+                  ),
+                  TradeCardTile(
+                    isRightAlign: true,
                     hasBottomMargin: false,
                     label: 'Transaction Type',
-                    value: order.buyOrSell,
-                    valueColor: order.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
-                  ),
-                  TradeCardTile(
-                    isRightAlign: true,
-                    label: 'Status',
-                    value: order.status,
-                    valueColor: order.status == "COMPLETE" ? AppColors.success : AppColors.danger,
-                    hasBottomMargin: false,
+                    value: stopLoss.buyOrSell,
+                    valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
                   ),
                 ],
               ),
-              SizedBox(height: 2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TradeCardTile(
+                    label: 'Status',
+                    value: stopLoss.status,
+                    valueColor: stopLoss.status == "Executed" ? AppColors.success : AppColors.danger,
+                    hasBottomMargin: false,
+                  ),
+                  TradeCardTile(
+                    isRightAlign: true,
                     hasBottomMargin: true,
                     label: 'Execution Time',
-                    value: FormatHelper.formatDateTimeToIST(order.tradeTimeUtc),
+                    value: FormatHelper.formatDateTimeToIST(stopLoss.time),
                   ),
                 ],
               )

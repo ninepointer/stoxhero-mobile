@@ -90,6 +90,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxPortfolioDetails = TenxTradingPortfolioDetails().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final userSubscriptionsIds = <String>[].obs;
+
   final selectedQuantity = 0.obs;
   final selectedStringQuantity = "0".obs;
   final lotsValueList = <int>[0].obs;
@@ -441,9 +442,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
         : (openingBalance - margin);
-    print(availableMargin);
-    print(calculateTotalNetPNL());
-    print(margin);
+    // print('availableMargin $availableMargin');
+    // print('calculateTotalNetPNL ${calculateTotalNetPNL()}');
+    // print('margin$margin');
     return availableMargin;
   }
 
@@ -748,25 +749,25 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       quantity: selectedQuantity.value,
       product: "NRML",
       orderType: selectedType.value,
+      stopLoss: "",
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      price: double.tryParse(limitPriceTextController.text),
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
+      instrumentToken: inst.instrumentToken,
       validity: "DAY",
       variety: "regular",
       createdBy: userDetails.value.name,
-      orderId: Uuid().v4(),
-      subscriptionId: selectedSubscriptionId.value,
       userId: userDetails.value.email,
-      instrumentToken: inst.instrumentToken,
       trader: userDetails.value.sId,
+      orderId: Uuid().v4(),
       paperTrade: false,
       tenxTraderPath: true,
+      subscriptionId: selectedSubscriptionId.value,
       battleId: selectedSubscriptionId.value,
       marginxId: selectedSubscriptionId.value,
-      price: limitPriceTextController.text,
       triggerPrice: "",
-      stopLoss: "",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
@@ -786,7 +787,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         await getTenxTodayOrdersList();
         await getTenxTradingPortfolioDetails();
       } else if (response.data?.status == "Failed") {
-        print(response.error!.message!.toString());
+        log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1146,6 +1147,27 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     }
   }
 
+  Future getTenxTodayOrdersList() async {
+    isOrderStateLoading(true);
+    try {
+      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeTodaysOrdersList(
+        selectedSubscriptionId.value,
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          tenxTradeTodaysOrdersList(response.data?.data ?? []);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isOrderStateLoading(false);
+    }
+  }
+
   Future getStopLossExecutedOrder() async {
     isExecutedOrderStateLoading(true);
     try {
@@ -1187,8 +1209,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     try {
       await repository.getStopLossPendingCancelOrder(id ?? '');
       await getStopLossPendingOrder();
-      await getStopLossExecutedOrder();
       await getTenxTradingPortfolioDetails();
+      await getStopLossExecutedOrder();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1218,7 +1240,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       quantity: selectedQuantity.value,
       product: "NRML",
-      orderType: selectedType.value,
+      orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
@@ -1228,6 +1250,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       id: selectedSubscriptionId.value,
       lastPrice: inst.lastPrice.toString(),
       variety: "regular",
+      from: "TenX Trader",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
@@ -1244,8 +1267,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         SnackbarHelper.showSnackbar(response.data?.message);
         await getStopLossPendingOrder();
         await getTenxTodayOrdersList();
-
-        // await getTenxTradingPortfolioDetails();
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1283,27 +1304,6 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isPendingOrderStateLoading(false);
-  }
-
-  Future getTenxTodayOrdersList() async {
-    isOrderStateLoading(true);
-    try {
-      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeTodaysOrdersList(
-        selectedSubscriptionId.value,
-      );
-      if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {
-          tenxTradeTodaysOrdersList(response.data?.data ?? []);
-        } else {
-          SnackbarHelper.showSnackbar(response.error?.message);
-        }
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    } finally {
-      isOrderStateLoading(false);
-    }
   }
 
   Future socketSendConnection() async {

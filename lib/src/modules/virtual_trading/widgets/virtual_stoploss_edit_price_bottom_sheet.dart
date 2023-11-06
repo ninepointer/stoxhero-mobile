@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
+class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingController> {
   final StopLossPendingOrdersList stopLoss;
-  const StoplossEditPriceBottomSheet({
+  const VirtualStoplossEditPriceBottomSheet({
     Key? key,
     required this.stopLoss,
   }) : super(key: key);
@@ -80,7 +80,6 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        // '',
                         stopLoss.symbol ?? '-',
                         style: AppStyles.tsSecondaryMedium16,
                       ),
@@ -91,7 +90,6 @@ class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
                             stopLoss.exchangeInstrumentToken!,
                           ),
                         ),
-                        // '',
                         style: AppStyles.tsSecondaryMedium16,
                       ),
                     ],

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class StoplossEditPriceBottomSheet extends GetView<TenxTradingController> {
+class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
   final StopLossPendingOrdersList stopLoss;
-  const StoplossEditPriceBottomSheet({
+  const MarginXStoplossEditPriceBottomSheet({
     Key? key,
     required this.stopLoss,
   }) : super(key: key);

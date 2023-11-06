@@ -32,6 +32,31 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
     );
   }
 
+  void openModifyBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      position.id!.instrumentToken!,
+      position.id!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    controller.generateLotsList(type: position.id?.symbol);
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: VirtualStoplossModifyPriceBottomSheet(
+        type: type,
+        stopLoss: TradingInstrument(
+          name: position.id?.symbol,
+          exchange: position.id?.exchange,
+          tradingsymbol: position.id?.symbol,
+          exchangeToken: position.id?.exchangeInstrumentToken,
+          instrumentToken: position.id?.instrumentToken,
+          lastPrice: lastPrice,
+          lotSize: position.lots,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -95,13 +120,13 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'LTP (Last Traded Price)',
-                        valueColor: controller.getValueColor(
+                        value: FormatHelper.formatNumbers(
                           controller.getInstrumentLastPrice(
                             position.id!.instrumentToken!,
                             position.id!.exchangeInstrumentToken!,
                           ),
                         ),
-                        value: FormatHelper.formatNumbers(
+                        valueColor: controller.getValueColor(
                           controller.getInstrumentLastPrice(
                             position.id!.instrumentToken!,
                             position.id!.exchangeInstrumentToken!,
@@ -121,16 +146,16 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       TradeCardTile(
                         hasBottomMargin: false,
                         isRightAlign: true,
-                        label: 'Changes(%)',
+                        label: 'Changes (%)',
+                        value: controller.getInstrumentChanges(
+                          position.id?.instrumentToken ?? 0,
+                          position.id?.exchangeInstrumentToken ?? 0,
+                        ),
                         valueColor: controller.getValueColor(
                           controller.getInstrumentChanges(
                             position.id?.instrumentToken ?? 0,
                             position.id?.exchangeInstrumentToken ?? 0,
                           ),
-                        ),
-                        value: controller.getInstrumentChanges(
-                          position.id?.instrumentToken ?? 0,
-                          position.id?.exchangeInstrumentToken ?? 0,
                         ),
                       ),
                     ],
@@ -186,7 +211,6 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       List<int> lots = controller.generateLotsList(type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
                       int maxLots = lots.last;
-
                       if (exitLots == 0) {
                         SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
@@ -194,21 +218,22 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                           if (exitLots < 0) {
                             exitLots = -exitLots;
                           }
+
                           if (!lots.contains(exitLots)) {
                             lots.add(exitLots);
                             lots.sort();
                           }
                           controller.selectedQuantity.value = exitLots;
                         }
+
                         if (exitLots > maxLots) {
                           controller.selectedQuantity.value = maxLots;
                         } else {
                           controller.selectedQuantity.value = exitLots;
                         }
-                        controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-                        print(controller.selectedStringQuantity.value);
                         controller.lotsValueList.assignAll(lots);
-                        TradingInstrument tradingInstrument = TradingInstrument(
+                        controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+                        TradingInstrument trading = TradingInstrument(
                           name: position.id?.symbol,
                           exchange: position.id?.exchange,
                           tradingsymbol: position.id?.symbol,
@@ -224,8 +249,8 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                           context: context,
                           child: VirtualTransactionBottomSheet(
                             type: TransactionType.exit,
-                            tradingInstrument: tradingInstrument,
-                            marginRequired: controller.getMarginRequired(TransactionType.exit, tradingInstrument),
+                            tradingInstrument: trading,
+                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
                           ),
                         );
                       }
@@ -235,14 +260,40 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.secondary.withOpacity(.25),
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(8),
-                        ),
                       ),
                       child: Text(
                         'EXIT ALL',
                         style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.secondary.shade600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (position.lots!.toInt() == 0) {
+                        // SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                      } else if (controller.selectedQuantity.value.toString().contains('-')) {
+                        openModifyBottomSheet(context, TransactionType.sell);
+                      } else {
+                        openModifyBottomSheet(context, TransactionType.buy);
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.info.withOpacity(.25),
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        'MODIFY',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
+                          color: AppColors.info,
                         ),
                       ),
                     ),

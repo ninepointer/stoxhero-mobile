@@ -233,7 +233,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           },
                         ),
                   CommonTile(
-                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    isLoading: controller.isExecutedOrderStateLoadingStatus,
                     label: 'My Executed Orders',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),

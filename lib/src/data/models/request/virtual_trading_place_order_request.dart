@@ -4,12 +4,13 @@ class VirtualTradingPlaceOrderRequest {
   String? exchange;
   String? symbol;
   String? buyOrSell;
-  dynamic quantity;
-  String? price;
+  int? quantity;
+  String? stopLoss;
   String? product;
   String? orderType;
   String? triggerPrice;
-  String? stopLoss;
+  String? stopProfitPrice;
+  String? stopLossPrice;
   String? uId;
   int? exchangeInstrumentToken;
   String? validity;
@@ -20,6 +21,7 @@ class VirtualTradingPlaceOrderRequest {
   int? instrumentToken;
   String? trader;
   bool? paperTrade;
+  num? price;
   DeviceDetails? deviceDetails;
 
   VirtualTradingPlaceOrderRequest({
@@ -27,11 +29,12 @@ class VirtualTradingPlaceOrderRequest {
     this.symbol,
     this.buyOrSell,
     this.quantity,
-    this.price,
+    this.stopLoss,
     this.product,
     this.orderType,
     this.triggerPrice,
-    this.stopLoss,
+    this.stopProfitPrice,
+    this.stopLossPrice,
     this.uId,
     this.exchangeInstrumentToken,
     this.validity,
@@ -42,6 +45,7 @@ class VirtualTradingPlaceOrderRequest {
     this.instrumentToken,
     this.trader,
     this.paperTrade,
+    this.price,
     this.deviceDetails,
   });
 
@@ -50,11 +54,12 @@ class VirtualTradingPlaceOrderRequest {
     symbol = json['symbol'];
     buyOrSell = json['buyOrSell'];
     quantity = json['Quantity'];
-    price = json['Price'];
+    stopLoss = json['stopLoss'];
     product = json['Product'];
     orderType = json['order_type'];
     triggerPrice = json['TriggerPrice'];
-    stopLoss = json['stopLoss'];
+    stopProfitPrice = json['stopProfitPrice'];
+    stopLossPrice = json['stopLossPrice'];
     uId = json['uId'];
     exchangeInstrumentToken = json['exchangeInstrumentToken'];
     validity = json['validity'];
@@ -65,6 +70,7 @@ class VirtualTradingPlaceOrderRequest {
     instrumentToken = json['instrumentToken'];
     trader = json['trader'];
     paperTrade = json['paperTrade'];
+    price = json['price'];
     deviceDetails = json['deviceDetails'] != null ? new DeviceDetails.fromJson(json['deviceDetails']) : null;
   }
 
@@ -74,11 +80,12 @@ class VirtualTradingPlaceOrderRequest {
     data['symbol'] = this.symbol;
     data['buyOrSell'] = this.buyOrSell;
     data['Quantity'] = this.quantity;
-    data['Price'] = this.price;
+    data['stopLoss'] = this.stopLoss;
     data['Product'] = this.product;
     data['order_type'] = this.orderType;
     data['TriggerPrice'] = this.triggerPrice;
-    data['stopLoss'] = this.stopLoss;
+    data['stopProfitPrice'] = this.stopProfitPrice;
+    data['stopLossPrice'] = this.stopLossPrice;
     data['uId'] = this.uId;
     data['exchangeInstrumentToken'] = this.exchangeInstrumentToken;
     data['validity'] = this.validity;
@@ -89,6 +96,7 @@ class VirtualTradingPlaceOrderRequest {
     data['instrumentToken'] = this.instrumentToken;
     data['trader'] = this.trader;
     data['paperTrade'] = this.paperTrade;
+    data['price'] = this.price;
     if (this.deviceDetails != null) {
       data['deviceDetails'] = this.deviceDetails!.toJson();
     }

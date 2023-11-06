@@ -5,7 +5,7 @@ class TenxTradingPlaceOrderRequest {
   String? symbol;
   String? buyOrSell;
   int? quantity;
-  String? price;
+  num? price;
   String? battleId;
   String? product;
   String? orderType;

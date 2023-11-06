@@ -172,9 +172,17 @@ class AppUrls {
   static String tenxSubscriberCount(String? id) => "$apiURL/tenX/subscribercount/$id";
   static String verifyAndParticipate(String? id) => "$apiURL/dailycontest/contest/$id/varifycodeandparticipate";
 
-  static String tenxStopLossExecutedOrder(String? id) =>
-      '$apiURL/pendingorder/my/todaysProcessed/$id/TenX?skip=0&limit=5';
-  static String tenxStopLossPendingOrder(String? id) => '$apiURL/pendingorder/my/todaysPending/$id/TenX?skip=0&limit=5';
-  static String tenxStopLossPendingCancelOrder(String? id) => '$apiURL/pendingorder/$id';
-  static String tenxStopLossEditOrder(String? id) => '$apiURL/pendingorder/editprice/$id';
+  static const String pendingOrder = "$apiURL/pendingorder/my";
+  static String tenxStopLossExecutedOrder(String? id) => "$pendingOrder/todaysProcessed/$id/TenX%20Trader";
+  static String tenxStopLossPendingOrder(String? id) => "$pendingOrder/todaysPending/$id/TenX%20Trader";
+  static String tenxStopLossPendingCancelOrder(String? id) => "$apiURL/pendingorder/$id/TenX%20Trader";
+  static String stopLossEditOrder(String? id) => "$apiURL/pendingorder/editprice/$id";
+
+  static String virtualStopLossExecutedOrder(String? id) => "$pendingOrder/todaysProcessed/$id/paperTrade";
+  static String virtualStopLossPendingOrder(String? id) => "$pendingOrder/todaysPending/$id/paperTrade";
+  static String virtualStopLossPendingCancelOrder(String? id) => "$apiURL/pendingorder/$id/paperTrade";
+
+  static String contestStopLossExecutedOrder(String? id) => "$pendingOrder/todaysProcessed/$id/Daily%20Contest";
+  static String contestStopLossPendingOrder(String? id) => "$pendingOrder/todaysPending/$id/Daily%20Contest";
+  static String contestStopLossPendingCancelOrder(String? id) => "$apiURL/pendingorder/$id/Daily%20Contest";
 }

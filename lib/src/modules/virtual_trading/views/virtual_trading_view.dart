@@ -147,10 +147,83 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.virtualPositionsList.length,
                           itemBuilder: (context, index) {
-                            return VirtualPositionCard(
-                              position: controller.virtualPositionsList[index],
+                            final position = controller.virtualPositionsList[index];
+                            if (position.id?.isLimit != true) {
+                              return VirtualPositionCard(
+                                position: position,
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPendingOrderStateLoadingStatus,
+                    label: 'My Pending Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossPendingOrderList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.stopLossPendingOrderList.length,
+                          itemBuilder: (context, index) {
+                            return VirtualStoplossPendingOrderCard(
+                              stopLoss: controller.stopLossPendingOrderList[index],
                             );
                           },
+                        ),
+                  CommonTile(
+                    isLoading: controller.isExecutedOrderStateLoadingStatus,
+                    label: 'My Executed Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossExecutedOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.stopLossExecutedOrdersList.length >= 3
+                              ? 180
+                              : controller.stopLossExecutedOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return StoplossExecutedOrderCard(
+                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                              );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'My Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.virtualTradeTodaysOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.virtualTradeTodaysOrdersList.length >= 3
+                              ? 180
+                              : controller.virtualTradeTodaysOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.virtualTradeTodaysOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return VirtualTodayOrderCard(
+                                order: controller.virtualTradeTodaysOrdersList[index],
+                              );
+                            },
+                          ),
                         ),
                   CommonTile(
                     isLoading: controller.isPortfolioStateLoadingStatus,
