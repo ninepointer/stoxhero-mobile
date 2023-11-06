@@ -12,3 +12,4 @@ export 'trading_stock_card.dart';
 export 'trading_watchlist_card.dart';
 export 'update_alert_dialog.dart';
 export 'trading_position_card.dart';
+export 'stoploss_executed_order_card.dart';

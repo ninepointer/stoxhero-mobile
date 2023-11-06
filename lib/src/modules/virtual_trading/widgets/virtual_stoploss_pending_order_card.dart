@@ -1,38 +1,37 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-
 import '../../../app/app.dart';
 
-class StoplossPendingOrderCard extends GetView<TenxTradingController> {
+class VirtualStoplossPendingOrderCard extends GetView<VirtualTradingController> {
   final StopLossPendingOrdersList stopLoss;
-  const StoplossPendingOrderCard({
+  const VirtualStoplossPendingOrderCard({
     Key? key,
     required this.stopLoss,
   }) : super(key: key);
 
+  void openBottomSheet(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    log(stopLoss.type.toString());
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: VirtualStoplossEditPriceBottomSheet(
+        stopLoss: StopLossPendingOrdersList(
+          id: stopLoss.id,
+          type: stopLoss.type,
+          symbol: stopLoss.symbol,
+          quantity: stopLoss.quantity,
+          buyOrSell: stopLoss.buyOrSell,
+          instrumentToken: stopLoss.instrumentToken,
+          exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
+          price: stopLoss.price,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    void openBottomSheet(BuildContext context) {
-      FocusScope.of(context).unfocus();
-      log(stopLoss.type.toString());
-      BottomSheetHelper.openBottomSheet(
-        context: context,
-        child: StoplossEditPriceBottomSheet(
-          stopLoss: StopLossPendingOrdersList(
-            id: stopLoss.id,
-            type: stopLoss.type,
-            symbol: stopLoss.symbol,
-            quantity: stopLoss.quantity,
-            buyOrSell: stopLoss.buyOrSell,
-            instrumentToken: stopLoss.instrumentToken,
-            exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
-            price: stopLoss.price,
-          ),
-        ),
-      );
-    }
-
     return Obx(
       () => CommonCard(
         hasBorder: false,
@@ -147,9 +146,7 @@ class StoplossPendingOrderCard extends GetView<TenxTradingController> {
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap: () {
-                    controller.getStopLossPendingCancelOrder(stopLoss.id);
-                  },
+                  onTap: () => controller.getStopLossPendingCancelOrder(stopLoss.id),
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(6),

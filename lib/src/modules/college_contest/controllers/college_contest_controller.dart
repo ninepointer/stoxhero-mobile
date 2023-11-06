@@ -60,6 +60,15 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   final isMarginStateLoading = false.obs;
   bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
+
+  final isPendingOrderStateLoading = false.obs;
+  bool get isPendingOrderStateLoadingStatus => isPendingOrderStateLoading.value;
+
+  final isOrderStateLoading = false.obs;
+  bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
+
+  final isExecutedOrderStateLoading = false.obs;
+  bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
   final selectedTabBarIndex = 0.obs;
   final selectedSecondTabBarIndex = 0.obs;
 
@@ -112,6 +121,17 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final selectedQuantity = 0.obs;
   final lotsValueList = <int>[0].obs;
   final selectedContest = UpComingContest().obs;
+  final stopLossFormKey = GlobalKey<FormState>();
+  final stopLossPriceTextController = TextEditingController();
+  final stopProfitPriceTextController = TextEditingController();
+  final quanitityTextController = TextEditingController();
+  final limitPriceTextController = TextEditingController();
+  final stopLossExecutedOrdersList = <StopLossExecutedOrdersList>[].obs;
+  final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
+  final stopLossPendingOrder = StopLossPendingOrdersList().obs;
+  final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final selectedType = "".obs;
+  final selectedGroupValue = 0.obs;
   final selectedContestId = ''.obs;
   final selectedContestName = ''.obs;
   final selectedStringQuantity = "0".obs;
@@ -168,10 +188,14 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     await getStockIndexInstrumentsList();
     await getContestWatchList();
     await getContestPositions();
+    await getStopLossPendingOrder();
+    await getStopLossExecutedOrder();
+    await getContestTodaysOrderList();
     await getContestPortfolio();
     socketConnection();
     socketIndexConnection();
     socketLeaderboardConnection();
+    socketSendConnection();
   }
 
   Future loadRegisterData() async {
@@ -182,6 +206,35 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   void gotoTradingView() {
     loadTradingData();
     Get.to(() => CollegeContestTradingView());
+  }
+
+  bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
+    bool isDisabled = false;
+
+    if (type == TransactionType.buy) {
+      if (transactionLotSize < 0 && transactionLotSize.abs() == positionLots) {
+        isDisabled = true;
+        log("BUY - Disable TextField");
+      } else {
+        isDisabled = false;
+        log("BUY - Enable TextField");
+      }
+    } else if (type == TransactionType.sell) {
+      if (transactionLotSize < 0 || transactionLotSize.abs() < positionLots) {
+        isDisabled = false;
+        log("SELL - Enable TextField");
+      } else {
+        isDisabled = true;
+        log("SELL - Disable TextField");
+      }
+    }
+
+    return isDisabled;
+  }
+
+  void handleRadioValueChanged(int newValue, String labelText) {
+    selectedGroupValue.value = newValue;
+    selectedType.value = labelText;
   }
 
   void downloadFile() async {
@@ -265,27 +318,6 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     walletBalance(amount);
   }
 
-  void calculateTotalPositionValues() {
-    int totalLots = 0;
-    num totalBrokerage = 0;
-    num totalGross = 0;
-    num totalNet = 0;
-
-    for (var position in contestPositionsList) {
-      totalLots += position.lots ?? 0;
-      totalBrokerage += position.brokerage ?? 0;
-      totalGross += position.amount ?? 0;
-      totalNet += position.amount ?? 0;
-    }
-
-    tenxTotalPositionDetails(TenxTotalPositionDetails(
-      lots: totalLots,
-      brokerage: totalBrokerage,
-      gross: totalGross,
-      net: totalNet,
-    ));
-  }
-
   Color getValueColor(dynamic value) {
     if (value != null) {
       if (value is String) {
@@ -318,7 +350,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   int getOpenPositionCount() {
     int openCount = 0;
     for (var position in contestPositionsList) {
-      if (position.lots != 0) {
+      if (position.id?.isLimit ?? false) {
+      } else if (position.lots != 0) {
         openCount++;
       }
     }
@@ -328,7 +361,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   int getClosePositionCount() {
     int closeCount = 0;
     for (var position in contestPositionsList) {
-      if (position.lots == 0) {
+      if (position.id?.isLimit ?? false) {
+      } else if (position.lots == 0) {
         closeCount++;
       }
     }
@@ -384,6 +418,36 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     return canParticipate;
   }
 
+  void calculateTotalPositionValues() {
+    int totalLots = 0;
+    num totalBrokerage = 0;
+    num totalGross = 0;
+    num totalNet = 0;
+
+    for (var position in contestPositionsList) {
+      if (position.id?.isLimit ?? false) {
+      } else {
+        totalLots += position.lots ?? 0;
+        totalBrokerage += position.brokerage ?? 0;
+        totalGross += position.lastaverageprice ?? 0;
+        totalNet += position.amount ?? 0;
+      }
+
+      // totalLots += position.lots ?? 0;
+      // totalBrokerage += position.brokerage ?? 0;
+      // totalGross += position.lastaverageprice ?? 0;
+      // totalNet += position.amount ?? 0;
+    }
+    tenxTotalPositionDetails(
+      TenxTotalPositionDetails(
+        lots: totalLots,
+        brokerage: totalBrokerage,
+        gross: totalGross,
+        net: totalNet,
+      ),
+    );
+  }
+
   num calculateGrossPNL(num amount, int lots, num ltp) {
     if (ltp == 0) return 0;
     num pnl = 0;
@@ -395,15 +459,18 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   num calculateTotalGrossPNL() {
     num totalGross = 0;
     for (var position in contestPositionsList) {
-      num avg = position.amount ?? 0;
-      int lots = position.lots?.toInt() ?? 0;
-      num ltp = getInstrumentLastPrice(
-        position.id?.instrumentToken ?? 0,
-        position.id?.exchangeInstrumentToken ?? 0,
-      );
-      if (ltp == 0) return 0;
-      num value = (avg + (lots) * ltp);
-      totalGross += value;
+      if (position.id?.isLimit != true) {
+        // Check if isLimit is not true
+        num avg = position.amount ?? 0;
+        int lots = position.lots?.toInt() ?? 0;
+        num ltp = getInstrumentLastPrice(
+          position.id?.instrumentToken ?? 0,
+          position.id?.exchangeInstrumentToken ?? 0,
+        );
+        if (ltp == 0) return 0;
+        num value = (avg + (lots) * ltp);
+        totalGross += value;
+      }
     }
     return totalGross.round();
   }
@@ -411,17 +478,19 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   num calculateTotalNetPNL() {
     num totalNetPNL = 0;
     for (var position in contestPositionsList) {
-      num avg = position.amount ?? 0;
-      int lots = position.lots?.toInt() ?? 0;
-      num ltp = getInstrumentLastPrice(
-        position.id?.instrumentToken ?? 0,
-        position.id?.exchangeInstrumentToken ?? 0,
-      );
-      if (ltp == 0) return 0;
-      num value = (avg + (lots) * ltp);
-      num brokerage = position.brokerage ?? 0;
-      num broker = value - brokerage;
-      totalNetPNL += broker;
+      if (position.id?.isLimit != true) {
+        num avg = position.amount ?? 0;
+        int lots = position.lots?.toInt() ?? 0;
+        num ltp = getInstrumentLastPrice(
+          position.id?.instrumentToken ?? 0,
+          position.id?.exchangeInstrumentToken ?? 0,
+        );
+        if (ltp == 0) return 0;
+        num value = (avg + (lots) * ltp);
+        num brokerage = position.brokerage ?? 0;
+        num broker = value - brokerage;
+        totalNetPNL += broker;
+      }
     }
     return totalNetPNL.round();
   }
@@ -576,29 +645,31 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       }
     }
     ContestPlaceOrderRequest data = ContestPlaceOrderRequest(
-      orderType: "MARKET",
-      price: "",
-      product: "NRML",
-      quantity: selectedQuantity.value,
-      triggerPrice: "",
-      battleId: liveCollegeContest.value.id,
-      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      contestId: liveCollegeContest.value.id,
-      createdBy: userDetailsData.name,
       exchange: inst.exchange,
+      symbol: inst.tradingsymbol,
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      quantity: selectedQuantity.value,
+      product: "NRML",
+      orderType: selectedType.value,
+      stopLoss: "",
+      stopLossPrice: double.tryParse(stopLossPriceTextController.text),
+      stopProfitPrice: double.tryParse(stopProfitPriceTextController.text),
+      price: limitPriceTextController.text,
+      uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
-      marginxId: liveCollegeContest.value.id,
-      orderId: Uuid().v4(),
-      paperTrade: false,
-      stopLoss: "",
-      subscriptionId: liveCollegeContest.value.id,
-      symbol: inst.tradingsymbol,
-      trader: userDetailsData.sId,
-      uId: Uuid().v4(),
-      userId: userDetailsData.email,
       validity: "DAY",
       variety: "regular",
+      createdBy: userDetails.value.name,
+      userId: userDetails.value.email,
+      trader: userDetails.value.sId,
+      orderId: Uuid().v4(),
+      paperTrade: false,
+      subscriptionId: liveCollegeContest.value.id,
+      battleId: liveCollegeContest.value.id,
+      contestId: liveCollegeContest.value.id,
+      marginxId: liveCollegeContest.value.id,
+      triggerPrice: "",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
@@ -614,6 +685,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successful');
         await getContestPositions();
+        await getStopLossPendingOrder();
+        await getContestTodaysOrderList();
         await getContestPortfolio();
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
@@ -1107,13 +1180,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   int calculateQuantity(TransactionType type, int tradingLots, int selectQuantity) {
-    if (type == TransactionType.buy) {
-      if (tradingLots.toString().contains('-')) {
-        if (tradingLots.toString().contains('-') == selectQuantity) {
-          return 0;
-        }
-      }
-    } else if (type == TransactionType.sell || type == TransactionType.exit) {
+    if (type == TransactionType.sell || type == TransactionType.exit) {
       if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
         return 0;
       } else if (tradingLots.abs() <= selectQuantity) {
@@ -1162,5 +1229,187 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     } finally {
       isMarginStateLoading(false);
     }
+  }
+
+  Future getContestTodaysOrderList() async {
+    isOrderStateLoading(true);
+    try {
+      final RepoResponse<ContestOrderResponse> response = await repository.getContestOrderList(
+        liveCollegeContest.value.id,
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          contestOrdersList(response.data?.data ?? []);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isOrderStateLoading(false);
+    }
+  }
+
+  Future getStopLossExecutedOrder() async {
+    isExecutedOrderStateLoading(true);
+    try {
+      final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
+        liveCollegeContest.value.id,
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        stopLossExecutedOrdersList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isExecutedOrderStateLoading(false);
+  }
+
+  Future getStopLossPendingOrder() async {
+    isPendingOrderStateLoading(true);
+    try {
+      final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
+        liveCollegeContest.value.id,
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        stopLossPendingOrderList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future getStopLossPendingCancelOrder(String? id) async {
+    isPendingOrderStateLoading(true);
+    try {
+      await repository.getStopLossPendingCancelOrder(id ?? '');
+      await getStopLossPendingOrder();
+      await getContestPortfolio();
+      await getStopLossExecutedOrder();
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future pendingOrderModify(TransactionType type, TradingInstrument inst) async {
+    isPendingOrderStateLoading(true);
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
+      }
+    }
+    PendingOrderModifyRequest data = PendingOrderModifyRequest(
+      exchange: inst.exchange,
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      quantity: selectedQuantity.value,
+      product: "NRML",
+      orderType: "SL/SP-M",
+      exchangeInstrumentToken: inst.exchangeToken,
+      instrumentToken: inst.instrumentToken,
+      stopLossPrice: stopLossPriceTextController.text,
+      stopProfitPrice: stopProfitPriceTextController.text,
+      symbol: inst.tradingsymbol,
+      validity: "DAY",
+      id: liveCollegeContest.value.id,
+      lastPrice: inst.lastPrice.toString(),
+      variety: "regular",
+      from: "Daily Contest",
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
+    );
+    print('PendingOrderModifyRequest : ${data.toJson()}');
+    try {
+      final RepoResponse<GenericResponse> response = await repository.pendingOrderModify(
+        data.toJson(),
+      );
+      Get.back();
+      print(response.data.toString());
+      if (response.data?.status == "Success") {
+        SnackbarHelper.showSnackbar(response.data?.message);
+        await getStopLossPendingOrder();
+        await getContestTodaysOrderList();
+      } else if (response.data?.status == "Failed") {
+        print(response.error!.message!.toString());
+        SnackbarHelper.showSnackbar(response.error?.message);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future getStopLossEditOrder(String? id, String? type) async {
+    isPendingOrderStateLoading(true);
+    PendingEditOrderRequest data = PendingEditOrderRequest(
+      executionPrice: type == "StopLoss"
+          ? stopLossPriceTextController.text
+          : (type == "StopProfit"
+              ? stopProfitPriceTextController.text
+              : (type == "Limit" ? limitPriceTextController.text : '0')),
+    );
+    try {
+      final response = await repository.getStopLossEditOrder(
+        id,
+        data.toJson(),
+      );
+      Get.back();
+      getStopLossPendingOrder();
+      if (response.data?.status?.toLowerCase() == "Success") {
+        getStopLossPendingOrder();
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future socketSendConnection() async {
+    isPendingOrderStateLoading(true);
+    try {
+      socketService.socket.on(
+        'sendOrderResponse${userDetails.value.sId}',
+        (data) {
+          print('sendOrderResponse${userDetails.value.sId} $data');
+          if (data.containsKey("message")) {
+            String message = data["message"];
+            SnackbarHelper.showSnackbar(message);
+          }
+          getContestPositions();
+          getStopLossPendingOrder();
+          getStopLossExecutedOrder();
+          getContestTodaysOrderList();
+        },
+      );
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+    isPendingOrderStateLoading(false);
   }
 }

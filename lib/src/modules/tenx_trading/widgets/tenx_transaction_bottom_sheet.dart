@@ -235,7 +235,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                           tradingInstrument.instrumentToken!,
                                           tradingInstrument.exchangeToken!,
                                         )) {
-                                      return 'Stop Loss price should \nbe less than LTP.';
+                                      return 'StopLoss price should \nbe less than LTP.';
                                     }
                                   } else if (type == TransactionType.sell) {
                                     if (stopLossPrice <=
@@ -243,7 +243,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                           tradingInstrument.instrumentToken!,
                                           tradingInstrument.exchangeToken!,
                                         )) {
-                                      return 'Stop Loss price should \nbe greater than LTP.';
+                                      return 'StopLoss price should \nbe greater than LTP.';
                                     }
                                   }
                                 }
@@ -276,7 +276,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                           tradingInstrument.instrumentToken!,
                                           tradingInstrument.exchangeToken!,
                                         )) {
-                                      return 'Stop Profit price should \nbe greater than LTP.';
+                                      return 'StopProfit price should \nbe greater than LTP.';
                                     }
                                   } else if (type == TransactionType.sell) {
                                     if (stopProfitPrice >=
@@ -284,7 +284,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                           tradingInstrument.instrumentToken!,
                                           tradingInstrument.exchangeToken!,
                                         )) {
-                                      return 'Stop Profit price should \nbe less than LTP.';
+                                      return 'StopProfit price should \nbe less than LTP.';
                                     }
                                   }
                                 }
@@ -306,17 +306,13 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           onChanged: (int value) {
                             controller.handleRadioValueChanged(value, "MARKET");
                             controller.getMarginRequired(type, tradingInstrument);
+                            controller.stopLossPriceTextController.clear();
+                            controller.stopProfitPriceTextController.clear();
+                            controller.limitPriceTextController.clear();
                           },
                         ),
                       ),
                       SizedBox(width: 8),
-                      // Expanded(
-                      //   child: CommonRadioButtonTile(
-                      //     value: 1,
-                      //     groupValue: 2,
-                      //     label: 'LIMIT',
-                      //   ),
-                      // ),
                       Expanded(
                         child: CommonRadioButtonTile(
                           value: 1,
@@ -325,6 +321,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           onChanged: (int value) {
                             controller.handleRadioValueChanged(value, "LIMIT");
                             controller.getMarginRequired(type, tradingInstrument);
+                            controller.stopLossPriceTextController.clear();
+                            controller.stopProfitPriceTextController.clear();
+                            controller.limitPriceTextController.clear();
                           },
                         ),
                       ),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../app/app.dart';
 
-class TenxTodayOrderCard extends StatelessWidget {
-  final TenxTradeOrder order;
-  const TenxTodayOrderCard({
+class CollegeContestTodayOrderCard extends StatelessWidget {
+  final ContestOrderDetails order;
+  const CollegeContestTodayOrderCard({
     Key? key,
     required this.order,
   }) : super(key: key);
@@ -78,7 +78,7 @@ class TenxTodayOrderCard extends StatelessWidget {
                   TradeCardTile(
                     hasBottomMargin: true,
                     label: 'Execution Time',
-                    value: FormatHelper.formatDateTimeToIST(order.tradeTimeUtc),
+                    value: FormatHelper.formatDateTime(order.tradeTime),
                   ),
                 ],
               )

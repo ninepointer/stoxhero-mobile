@@ -3,7 +3,6 @@ export 'views/tenx_dashboard_view.dart';
 export 'views/tenx_search_symbol_view.dart';
 export 'views/tenx_trading_view.dart';
 export 'widgets/stoploss_edit_price_bottom_sheet.dart';
-export 'widgets/stoploss_executed_order_card.dart';
 export 'widgets/stoploss_modify_price_bottom_sheet.dart';
 export 'widgets/stoploss_pending_order_card.dart';
 export 'widgets/tenx_active_card.dart';

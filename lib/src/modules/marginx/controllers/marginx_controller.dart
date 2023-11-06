@@ -48,6 +48,15 @@ class MarginXController extends BaseController<MarginXRepository> {
   final isMarginStateLoading = false.obs;
   bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
 
+  final isPendingOrderStateLoading = false.obs;
+  bool get isPendingOrderStateLoadingStatus => isPendingOrderStateLoading.value;
+
+  final isOrderStateLoading = false.obs;
+  bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
+
+  final isExecutedOrderStateLoading = false.obs;
+  bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
+
   final selectedTabBarIndex = 0.obs;
 
   final searchTextController = TextEditingController();
@@ -77,6 +86,18 @@ class MarginXController extends BaseController<MarginXRepository> {
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
   final marginRequired = MarginRequiredResponse().obs;
+
+  final stopLossFormKey = GlobalKey<FormState>();
+  final stopLossPriceTextController = TextEditingController();
+  final stopProfitPriceTextController = TextEditingController();
+  final quanitityTextController = TextEditingController();
+  final limitPriceTextController = TextEditingController();
+  final stopLossExecutedOrdersList = <StopLossExecutedOrdersList>[].obs;
+  final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
+  final stopLossPendingOrder = StopLossPendingOrdersList().obs;
+  final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final selectedType = "".obs;
+  final selectedGroupValue = 0.obs;
 
   Future loadData() async {
     loadUserDetails();

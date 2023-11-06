@@ -184,9 +184,83 @@ class MarginXTradingView extends GetView<MarginXController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.marginXPositionList.length,
                           itemBuilder: (context, index) {
-                            var item = controller.marginXPositionList[index];
-                            return MarginXPositionCard(position: item);
+                            final position = controller.marginXPositionList[index];
+                            if (position.id?.isLimit != true) {
+                              return MarginXPositionCard(
+                                position: position,
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
                           },
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPendingOrderStateLoadingStatus,
+                    label: 'My Pending Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossPendingOrderList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.stopLossPendingOrderList.length,
+                          itemBuilder: (context, index) {
+                            return StoplossPendingOrderCard(
+                              stopLoss: controller.stopLossPendingOrderList[index],
+                            );
+                          },
+                        ),
+                  CommonTile(
+                    isLoading: controller.isExecutedOrderStateLoadingStatus,
+                    label: 'My Executed Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossExecutedOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.stopLossExecutedOrdersList.length >= 3
+                              ? 180
+                              : controller.stopLossExecutedOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return StoplossExecutedOrderCard(
+                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                              );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'My Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.completedMarginXOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.completedMarginXOrdersList.length >= 3
+                              ? 180
+                              : controller.completedMarginXOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.completedMarginXOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return MarginXTodayOrderCard(
+                                order: controller.completedMarginXOrdersList[index],
+                              );
+                            },
+                          ),
                         ),
                   CommonTile(
                     isLoading: controller.isPortfolioStateLoadingStatus,

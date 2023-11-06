@@ -204,7 +204,7 @@ class TenxTradingRepository extends BaseRepository {
   }
 
   Future<RepoResponse<GenericResponse>> getStopLossEditOrder(String? id, Map<String, dynamic> data) async {
-    String apiURL = AppUrls.tenxStopLossEditOrder(id);
+    String apiURL = AppUrls.stopLossEditOrder(id);
     var response = await service.patchAuth(path: apiURL, data: data);
     return response is APIException
         ? RepoResponse(error: response)

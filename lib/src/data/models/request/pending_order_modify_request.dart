@@ -15,6 +15,7 @@ class PendingOrderModifyRequest {
   String? variety;
   int? instrumentToken;
   String? lastPrice;
+  String? from;
   DeviceDetails? deviceDetails;
 
   PendingOrderModifyRequest({
@@ -32,6 +33,7 @@ class PendingOrderModifyRequest {
     this.variety,
     this.instrumentToken,
     this.lastPrice,
+    this.from,
     this.deviceDetails,
   });
 
@@ -50,6 +52,7 @@ class PendingOrderModifyRequest {
     variety = json['variety'];
     instrumentToken = json['instrumentToken'];
     lastPrice = json['last_price'];
+    from = json['from'];
     deviceDetails = json['deviceDetails'] != null ? new DeviceDetails.fromJson(json['deviceDetails']) : null;
   }
 
@@ -69,10 +72,10 @@ class PendingOrderModifyRequest {
     data['variety'] = this.variety;
     data['instrumentToken'] = this.instrumentToken;
     data['last_price'] = this.lastPrice;
+    data['from'] = this.from;
     if (this.deviceDetails != null) {
       data['deviceDetails'] = this.deviceDetails!.toJson();
     }
-
     return data;
   }
 }
