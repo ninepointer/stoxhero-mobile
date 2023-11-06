@@ -32,13 +32,11 @@ class CommonDropdown extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: DropdownButton2<String>(
-            hint: Container(
-              child: Text(
-                hint,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: AppStyles.tsGreyRegular16,
-              ),
+            hint: Text(
+              hint,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppStyles.tsGreyRegular14,
             ),
             value: value,
             onChanged: onChanged,
@@ -48,7 +46,9 @@ class CommonDropdown extends StatelessWidget {
                   value: value,
                   child: Text(
                     useSeptValue ? (getValue?.call(value) ?? value) : value,
-                    style: Theme.of(context).textTheme.tsRegular14,
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.tsRegular12,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 );
               },

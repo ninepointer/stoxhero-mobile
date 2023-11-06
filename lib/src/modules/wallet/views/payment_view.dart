@@ -1,124 +1,105 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:crypto/crypto.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:stoxhero/main.dart';
+import 'package:stoxhero/src/app/app.dart';
 import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
-import 'package:uuid/uuid.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class PaymentView extends StatefulWidget {
-  final int amount;
-
-  const PaymentView({
-    super.key,
-    this.amount = 0,
-  });
-
   @override
   _PaymentViewState createState() => _PaymentViewState();
 }
 
 class _PaymentViewState extends State<PaymentView> {
+  late WalletController controller;
+  String body = "";
+  String checksum = "";
+  String callBackUrl = AppUrls.paymentCallBackUrl;
   String saltIndex = "1";
-  String saltKey = "92333ad2-4277-4e69-86f1-b86a83161b74";
   String apiEndpoint = "/pg/v1/pay";
+  String environment = "PRODUCTION";
+  String appId = !isProd ? "63dff75c930b42a9af0f216bb6af6e16" : "42cfbc6993624af5b061665f58797533";
+  String saltKey = "92333ad2-4277-4e69-86f1-b86a83161b74";
+  String merchantId = "STOXONLINE";
 
-  String paymentGatewayBaseUrl = "https://api.phonepe.com/apis/hermes/pg/v1/pay";
-  String paymentUrl = "https://stoxhero.com/";
-
-  bool isViewLoaded = false;
-  var result;
+  Object? result;
 
   @override
   void initState() {
     super.initState();
-    // processPayment();
+    controller = Get.find<WalletController>();
+    initPaymentSDK();
   }
 
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    await getPackageSignatureForAndroid();
-    // PhonePePaymentSdk.init("PRODUCTION", result ?? "", "STOXONLINE", false);
-    // startPGTransaction();
+  String generateUniqueTransactionId() {
+    const int maxLength = 36;
+    const String allowedCharacters = "0123456789";
+
+    String timestampPart = "mtid" + DateTime.now().millisecondsSinceEpoch.toString();
+    int remainingLength = maxLength - timestampPart.length;
+    String randomChars = List.generate(remainingLength, (index) {
+      return allowedCharacters[math.Random().nextInt(allowedCharacters.length)];
+    }).join('');
+
+    return timestampPart + randomChars;
   }
 
-  Future getPackageSignatureForAndroid() async {
-    if (Platform.isAndroid) {
-      PhonePePaymentSdk.getPackageSignatureForAndroid()
-          .then((packageSignature) => {
-                setState(() {
-                  result = 'getPackageSignatureForAndroid - $packageSignature';
-                  print(result.toString());
-                })
+  Future initPaymentSDK() async {
+    await PhonePePaymentSdk.init(
+      environment,
+      appId,
+      merchantId,
+      true,
+    )
+        .then((isInitialized) => {
+              setState(() {
+                result = 'PhonePe SDK Initialized - $isInitialized';
+                print(result);
               })
-          .catchError((error) {
-        return <dynamic>{};
-      });
-    }
+            })
+        .catchError((error) {
+      handleError(error);
+      return <dynamic>{};
+    });
   }
 
-  Future startPGTransaction() async {
-    try {
-      var response = await PhonePePaymentSdk.startPGTransaction(
-        "eyJtZXJjaGFudElkIjoiTUVSQ0hBTlRVQVQiLCJtZXJjaGFudFRyYW5zYWN0aW9uSWQiOiJNVDc4NTA1OTAwNjgxODgxMDQiLCJtZXJjaGFudFVzZXJJZCI6Ik1VSUQxMjMiLCJhbW91bnQiOiIxMDAiLCJyZWRpcmVjdFVybCI6Imh0dHBzOi8vd2ViaG9vay5zaXRlL3JlZGlyZWN0LXVybCIsInJlZGlyZWN0TW9kZSI6IlBPU1QiLCJjYWxsYmFja1VybCI6Imh0dHBzOi8vd2ViaG9vay5zaXRlL2NhbGxiYWNrLXVybCIsIm1vYmlsZU51bWJlciI6Ijk5OTk5OTk5OTkiLCJwYXltZW50SW5zdHJ1bWVudCI6eyJ0eXBlIjoiUEFZX1BBR0UifX0=",
-        "",
-        "65949249f15b119630fc86bf2ae9a9b713a02cb58c693904fdf9eb6fea0b62ac###1",
-        {},
-        "/pg/v1/pay",
-        "",
-      );
-      print(response);
-    } catch (error) {}
-    return null;
-  }
+  Future generatePaymentData() async {
+    LoginDetailsResponse userDetails = AppStorage.getUserDetails();
+    String mtId = generateUniqueTransactionId();
+    String muid = 'muid${userDetails.sId}';
 
-  Future processPayment() async {
-    try {
-      final jsonData = {
-        "merchantId": "STOXONLINE",
-        "merchantTransactionId": Uuid().v4(),
-        "merchantUserId": Uuid().v4(),
-        "amount": '100',
-        "mobileNumber": "9999999999",
-        "redirectMode": "POST",
-        "redirectUrl": "https://stoxhero.com/",
-        "callbackUrl": "https://stoxhero.com/",
-        "paymentInstrument": {"type": "PAY_PAGE"}
-      };
+    final data = {
+      "merchantId": merchantId,
+      "merchantTransactionId": mtId,
+      "merchantUserId": muid,
+      "amount": 100,
+      "callbackUrl": callBackUrl,
+      "mobileNumber": userDetails.mobile,
+      "paymentInstrument": {
+        "type": "PAY_PAGE",
+      }
+    };
 
-      String jsonString = jsonEncode(jsonData);
-      String base64Data = jsonString.toBase64;
-      String dataToHash = base64Data + apiEndpoint + saltKey;
-      String sha256 = generateSha256Hash(dataToHash);
-      String checkSum = "$sha256###$saltIndex";
+    print('PaymentData : $data');
 
-      print(base64Data);
-      print("$sha256###$saltIndex");
+    String jsonString = jsonEncode(data);
+    String base64Data = jsonString.toBase64;
+    String dataToHash = base64Data + apiEndpoint + saltKey;
+    String sHA256 = generateSha256Hash(dataToHash);
 
-      final response = await Dio().post(
-        paymentGatewayBaseUrl,
-        data: {'request': base64Data},
-        options: Options(
-          headers: {
-            'accept': 'application/json',
-            'X-VERIFY': checkSum,
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
-      print(response);
+    print(base64Data);
+    print("$sHA256###$saltIndex");
 
-      var data = response.data;
-      paymentUrl = data['data']['instrumentResponse']['redirectInfo']['url'];
-      isViewLoaded = true;
+    body = base64Data;
+    checksum = "$sHA256###$saltIndex";
 
-      setState(() {});
-    } catch (e) {
-      print(e.toString());
-    }
+    PaymentRequest paymentData = PaymentRequest();
+
+    await controller.initPaymentRequest(paymentData);
+
+    setState(() {});
   }
 
   String generateSha256Hash(String input) {
@@ -127,30 +108,69 @@ class _PaymentViewState extends State<PaymentView> {
     return digest.toString();
   }
 
+  void startPGTransaction() async {
+    try {
+      await generatePaymentData();
+      PhonePePaymentSdk.startPGTransaction(
+        body,
+        callBackUrl,
+        checksum,
+        {"Content-Type": "application/json"},
+        apiEndpoint,
+        "",
+      )
+          .then((response) => {
+                setState(() {
+                  if (response != null) {
+                    print(response);
+                    String status = response['status'].toString();
+                    String error = response['error'].toString();
+                    if (status == 'SUCCESS') {
+                      result = "Flow Completed - Status: Success!";
+                    } else {
+                      result = "Flow Completed - Status: $status and Error: $error";
+                    }
+                  } else {
+                    result = "Flow Incomplete";
+                  }
+                  print(result);
+                })
+              })
+          .catchError((error) {
+        handleError(error);
+        return <dynamic>{};
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  void handleError(error) {
+    setState(() {
+      if (error is Exception) {
+        result = error.toString();
+      } else {
+        result = {"error": error};
+      }
+      print(result);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: isViewLoaded
-            ? InAppWebView(
-                initialUrlRequest: URLRequest(
-                  url: Uri.parse(paymentUrl),
-                ),
-                onUpdateVisitedHistory: ((controller, url, androidIsReload) {
-                  print(url.toString());
-                  if (url!.host.contains("stoxhero.com")) {
-                    Navigator.of(context).pop('success');
-                  }
-                }),
-              )
-            : Center(child: CircularProgressIndicator()),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CommonFilledButton(
+              label: 'Start Transaction',
+              onPressed: startPGTransaction,
+            ),
+          ],
+        ),
       ),
     );
   }
-}
-
-extension EncodingExtensions on String {
-  String get toBase64 => base64.encode(toUtf8);
-  List<int> get toUtf8 => utf8.encode(this);
-  String get toSha256 => sha256.convert(toUtf8).toString();
 }

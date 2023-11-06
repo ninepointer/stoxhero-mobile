@@ -36,7 +36,7 @@ class InternshipOrdersList {
   String? product;
   String? buyOrSell;
   String? symbol;
-  int? amount;
+  num? amount;
   String? tradeTime;
   Batch? batch;
 

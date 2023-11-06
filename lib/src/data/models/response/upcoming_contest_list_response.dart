@@ -37,7 +37,7 @@ class UpComingContest {
   String? description;
   String? contestType;
   String? contestFor;
-  int? entryFee;
+  num? entryFee;
   num? payoutPercentage;
   ContestPortfolio? portfolio;
   int? maxParticipants;
@@ -53,6 +53,8 @@ class UpComingContest {
   String? lastModifiedOn;
   List<Participants>? participants;
   List<InterestedUsers>? interestedUsers;
+  num? payoutCapPercentage;
+
   UpComingContest({
     this.id,
     this.contestName,
@@ -77,6 +79,7 @@ class UpComingContest {
     this.lastModifiedOn,
     this.participants,
     this.interestedUsers,
+    this.payoutCapPercentage,
   });
 
   UpComingContest.fromJson(Map<String, dynamic> json) {
@@ -113,6 +116,7 @@ class UpComingContest {
         interestedUsers!.add(new InterestedUsers.fromJson(v));
       });
     }
+    payoutCapPercentage = json['payoutCapPercentage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -146,6 +150,7 @@ class UpComingContest {
     if (this.interestedUsers != null) {
       data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
     }
+    data['payoutCapPercentage'] = this.payoutCapPercentage;
     return data;
   }
 }
@@ -153,7 +158,7 @@ class UpComingContest {
 class ContestPortfolio {
   String? id;
   String? portfolioName;
-  int? portfolioValue;
+  num? portfolioValue;
 
   ContestPortfolio({this.id, this.portfolioName, this.portfolioValue});
 

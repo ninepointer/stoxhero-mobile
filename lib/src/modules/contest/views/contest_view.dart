@@ -32,6 +32,7 @@ class ContestView extends StatelessWidget {
             buttonLabel: 'Join Contest!',
             onPressed: () {
               Get.find<ContestController>().loadData();
+              Get.find<ContestController>().selectedTabBarIndex(0);
               Get.to(() => ContestListView());
             },
           ),
@@ -43,6 +44,7 @@ class ContestView extends StatelessWidget {
             buttonLabel: 'Join College Contest!',
             onPressed: () {
               Get.find<CollegeContestController>().loadData();
+              Get.find<CollegeContestController>().selectedTabBarIndex(0);
               Get.to(() => CollegeContestView());
             },
           ),
@@ -53,16 +55,12 @@ class ContestView extends StatelessWidget {
             image: AppImages.contestLeaderboard,
             buttonLabel: 'See Contest Leaderboard!',
             onPressed: () {
-              ContestController contestController = Get.find<ContestController>();
-              CollegeContestController collegeContestController = Get.find<CollegeContestController>();
+              final contestController = Get.find<ContestController>();
+              final collegeContestController = Get.find<CollegeContestController>();
               contestController.getContestLeaderboardList();
               collegeContestController.getCollegeContestLeaderboardList();
-              Get.to(
-                () => ContestLeaderboardView(
-                  contestController: contestController,
-                  collegeContestController: collegeContestController,
-                ),
-              );
+              Get.find<ContestController>().selectedTabBarIndex(0);
+              Get.to(() => ContestLeaderboardView());
             },
           ),
           SizedBox(height: 16),
@@ -117,7 +115,7 @@ class ContestView extends StatelessWidget {
               SizedBox(height: 16),
               CommonFilledButton(
                 label: buttonLabel,
-                height: 48,
+                height: 42,
                 onPressed: onPressed,
               ),
             ],

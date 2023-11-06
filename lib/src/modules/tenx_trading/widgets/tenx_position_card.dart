@@ -1,11 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class TenxPositionCard extends GetView<TenxTradingController> {
-  final TenxTradingPosition position;
-  const TenxPositionCard({super.key, required this.position});
+  final TradingPosition position;
+  final bool isLimit;
+  const TenxPositionCard({
+    super.key,
+    required this.position,
+    this.isLimit = false,
+  });
 
   void openBottomSheet(BuildContext context, TransactionType type) {
     FocusScope.of(context).unfocus();
@@ -15,17 +18,45 @@ class TenxPositionCard extends GetView<TenxTradingController> {
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
     controller.generateLotsList(type: position.id?.symbol);
+    TradingInstrument trading = TradingInstrument(
+      name: position.id?.symbol,
+      exchange: position.id?.exchange,
+      tradingsymbol: position.id?.symbol,
+      exchangeToken: position.id?.exchangeInstrumentToken,
+      instrumentToken: position.id?.instrumentToken,
+      lastPrice: lastPrice,
+      lotSize: position.lots,
+    );
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: TenxTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
+      ),
+    );
+  }
+
+  void openModifyBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      position.id!.instrumentToken!,
+      position.id!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    controller.generateLotsList(type: position.id?.symbol);
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: StoplossModifyPriceBottomSheet(
+        type: type,
+        stopLoss: TradingInstrument(
           name: position.id?.symbol,
           exchange: position.id?.exchange,
           tradingsymbol: position.id?.symbol,
           exchangeToken: position.id?.exchangeInstrumentToken,
           instrumentToken: position.id?.instrumentToken,
           lastPrice: lastPrice,
+          lotSize: position.lots,
         ),
       ),
     );
@@ -54,12 +85,12 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       ),
                       TradeCardTile(
                         isRightAlign: true,
-                        label: 'Gross P&L',
+                        label: 'Gross P&L (Profit & Loss)',
                         valueColor: controller.getValueColor(
                           position.lots == 0
                               ? position.amount
                               : controller.calculateGrossPNL(
-                                  position.amount!,
+                                  position.amount ?? 0,
                                   position.lots!.toInt(),
                                   controller.getInstrumentLastPrice(
                                     position.id!.instrumentToken!,
@@ -71,7 +102,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                             ? FormatHelper.formatNumbers(position.amount)
                             : FormatHelper.formatNumbers(
                                 controller.calculateGrossPNL(
-                                  position.amount!,
+                                  position.amount ?? 0,
                                   position.lots!.toInt(),
                                   controller.getInstrumentLastPrice(
                                     position.id!.instrumentToken!,
@@ -86,14 +117,14 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TradeCardTile(
-                        label: 'Avg. Price',
+                        label: 'Average Price',
                         value: FormatHelper.formatNumbers(
                           position.lastaverageprice,
                         ),
                       ),
                       TradeCardTile(
                         isRightAlign: true,
-                        label: 'LTP',
+                        label: 'LTP (Last Traded Price)',
                         value: FormatHelper.formatNumbers(
                           controller.getInstrumentLastPrice(
                             position.id!.instrumentToken!,
@@ -120,7 +151,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       TradeCardTile(
                         hasBottomMargin: false,
                         isRightAlign: true,
-                        label: 'Changes(%)',
+                        label: 'Changes (%)',
                         value: controller.getInstrumentChanges(
                           position.id?.instrumentToken ?? 0,
                           position.id?.exchangeInstrumentToken ?? 0,
@@ -144,7 +175,7 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                     onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -152,8 +183,8 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                         ),
                       ),
                       child: Text(
-                        'BUY',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        position.lots == 0 ? 'BUY' : 'ADD MORE',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.success,
                         ),
                       ),
@@ -165,13 +196,13 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                     onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'SELL',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        position.lots == 0 ? 'SELL' : 'EXIT SOME',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.danger,
                         ),
                       ),
@@ -185,12 +216,9 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                       List<int> lots = controller.generateLotsList(type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
                       int maxLots = lots.last;
-
                       if (exitLots == 0) {
-                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                        SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
-                        log(exitLots.toString());
-                        log(maxLots.toString());
                         if (exitLots.toString().contains('-')) {
                           if (exitLots < 0) {
                             exitLots = -exitLots;
@@ -210,35 +238,67 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                         }
                         controller.lotsValueList.assignAll(lots);
                         controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+                        TradingInstrument trading = TradingInstrument(
+                          name: position.id?.symbol,
+                          exchange: position.id?.exchange,
+                          tradingsymbol: position.id?.symbol,
+                          exchangeToken: position.id?.exchangeInstrumentToken,
+                          instrumentToken: position.id?.instrumentToken,
+                          lotSize: position.lots,
+                          lastPrice: controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        );
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: TenxTransactionBottomSheet(
                             type: TransactionType.exit,
-                            tradingInstrument: TradingInstrument(
-                              name: position.id?.symbol,
-                              exchange: position.id?.exchange,
-                              tradingsymbol: position.id?.symbol,
-                              exchangeToken: position.id?.exchangeInstrumentToken,
-                              instrumentToken: position.id?.instrumentToken,
-                              lotSize: position.lots,
-                            ),
+                            tradingInstrument: trading,
+                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
                           ),
                         );
                       }
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(.25),
+                        color: AppColors.secondary.withOpacity(.25),
+                      ),
+                      child: Text(
+                        'EXIT ALL',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
+                          color: AppColors.secondary.shade600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (position.lots!.toInt() == 0) {
+                        // SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                      } else if (controller.selectedQuantity.value.toString().contains('-')) {
+                        openModifyBottomSheet(context, TransactionType.sell);
+                      } else {
+                        openModifyBottomSheet(context, TransactionType.buy);
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.info.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
                       ),
                       child: Text(
-                        'EXIT',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                          color: AppColors.warning,
+                        'MODIFY',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
+                          color: AppColors.info,
                         ),
                       ),
                     ),
@@ -252,37 +312,3 @@ class TenxPositionCard extends GetView<TenxTradingController> {
     );
   }
 }
-
-// class TenXPositionCardTile extends StatelessWidget {
-//   final String? label;
-//   final dynamic value;
-//   final bool isRightAlign;
-//   final Color? valueColor;
-//   const TenXPositionCardTile({
-//     super.key,
-//     required this.label,
-//     this.value,
-//     this.isRightAlign = false,
-//     this.valueColor,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-//       children: [
-//         Text(
-//           label ?? '-',
-//           style: AppStyles.tsGreyMedium12,
-//         ),
-//         SizedBox(height: 2),
-//         Text(
-//           value,
-//           style: Theme.of(context).textTheme.tsMedium14.copyWith(
-//                 color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-//               ),
-//         ),
-//       ],
-//     );
-//   }
-// }

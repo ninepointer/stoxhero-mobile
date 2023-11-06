@@ -13,7 +13,7 @@ class LiveContestLeaderboardReponse {
 
 class LiveContestLeaderboard {
   String? name;
-  double? npnl;
+  num? npnl;
   String? userName;
   String? photo;
 

@@ -144,8 +144,7 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
 
   Widget bottomTitlesMonthly(double value, TitleMeta meta) {
     var index = value.toInt();
-    String date = ""; // Default value for date
-
+    String date = "";
     if (index >= 0 && index < virtualTadingMonthlyPnlList.length) {
       String? dateStr = virtualTadingMonthlyPnlList[index].date;
       if (dateStr != null && dateStr.isNotEmpty) {

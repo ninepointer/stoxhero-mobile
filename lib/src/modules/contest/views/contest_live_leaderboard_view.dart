@@ -8,7 +8,11 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contest Leaderboard'),
+        title: Text(
+          '${controller.liveContest.value.contestName ?? 'Contest Trading'}',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Column(
@@ -17,7 +21,7 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
             CommonRankCard(
               rank: controller.myRank.toString(),
               name: '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
-              netPnL: "0",
+              netPnL: controller.calculateTotalNetPNL().toString(),
               reward: controller.calculatePayout().toString(),
             ),
             CommonTile(label: 'Leaderboard'),

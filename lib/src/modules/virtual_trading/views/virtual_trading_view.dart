@@ -9,9 +9,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
     return Scaffold(
       body: Obx(
         () => Visibility(
-          visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
-          child: RefreshIndicator(
+          visible: controller.isLoadingStatus,
+          child: TradingShimmer(),
+          replacement: RefreshIndicator(
             onRefresh: controller.loadData,
             child: SingleChildScrollView(
               child: Column(
@@ -23,7 +23,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
-                            CommonStockInfo(
+                            TradingStockCard(
                               label: controller.getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
@@ -45,19 +45,19 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                       ),
                     ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
                       children: [
                         Expanded(
-                          child: CommonMarginNPNLCard(
-                            label: 'Margin',
-                            value: controller.calculateTotalNetPNL(),
+                          child: TradingMarginNpnlCard(
+                            label: 'Available Margin',
+                            value: controller.calculateMargin().round(),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 4),
                         Expanded(
-                          child: CommonMarginNPNLCard(
-                            label: 'Net P & L',
+                          child: TradingMarginNpnlCard(
+                            label: 'Net P&L',
                             value: controller.calculateTotalNetPNL(),
                           ),
                         ),
@@ -65,17 +65,20 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     ),
                   ),
                   CommonTile(
+                    isLoading: controller.isWatchlistStateLoadingStatus,
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
-                    padding: EdgeInsets.only(left: 16),
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: 'Nothing here! \nClick on + icon to add instruments',
+                        )
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 150,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -88,7 +91,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             },
                           ),
                         ),
-                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -96,13 +99,13 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         children: [
                           Row(
                             children: [
-                              VirtualPositionDetailsCard(
+                              PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              VirtualPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -111,13 +114,13 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              VirtualPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
-                              VirtualPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
@@ -127,7 +130,15 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Position'),
+                  CommonTile(
+                    isLoading: controller.isPositionStateLoadingStatus,
+                    label: 'My Positions',
+                    showSeeAllButton: true,
+                    seeAllLabel:
+                        '( Open P: ${controller.getOpenPositionCount()} | Close P: ${controller.getClosePositionCount()} )',
+                    sellAllColor: AppColors.grey,
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   controller.virtualPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
@@ -136,27 +147,109 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.virtualPositionsList.length,
                           itemBuilder: (context, index) {
-                            return VirtualPositionCard(
-                              position: controller.virtualPositionsList[index],
+                            final position = controller.virtualPositionsList[index];
+                            if (position.id?.isLimit != true) {
+                              return VirtualPositionCard(
+                                position: position,
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPendingOrderStateLoadingStatus,
+                    label: 'My Pending Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossPendingOrderList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.stopLossPendingOrderList.length,
+                          itemBuilder: (context, index) {
+                            return VirtualStoplossPendingOrderCard(
+                              stopLoss: controller.stopLossPendingOrderList[index],
                             );
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
-                  VirtualPortfolioDetailsCard(
-                    label: 'Portfolio Value',
+                  CommonTile(
+                    isLoading: controller.isExecutedOrderStateLoadingStatus,
+                    label: 'My Executed Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossExecutedOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.stopLossExecutedOrdersList.length >= 3
+                              ? 180
+                              : controller.stopLossExecutedOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return StoplossExecutedOrderCard(
+                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                              );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'My Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.virtualTradeTodaysOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.virtualTradeTodaysOrdersList.length >= 3
+                              ? 180
+                              : controller.virtualTradeTodaysOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.virtualTradeTodaysOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return VirtualTodayOrderCard(
+                                order: controller.virtualTradeTodaysOrdersList[index],
+                              );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  PortfolioDetailCardTile(
+                    label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.virtualPortfolio.value.totalFund,
                   ),
-                  VirtualPortfolioDetailsCard(
-                    label: 'Available Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
-                  VirtualPortfolioDetailsCard(
-                    label: 'Used Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                  ),
+                  PortfolioDetailCardTile(
+                    label: 'Unrealised Profit & Loss',
+                    info: 'Increased value of your investment',
+                    value: controller.calculateUnRealisedPNL(),
                   ),
                   SizedBox(height: 56),
                 ],

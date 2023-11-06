@@ -14,8 +14,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late HomeController controller;
 
-  int _selectedIndex = 2;
-
   List<Widget> _tabs = [
     DashboardView(),
     VirtualTradingView(),
@@ -31,26 +29,25 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _updateTab(int index) {
-    _selectedIndex = index;
+    controller.selectedIndex.value = index;
 
     switch (index) {
       case 0:
         Get.find<HomeController>().loadData();
-        Get.find<ContestController>().getUpComingContestList();
         Get.find<ContestController>().getLiveContestList();
+        Get.find<ContestController>().getUpComingContestList();
         break;
       case 1:
         Get.find<VirtualTradingController>().loadData();
         break;
       case 2:
-        // Get.toNamed(AppRoutes.payment);
-        Get.find<TenxTradingController>().getTenxTradingActiveSubs();
+        Get.find<TenxTradingController>().loadData();
         break;
       case 3:
         Get.find<MarginXController>().loadData();
         break;
       case 4:
-        Get.find<ContestController>().loadData();
+        // Blank
         break;
       default:
     }
@@ -61,6 +58,9 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CommonDrawer(),
+      onDrawerChanged: (isOpened) {
+        if (isOpened) controller.userDetails(AppStorage.getUserDetails());
+      },
       appBar: AppBar(
         title: Row(
           children: [
@@ -71,11 +71,9 @@ class _HomeViewState extends State<HomeView> {
                   'Hello,',
                   style: AppStyles.tsGreyRegular12,
                 ),
-                Obx(
-                  () => Text(
-                    controller.userDetailsData.firstName?.capitalizeFirst ?? '-',
-                    style: Theme.of(context).textTheme.tsMedium16,
-                  ),
+                Text(
+                  controller.userDetailsData.firstName?.capitalizeFirst ?? '-',
+                  style: Theme.of(context).textTheme.tsMedium16,
                 ),
               ],
             ),
@@ -86,7 +84,9 @@ class _HomeViewState extends State<HomeView> {
             splashRadius: 24,
             icon: Icon(Icons.account_balance_wallet_rounded),
             onPressed: () {
-              Get.find<WalletController>().loadData();
+              final controller = Get.find<WalletController>();
+              controller.loadData();
+              controller.selectedTabBarIndex(0);
               Get.toNamed(AppRoutes.wallet);
             },
           ),
@@ -97,8 +97,9 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
       ),
-      body: _tabs[_selectedIndex],
+      body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
+        elevation: 0,
         backgroundColor: AppColors.primary,
         onPressed: () => _updateTab(2),
         child: Icon(
@@ -107,40 +108,42 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 4,
-        child: Container(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildTabButton(
-                context,
-                index: 0,
-                label: 'Home',
-                icon: Icons.bar_chart_rounded,
-              ),
-              _buildTabButton(
-                context,
-                index: 1,
-                label: 'Virtual',
-                icon: Icons.analytics_rounded,
-              ),
-              SizedBox(width: 40),
-              _buildTabButton(
-                context,
-                index: 3,
-                label: 'MarginX',
-                icon: Icons.trending_up_rounded,
-              ),
-              _buildTabButton(
-                context,
-                index: 4,
-                label: 'Contest',
-                icon: Icons.groups_rounded,
-              ),
-            ],
+      bottomNavigationBar: Obx(
+        () => BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          notchMargin: 4,
+          child: Container(
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildTabButton(
+                  context,
+                  index: 0,
+                  label: 'Home',
+                  icon: Icons.bar_chart_rounded,
+                ),
+                _buildTabButton(
+                  context,
+                  index: 1,
+                  label: 'Virtual',
+                  icon: Icons.analytics_rounded,
+                ),
+                SizedBox(width: 40),
+                _buildTabButton(
+                  context,
+                  index: 3,
+                  label: 'MarginX',
+                  icon: Icons.trending_up_rounded,
+                ),
+                _buildTabButton(
+                  context,
+                  index: 4,
+                  label: 'Contest',
+                  icon: Icons.groups_rounded,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -161,13 +164,13 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Icon(
               icon,
-              color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.grey,
+              color: controller.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey,
             ),
             SizedBox(height: 4),
             Text(
               label,
               style: Theme.of(context).textTheme.tsRegular12.copyWith(
-                    color: _selectedIndex == index ? Theme.of(context).primaryColor : AppColors.grey,
+                    color: controller.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey,
                   ),
             )
           ],

@@ -1,15 +1,18 @@
+import '../../../app/app.dart';
+
 class ContestPlaceOrderRequest {
   String? exchange;
   String? symbol;
   String? buyOrSell;
-  dynamic quantity;
-  String? price;
+  int? quantity;
+  String? stopLoss;
   String? contestId;
   String? battleId;
   String? product;
   String? orderType;
   String? triggerPrice;
-  String? stopLoss;
+  num? stopProfitPrice;
+  num? stopLossPrice;
   String? uId;
   int? exchangeInstrumentToken;
   String? validity;
@@ -22,44 +25,51 @@ class ContestPlaceOrderRequest {
   int? instrumentToken;
   String? trader;
   bool? paperTrade;
+  String? price;
+  DeviceDetails? deviceDetails;
 
-  ContestPlaceOrderRequest(
-      {this.exchange,
-      this.symbol,
-      this.buyOrSell,
-      this.quantity,
-      this.price,
-      this.contestId,
-      this.battleId,
-      this.product,
-      this.orderType,
-      this.triggerPrice,
-      this.stopLoss,
-      this.uId,
-      this.exchangeInstrumentToken,
-      this.validity,
-      this.variety,
-      this.createdBy,
-      this.orderId,
-      this.subscriptionId,
-      this.marginxId,
-      this.userId,
-      this.instrumentToken,
-      this.trader,
-      this.paperTrade});
+  ContestPlaceOrderRequest({
+    this.exchange,
+    this.symbol,
+    this.buyOrSell,
+    this.quantity,
+    this.stopLoss,
+    this.contestId,
+    this.battleId,
+    this.product,
+    this.orderType,
+    this.triggerPrice,
+    this.stopProfitPrice,
+    this.stopLossPrice,
+    this.uId,
+    this.exchangeInstrumentToken,
+    this.validity,
+    this.variety,
+    this.createdBy,
+    this.orderId,
+    this.subscriptionId,
+    this.marginxId,
+    this.userId,
+    this.instrumentToken,
+    this.trader,
+    this.paperTrade,
+    this.price,
+    this.deviceDetails,
+  });
 
   ContestPlaceOrderRequest.fromJson(Map<String, dynamic> json) {
     exchange = json['exchange'];
     symbol = json['symbol'];
     buyOrSell = json['buyOrSell'];
     quantity = json['Quantity'];
-    price = json['Price'];
+    stopLoss = json['stopLoss'];
     contestId = json['contestId'];
     battleId = json['battleId'];
     product = json['Product'];
-    orderType = json['OrderType'];
+    orderType = json['order_type'];
     triggerPrice = json['TriggerPrice'];
-    stopLoss = json['stopLoss'];
+    stopProfitPrice = json['stopProfitPrice'];
+    stopLossPrice = json['stopLossPrice'];
     uId = json['uId'];
     exchangeInstrumentToken = json['exchangeInstrumentToken'];
     validity = json['validity'];
@@ -72,6 +82,8 @@ class ContestPlaceOrderRequest {
     instrumentToken = json['instrumentToken'];
     trader = json['trader'];
     paperTrade = json['paperTrade'];
+    price = json['price'];
+    deviceDetails = json['deviceDetails'] != null ? new DeviceDetails.fromJson(json['deviceDetails']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -80,13 +92,14 @@ class ContestPlaceOrderRequest {
     data['symbol'] = this.symbol;
     data['buyOrSell'] = this.buyOrSell;
     data['Quantity'] = this.quantity;
-    data['Price'] = this.price;
+    data['stopLoss'] = this.stopLoss;
     data['contestId'] = this.contestId;
     data['battleId'] = this.battleId;
     data['Product'] = this.product;
-    data['OrderType'] = this.orderType;
+    data['order_type'] = this.orderType;
     data['TriggerPrice'] = this.triggerPrice;
-    data['stopLoss'] = this.stopLoss;
+    data['stopProfitPrice'] = this.stopProfitPrice;
+    data['stopLossPrice'] = this.stopLossPrice;
     data['uId'] = this.uId;
     data['exchangeInstrumentToken'] = this.exchangeInstrumentToken;
     data['validity'] = this.validity;
@@ -99,6 +112,10 @@ class ContestPlaceOrderRequest {
     data['instrumentToken'] = this.instrumentToken;
     data['trader'] = this.trader;
     data['paperTrade'] = this.paperTrade;
+    data['price'] = this.price;
+    if (this.deviceDetails != null) {
+      data['deviceDetails'] = this.deviceDetails!.toJson();
+    }
     return data;
   }
 }

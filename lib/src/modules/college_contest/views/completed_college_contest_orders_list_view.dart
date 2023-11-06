@@ -11,22 +11,33 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('College Contest Orders'),
+        title: Text(
+          '${controller.completedCollegeContest.value.contestName}\n Order Book',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
-        () {
-          return ListView.builder(
+        () => Visibility(
+          visible: controller.isCompletedOrdersLoadingStatus,
+          child: ListViewShimmer(
+            itemCount: 10,
+            padding: EdgeInsets.all(12),
+            shimmerCard: LargeCardShimmer(),
+          ),
+          replacement: ListView.builder(
             shrinkWrap: true,
-            itemCount: controller.contestTodaysOrdersList.length,
+            itemCount: controller.contestOrdersList.length,
             itemBuilder: (context, index) {
-              var order = controller.contestTodaysOrdersList[index];
+              var order = controller.contestOrdersList[index];
               return CommonCard(
+                margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
                 children: [
                   OrderCardTile(
-                    label: 'Contract',
+                    label: 'Symbol',
                     value: order.symbol,
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -41,7 +52,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -60,7 +71,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -76,7 +87,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -89,8 +100,8 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                 ],
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

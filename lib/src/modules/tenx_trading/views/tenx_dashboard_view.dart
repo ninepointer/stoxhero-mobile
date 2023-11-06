@@ -8,26 +8,29 @@ class TenxDashboardView extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(' Tenx Trading'),
+        title: Text(
+          '${controller.tenxSubscribedPlanSelected.value.planName ?? 'TenX Trading'}',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Visibility(
-          visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
-          child: RefreshIndicator(
+          visible: controller.isLoadingStatus,
+          child: TradingShimmer(),
+          replacement: RefreshIndicator(
             onRefresh: controller.loadTenxData,
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.all(8.0).copyWith(
-                        bottom: 0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
-                            CommonStockInfo(
+                            TradingStockCard(
                               label: controller.getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
@@ -48,35 +51,89 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ],
                       ),
                     ),
-                  // Row(
-                  //   children: [
-                  //     CommonStockInfo(
-                  //       label: 'Margin',
-                  //       stockPrice: '₹ 19,454.09',
-                  //       stockLTP: '₹ 183.15',
-                  //       stockChange: '(+ 34.42%)',
-                  //     ),
-                  //     CommonStockInfo(
-                  //       label: 'Net P&L',
-                  //       stockPrice: '₹ 19,454.98',
-                  //       stockLTP: '₹ 183.15',
-                  //       stockChange: '(+ 34.42%)',
-                  //     ),
-                  //     SizedBox(width: 8),
-                  //   ],
-                  // ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TradingMarginNpnlCard(
+                            label: 'Available Margin',
+                            value: controller.calculateMargin().round(),
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Expanded(
+                          child: TradingMarginNpnlCard(
+                            label: 'Net P&L',
+                            value: controller.calculateTotalNetPNL(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  CommonCard(
+                    margin: EdgeInsets.only(left: 8, right: 8, top: 4),
+                    children: [
+                      if (controller.tenxCountTradingDays.isNotEmpty)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '# of Trading Days : ${controller.tenxCountTradingDays[0].totalTradingDays}',
+                                    style: AppStyles.tsSecondaryMedium12,
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Subscribed On : ${FormatHelper.formatDateTimeToIST(controller.tenxSubscribedPlanSelected.value.subscribedOn)}',
+                                    style: AppStyles.tsSecondaryMedium12,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '# of Trading Days Left : ${controller.tenxCountTradingDays[0].actualRemainingDay}',
+                                    style: AppStyles.tsWhiteMedium12.copyWith(
+                                      color: AppColors.success,
+                                    ),
+                                  ),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    'Expires On: ${FormatHelper.formatDateTimeToIST(controller.date().toString())}',
+                                    textAlign: TextAlign.end,
+                                    style: AppStyles.tsWhiteMedium12.copyWith(
+                                      color: AppColors.success,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
                   CommonTile(
+                    isLoading: controller.isWatchlistStateLoadingStatus,
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
-                    padding: EdgeInsets.only(left: 16),
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: 'Nothing here! \nClick on + icon to add instruments',
+                        )
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -89,7 +146,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             },
                           ),
                         ),
-                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.tenxPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -97,13 +154,13 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         children: [
                           Row(
                             children: [
-                              TenxPositionDetailsCard(
+                              PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              TenxPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -112,13 +169,13 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              TenxPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
-                              TenxPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
                                 valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
@@ -128,7 +185,15 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Position'),
+                  CommonTile(
+                    isLoading: controller.isPositionStateLoadingStatus,
+                    label: 'My Positions',
+                    showSeeAllButton: true,
+                    seeAllLabel:
+                        '( Open P: ${controller.getOpenPositionCount()} | Close P: ${controller.getClosePositionCount()} )',
+                    sellAllColor: AppColors.grey,
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   controller.tenxPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
@@ -137,34 +202,116 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.tenxPositionsList.length,
                           itemBuilder: (context, index) {
-                            return TenxPositionCard(
-                              position: controller.tenxPositionsList[index],
+                            final position = controller.tenxPositionsList[index];
+                            if (position.id?.isLimit != true) {
+                              return TenxPositionCard(
+                                position: position,
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPendingOrderStateLoadingStatus,
+                    label: 'My Pending Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossPendingOrderList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.stopLossPendingOrderList.length,
+                          itemBuilder: (context, index) {
+                            return StoplossPendingOrderCard(
+                              stopLoss: controller.stopLossPendingOrderList[index],
                             );
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
-                  TenxPortfolioDetailsCard(
-                    label: 'Portfolio Value',
+                  CommonTile(
+                    isLoading: controller.isExecutedOrderStateLoadingStatus,
+                    label: 'My Executed Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossExecutedOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.stopLossExecutedOrdersList.length >= 3
+                              ? 180
+                              : controller.stopLossExecutedOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return StoplossExecutedOrderCard(
+                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                              );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'My Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.tenxTradeTodaysOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.tenxTradeTodaysOrdersList.length >= 3
+                              ? 180
+                              : controller.tenxTradeTodaysOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.tenxTradeTodaysOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return TenxTodayOrderCard(
+                                order: controller.tenxTradeTodaysOrdersList[index],
+                              );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  PortfolioDetailCardTile(
+                    label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.tenxPortfolioDetails.value.totalFund,
                   ),
-                  TenxPortfolioDetailsCard(
-                    label: 'Available Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
-                  TenxPortfolioDetailsCard(
-                    label: 'Used Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
                   ),
-                  TenxPortfolioDetailsCard(
+                  PortfolioDetailCardTile(
                     label: 'Opening Balance',
                     info: 'Cash available at the beginning of the day',
                     value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
                         ? controller.tenxPortfolioDetails.value.openingBalance
                         : controller.tenxPortfolioDetails.value.totalFund,
+                  ),
+                  PortfolioDetailCardTile(
+                    label: 'Unrealised Profit & Loss',
+                    info: 'Increased value of your investment',
+                    value: controller.calculateUnRealisedPNL(),
                   ),
                   SizedBox(height: 56),
                 ],

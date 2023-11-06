@@ -37,7 +37,7 @@ class UpComingCollegeContest {
   String? currentLiveStatus;
   String? contestFor;
   String? collegeCode;
-  int? entryFee;
+  num? entryFee;
   num? payoutPercentage;
   Portfolio? portfolio;
   String? college;
@@ -51,41 +51,44 @@ class UpComingCollegeContest {
   bool? isFinNifty;
   bool? isAllIndex;
   List<Null>? rewards;
-  List<InterestedUsers>? interestedUsers;
+  List<InterestedUserss>? interestedUsers;
   List<Null>? participants;
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
+  num? payoutCapPercentage;
 
-  UpComingCollegeContest(
-      {this.id,
-      this.contestName,
-      this.contestStartTime,
-      this.contestEndTime,
-      this.description,
-      this.contestType,
-      this.currentLiveStatus,
-      this.contestFor,
-      this.collegeCode,
-      this.entryFee,
-      this.payoutPercentage,
-      this.portfolio,
-      this.college,
-      this.maxParticipants,
-      this.contestStatus,
-      this.createdBy,
-      this.lastModifiedBy,
-      this.contestExpiry,
-      this.isNifty,
-      this.isBankNifty,
-      this.isFinNifty,
-      this.isAllIndex,
-      this.rewards,
-      this.interestedUsers,
-      this.participants,
-      this.createdOn,
-      this.lastModifiedOn,
-      this.iV});
+  UpComingCollegeContest({
+    this.id,
+    this.contestName,
+    this.contestStartTime,
+    this.contestEndTime,
+    this.description,
+    this.contestType,
+    this.currentLiveStatus,
+    this.contestFor,
+    this.collegeCode,
+    this.entryFee,
+    this.payoutPercentage,
+    this.portfolio,
+    this.college,
+    this.maxParticipants,
+    this.contestStatus,
+    this.createdBy,
+    this.lastModifiedBy,
+    this.contestExpiry,
+    this.isNifty,
+    this.isBankNifty,
+    this.isFinNifty,
+    this.isAllIndex,
+    this.rewards,
+    this.interestedUsers,
+    this.participants,
+    this.createdOn,
+    this.lastModifiedOn,
+    this.iV,
+    this.payoutCapPercentage,
+  });
 
   UpComingCollegeContest.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -117,9 +120,9 @@ class UpComingCollegeContest {
       });
     }
     if (json['interestedUsers'] != null) {
-      interestedUsers = <InterestedUsers>[];
+      interestedUsers = <InterestedUserss>[];
       json['interestedUsers'].forEach((v) {
-        interestedUsers!.add(new InterestedUsers.fromJson(v));
+        interestedUsers!.add(new InterestedUserss.fromJson(v));
       });
     }
     if (json['participants'] != null) {
@@ -131,6 +134,7 @@ class UpComingCollegeContest {
     createdOn = json['createdOn'];
     lastModifiedOn = json['lastModifiedOn'];
     iV = json['__v'];
+    payoutCapPercentage = json['payoutCapPercentage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -171,6 +175,7 @@ class UpComingCollegeContest {
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['__v'] = this.iV;
+    data['payoutCapPercentage'] = this.payoutCapPercentage;
     return data;
   }
 }
@@ -178,7 +183,7 @@ class UpComingCollegeContest {
 class Portfolio {
   String? sId;
   String? portfolioName;
-  int? portfolioValue;
+  num? portfolioValue;
 
   Portfolio({this.sId, this.portfolioName, this.portfolioValue});
 
@@ -197,15 +202,15 @@ class Portfolio {
   }
 }
 
-class InterestedUsers {
+class InterestedUserss {
   UserId? userId;
   String? registeredOn;
   String? status;
   String? sId;
 
-  InterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
+  InterestedUserss({this.userId, this.registeredOn, this.status, this.sId});
 
-  InterestedUsers.fromJson(Map<String, dynamic> json) {
+  InterestedUserss.fromJson(Map<String, dynamic> json) {
     userId = json['userId'] != null ? new UserId.fromJson(json['userId']) : null;
     registeredOn = json['registeredOn'];
     status = json['status'];
@@ -225,17 +230,17 @@ class InterestedUsers {
 }
 
 class UserId {
-  String? sId;
+  String? id;
   String? firstName;
   String? lastName;
   String? email;
   String? mobile;
   String? creationProcess;
 
-  UserId({this.sId, this.firstName, this.lastName, this.email, this.mobile, this.creationProcess});
+  UserId({this.id, this.firstName, this.lastName, this.email, this.mobile, this.creationProcess});
 
   UserId.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
+    id = json['_id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
     email = json['email'];
@@ -245,7 +250,7 @@ class UserId {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
     data['email'] = this.email;

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stoxhero/src/data/models/response/upcoming_college_contest_list_response.dart';
 
 import '../../../app/app.dart';
@@ -72,6 +73,10 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
 
   @override
   Widget build(BuildContext context) {
+    bool isUserInterestedId = controller.isUserInterested(
+      widget.contest,
+      controller.userDetails.value.sId,
+    );
     return Visibility(
       visible: !isVisible,
       replacement: SizedBox(),
@@ -80,14 +85,14 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             alignment: Alignment.center,
             child: Row(
               children: [
                 Expanded(
                   child: Text(
                     widget.contest?.contestName ?? '-',
-                    style: AppStyles.tsSecondaryMedium16,
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                 ),
               ],
@@ -100,7 +105,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                 Visibility(
                   visible: widget.contest?.isNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: AppColors.success,
                       borderRadius: BorderRadius.circular(100),
@@ -115,7 +120,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                 Visibility(
                   visible: widget.contest?.isBankNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: AppColors.secondary,
                       borderRadius: BorderRadius.circular(100),
@@ -130,7 +135,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                 Visibility(
                   visible: widget.contest?.isFinNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
                       color: AppColors.info,
                       borderRadius: BorderRadius.circular(100),
@@ -143,7 +148,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                 ),
                 SizedBox(width: 4),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.danger,
                     borderRadius: BorderRadius.circular(100),
@@ -156,7 +161,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
               ],
             ),
           ),
-          SizedBox(height: 12),
+          SizedBox(height: 8),
           Divider(thickness: 1, height: 0),
           SizedBox(height: 8),
           Padding(
@@ -172,7 +177,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                         children: [
                           Text(
                             'No. of Seats left',
-                            style: AppStyles.tsGreyRegular12,
+                            style: AppStyles.tsGreyMedium12,
                           ),
                           SizedBox(height: 2),
                           Text(
@@ -182,7 +187,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                                   widget.contest?.participants?.length ?? 0,
                                 )
                                 .toString(),
-                            style: Theme.of(context).textTheme.tsMedium14,
+                            style: Theme.of(context).textTheme.tsMedium12,
                           ),
                         ],
                       ),
@@ -191,15 +196,29 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                       children: [
                         Image.asset(
                           AppImages.contestTrophy,
-                          width: 40,
+                          width: 36,
                         ),
                         Text(
                           'Reward',
-                          style: AppStyles.tsGreyRegular12,
+                          style: AppStyles.tsGreyMedium12,
                         ),
-                        Text(
-                          '${widget.contest?.payoutPercentage} % of the net P&L',
-                          style: Theme.of(context).textTheme.tsMedium14,
+                        Row(
+                          children: [
+                            Text(
+                              '${widget.contest?.payoutPercentage}% of the Net P&L',
+                              style: Theme.of(context).textTheme.tsMedium12,
+                            ),
+                            if (widget.contest?.payoutCapPercentage != null)
+                              Text(
+                                ' (Upto ${controller.getPaidCapAmount(
+                                  widget.contest?.entryFee == 0
+                                      ? widget.contest?.portfolio?.portfolioValue ?? 0
+                                      : widget.contest?.entryFee ?? 0,
+                                  widget.contest?.payoutCapPercentage ?? 0,
+                                )})',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                              ),
+                          ],
                         ),
                       ],
                     ),
@@ -208,13 +227,14 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'Remaining',
-                            style: AppStyles.tsGreyRegular12,
+                            'Remaining Time',
+                            style: AppStyles.tsGreyMedium12,
+                            textAlign: TextAlign.end,
                           ),
                           SizedBox(height: 2),
                           Text(
-                            '${remainingTime.inDays} days \n${remainingTime.inHours.remainder(24)} hrs \n${remainingTime.inMinutes.remainder(60)} mins \n${remainingTime.inSeconds.remainder(60)} secs',
-                            style: Theme.of(context).textTheme.tsMedium14,
+                            '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                            style: Theme.of(context).textTheme.tsMedium12,
                             textAlign: TextAlign.end,
                           ),
                         ],
@@ -222,7 +242,6 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -230,13 +249,13 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Start Date & Time',
-                          style: AppStyles.tsGreyRegular12,
+                          'Starts',
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
                           FormatHelper.formatDateTimeToIST(widget.contest?.contestStartTime),
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
@@ -244,19 +263,19 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'End Date & Time',
-                          style: AppStyles.tsGreyRegular12,
+                          'Ends',
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
                           FormatHelper.formatDateTimeToIST(widget.contest?.contestEndTime),
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
                   ],
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -265,14 +284,14 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                       children: [
                         Text(
                           'Entry Fee',
-                          style: AppStyles.tsGreyRegular12,
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
                           widget.contest?.entryFee == 0
                               ? 'Free'
                               : FormatHelper.formatNumbers(widget.contest?.entryFee, decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
@@ -280,13 +299,13 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Portfolio',
-                          style: AppStyles.tsGreyRegular12,
+                          'Virtual Margin Money',
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
                           FormatHelper.formatNumbers(widget.contest?.portfolio?.portfolioValue, decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
@@ -303,17 +322,26 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
             ),
             child: Row(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(.25),
-                      ),
-                      child: Text(
-                        'Get Notified',
-                        style: AppStyles.tsPrimaryMedium14,
+                Visibility(
+                  visible: !isUserInterestedId,
+                  child: Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.upComingCollegeContest(widget.contest);
+                        controller.getNotified();
+                        SnackbarHelper.showSnackbar(
+                            'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the contest starts');
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(.25),
+                        ),
+                        child: Text(
+                          isUserInterestedId ? '' : 'Get Notified',
+                          style: AppStyles.tsPrimaryMedium12,
+                        ),
                       ),
                     ),
                   ),
@@ -324,7 +352,7 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                             controller.calculateSeatsLeft(
                                     widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) >
                                 0
-                        ? () {}
+                        ? () => SnackbarHelper.showSnackbar('The Contest has not started yet!')
                         : () async {
                             if (controller.calculateSeatsLeft(
                                     widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) ==
@@ -333,12 +361,18 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                             } else {
                               BottomSheetHelper.openBottomSheet(
                                 context: context,
-                                child: PurchaseItemBottomSheet(
+                                child: PaymentBottomSheet(
+                                  productType: ProductType.collegeContest,
+                                  productId: widget.contest?.id ?? '',
                                   buyItemPrice: widget.contest?.entryFee ?? 0,
+                                  onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
                                   onSubmit: () {
                                     Get.back();
+                                    var walletController = Get.find<WalletController>();
                                     var data = {
-                                      "contestFee": widget.contest?.entryFee,
+                                      "bonusRedemption": 0,
+                                      "coupon": walletController.couponCodeTextController.text,
+                                      "contestFee": walletController.subscriptionAmount.value,
                                       "contestId": widget.contest?.id,
                                       "contestName": widget.contest?.contestName,
                                     };
@@ -350,22 +384,24 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                           },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                       ),
                       child: Text(
-                        (controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0) &&
-                                controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
-                                        widget.contest?.participants?.length ?? 0) >
-                                    0
-                            ? 'Purchased'
-                            : controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
-                                        widget.contest?.participants?.length ?? 0) ==
-                                    0
-                                ? 'Contest Full'
-                                : 'Pay Now',
-                        style: AppStyles.tsWhiteMedium14.copyWith(
+                        widget.contest?.entryFee == 0
+                            ? 'Start Trading'
+                            : (controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0) &&
+                                    controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
+                                            widget.contest?.participants?.length ?? 0) >
+                                        0
+                                ? 'Purchased'
+                                : controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
+                                            widget.contest?.participants?.length ?? 0) ==
+                                        0
+                                    ? 'Contest Full'
+                                    : 'Pay Now',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),
                       ),
@@ -374,15 +410,24 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                 ),
                 Expanded(
                   child: GestureDetector(
+                    onTap: () {
+                      controller.upComingCollegeContest(widget.contest);
+                      controller.getShareContest(true);
+                      String url = 'https://stoxhero.com/contest';
+                      Clipboard.setData(ClipboardData(text: url));
+                      SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                    },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.secondary.withOpacity(.25),
                       ),
                       child: Text(
                         'Share',
-                        style: AppStyles.tsSecondaryMedium14,
+                        style: AppStyles.tsSecondaryMedium12.copyWith(
+                          color: AppColors.secondary.shade600,
+                        ),
                       ),
                     ),
                   ),

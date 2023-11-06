@@ -5,14 +5,22 @@ import 'package:stoxhero/src/modules/college_contest/widgets/college_contest_lea
 import '../../../core/core.dart';
 import '../../modules.dart';
 
-class ContestLeaderboardView extends StatelessWidget {
-  final ContestController contestController;
-  final CollegeContestController collegeContestController;
-  const ContestLeaderboardView({
-    Key? key,
-    required this.contestController,
-    required this.collegeContestController,
-  }) : super(key: key);
+class ContestLeaderboardView extends StatefulWidget {
+  const ContestLeaderboardView({Key? key}) : super(key: key);
+
+  @override
+  State<ContestLeaderboardView> createState() => _ContestLeaderboardViewState();
+}
+
+class _ContestLeaderboardViewState extends State<ContestLeaderboardView> {
+  late ContestController contestController;
+  late CollegeContestController collegeContestController;
+  @override
+  void initState() {
+    super.initState();
+    contestController = Get.find<ContestController>();
+    collegeContestController = Get.find<CollegeContestController>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,51 +29,80 @@ class ContestLeaderboardView extends StatelessWidget {
         title: Text('Contests Leaderboard'),
       ),
       body: Obx(
-        () => Visibility(
-          visible: !contestController.isLoadingStatus,
-          replacement: CommonLoader(),
-          child: RefreshIndicator(
-            onRefresh: contestController.loadData,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  CommonSegmentedControl(
-                    segments: {
-                      0: 'StoxHero Contest',
-                      1: 'College Contest',
-                    },
-                    selectedSegment: contestController.segmentedControlValue.value,
-                    onValueChanged: contestController.handleSegmentChange,
+        () => CommonTabBar(
+          index: contestController.selectedTabBarIndex.value,
+          onTap: contestController.changeTabBarIndex,
+          tabsTitle: [
+            AppStrings.stoxHeroContests,
+            AppStrings.collegeContests,
+          ],
+          tabs: [
+            RefreshIndicator(
+              onRefresh: contestController.getContestLeaderboardList,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.only(bottom: 100),
+                child: Visibility(
+                  visible: contestController.isLeaderboardLoadingStatus,
+                  child: ListViewShimmer(
+                    itemCount: 10,
+                    shimmerCard: MediumCardShimmer(),
                   ),
-                  if (contestController.segmentedControlValue.value == 0)
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: contestController.contestLeaderboardList.length,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return ContestLeaderboardCard(
-                          contestLeaderboard: contestController.contestLeaderboardList[index],
-                        );
-                      },
-                    )
-                  else if (contestController.segmentedControlValue.value == 1)
-                    ListView.builder(
+                  replacement: Visibility(
+                      visible: contestController.contestLeaderboardList.isEmpty,
+                      child: NoDataFound(
+                        imagePath: AppImages.contestTrophy,
+                        label: AppStrings.noDataFoundContestLeaderboard,
+                      ),
+                      replacement: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: contestController.contestLeaderboardList.length,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return ContestLeaderboardCard(
+                            index: index + 1,
+                            contestLeaderboard: contestController.contestLeaderboardList[index],
+                          );
+                        },
+                      )),
+                ),
+              ),
+            ),
+            RefreshIndicator(
+              onRefresh: collegeContestController.getCollegeContestLeaderboardList,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.only(bottom: 100),
+                child: Visibility(
+                  visible: collegeContestController.isLeaderboardLoadingStatus,
+                  child: ListViewShimmer(
+                    itemCount: 10,
+                    shimmerCard: MediumCardShimmer(),
+                  ),
+                  replacement: Visibility(
+                    visible: collegeContestController.collegeContestLeaderboardList.isEmpty,
+                    child: NoDataFound(
+                      imagePath: AppImages.contestTrophy,
+                      label: AppStrings.noDataFoundCollegeContestLeaderboard,
+                    ),
+                    replacement: ListView.builder(
                       shrinkWrap: true,
                       itemCount: collegeContestController.collegeContestLeaderboardList.length,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return CollegeContestLeaderboardCard(
-                          contestLeaderboard:
-                              collegeContestController.collegeContestLeaderboardList[index],
+                          index: index + 1,
+                          contestLeaderboard: collegeContestController.collegeContestLeaderboardList[index],
                         );
                       },
                     ),
-                ],
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

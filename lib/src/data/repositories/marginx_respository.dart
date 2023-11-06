@@ -35,12 +35,12 @@ class MarginXRepository extends BaseRepository {
         : RepoResponse(data: CompletedMarginXOrdersResponse.fromJson(response));
   }
 
-  Future<RepoResponse<MarginXTradingPositionResponse>> getMarginXPositions(String? id) async {
+  Future<RepoResponse<TradingPositionListResponse>> getMarginXPositions(String? id) async {
     String apiURL = AppUrls.marginXPosition(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: MarginXTradingPositionResponse.fromJson(response));
+        : RepoResponse(data: TradingPositionListResponse.fromJson(response));
   }
 
   Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(
@@ -124,5 +124,21 @@ class MarginXRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getShareMarginX(String? id) async {
+    String apiURL = AppUrls.shareMarginX(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<MarginRequiredResponse>> getMarginRequired(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.marginRequired;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: MarginRequiredResponse.fromJson(response));
   }
 }

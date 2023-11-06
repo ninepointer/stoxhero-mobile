@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:stoxhero/src/app/app.dart';
 
 class LiveCollegeContestCard extends GetView<CollegeContestController> {
   final LiveCollegeContest? contest;
-  final ContestPosition? contestPositionList;
+  final TradingPosition? contestPositionList;
   final ContestCreditData? contestPortfolio;
   const LiveCollegeContestCard({
     Key? key,
@@ -19,14 +20,14 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   contest?.contestName ?? '-',
-                  style: AppStyles.tsSecondaryMedium16,
+                  style: AppStyles.tsSecondaryMedium14,
                 ),
               ),
             ],
@@ -39,7 +40,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               Visibility(
                 visible: contest?.isNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.success,
                     borderRadius: BorderRadius.circular(100),
@@ -54,7 +55,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               Visibility(
                 visible: contest?.isBankNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.secondary,
                     borderRadius: BorderRadius.circular(100),
@@ -69,7 +70,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               Visibility(
                 visible: contest?.isFinNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.info,
                     borderRadius: BorderRadius.circular(100),
@@ -82,7 +83,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.danger,
                   borderRadius: BorderRadius.circular(100),
@@ -94,7 +95,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(100),
@@ -107,7 +108,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
             ],
           ),
         ),
-        SizedBox(height: 12),
+        SizedBox(height: 8),
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
@@ -115,6 +116,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
           child: Column(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
@@ -122,7 +124,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: Theme.of(context).textTheme.tsGreyRegular12,
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
@@ -132,7 +134,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                                 contest?.participants?.length ?? 0,
                               )
                               .toString(),
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
@@ -141,27 +143,52 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     children: [
                       Image.asset(
                         AppImages.contestTrophy,
-                        width: 40,
+                        width: 36,
                       ),
                       Text(
                         'Reward',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        style: AppStyles.tsGreyMedium12,
                       ),
-                      Text(
-                        '${contest?.payoutPercentage} % of the net P&L',
-                        style: Theme.of(context).textTheme.tsMedium14,
+                      Row(
+                        children: [
+                          Text(
+                            '${contest?.payoutPercentage}% of the Net P&L',
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                          if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                            Text(
+                              ' (Upto ${controller.getPaidCapAmount(
+                                contest?.entryFee == 0
+                                    ? contest?.portfolio?.portfolioValue ?? 0
+                                    : contest?.entryFee ?? 0,
+                                contest?.payoutCapPercentage ?? 0,
+                              )})',
+                              style: Theme.of(context).textTheme.tsMedium12,
+                            ),
+                        ],
                       ),
                     ],
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [],
+                      children: [
+                        Text(
+                          'Remaining Time',
+                          style: AppStyles.tsGreyMedium12,
+                          textAlign: TextAlign.end,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Started',
+                          style: Theme.of(context).textTheme.tsMedium12,
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -169,13 +196,13 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Start Date & Time',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Starts',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -183,19 +210,19 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'End Date & Time',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Ends',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -204,12 +231,12 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     children: [
                       Text(
                         'Entry Fee',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -217,8 +244,8 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Portfolio',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Virtual Margin Money',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
@@ -226,7 +253,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                           contest?.portfolio?.portfolioValue,
                           decimal: 0,
                         ),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -245,42 +272,66 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
-                          controller.calculateSeatsLeft(
-                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
-                              0
-                      ? () {
-                          controller.liveCollegeContest(contest);
-                          controller.loadTradingData();
-                          // controller.liveLeaderboardList();
-                          Get.to(() => CollegeContestTradingView());
-                        }
-                      : () {
-                          if (controller.calculateSeatsLeft(
-                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
-                              0) {
-                            SnackbarHelper.showSnackbar('Contest is Full');
-                          } else {
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: PurchaseItemBottomSheet(
-                                buyItemPrice: contest?.entryFee ?? 0,
-                                onSubmit: () {
-                                  Get.back();
-                                  var data = {
-                                    "contestFee": contest?.entryFee,
-                                    "contestId": contest?.id,
-                                    "contestName": contest?.contestName,
-                                  };
-                                  controller.purchaseContest(data);
-                                },
-                              ),
-                            );
+                  onTap: () {
+                    controller.liveCollegeContest(contest);
+                    if (contest?.entryFee == 0) {
+                      if (contest?.maxParticipants == contest?.participants?.length) {
+                        if (controller.canUserTrade(contest)) {
+                          controller.gotoTradingView();
+                        } else {
+                          if (controller.collegeCodeTextController.text.isNotEmpty) {
+                            Get.back();
+                            controller.verifyAndParticipate(contest);
+                            controller.collegeCodeTextController.clear();
                           }
-                        },
+                        }
+                      } else if (controller.canUserTrade(contest)) {
+                        controller.gotoTradingView();
+                      } else {
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: CollegeContestCodeBottomsheet(
+                            onSubmit: () {
+                              if (controller.collegeCodeTextController.text.isNotEmpty) {
+                                Get.back();
+                                controller.verifyAndParticipate(contest);
+                                controller.collegeCodeTextController.clear();
+                              }
+                            },
+                          ),
+                        );
+                      }
+                    } else {
+                      if (controller.checkIfLivePurchased(contest)) {
+                        controller.gotoTradingView();
+                      } else {
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: PaymentBottomSheet(
+                            productType: ProductType.collegeContest,
+                            productId: contest?.id ?? '',
+                            buyItemPrice: contest?.entryFee ?? 0,
+                            onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                            onSubmit: () {
+                              Get.back();
+                              var walletController = Get.find<WalletController>();
+                              var data = {
+                                "bonusRedemption": 0,
+                                "coupon": walletController.couponCodeTextController.text,
+                                "contestFee": walletController.subscriptionAmount.value,
+                                "contestId": contest?.id,
+                                "contestName": contest?.contestName,
+                              };
+                              controller.purchaseContest(data);
+                            },
+                          ),
+                        );
+                      }
+                    }
+                  },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(8),
@@ -288,17 +339,10 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
-                              controller.calculateSeatsLeft(
-                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
-                                  0
+                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0)
                           ? 'Start Trading'
-                          : controller.calculateSeatsLeft(
-                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
-                                  0
-                              ? 'Contest Full'
-                              : 'Pay Now',
-                      style: AppStyles.tsWhiteMedium14.copyWith(
+                          : 'Pay Now',
+                      style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
                       ),
                     ),
@@ -307,9 +351,16 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
               ),
               Expanded(
                 child: GestureDetector(
+                  onTap: () {
+                    controller.liveCollegeContest(contest);
+                    controller.getShareContest(false);
+                    String url = 'https://stoxhero.com/contest';
+                    Clipboard.setData(ClipboardData(text: url));
+                    SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                  },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: AppColors.secondary.withOpacity(.25),
                       borderRadius: BorderRadius.only(
@@ -318,7 +369,9 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     ),
                     child: Text(
                       'Share',
-                      style: AppStyles.tsSecondaryMedium14,
+                      style: AppStyles.tsSecondaryMedium12.copyWith(
+                        color: AppColors.secondary.shade600,
+                      ),
                     ),
                   ),
                 ),

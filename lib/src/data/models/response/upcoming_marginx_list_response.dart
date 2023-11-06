@@ -76,9 +76,7 @@ class UpcomingMarginX {
     startTime = json['startTime'];
     endTime = json['endTime'];
     liveTime = json['liveTime'];
-    marginXTemplate = json['marginXTemplate'] != null
-        ? new UMarginXTemplate.fromJson(json['marginXTemplate'])
-        : null;
+    marginXTemplate = json['marginXTemplate'] != null ? new UMarginXTemplate.fromJson(json['marginXTemplate']) : null;
     if (json['potentialParticipants'] != null) {
       potentialParticipants = <Null>[];
       json['potentialParticipants'].forEach((v) {
@@ -156,8 +154,8 @@ class UpcomingMarginX {
 class UMarginXTemplate {
   String? sId;
   String? templateName;
-  int? portfolioValue;
-  int? entryFee;
+  num? portfolioValue;
+  num? entryFee;
 
   UMarginXTemplate({this.sId, this.templateName, this.portfolioValue, this.entryFee});
 

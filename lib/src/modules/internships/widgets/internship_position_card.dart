@@ -3,36 +3,39 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class InternshipPositionCard extends GetView<InternshipController> {
-  final InternshipPosition position;
+  final TradingPosition position;
 
   const InternshipPositionCard({super.key, required this.position});
 
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      position.id!.instrumentToken!,
+      position.id!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    controller.generateLotsList(type: position.id?.symbol);
+    TradingInstrument trading = TradingInstrument(
+      name: position.id?.symbol,
+      exchange: position.id?.exchange,
+      tradingsymbol: position.id?.symbol,
+      exchangeToken: position.id?.exchangeInstrumentToken,
+      instrumentToken: position.id?.instrumentToken,
+      lastPrice: lastPrice,
+      lotSize: position.lots,
+    );
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: InternshipTransactionBottomSheet(
+        type: type,
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    void openBottomSheet(BuildContext context, TransactionType type) {
-      FocusScope.of(context).unfocus();
-      num lastPrice = controller.getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
-      );
-      controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-      controller.generateLotsList(type: position.id?.symbol);
-      BottomSheetHelper.openBottomSheet(
-        context: context,
-        child: VirtualTransactionBottomSheet(
-          type: type,
-          tradingInstrument: TradingInstrument(
-            name: position.id?.symbol,
-            exchange: position.id?.exchange,
-            tradingsymbol: position.id?.symbol,
-            exchangeToken: position.id?.exchangeInstrumentToken,
-            instrumentToken: position.id?.instrumentToken,
-            lastPrice: lastPrice,
-          ),
-        ),
-      );
-    }
-
     return Column(
       children: [
         CommonCard(
@@ -45,81 +48,91 @@ class InternshipPositionCard extends GetView<InternshipController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InternshipPositionCardTile(
-                          label: 'Symbol',
-                          value: position.id?.symbol,
-                        ),
-                        InternshipPositionCardTile(
-                          isRightAlign: true,
-                          label: 'Gross P&L',
-                          valueColor: controller.getValueColor(
-                            controller.calculateGrossPNL(
-                              position.amount!,
-                              position.lots!.toInt(),
-                              controller.getInstrumentLastPrice(
-                                position.id!.instrumentToken!,
-                                position.id!.exchangeInstrumentToken!,
-                              ),
-                            ),
-                          ),
-                          value: position.lots == 0
-                              ? FormatHelper.formatNumbers(position.amount)
-                              : FormatHelper.formatNumbers(
-                                  controller.calculateGrossPNL(
-                                    position.amount!,
-                                    position.lots!.toInt(),
-                                    controller.getInstrumentLastPrice(
-                                      position.id!.instrumentToken!,
-                                      position.id!.exchangeInstrumentToken!,
-                                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TradeCardTile(
+                        label: 'Symbol',
+                        value: position.id?.symbol,
+                      ),
+                      TradeCardTile(
+                        isRightAlign: true,
+                        label: 'Gross P&L (Profit & Loss)',
+                        valueColor: controller.getValueColor(
+                          position.lots == 0
+                              ? position.amount
+                              : controller.calculateGrossPNL(
+                                  position.amount ?? 0,
+                                  position.lots?.toInt() ?? 0,
+                                  controller.getInstrumentLastPrice(
+                                    position.id?.instrumentToken ?? 0,
+                                    position.id?.exchangeInstrumentToken ?? 0,
                                   ),
                                 ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InternshipPositionCardTile(
-                          label: 'Avg. Price',
-                          value: FormatHelper.formatNumbers(position.lastaverageprice),
-                        ),
-                        InternshipPositionCardTile(
-                          isRightAlign: true,
-                          label: 'LTP',
-                          valueColor: controller.getValueColor(position.lastaverageprice),
-                          value: FormatHelper.formatNumbers(position.lastaverageprice),
-                        ),
-                      ],
-                    ),
+                        value: position.lots == 0
+                            ? FormatHelper.formatNumbers(position.amount)
+                            : FormatHelper.formatNumbers(
+                                controller.calculateGrossPNL(
+                                  position.amount ?? 0,
+                                  position.lots?.toInt() ?? 0,
+                                  controller.getInstrumentLastPrice(
+                                    position.id?.instrumentToken ?? 0,
+                                    position.id?.exchangeInstrumentToken ?? 0,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InternshipPositionCardTile(
+                      TradeCardTile(
+                        label: 'Average Price',
+                        value: FormatHelper.formatNumbers(
+                          position.lastaverageprice,
+                        ),
+                      ),
+                      TradeCardTile(
+                        isRightAlign: true,
+                        label: 'LTP (Last Traded Price)',
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentLastPrice(
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
+                          ),
+                        ),
+                        value: FormatHelper.formatNumbers(
+                          controller.getInstrumentLastPrice(
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TradeCardTile(
+                        hasBottomMargin: false,
                         label: 'Quantity',
                         value: position.lots.toString(),
                       ),
-                      InternshipPositionCardTile(
+                      TradeCardTile(
+                        hasBottomMargin: false,
                         isRightAlign: true,
                         label: 'Changes(%)',
-                        value: controller.getInstrumentChanges(
-                          position.id!.instrumentToken!,
-                          position.id!.exchangeInstrumentToken!,
-                        ),
                         valueColor: controller.getValueColor(
                           controller.getInstrumentChanges(
-                            position.id!.instrumentToken!,
-                            position.id!.exchangeInstrumentToken!,
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
                           ),
+                        ),
+                        value: controller.getInstrumentChanges(
+                          position.id?.instrumentToken ?? 0,
+                          position.id?.exchangeInstrumentToken ?? 0,
                         ),
                       ),
                     ],
@@ -134,7 +147,7 @@ class InternshipPositionCard extends GetView<InternshipController> {
                     onTap: () => openBottomSheet(context, TransactionType.buy),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.success.withOpacity(.25),
                         borderRadius: BorderRadius.only(
@@ -142,8 +155,8 @@ class InternshipPositionCard extends GetView<InternshipController> {
                         ),
                       ),
                       child: Text(
-                        'BUY',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        position.lots == 0 ? 'BUY' : 'ADD MORE',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),
                       ),
@@ -155,13 +168,13 @@ class InternshipPositionCard extends GetView<InternshipController> {
                     onTap: () => openBottomSheet(context, TransactionType.sell),
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(.25),
                       ),
                       child: Text(
-                        'SELL',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
+                        position.lots == 0 ? 'SELL' : 'EXIT SOME',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.danger,
                         ),
                       ),
@@ -177,7 +190,7 @@ class InternshipPositionCard extends GetView<InternshipController> {
                       int maxLots = lots.last;
 
                       if (exitLots == 0) {
-                        SnackbarHelper.showSnackbar('You do not have any open position for this symbol.');
+                        SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                       } else {
                         if (exitLots.toString().contains('-')) {
                           if (exitLots < 0) {
@@ -199,35 +212,42 @@ class InternshipPositionCard extends GetView<InternshipController> {
                         controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
                         print(controller.selectedStringQuantity.value);
                         controller.lotsValueList.assignAll(lots);
+
+                        TradingInstrument trading = TradingInstrument(
+                          name: position.id?.symbol,
+                          exchange: position.id?.exchange,
+                          tradingsymbol: position.id?.symbol,
+                          exchangeToken: position.id?.exchangeInstrumentToken,
+                          instrumentToken: position.id?.instrumentToken,
+                          lotSize: position.lots,
+                          lastPrice: controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        );
                         BottomSheetHelper.openBottomSheet(
                           context: context,
-                          child: VirtualTransactionBottomSheet(
+                          child: InternshipTransactionBottomSheet(
                             type: TransactionType.exit,
-                            tradingInstrument: TradingInstrument(
-                              name: position.id?.symbol,
-                              exchange: position.id?.exchange,
-                              tradingsymbol: position.id?.symbol,
-                              exchangeToken: position.id?.exchangeInstrumentToken,
-                              instrumentToken: position.id?.instrumentToken,
-                              lotSize: position.lots,
-                            ),
+                            tradingInstrument: trading,
+                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
                           ),
                         );
                       }
                     },
                     child: Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(.25),
+                        color: AppColors.secondary.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
                       ),
                       child: Text(
-                        'EXIT',
-                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                          color: AppColors.warning,
+                        'EXIT ALL',
+                        style: AppStyles.tsWhiteMedium12.copyWith(
+                          color: AppColors.secondary.shade600,
                         ),
                       ),
                     ),
@@ -236,41 +256,6 @@ class InternshipPositionCard extends GetView<InternshipController> {
               ],
             )
           ],
-        ),
-      ],
-    );
-  }
-}
-
-class InternshipPositionCardTile extends StatelessWidget {
-  final String? label;
-  final String? value;
-  final bool isRightAlign;
-  final Color? valueColor;
-
-  const InternshipPositionCardTile({
-    super.key,
-    this.label,
-    this.value,
-    this.isRightAlign = false,
-    this.valueColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: [
-        Text(
-          label ?? '-',
-          style: AppStyles.tsGreyRegular12,
-        ),
-        SizedBox(height: 2),
-        Text(
-          value ?? '-',
-          style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
-              ),
         ),
       ],
     );

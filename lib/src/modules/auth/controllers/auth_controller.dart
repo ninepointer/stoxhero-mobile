@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../base/base.dart';
 import '../../../core/core.dart';
@@ -23,6 +24,8 @@ class AuthController extends BaseController<AuthRepository> {
   final emailTextController = TextEditingController();
   final mobileTextController = TextEditingController();
   final otpTextController = TextEditingController();
+  final dobTextController = TextEditingController();
+  final referralTextController = TextEditingController();
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
@@ -30,8 +33,23 @@ class AuthController extends BaseController<AuthRepository> {
   final isSignup = false.obs;
 
   final token = ''.obs;
+  final inviteCode = CampaignCodeData().obs;
 
   void verifyOtp() => isSignup.value ? verifySignupOtp() : verifySigninOtp();
+
+  void showDateRangePicker(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      String date = DateFormat("dd-MM-yyyy").format(pickedDate);
+      dobTextController.text = date;
+    }
+  }
 
   Future userSignin() async {
     isLoading(true);
@@ -96,14 +114,15 @@ class AuthController extends BaseController<AuthRepository> {
     isLoading(true);
 
     FocusScope.of(Get.context!).unfocus();
-
+    DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     VerifySignupRequest data = VerifySignupRequest(
       firstName: firstNameTextController.text,
       lastName: lastNameTextController.text,
       email: emailTextController.text,
       mobile: mobileTextController.text,
       mobileOtp: otpTextController.text,
-      referrerCode: "",
+      dob: DateFormat('yyyy-MM-dd').format(date),
+      referrerCode: referralTextController.text,
     );
 
     try {
@@ -129,12 +148,14 @@ class AuthController extends BaseController<AuthRepository> {
 
   Future userSignup() async {
     isLoading(true);
-
+    DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     SignupRequest data = SignupRequest(
       firstName: firstNameTextController.text,
       lastName: lastNameTextController.text,
       email: emailTextController.text,
       mobile: mobileTextController.text,
+      dob: DateFormat('yyyy-MM-dd').format(date),
+      referrerCode: referralTextController.text,
     );
 
     try {
@@ -163,9 +184,11 @@ class AuthController extends BaseController<AuthRepository> {
       final response = await repository.loginDetails();
       if (response.data != null) {
         await AppStorage.setUserDetails(response.data ?? LoginDetailsResponse());
-        log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         Get.find<HomeController>().loadUserDetails();
-        if (navigate) Get.offAllNamed(AppRoutes.home);
+        if (navigate) {
+          await SocketService().initSocket();
+          Get.offAllNamed(AppRoutes.home);
+        }
         log('App ${AppStorage.getToken()}');
       } else {
         if (navigate) Get.offAllNamed(AppRoutes.signin);
@@ -202,6 +225,19 @@ class AuthController extends BaseController<AuthRepository> {
       }
     } catch (e) {
       log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getDefaultInviteCode() async {
+    isLoading(true);
+    try {
+      final RepoResponse<CampaignCodeResponse> response = await repository.getDefaultInviteCode();
+      if (response.data != null) {
+        inviteCode(response.data?.data);
+      }
+    } catch (e) {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);

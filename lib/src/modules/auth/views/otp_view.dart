@@ -107,6 +107,7 @@ class OtpView extends GetView<AuthController> {
                           SizedBox(height: 16),
                           Obx(
                             () => CommonFilledButton(
+                              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                               label: 'Verify',
                               onPressed: controller.verifyOtp,
                               isLoading: controller.isLoadingStatus,
@@ -118,13 +119,15 @@ class OtpView extends GetView<AuthController> {
                       SizedBox(height: 24),
                       Center(
                         child: Text(
-                          'Didn\'t received the code?',
+                          'Didn\'t receive the code?',
                           style: Theme.of(context).textTheme.tsRegular16,
                           textAlign: TextAlign.center,
                         ),
                       ),
                       SizedBox(height: 24),
                       CommonOutlinedButton(
+                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         label: 'Send again',
                         onPressed: () => controller.resendSigninOtp(),
                       ),

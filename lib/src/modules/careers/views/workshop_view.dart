@@ -25,7 +25,7 @@ class _WorkshopViewState extends State<WorkshopView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Workshop'),
+        title: Text('Workshops'),
       ),
       body: Obx(
         () => Visibility(
@@ -43,7 +43,7 @@ class _WorkshopViewState extends State<WorkshopView> {
                       children: [
                         Text(
                           'What is StoxHero Workshop ?',
-                          style: Theme.of(context).textTheme.tsMedium16,
+                          style: Theme.of(context).textTheme.tsSecondaryMedium14,
                         ),
                         Icon(
                           isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
@@ -58,22 +58,25 @@ class _WorkshopViewState extends State<WorkshopView> {
                 // CommonTile(
                 //   label: "Registered Workshop(s)",
                 // ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.careerList.length,
-                  itemBuilder: (BuildContext context, index) {
-                    if (controller.careerList[index].listingType == 'Workshop') {
-                      return InfoCard(
-                        career: controller.careerList[index],
-                      );
-                    } else {
-                      return NoDataFound(label: 'No Workshop');
-                    }
-                  },
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: Get.find<CareerController>().careerList.length,
+                    itemBuilder: (context, index) {
+                      final controller = Get.find<CareerController>();
+                      final jobType = controller.careerList[index].listingType;
+                      if (jobType == "Workshop") {
+                        return InfoCard(
+                          career: controller.careerList[index],
+                        );
+                      }
+                      return SizedBox.shrink();
+                    },
+                  ),
                 ),
-
                 // CommonTile(
                 //   label: "Attended Workshop(s)",
                 // ),
@@ -108,7 +111,7 @@ class _WorkshopViewState extends State<WorkshopView> {
                 //                 crossAxisAlignment: CrossAxisAlignment.start,
                 //                 children: [
                 //                   Text(
-                //                     'Start Date & Time',
+                //                     'Starts',
                 //                     style: Theme.of(context).textTheme.tsRegular12,
                 //                   ),
                 //                   SizedBox(height: 4),
@@ -122,7 +125,7 @@ class _WorkshopViewState extends State<WorkshopView> {
                 //                 crossAxisAlignment: CrossAxisAlignment.end,
                 //                 children: [
                 //                   Text(
-                //                     'End Date & Time',
+                //                     'Ends',
                 //                     style: Theme.of(context).textTheme.tsRegular12,
                 //                   ),
                 //                   SizedBox(height: 4),

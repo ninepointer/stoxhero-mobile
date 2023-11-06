@@ -61,12 +61,7 @@ class CId {
   int? exchangeInstrumentToken;
   String? exchange;
 
-  CId(
-      {this.symbol,
-      this.product,
-      this.instrumentToken,
-      this.exchangeInstrumentToken,
-      this.exchange});
+  CId({this.symbol, this.product, this.instrumentToken, this.exchangeInstrumentToken, this.exchange});
 
   CId.fromJson(Map<String, dynamic> json) {
     symbol = json['symbol'];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/modules/contest/widgets/contest_stoploss_pending_order_card.dart';
 import '../../../app/app.dart';
 
 class ContestTradingView extends GetView<ContestController> {
@@ -8,12 +9,16 @@ class ContestTradingView extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(' Contest Trading'),
+        title: Text(
+          '${controller.liveContest.value.contestName ?? 'Contest'}',
+          style: Theme.of(context).textTheme.tsRegular16,
+          textAlign: TextAlign.center,
+        ),
       ),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
-          replacement: CommonLoader(),
+          replacement: TradingShimmer(),
           child: RefreshIndicator(
             onRefresh: controller.loadTradingData,
             child: SingleChildScrollView(
@@ -21,13 +26,12 @@ class ContestTradingView extends GetView<ContestController> {
                 children: [
                   if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.all(8.0).copyWith(
-                        bottom: 0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           for (var item in controller.stockIndexDetailsList) ...[
-                            CommonStockInfo(
+                            TradingStockCard(
                               label: controller.getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
@@ -48,18 +52,41 @@ class ContestTradingView extends GetView<ContestController> {
                         ],
                       ),
                     ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TradingMarginNpnlCard(
+                            label: 'Available Margin',
+                            value: controller.calculateMargin().round(),
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Expanded(
+                          child: TradingMarginNpnlCard(
+                            label: 'Net P&L',
+                            value: controller.calculateTotalNetPNL(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   CommonTile(
+                    isLoading: controller.isWatchlistStateLoadingStatus,
                     label: 'My Watchlist',
                     showIconButton: true,
                     icon: Icons.add,
                     onPressed: controller.gotoSearchInstrument,
-                    padding: EdgeInsets.only(left: 16),
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tradingWatchlist.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: 'Nothing here! \nClick on + icon to add instruments',
+                        )
                       : SizedBox(
                           height:
-                              controller.tradingWatchlist.length >= 3 ? 340 : controller.tradingWatchlist.length * 120,
+                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -81,10 +108,10 @@ class ContestTradingView extends GetView<ContestController> {
                   CommonRankCard(
                     rank: controller.myRank.toString(),
                     name: '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
-                    netPnL: "0",
+                    netPnL: controller.calculateTotalNetPNL().toString(),
                     reward: controller.calculatePayout().toString(),
                   ),
-                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Details'),
+                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -92,13 +119,13 @@ class ContestTradingView extends GetView<ContestController> {
                         children: [
                           Row(
                             children: [
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
                                 value: controller.tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Brokerage',
                                 value: controller.tenxTotalPositionDetails.value.brokerage,
                               ),
@@ -107,7 +134,7 @@ class ContestTradingView extends GetView<ContestController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
                                 valueColor: controller.getValueColor(
@@ -115,7 +142,7 @@ class ContestTradingView extends GetView<ContestController> {
                                 ),
                               ),
                               SizedBox(width: 8),
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
                                 valueColor: controller.getValueColor(
@@ -127,9 +154,9 @@ class ContestTradingView extends GetView<ContestController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              ContestPositionDetailsCard(
+                              PositionDetailCardTile(
                                 label: 'Payout',
-                                value: controller.calculatePayout(),
+                                value: controller.calculatePayout().round(),
                                 valueColor: controller.getValueColor(
                                   controller.calculatePayout(),
                                 ),
@@ -139,7 +166,15 @@ class ContestTradingView extends GetView<ContestController> {
                         ],
                       ),
                     ),
-                  CommonTile(label: 'My Position'),
+                  CommonTile(
+                    isLoading: controller.isPositionStateLoadingStatus,
+                    label: 'My Positions',
+                    showSeeAllButton: true,
+                    seeAllLabel:
+                        '( Open P: ${controller.getOpenPositionCount()} | Close P: ${controller.getClosePositionCount()} )',
+                    sellAllColor: AppColors.grey,
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
                   controller.contestPositionsList.isEmpty
                       ? NoDataFound()
                       : ListView.builder(
@@ -148,27 +183,109 @@ class ContestTradingView extends GetView<ContestController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.contestPositionsList.length,
                           itemBuilder: (context, index) {
-                            return ContestPositionCard(
-                              position: controller.contestPositionsList[index],
+                            final position = controller.contestPositionsList[index];
+                            if (position.id?.isLimit != true) {
+                              return ContestPositionCard(
+                                position: position,
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPendingOrderStateLoadingStatus,
+                    label: 'My Pending Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossPendingOrderList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.stopLossPendingOrderList.length,
+                          itemBuilder: (context, index) {
+                            return ContestStoplossPendingOrderCard(
+                              stopLoss: controller.stopLossPendingOrderList[index],
                             );
                           },
                         ),
-                  CommonTile(label: 'Portfolio Details'),
-                  ContestPortfolioDetailsCard(
-                    label: 'Portfolio Value',
+                  CommonTile(
+                    isLoading: controller.isExecutedOrderStateLoadingStatus,
+                    label: 'My Executed Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.stopLossExecutedOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.stopLossExecutedOrdersList.length >= 3
+                              ? 180
+                              : controller.stopLossExecutedOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return StoplossExecutedOrderCard(
+                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                              );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'My Orders',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  controller.contestOrdersList.isEmpty
+                      ? NoDataFound(
+                          label: 'Nothing here!\n Please Take Trade',
+                        )
+                      : SizedBox(
+                          height: controller.contestOrdersList.length >= 3
+                              ? 180
+                              : controller.contestOrdersList.length * 130,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.contestOrdersList.length,
+                            itemBuilder: (context, index) {
+                              return ContestTodayOrderCard(
+                                order: controller.contestOrdersList[index],
+                              );
+                            },
+                          ),
+                        ),
+                  CommonTile(
+                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    label: 'Portfolio Details',
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+                  PortfolioDetailCardTile(
+                    label: 'Virtual Margin Money',
                     info: 'Total funds added by StoxHero in your Account',
                     value: controller.contestPortfolio.value.totalFund,
                   ),
-                  ContestPortfolioDetailsCard(
-                    label: 'Available Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Available Margin Money',
                     info: 'Funds that you can use to trade today',
                     value: controller.calculateMargin(),
                   ),
-                  ContestPortfolioDetailsCard(
-                    label: 'Used Margin',
+                  PortfolioDetailCardTile(
+                    label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                  ),
+                  PortfolioDetailCardTile(
+                    label: 'Unrealised Profit & Loss',
+                    info: 'Increased value of your investment',
+                    value: controller.calculateUnRealisedPNL(),
                   ),
                   SizedBox(height: 56),
                 ],

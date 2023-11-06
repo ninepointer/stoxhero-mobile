@@ -75,12 +75,12 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestPositionListResponse>> getContestPositions(String? id) async {
+  Future<RepoResponse<TradingPositionListResponse>> getContestPositions(String? id) async {
     String apiURL = AppUrls.contestPosition(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: ContestPositionListResponse.fromJson(response));
+        : RepoResponse(data: TradingPositionListResponse.fromJson(response));
   }
 
   Future<RepoResponse<GenericResponse>> placeContestOrder(Map<String, dynamic> data) async {
@@ -155,5 +155,93 @@ class CollegeContestRepository extends BaseRepository {
     String apiURL = AppUrls.confirmCollegeContestOtp;
     var response = await service.post(path: apiURL, data: data);
     return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
+  }
+
+  Future<RepoResponse<GenericResponse>> getShareContest(String? id) async {
+    String apiURL = AppUrls.shareContest(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getNotified(String? id) async {
+    String apiURL = AppUrls.getNotified(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> participate(String? id) async {
+    String apiURL = AppUrls.participate(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> verifyAndParticipate(String? id, data) async {
+    String apiURL = AppUrls.verifyAndParticipate(id);
+    var response = await service.putAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<CompletedContestLeaderboardListResponse>> getCompletedContestLeaderboardList(String? id) async {
+    String apiURL = AppUrls.completedContestLeaderboard(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: CompletedContestLeaderboardListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<MarginRequiredResponse>> getMarginRequired(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.marginRequired;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: MarginRequiredResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StopLossExecutedOrdersListResponse>> getStopLossExecutedOrder(String? id) async {
+    String apiURL = AppUrls.contestStopLossExecutedOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossExecutedOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StopLossPendingOrdersListResponse>> getStopLossPendingOrder(String? id) async {
+    String apiURL = AppUrls.contestStopLossPendingOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossPendingOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossPendingCancelOrder(String id) async {
+    String apiURL = AppUrls.contestStopLossPendingCancelOrder(id);
+    var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> pendingOrderModify(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.pendingOrderModify;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossEditOrder(String? id, Map<String, dynamic> data) async {
+    String apiURL = AppUrls.stopLossEditOrder(id);
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
   }
 }

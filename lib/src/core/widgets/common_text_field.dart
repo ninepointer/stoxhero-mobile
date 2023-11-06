@@ -18,6 +18,8 @@ class CommonTextField extends StatelessWidget {
   final bool isDisabled;
   final FocusNode? focusNode;
   final Function(String?)? onChanged;
+  final bool? enabled;
+  final bool? autoFocus;
   const CommonTextField({
     Key? key,
     this.padding,
@@ -34,6 +36,8 @@ class CommonTextField extends StatelessWidget {
     this.isDisabled = false,
     this.focusNode,
     this.onChanged,
+    this.enabled,
+    this.autoFocus,
   }) : super(key: key);
 
   @override
@@ -59,6 +63,8 @@ class CommonTextField extends StatelessWidget {
               inputFormatters: inputFormatters,
               keyboardType: keyboardType,
               obscureText: obscureText ?? false,
+              enabled: enabled,
+              autofocus: autoFocus ?? false,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               style: Theme.of(context).textTheme.tsRegular16,
               decoration: InputDecoration(
@@ -66,9 +72,11 @@ class CommonTextField extends StatelessWidget {
                 filled: true,
                 fillColor: AppColors.grey.withOpacity(.1),
                 hintText: hintText,
-                hintStyle: AppStyles.tsGreyRegular16,
+                hintStyle: AppStyles.tsGreyRegular14,
                 suffixIcon: suffixIcon,
                 prefixIcon: prefixIcon,
+                prefixIconColor: AppColors.grey,
+                suffixIconColor: AppColors.grey,
                 errorStyle: AppStyles.tsGreyRegular12.copyWith(
                   color: AppColors.danger.shade700,
                 ),
@@ -82,6 +90,13 @@ class CommonTextField extends StatelessWidget {
                   borderSide: BorderSide(
                     width: 2,
                     color: AppColors.primary,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: AppColors.primary.shade700,
                   ),
                 ),
                 errorBorder: OutlineInputBorder(

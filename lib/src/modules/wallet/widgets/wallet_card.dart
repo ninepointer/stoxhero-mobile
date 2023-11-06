@@ -15,21 +15,18 @@ class WalletCard extends StatelessWidget {
     required this.value,
     required this.iconData,
     required this.buttonLabel,
-    required this.onPressed,
+    this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.all(16).copyWith(
-        top: 8,
-        bottom: 0,
-      ),
+      margin: EdgeInsets.zero,
       children: [
         Row(
           children: [
             Container(
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: AppColors.secondary.withOpacity(.25),
                 shape: BoxShape.circle,
@@ -52,7 +49,7 @@ class WalletCard extends StatelessWidget {
                   SizedBox(height: 2),
                   Text(
                     value,
-                    style: AppStyles.tsPrimaryMedium20.copyWith(
+                    style: AppStyles.tsPrimaryMedium16.copyWith(
                       color: AppColors.success,
                     ),
                   ),
@@ -60,12 +57,13 @@ class WalletCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: 12),
-            CommonFilledButton(
-              height: 32,
-              width: 120,
-              label: buttonLabel,
-              onPressed: onPressed,
-            )
+            if (onPressed != null)
+              CommonFilledButton(
+                height: 32,
+                width: 120,
+                label: buttonLabel,
+                onPressed: onPressed,
+              )
           ],
         )
       ],

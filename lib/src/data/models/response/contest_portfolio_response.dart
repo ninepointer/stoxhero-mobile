@@ -21,7 +21,7 @@ class ContestPortfolioResponse {
 
 class ContestCreditData {
   String? batch;
-  int? totalFund;
+  num? totalFund;
   num? npnl;
   num? openingBalance;
 

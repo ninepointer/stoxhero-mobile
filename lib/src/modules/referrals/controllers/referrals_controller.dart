@@ -14,7 +14,17 @@ class ReferralsBinding implements Bindings {
 class ReferralsController extends BaseController<ReferralsRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+
+  final isInviteLoading = false.obs;
+  bool get isInviteLoadingStatus => isInviteLoading.value;
+
+  final isReferralLoading = false.obs;
+  bool get isReferralLoadingStatus => isReferralLoading.value;
+
   final segmentedControlValue = 0.obs;
+
+  final selectedTabBarIndex = 0.obs;
+  final selectedReferralTabBarIndex = 0.obs;
 
   final Rx<ActiveReferral?> activeReferrals = ActiveReferral().obs;
   final referralsLeaderboardList = <LeaderboardUserDetails>[].obs;
@@ -24,7 +34,7 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => AppStorage.getUserDetails();
 
-  void loadData() async {
+  Future loadData() async {
     loadUserDetails();
     getMyEarnings();
     getActiveReferrals();
@@ -32,8 +42,19 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     getReferralsLeaderboard();
   }
 
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+
+  void changeReferralTabBarIndex(int val) => selectedReferralTabBarIndex.value = val;
+
   String getReferralMessage() {
-    return "AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR Join me at StoxHero - Options Trading and Investment Platform 🤝 👉 Get 10,00,000 virtual currency in your account to start option trading using my referral code 👉 Join the community of ace traders and learn real-time options trading 👉 Participate in TenX Trading and earn 10% real cash on the profit you will make on the platform 📲 Visit https://www.stoxhero.com/signup?referral=${userDetailsData.myReferralCode} Use my below invitation code 👇 and get INR ₹10,00,000 in your wallet and start trading My Referral Code to join the StoxHero: ${userDetailsData.myReferralCode}";
+    return '''AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR 
+    Join me at StoxHero - Options Trading and Investment Platform 🤝 
+    👉 Get 10,00,000 virtual currency in your account to start option trading using my referral code 
+    👉 Join the community of ace traders and learn real-time options trading 
+    👉 Participate in TenX Trading and earn 10% real cash on the profit you will make on the platform 
+    📲 Visit ${AppUrls.referralWebUrl}${userDetailsData.myReferralCode} Use my below invitation code 
+    👇 and get virtual currency of ₹10,00,000 in your wallet and start trading
+    My Referral Code to join the StoxHero: ${userDetailsData.myReferralCode}''';
   }
 
   void loadUserDetails() {
@@ -98,7 +119,7 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   }
 
   Future getReferralsLeaderboard() async {
-    isLoading(true);
+    isReferralLoading(true);
     try {
       final RepoResponse<ReferralsLeaderboardResponse> response = await repository.getReferralsLeaderboard();
       if (response.data != null) {
@@ -110,6 +131,6 @@ class ReferralsController extends BaseController<ReferralsRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isReferralLoading(false);
   }
 }

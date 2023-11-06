@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class FormatHelper {
@@ -5,9 +6,10 @@ class FormatHelper {
     dynamic value, {
     bool isNegative = false,
     bool showSymbol = true,
+    bool showDecimal = true,
     int decimal = 2,
   }) {
-    if (value == null || value.toString().isEmpty) return '₹ 0';
+    if (value == null || value.toString().isEmpty) return '₹0';
     if (value != null) {
       num number = value is int || value is double
           ? isNegative
@@ -18,14 +20,19 @@ class FormatHelper {
               : num.parse(value);
       final currencyFormat = NumberFormat.currency(
         locale: 'en_IN',
-        symbol: showSymbol ? '₹ ' : '',
+        symbol: showSymbol ? '₹' : '',
         decimalDigits: decimal,
       );
 
-      String formattedAmount = currencyFormat.format(number);
+      String formattedAmount = '₹0';
+      if (showDecimal) {
+        formattedAmount = currencyFormat.format(number);
+      } else {
+        formattedAmount = currencyFormat.format(number).replaceAll(RegExp(r'\.00$'), '');
+      }
       return formattedAmount;
     } else {
-      return '₹ 0';
+      return '₹0';
     }
   }
 
@@ -94,5 +101,37 @@ class FormatHelper {
     } else {
       return '-';
     }
+  }
+
+  static String formatDateToIST(String? value) {
+    if (value != null) {
+      DateTime dateTimeUTC = DateTime.parse(value);
+      DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
+      String formattedIST = DateFormat('dd/MM/yyyy').format(dateTimeIST);
+      return formattedIST;
+    } else {
+      return '-';
+    }
+  }
+
+  static String formatDateOfBirthToIST(String? value) {
+    if (value != null) {
+      DateTime dateTimeUTC = DateTime.parse(value);
+      DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
+      String formattedIST = DateFormat('dd-MM-yyyy').format(dateTimeIST);
+      return formattedIST;
+    } else {
+      return '-';
+    }
+  }
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
   }
 }

@@ -26,7 +26,7 @@ class MyTenxPortfolioResponse {
 
 class MyTenxPortfolio {
   String? subscriptionId;
-  int? portfolioValue;
+  num? portfolioValue;
   String? portfolioType;
   String? portfolioName;
   String? portfolioAccount;

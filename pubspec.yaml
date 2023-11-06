@@ -1,7 +1,7 @@
 name: stoxhero
 description: A new Flutter project.
-version: 1.0.0+28 # Dev
-# version: 1.0.0+6 # Prod
+version: 1.0.0+38 # Dev
+# version: 1.0.0+17 # Prod
 publish_to: "none"
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  phonepe_payment_sdk: ^1.0.0
+  phonepe_payment_sdk: ^1.0.2
   get: ^4.6.5
   dio: ^5.1.1
   get_storage: ^2.1.1
@@ -35,8 +35,15 @@ dependencies:
   flutter_inappwebview: ^5.8.0
   crypto: ^3.0.3
   http: ^0.13.6
-
-
+  firebase_core: ^2.17.0
+  firebase_analytics: ^10.5.1
+  in_app_update: ^4.2.2
+  url_launcher: ^6.1.14
+  uni_links: ^0.5.1
+  shimmer: ^3.0.0
+  logger: ^2.0.2+1
+  path_provider: ^2.1.1
+  open_filex: ^4.3.4
 
 dev_dependencies:
   flutter_launcher_icons: any

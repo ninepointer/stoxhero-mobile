@@ -20,8 +20,8 @@ class OrdersRepository extends BaseRepository {
         : RepoResponse(data: InfinityTradeOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxTradeOrdersListResponse>> getTenxTradeTodaysOrdersList() async {
-    String apiURL = AppUrls.tenxTradeTodaysOrders;
+  Future<RepoResponse<TenxTradeOrdersListResponse>> getTenxTradeTodaysOrdersList(String? subscriptionId) async {
+    String apiURL = AppUrls.tenxTradeTodaysOrders(subscriptionId);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)

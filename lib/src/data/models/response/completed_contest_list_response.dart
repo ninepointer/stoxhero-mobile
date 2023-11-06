@@ -39,7 +39,7 @@ class CompletedContest {
   String? description;
   String? contestType;
   String? contestFor;
-  int? entryFee;
+  num? entryFee;
   num? payoutPercentage;
   String? portfolio;
   int? maxParticipants;

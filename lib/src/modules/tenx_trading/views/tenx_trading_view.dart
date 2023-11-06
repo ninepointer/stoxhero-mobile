@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/core/widgets/common_chip.dart';
 
 import '../../../app/app.dart';
 
@@ -12,169 +13,242 @@ class TenxTradingView extends StatefulWidget {
 class _TenxTradingViewState extends State<TenxTradingView> {
   late TenxTradingController controller;
 
-  bool isExpanded = false;
-
   @override
   void initState() {
-    controller = Get.find<TenxTradingController>();
     super.initState();
-  }
-
-  Widget buildInfoCard() {
-    return Expanded(
-      child: Card(
-        elevation: 0,
-        margin: EdgeInsets.only(top: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: AppColors.grey.shade400,
-                    ),
-                    child: Icon(
-                      Icons.trending_up_rounded,
-                      size: 20,
-                      color: AppColors.white,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'NIFTY 50',
-                        style: AppStyles.tsGreyMedium10,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        '₹ 12,500.90',
-                        style: AppStyles.tsWhiteSemiBold14,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    'Today',
-                    style: AppStyles.tsGreyRegular12,
-                  ),
-                  Spacer(),
-                  Text(
-                    '₹ 125.87',
-                    style: Theme.of(context).textTheme.tsMedium12,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '(+ 0.25%)',
-                    style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                          color: AppColors.success,
-                        ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+    controller = Get.find<TenxTradingController>();
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Visibility(
-        visible: !controller.isLoadingStatus,
-        replacement: CommonLoader(),
-        child: RefreshIndicator(
-          onRefresh: controller.loadData,
-          child: SingleChildScrollView(
+      () => CommonTabBar(
+        isScrollable: true,
+        index: controller.selectedTabBarIndex.value,
+        onTap: controller.changeTabBarIndex,
+        tabsTitle: [
+          AppStrings.availableTenxPlans,
+          AppStrings.subscribedTenxPlans,
+          AppStrings.expiredTenxPlans,
+          AppStrings.tenxLeaderboard,
+        ],
+        tabs: [
+          RefreshIndicator(
+            onRefresh: controller.getTenxActivePlans,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 8),
-                //   child: Row(
-                //     children: [
-                //       buildInfoCard(),
-                //       SizedBox(width: 8),
-                //       buildInfoCard(),
-                //     ],
-                //   ),
-                // ),
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 8),
-                //   child: Row(
-                //     children: [
-                //       buildInfoCard(),
-                //       SizedBox(width: 8),
-                //       buildInfoCard(),
-                //     ],
-                //   ),
-                // )
-                CommonCard(
-                  onTap: () => setState(() => isExpanded = !isExpanded),
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                if (controller.tenxAvailableValidityList.isNotEmpty)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
                       children: [
-                        Text(
-                          'What is TenX Trading / TenX ट्रेडिंग क्या है?',
-                          style: AppStyles.tsSecondaryRegular16,
-                        ),
-                        Icon(
-                          isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                          color: AppColors.grey,
-                        ),
+                        for (PlanValidity item in controller.tenxAvailableValidityList)
+                          CommonChip(
+                            margin: EdgeInsets.only(right: 8),
+                            label: item.label,
+                            isSelected: item.label == controller.tenxAvailableValiditySelected.value.label,
+                            onTap: () {
+                              controller.tenxAvailableValiditySelected(item);
+                              controller.updateTenxAvailablePlanValidity();
+                            },
+                          ),
                       ],
                     ),
-                    if (isExpanded)
-                      Column(
-                        children: [
-                          SizedBox(height: 16),
-                          Text(
-                            AppData.tenxInfoEnglish,
-                            style: Theme.of(context).textTheme.tsRegular14,
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            AppData.tenxInfoHindi,
-                            style: Theme.of(context).textTheme.tsRegular14,
-                          ),
-                        ],
+                  ),
+                SizedBox(height: 8),
+                TenxInfoCard(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.only(bottom: 100),
+                    child: Visibility(
+                      visible: controller.isActiveLoadingStatus,
+                      child: ListViewShimmer(
+                        itemCount: 10,
+                        shimmerCard: LargeCardShimmer(),
                       ),
-                  ],
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.tenxActiveSub.length,
-                  itemBuilder: (context, index) {
-                    var sub = controller.tenxActiveSub[index];
-                    return Obx(
-                      () => TenxTradingSubscriptionCard(
-                        subscription: sub,
-                        isActive: controller.userSubscriptionsIds.contains(sub.sId),
+                      replacement: Visibility(
+                        visible: controller.tenxAvailablePlans.isEmpty,
+                        child: NoDataFound(
+                          imagePath: AppImages.contestTrophy,
+                          label: AppStrings.noDataFoundTenxActive,
+                        ),
+                        replacement: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.tenxAvailablePlans.length,
+                          itemBuilder: (context, index) {
+                            var sub = controller.tenxAvailablePlans[index];
+                            return TenxActiveCard(
+                              subscription: sub,
+                              isActive: controller.userSubscriptionsIds.contains(sub.sId),
+                            );
+                          },
+                        ),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
-                SizedBox(height: 36),
               ],
             ),
           ),
-        ),
+          RefreshIndicator(
+            onRefresh: controller.getTenxSubscribedPlans,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (controller.tenxSubscribedValidityList.isNotEmpty)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        for (PlanValidity item in controller.tenxSubscribedValidityList)
+                          CommonChip(
+                            margin: EdgeInsets.only(right: 8),
+                            label: item.label,
+                            isSelected: item.label == controller.tenxSubscribedValiditySelected.value.label,
+                            onTap: () {
+                              controller.tenxSubscribedValiditySelected(item);
+                              controller.updateTenxSubscribedPlanValidity();
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                SizedBox(height: 8),
+                TenxInfoCard(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.only(bottom: 100),
+                    child: Visibility(
+                      visible: controller.isSubscribeLoadingStatus,
+                      child: ListViewShimmer(
+                        itemCount: 10,
+                        shimmerCard: LargeCardShimmer(),
+                      ),
+                      replacement: Visibility(
+                        visible: controller.tenxSubscribedPlans.isEmpty,
+                        child: NoDataFound(
+                          imagePath: AppImages.contestTrophy,
+                          label: AppStrings.noDataFoundTenxSubscribed,
+                        ),
+                        replacement: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.tenxSubscribedPlans.length,
+                          itemBuilder: (context, index) {
+                            var sub = controller.tenxSubscribedPlans[index];
+                            return TenxSubscribedCard(
+                              subscription: sub,
+                              isActive: controller.userSubscriptionsIds.contains(sub.sId),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          RefreshIndicator(
+            onRefresh: controller.getTenxExpiredPlans,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (controller.tenxExpiredValidityList.isNotEmpty)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        for (PlanValidity item in controller.tenxExpiredValidityList)
+                          CommonChip(
+                            margin: EdgeInsets.only(right: 8),
+                            label: item.label,
+                            isSelected: item.label == controller.tenxExpiredValiditySelected.value.label,
+                            onTap: () {
+                              controller.tenxExpiredValiditySelected(item);
+                              controller.updateTenxExpiredPlanValidity();
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                SizedBox(height: 8),
+                TenxInfoCard(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.only(bottom: 100),
+                    child: Visibility(
+                      visible: controller.isExpiredLoadingStatus,
+                      child: ListViewShimmer(
+                        itemCount: 10,
+                        shimmerCard: LargeCardShimmer(),
+                      ),
+                      replacement: Visibility(
+                        visible: controller.tenxExpiredPlans.isEmpty,
+                        child: NoDataFound(
+                          imagePath: AppImages.contestTrophy,
+                          label: AppStrings.noDataFoundTenxExpired,
+                        ),
+                        replacement: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: controller.tenxExpiredPlans.length,
+                          itemBuilder: (context, index) {
+                            var sub = controller.tenxExpiredPlans[index];
+                            return TenxExpiredCard(
+                              subscription: sub,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          RefreshIndicator(
+            onRefresh: controller.getTenxLeaderboard,
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.only(bottom: 100),
+              child: Visibility(
+                visible: controller.isLeaderboardLoadingStatus,
+                child: ListViewShimmer(
+                  itemCount: 10,
+                  shimmerCard: MediumCardShimmer(),
+                ),
+                replacement: Visibility(
+                  visible: controller.tenxAvailablePlans.isEmpty,
+                  child: NoDataFound(
+                    imagePath: AppImages.contestTrophy,
+                    label: AppStrings.noDataFoundTenxLeaderboard,
+                  ),
+                  replacement: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: controller.tenxLeaderboard.length,
+                    itemBuilder: (context, index) {
+                      var sub = controller.tenxLeaderboard[index];
+                      return TenxLeaderboardCard(
+                        index: index + 1,
+                        leaderboard: sub,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -23,8 +23,8 @@ class EarningsResponse {
 }
 
 class EarningData {
-  int? joined;
-  int? earnings;
+  num? joined;
+  num? earnings;
 
   EarningData({this.joined, this.earnings});
 

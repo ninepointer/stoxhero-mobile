@@ -1,3 +1,5 @@
+import '../../../app/app.dart';
+
 class InternshipPlaceOrderRequest {
   String? exchange;
   String? symbol;
@@ -22,31 +24,34 @@ class InternshipPlaceOrderRequest {
   String? trader;
   bool? paperTrade;
   bool? internPath;
+  DeviceDetails? deviceDetails;
 
-  InternshipPlaceOrderRequest(
-      {this.exchange,
-      this.symbol,
-      this.buyOrSell,
-      this.quantity,
-      this.price,
-      this.battleId,
-      this.product,
-      this.orderType,
-      this.triggerPrice,
-      this.stopLoss,
-      this.uId,
-      this.exchangeInstrumentToken,
-      this.validity,
-      this.variety,
-      this.createdBy,
-      this.orderId,
-      this.subscriptionId,
-      this.marginxId,
-      this.userId,
-      this.instrumentToken,
-      this.trader,
-      this.paperTrade,
-      this.internPath});
+  InternshipPlaceOrderRequest({
+    this.exchange,
+    this.symbol,
+    this.buyOrSell,
+    this.quantity,
+    this.price,
+    this.battleId,
+    this.product,
+    this.orderType,
+    this.triggerPrice,
+    this.stopLoss,
+    this.uId,
+    this.exchangeInstrumentToken,
+    this.validity,
+    this.variety,
+    this.createdBy,
+    this.orderId,
+    this.subscriptionId,
+    this.marginxId,
+    this.userId,
+    this.instrumentToken,
+    this.trader,
+    this.paperTrade,
+    this.internPath,
+    this.deviceDetails,
+  });
 
   InternshipPlaceOrderRequest.fromJson(Map<String, dynamic> json) {
     exchange = json['exchange'];
@@ -56,7 +61,7 @@ class InternshipPlaceOrderRequest {
     price = json['Price'];
     battleId = json['battleId'];
     product = json['Product'];
-    orderType = json['OrderType'];
+    orderType = json['order_type'];
     triggerPrice = json['TriggerPrice'];
     stopLoss = json['stopLoss'];
     uId = json['uId'];
@@ -72,6 +77,7 @@ class InternshipPlaceOrderRequest {
     trader = json['trader'];
     paperTrade = json['paperTrade'];
     internPath = json['internPath'];
+    deviceDetails = json['deviceDetails'] != null ? new DeviceDetails.fromJson(json['deviceDetails']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -83,7 +89,7 @@ class InternshipPlaceOrderRequest {
     data['Price'] = this.price;
     data['battleId'] = this.battleId;
     data['Product'] = this.product;
-    data['OrderType'] = this.orderType;
+    data['order_type'] = this.orderType;
     data['TriggerPrice'] = this.triggerPrice;
     data['stopLoss'] = this.stopLoss;
     data['uId'] = this.uId;
@@ -99,6 +105,9 @@ class InternshipPlaceOrderRequest {
     data['trader'] = this.trader;
     data['paperTrade'] = this.paperTrade;
     data['internPath'] = this.internPath;
+    if (this.deviceDetails != null) {
+      data['deviceDetails'] = this.deviceDetails!.toJson();
+    }
     return data;
   }
 }

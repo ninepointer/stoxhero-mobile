@@ -23,7 +23,7 @@ class _InternshipViewState extends State<InternshipView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Internship'),
+        title: Text('Internships'),
       ),
       body: Obx(
         () => Visibility(
@@ -41,7 +41,7 @@ class _InternshipViewState extends State<InternshipView> {
                       children: [
                         Text(
                           'What is stoxHero Internship Program ?',
-                          style: Theme.of(context).textTheme.tsMedium16,
+                          style: Theme.of(context).textTheme.tsSecondaryMedium16,
                         ),
                         Icon(
                           isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
@@ -52,21 +52,26 @@ class _InternshipViewState extends State<InternshipView> {
                     if (isExpanded) bulletPoint(),
                   ],
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.careerList.length,
-                  itemBuilder: (BuildContext context, index) {
-                    if (controller.careerList[index].listingType == 'Job') {
-                      return InfoCard(
-                        career: controller.careerList[index],
-                      );
-                    } else {
-                      return NoDataFound(label: 'No Internship');
-                    }
-                  },
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: Get.find<CareerController>().careerList.length,
+                    itemBuilder: (context, index) {
+                      final controller = Get.find<CareerController>();
+                      final jobType = controller.careerList[index].jobType;
+                      if (jobType == "Internship" || jobType == "Workshop") {
+                        return InfoCard(
+                          career: controller.careerList[index],
+                        );
+                      }
+                      return SizedBox.shrink();
+                    },
+                  ),
                 ),
+                SizedBox(height: 40),
               ],
             ),
           ),

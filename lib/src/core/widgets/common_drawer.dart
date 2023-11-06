@@ -43,14 +43,16 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<OrdersController>().loadData();
         break;
       case 3:
-        Get.toNamed(AppRoutes.Internship);
-        Get.find<InternshipController>().loadUserData();
-
+        Get.toNamed(AppRoutes.careers);
         break;
       case 4:
-        ThemeService().switchTheme();
+        Get.toNamed(AppRoutes.Internship);
+        Get.find<InternshipController>().loadIntershipData();
         break;
       case 5:
+        ThemeService().switchTheme();
+        break;
+      case 6:
         AppStorage.clearStorage();
         Get.offAllNamed(AppRoutes.signin);
         // AppStorage.clearLoginDetails();
@@ -85,13 +87,6 @@ class _CommonDrawerState extends State<CommonDrawer> {
                         'Referral Code: ${controller.userDetailsData.myReferralCode ?? '-'}',
                       ),
                     ),
-                    // IconButton(
-                    //   onPressed: () {
-                    //     // Add your logout logic here
-                    //   },
-                    //   icon: Icon(Icons.logout),
-                    //   color: Theme.of(context).primaryColor,
-                    // ),
                   ],
                 ),
                 currentAccountPicture: Container(
@@ -102,7 +97,15 @@ class _CommonDrawerState extends State<CommonDrawer> {
                     ),
                   ),
                   child: ClipOval(
-                    child: Image.asset(AppImages.appLogo),
+                    child: controller.userDetails.value.profilePhoto == null
+                        ? Image.asset(
+                            AppImages.appLogo,
+                            width: 48,
+                            height: 48,
+                          )
+                        : Image.network(
+                            controller.userDetails.value.profilePhoto?.url ?? '',
+                          ),
                   ),
                 ),
               ),
@@ -144,22 +147,28 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 1),
               ),
               ProfileListTile(
-                label: 'Orders',
+                label: 'Order Book',
                 onTap: () => selectedItem(context, 2),
               ),
               ProfileListTile(
-                label: 'Internship/Training',
+                icon: Icons.school,
+                label: 'Careers',
                 onTap: () => selectedItem(context, 3),
               ),
               ProfileListTile(
-                icon: Icons.dark_mode,
-                label: 'Dark Mode',
+                icon: Icons.school,
+                label: 'Internship/Workshop',
                 onTap: () => selectedItem(context, 4),
+              ),
+              ProfileListTile(
+                icon: ThemeService().theme == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
+                label: ThemeService().theme == ThemeMode.dark ? 'Light Mode' : 'Dark Mode',
+                onTap: () => selectedItem(context, 5),
               ),
               ProfileListTile(
                 icon: Icons.logout,
                 label: 'Logout',
-                onTap: () => selectedItem(context, 5),
+                onTap: () => selectedItem(context, 6),
               ),
             ],
           ),

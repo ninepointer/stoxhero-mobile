@@ -22,37 +22,99 @@ class ProfileView extends GetView<ProfileController> {
         ),
         child: Column(
           children: [
-            Container(
-              height: 80,
-              width: 80,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.asset(AppImages.appLogo),
-              ),
+            Stack(
+              children: [
+                Obx(
+                  () => Container(
+                    height: 80,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.grey.withOpacity(.25),
+                      ),
+                    ),
+                    child: ClipOval(
+                      child: controller.userDetails.value.profilePhoto == null
+                          ? Image.asset(
+                              AppImages.appLogo,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              controller.userDetails.value.profilePhoto?.url ?? '',
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                  ),
+                ),
+                // Positioned(
+                //   right: 0,
+                //   bottom: 0,
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       controller.filePicker(
+                //         KycDocumentType.profilePhoto,
+                //       );
+                //     },
+                //     child: Container(
+                //       width: 24,
+                //       height: 24,
+                //       decoration: BoxDecoration(
+                //         shape: BoxShape.circle,
+                //         color: AppColors.primary,
+                //       ),
+                //       child: Align(
+                //         alignment: Alignment.center,
+                //         child: Icon(
+                //           Icons.edit,
+                //           color: Colors.white,
+                //           size: 14,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
             ),
             SizedBox(height: 12),
             Text(
               controller.getUserFullName(),
               style: Theme.of(context).textTheme.tsMedium18,
             ),
+            SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 42),
-                  child: Text(
-                    'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
-                    style: AppStyles.tsPrimaryRegular14,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
+                InkWell(
+                  borderRadius: BorderRadius.circular(50),
+                  onTap: () {
                     String referralCode = controller.userDetailsData.myReferralCode ?? '-';
                     Clipboard.setData(ClipboardData(text: referralCode));
                     SnackbarHelper.showSnackbar('Referral code copied to clipboard');
                   },
-                  icon: Icon(Icons.copy),
-                  iconSize: 16,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(
+                        color: AppColors.grey.withOpacity(.25),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Referral Code : ${controller.userDetailsData.myReferralCode ?? '-'}',
+                          style: AppStyles.tsPrimaryMedium14,
+                        ),
+                        SizedBox(width: 16),
+                        Icon(
+                          Icons.copy,
+                          size: 20,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -60,38 +122,37 @@ class ProfileView extends GetView<ProfileController> {
             ProfileListTile(
               icon: Icons.person,
               label: 'My Profile',
-              onTap: () {
+              onTap: () async {
+                controller.loadProfileDetails();
+                await Get.toNamed(AppRoutes.profileDetails);
                 controller.loadData();
-                Get.toNamed(AppRoutes.profileDetails);
               },
             ),
             ProfileListTile(
               icon: Icons.account_balance,
               label: 'Bank Details',
-              onTap: () {
-                Get.find<BankController>().loadData();
-                Get.toNamed(AppRoutes.bankDetails);
+              onTap: () async {
+                controller.loadBankDetails();
+                await Get.toNamed(AppRoutes.bankDetails);
+                controller.loadData();
               },
             ),
             ProfileListTile(
               icon: Icons.account_balance,
               label: 'KYC Details',
-              onTap: () {
-                Get.find<BankController>().loadData();
-                Get.toNamed(AppRoutes.kycDetails);
+              onTap: () async {
+                controller.loadBankDetails();
+                await Get.toNamed(AppRoutes.kycDetails);
+                controller.loadData();
               },
-            ),
-            ProfileListTile(
-              icon: Icons.school,
-              label: 'Careers',
-              onTap: () => Get.toNamed(AppRoutes.careers),
             ),
             ProfileListTile(
               icon: Icons.wallet_giftcard_rounded,
               label: 'Referrals',
-              onTap: () {
+              onTap: () async {
                 Get.toNamed(AppRoutes.referrals);
-                Get.find<ReferralsController>().loadData();
+                await Get.find<ReferralsController>().loadData();
+                controller.loadData();
               },
             ),
             ProfileListTile(

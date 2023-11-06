@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
@@ -20,21 +21,34 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Withdraw from wallet to bank account',
-                style: Theme.of(context).textTheme.tsMedium18,
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.secondary.withOpacity(0.25),
+                ),
+                child: Icon(
+                  Icons.lock,
+                  color: AppColors.secondary,
+                ),
               ),
-              Divider(
-                thickness: 1,
-                height: 36,
-              ),
+              SizedBox(height: 24),
               Text(
-                "KYC required for withdrawals. Daily limit: ₹200 to ₹1000",
+                'Withdraw from\nwallet to bank account',
+                style: AppStyles.tsSecondarySemiBold20,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Text(
+                "KYC required for withdrawals.\nDaily limit: ₹200 to ₹1000",
                 style: Theme.of(context).textTheme.tsRegular16,
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: 16),
               CommonCard(
                 margin: EdgeInsets.zero,
+                padding: EdgeInsets.all(12),
                 children: [
                   Row(
                     children: [
@@ -48,7 +62,9 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
                           controller.totalCashAmount.value,
                           decimal: 0,
                         ),
-                        style: Theme.of(context).textTheme.tsMedium20,
+                        style: Theme.of(context).textTheme.tsMedium20.copyWith(
+                              color: AppColors.success,
+                            ),
                       ),
                     ],
                   ),
@@ -56,30 +72,35 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
               ),
               SizedBox(height: 16),
               CommonTextField(
-                hintText: 'Amount',
                 controller: controller.amountTextController,
-                prefixIcon: Icon(Icons.money),
+                hintText: 'Enter amount',
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10),
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: controller.onCancel,
-                    child: Text(
-                      'Cancel',
-                      style: Theme.of(context).textTheme.tsRegular16,
+                  Expanded(
+                    child: CommonOutlinedButton(
+                      height: 42,
+                      onPressed: controller.onCancel,
+                      label: 'Cancel',
                     ),
                   ),
                   SizedBox(width: 8),
-                  CommonFilledButton(
-                    height: 42,
-                    width: 120,
-                    label: 'Confirm',
-                    onPressed: controller.onConfirm,
+                  Expanded(
+                    child: CommonFilledButton(
+                      height: 42,
+                      width: 120,
+                      label: 'Proceed',
+                      onPressed: controller.onConfirm,
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 56),
             ],
           ),
         ),

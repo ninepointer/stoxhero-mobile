@@ -19,6 +19,7 @@ class _FaqViewState extends State<FaqView> {
         title: Text('FAQ\'s'),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: 100),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -51,6 +52,7 @@ class _FaqViewState extends State<FaqView> {
 
   Widget buildExpandableCard(int index, FaqItem item) {
     return CommonCard(
+      margin: EdgeInsets.all(16).copyWith(bottom: 0, top: 8),
       onTap: () {
         setState(() {
           expandedIndex = expandedIndex == index ? -1 : index;

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uni_links/uni_links.dart';
 
 import 'app.dart';
 import 'app_binding.dart';
@@ -21,6 +24,51 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  Uri? initialUri;
+  Uri? latestUri;
+  Object? err;
+  bool _initialUriIsHandled = false;
+
+  StreamSubscription? sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _handleInitialUri();
+    _handleIncomingLinks();
+  }
+
+  Future<void> _handleInitialUri() async {
+    if (!_initialUriIsHandled) {
+      _initialUriIsHandled = true;
+      try {
+        final uri = await getInitialUri();
+        if (uri != null) {
+          print('got initial uri: $uri');
+          // if (uri.path.contains('/contest')) {
+          //   Get.toNamed(AppRoutes.contest);
+          // }
+        }
+        if (!mounted) return;
+        setState(() => initialUri = uri);
+      } catch (e) {
+        print('error : $e');
+      }
+    }
+  }
+
+  void _handleIncomingLinks() {
+    sub = uriLinkStream.listen((Uri? uri) {
+      if (!mounted) return;
+      print('got uri: $uri');
+      latestUri = uri;
+    }, onError: (Object e) {
+      if (!mounted) return;
+      print('got err: $err');
+      latestUri = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemUiOverlayStyle(

@@ -21,19 +21,21 @@ class MarginXSearchInstrumentsCard extends GetView<MarginXController> {
       tradingInstrument.exchangeToken!,
     );
     controller.generateLotsList(type: tradingInstrument.name);
+    TradingInstrument trading = TradingInstrument(
+      name: tradingInstrument.tradingsymbol,
+      instrumentType: tradingInstrument.instrumentType,
+      exchange: tradingInstrument.exchange,
+      tradingsymbol: tradingInstrument.tradingsymbol,
+      exchangeToken: tradingInstrument.exchangeToken,
+      instrumentToken: tradingInstrument.instrumentToken,
+      lastPrice: lastPrice,
+    );
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: MarginXTransactionBottomSheet(
         type: type,
-        tradingInstrument: TradingInstrument(
-          name: tradingInstrument.tradingsymbol,
-          instrumentType: tradingInstrument.instrumentType,
-          exchange: tradingInstrument.exchange,
-          tradingsymbol: tradingInstrument.tradingsymbol,
-          exchangeToken: tradingInstrument.exchangeToken,
-          instrumentToken: tradingInstrument.instrumentToken,
-          lastPrice: lastPrice,
-        ),
+        tradingInstrument: trading,
+        marginRequired: controller.getMarginRequired(type, trading),
       ),
     );
   }
@@ -54,11 +56,11 @@ class MarginXSearchInstrumentsCard extends GetView<MarginXController> {
                 children: [
                   Text(
                     tradingInstrument.name ?? '-',
-                    style: AppStyles.tsSecondaryMedium16,
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                   Text(
                     FormatHelper.formatDateByMonth(tradingInstrument.expiry),
-                    style: AppStyles.tsSecondaryMedium16,
+                    style: AppStyles.tsSecondaryMedium14,
                   ),
                 ],
               ),
@@ -68,11 +70,11 @@ class MarginXSearchInstrumentsCard extends GetView<MarginXController> {
                 children: [
                   Text(
                     tradingInstrument.tradingsymbol ?? '-',
-                    style: Theme.of(context).textTheme.tsMedium14,
+                    style: Theme.of(context).textTheme.tsMedium12,
                   ),
                   Text(
                     tradingInstrument.exchange ?? '-',
-                    style: Theme.of(context).textTheme.tsMedium14,
+                    style: Theme.of(context).textTheme.tsMedium12,
                   ),
                 ],
               ),
@@ -86,7 +88,7 @@ class MarginXSearchInstrumentsCard extends GetView<MarginXController> {
                 onTap: () => openBottomSheet(context, TransactionType.buy),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: AppColors.success.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -95,7 +97,7 @@ class MarginXSearchInstrumentsCard extends GetView<MarginXController> {
                   ),
                   child: Text(
                     'BUY',
-                    style: AppStyles.tsWhiteMedium14.copyWith(
+                    style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.success,
                     ),
                   ),
@@ -107,13 +109,13 @@ class MarginXSearchInstrumentsCard extends GetView<MarginXController> {
                 onTap: () => openBottomSheet(context, TransactionType.sell),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: AppColors.danger.withOpacity(.25),
                   ),
                   child: Text(
                     'SELL',
-                    style: AppStyles.tsWhiteMedium14.copyWith(
+                    style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.danger,
                     ),
                   ),
@@ -127,7 +129,7 @@ class MarginXSearchInstrumentsCard extends GetView<MarginXController> {
                     : () => Get.find<MarginXController>().addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
@@ -136,8 +138,8 @@ class MarginXSearchInstrumentsCard extends GetView<MarginXController> {
                   ),
                   child: Text(
                     isAdded ? 'REMOVE' : 'ADD',
-                    style: AppStyles.tsWhiteMedium14.copyWith(
-                      color: isAdded ? AppColors.info : AppColors.secondary,
+                    style: AppStyles.tsWhiteMedium12.copyWith(
+                      color: isAdded ? AppColors.info : AppColors.secondary.shade600,
                     ),
                   ),
                 ),

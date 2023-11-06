@@ -21,7 +21,7 @@ class InternshipBatchPortfolioResponse {
 
 class InternshipBatchPortfolio {
   String? batch;
-  int? totalFund;
+  num? totalFund;
   num? npnl;
   num? openingBalance;
 

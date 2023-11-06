@@ -27,12 +27,12 @@ class VirtualTradingRepository extends BaseRepository {
         : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
-  Future<RepoResponse<VirtualTradingPositionListResponse>> getVirtualPositions() async {
+  Future<RepoResponse<TradingPositionListResponse>> getVirtualPositions() async {
     String apiURL = AppUrls.paperTradePosition;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: VirtualTradingPositionListResponse.fromJson(response));
+        : RepoResponse(data: TradingPositionListResponse.fromJson(response));
   }
 
   Future<RepoResponse<TradingInstrumentListResponse>> searchInstruments(String? value) async {
@@ -74,5 +74,68 @@ class VirtualTradingRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<MarginRequiredResponse>> getMarginRequired(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.marginRequired;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: MarginRequiredResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<VirtualTradeOrdersListResponse>> getVirtualTradeTodaysOrdersList() async {
+    String apiURL = AppUrls.paperTradeTodaysOrders;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: VirtualTradeOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StopLossExecutedOrdersListResponse>> getStopLossExecutedOrder(String? id) async {
+    String apiURL = AppUrls.virtualStopLossExecutedOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossExecutedOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StopLossPendingOrdersListResponse>> getStopLossPendingOrder(String? id) async {
+    String apiURL = AppUrls.virtualStopLossPendingOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossPendingOrdersListResponse.fromJson(response));
+  }
+
+  // Future<RepoResponse<StopLossPendingCancelOrderResponse>> getStopLossPendingCancelOrder(String id) async {
+  //   String apiURL = AppUrls.tenxStopLossPendingCancelOrder(id);
+  //   var response = await service.patchAuth(path: apiURL);
+  //   return response is APIException
+  //       ? RepoResponse(error: response)
+  //       : RepoResponse(data: StopLossPendingCancelOrderResponse.fromJson(response));
+  // }
+  Future<RepoResponse<GenericResponse>> getStopLossPendingCancelOrder(String id) async {
+    String apiURL = AppUrls.virtualStopLossPendingCancelOrder(id);
+    var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossEditOrder(String? id, Map<String, dynamic> data) async {
+    String apiURL = AppUrls.stopLossEditOrder(id);
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> pendingOrderModify(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.pendingOrderModify;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
   }
 }

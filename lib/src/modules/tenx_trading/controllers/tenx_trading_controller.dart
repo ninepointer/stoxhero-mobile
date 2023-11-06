@@ -1,6 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
 
@@ -16,55 +17,281 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
+  final isTradingOrderSheetLoading = false.obs;
+  bool get isTradingOrderSheetLoadingStatus => isTradingOrderSheetLoading.value;
+
+  final isWatchlistStateLoading = false.obs;
+  bool get isWatchlistStateLoadingStatus => isWatchlistStateLoading.value;
+
+  final isPositionStateLoading = false.obs;
+  bool get isPositionStateLoadingStatus => isPositionStateLoading.value;
+
+  final isPortfolioStateLoading = false.obs;
+  bool get isPortfolioStateLoadingStatus => isPortfolioStateLoading.value;
+
+  final isInstrumentListLoading = false.obs;
+  bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
+
+  final isWatchlistLoading = false.obs;
+  bool get isWatchlistLoadingStatus => isWatchlistLoading.value;
+
+  final isPositionLoading = false.obs;
+  bool get isPositionLoadingStatus => isPositionLoading.value;
+
+  final isActiveLoading = false.obs;
+  bool get isActiveLoadingStatus => isActiveLoading.value;
+
+  final isSubscribeLoading = false.obs;
+  bool get isSubscribeLoadingStatus => isSubscribeLoading.value;
+
+  final isExpiredLoading = false.obs;
+  bool get isExpiredLoadingStatus => isExpiredLoading.value;
+
+  final isLeaderboardLoading = false.obs;
+  bool get isLeaderboardLoadingStatus => isLeaderboardLoading.value;
+
+  final isPendingOrderStateLoading = false.obs;
+  bool get isPendingOrderStateLoadingStatus => isPendingOrderStateLoading.value;
+
+  final isOrderStateLoading = false.obs;
+  bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
+
+  final isExecutedOrderStateLoading = false.obs;
+  bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
+
+  final isMarginStateLoading = false.obs;
+  bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
+
+  final selectedTabBarIndex = 0.obs;
+
+  final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();
+  final stopLossPriceTextController = TextEditingController();
+  final stopProfitPriceTextController = TextEditingController();
+  final quanitityTextController = TextEditingController();
+  final limitPriceTextController = TextEditingController();
   final selectedSubscriptionId = ''.obs;
-  final selectedSubscription = TenxActiveSubscription().obs;
+  final selectSubscriptionName = ''.obs;
+  final selectSubscriptionAmount = 0.obs;
+  final selectedSubscription = TenxActivePlan().obs;
   final walletBalance = RxNum(0);
   final selectedWatchlistIndex = RxInt(-1);
-  final isLivePriceLoaded = false.obs;
 
+  final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
+  final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
 
-  final tenxActiveSub = <TenxActiveSubscription>[].obs;
-  final tenxInstrumentTradeDetailsList = <TenxTradingInstrumentTradeDetails>[].obs;
-  final tenxPositionsList = <TenxTradingPosition>[].obs;
-  final tenxPosition = TenxTradingPosition().obs;
+  final tenxPositionsList = <TradingPosition>[].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
+  final tenxPosition = TradingPosition().obs;
 
   final tenxPortfolioDetails = TenxTradingPortfolioDetails().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final userSubscriptionsIds = <String>[].obs;
+
   final selectedQuantity = 0.obs;
   final selectedStringQuantity = "0".obs;
   final lotsValueList = <int>[0].obs;
 
+  final defaultSelectedValidity = PlanValidity(label: 'All', validity: 0);
+
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
+  final tenxCountTradingDays = <CountTradingDays>[].obs;
+  final selectedTenXSub = TenXSubscription().obs;
+  final tenXSubscription = <TenXSubscription>[].obs;
 
-  void loadUserDetails() {
+  final tenxLeaderboard = <TenxLeaderboardList>[].obs;
+  final stopLossExecutedOrdersList = <StopLossExecutedOrdersList>[].obs;
+  final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
+  final stopLossPendingOrder = StopLossPendingOrdersList().obs;
+  final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final selectedType = "".obs;
+  final selectedGroupValue = 0.obs;
+  final isMarketSelected = true.obs;
+  final tenxTradeTodaysOrdersList = <TenxTradeOrder>[].obs;
+  final sendOrder = SendOrderResponse().obs;
+  final sendOrderList = <SendOrderResponse>[].obs;
+
+  final tenxAvailablePlans = <TenxActivePlan>[].obs;
+  final tenxAvailablePlansUnFiltered = <TenxActivePlan>[].obs;
+
+  final tenxSubscribedPlans = <TenxSubscribedPlan>[].obs;
+  final tenxSubscribedPlansUnFiltered = <TenxSubscribedPlan>[].obs;
+  final tenxSubscribedPlanSelected = TenxSubscribedPlan().obs;
+
+  final tenxExpiredPlans = <TenxExpiredPlan>[].obs;
+  final tenxExpiredPlansUnFiltered = <TenxExpiredPlan>[].obs;
+  final tenxExpiredPlanSelected = TenxExpiredPlan().obs;
+
+  final tenxAvailableValidityList = <PlanValidity>[].obs;
+  final tenxAvailableValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
+
+  final tenxSubscribedValidityList = <PlanValidity>[].obs;
+  final tenxSubscribedValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
+
+  final tenxExpiredValidityList = <PlanValidity>[].obs;
+  final tenxExpiredValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
+
+  final marginRequired = MarginRequiredResponse().obs;
+
+  Future loadUserDetails() async {
     userDetails.value = AppStorage.getUserDetails();
   }
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await getTenxTradingActiveSubs();
+    await getTenxActivePlans();
+    await getTenxSubscribedPlans();
+    await getTenxExpiredPlans();
+    await getTenxLeaderboard();
   }
 
   Future loadTenxData() async {
     userDetails.value = AppStorage.getUserDetails();
-    await socketConnection();
-    await socketIndexConnection();
+    await getTenxCountTradingDays();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
+    // await getTenXSubscriptionList();
     await getTenxTradingWatchlist();
-    await getTenxPositionsList();
+    await getTenxPositionList();
+    await getStopLossPendingOrder();
+    await getStopLossExecutedOrder();
+    await getTenxTodayOrdersList();
     await getTenxTradingPortfolioDetails();
+    socketConnection();
+    socketIndexConnection();
+    socketSendConnection();
+  }
+
+  Future loadDataAfterPaymentSuccess() async {
+    await Get.find<AuthController>().getUserDetails(navigate: false);
+    await loadUserDetails();
+    getTenxActivePlans();
+  }
+
+  void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+
+  void updateTenxAvailablePlanValidity() {
+    var filteredList = <TenxActivePlan>[];
+    if (tenxAvailableValiditySelected.value.label == 'All') {
+      filteredList = tenxAvailablePlansUnFiltered;
+    } else {
+      for (var plan in tenxAvailablePlansUnFiltered) {
+        if (plan.validity == tenxAvailableValiditySelected.value.validity) {
+          filteredList.add(plan);
+        }
+      }
+    }
+    tenxAvailablePlans(filteredList);
+  }
+
+  void updateTenxSubscribedPlanValidity() {
+    var filteredList = <TenxSubscribedPlan>[];
+    if (tenxSubscribedValiditySelected.value.label == 'All') {
+      filteredList = tenxSubscribedPlansUnFiltered;
+    } else {
+      for (var plan in tenxSubscribedPlansUnFiltered) {
+        if (plan.validity == tenxSubscribedValiditySelected.value.validity) {
+          filteredList.add(plan);
+        }
+      }
+    }
+    tenxSubscribedPlans(filteredList);
+  }
+
+  void updateTenxExpiredPlanValidity() {
+    var filteredList = <TenxExpiredPlan>[];
+    if (tenxExpiredValiditySelected.value.label == 'All') {
+      filteredList = tenxExpiredPlansUnFiltered;
+    } else {
+      for (var plan in tenxExpiredPlansUnFiltered) {
+        if (plan.validity == tenxExpiredValiditySelected.value.validity) {
+          filteredList.add(plan);
+        }
+      }
+    }
+    tenxExpiredPlans(filteredList);
+  }
+
+  bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
+    bool isDisabled = false;
+
+    if (type == TransactionType.buy) {
+      if (transactionLotSize < 0 && transactionLotSize.abs() == positionLots) {
+        isDisabled = true;
+        log("BUY - Disable TextField");
+      } else {
+        isDisabled = false;
+        log("BUY - Enable TextField");
+      }
+    } else if (type == TransactionType.sell) {
+      if (transactionLotSize < 0 || transactionLotSize.abs() < positionLots) {
+        isDisabled = false;
+        log("SELL - Enable TextField");
+      } else {
+        isDisabled = true;
+        log("SELL - Disable TextField");
+      }
+    }
+
+    return isDisabled;
+  }
+
+  void handleRadioValueChanged(int newValue, String labelText) {
+    selectedGroupValue.value = newValue;
+    selectedType.value = labelText;
+  }
+
+  String getFormattedExpiryDate(String? subscribedOn, int? expiryDays) {
+    if (subscribedOn != null) {
+      DateTime subscribedDateTimeUTC = DateTime.parse(subscribedOn);
+      DateTime expiryDateTimeUTC = subscribedDateTimeUTC.add(Duration(days: expiryDays ?? 0));
+      DateTime expiryDateTimeIST = expiryDateTimeUTC.add(Duration(hours: 5, minutes: 30));
+      String formattedIST = DateFormat('d MMM yyyy hh:mm a').format(expiryDateTimeIST);
+      return formattedIST;
+    } else {
+      return '-';
+    }
+  }
+
+  String date() {
+    DateTime subscribedOn = DateTime.parse(tenxSubscribedPlanSelected.value.subscribedOn ?? '');
+    DateTime newExpiryDate = subscribedOn.add(Duration(days: tenxSubscribedPlanSelected.value.expiryDays ?? 0));
+    return newExpiryDate.toString();
+  }
+
+  int getOpenPositionCount() {
+    int openCount = 0;
+    for (var position in tenxPositionsList) {
+      if (position.id?.isLimit ?? false) {
+      } else if (position.lots != 0) {
+        openCount++;
+      }
+    }
+    return openCount;
+  }
+
+  int getClosePositionCount() {
+    int closeCount = 0;
+    for (var position in tenxPositionsList) {
+      if (position.id?.isLimit ?? false) {
+      } else if (position.lots == 0) {
+        closeCount++;
+      }
+    }
+    return closeCount;
+  }
+
+  double calculateSavingsPercentage(actualPrice, discountPrice) {
+    int savings = actualPrice - discountPrice;
+    double savingsPercentage = (savings / actualPrice) * 100;
+    return savingsPercentage;
   }
 
   String getStockIndexName(int instId) {
-    // log('instToken : $instId');
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
@@ -91,12 +318,19 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num totalNet = 0;
 
     for (var position in tenxPositionsList) {
-      totalLots += position.lots ?? 0;
-      totalBrokerage += position.brokerage ?? 0;
-      totalGross += position.lastaverageprice ?? 0;
-      totalNet += position.amount ?? 0;
-    }
+      if (position.id?.isLimit ?? false) {
+      } else {
+        totalLots += position.lots ?? 0;
+        totalBrokerage += position.brokerage ?? 0;
+        totalGross += position.lastaverageprice ?? 0;
+        totalNet += position.amount ?? 0;
+      }
 
+      // totalLots += position.lots ?? 0;
+      // totalBrokerage += position.brokerage ?? 0;
+      // totalGross += position.lastaverageprice ?? 0;
+      // totalNet += position.amount ?? 0;
+    }
     tenxTotalPositionDetails(
       TenxTotalPositionDetails(
         lots: totalLots,
@@ -105,30 +339,47 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         net: totalNet,
       ),
     );
-    log('TenxTotalPositionDetails : ${tenxTotalPositionDetails.toJson()}');
   }
 
-  num calculateGrossPNL(num avg, int lots, num ltp) {
+  num calculateGrossPNL(num amount, int lots, num ltp) {
+    if (ltp == 0) return 0;
     num pnl = 0;
-    num value = (avg + (lots) * ltp);
+    num value = (amount + (lots * ltp));
     pnl += value;
     return pnl;
   }
 
+  // num calculateTotalGrossPNL() {
+  //   num totalGross = 0;
+  //   for (var position in tenxPositionsList) {
+  //     num avg = position.amount ?? 0;
+  //     int lots = position.lots?.toInt() ?? 0;
+  //     num ltp = getInstrumentLastPrice(
+  //       position.id?.instrumentToken ?? 0,
+  //       position.id?.exchangeInstrumentToken ?? 0,
+  //     );
+  //     if (ltp == 0) return 0;
+  //     num value = (avg + (lots) * ltp);
+  //     totalGross += value;
+  //   }
+  //   return totalGross.round();
+  // }
+
   num calculateTotalGrossPNL() {
     num totalGross = 0;
     for (var position in tenxPositionsList) {
-      num avg = position.amount!;
-      int lots = position.lots!.toInt();
-      num ltp = getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
-      );
-
-      num pnl = 0;
-      num value = (avg + (lots) * ltp);
-      pnl += value;
-      totalGross += pnl;
+      if (position.id?.isLimit != true) {
+        // Check if isLimit is not true
+        num avg = position.amount ?? 0;
+        int lots = position.lots?.toInt() ?? 0;
+        num ltp = getInstrumentLastPrice(
+          position.id?.instrumentToken ?? 0,
+          position.id?.exchangeInstrumentToken ?? 0,
+        );
+        if (ltp == 0) return 0;
+        num value = (avg + (lots) * ltp);
+        totalGross += value;
+      }
     }
     return totalGross.round();
   }
@@ -136,35 +387,73 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   num calculateTotalNetPNL() {
     num totalNetPNL = 0;
     for (var position in tenxPositionsList) {
-      num avg = position.amount!;
-      int lots = position.lots!.toInt();
-      num ltp = getInstrumentLastPrice(
-        position.id!.instrumentToken!,
-        position.id!.exchangeInstrumentToken!,
-      );
-      num value = (avg + (lots) * ltp);
-      num brokerage = position.brokerage!;
-      num broker = value - brokerage;
-      totalNetPNL += broker;
+      if (position.id?.isLimit != true) {
+        num avg = position.amount ?? 0;
+        int lots = position.lots?.toInt() ?? 0;
+        num ltp = getInstrumentLastPrice(
+          position.id?.instrumentToken ?? 0,
+          position.id?.exchangeInstrumentToken ?? 0,
+        );
+        if (ltp == 0) return 0;
+        num value = (avg + (lots) * ltp);
+        num brokerage = position.brokerage ?? 0;
+        num broker = value - brokerage;
+        totalNetPNL += broker;
+      }
     }
     return totalNetPNL.round();
   }
 
+  // num calculateTotalNetPNL() {
+  //   num totalNetPNL = 0;
+  //   for (var position in tenxPositionsList) {
+  //     num avg = position.amount ?? 0;
+  //     int lots = position.lots?.toInt() ?? 0;
+  //     num ltp = getInstrumentLastPrice(
+  //       position.id?.instrumentToken ?? 0,
+  //       position.id?.exchangeInstrumentToken ?? 0,
+  //     );
+  //     if (ltp == 0) return 0;
+  //     num value = (avg + (lots) * ltp);
+  //     num brokerage = position.brokerage ?? 0;
+  //     num broker = value - brokerage;
+  //     totalNetPNL += broker;
+  //   }
+  //   return totalNetPNL.round();
+  // }
+
   num calculateMargin() {
-    num pnl = 0;
-    num amount = 0;
     num lots = 0;
+    num margin = 0;
     for (var position in tenxPositionsList) {
-      amount += position.amount ?? 0;
-      lots += position.lots ?? 0;
+      if (position.lots != 0) {
+        lots += position.lots ?? 0;
+        margin += position.margin ?? 0;
+      }
     }
-    num openingBalance = tenxPortfolioDetails.value.openingBalance ?? 0;
-    pnl += openingBalance + amount;
-    if (lots == 0) {
-      num margin = openingBalance + calculateTotalNetPNL();
-      return margin;
+    num openingBalance = 0;
+    num totalFund = tenxPortfolioDetails.value.totalFund ?? 0;
+
+    if (tenxPortfolioDetails.value.openingBalance != null) {
+      openingBalance = tenxPortfolioDetails.value.openingBalance ?? 0;
     } else {
+      openingBalance = totalFund;
+    }
+    num availableMargin = (calculateTotalNetPNL() < 0)
+        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        : (openingBalance - margin);
+    // print('availableMargin $availableMargin');
+    // print('calculateTotalNetPNL ${calculateTotalNetPNL()}');
+    // print('margin$margin');
+    return availableMargin;
+  }
+
+  num calculateUnRealisedPNL() {
+    num pnl = calculateTotalNetPNL();
+    if (pnl >= 0) {
       return pnl;
+    } else {
+      return 0;
     }
   }
 
@@ -197,26 +486,35 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
-    if (tenxInstrumentTradeDetailsList.isNotEmpty) {
-      int index = tenxInstrumentTradeDetailsList.indexWhere(
+    num priceValue = 0;
+    if (tradingInstrumentTradeDetailsList.isNotEmpty) {
+      int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return 0;
-      num price = tenxInstrumentTradeDetailsList[index].lastPrice ?? 0;
+      if (index == -1) {
+        int index = instrumentLivePriceList.indexWhere(
+          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        );
 
-      return price;
-    } else {
-      return 0;
+        if (index == -1) {
+          priceValue = 0;
+        } else {
+          priceValue = instrumentLivePriceList[index].lastPrice ?? 0;
+        }
+      } else {
+        priceValue = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
+      }
     }
+    return priceValue;
   }
 
   String getInstrumentChanges(int instID, int exchID) {
-    if (tenxInstrumentTradeDetailsList.isNotEmpty) {
-      int index = tenxInstrumentTradeDetailsList.indexWhere(
+    if (tradingInstrumentTradeDetailsList.isNotEmpty) {
+      int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price = tenxInstrumentTradeDetailsList[index].change?.toString();
+      String? price = tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
@@ -224,42 +522,22 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future socketConnection() async {
-    List<TenxTradingInstrumentTradeDetails>? tempList = [];
+    List<TradingInstrumentTradeDetails>? tempList = [];
     try {
-      IO.Socket socket;
-
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
-      socket.on('index-tick', (data) {
-        // print(data);
-        // log('Socket : index-tick $data');
-      });
-      socket.on('tick-room', (data) {
-        // log('Socket : tick-room $data');
-        tempList = TenxTradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+      socketService.socket.on('tick-room', (data) {
+        tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
-          if (tenxInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
-            int index = tenxInstrumentTradeDetailsList.indexWhere(
+          if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            int index = tradingInstrumentTradeDetailsList.indexWhere(
               (stock) => stock.instrumentToken == element.instrumentToken,
             );
-            tenxInstrumentTradeDetailsList.removeAt(index);
-            tenxInstrumentTradeDetailsList.insert(index, element);
+            tradingInstrumentTradeDetailsList.removeAt(index);
+            tradingInstrumentTradeDetailsList.insert(index, element);
           } else {
-            tenxInstrumentTradeDetailsList.add(element);
+            tradingInstrumentTradeDetailsList.add(element);
           }
         });
       });
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -278,31 +556,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     }
   }
 
-  Future getTenxTradingActiveSubs() async {
-    isLoading(true);
-    try {
-      final RepoResponse<TenxTradingActiveResponse> response = await repository.getTenxActiveSubscriptions();
-      if (response.data?.status?.toLowerCase() == "success") {
-        tenxActiveSub.clear();
-        userSubscriptionsIds.clear();
-        tenxActiveSub(response.data?.data ?? []);
-        for (var userSub in userDetails.value.subscription!) {
-          if (userSub.subscriptionId != null) {
-            userSubscriptionsIds.add(userSub.subscriptionId!.id!);
-          }
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-    isLoading(false);
-  }
-
   Future getTenxTradingWatchlist() async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingWatchlistResponse> response = await repository.getTenxWatchlist();
       if (response.data != null) {
@@ -321,11 +576,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
-  Future searchInstruments(String? value) async {
-    isLoading(true);
+  Future searchInstruments(String? value, {bool showShimmer = true}) async {
+    showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
       if (response.data != null) {
@@ -340,13 +595,13 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
   }
 
-  Future getTenxPositionsList() async {
-    isLoading(true);
+  Future getTenxPositionList() async {
+    isPositionStateLoading(true);
     try {
-      final RepoResponse<TenxTradingPositionListResponse> response = await repository.getTenxPositions(
+      final RepoResponse<TradingPositionListResponse> response = await repository.getTenxPositions(
         selectedSubscriptionId.value,
       );
       if (response.data != null) {
@@ -361,16 +616,15 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPositionStateLoading(false);
   }
 
   Future getInstrumentLivePriceList() async {
-    isLoading(true);
+    isInstrumentListLoading(true);
     try {
       final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
-          isLivePriceLoaded(true);
           instrumentLivePriceList(response.data?.data ?? []);
         }
       } else {
@@ -380,17 +634,16 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isInstrumentListLoading(false);
   }
 
   Future getTenxTradingPortfolioDetails() async {
-    isLoading(true);
+    isPortfolioStateLoading(true);
     try {
       final RepoResponse<TenxTradingPortfolioDetailsResponse> response = await repository.getTenxPortfolioDetails(
         selectedSubscriptionId.value,
       );
       if (response.data?.data != null) {
-        log('getTenxTradingPortfolioDetails');
         tenxPortfolioDetails(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -399,17 +652,94 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPortfolioStateLoading(false);
   }
 
+  // Future placeTenxTradingOrder(TransactionType type, TradingInstrument inst) async {
+  //   isTradingOrderSheetLoading(true);
+  //   if (type == TransactionType.exit) {
+  //     if (selectedStringQuantity.value.contains('-')) {
+  //       type = TransactionType.buy;
+  //     } else {
+  //       type = TransactionType.sell;
+  //     }
+  //   } else {
+  //     if (selectedStringQuantity.value.contains('-')) {
+  //       if (type == TransactionType.buy) {
+  //         type = TransactionType.sell;
+  //       } else {
+  //         type = TransactionType.buy;
+  //       }
+  //     }
+  //   }
+  //   TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
+  //     exchange: inst.exchange,
+  //     symbol: inst.tradingsymbol,
+  //     buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+  //     quantity: selectedQuantity.value,
+  //     price: "",
+  //     product: "NRML",
+  //     orderType: "MARKET",
+  //     triggerPrice: "",
+  //     stopLoss: "",
+  //     uId: Uuid().v4(),
+  //     exchangeInstrumentToken: inst.exchangeToken,
+  //     validity: "DAY",
+  //     variety: "regular",
+  //     createdBy: userDetails.value.name,
+  //     orderId: Uuid().v4(),
+  //     subscriptionId: selectedSubscriptionId.value,
+  //     userId: userDetails.value.email,
+  //     instrumentToken: inst.instrumentToken,
+  //     trader: userDetails.value.sId,
+  //     paperTrade: false,
+  //     tenxTraderPath: true,
+  //     battleId: selectedSubscriptionId.value,
+  //     marginxId: selectedSubscriptionId.value,
+  //     deviceDetails: DeviceDetails(
+  //       deviceType: 'Mobile',
+  //       platformType: Platform.isAndroid ? 'Android' : 'iOS',
+  //     ),
+  //   );
+  //   print('placeTenxTradingOrder : ${data.toJson()}');
+  //   try {
+  //     final RepoResponse<GenericResponse> response = await repository.placeTenxTradingOrder(
+  //       data.toJson(),
+  //     );
+  //     Get.back();
+  //     print(response.data.toString());
+  //     if (response.data?.status == "Complete") {
+  //       SnackbarHelper.showSnackbar('Trade Successful');
+  //       await getTenxPositionsList();
+  //       await getTenxTradingPortfolioDetails();
+  //     } else if (response.data?.status == "Failed") {
+  //       print(response.error!.message!.toString());
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     } else {
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //   }
+  //   isTradingOrderSheetLoading(false);
+  // }
+
   Future placeTenxTradingOrder(TransactionType type, TradingInstrument inst) async {
-    Get.back();
-    isLoading(true);
+    isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
         type = TransactionType.sell;
+      }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
       }
     }
     TenxTradingPlaceOrderRequest data = TenxTradingPlaceOrderRequest(
@@ -417,35 +747,44 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       symbol: inst.tradingsymbol,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       quantity: selectedQuantity.value,
-      price: "",
       product: "NRML",
-      orderType: "MARKET",
-      triggerPrice: "",
+      orderType: selectedType.value,
       stopLoss: "",
+      stopLossPrice: stopLossPriceTextController.text,
+      stopProfitPrice: stopProfitPriceTextController.text,
+      price: double.tryParse(limitPriceTextController.text),
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
+      instrumentToken: inst.instrumentToken,
       validity: "DAY",
       variety: "regular",
       createdBy: userDetails.value.name,
-      orderId: Uuid().v4(),
-      subscriptionId: selectedSubscriptionId.value,
       userId: userDetails.value.email,
-      instrumentToken: inst.instrumentToken,
       trader: userDetails.value.sId,
+      orderId: Uuid().v4(),
       paperTrade: false,
       tenxTraderPath: true,
+      subscriptionId: selectedSubscriptionId.value,
       battleId: selectedSubscriptionId.value,
       marginxId: selectedSubscriptionId.value,
+      triggerPrice: "",
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
     );
-    log('placeTenxTradingOrder : ${data.toJson()}');
+    print('placeTenxTradingOrder : ${data.toJson()}');
     try {
       final RepoResponse<GenericResponse> response = await repository.placeTenxTradingOrder(
         data.toJson(),
       );
-      log(response.data.toString());
+      Get.back();
+      print(response.data.toString());
       if (response.data?.status == "Complete") {
-        SnackbarHelper.showSnackbar('Trade Successfull');
-        await getTenxPositionsList();
+        SnackbarHelper.showSnackbar('Trade Successful');
+        await getTenxPositionList();
+        await getStopLossPendingOrder();
+        await getTenxTodayOrdersList();
         await getTenxTradingPortfolioDetails();
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
@@ -454,14 +793,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log(e.toString());
+      print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isTradingOrderSheetLoading(false);
   }
 
   Future addInstrument(TradingInstrument inst) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     AddInstrumentRequest data = AddInstrumentRequest(
       chartInstrument: inst.chartInstrument,
       instrument: inst.name,
@@ -482,10 +821,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     try {
       await repository.addInstrument(data.toJson());
       // if (response.data?.message == "Instrument Added") {
-      tradingWatchlist.clear();
-      tradingInstruments.clear();
       await getTenxTradingWatchlist();
-      await searchInstruments(searchTextController.text);
+      await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Instrument Added');
       // } else {
       // }
@@ -493,20 +830,19 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
   Future removeInstrument(int? instToken) async {
-    isLoading(true);
+    isWatchlistStateLoading(true);
     try {
       await repository.removeInstrument(instToken ?? 0);
       // if (response.data != null) {
-      selectedWatchlistIndex(-1);
-      tradingWatchlist.clear();
-      tradingInstruments.clear();
+      // selectedWatchlistIndex(-1);
+      // tradingWatchlist.clear();
+      // tradingInstruments.clear();
       await getTenxTradingWatchlist();
-      await searchInstruments(searchTextController.text);
-      log('getTenxTradingWatchlist : ${tradingWatchlist.length}');
+      await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Instrument Remove');
 
       // } else {
@@ -516,18 +852,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isWatchlistStateLoading(false);
   }
 
-  Future purchaseSubscription() async {
-    Get.back();
+  Future purchaseSubscription(Map<String, dynamic> data) async {
     isLoading(true);
-    var data = {
-      "subscriptionAmount": selectedSubscription.value.discountedPrice,
-      "subscriptionName": selectedSubscription.value.planName,
-      "subscribedId": selectedSubscription.value.sId,
-    };
-    log(data.toString());
     try {
       final RepoResponse<GenericResponse> response = await repository.purchaseSubscription(
         data,
@@ -535,9 +864,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       if (response.data?.status == "success") {
         SnackbarHelper.showSnackbar(response.data?.message ?? 'Subscription purchased successfully');
       }
-      await Get.find<AuthController>().getUserDetails(navigate: false);
-      loadUserDetails();
-      await getTenxTradingActiveSubs();
+      loadDataAfterPaymentSuccess();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -546,7 +873,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   }
 
   Future getStockIndexInstrumentsList() async {
-    isLoading(true);
+    isInstrumentListLoading(true);
     try {
       final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
@@ -558,27 +885,15 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       log('car ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isInstrumentListLoading(false);
   }
 
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      IO.Socket socket;
-      socket = IO.io(AppUrls.baseURL, <String, dynamic>{
-        'autoConnect': false,
-        'transports': ['websocket'],
-      });
-      socket.connect();
-      socket.onConnect((_) {
-        log('Socket : Connected');
-        socket.emit('userId', userDetails.value.sId);
-        socket.emit('user-ticks', userDetails.value.sId);
-      });
-      socket.on(
+      socketService.socket.on(
         'index-tick',
         (data) {
-          // log('Stock Socket : index-tick $data');
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
             if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
@@ -591,15 +906,478 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
               stockIndexDetailsList.add(element);
             }
           }
-
-          // log('Socket : ${stockIndexDetailsList.length}');
         },
       );
-      socket.onDisconnect((_) => log('Socket : Disconnect'));
-      socket.onConnectError((err) => log(err));
-      socket.onError((err) => log(err));
     } on Exception catch (e) {
       log(e.toString());
+    }
+  }
+
+  Future getTenxCountTradingDays() async {
+    isLoading(true);
+    try {
+      final RepoResponse<CountTradingDaysResponse> response = await repository.getTenxCountTradingDays(
+        selectedSubscriptionId.value,
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          tenxCountTradingDays(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getTenXSubscriptionList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<TenXSubscriptionResponse> response = await repository.getTenXSubscriptionList();
+      if (response.data != null) {
+        tenXSubscription.clear();
+        tenXSubscription(response.data?.data ?? []);
+        if (tenXSubscription.isNotEmpty) {
+          selectedTenXSub(tenXSubscription.first);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getTenxActivePlans() async {
+    isActiveLoading(true);
+    try {
+      final RepoResponse<TenxActivePlanListResponse> response = await repository.getTenxActiveSubscriptions();
+      if (response.data?.status?.toLowerCase() == "success") {
+        tenxAvailablePlans.clear();
+        userSubscriptionsIds.clear();
+        tenxAvailablePlans(response.data?.data ?? []);
+        tenxAvailablePlansUnFiltered(response.data?.data ?? []);
+        for (var userSub in userDetails.value.subscription!) {
+          if (userSub.subscriptionId != null) {
+            userSubscriptionsIds.add(userSub.subscriptionId!.id!);
+          }
+        }
+        Set<int> uniqueValues = Set<int>();
+        List<PlanValidity> result = [];
+
+        for (TenxActivePlan sub in tenxAvailablePlans) {
+          if (sub.validity != null) {
+            if (sub.validity != 0 && uniqueValues.add(sub.validity!)) {
+              result.add(PlanValidity(
+                label: '${sub.validity} Days',
+                validity: sub.validity!,
+              ));
+            }
+          }
+        }
+        result.sort(
+          (a, b) => a.validity!.compareTo(b.validity!),
+        );
+        result.insert(0, defaultSelectedValidity);
+        if (result.length.isGreaterThan(1)) {
+          tenxAvailableValidityList.clear();
+          tenxAvailableValiditySelected(defaultSelectedValidity);
+          tenxAvailableValidityList(result);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isActiveLoading(false);
+  }
+
+  Future getTenxSubscribedPlans() async {
+    isSubscribeLoading(true);
+    try {
+      final RepoResponse<TenxSubscribedPlanListResponse> response = await repository.getTenxMyActiveSubscribed();
+      if (response.data?.status?.toLowerCase() == "success") {
+        tenxSubscribedPlans.clear();
+        userSubscriptionsIds.clear();
+        tenxSubscribedPlans(response.data?.data ?? []);
+        tenxSubscribedPlansUnFiltered(response.data?.data ?? []);
+        for (var userSub in userDetails.value.subscription!) {
+          if (userSub.subscriptionId != null) {
+            userSubscriptionsIds.add(userSub.subscriptionId!.id!);
+          }
+        }
+        Set<int> uniqueValues = Set<int>();
+        List<PlanValidity> result = [];
+
+        for (TenxSubscribedPlan sub in tenxSubscribedPlans) {
+          if (sub.validity != null) {
+            if (sub.validity != 0 && uniqueValues.add(sub.validity!)) {
+              result.add(PlanValidity(
+                label: '${sub.validity} Days',
+                validity: sub.validity!,
+              ));
+            }
+          }
+        }
+        result.sort(
+          (a, b) => a.validity!.compareTo(b.validity!),
+        );
+        result.insert(0, defaultSelectedValidity);
+        if (result.length.isGreaterThan(1)) {
+          tenxSubscribedValidityList.clear();
+          tenxSubscribedValiditySelected(defaultSelectedValidity);
+          tenxSubscribedValidityList(result);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isSubscribeLoading(false);
+  }
+
+  Future getTenxExpiredPlans() async {
+    isExpiredLoading(true);
+    try {
+      final RepoResponse<TenxExpiredPlanListResponse> response = await repository.getTenxMyExpiredSubscription();
+      if (response.data?.status?.toLowerCase() == "success") {
+        tenxExpiredPlans.clear();
+        userSubscriptionsIds.clear();
+        tenxExpiredPlans(response.data?.data ?? []);
+        tenxExpiredPlansUnFiltered(response.data?.data ?? []);
+        for (var userSub in userDetails.value.subscription!) {
+          if (userSub.subscriptionId != null) {
+            userSubscriptionsIds.add(userSub.subscriptionId!.id!);
+          }
+        }
+        Set<int> uniqueValues = Set<int>();
+        List<PlanValidity> result = [];
+
+        for (TenxExpiredPlan sub in tenxExpiredPlans) {
+          if (sub.validity != null) {
+            if (sub.validity != 0 && uniqueValues.add(sub.validity!)) {
+              result.add(PlanValidity(
+                label: '${sub.validity} Days',
+                validity: sub.validity!,
+              ));
+            }
+          }
+        }
+        result.sort(
+          (a, b) => a.validity!.compareTo(b.validity!),
+        );
+        result.insert(0, defaultSelectedValidity);
+        if (result.length.isGreaterThan(1)) {
+          tenxExpiredValidityList.clear();
+          tenxExpiredValiditySelected(defaultSelectedValidity);
+          tenxExpiredValidityList(result);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isExpiredLoading(false);
+  }
+
+  Future getTenxLeaderboard() async {
+    isLeaderboardLoading(true);
+    try {
+      final RepoResponse<TenxLeaderboardListResponse> response = await repository.getTenxLeaderboard();
+      if (response.data?.status?.toLowerCase() == "success") {
+        tenxLeaderboard(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLeaderboardLoading(false);
+  }
+
+  Future tenxRenewSubscription(Map<String, dynamic> data) async {
+    isLoading(true);
+    try {
+      final RepoResponse<GenericResponse> response = await repository.tenxRenewSubscription(
+        data,
+      );
+      if (response.data?.status == "success") {
+        SnackbarHelper.showSnackbar(response.data?.message ?? 'Subscription renewed successfully');
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future tenxTutorial() async {
+    var data = {
+      "tenXSubscription": selectedSubscriptionId.value,
+      "tutorialViewedBy": userDetails.value.sId,
+    };
+    try {
+      await repository.tenxTutorial(data);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future tenxCapturePurchaseIntent() async {
+    var data = {
+      "tenXSubscription": selectedSubscriptionId.value,
+      "tutorialViewedBy": userDetails.value.sId,
+    };
+    try {
+      await repository.tenxTutorial(data);
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future getTenxTodayOrdersList() async {
+    isOrderStateLoading(true);
+    try {
+      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeTodaysOrdersList(
+        selectedSubscriptionId.value,
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          tenxTradeTodaysOrdersList(response.data?.data ?? []);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isOrderStateLoading(false);
+    }
+  }
+
+  Future getStopLossExecutedOrder() async {
+    isExecutedOrderStateLoading(true);
+    try {
+      final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
+        selectedSubscriptionId.value,
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        stopLossExecutedOrdersList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isExecutedOrderStateLoading(false);
+  }
+
+  Future getStopLossPendingOrder() async {
+    isPendingOrderStateLoading(true);
+    try {
+      final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
+        selectedSubscriptionId.value,
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        stopLossPendingOrderList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future getStopLossPendingCancelOrder(String? id) async {
+    isPendingOrderStateLoading(true);
+    try {
+      await repository.getStopLossPendingCancelOrder(id ?? '');
+      await getStopLossPendingOrder();
+      await getTenxTradingPortfolioDetails();
+      await getStopLossExecutedOrder();
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future pendingOrderModify(TransactionType type, TradingInstrument inst) async {
+    isPendingOrderStateLoading(true);
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
+      }
+    }
+    PendingOrderModifyRequest data = PendingOrderModifyRequest(
+      exchange: inst.exchange,
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      quantity: selectedQuantity.value,
+      product: "NRML",
+      orderType: "SL/SP-M",
+      exchangeInstrumentToken: inst.exchangeToken,
+      instrumentToken: inst.instrumentToken,
+      stopLossPrice: stopLossPriceTextController.text,
+      stopProfitPrice: stopProfitPriceTextController.text,
+      symbol: inst.tradingsymbol,
+      validity: "DAY",
+      id: selectedSubscriptionId.value,
+      lastPrice: inst.lastPrice.toString(),
+      variety: "regular",
+      from: "TenX Trader",
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
+    );
+    print('PendingOrderModifyRequest : ${data.toJson()}');
+    try {
+      final RepoResponse<GenericResponse> response = await repository.pendingOrderModify(
+        data.toJson(),
+      );
+      Get.back();
+      print(response.data.toString());
+      if (response.data?.status == "Success") {
+        SnackbarHelper.showSnackbar(response.data?.message);
+        await getStopLossPendingOrder();
+        await getTenxTodayOrdersList();
+      } else if (response.data?.status == "Failed") {
+        print(response.error!.message!.toString());
+        SnackbarHelper.showSnackbar(response.error?.message);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future getStopLossEditOrder(String? id, String? type) async {
+    isPendingOrderStateLoading(true);
+    PendingEditOrderRequest data = PendingEditOrderRequest(
+      executionPrice: type == "StopLoss"
+          ? stopLossPriceTextController.text
+          : (type == "StopProfit"
+              ? stopProfitPriceTextController.text
+              : (type == "Limit" ? limitPriceTextController.text : '0')),
+    );
+    try {
+      final response = await repository.getStopLossEditOrder(
+        id,
+        data.toJson(),
+      );
+      Get.back();
+      getStopLossPendingOrder();
+      if (response.data?.status?.toLowerCase() == "Success") {
+        getStopLossPendingOrder();
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future socketSendConnection() async {
+    isPendingOrderStateLoading(true);
+    try {
+      socketService.socket.on(
+        'sendOrderResponse${userDetails.value.sId}',
+        (data) {
+          print('sendOrderResponse${userDetails.value.sId} $data');
+          if (data.containsKey("message")) {
+            String message = data["message"];
+            SnackbarHelper.showSnackbar(message);
+          }
+          getTenxPositionList();
+          getStopLossPendingOrder();
+          getStopLossExecutedOrder();
+          getTenxTodayOrdersList();
+        },
+      );
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  int calculateQuantity(TransactionType type, int tradingLots, int selectQuantity) {
+    if (type == TransactionType.sell || type == TransactionType.exit) {
+      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
+        return 0;
+      } else if (tradingLots.abs() <= selectQuantity) {
+        return selectQuantity - tradingLots.abs();
+      }
+    }
+    return selectQuantity;
+  }
+
+  Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
+    isMarginStateLoading(true);
+
+    MarginRequiredRequest data = MarginRequiredRequest(
+      exchange: inst.exchange,
+      symbol: inst.tradingsymbol,
+      buyOrSell: inst.lotSize.toString().contains('-')
+          ? type == TransactionType.buy
+              ? 'SELL'
+              : 'BUY'
+          : type == TransactionType.buy
+              ? 'BUY'
+              : 'SELL',
+      quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
+      product: "NRML",
+      orderType: selectedType.value,
+      validity: "DAY",
+      variety: "regular",
+      price: limitPriceTextController.text,
+      lastPrice: inst.lastPrice.toString(),
+    );
+
+    try {
+      final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          marginRequired(response.data);
+        } else {
+          SnackbarHelper.showSnackbar(response.error?.message);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isMarginStateLoading(false);
     }
   }
 }

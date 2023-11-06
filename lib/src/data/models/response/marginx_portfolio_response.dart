@@ -21,7 +21,7 @@ class MarginXPortfolioResponse {
 
 class MarginXPortfolio {
   String? marginx;
-  int? totalFund;
+  num? totalFund;
 
   MarginXPortfolio({this.marginx, this.totalFund});
 

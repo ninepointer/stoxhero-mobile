@@ -1,6 +1,6 @@
 class ContestOrderResponse {
   String? status;
-  List<ContestOrderList>? data;
+  List<ContestOrderDetails>? data;
   int? count;
 
   ContestOrderResponse({this.status, this.data, this.count});
@@ -8,9 +8,9 @@ class ContestOrderResponse {
   ContestOrderResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <ContestOrderList>[];
+      data = <ContestOrderDetails>[];
       json['data'].forEach((v) {
-        data!.add(new ContestOrderList.fromJson(v));
+        data!.add(new ContestOrderDetails.fromJson(v));
       });
     }
     count = json['count'];
@@ -27,7 +27,7 @@ class ContestOrderResponse {
   }
 }
 
-class ContestOrderList {
+class ContestOrderDetails {
   String? sId;
   String? orderId;
   String? status;
@@ -39,7 +39,7 @@ class ContestOrderList {
   num? amount;
   String? tradeTime;
 
-  ContestOrderList(
+  ContestOrderDetails(
       {this.sId,
       this.orderId,
       this.status,
@@ -51,7 +51,7 @@ class ContestOrderList {
       this.amount,
       this.tradeTime});
 
-  ContestOrderList.fromJson(Map<String, dynamic> json) {
+  ContestOrderDetails.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     orderId = json['order_id'];
     status = json['status'];

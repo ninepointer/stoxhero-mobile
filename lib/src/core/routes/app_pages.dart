@@ -48,7 +48,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.bankDetails,
       page: () => BankDetailsView(),
-      binding: BankBinding(),
+      binding: ProfileBinding(),
     ),
     GetPage(
       name: AppRoutes.kycDetails,
@@ -142,6 +142,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.collegeContestSearchSymbol,
       page: () => CollegeContestSearchSymbolView(),
+      binding: CollegeContestBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.collegeContestLiveLeaderboard,
+      page: () => CollegeContestLiveLeaderboardView(),
       binding: CollegeContestBinding(),
     ),
     GetPage(

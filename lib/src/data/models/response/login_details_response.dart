@@ -4,7 +4,7 @@ class LoginDetailsResponse {
   UserImageDetails? panCardFrontImage;
   UserImageDetails? passportPhoto;
   UserImageDetails? addressProofDocument;
-  String? profilePhoto;
+  UserImageDetails? profilePhoto;
   String? sId;
   String? kYCStatus;
   int? iV;
@@ -56,7 +56,7 @@ class LoginDetailsResponse {
   List<ProfilePortfolio>? portfolio;
   List<Referrals>? referrals;
   List<Subscription>? subscription;
-
+  List<InternshipBatchList>? internshipBatch;
   LoginDetailsResponse({
     this.aadhaarCardFrontImage,
     this.aadhaarCardBackImage,
@@ -115,6 +115,7 @@ class LoginDetailsResponse {
     this.portfolio,
     this.referrals,
     this.subscription,
+    this.internshipBatch,
   });
 
   LoginDetailsResponse.fromJson(Map<String, dynamic> json) {
@@ -143,7 +144,7 @@ class LoginDetailsResponse {
             json['addressProofDocument'],
           )
         : null;
-    profilePhoto = json['profilePhoto'].toString();
+    profilePhoto = json['profilePhoto'] != null ? new UserImageDetails.fromJson(json['profilePhoto']) : null;
     sId = json['_id'];
     kYCStatus = json['KYCStatus'];
     iV = json['__v'];
@@ -210,6 +211,12 @@ class LoginDetailsResponse {
         subscription!.add(new Subscription.fromJson(v));
       });
     }
+    if (json['internshipBatch'] != null) {
+      internshipBatch = <InternshipBatchList>[];
+      json['internshipBatch'].forEach((v) {
+        internshipBatch!.add(new InternshipBatchList.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -230,7 +237,7 @@ class LoginDetailsResponse {
       data['addressProofDocument'] = this.addressProofDocument!.toJson();
     }
     if (this.profilePhoto != null) {
-      data['profilePhoto'] = this.profilePhoto.toString();
+      data['profilePhoto'] = this.profilePhoto!.toJson();
     }
     data['_id'] = this.sId;
     data['KYCStatus'] = this.kYCStatus;
@@ -289,6 +296,9 @@ class LoginDetailsResponse {
     if (this.subscription != null) {
       data['subscription'] = this.subscription!.map((v) => v.toJson()).toList();
     }
+    if (this.internshipBatch != null) {
+      data['internshipBatch'] = this.internshipBatch!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 
@@ -298,7 +308,7 @@ class LoginDetailsResponse {
     UserImageDetails? panCardFrontImage,
     UserImageDetails? passportPhoto,
     UserImageDetails? addressProofDocument,
-    String? profilePhoto,
+    UserImageDetails? profilePhoto,
     String? sId,
     String? kYCStatus,
     int? iV,
@@ -349,6 +359,7 @@ class LoginDetailsResponse {
     List<String>? contests,
     List<ProfilePortfolio>? portfolio,
     List<Referrals>? referrals,
+    List<InternshipBatchList>? internshipBatch,
   }) {
     return LoginDetailsResponse(
       aadhaarCardFrontImage: aadhaarCardFrontImage ?? this.aadhaarCardFrontImage,
@@ -407,6 +418,7 @@ class LoginDetailsResponse {
       contests: contests ?? this.contests,
       portfolio: portfolio ?? this.portfolio,
       referrals: referrals ?? this.referrals,
+      internshipBatch: internshipBatch ?? this.internshipBatch,
     );
   }
 }
@@ -457,6 +469,173 @@ class UserImageDetails {
 //     return data;
 //   }
 // }
+class InternshipBatchList {
+  String? sId;
+  String? batchName;
+  String? batchStartDate;
+  String? batchEndDate;
+  InternshipCareer? career;
+  PortfolioId? portfolio;
+  List<InternshipParticipants>? participants;
+
+  InternshipBatchList(
+      {this.sId,
+      this.batchName,
+      this.batchStartDate,
+      this.batchEndDate,
+      this.career,
+      this.portfolio,
+      this.participants});
+
+  InternshipBatchList.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    batchName = json['batchName'];
+    batchStartDate = json['batchStartDate'];
+    batchEndDate = json['batchEndDate'];
+    career = json['career'] != null ? new InternshipCareer.fromJson(json['career']) : null;
+    portfolio = json['portfolio'] != null ? new PortfolioId.fromJson(json['portfolio']) : null;
+    if (json['participants'] != null) {
+      participants = <InternshipParticipants>[];
+      json['participants'].forEach((v) {
+        participants!.add(new InternshipParticipants.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['batchName'] = this.batchName;
+    data['batchStartDate'] = this.batchStartDate;
+    data['batchEndDate'] = this.batchEndDate;
+    if (this.career != null) {
+      data['career'] = this.career!.toJson();
+    }
+    if (this.portfolio != null) {
+      data['portfolio'] = this.portfolio!.toJson();
+    }
+    if (this.participants != null) {
+      data['participants'] = this.participants!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class InternshipCareer {
+  String? sId;
+  String? jobTitle;
+
+  InternshipCareer({this.sId, this.jobTitle});
+
+  InternshipCareer.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    jobTitle = json['jobTitle'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['jobTitle'] = this.jobTitle;
+    return data;
+  }
+}
+
+class InternshipPortfolio {
+  String? sId;
+  num? portfolioValue;
+
+  InternshipPortfolio({this.sId, this.portfolioValue});
+
+  InternshipPortfolio.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    portfolioValue = json['portfolioValue'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['portfolioValue'] = this.portfolioValue;
+    return data;
+  }
+}
+
+class InternshipParticipants {
+  String? user;
+  College? college;
+  String? joiningDate;
+  String? sId;
+  num? attendance;
+  num? payout;
+  num? referral;
+  num? tradingdays;
+  num? gpnl;
+  num? noOfTrade;
+  num? npnl;
+
+  InternshipParticipants(
+      {this.user,
+      this.college,
+      this.joiningDate,
+      this.sId,
+      this.attendance,
+      this.payout,
+      this.referral,
+      this.tradingdays,
+      this.gpnl,
+      this.noOfTrade,
+      this.npnl});
+
+  InternshipParticipants.fromJson(Map<String, dynamic> json) {
+    user = json['user'];
+    college = json['college'] != null ? new College.fromJson(json['college']) : null;
+    joiningDate = json['joiningDate'];
+    sId = json['_id'];
+    attendance = json['attendance'];
+    payout = json['payout'];
+    referral = json['referral'];
+    tradingdays = json['tradingdays'];
+    gpnl = json['gpnl'];
+    noOfTrade = json['noOfTrade'];
+    npnl = json['npnl'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['user'] = this.user;
+    if (this.college != null) {
+      data['college'] = this.college!.toJson();
+    }
+    data['joiningDate'] = this.joiningDate;
+    data['_id'] = this.sId;
+    data['attendance'] = this.attendance;
+    data['payout'] = this.payout;
+    data['referral'] = this.referral;
+    data['tradingdays'] = this.tradingdays;
+    data['gpnl'] = this.gpnl;
+    data['noOfTrade'] = this.noOfTrade;
+    data['npnl'] = this.npnl;
+    return data;
+  }
+}
+
+class College {
+  String? sId;
+  String? collegeName;
+
+  College({this.sId, this.collegeName});
+
+  College.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    collegeName = json['collegeName'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['collegeName'] = this.collegeName;
+    return data;
+  }
+}
 
 class ProfilePortfolio {
   String? id;
@@ -494,7 +673,7 @@ class PortfolioId {
   String? portfolioAccount;
   String? portfolioName;
   String? portfolioType;
-  int? portfolioValue;
+  num? portfolioValue;
 
   PortfolioId({
     this.id,
@@ -626,7 +805,7 @@ class PortfolioDetails {
   String? portfolioAccount;
   String? portfolioName;
   String? portfolioType;
-  int? portfolioValue;
+  num? portfolioValue;
 
   PortfolioDetails({
     this.sId,

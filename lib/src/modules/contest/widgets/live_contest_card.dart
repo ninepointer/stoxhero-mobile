@@ -7,31 +7,36 @@ import '../../../data/data.dart';
 import '../../modules.dart';
 
 class LiveContestCard extends GetView<ContestController> {
+  final String userId;
   final LiveContest? contest;
-  final ContestPosition? contestPositionList;
+  final TradingPosition? contestPositionList;
   final ContestCreditData? contestPortfolio;
+  final EdgeInsets? margin;
   const LiveContestCard({
     Key? key,
+    required this.userId,
     this.contest,
     this.contestPositionList,
     this.contestPortfolio,
+    this.margin,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      margin: margin,
       padding: EdgeInsets.zero,
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   contest?.contestName ?? '-',
-                  style: AppStyles.tsSecondaryMedium16,
+                  style: AppStyles.tsSecondaryMedium14,
                 ),
               ),
             ],
@@ -44,7 +49,7 @@ class LiveContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.isNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.success,
                     borderRadius: BorderRadius.circular(100),
@@ -59,7 +64,7 @@ class LiveContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.isBankNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.secondary,
                     borderRadius: BorderRadius.circular(100),
@@ -74,7 +79,7 @@ class LiveContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.isFinNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.info,
                     borderRadius: BorderRadius.circular(100),
@@ -87,7 +92,7 @@ class LiveContestCard extends GetView<ContestController> {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.danger,
                   borderRadius: BorderRadius.circular(100),
@@ -99,7 +104,7 @@ class LiveContestCard extends GetView<ContestController> {
               ),
               SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(100),
@@ -112,7 +117,7 @@ class LiveContestCard extends GetView<ContestController> {
             ],
           ),
         ),
-        SizedBox(height: 12),
+        SizedBox(height: 8),
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
@@ -120,6 +125,7 @@ class LiveContestCard extends GetView<ContestController> {
           child: Column(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Column(
@@ -127,7 +133,7 @@ class LiveContestCard extends GetView<ContestController> {
                       children: [
                         Text(
                           'No. of Seats left',
-                          style: Theme.of(context).textTheme.tsGreyRegular12,
+                          style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
@@ -137,7 +143,7 @@ class LiveContestCard extends GetView<ContestController> {
                                 contest?.participants?.length ?? 0,
                               )
                               .toString(),
-                          style: Theme.of(context).textTheme.tsMedium14,
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
@@ -146,27 +152,52 @@ class LiveContestCard extends GetView<ContestController> {
                     children: [
                       Image.asset(
                         AppImages.contestTrophy,
-                        width: 40,
+                        width: 36,
                       ),
                       Text(
                         'Reward',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        style: AppStyles.tsGreyMedium12,
                       ),
-                      Text(
-                        '${contest?.payoutPercentage} % of the net P&L',
-                        style: Theme.of(context).textTheme.tsMedium14,
+                      Row(
+                        children: [
+                          Text(
+                            '${contest?.payoutPercentage}% of the Net P&L',
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                          if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                            Text(
+                              ' (Upto ${controller.getPaidCapAmount(
+                                contest?.entryFee == 0
+                                    ? contest?.portfolio?.portfolioValue ?? 0
+                                    : contest?.entryFee ?? 0,
+                                contest?.payoutCapPercentage ?? 0,
+                              )})',
+                              style: Theme.of(context).textTheme.tsMedium12,
+                            ),
+                        ],
                       ),
                     ],
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [],
+                      children: [
+                        Text(
+                          'Remaining Time',
+                          style: AppStyles.tsGreyMedium12,
+                          textAlign: TextAlign.end,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Started',
+                          style: Theme.of(context).textTheme.tsMedium12,
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -174,13 +205,13 @@ class LiveContestCard extends GetView<ContestController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Start Date & Time',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Starts',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -188,19 +219,19 @@ class LiveContestCard extends GetView<ContestController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'End Date & Time',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Ends',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -209,12 +240,12 @@ class LiveContestCard extends GetView<ContestController> {
                     children: [
                       Text(
                         'Entry Fee',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
                         contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -222,8 +253,8 @@ class LiveContestCard extends GetView<ContestController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Portfolio',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        'Virtual Margin Money',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
@@ -231,7 +262,7 @@ class LiveContestCard extends GetView<ContestController> {
                           contest?.portfolio?.portfolioValue,
                           decimal: 0,
                         ),
-                        style: Theme.of(context).textTheme.tsMedium14,
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
@@ -250,42 +281,54 @@ class LiveContestCard extends GetView<ContestController> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
-                          controller.calculateSeatsLeft(
-                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
-                              0
-                      ? () {
-                          controller.liveContest(contest);
-                          controller.loadTradingData();
-                          controller.liveLeaderboardList();
-                          Get.to(() => ContestTradingView());
+                  onTap: () {
+                    controller.userDetails.value = AppStorage.getUserDetails();
+                    controller.liveContest(contest);
+                    if (contest?.entryFee == 0) {
+                      if (contest?.maxParticipants == contest?.participants?.length) {
+                        if (controller.canUserTrade(contest, userId)) {
+                          controller.gotoTradingView();
+                        } else {
+                          controller.participate(contest);
                         }
-                      : () {
-                          if (controller.calculateSeatsLeft(
-                                  contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
-                              0) {
-                            SnackbarHelper.showSnackbar('Contest is Full');
-                          } else {
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: PurchaseItemBottomSheet(
-                                buyItemPrice: contest?.entryFee ?? 0,
-                                onSubmit: () {
-                                  Get.back();
-                                  var data = {
-                                    "contestFee": contest?.entryFee,
-                                    "contestId": contest?.id,
-                                    "contestName": contest?.contestName,
-                                  };
-                                  controller.purchaseContest(data);
-                                },
-                              ),
-                            );
-                          }
-                        },
+                      } else {
+                        if (controller.canUserTrade(contest, userId)) {
+                          controller.gotoTradingView();
+                        } else {
+                          controller.participate(contest);
+                        }
+                      }
+                    } else {
+                      if (controller.checkIfLivePurchased(contest, userId)) {
+                        controller.gotoTradingView();
+                      } else {
+                        BottomSheetHelper.openBottomSheet(
+                          context: context,
+                          child: PaymentBottomSheet(
+                            productType: ProductType.contest,
+                            productId: contest?.id ?? '',
+                            buyItemPrice: contest?.entryFee ?? 0,
+                            onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                            onSubmit: () {
+                              Get.back();
+                              var walletController = Get.find<WalletController>();
+                              var data = {
+                                "bonusRedemption": 0,
+                                "coupon": walletController.couponCodeTextController.text,
+                                "contestFee": walletController.subscriptionAmount.value,
+                                "contestId": contest?.id,
+                                "contestName": contest?.contestName,
+                              };
+                              controller.purchaseContest(data);
+                            },
+                          ),
+                        );
+                      }
+                    }
+                  },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(8),
@@ -293,17 +336,10 @@ class LiveContestCard extends GetView<ContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0) &&
-                              controller.calculateSeatsLeft(
-                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) >
-                                  0
+                      (controller.checkIfLivePurchased(contest, userId) || contest?.entryFee == 0)
                           ? 'Start Trading'
-                          : controller.calculateSeatsLeft(
-                                      contest?.maxParticipants ?? 0, contest?.participants?.length ?? 0) ==
-                                  0
-                              ? 'Contest Full'
-                              : 'Pay Now',
-                      style: AppStyles.tsWhiteMedium14.copyWith(
+                          : 'Pay Now',
+                      style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
                       ),
                     ),
@@ -317,11 +353,11 @@ class LiveContestCard extends GetView<ContestController> {
                     controller.getShareContest(false);
                     String url = 'https://stoxhero.com/contest';
                     Clipboard.setData(ClipboardData(text: url));
-                    SnackbarHelper.showSnackbar('Share Link with your Friends');
+                    SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
                   },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: AppColors.secondary.withOpacity(.25),
                       borderRadius: BorderRadius.only(
@@ -330,7 +366,9 @@ class LiveContestCard extends GetView<ContestController> {
                     ),
                     child: Text(
                       'Share',
-                      style: AppStyles.tsSecondaryMedium14,
+                      style: AppStyles.tsSecondaryMedium12.copyWith(
+                        color: AppColors.secondary.shade600,
+                      ),
                     ),
                   ),
                 ),

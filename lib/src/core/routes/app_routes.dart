@@ -7,8 +7,8 @@ class AppRoutes {
   static const String home = '/home';
   static const String profile = '/profile';
   static const String profileDetails = '/profile/profile_details';
-  static const String bankDetails = '/bank';
-  static const String kycDetails = '/bank/kyc_details';
+  static const String bankDetails = '/profile/bank_details';
+  static const String kycDetails = '/profile/kyc_details';
   static const String orders = '/orders';
   static const String funds = '/funds';
   static const String portfolio = '/portfolio';
@@ -25,6 +25,7 @@ class AppRoutes {
   static const String contest = '/contest';
   static const String pastContest = '/contest/past_contest';
   static const String contestLiveLeaderboard = '/contest/live_leaderboard';
+  static const String collegeContestLiveLeaderboard = '/college_contest/college_contest_live_leaderboard';
   static const String faq = '/faq';
   static const String tutorial = '/tutorial';
   static const String careers = '/careers';

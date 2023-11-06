@@ -5,7 +5,7 @@ import '../../../core/core.dart';
 import '../../modules.dart';
 
 class InfoCard extends StatelessWidget {
-  final CareerList? career;
+  final CareerData? career;
   const InfoCard({
     Key? key,
     this.career,
@@ -14,6 +14,7 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
+      margin: EdgeInsets.only(bottom: 8),
       padding: EdgeInsets.zero,
       children: [
         Padding(
@@ -63,7 +64,7 @@ class InfoCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  career?.jobType != '' ? 'Internship' : 'Workshop',
+                  career?.listingType == 'Workshop' ? '${career?.listingType}' : '${career?.jobType}',
                   textAlign: TextAlign.center,
                   style: AppStyles.tsWhiteMedium12,
                 ),
@@ -88,7 +89,7 @@ class InfoCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: CommonFilledButton(
             label: 'Click here to Apply!',
-            height: 48,
+            height: 42,
             onPressed: () {
               Get.to(
                 () => ResponsibilitiesView(

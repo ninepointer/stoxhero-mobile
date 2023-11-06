@@ -24,8 +24,8 @@ class InternshipBatch {
   String? batchName;
   String? batchStartDate;
   String? batchEndDate;
-  int? payoutPercentage;
-  int? attendancePercentage;
+  num? payoutPercentage;
+  num? attendancePercentage;
   int? referralCount;
   Career? career;
   InternPortfolio? portfolio;
@@ -97,7 +97,7 @@ class Career {
 
 class InternPortfolio {
   String? id;
-  int? portfolioValue;
+  num? portfolioValue;
 
   InternPortfolio({this.id, this.portfolioValue});
 
