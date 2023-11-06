@@ -189,7 +189,9 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                             context: context,
                             child: PaymentBottomSheet(
                               productType: ProductType.tenx,
+                              productId: subscription.sId ?? '',
                               buyItemPrice: subscription.discountedPrice ?? 0,
+                              onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
                               onSubmit: () {
                                 Get.back();
                                 var walletController = Get.find<WalletController>();

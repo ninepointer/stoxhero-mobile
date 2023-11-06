@@ -2,7 +2,7 @@ class PaymentRequest {
   String? productId;
   String? paymentFor;
   String? merchantTransactionId;
-  double? amount;
+  num? amount;
   String? coupon;
   num? bonusRedemption;
 
@@ -26,7 +26,7 @@ class PaymentRequest {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (data['productId'] != null) data['productId'] = this.productId;
+    data['productId'] = this.productId;
     data['paymentFor'] = this.paymentFor;
     data['merchantTransactionId'] = this.merchantTransactionId;
     data['amount'] = this.amount;

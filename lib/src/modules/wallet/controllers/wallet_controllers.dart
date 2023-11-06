@@ -70,6 +70,26 @@ class WalletController extends BaseController<WalletRepository> {
     getMyWithdrawalsTransactionsList();
   }
 
+  String getPaymentProductType(ProductType type) {
+    String productType = '';
+    switch (type) {
+      case ProductType.tenx:
+        productType = 'TenX';
+        break;
+      case ProductType.contest:
+        productType = 'Contest';
+        break;
+      case ProductType.marginx:
+        productType = 'MarginX';
+        break;
+      case ProductType.battle:
+        productType = 'Battle';
+        break;
+      default:
+    }
+    return productType;
+  }
+
   void removeCouponCode() {
     couponCodeSuccessText("");
     isCouponCodeAdded(false);
@@ -244,12 +264,14 @@ class WalletController extends BaseController<WalletRepository> {
 
   Future<bool> checkPaymentStatus(String id) async {
     try {
-      final RepoResponse<GenericResponse> response = await repository.checkPaymentStatus(
+      final RepoResponse<CheckPaymentStatusResponse> response = await repository.checkPaymentStatus(
         id,
       );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          return true;
+          if (response.data?.data?.code == 'PAYMENT_SUCCESS')
+            return true;
+          else if (response.data?.data?.code == 'PAYMENT_ERROR') return false;
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

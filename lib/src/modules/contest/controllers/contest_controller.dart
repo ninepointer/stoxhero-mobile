@@ -137,6 +137,13 @@ class ContestController extends BaseController<ContestRepository> {
     socketLeaderboardConnection();
   }
 
+  Future loadDataAfterPaymentSuccess() async {
+    await Get.find<AuthController>().getUserDetails(navigate: false);
+    await loadUserDetails();
+    getUpComingContestList();
+    getLiveContestList();
+  }
+
   void gotoTradingView() {
     loadTradingData();
     Get.to(() => ContestTradingView());
@@ -886,10 +893,7 @@ class ContestController extends BaseController<ContestRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
-      await Get.find<AuthController>().getUserDetails(navigate: false);
-      await loadUserDetails();
-      getUpComingContestList();
-      getLiveContestList();
+      loadDataAfterPaymentSuccess();
     } catch (e) {
       log('Purchase Contest: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

@@ -363,7 +363,9 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                                 context: context,
                                 child: PaymentBottomSheet(
                                   productType: ProductType.collegeContest,
+                                  productId: widget.contest?.id ?? '',
                                   buyItemPrice: widget.contest?.entryFee ?? 0,
+                                  onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
                                   onSubmit: () {
                                     Get.back();
                                     var walletController = Get.find<WalletController>();

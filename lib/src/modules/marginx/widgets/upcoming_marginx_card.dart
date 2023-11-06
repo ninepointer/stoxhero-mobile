@@ -333,7 +333,9 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                             context: context,
                             child: PaymentBottomSheet(
                               productType: ProductType.marginx,
+                              productId: widget.marginx?.id ?? '',
                               buyItemPrice: widget.marginx?.marginXTemplate?.entryFee ?? 0,
+                              onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
                               onSubmit: () {
                                 Get.back();
                                 var walletController = Get.find<WalletController>();

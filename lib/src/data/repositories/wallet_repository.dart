@@ -44,11 +44,11 @@ class WalletRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> checkPaymentStatus(String id) async {
+  Future<RepoResponse<CheckPaymentStatusResponse>> checkPaymentStatus(String id) async {
     String apiURL = '${AppUrls.checkPaymentStatus}/$id';
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: GenericResponse.fromJson(response));
+        : RepoResponse(data: CheckPaymentStatusResponse.fromJson(response));
   }
 }

@@ -10,14 +10,18 @@ import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 class PaymentBottomSheet extends StatefulWidget {
   final ProductType productType;
+  final String productId;
   final num buyItemPrice;
   final VoidCallback onSubmit;
+  final VoidCallback onPaymentSuccess;
   final PaymentTransactionType paymentTransactionType;
 
   PaymentBottomSheet({
     required this.productType,
+    required this.productId,
     required this.buyItemPrice,
     required this.onSubmit,
+    required this.onPaymentSuccess,
     this.paymentTransactionType = PaymentTransactionType.debit,
   });
 
@@ -49,12 +53,15 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     super.initState();
     controller = Get.find<WalletController>();
     controller.removeCouponCode();
+    controller.isLoading(false);
     controller.addMoneyAmountTextController.clear();
     controller.subscriptionAmount(widget.buyItemPrice.toDouble());
     controller.actualSubscriptionAmount(widget.buyItemPrice.toDouble());
-    if (widget.paymentTransactionType == PaymentTransactionType.credit) initPaymentSDK();
     if (widget.paymentTransactionType == PaymentTransactionType.debit) calculateUserWalletAmount();
+    initPaymentSDK();
   }
+
+  bool get isWalletPayment => widget.paymentTransactionType == PaymentTransactionType.credit;
 
   String generateSha256Hash(String input) {
     var bytes = utf8.encode(input);
@@ -103,31 +110,57 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     String mobile = userDetails.mobile ?? '';
 
     await generatePaymentData(mtId, muId, mobile);
-    double amount = double.parse(controller.addMoneyAmountTextController.text) * 100;
+    PaymentRequest paymentData = PaymentRequest();
+    if (isWalletPayment) {
+      num amount = num.parse(controller.addMoneyAmountTextController.text) * 100;
+      paymentData = PaymentRequest(
+        bonusRedemption: 0,
+        coupon: '',
+        paymentFor: 'Wallet',
+        merchantTransactionId: mtId,
+        amount: amount,
+      );
+    } else {
+      num amount =
+          controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice;
+      amount = amount * 100;
+      paymentData = PaymentRequest(
+        bonusRedemption: 0,
+        coupon: '',
+        productId: widget.productId,
+        paymentFor: controller.getPaymentProductType(widget.productType),
+        merchantTransactionId: mtId,
+        amount: amount,
+      );
+    }
 
-    PaymentRequest paymentData = PaymentRequest(
-      bonusRedemption: 0,
-      coupon: '',
-      paymentFor: 'Wallet',
-      merchantTransactionId: mtId,
-      amount: amount,
-    );
-
-    print(paymentData);
+    print('PaymentData : ${paymentData.toJson()}');
 
     await controller.initPaymentRequest(paymentData);
 
     await startPhonePePayment();
     Get.back();
-    controller.loadData();
+
     if (paymentStatus) {
-      SnackbarHelper.showSnackbar('Payment successful, amount added to wallet.');
+      SnackbarHelper.showSnackbar('Transaction successful');
+    } else {
+      bool status = await controller.checkPaymentStatus(mtId);
+      if (status) SnackbarHelper.showSnackbar('Transaction successful');
     }
+    if (isWalletPayment) controller.loadData();
+    widget.onPaymentSuccess();
     controller.isLoading(false);
   }
 
   Future generatePaymentData(String mtId, String muId, String mobile) async {
-    double amount = double.parse(controller.addMoneyAmountTextController.text) * 100;
+    num amount = 1000;
+    if (isWalletPayment) {
+      amount = num.parse(controller.addMoneyAmountTextController.text) * 100;
+    } else {
+      amount = controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice;
+      amount = amount * 100;
+    }
+
     final data = {
       "merchantId": merchantId,
       "merchantTransactionId": mtId,
@@ -158,7 +191,6 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
 
   Future startPhonePePayment() async {
     try {
-      // await generatePaymentData();
       await PhonePePaymentSdk.startPGTransaction(
         body,
         callBackUrl,
@@ -255,9 +287,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   ),
                   SizedBox(height: 24),
                   Text(
-                    widget.paymentTransactionType == PaymentTransactionType.debit
-                        ? 'Choose how to pay'
-                        : 'Add money to\nwallet from bank account',
+                    isWalletPayment ? 'Add money to\nwallet from bank account' : 'Choose how to pay',
                     style: AppStyles.tsSecondarySemiBold20,
                     textAlign: TextAlign.center,
                   ),
@@ -268,7 +298,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 24),
-                  if (widget.paymentTransactionType == PaymentTransactionType.debit)
+                  if (!isWalletPayment)
                     CommonCard(
                       margin: EdgeInsets.only(top: 8),
                       padding: EdgeInsets.all(12),
@@ -335,7 +365,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ),
                     ),
-                  if (widget.paymentTransactionType == PaymentTransactionType.debit)
+                  if (!isWalletPayment)
                     if (walletBalance == null || widget.buyItemPrice <= walletBalance!)
                       if (!controller.isCouponCodeAdded.value)
                         Row(
@@ -365,7 +395,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                             ),
                           ],
                         ),
-                  if (widget.paymentTransactionType == PaymentTransactionType.debit)
+                  if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('wallet'),
                       margin: EdgeInsets.only(top: 16),
@@ -398,57 +428,60 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ],
                     ),
-                  // if (widget.paymentTransactionType == PaymentTransactionType.debit)
-                  //   CommonCard(
-                  //     onTap: () => controller.selectedPaymentValue('gateway'),
-                  //     margin: EdgeInsets.only(top: 16),
-                  //     children: [
-                  //       Row(
-                  //         children: [
-                  //           Radio(
-                  //             value: 'gateway',
-                  //             groupValue: controller.selectedPaymentValue.value,
-                  //             onChanged: (value) {
-                  //               controller.selectedPaymentValue.value = value as String;
-                  //             },
-                  //             visualDensity: VisualDensity.compact,
-                  //           ),
-                  //           SizedBox(width: 8),
-                  //           Text(
-                  //             'Pay from Bank Account/UPI',
-                  //             style: Theme.of(context).textTheme.tsRegular14,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  if (walletBalance == null || widget.buyItemPrice <= walletBalance!)
-                    Column(
+                  if (!isWalletPayment)
+                    CommonCard(
+                      onTap: () => controller.selectedPaymentValue('gateway'),
+                      margin: EdgeInsets.only(top: 16),
                       children: [
-                        SizedBox(height: 16),
-                        CommonFilledButton(
-                          isLoading: controller.isLoadingStatus,
-                          height: 42,
-                          label: 'Proceed',
-                          onPressed: widget.paymentTransactionType == PaymentTransactionType.credit
-                              ? () => startPaymentTransaction(context)
-                              : widget.onSubmit,
+                        Row(
+                          children: [
+                            Radio(
+                              value: 'gateway',
+                              groupValue: controller.selectedPaymentValue.value,
+                              onChanged: (value) {
+                                controller.selectedPaymentValue.value = value as String;
+                              },
+                              visualDensity: VisualDensity.compact,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              'Pay from Bank Account/UPI',
+                              style: Theme.of(context).textTheme.tsRegular14,
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   if (walletBalance != null && widget.buyItemPrice >= walletBalance!)
                     Column(
                       children: [
-                        SizedBox(height: 24),
+                        SizedBox(height: 16),
                         Text(
                           'Your wallet balance is low kindly refer more users on this platform to buy this subscription.',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.tsRegular14,
                         ),
-                        SizedBox(height: 24),
+                        SizedBox(height: 16),
                         ReferralCodeCard(),
                       ],
                     ),
+                  Column(
+                    children: [
+                      SizedBox(height: 16),
+                      CommonFilledButton(
+                        isLoading: controller.isLoadingStatus,
+                        height: 42,
+                        label: 'Proceed',
+                        onPressed: isWalletPayment || controller.selectedPaymentValue.value == 'gateway'
+                            ? () => startPaymentTransaction(context)
+                            : walletBalance != null && widget.buyItemPrice >= walletBalance!
+                                ? () {
+                                    SnackbarHelper.showSnackbar('Low wallet balance!');
+                                  }
+                                : widget.onSubmit,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

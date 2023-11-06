@@ -309,7 +309,9 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                           context: context,
                           child: PaymentBottomSheet(
                             productType: ProductType.collegeContest,
+                            productId: contest?.id ?? '',
                             buyItemPrice: contest?.entryFee ?? 0,
+                            onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
                             onSubmit: () {
                               Get.back();
                               var walletController = Get.find<WalletController>();

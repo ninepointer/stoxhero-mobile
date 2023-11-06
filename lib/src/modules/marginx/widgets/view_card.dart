@@ -331,7 +331,9 @@ class _ViewCardState extends State<ViewCard> {
                                       context: context,
                                       child: PaymentBottomSheet(
                                         productType: ProductType.marginx,
+                                        productId: widget.liveMarginX?.id ?? '',
                                         buyItemPrice: widget.liveMarginX?.marginXTemplate?.entryFee ?? 0,
+                                        onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
                                         onSubmit: () {
                                           Get.back();
                                           var walletController = Get.find<WalletController>();
@@ -355,7 +357,14 @@ class _ViewCardState extends State<ViewCard> {
                                       context: context,
                                       child: PaymentBottomSheet(
                                         productType: ProductType.marginx,
+                                        productId: widget.upcomingMarginX?.id ?? '',
                                         buyItemPrice: widget.upcomingMarginX?.marginXTemplate?.entryFee ?? 0,
+                                        onPaymentSuccess: () async {
+                                          await Get.find<AuthController>().getUserDetails(navigate: false);
+                                          controller.loadUserDetails();
+                                          controller.getUpComingMarginXList();
+                                          controller.getLiveMarginXList();
+                                        },
                                         onSubmit: () {
                                           Get.back();
                                           var walletController = Get.find<WalletController>();

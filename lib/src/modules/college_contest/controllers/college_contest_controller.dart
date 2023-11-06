@@ -162,6 +162,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     await getCompletedContestPnlList();
   }
 
+  Future loadUserDetails() async {
+    userDetails.value = AppStorage.getUserDetails();
+  }
+
   Future loadTradingData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getInstrumentLivePriceList();
@@ -172,6 +176,13 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     socketConnection();
     socketIndexConnection();
     socketLeaderboardConnection();
+  }
+
+  Future loadDataAfterPaymentSuccess() async {
+    await Get.find<AuthController>().getUserDetails(navigate: false);
+    await loadUserDetails();
+    getUpComingCollegeContestList();
+    getLiveCollegeContestList();
   }
 
   Future loadRegisterData() async {
@@ -929,8 +940,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
-      getUpComingCollegeContestList();
-      getLiveCollegeContestList();
+      loadDataAfterPaymentSuccess();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

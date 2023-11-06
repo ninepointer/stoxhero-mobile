@@ -282,7 +282,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
                             context: context,
                             child: PaymentBottomSheet(
                               productType: ProductType.marginx,
+                              productId: marginx?.id ?? '',
                               buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
+                              onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
                               onSubmit: () {
                                 Get.back();
                                 var walletController = Get.find<WalletController>();

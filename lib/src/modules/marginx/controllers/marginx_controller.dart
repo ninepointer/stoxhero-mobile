@@ -100,6 +100,13 @@ class MarginXController extends BaseController<MarginXRepository> {
     socketIndexConnection();
   }
 
+  Future loadDataAfterPaymentSuccess() async {
+    await Get.find<AuthController>().getUserDetails(navigate: false);
+    await loadUserDetails();
+    getUpComingMarginXList();
+    getLiveMarginXList();
+  }
+
   int getOpenPositionCount() {
     int openCount = 0;
     for (var position in marginXPositionList) {
@@ -726,10 +733,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
-      await Get.find<AuthController>().getUserDetails(navigate: false);
-      loadUserDetails();
-      getUpComingMarginXList();
-      getLiveMarginXList();
+      loadDataAfterPaymentSuccess();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

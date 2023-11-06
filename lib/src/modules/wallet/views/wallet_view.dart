@@ -91,9 +91,11 @@ class _WalletViewState extends State<WalletView> {
                                   context: context,
                                   child: PaymentBottomSheet(
                                     productType: ProductType.wallet,
+                                    productId: "",
                                     paymentTransactionType: PaymentTransactionType.credit,
                                     buyItemPrice: 0,
                                     onSubmit: () {},
+                                    onPaymentSuccess: () {},
                                   ),
                                 ),
                               ),

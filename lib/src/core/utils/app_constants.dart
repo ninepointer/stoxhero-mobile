@@ -34,6 +34,7 @@ enum ProductType {
   virtual,
   marginx,
   contest,
+  battle,
   collegeContest,
   internship,
   wallet,

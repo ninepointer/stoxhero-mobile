@@ -135,7 +135,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxExpiredValiditySelected = PlanValidity(label: 'All', validity: 0).obs;
 
   final marginRequired = MarginRequiredResponse().obs;
-  void loadUserDetails() {
+
+  Future loadUserDetails() async {
     userDetails.value = AppStorage.getUserDetails();
   }
 
@@ -162,6 +163,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
+  }
+
+  Future loadDataAfterPaymentSuccess() async {
+    await Get.find<AuthController>().getUserDetails(navigate: false);
+    await loadUserDetails();
+    getTenxActivePlans();
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
@@ -856,9 +863,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       if (response.data?.status == "success") {
         SnackbarHelper.showSnackbar(response.data?.message ?? 'Subscription purchased successfully');
       }
-      await Get.find<AuthController>().getUserDetails(navigate: false);
-      loadUserDetails();
-      await getTenxActivePlans();
+      loadDataAfterPaymentSuccess();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
