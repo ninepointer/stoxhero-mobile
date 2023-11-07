@@ -42,6 +42,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final isPendingOrderStateLoading = false.obs;
   bool get isPendingOrderStateLoadingStatus => isPendingOrderStateLoading.value;
 
+  final isOrderStateLoading = false.obs;
+  bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
+
   final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();
   final stopLossPriceTextController = TextEditingController();
@@ -197,7 +200,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     num totalBrokerage = 0;
     num totalGross = 0;
     num totalNet = 0;
-
     for (var position in virtualPositionsList) {
       if (position.id?.isLimit ?? false) {
       } else {
@@ -206,11 +208,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         totalGross += position.lastaverageprice ?? 0;
         totalNet += position.amount ?? 0;
       }
-
-      // totalLots += position.lots ?? 0;
-      // totalBrokerage += position.brokerage ?? 0;
-      // totalGross += position.lastaverageprice ?? 0;
-      // totalNet += position.amount ?? 0;
     }
     tenxTotalPositionDetails(
       TenxTotalPositionDetails(
@@ -653,10 +650,10 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
               : 'SELL',
       quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
-      orderType: "MARKET",
+      orderType: selectedType.value,
       validity: "DAY",
       variety: "regular",
-      price: "",
+      price: limitPriceTextController.text,
       lastPrice: inst.lastPrice.toString(),
     );
 
@@ -680,7 +677,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   Future getVirtualTodayOrderList() async {
-    isLoading(true);
+    isOrderStateLoading(true);
     try {
       final RepoResponse<VirtualTradeOrdersListResponse> response = await repository.getVirtualTradeTodaysOrdersList();
       if (response.data != null) {
@@ -694,7 +691,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isOrderStateLoading(false);
   }
 
   Future getStopLossExecutedOrder() async {
@@ -740,6 +737,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       await getStopLossPendingOrder();
       await getStopLossExecutedOrder();
       await getVirtualTradingPortfolio();
+      calculateMargin();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

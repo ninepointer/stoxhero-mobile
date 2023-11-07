@@ -24,8 +24,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    controller = Get.find<HomeController>();
     super.initState();
+    controller = Get.find<HomeController>();
   }
 
   void _updateTab(int index) {
@@ -36,6 +36,7 @@ class _HomeViewState extends State<HomeView> {
         Get.find<HomeController>().loadData();
         Get.find<ContestController>().getLiveContestList();
         Get.find<ContestController>().getUpComingContestList();
+        Get.find<CollegeContestController>().getLiveCollegeContestList();
         break;
       case 1:
         Get.find<VirtualTradingController>().loadData();

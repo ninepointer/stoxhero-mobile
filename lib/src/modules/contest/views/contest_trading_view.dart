@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/modules/contest/widgets/contest_stoploss_pending_order_card.dart';
 import '../../../app/app.dart';
 
 class ContestTradingView extends GetView<ContestController> {

@@ -34,6 +34,7 @@ class HomeController extends BaseController<DashboardRepository> {
     loadData();
     Get.find<ContestController>().getLiveContestList();
     Get.find<ContestController>().getUpComingContestList();
+    Get.find<CollegeContestController>().getLiveCollegeContestList();
     // Get.find<TenxTradingController>().loadUserDetails();
     // Get.find<TenxTradingController>().getTenxTradingActiveSubs();
   }

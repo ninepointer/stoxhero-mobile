@@ -144,7 +144,6 @@ class _WalletViewState extends State<WalletView> {
               ),
             ),
             CommonTabBar(
-              isScrollable: true,
               index: controller.selectedSecondTabBarIndex.value,
               onTap: controller.changeSecondTabBarIndex,
               tabsTitle: [

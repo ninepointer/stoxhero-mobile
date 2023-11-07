@@ -187,6 +187,7 @@ class VirtualStoplossModifyPriceBottomSheet extends GetView<VirtualTradingContro
                       Expanded(
                         child: CommonTextField(
                           hintText: 'Stop Loss Price',
+                          keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                           ],
@@ -222,6 +223,7 @@ class VirtualStoplossModifyPriceBottomSheet extends GetView<VirtualTradingContro
                       Expanded(
                         child: CommonTextField(
                           hintText: 'StopProfit Price',
+                          keyboardType: TextInputType.number,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                           ],

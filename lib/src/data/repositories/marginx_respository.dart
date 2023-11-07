@@ -141,4 +141,52 @@ class MarginXRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: MarginRequiredResponse.fromJson(response));
   }
+
+  Future<RepoResponse<StopLossExecutedOrdersListResponse>> getStopLossExecutedOrder(String? id) async {
+    String apiURL = AppUrls.marginXStopLossExecutedOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossExecutedOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StopLossPendingOrdersListResponse>> getStopLossPendingOrder(String? id) async {
+    String apiURL = AppUrls.marginXStopLossPendingOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossPendingOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossPendingCancelOrder(String id) async {
+    String apiURL = AppUrls.marginXStopLossPendingCancelOrder(id);
+    var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> pendingOrderModify(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.pendingOrderModify;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossEditOrder(String? id, Map<String, dynamic> data) async {
+    String apiURL = AppUrls.stopLossEditOrder(id);
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<CompletedMarginXOrdersResponse>> getMarginXTodayOrdersList(String? id) async {
+    String apiURL = AppUrls.marginXTodayOrders(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: CompletedMarginXOrdersResponse.fromJson(response));
+  }
 }

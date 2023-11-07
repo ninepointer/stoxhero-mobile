@@ -1215,10 +1215,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
               : 'SELL',
       quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
-      orderType: "MARKET",
+      orderType: selectedType.value,
       validity: "DAY",
       variety: "regular",
-      price: "",
+      price: limitPriceTextController.text,
       lastPrice: inst.lastPrice.toString(),
     );
 
