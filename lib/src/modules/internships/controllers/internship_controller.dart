@@ -854,9 +854,9 @@ class InternshipController extends BaseController<InternshipRespository> {
       product: "NRML",
       orderType: selectedType.value,
       stopLoss: "",
-      stopLossPrice: double.tryParse(stopLossPriceTextController.text),
-      stopProfitPrice: double.tryParse(stopProfitPriceTextController.text),
-      price: limitPriceTextController.text,
+      stopLossPrice: stopLossPriceTextController.text,
+      stopProfitPrice: stopProfitPriceTextController.text,
+      price: double.tryParse(limitPriceTextController.text),
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
@@ -1128,6 +1128,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       await getStopLossPendingOrder();
       await getInternshipBatchPortfolioDetails();
       await getStopLossExecutedOrder();
+      loadTradingData();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

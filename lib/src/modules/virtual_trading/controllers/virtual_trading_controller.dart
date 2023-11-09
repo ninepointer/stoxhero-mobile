@@ -85,9 +85,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     userDetails.value = AppStorage.getUserDetails();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
-    await getVirtualTradingPortfolio();
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
+    await getVirtualTradingPortfolio();
     await getStopLossPendingOrder();
     await getStopLossExecutedOrder();
     await getVirtualTodayOrderList();
@@ -283,11 +283,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     } else {
       openingBalance = totalFund;
     }
-
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
         : (openingBalance - margin);
-
     return availableMargin;
   }
 
@@ -737,7 +735,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       await getStopLossPendingOrder();
       await getStopLossExecutedOrder();
       await getVirtualTradingPortfolio();
-      calculateMargin();
+      loadData();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

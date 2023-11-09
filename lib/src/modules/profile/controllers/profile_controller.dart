@@ -14,6 +14,7 @@ import 'package:stoxhero/src/base/base.dart';
 import 'package:stoxhero/src/data/data.dart';
 
 import '../../../core/core.dart';
+import '../../modules.dart';
 
 enum KycDocumentType {
   aadhaarCardFront,
@@ -49,6 +50,7 @@ class ProfileController extends BaseController<ProfileRepository> {
 
   String? genderValue;
   List<String> dropdownItems = ['Male', 'Female', 'Other'];
+  final selectedStates = ''.obs;
 
   final userNameTextController = TextEditingController();
   final positionTextController = TextEditingController();
@@ -87,8 +89,42 @@ class ProfileController extends BaseController<ProfileRepository> {
   final Rx<PlatformFile?> addressProofFile = PlatformFile(name: '', size: 0).obs;
   final Rx<PlatformFile?> profilePhotoFile = PlatformFile(name: '', size: 0).obs;
 
+  List<String> states = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Delhi",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jammu & Kashmir",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+  ];
+
   void loadData() {
     loadProfileDetails();
+    loadBankDetails();
     isEditEnabled(false);
   }
 
@@ -166,6 +202,8 @@ class ProfileController extends BaseController<ProfileRepository> {
     panCardFile(await downloadFileAsPlatformFile(userDetails.value.panCardFrontImage));
     passportSizePhotoFile(await downloadFileAsPlatformFile(userDetails.value.passportPhoto));
     addressProofFile(await downloadFileAsPlatformFile(userDetails.value.addressProofDocument));
+    dobTextController.text = FormatHelper.formatDateOfBirthToIST(userDetails.value.dob);
+    selectedStates.value = userDetails.value.bankState ?? '';
     isBankLoading(false);
   }
 
@@ -321,7 +359,7 @@ class ProfileController extends BaseController<ProfileRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('Save: ${e.toString()}');
+      log('Save KYC: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isProfileLoading(false);
@@ -338,21 +376,24 @@ class ProfileController extends BaseController<ProfileRepository> {
       'nameAsPerBankAccount': nameAsPerBankAccountTextController.text,
       'accountNumber': accountNumberTextController.text,
       'ifscCode': ifscCodeTextController.text,
+      'bankState': selectedStates.value,
     };
+    print(data);
     try {
       final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
       if (response.data != null) {
-        await AppStorage.setUserDetails(
-          LoginDetailsResponse.fromJson(response.data?.data),
-        );
+        await Get.find<AuthController>().getUserDetails(navigate: false);
+        loadData();
+        // await AppStorage.setUserDetails(
+        //   LoginDetailsResponse.fromJson(response.data?.data),
+        // );
         log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         SnackbarHelper.showSnackbar(response.data?.message);
       } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
+        // SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('Save: ${e.toString()}');
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isBankLoading(false);
   }
@@ -362,8 +403,11 @@ class ProfileController extends BaseController<ProfileRepository> {
         aadhaarCardBackFile.value?.path == null ||
         panCardFile.value?.path == null) {
       return SnackbarHelper.showSnackbar('Upload Required Document');
+    } else if (dobTextController.text.isEmpty) {
+      return SnackbarHelper.showSnackbar('Please enter your DOB');
     } else {
       isBankLoading(true);
+      DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
       Map<String, dynamic> data = {
         'aadhaarNumber': aadhaarCardNumberTextController.text,
         'panNumber': panCardNumberTextController.text,
@@ -374,13 +418,16 @@ class ProfileController extends BaseController<ProfileRepository> {
         'panCardFrontImage': await convertPlatformFileToMultipartFile(panCardFile.value),
         'passportPhoto': await convertPlatformFileToMultipartFile(passportSizePhotoFile.value),
         'addressProofDocument': await convertPlatformFileToMultipartFile(addressProofFile.value),
+        "dob": DateFormat('yyyy-MM-dd').format(date),
       };
       try {
         final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
         if (response.data != null) {
-          await AppStorage.setUserDetails(
-            LoginDetailsResponse.fromJson(response.data?.data),
-          );
+          await Get.find<AuthController>().getUserDetails(navigate: false);
+          loadData();
+          // await AppStorage.setUserDetails(
+          //   LoginDetailsResponse.fromJson(response.data?.data),
+          // );
           log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
           SnackbarHelper.showSnackbar(response.data?.message);
         } else {

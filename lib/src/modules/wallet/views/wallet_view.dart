@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class WalletView extends StatefulWidget {
   @override
@@ -47,6 +45,81 @@ class _WalletViewState extends State<WalletView> {
                     margin: EdgeInsets.all(16),
                     child: Column(
                       children: [
+                        //  Container(
+                        //       height: 80,
+                        //       width: 80,
+                        //       decoration: BoxDecoration(
+                        //         color: AppColors.white,
+                        //         shape: BoxShape.circle,
+                        //         border: Border.all(
+                        //           color: AppColors.grey.withOpacity(.25),
+                        //         ),
+                        //       ),
+                        //       child: ClipOval(
+                        //         child: controller.walletDetails.value.userId?.profilePhoto?.url == null
+                        //             ? Image.asset(
+                        //                 AppImages.appLogo,
+                        //                 fit: BoxFit.cover,
+                        //               )
+                        //             : Image.network(
+                        //                 controller.walletDetails.value.userId?.profilePhoto?.url ?? '',
+                        //                 fit: BoxFit.cover,
+                        //               ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // SizedBox(height: 12),
+                        // Text(
+                        //   controller.getUserFullName(),
+                        //   style: Theme.of(context).textTheme.tsMedium16,
+                        // ),
+                        CommonCard(
+                          margin: EdgeInsets.zero,
+                          padding: EdgeInsets.all(16),
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CommonCardTile(
+                                    label: 'Name',
+                                    value: '${controller.getUserFullName()}',
+                                  ),
+                                ),
+                                Expanded(
+                                  child: CommonCardTile(
+                                    label: 'KYC Status',
+                                    value: '${controller.walletDetails.value.userId?.kYCStatus}',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CommonCardTile(
+                                    label: 'Bank Details Status',
+                                    value: (controller.walletDetails.value.userId?.bankName != null ||
+                                            controller.walletDetails.value.userId?.ifscCode != null ||
+                                            controller.walletDetails.value.userId?.accountNumber != null ||
+                                            controller.walletDetails.value.userId?.nameAsPerBankAccount != null)
+                                        ? 'Updated'
+                                        : 'Not Updated',
+                                  ),
+                                ),
+                                Expanded(
+                                  child: CommonCardTile(
+                                    label: 'State',
+                                    value: (controller.walletDetails.value.userId?.state != null)
+                                        ? '${controller.walletDetails.value.userId?.state}'
+                                        : 'Not Updated',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
                         Row(
                           children: [
                             Expanded(
@@ -99,6 +172,39 @@ class _WalletViewState extends State<WalletView> {
                                   ),
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
+                        CommonCard(
+                          margin: EdgeInsets.only(top: 18),
+                          padding: EdgeInsets.zero,
+                          children: [
+                            Column(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      topRight: Radius.circular(8),
+                                    ),
+                                    color: AppColors.secondary.withOpacity(0.1),
+                                  ),
+                                  child: Text(
+                                    AppStrings.important,
+                                    style: Theme.of(context).textTheme.tsSecondaryMedium16,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  child: Text(
+                                    AppStrings.importantInfo,
+                                    style: Theme.of(context).textTheme.tsRegular14,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

@@ -598,7 +598,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       stopLoss: "",
       stopLossPrice: double.tryParse(stopLossPriceTextController.text),
       stopProfitPrice: double.tryParse(stopProfitPriceTextController.text),
-      price: limitPriceTextController.text,
+      price: double.tryParse(limitPriceTextController.text),
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
@@ -943,6 +943,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       await getStopLossPendingOrder();
       await getMarginXPortfolioDetails();
       await getStopLossExecutedOrder();
+      loadData();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

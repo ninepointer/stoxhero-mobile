@@ -53,7 +53,7 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
                         width: 1,
-                        color: AppColors.success.withOpacity(.4),
+                        color: AppColors.grey.withOpacity(.25),
                       ),
                     ),
                     child: Padding(
@@ -95,14 +95,14 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
                               width: 1,
-                              color: AppColors.secondary.withOpacity(.4),
+                              color: AppColors.grey.withOpacity(.25),
                             ),
                           ),
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                             child: Text(
                               FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
-                              style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                              style: Theme.of(context).textTheme.tsMedium12.copyWith(
                                     color: AppColors.secondary,
                                   ),
                               textAlign: TextAlign.center,
@@ -112,7 +112,7 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                       ),
                       SizedBox(width: 12),
                       Image.asset(
-                        AppImages.trophy,
+                        AppImages.contestTrophy,
                         width: 36,
                         height: 36,
                       ),
@@ -123,14 +123,14 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
                               width: 1,
-                              color: AppColors.secondary.withOpacity(.4),
+                              color: AppColors.grey.withOpacity(.25),
                             ),
                           ),
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                             child: Text(
                               FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
-                              style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                              style: Theme.of(context).textTheme.tsMedium12.copyWith(
                                     color: AppColors.secondary,
                                   ),
                               textAlign: TextAlign.center,

@@ -54,7 +54,7 @@ class AppStrings {
   static const String tenxLeaderboard = "TenX Leaderboard";
   static const String wallet = "Wallet";
   static const String transactions = "Transactions";
-  static const String successfulTransactions = "Successful Transactions";
+  static const String successfulTransactions = "Successful Withdrawals";
   static const String recentTransactions = "Recent Transactions";
 
   static const String todayOrders = 'Today Orders';
@@ -110,6 +110,22 @@ class AppStrings {
   static const String noDataFoundTenxExpired =
       "Oops!\nThere are no Expired TenX at the moment.\nPlease check Active TenX!";
   static const String noDataFoundTenxLeaderboard = "Oops!\nThere are no Leaderboard for TenX at the moment.";
+
+  static const String important = "IMPORTANT";
+  static const String importantInfo =
+      '''1. Please ensure you have filled your bank details and completed your KYC before proceeding with your withdrawal.
+
+2. Your full name on StoxHero, Bank Account, Aadhaar Card and PAN Card should match.
+
+3. TDS has already been deducted from your net winnings.
+
+4. Transfer might take upto 24-48 working hours to reflect in your bank account.
+
+5. You can only make one withdrawal in a day.
+
+6. The minimum withdrawal amount is ₹200.
+
+7. The maximum withdrawal limit for a day is ₹1,000.''';
 }
 
 class ErrorMessages {

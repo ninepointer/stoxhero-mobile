@@ -17,3 +17,4 @@ export 'pending_order_modify_request.dart';
 export 'pending_edit_order_request.dart';
 export 'margin_required_request.dart';
 export 'payment_request.dart';
+export 'withdrawal_request.dart';
