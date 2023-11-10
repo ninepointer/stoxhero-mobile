@@ -72,7 +72,9 @@ class CommonRankCard extends GetView<ContestController> {
                     style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
                   Text(
-                    FormatHelper.formatNumbers(reward),
+                    controller.liveContest.value.payoutType == 'Reward'
+                        ? FormatHelper.formatNumbers(reward)
+                        : FormatHelper.formatNumbers(reward),
                     style: Theme.of(context).textTheme.tsMedium12.copyWith(
                           color: controller.getValueColor(reward),
                         ),

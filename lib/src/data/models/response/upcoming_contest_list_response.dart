@@ -1,5 +1,3 @@
-import 'package:stoxhero/src/data/data.dart';
-
 class UpComingContestListResponse {
   String? status;
   String? message;
@@ -36,9 +34,11 @@ class UpComingContest {
   String? contestEndTime;
   String? description;
   String? contestType;
+  String? currentLiveStatus;
   String? contestFor;
   num? entryFee;
   num? payoutPercentage;
+  bool? featured;
   ContestPortfolio? portfolio;
   int? maxParticipants;
   String? contestStatus;
@@ -49,38 +49,49 @@ class UpComingContest {
   bool? isBankNifty;
   bool? isFinNifty;
   bool? isAllIndex;
+  String? product;
+  num? payoutCapPercentage;
+  List<UpcomingRewards>? rewards;
+  List<InterestedUsers>? interestedUsers;
+  List<UpcomingParticipants>? participants;
   String? createdOn;
   String? lastModifiedOn;
-  List<Participants>? participants;
-  List<InterestedUsers>? interestedUsers;
-  num? payoutCapPercentage;
+  int? iV;
+  String? payoutType;
+  String? payoutPercentageType;
 
-  UpComingContest({
-    this.id,
-    this.contestName,
-    this.contestStartTime,
-    this.contestEndTime,
-    this.description,
-    this.contestType,
-    this.contestFor,
-    this.entryFee,
-    this.payoutPercentage,
-    this.portfolio,
-    this.maxParticipants,
-    this.contestStatus,
-    this.createdBy,
-    this.lastModifiedBy,
-    this.contestExpiry,
-    this.isNifty,
-    this.isBankNifty,
-    this.isFinNifty,
-    this.isAllIndex,
-    this.createdOn,
-    this.lastModifiedOn,
-    this.participants,
-    this.interestedUsers,
-    this.payoutCapPercentage,
-  });
+  UpComingContest(
+      {this.id,
+      this.contestName,
+      this.contestStartTime,
+      this.contestEndTime,
+      this.description,
+      this.contestType,
+      this.currentLiveStatus,
+      this.contestFor,
+      this.entryFee,
+      this.payoutPercentage,
+      this.featured,
+      this.portfolio,
+      this.maxParticipants,
+      this.contestStatus,
+      this.createdBy,
+      this.lastModifiedBy,
+      this.contestExpiry,
+      this.isNifty,
+      this.isBankNifty,
+      this.isFinNifty,
+      this.isAllIndex,
+      this.product,
+      this.payoutCapPercentage,
+      this.rewards,
+      this.interestedUsers,
+      this.participants,
+      this.createdOn,
+      this.lastModifiedOn,
+      this.iV,
+      this.payoutType,
+      this.payoutPercentageType});
 
   UpComingContest.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -89,9 +100,11 @@ class UpComingContest {
     contestEndTime = json['contestEndTime'];
     description = json['description'];
     contestType = json['contestType'];
+    currentLiveStatus = json['currentLiveStatus'];
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
+    featured = json['featured'];
     portfolio = json['portfolio'] != null ? new ContestPortfolio.fromJson(json['portfolio']) : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
@@ -102,12 +115,12 @@ class UpComingContest {
     isBankNifty = json['isBankNifty'];
     isFinNifty = json['isFinNifty'];
     isAllIndex = json['isAllIndex'];
-    createdOn = json['createdOn'];
-    lastModifiedOn = json['lastModifiedOn'];
-    if (json['participants'] != null) {
-      participants = <Participants>[];
-      json['participants'].forEach((v) {
-        participants!.add(new Participants.fromJson(v));
+    product = json['product'];
+    payoutCapPercentage = json['payoutCapPercentage'];
+    if (json['rewards'] != null) {
+      rewards = <UpcomingRewards>[];
+      json['rewards'].forEach((v) {
+        rewards!.add(new UpcomingRewards.fromJson(v));
       });
     }
     if (json['interestedUsers'] != null) {
@@ -116,7 +129,17 @@ class UpComingContest {
         interestedUsers!.add(new InterestedUsers.fromJson(v));
       });
     }
-    payoutCapPercentage = json['payoutCapPercentage'];
+    if (json['participants'] != null) {
+      participants = <UpcomingParticipants>[];
+      json['participants'].forEach((v) {
+        participants!.add(new UpcomingParticipants.fromJson(v));
+      });
+    }
+    createdOn = json['createdOn'];
+    lastModifiedOn = json['lastModifiedOn'];
+    iV = json['__v'];
+    payoutType = json['payoutType'];
+    payoutPercentageType = json['payoutPercentageType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -127,9 +150,11 @@ class UpComingContest {
     data['contestEndTime'] = this.contestEndTime;
     data['description'] = this.description;
     data['contestType'] = this.contestType;
+    data['currentLiveStatus'] = this.currentLiveStatus;
     data['contestFor'] = this.contestFor;
     data['entryFee'] = this.entryFee;
     data['payoutPercentage'] = this.payoutPercentage;
+    data['featured'] = this.featured;
     if (this.portfolio != null) {
       data['portfolio'] = this.portfolio!.toJson();
     }
@@ -142,37 +167,69 @@ class UpComingContest {
     data['isBankNifty'] = this.isBankNifty;
     data['isFinNifty'] = this.isFinNifty;
     data['isAllIndex'] = this.isAllIndex;
-    data['createdOn'] = this.createdOn;
-    data['lastModifiedOn'] = this.lastModifiedOn;
-    if (this.participants != null) {
-      data['participants'] = this.participants!.map((v) => v.toJson()).toList();
+    data['product'] = this.product;
+    data['payoutCapPercentage'] = this.payoutCapPercentage;
+    if (this.rewards != null) {
+      data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
     }
     if (this.interestedUsers != null) {
       data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
     }
-    data['payoutCapPercentage'] = this.payoutCapPercentage;
+    if (this.participants != null) {
+      data['participants'] = this.participants!.map((v) => v.toJson()).toList();
+    }
+    data['createdOn'] = this.createdOn;
+    data['lastModifiedOn'] = this.lastModifiedOn;
+    data['__v'] = this.iV;
+    data['payoutType'] = this.payoutType;
+    data['payoutPercentageType'] = this.payoutPercentageType;
     return data;
   }
 }
 
 class ContestPortfolio {
-  String? id;
+  String? sId;
   String? portfolioName;
   num? portfolioValue;
 
-  ContestPortfolio({this.id, this.portfolioName, this.portfolioValue});
+  ContestPortfolio({this.sId, this.portfolioName, this.portfolioValue});
 
   ContestPortfolio.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
+    sId = json['_id'];
     portfolioName = json['portfolioName'];
     portfolioValue = json['portfolioValue'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.id;
+    data['_id'] = this.sId;
     data['portfolioName'] = this.portfolioName;
     data['portfolioValue'] = this.portfolioValue;
+    return data;
+  }
+}
+
+class UpcomingRewards {
+  int? rankStart;
+  int? rankEnd;
+  num? prize;
+  String? id;
+
+  UpcomingRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+
+  UpcomingRewards.fromJson(Map<String, dynamic> json) {
+    rankStart = json['rankStart'];
+    rankEnd = json['rankEnd'];
+    prize = json['prize'];
+    id = json['_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['rankStart'] = this.rankStart;
+    data['rankEnd'] = this.rankEnd;
+    data['prize'] = this.prize;
+    data['_id'] = this.id;
     return data;
   }
 }
@@ -181,15 +238,15 @@ class InterestedUsers {
   ContestUserId? userId;
   String? registeredOn;
   String? status;
-  String? id;
+  String? sId;
 
-  InterestedUsers({this.userId, this.registeredOn, this.status, this.id});
+  InterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
 
   InterestedUsers.fromJson(Map<String, dynamic> json) {
     userId = json['userId'] != null ? new ContestUserId.fromJson(json['userId']) : null;
     registeredOn = json['registeredOn'];
     status = json['status'];
-    id = json['_id'];
+    sId = json['_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -199,7 +256,7 @@ class InterestedUsers {
     }
     data['registeredOn'] = this.registeredOn;
     data['status'] = this.status;
-    data['_id'] = this.id;
+    data['_id'] = this.sId;
     return data;
   }
 }
@@ -211,13 +268,7 @@ class ContestUserId {
   String? lastName;
   String? mobile;
 
-  ContestUserId({
-    this.id,
-    this.email,
-    this.firstName,
-    this.lastName,
-    this.mobile,
-  });
+  ContestUserId({this.id, this.email, this.firstName, this.lastName, this.mobile});
 
   ContestUserId.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -238,24 +289,35 @@ class ContestUserId {
   }
 }
 
-class PurchaseIntent {
-  String? userId;
-  String? date;
-  String? id;
+class UpcomingParticipants {
+  ContestUserId? userId;
+  num? fee;
+  num? actualPrice;
+  String? participatedOn;
+  bool? isLive;
+  String? sId;
 
-  PurchaseIntent({this.userId, this.date, this.id});
+  UpcomingParticipants({this.userId, this.fee, this.actualPrice, this.participatedOn, this.isLive, this.sId});
 
-  PurchaseIntent.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'];
-    date = json['date'];
-    id = json['_id'];
+  UpcomingParticipants.fromJson(Map<String, dynamic> json) {
+    userId = json['userId'] != null ? new ContestUserId.fromJson(json['userId']) : null;
+    fee = json['fee'];
+    actualPrice = json['actualPrice'];
+    participatedOn = json['participatedOn'];
+    isLive = json['isLive'];
+    sId = json['_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userId'] = this.userId;
-    data['date'] = this.date;
-    data['_id'] = this.id;
+    if (this.userId != null) {
+      data['userId'] = this.userId!.toJson();
+    }
+    data['fee'] = this.fee;
+    data['actualPrice'] = this.actualPrice;
+    data['participatedOn'] = this.participatedOn;
+    data['isLive'] = this.isLive;
+    data['_id'] = this.sId;
     return data;
   }
 }

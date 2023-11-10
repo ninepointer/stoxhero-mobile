@@ -81,7 +81,6 @@ class _PaymentViewState extends State<PaymentView> {
         "type": "PAY_PAGE",
       }
     };
-
     print('PaymentData : $data');
 
     String jsonString = jsonEncode(data);

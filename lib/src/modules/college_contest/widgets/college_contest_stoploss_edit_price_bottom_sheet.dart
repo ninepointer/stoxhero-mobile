@@ -12,6 +12,9 @@ class CollegeContestStoplossEditPriceBottomSheet extends GetView<CollegeContestC
   @override
   Widget build(BuildContext context) {
     controller.quanitityTextController.text = stopLoss.quantity.toString();
+    controller.limitPriceTextController.text = stopLoss.price.toString();
+    controller.stopProfitPriceTextController.text = stopLoss.price.toString();
+    controller.stopLossPriceTextController.text = stopLoss.price.toString();
     return Obx(
       () => Wrap(
         children: [
@@ -31,9 +34,9 @@ class CollegeContestStoplossEditPriceBottomSheet extends GetView<CollegeContestC
                   GestureDetector(
                     onTap: () {
                       Get.back();
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
-                      controller.limitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
+                      // controller.limitPriceTextController.clear();
                     },
                     child: Column(
                       children: [
@@ -225,40 +228,6 @@ class CollegeContestStoplossEditPriceBottomSheet extends GetView<CollegeContestC
                       ),
                     ],
                   ),
-                  //       child: CommonTextField(
-                  //         hintText: 'Limit Price',
-                  //         keyboardType: TextInputType.number,
-                  //         inputFormatters: [
-                  //           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                  //         ],
-                  //         controller: controller.limitPriceTextController,
-                  //         validator: (value) {
-                  //           final limitPrice = double.tryParse(controller.limitPriceTextController.text);
-                  //           if (limitPrice != null) {
-                  //             if (stopLoss.buyOrSell == 'BUY') {
-                  //               if (limitPrice >=
-                  //                   controller.getInstrumentLastPrice(
-                  //                     stopLoss.instrumentToken!,
-                  //                     stopLoss.exchangeInstrumentToken!,
-                  //                   )) {
-                  //                 return 'Price should be less than LTP.';
-                  //               }
-                  //             } else if (stopLoss.buyOrSell == 'SELL') {
-                  //               if (limitPrice <=
-                  //                   controller.getInstrumentLastPrice(
-                  //                     stopLoss.instrumentToken!,
-                  //                     stopLoss.exchangeInstrumentToken!,
-                  //                   )) {
-                  //                 return 'Price should be greater than LTP.';
-                  //               }
-                  //             }
-                  //           }
-                  //           return null;
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   CommonFilledButton(
                     isLoading: controller.isPendingOrderStateLoading.value,
                     label: 'Edit',
@@ -282,9 +251,9 @@ class CollegeContestStoplossEditPriceBottomSheet extends GetView<CollegeContestC
                           stopLoss.type,
                         );
                       }
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
-                      controller.limitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
+                      // controller.limitPriceTextController.clear();
                     },
                   ),
                   SizedBox(height: 36),

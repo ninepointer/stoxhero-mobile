@@ -30,6 +30,7 @@ class AppUrls {
   static const String resendSignupOtp = "$apiURL/resendotp";
   static const String loginDetails = "$apiURL/loginDetail";
   static const String updateUserDetails = "$apiURL/userdetail/me";
+  static const String readSetting = "$apiURL/readsetting";
 
   static const String myTenx = "$apiURL/portfolio/myTenx";
   static const String tenxActive = "$apiURL/tenx/active";
@@ -98,6 +99,7 @@ class AppUrls {
   static const String contestTodaysOrders = "$apiURL/dailycontest/dailycontest/trade/my/todayorders";
   static const String contestPlacingOrder = "$apiURL/placingOrderDailyContest";
 
+  static const String featuredContest = "$apiURL/dailycontest/userfeatured";
   static const String liveCollegeContests = "$apiURL/dailycontest/collegecontests/userlive";
   static const String upComingCollegeContests = "$apiURL/dailycontest/collegecontests/userupcoming";
   static const String completedCollegeContests = "$apiURL/dailycontest/contests/collegecompleted";
@@ -148,6 +150,7 @@ class AppUrls {
   static String shareContest(String? id) => "$apiURL/dailycontest/contest/$id/share";
   static String getNotified(String? id) => "$apiURL/dailycontest/contest/$id/register";
   static String participate(String? id) => "$apiURL/dailycontest/contest/$id/participate";
+  static String featuredParticipate(String? id) => "$apiURL/dailycontest/contest/$id/participate";
 
   static String marginXPosition(String? id) => "$apiURL/marginxtrade/$id/pnl";
   static String marginXCreditData(String? id) => "$apiURL/marginxtrade/$id/myPnlandCreditData";

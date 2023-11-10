@@ -20,16 +20,32 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  contest?.contestName ?? '-',
-                  style: AppStyles.tsSecondaryMedium14,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Text(
+                    contest?.contestName ?? '-',
+                    style: AppStyles.tsSecondaryMedium14,
+                  ),
                 ),
               ),
+              Visibility(
+                visible: contest?.featured == true,
+                child: Container(
+                  padding: EdgeInsets.all(18),
+                  foregroundDecoration: CommonTriangleCard(
+                    badgeColor: AppColors.success,
+                    badgeSize: 62,
+                    textSpan: TextSpan(
+                      text: 'Featured',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

@@ -26,12 +26,9 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                   Expanded(
                     child: Divider(thickness: 2),
                   ),
-                  SizedBox(width: 18),
-                  Expanded(
-                    child: Text(
-                      'College Contest',
-                      style: Theme.of(context).textTheme.tsPrimaryMedium14,
-                    ),
+                  Text(
+                    'College Contest',
+                    style: Theme.of(context).textTheme.tsPrimaryMedium14,
                   ),
                   Expanded(
                     child: Divider(thickness: 2),
@@ -101,8 +98,8 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                             child: Text(
-                              FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
-                              style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                              FormatHelper.formatDateTimeOnlyToIST(contest?.contestStartTime),
+                              style: Theme.of(context).textTheme.tsMedium14.copyWith(
                                     color: AppColors.secondary,
                                   ),
                               textAlign: TextAlign.center,
@@ -129,8 +126,8 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                             child: Text(
-                              FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
-                              style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                              FormatHelper.formatDateTimeOnlyToIST(contest?.contestEndTime),
+                              style: Theme.of(context).textTheme.tsMedium14.copyWith(
                                     color: AppColors.secondary,
                                   ),
                               textAlign: TextAlign.center,

@@ -56,6 +56,7 @@ class LiveCollegeContest {
   String? lastModifiedOn;
   int? iV;
   num? payoutCapPercentage;
+  bool? featured;
 
   LiveCollegeContest({
     this.id,
@@ -86,6 +87,7 @@ class LiveCollegeContest {
     this.lastModifiedOn,
     this.iV,
     this.payoutCapPercentage,
+    this.featured,
   });
 
   LiveCollegeContest.fromJson(Map<String, dynamic> json) {
@@ -121,6 +123,7 @@ class LiveCollegeContest {
     createdOn = json['createdOn'];
     lastModifiedOn = json['lastModifiedOn'];
     iV = json['__v'];
+    featured = json['featured'];
     payoutCapPercentage = json['payoutCapPercentage'];
   }
 
@@ -158,6 +161,7 @@ class LiveCollegeContest {
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['__v'] = this.iV;
+    data['featured'] = this.featured;
     data['payoutCapPercentage'] = this.payoutCapPercentage;
     return data;
   }
