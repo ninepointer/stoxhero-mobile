@@ -46,17 +46,6 @@ class _CareerFormState extends State<CareerForm> {
                       style: AppStyles.tsGreyMedium16,
                     ),
                     SizedBox(height: 12),
-                    // CommonTextField(
-                    //   prefixIcon: Icon(Icons.school),
-                    //   controller: controller.collegeNameTextController,
-                    //   hintText: 'College Name',
-                    //   validator: (value) {
-                    //     if (value == null || value.isEmpty) {
-                    //       return 'Please enter your college name';
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
                     Autocomplete<CollegeData>(
                       displayStringForOption: (option) => option.collegeName ?? '-',
                       fieldViewBuilder: (
@@ -115,12 +104,12 @@ class _CareerFormState extends State<CareerForm> {
                           focusNode: fieldFocusNode,
                         );
                       },
-                      optionsBuilder: (TextEditingValue fruitTextEditingValue) {
-                        if (fruitTextEditingValue.text == '') {
+                      optionsBuilder: (TextEditingValue value) {
+                        if (value.text == '') {
                           return const Iterable<CollegeData>.empty();
                         }
                         return controller.collegeList.where((CollegeData data) {
-                          return data.collegeName!.contains(fruitTextEditingValue.text.toLowerCase());
+                          return data.collegeName!.contains(value.text.toLowerCase());
                         });
                       },
                       onSelected: (CollegeData value) {

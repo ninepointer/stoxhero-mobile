@@ -185,4 +185,13 @@ class AppUrls {
   static String contestStopLossExecutedOrder(String? id) => "$pendingOrder/todaysProcessed/$id/Daily%20Contest";
   static String contestStopLossPendingOrder(String? id) => "$pendingOrder/todaysPending/$id/Daily%20Contest";
   static String contestStopLossPendingCancelOrder(String? id) => "$apiURL/pendingorder/$id/Daily%20Contest";
+
+  static String internshipStopLossExecutedOrder(String? id) => "$pendingOrder/todaysProcessed/$id/Internship%20Trader";
+  static String internshipStopLossPendingOrder(String? id) => "$pendingOrder/todaysPending/$id/Internship%20Trader";
+  static String internshipStopLossPendingCancelOrder(String? id) => "$apiURL/pendingorder/$id/Internship%20Trader";
+
+  static String marginXStopLossExecutedOrder(String? id) => "$pendingOrder/todaysProcessed/$id/MarginX";
+  static String marginXStopLossPendingOrder(String? id) => "$pendingOrder/todaysPending/$id/MarginX";
+  static String marginXStopLossPendingCancelOrder(String? id) => "$apiURL/pendingorder/$id/MarginX";
+  static String marginXTodayOrders(String? id) => "$apiURL/marginxtrade/$id/my/todayorders";
 }

@@ -15,6 +15,7 @@ class HomeController extends BaseController<DashboardRepository> {
   bool get isLoadingStatus => isLoading.value;
 
   final selectedIndex = 0.obs;
+  num get walletAmount => Get.find<WalletController>().totalCashAmount.value;
 
   final userDashboard = DashboardTradeSummary().obs;
   final userDashboardReturnSummary = DashboardReturnSummary().obs;
@@ -34,6 +35,8 @@ class HomeController extends BaseController<DashboardRepository> {
     loadData();
     Get.find<ContestController>().getLiveContestList();
     Get.find<ContestController>().getUpComingContestList();
+    Get.find<CollegeContestController>().getLiveCollegeContestList();
+    Get.find<WalletController>().getWalletTransactionsList();
     // Get.find<TenxTradingController>().loadUserDetails();
     // Get.find<TenxTradingController>().getTenxTradingActiveSubs();
   }

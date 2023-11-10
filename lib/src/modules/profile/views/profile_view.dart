@@ -22,60 +22,29 @@ class ProfileView extends GetView<ProfileController> {
         ),
         child: Column(
           children: [
-            Stack(
-              children: [
-                Obx(
-                  () => Container(
-                    height: 80,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColors.grey.withOpacity(.25),
-                      ),
-                    ),
-                    child: ClipOval(
-                      child: controller.userDetails.value.profilePhoto == null
-                          ? Image.asset(
-                              AppImages.appLogo,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.network(
-                              controller.userDetails.value.profilePhoto?.url ?? '',
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+            Obx(
+              () => Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.grey.withOpacity(.25),
                   ),
                 ),
-                // Positioned(
-                //   right: 0,
-                //   bottom: 0,
-                //   child: GestureDetector(
-                //     onTap: () {
-                //       controller.filePicker(
-                //         KycDocumentType.profilePhoto,
-                //       );
-                //     },
-                //     child: Container(
-                //       width: 24,
-                //       height: 24,
-                //       decoration: BoxDecoration(
-                //         shape: BoxShape.circle,
-                //         color: AppColors.primary,
-                //       ),
-                //       child: Align(
-                //         alignment: Alignment.center,
-                //         child: Icon(
-                //           Icons.edit,
-                //           color: Colors.white,
-                //           size: 14,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
+                child: ClipOval(
+                  child: controller.userDetails.value.profilePhoto == null
+                      ? Image.asset(
+                          AppImages.appLogo,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          controller.userDetails.value.profilePhoto?.url ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
             ),
             SizedBox(height: 12),
             Text(

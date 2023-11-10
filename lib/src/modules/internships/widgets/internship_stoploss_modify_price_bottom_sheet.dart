@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class StoplossModifyPriceBottomSheet extends GetView<TenxTradingController> {
+class InternshipStoplossModifyPriceBottomSheet extends GetView<InternshipController> {
   final TradingInstrument stopLoss;
   final TransactionType type;
-  const StoplossModifyPriceBottomSheet({
+  const InternshipStoplossModifyPriceBottomSheet({
     Key? key,
     required this.stopLoss,
     required this.type,

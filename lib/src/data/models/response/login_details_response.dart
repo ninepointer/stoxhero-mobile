@@ -57,6 +57,7 @@ class LoginDetailsResponse {
   List<Referrals>? referrals;
   List<Subscription>? subscription;
   List<InternshipBatchList>? internshipBatch;
+  String? bankState;
   LoginDetailsResponse({
     this.aadhaarCardFrontImage,
     this.aadhaarCardBackImage,
@@ -116,6 +117,7 @@ class LoginDetailsResponse {
     this.referrals,
     this.subscription,
     this.internshipBatch,
+    this.bankState,
   });
 
   LoginDetailsResponse.fromJson(Map<String, dynamic> json) {
@@ -217,6 +219,7 @@ class LoginDetailsResponse {
         internshipBatch!.add(new InternshipBatchList.fromJson(v));
       });
     }
+    bankState = json['bankState'];
   }
 
   Map<String, dynamic> toJson() {
@@ -299,6 +302,7 @@ class LoginDetailsResponse {
     if (this.internshipBatch != null) {
       data['internshipBatch'] = this.internshipBatch!.map((v) => v.toJson()).toList();
     }
+    data['bankState'] = this.bankState;
     return data;
   }
 
@@ -360,6 +364,7 @@ class LoginDetailsResponse {
     List<ProfilePortfolio>? portfolio,
     List<Referrals>? referrals,
     List<InternshipBatchList>? internshipBatch,
+    String? bankState,
   }) {
     return LoginDetailsResponse(
       aadhaarCardFrontImage: aadhaarCardFrontImage ?? this.aadhaarCardFrontImage,
@@ -419,6 +424,7 @@ class LoginDetailsResponse {
       portfolio: portfolio ?? this.portfolio,
       referrals: referrals ?? this.referrals,
       internshipBatch: internshipBatch ?? this.internshipBatch,
+      bankState: bankState ?? this.bankState,
     );
   }
 }

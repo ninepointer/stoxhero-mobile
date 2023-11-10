@@ -57,16 +57,46 @@ class CollegeContestSearchSymbolView extends GetView<CollegeContestController> {
                       itemCount: controller.tradingInstruments.length,
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
-                        return CollegeContestSearchInstrumentsCard(
+                        void openBottomSheet(BuildContext context, TransactionType type) {
+                          FocusScope.of(context).unfocus();
+                          num lastPrice = controller.getInstrumentLastPrice(
+                            data.instrumentToken ?? 0,
+                            data.exchangeToken ?? 0,
+                          );
+                          controller.generateLotsList(type: data.name);
+                          var tradingIntrument = TradingInstrument(
+                            name: data.tradingsymbol,
+                            instrumentType: data.instrumentType,
+                            exchange: data.exchange,
+                            tradingsymbol: data.tradingsymbol,
+                            exchangeToken: data.exchangeToken,
+                            instrumentToken: data.instrumentToken,
+                            lastPrice: lastPrice,
+                          );
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: CollegeContestTransactionBottomSheet(
+                              type: type,
+                              tradingInstrument: tradingIntrument,
+                              marginRequired: controller.getMarginRequired(type, tradingIntrument),
+                            ),
+                          );
+                        }
+
+                        return TradingInstrumentSearchCard(
                           tradingInstrument: data,
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),
+                          buyOnTap: () => openBottomSheet(context, TransactionType.buy),
+                          sellOnTap: () => openBottomSheet(context, TransactionType.sell),
+                          removeOnTap: () => controller.removeInstrument(data.instrumentToken),
+                          addOnTap: () => controller.addInstrument(data),
                         );
                       },
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

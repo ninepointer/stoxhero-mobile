@@ -16,8 +16,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
   late HomeController controller;
   @override
   void initState() {
-    controller = Get.find<HomeController>();
     super.initState();
+    controller = Get.find<HomeController>();
   }
 
   String getUserFullName() {
