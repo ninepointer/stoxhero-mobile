@@ -202,7 +202,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           ),
                         ),
                   CommonTile(
-                    isLoading: controller.isPortfolioStateLoadingStatus,
+                    isLoading: controller.isOrderStateLoadingStatus,
                     label: 'My Orders',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
@@ -244,7 +244,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
                     value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
-                    valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                    valueColor: controller.getValueColor(
+                      controller.calculateTotalNetPNL(),
+                    ),
                   ),
                   PortfolioDetailCardTile(
                     label: 'Unrealised Profit & Loss',

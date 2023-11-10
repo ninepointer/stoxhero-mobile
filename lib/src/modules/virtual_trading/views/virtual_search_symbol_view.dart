@@ -60,12 +60,6 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                       padding: EdgeInsets.only(bottom: 100),
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
-                        // return VirtualSearchInstrumentsCard(
-                        //   tradingInstrument: data,
-                        //   isAdded: controller.tradingWatchlistIds.contains(
-                        //     data.instrumentToken ?? data.exchangeToken,
-                        //   ),
-                        // );
                         void openBottomSheet(BuildContext context, TransactionType type) {
                           FocusScope.of(context).unfocus();
                           num lastPrice = controller.getInstrumentLastPrice(
@@ -73,31 +67,21 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                             data.exchangeToken ?? 0,
                           );
                           controller.generateLotsList(type: data.name);
+                          var tradingIntrument = TradingInstrument(
+                            name: data.tradingsymbol,
+                            instrumentType: data.instrumentType,
+                            exchange: data.exchange,
+                            tradingsymbol: data.tradingsymbol,
+                            exchangeToken: data.exchangeToken,
+                            instrumentToken: data.instrumentToken,
+                            lastPrice: lastPrice,
+                          );
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: VirtualTransactionBottomSheet(
                               type: type,
-                              tradingInstrument: TradingInstrument(
-                                name: data.tradingsymbol,
-                                instrumentType: data.instrumentType,
-                                exchange: data.exchange,
-                                tradingsymbol: data.tradingsymbol,
-                                exchangeToken: data.exchangeToken,
-                                instrumentToken: data.instrumentToken,
-                                lastPrice: lastPrice,
-                              ),
-                              marginRequired: controller.getMarginRequired(
-                                type,
-                                TradingInstrument(
-                                  name: data.tradingsymbol,
-                                  instrumentType: data.instrumentType,
-                                  exchange: data.exchange,
-                                  tradingsymbol: data.tradingsymbol,
-                                  exchangeToken: data.exchangeToken,
-                                  instrumentToken: data.instrumentToken,
-                                  lastPrice: lastPrice,
-                                ),
-                              ),
+                              tradingInstrument: tradingIntrument,
+                              marginRequired: controller.getMarginRequired(type, tradingIntrument),
                             ),
                           );
                         }

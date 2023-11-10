@@ -665,7 +665,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       stopLoss: "",
       stopLossPrice: double.tryParse(stopLossPriceTextController.text),
       stopProfitPrice: double.tryParse(stopProfitPriceTextController.text),
-      price: limitPriceTextController.text,
+      price: double.tryParse(limitPriceTextController.text),
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
@@ -1215,10 +1215,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
               : 'SELL',
       quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
-      orderType: "MARKET",
+      orderType: selectedType.value,
       validity: "DAY",
       variety: "regular",
-      price: "",
+      price: limitPriceTextController.text,
       lastPrice: inst.lastPrice.toString(),
     );
 
@@ -1305,6 +1305,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       await getStopLossPendingOrder();
       await getContestPortfolio();
       await getStopLossExecutedOrder();
+      loadData();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingController> {
+class InternshipStoplossEditPriceBottomSheet extends GetView<InternshipController> {
   final StopLossPendingOrdersList stopLoss;
-  const VirtualStoplossEditPriceBottomSheet({
+  const InternshipStoplossEditPriceBottomSheet({
     Key? key,
     required this.stopLoss,
   }) : super(key: key);
@@ -80,6 +80,7 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
+                        // '',
                         stopLoss.symbol ?? '-',
                         style: AppStyles.tsSecondaryMedium16,
                       ),
@@ -90,6 +91,7 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                             stopLoss.exchangeInstrumentToken!,
                           ),
                         ),
+                        // '',
                         style: AppStyles.tsSecondaryMedium16,
                       ),
                     ],
@@ -127,7 +129,7 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                                               stopLoss.instrumentToken!,
                                               stopLoss.exchangeInstrumentToken!,
                                             )) {
-                                          return 'Stop Loss price should \nbe less than LTP.';
+                                          return 'StopLoss price should \nbe less than LTP.';
                                         }
                                       }
                                       return null;
@@ -150,7 +152,7 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                                                   stopLoss.instrumentToken!,
                                                   stopLoss.exchangeInstrumentToken!,
                                                 )) {
-                                              return 'Stop Profit price should \nbe greater than LTP.';
+                                              return 'StopProfit price should \nbe greater than LTP.';
                                             }
                                           }
                                           return null;

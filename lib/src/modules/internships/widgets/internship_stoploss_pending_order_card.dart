@@ -1,37 +1,34 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class VirtualStoplossPendingOrderCard extends GetView<VirtualTradingController> {
+class InternshipStoplossPendingOrderCard extends GetView<InternshipController> {
   final StopLossPendingOrdersList stopLoss;
-  const VirtualStoplossPendingOrderCard({
+  const InternshipStoplossPendingOrderCard({
     Key? key,
     required this.stopLoss,
   }) : super(key: key);
 
-  void openBottomSheet(BuildContext context) {
-    FocusScope.of(context).unfocus();
-    log(stopLoss.type.toString());
-    BottomSheetHelper.openBottomSheet(
-      context: context,
-      child: VirtualStoplossEditPriceBottomSheet(
-        stopLoss: StopLossPendingOrdersList(
-          id: stopLoss.id,
-          type: stopLoss.type,
-          symbol: stopLoss.symbol,
-          quantity: stopLoss.quantity,
-          buyOrSell: stopLoss.buyOrSell,
-          instrumentToken: stopLoss.instrumentToken,
-          exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
-          price: stopLoss.price,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    void openBottomSheet(BuildContext context) {
+      FocusScope.of(context).unfocus();
+      BottomSheetHelper.openBottomSheet(
+        context: context,
+        child: InternshipStoplossEditPriceBottomSheet(
+          stopLoss: StopLossPendingOrdersList(
+            id: stopLoss.id,
+            type: stopLoss.type,
+            symbol: stopLoss.symbol,
+            quantity: stopLoss.quantity,
+            buyOrSell: stopLoss.buyOrSell,
+            instrumentToken: stopLoss.instrumentToken,
+            exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
+            price: stopLoss.price,
+          ),
+        ),
+      );
+    }
+
     return Obx(
       () => CommonCard(
         hasBorder: false,

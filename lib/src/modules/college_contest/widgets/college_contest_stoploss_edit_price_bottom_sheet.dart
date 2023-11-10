@@ -115,6 +115,7 @@ class CollegeContestStoplossEditPriceBottomSheet extends GetView<CollegeContestC
                             ? (stopLoss.type == 'StopLoss')
                                 ? CommonTextField(
                                     hintText: 'StopLoss Price',
+                                    keyboardType: TextInputType.number,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                                     ],
@@ -128,7 +129,7 @@ class CollegeContestStoplossEditPriceBottomSheet extends GetView<CollegeContestC
                                               stopLoss.instrumentToken!,
                                               stopLoss.exchangeInstrumentToken!,
                                             )) {
-                                          return 'Stop Loss price should \nbe less than LTP.';
+                                          return 'StopLoss price should \nbe less than LTP.';
                                         }
                                       }
                                       return null;
@@ -137,6 +138,7 @@ class CollegeContestStoplossEditPriceBottomSheet extends GetView<CollegeContestC
                                 : (stopLoss.type == 'StopProfit')
                                     ? CommonTextField(
                                         hintText: 'StopProfit Price',
+                                        keyboardType: TextInputType.number,
                                         inputFormatters: [
                                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                                         ],
@@ -150,7 +152,7 @@ class CollegeContestStoplossEditPriceBottomSheet extends GetView<CollegeContestC
                                                   stopLoss.instrumentToken!,
                                                   stopLoss.exchangeInstrumentToken!,
                                                 )) {
-                                              return 'Stop Profit price should \nbe greater than LTP.';
+                                              return 'StopProfit price should \nbe greater than LTP.';
                                             }
                                           }
                                           return null;

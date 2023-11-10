@@ -11,6 +11,7 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   late HomeController controller;
   late ContestController contestController;
+  late CollegeContestController collegeContestController;
   late List<String> monthsList;
 
   String? selectedValue2 = '';
@@ -20,6 +21,7 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
     controller = Get.find<HomeController>();
     contestController = Get.find<ContestController>();
+    collegeContestController = Get.find<CollegeContestController>();
     DateTime now = DateTime.now();
     String currentMonth = DateFormat('MMMM yyyy').format(now);
     String previousMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
@@ -120,6 +122,25 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
+                  collegeContestController.liveCollegeContestList.isEmpty
+                      ? Container()
+                      : Obx(
+                          () => SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: collegeContestController.liveCollegeContestList.map((contest) {
+                                String userId = controller.userDetailsData.sId ?? '';
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: CollegeContestCard(
+                                    userId: userId,
+                                    contest: contest,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
                   contestController.liveContestList.isEmpty
                       ? Container()
                       : CommonTile(

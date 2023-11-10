@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class MarginXStoplossModifyPriceBottomSheet extends GetView<ContestController> {
+class MarginXStoplossModifyPriceBottomSheet extends GetView<MarginXController> {
   final TradingInstrument stopLoss;
   final TransactionType type;
   const MarginXStoplossModifyPriceBottomSheet({

@@ -2,12 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/base/base.dart';
-import 'package:stoxhero/src/data/data.dart';
-import 'package:stoxhero/src/data/models/request/withdrawal_request.dart';
-
-import '../../../core/core.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 class WalletBinding implements Bindings {
   @override
@@ -34,6 +29,7 @@ class WalletController extends BaseController<WalletRepository> {
   final totalCashAmount = RxNum(0);
   final walletTransactionsList = <WalletTransaction>[].obs;
   final withdrawalTransactionsList = <MyWithdrawalsList>[].obs;
+  final walletDetails = WalletDetails().obs;
   final amountTextController = TextEditingController();
   final amount = 0.obs;
 
@@ -68,6 +64,13 @@ class WalletController extends BaseController<WalletRepository> {
   Future loadData() async {
     getWalletTransactionsList();
     getMyWithdrawalsTransactionsList();
+  }
+
+  String getUserFullName() {
+    String firstName = walletDetails.value.userId?.firstName ?? '';
+    String lastName = walletDetails.value.userId?.lastName ?? '';
+    String fullName = '$firstName $lastName';
+    return fullName.capitalize!;
   }
 
   String getPaymentProductType(ProductType type) {
@@ -141,6 +144,7 @@ class WalletController extends BaseController<WalletRepository> {
         walletTransactionsList.forEach((element) {
           totalCashAmount.value += element.amount ?? 0;
         });
+        walletDetails(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

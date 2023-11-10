@@ -24,8 +24,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    controller = Get.find<HomeController>();
     super.initState();
+    controller = Get.find<HomeController>();
   }
 
   void _updateTab(int index) {
@@ -36,6 +36,7 @@ class _HomeViewState extends State<HomeView> {
         Get.find<HomeController>().loadData();
         Get.find<ContestController>().getLiveContestList();
         Get.find<ContestController>().getUpComingContestList();
+        Get.find<CollegeContestController>().getLiveCollegeContestList();
         break;
       case 1:
         Get.find<VirtualTradingController>().loadData();
@@ -80,15 +81,40 @@ class _HomeViewState extends State<HomeView> {
           ],
         ),
         actions: [
-          IconButton(
-            splashRadius: 24,
-            icon: Icon(Icons.account_balance_wallet_rounded),
-            onPressed: () {
-              final controller = Get.find<WalletController>();
-              controller.loadData();
-              controller.selectedTabBarIndex(0);
-              Get.toNamed(AppRoutes.wallet);
-            },
+          Obx(
+            () => GestureDetector(
+              onTap: () {
+                final controller = Get.find<WalletController>();
+                controller.loadData();
+                controller.selectedTabBarIndex(0);
+                Get.toNamed(AppRoutes.wallet);
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: AppColors.grey.withOpacity(.1),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.account_balance_wallet_rounded,
+                      color: AppColors.secondary,
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      FormatHelper.formatNumbers(
+                        Get.find<WalletController>().totalCashAmount.value,
+                      ),
+                      style: AppStyles.tsBlackMedium14.copyWith(
+                        color: AppColors.success,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
           IconButton(
             splashRadius: 24,
