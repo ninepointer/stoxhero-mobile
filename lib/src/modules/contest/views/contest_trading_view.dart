@@ -8,12 +8,11 @@ class ContestTradingView extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '${controller.liveContest.value.contestName ?? 'Contest'}',
-          style: Theme.of(context).textTheme.tsRegular16,
-          textAlign: TextAlign.center,
-        ),
-      ),
+          title: Text(
+        '${controller.liveFeatured.value.contestName ?? controller.liveContest.value.contestName ?? 'Contest'}',
+        style: Theme.of(context).textTheme.tsRegular16,
+        textAlign: TextAlign.center,
+      )),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,

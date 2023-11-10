@@ -134,7 +134,9 @@ class _WalletViewState extends State<WalletView> {
                             Expanded(
                               child: WalletCard(
                                 label: 'HeroCash',
-                                value: '₹0.00',
+                                value: FormatHelper.formatNumbers(
+                                  controller.calculateBonus(controller.walletTransactionsList),
+                                ),
                                 iconData: Icons.redeem_rounded,
                                 buttonLabel: 'Redeem',
                               ),
@@ -200,7 +202,19 @@ class _WalletViewState extends State<WalletView> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                   child: Text(
-                                    AppStrings.importantInfo,
+                                    '''1. Please ensure you have filled your bank details and completed your KYC before proceeding with your withdrawal.
+
+2. Your full name on StoxHero, Bank Account, Aadhaar Card and PAN Card should match.
+
+3. TDS has already been deducted from your net winnings.
+
+4. Transfer might take upto 24-48 working hours to reflect in your bank account.
+
+5. You can only make one withdrawal in a day.
+
+6. The minimum withdrawal amount is ${FormatHelper.formatNumbers(controller.readSetting.value.minWithdrawal, decimal: 0)}.
+
+7. The maximum withdrawal limit for a day is ${FormatHelper.formatNumbers(controller.readSetting.value.maxWithdrawal, decimal: 0)}''',
                                     style: Theme.of(context).textTheme.tsRegular14,
                                   ),
                                 ),

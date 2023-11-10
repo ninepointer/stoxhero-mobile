@@ -22,7 +22,9 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
               rank: controller.myRank.toString(),
               name: '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
               netPnL: controller.calculateTotalNetPNL().toString(),
-              reward: controller.calculatePayout().toString(),
+              reward: controller.liveContest.value.payoutType != "Reward"
+                  ? controller.calculatePayout().toString()
+                  : controller.calculateUserReward(controller.myRank.toString()).toString(),
             ),
             CommonTile(label: 'Leaderboard'),
             Expanded(
@@ -32,10 +34,13 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                 itemBuilder: (context, index) {
                   int rank = index + 1;
                   LiveContestLeaderboard user = controller.liveLeaderboardList[index];
+                  var reward = controller.liveContest.value.payoutType;
                   return CommonRankCard(
                     rank: rank.toString(),
                     name: user.userName ?? '',
-                    reward: controller.calculateUserPayout(user.npnl ?? 0).toString(),
+                    reward: reward != "Reward"
+                        ? controller.calculateUserPayout(user.npnl ?? 0).toString()
+                        : controller.calculateUserReward(rank.toString()).toString(),
                     netPnL: user.npnl?.toStringAsFixed(2) ?? '0',
                   );
                 },

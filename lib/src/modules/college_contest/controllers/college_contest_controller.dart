@@ -388,8 +388,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   bool checkIfPurchased(UpComingCollegeContest? contest) {
     bool isPurchased = false;
-    for (Participants? user in contest?.participants ?? []) {
-      if (user?.userId?.sId == userDetails.value.sId) {
+    for (UpcomingCollegeParticipants? user in contest?.participants ?? []) {
+      if (user?.userId?.id == userDetails.value.sId) {
         isPurchased = true;
       }
     }

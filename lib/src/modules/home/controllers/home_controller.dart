@@ -15,13 +15,10 @@ class HomeController extends BaseController<DashboardRepository> {
   bool get isLoadingStatus => isLoading.value;
 
   final selectedIndex = 0.obs;
-  num get walletAmount => Get.find<WalletController>().totalCashAmount.value;
 
   final userDashboard = DashboardTradeSummary().obs;
   final userDashboardReturnSummary = DashboardReturnSummary().obs;
   final dashboardCarouselList = <DashboardCarousel>[].obs;
-  final dashboardCarousel = DashboardCarousel().obs;
-
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
 
@@ -37,6 +34,7 @@ class HomeController extends BaseController<DashboardRepository> {
     Get.find<ContestController>().getUpComingContestList();
     Get.find<CollegeContestController>().getLiveCollegeContestList();
     Get.find<WalletController>().getWalletTransactionsList();
+    Get.find<ContestController>().getFeaturedContest();
     // Get.find<TenxTradingController>().loadUserDetails();
     // Get.find<TenxTradingController>().getTenxTradingActiveSubs();
   }
@@ -67,6 +65,11 @@ class HomeController extends BaseController<DashboardRepository> {
       Get.find<WalletController>().loadData();
       Get.toNamed(AppRoutes.wallet);
     }
+  }
+
+  String getPaidCapAmount(num fees, num cap) {
+    num percentage = (fees * cap) / 100;
+    return FormatHelper.formatNumbers(percentage, showDecimal: false);
   }
 
   String getStockIndexName(int instId) {

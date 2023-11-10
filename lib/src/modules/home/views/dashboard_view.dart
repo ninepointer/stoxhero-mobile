@@ -122,6 +122,55 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
+                  // CommonTile(
+                  //   label: 'Featured Contests',
+                  //   showSeeAllButton: true,
+                  //   onPressed: () {
+                  //     contestController.loadData();
+                  //     contestController.selectedTabBarIndex(0);
+                  //     Get.to(() => ContestListView());
+                  //   },
+                  //   margin: EdgeInsets.only(bottom: 0, top: 8),
+                  // ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        contestController.liveFeaturedContest.isEmpty
+                            ? Container()
+                            : Obx(
+                                () => Row(
+                                  children: contestController.liveFeaturedContest.map((contest) {
+                                    String userId = controller.userDetailsData.sId ?? '';
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: LiveFeaturedCard(
+                                        userId: userId,
+                                        liveFeatured: contest,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                        contestController.upcomingFeaturedContest.isEmpty
+                            ? Container()
+                            : Obx(
+                                () => Row(
+                                  children: contestController.upcomingFeaturedContest.map((contest) {
+                                    String userId = controller.userDetailsData.sId ?? '';
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: UpcomingFeaturedCard(
+                                        userId: userId,
+                                        upcomingFeatured: contest,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
                   collegeContestController.liveCollegeContestList.isEmpty
                       ? Container()
                       : Obx(
@@ -173,41 +222,43 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ),
                         ),
-                  contestController.upComingContestList.isEmpty
-                      ? Container()
-                      : CommonTile(
-                          label: 'Upcoming Contests',
-                          showSeeAllButton: true,
-                          onPressed: () {
-                            contestController.loadData();
-                            contestController.selectedTabBarIndex(1);
-                            Get.to(() => ContestListView());
-                          },
-                          margin: EdgeInsets.only(bottom: 0, top: 8),
-                        ),
-                  contestController.upComingContestList.isEmpty
-                      ? Container()
-                      : Obx(
-                          () => SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: contestController.upComingContestList.map((contest) {
-                                bool isVisible = contestController.isUpcomingContestVisible(contest);
-                                String userId = controller.userDetailsData.sId ?? '';
-                                return isVisible
-                                    ? SizedBox()
-                                    : Container(
-                                        width: MediaQuery.of(context).size.width,
-                                        child: UpComingContestCard(
-                                          userId: userId,
-                                          contest: contest,
-                                          margin: EdgeInsets.all(8).copyWith(bottom: 0),
-                                        ),
-                                      );
-                              }).toList(),
+                  if (contestController.liveContestList.isEmpty)
+                    contestController.upComingContestList.isEmpty
+                        ? Container()
+                        : CommonTile(
+                            label: 'Upcoming Contests',
+                            showSeeAllButton: true,
+                            onPressed: () {
+                              contestController.loadData();
+                              contestController.selectedTabBarIndex(1);
+                              Get.to(() => ContestListView());
+                            },
+                            margin: EdgeInsets.only(bottom: 0, top: 8),
+                          ),
+                  if (contestController.liveContestList.isEmpty)
+                    contestController.upComingContestList.isEmpty
+                        ? Container()
+                        : Obx(
+                            () => SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: contestController.upComingContestList.map((contest) {
+                                  bool isVisible = contestController.isUpcomingContestVisible(contest);
+                                  String userId = controller.userDetailsData.sId ?? '';
+                                  return isVisible
+                                      ? SizedBox()
+                                      : Container(
+                                          width: MediaQuery.of(context).size.width,
+                                          child: UpComingContestCard(
+                                            userId: userId,
+                                            contest: contest,
+                                            margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                                          ),
+                                        );
+                                }).toList(),
+                              ),
                             ),
                           ),
-                        ),
                   SizedBox(height: 8),
                   CommonTile(
                     label: 'Return Summary',

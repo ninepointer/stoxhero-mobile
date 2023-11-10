@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../../data/data.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class LiveContestCard extends GetView<ContestController> {
   final String userId;
@@ -29,16 +26,32 @@ class LiveContestCard extends GetView<ContestController> {
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  contest?.contestName ?? '-',
-                  style: AppStyles.tsSecondaryMedium14,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Text(
+                    contest?.contestName ?? '-',
+                    style: AppStyles.tsSecondaryMedium14,
+                  ),
                 ),
               ),
+              Visibility(
+                visible: contest?.featured == true,
+                child: Container(
+                  padding: EdgeInsets.all(18),
+                  foregroundDecoration: CommonTriangleCard(
+                    badgeColor: AppColors.success,
+                    badgeSize: 62,
+                    textSpan: TextSpan(
+                      text: 'Featured',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -158,23 +171,40 @@ class LiveContestCard extends GetView<ContestController> {
                         'Reward',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            '${contest?.payoutPercentage}% of the Net P&L',
-                            style: Theme.of(context).textTheme.tsMedium12,
-                          ),
-                          if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
-                            Text(
-                              ' (Upto ${controller.getPaidCapAmount(
-                                contest?.entryFee == 0
-                                    ? contest?.portfolio?.portfolioValue ?? 0
-                                    : contest?.entryFee ?? 0,
-                                contest?.payoutCapPercentage ?? 0,
-                              )})',
-                              style: Theme.of(context).textTheme.tsMedium12,
-                            ),
-                        ],
+                      GestureDetector(
+                        onTap: () {
+                          if (contest?.payoutType == 'Reward')
+                            BottomSheetHelper.openBottomSheet(
+                              context: context,
+                              child: RewardTableBottomSheet(
+                                liveContest: contest,
+                              ),
+                            );
+                        },
+                        child: Row(
+                          children: [
+                            if (contest?.payoutType == 'Reward')
+                              Text(
+                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}. Click to know more.',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                              )
+                            else
+                              Text(
+                                '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                              ),
+                            if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                              Text(
+                                ' (Upto ${controller.getPaidCapAmount(
+                                  contest?.entryFee == 0
+                                      ? contest?.portfolio?.portfolioValue ?? 0
+                                      : contest?.entryFee ?? 0,
+                                  contest?.payoutCapPercentage ?? 0,
+                                )})',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                              ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

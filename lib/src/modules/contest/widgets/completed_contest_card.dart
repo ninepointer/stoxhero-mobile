@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/data/data.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+import '../../../app/app.dart';
 
-import '../../../core/core.dart';
-
-class CompletedContestCard extends StatelessWidget {
+class CompletedContestCard extends GetView<ContestController> {
   final String? id;
   final CompletedContest? contest;
   final CompletedContestPnl? completedContestPnl;
@@ -18,22 +14,37 @@ class CompletedContestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ContestController>();
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  contest?.contestName ?? '',
-                  style: AppStyles.tsSecondaryMedium14,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Text(
+                    contest?.contestName ?? '-',
+                    style: AppStyles.tsSecondaryMedium14,
+                  ),
                 ),
               ),
+              Visibility(
+                visible: contest?.featured == true,
+                child: Container(
+                  padding: EdgeInsets.all(18),
+                  foregroundDecoration: CommonTriangleCard(
+                    badgeColor: AppColors.success,
+                    badgeSize: 62,
+                    textSpan: TextSpan(
+                      text: 'Featured',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

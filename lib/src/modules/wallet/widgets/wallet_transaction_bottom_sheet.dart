@@ -41,7 +41,7 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
               ),
               SizedBox(height: 16),
               Text(
-                "KYC required for withdrawals.\nDaily limit: ₹200 to ₹1000",
+                "KYC required for withdrawals.\nDaily limit: ${FormatHelper.formatNumbers(controller.readSetting.value.minWithdrawal, decimal: 0)} to ${FormatHelper.formatNumbers(controller.readSetting.value.maxWithdrawal, decimal: 0)}",
                 style: Theme.of(context).textTheme.tsRegular16,
                 textAlign: TextAlign.center,
               ),
@@ -101,6 +101,7 @@ class WalletTransactionBottomSheet extends GetView<WalletController> {
                   ),
                 ],
               ),
+              SizedBox(height: 24),
             ],
           ),
         ),

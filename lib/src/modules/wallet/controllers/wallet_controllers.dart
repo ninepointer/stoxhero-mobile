@@ -31,6 +31,7 @@ class WalletController extends BaseController<WalletRepository> {
   final withdrawalTransactionsList = <MyWithdrawalsList>[].obs;
   final walletDetails = WalletDetails().obs;
   final amountTextController = TextEditingController();
+  final readSetting = ReadSettingResponse().obs;
   final amount = 0.obs;
 
   final selectedTabBarIndex = 0.obs;
@@ -64,6 +65,7 @@ class WalletController extends BaseController<WalletRepository> {
   Future loadData() async {
     getWalletTransactionsList();
     getMyWithdrawalsTransactionsList();
+    getReadSetting();
   }
 
   String getUserFullName() {
@@ -71,6 +73,17 @@ class WalletController extends BaseController<WalletRepository> {
     String lastName = walletDetails.value.userId?.lastName ?? '';
     String fullName = '$firstName $lastName';
     return fullName.capitalize!;
+  }
+
+  num calculateBonus(List<WalletTransaction> transactions) {
+    num bonus = 0;
+
+    for (var transaction in transactions) {
+      if (transaction.transactionType == 'Bonus') {
+        bonus += transaction.amount ?? 0;
+      }
+    }
+    return bonus;
   }
 
   String getPaymentProductType(ProductType type) {
@@ -286,5 +299,17 @@ class WalletController extends BaseController<WalletRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     return false;
+  }
+
+  Future getReadSetting() async {
+    isRecentLoading(true);
+    try {
+      final RepoResponse<ReadSettingResponse> response = await repository.readSetting();
+      readSetting(response.data);
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isRecentLoading(false);
   }
 }

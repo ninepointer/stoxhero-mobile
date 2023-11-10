@@ -12,6 +12,9 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
   @override
   Widget build(BuildContext context) {
     controller.quanitityTextController.text = stopLoss.quantity.toString();
+    controller.limitPriceTextController.text = stopLoss.price.toString();
+    controller.stopProfitPriceTextController.text = stopLoss.price.toString();
+    controller.stopLossPriceTextController.text = stopLoss.price.toString();
     return Obx(
       () => Wrap(
         children: [
@@ -31,9 +34,9 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                   GestureDetector(
                     onTap: () {
                       Get.back();
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
-                      controller.limitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
+                      // controller.limitPriceTextController.clear();
                     },
                     child: Column(
                       children: [
@@ -248,9 +251,9 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                           stopLoss.type,
                         );
                       }
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
-                      controller.limitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
+                      // controller.limitPriceTextController.clear();
                     },
                   ),
                   SizedBox(height: 36),
