@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../core.dart';
 
@@ -107,6 +108,16 @@ class AppTheme {
 
   static ThemeData themeData(BuildContext context) {
     var isDarkMode = Get.isDarkMode;
+  // Assuming ThemeService is initialized and available via dependency injection
+    ThemeService _themeService = Get.find<ThemeService>();
+
+    // Retrieve the system's theme mode only if there's no theme key stored
+    if (!GetStorage().hasData('isDarkMode')) {
+      isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    } else {
+      isDarkMode = _themeService._loadThemeFromBox(); // Use the existing method to load the stored theme
+    }
+
     return ThemeData(
       fontFamily: fontFamily,
       brightness: Brightness.dark,
@@ -176,10 +187,22 @@ class ThemeService {
   final _box = GetStorage();
   final _key = 'isDarkMode';
 
-  ThemeMode get theme => _loadThemeFromBox() ? ThemeMode.dark : ThemeMode.light;
+  ThemeMode get systemTheme {
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    return brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
+  }
 
-  bool _loadThemeFromBox() => _box.read(_key) ?? false;
-  _saveThemeToBox(bool isDarkMode) => _box.write(_key, isDarkMode);
+  // This function now uses the system theme as a default if there's no stored key
+  ThemeMode get theme {
+    if (_box.hasData(_key)) {
+      return _loadThemeFromBox() ? ThemeMode.dark : ThemeMode.light;
+    } else {
+      return systemTheme;
+    }
+  }
+
+  bool _loadThemeFromBox() => _box.read(_key) ?? false; // No change here
+  _saveThemeToBox(bool isDarkMode) => _box.write(_key, isDarkMode); // No change here
 
   void switchTheme() {
     Get.changeThemeMode(_loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
