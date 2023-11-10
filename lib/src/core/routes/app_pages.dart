@@ -169,10 +169,5 @@ class AppPages {
       page: () => InternshipSearchSymbolView(),
       binding: InternshipBinding(),
     ),
-    GetPage(
-      name: AppRoutes.payment,
-      page: () => PaymentView(),
-      binding: WalletBinding(),
-    ),
   ];
 }

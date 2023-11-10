@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stoxhero/main.dart';
-import '../../app/app.dart';
 import 'dart:convert';
 import 'dart:math' as math;
 
+import '../../app/app.dart';
 import 'package:crypto/crypto.dart';
 import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
@@ -41,7 +40,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   String saltIndex = "1";
   String apiEndpoint = "/pg/v1/pay";
   String environment = "PRODUCTION";
-  String appId = isProd ? "63dff75c930b42a9af0f216bb6af6e16" : "42cfbc6993624af5b061665f58797533";
+  String appId = "63dff75c930b42a9af0f216bb6af6e16";
   String saltKey = "92333ad2-4277-4e69-86f1-b86a83161b74";
   String merchantId = "STOXONLINE";
 
@@ -86,6 +85,9 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       handleError(error);
       return <dynamic>{};
     });
+
+    String signature = await PhonePePaymentSdk.getPackageSignatureForAndroid() ?? '';
+    print('Signature : $signature');
   }
 
   String generateUniqueTransactionId() {

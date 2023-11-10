@@ -140,91 +140,93 @@ class LiveContestCard extends GetView<ContestController> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'No. of Seats left',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          controller
-                              .calculateSeatsLeft(
-                                contest?.maxParticipants ?? 0,
-                                contest?.participants?.length ?? 0,
-                              )
-                              .toString(),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
-                    ),
-                  ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        AppImages.contestTrophy,
-                        width: 36,
-                      ),
                       Text(
-                        'Reward',
+                        'No. of Seats left',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          if (contest?.payoutType == 'Reward')
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: RewardTableBottomSheet(
-                                liveContest: contest,
-                              ),
-                            );
-                        },
-                        child: Row(
-                          children: [
-                            if (contest?.payoutType == 'Reward')
-                              Text(
-                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}. Click to know more.',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              )
-                            else
-                              Text(
-                                '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                            if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
-                              Text(
-                                ' (Upto ${controller.getPaidCapAmount(
-                                  contest?.entryFee == 0
-                                      ? contest?.portfolio?.portfolioValue ?? 0
-                                      : contest?.entryFee ?? 0,
-                                  contest?.payoutCapPercentage ?? 0,
-                                )})',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                          ],
-                        ),
+                      SizedBox(height: 2),
+                      Text(
+                        controller
+                            .calculateSeatsLeft(
+                              contest?.maxParticipants ?? 0,
+                              contest?.participants?.length ?? 0,
+                            )
+                            .toString(),
+                        style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
                   ),
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          'Remaining Time',
-                          style: AppStyles.tsGreyMedium12,
-                          textAlign: TextAlign.end,
+                        Image.asset(
+                          AppImages.contestTrophy,
+                          width: 36,
                         ),
-                        SizedBox(height: 2),
                         Text(
-                          'Started',
-                          style: Theme.of(context).textTheme.tsMedium12,
-                          textAlign: TextAlign.end,
+                          'Reward',
+                          style: AppStyles.tsGreyMedium12,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (contest?.payoutType == 'Reward')
+                              BottomSheetHelper.openBottomSheet(
+                                context: context,
+                                child: RewardTableBottomSheet(
+                                  liveContest: contest,
+                                ),
+                              );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (contest?.payoutType == 'Reward') ...[
+                                Text(
+                                  'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},\nClick to know more.',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                              if (contest?.payoutType != 'Reward') ...[
+                                Text(
+                                  '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                ),
+                                if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                                  Text(
+                                    ' (Upto ${controller.getPaidCapAmount(
+                                      contest?.entryFee == 0
+                                          ? contest?.portfolio?.portfolioValue ?? 0
+                                          : contest?.entryFee ?? 0,
+                                      contest?.payoutCapPercentage ?? 0,
+                                    )})',
+                                    style: Theme.of(context).textTheme.tsMedium12,
+                                  ),
+                              ]
+                            ],
+                          ),
                         ),
                       ],
                     ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Remaining Time',
+                        style: AppStyles.tsGreyMedium12,
+                        textAlign: TextAlign.end,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Started',
+                        style: Theme.of(context).textTheme.tsMedium12,
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
                   ),
                 ],
               ),

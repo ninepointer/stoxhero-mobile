@@ -107,7 +107,9 @@ class ContestTradingView extends GetView<ContestController> {
                     rank: controller.myRank.toString(),
                     name: '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
                     netPnL: controller.calculateTotalNetPNL().toString(),
-                    reward: controller.calculatePayout().toString(),
+                    reward: controller.liveContest.value.payoutType == 'Reward'
+                        ? controller.calculateUserReward(controller.myRank.toString()).toString()
+                        : controller.calculatePayout().toString(),
                   ),
                   if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
                   if (controller.contestPositionsList.isNotEmpty)

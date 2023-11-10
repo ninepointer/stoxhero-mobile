@@ -38,9 +38,9 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                   return CommonRankCard(
                     rank: rank.toString(),
                     name: user.userName ?? '',
-                    reward: reward != "Reward"
-                        ? controller.calculateUserPayout(user.npnl ?? 0).toString()
-                        : controller.calculateUserReward(rank.toString()).toString(),
+                    reward: reward == "Reward"
+                        ? controller.calculateUserReward(rank.toString()).toString()
+                        : controller.calculateUserPayout(user.npnl ?? 0).toString(),
                     netPnL: user.npnl?.toStringAsFixed(2) ?? '0',
                   );
                 },
