@@ -29,58 +29,56 @@ class RewardTableBottomSheet extends StatelessWidget {
             SizedBox(height: 16),
             if (liveContest != null || upcomingContest != null)
               Table(
-                border: TableBorder.all(),
+                border: TableBorder.all(
+                  color: AppColors.grey.shade50,
+                ),
                 children: [
                   TableRow(
                     children: [
                       TableCell(
-                        child: Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          color: AppColors.grey.withOpacity(.1),
+                          alignment: Alignment.center,
                           child: Text(
-                            'Rank Start',
-                            style: Theme.of(context).textTheme.tsMedium12,
+                            'Rank',
+                            style: Theme.of(context).textTheme.tsPrimaryMedium14,
                           ),
                         ),
                       ),
                       TableCell(
-                        child: Center(
-                          child: Text(
-                            'Rank End',
-                            style: Theme.of(context).textTheme.tsMedium12,
-                          ),
-                        ),
-                      ),
-                      TableCell(
-                        child: Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          color: AppColors.grey.withOpacity(.1),
+                          alignment: Alignment.center,
                           child: Text(
                             'Prize',
-                            style: Theme.of(context).textTheme.tsMedium12,
+                            style: Theme.of(context).textTheme.tsPrimaryMedium14,
                           ),
                         ),
                       ),
                     ],
                   ),
                   if (liveContest != null)
-                    for (var reward in liveContest!.rewards ?? [])
+                    for (Rewards reward in liveContest!.rewards ?? [])
                       TableRow(
                         children: [
                           TableCell(
-                            child: Center(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              alignment: Alignment.center,
                               child: Text(
-                                '${reward.rankStart}',
+                                reward.rankStart == reward.rankEnd
+                                    ? '${reward.rankStart}'
+                                    : '${reward.rankStart}-${reward.rankEnd}',
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
                             ),
                           ),
                           TableCell(
-                            child: Center(
-                              child: Text(
-                                '${reward.rankEnd}',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Center(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              alignment: Alignment.center,
                               child: Text(
                                 '${reward.prize}',
                                 style: Theme.of(context).textTheme.tsMedium12,
@@ -94,15 +92,9 @@ class RewardTableBottomSheet extends StatelessWidget {
                       TableRow(
                         children: [
                           TableCell(
-                            child: Center(
-                              child: Text(
-                                '${reward.rankStart}',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Center(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              alignment: Alignment.center,
                               child: Text(
                                 '${reward.rankEnd}',
                                 style: Theme.of(context).textTheme.tsMedium12,
@@ -110,7 +102,9 @@ class RewardTableBottomSheet extends StatelessWidget {
                             ),
                           ),
                           TableCell(
-                            child: Center(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              alignment: Alignment.center,
                               child: Text(
                                 '${reward.prize}',
                                 style: Theme.of(context).textTheme.tsMedium12,

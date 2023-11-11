@@ -204,89 +204,89 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'No. of Seats left',
-                            style: AppStyles.tsGreyMedium12,
-                          ),
-                          SizedBox(height: 2),
-                          Text(
-                            controller
-                                .calculateSeatsLeft(
-                                  widget.contest?.maxParticipants ?? 0,
-                                  widget.contest?.participants?.length ?? 0,
-                                )
-                                .toString(),
-                            style: Theme.of(context).textTheme.tsMedium12,
-                          ),
-                        ],
-                      ),
-                    ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        getContestImage(),
                         Text(
-                          'Reward',
+                          'No. of Seats left',
                           style: AppStyles.tsGreyMedium12,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            if (widget.contest?.payoutType == 'Reward')
-                              BottomSheetHelper.openBottomSheet(
-                                context: context,
-                                child: RewardTableBottomSheet(
-                                  upcomingContest: widget.contest,
-                                ),
-                              );
-                          },
-                          child: Row(
-                            children: [
-                              if (widget.contest?.payoutType == 'Reward')
-                                Text(
-                                  'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}. Click to know more.',
-                                  style: Theme.of(context).textTheme.tsMedium12,
-                                )
-                              else
-                                Text(
-                                  '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L',
-                                  style: Theme.of(context).textTheme.tsMedium12,
-                                ),
-                              if (widget.contest?.payoutCapPercentage != null &&
-                                  widget.contest?.payoutCapPercentage != 0)
-                                Text(
-                                  ' (Upto ${controller.getPaidCapAmount(
-                                    widget.contest?.entryFee == 0
-                                        ? widget.contest?.portfolio?.portfolioValue ?? 0
-                                        : widget.contest?.entryFee ?? 0,
-                                    widget.contest?.payoutCapPercentage ?? 0,
-                                  )})',
-                                  style: Theme.of(context).textTheme.tsMedium12,
-                                ),
-                            ],
-                          ),
+                        SizedBox(height: 2),
+                        Text(
+                          controller
+                              .calculateSeatsLeft(
+                                widget.contest?.maxParticipants ?? 0,
+                                widget.contest?.participants?.length ?? 0,
+                              )
+                              .toString(),
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          getContestImage(),
                           Text(
-                            'Remaining Time',
+                            'Reward',
                             style: AppStyles.tsGreyMedium12,
-                            textAlign: TextAlign.end,
                           ),
-                          SizedBox(height: 2),
-                          Text(
-                            '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
-                            style: Theme.of(context).textTheme.tsMedium12,
-                            textAlign: TextAlign.end,
+                          GestureDetector(
+                            onTap: () {
+                              if (widget.contest?.payoutType == 'Reward')
+                                BottomSheetHelper.openBottomSheet(
+                                  context: context,
+                                  child: RewardTableBottomSheet(
+                                    upcomingContest: widget.contest,
+                                  ),
+                                );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (widget.contest?.payoutType == 'Reward')
+                                  Text(
+                                    'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}.\nClick to know more.',
+                                    style: Theme.of(context).textTheme.tsMedium12,
+                                    textAlign: TextAlign.center,
+                                  )
+                                else
+                                  Text(
+                                    '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L',
+                                    style: Theme.of(context).textTheme.tsMedium12,
+                                  ),
+                                if (widget.contest?.payoutCapPercentage != null &&
+                                    widget.contest?.payoutCapPercentage != 0)
+                                  Text(
+                                    ' (Upto ${controller.getPaidCapAmount(
+                                      widget.contest?.entryFee == 0
+                                          ? widget.contest?.portfolio?.portfolioValue ?? 0
+                                          : widget.contest?.entryFee ?? 0,
+                                      widget.contest?.payoutCapPercentage ?? 0,
+                                    )})',
+                                    style: Theme.of(context).textTheme.tsMedium12,
+                                  ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Remaining Time',
+                          style: AppStyles.tsGreyMedium12,
+                          textAlign: TextAlign.end,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                          style: Theme.of(context).textTheme.tsMedium12,
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -379,9 +379,6 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         controller.getNotified();
                         SnackbarHelper.showSnackbar(
                             'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the contest starts');
-                        // if (isUserInterestedId) {
-                        //   SnackbarHelper.showSnackbar('Already interested in ${widget.contest?.contestName}');
-                        // } else {}
                       },
                       child: Container(
                         alignment: Alignment.center,
