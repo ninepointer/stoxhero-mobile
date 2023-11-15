@@ -128,156 +128,189 @@ class CompletedContestCard extends GetView<ContestController> {
         Divider(thickness: 1, height: 0),
         SizedBox(height: 8),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Started On',
-                      style: AppStyles.tsGreyMedium12,
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
-                      style: Theme.of(context).textTheme.tsMedium12,
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  Image.asset(
-                    AppImages.contestTrophy,
-                    width: 40,
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    'Reward',
-                    style: AppStyles.tsGreyMedium12,
-                  ),
-                  Text(
-                    '${contest?.payoutPercentage}% of the Net P&L',
-                    style: Theme.of(context).textTheme.tsMedium12,
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Ended On',
-                      style: AppStyles.tsGreyMedium12,
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
-                      style: Theme.of(context).textTheme.tsMedium12,
-                      textAlign: TextAlign.end,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Stack(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Entry Fee',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        contest?.entryFee == 0
-                            ? 'Free'
-                            : FormatHelper.formatNumbers(
-                                contest?.entryFee,
-                                decimal: 0,
-                              ),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Virtual Margin Money',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatNumbers(
-                          completedContestPnl?.portfolioValue,
-                          decimal: 0,
-                        ),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
+                  Positioned(
+                    left: 0,
+                    top: 0,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Net P&L (Profit & Loss)',
+                          'No. of Seats left',
                           style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
-                          FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                                color: (completedContestPnl?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
-                              ),
+                          controller
+                              .calculateSeatsLeft(
+                                contest?.maxParticipants ?? 0,
+                                contest?.participants?.length ?? 0,
+                              )
+                              .toString(),
+                          style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
                   ),
-                  Expanded(
+                  Column(
+                    children: [
+                      Image.asset(
+                        AppImages.contestTrophy,
+                        width: 36,
+                      ),
+                      Text(
+                        'Reward',
+                        style: AppStyles.tsGreyMedium12,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (contest?.payoutType == 'Reward')
+                            BottomSheetHelper.openBottomSheet(
+                              context: context,
+                              child: RewardTableBottomSheet(
+                                  // liveContest: contest,
+                                  ),
+                            );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (contest?.payoutType == 'Reward') ...[
+                              Text(
+                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},Click to know more.',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                            if (contest?.payoutType != 'Reward') ...[
+                              Text(
+                                '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                              ),
+                            ]
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Payout',
+                          'Remaining Time',
                           style: AppStyles.tsGreyMedium12,
+                          textAlign: TextAlign.end,
                         ),
                         SizedBox(height: 2),
                         Text(
-                          FormatHelper.formatNumbers(
-                            (completedContestPnl?.payoutAmount ?? 0) >= 0 ? completedContestPnl?.payoutAmount : 0,
-                          ),
-                          style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                                color: (completedContestPnl?.payoutAmount ?? 0) >= 0
-                                    ? AppColors.success
-                                    : AppColors.danger,
-                              ),
-                        )
+                          'Started',
+                          style: Theme.of(context).textTheme.tsMedium12,
+                          textAlign: TextAlign.end,
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Entry Fee',
+                            style: AppStyles.tsGreyMedium12,
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            contest?.entryFee == 0
+                                ? 'Free'
+                                : FormatHelper.formatNumbers(
+                                    contest?.entryFee,
+                                    decimal: 0,
+                                  ),
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Virtual Margin Money',
+                            style: AppStyles.tsGreyMedium12,
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            FormatHelper.formatNumbers(
+                              completedContestPnl?.portfolioValue,
+                              decimal: 0,
+                            ),
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Net P&L (Profit & Loss)',
+                              style: AppStyles.tsGreyMedium12,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0),
+                              style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                                    color: (completedContestPnl?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Payout',
+                              style: AppStyles.tsGreyMedium12,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              FormatHelper.formatNumbers(
+                                (completedContestPnl?.payoutAmount ?? 0) >= 0 ? completedContestPnl?.payoutAmount : 0,
+                              ),
+                              style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                                    color: (completedContestPnl?.payoutAmount ?? 0) >= 0
+                                        ? AppColors.success
+                                        : AppColors.danger,
+                                  ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                ],
+              ),
             ],
           ),
         ),

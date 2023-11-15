@@ -201,60 +201,66 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Stack(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'No. of Seats left',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          controller
-                              .calculateSeatsLeft(
-                                widget.contest?.maxParticipants ?? 0,
-                                widget.contest?.participants?.length ?? 0,
-                              )
-                              .toString(),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
-                    ),
-                    Expanded(
+                    Positioned(
+                      left: 0,
+                      top: 0,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          getContestImage(),
                           Text(
-                            'Reward',
+                            'No. of Seats left',
                             style: AppStyles.tsGreyMedium12,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              if (widget.contest?.payoutType == 'Reward')
-                                BottomSheetHelper.openBottomSheet(
-                                  context: context,
-                                  child: RewardTableBottomSheet(
-                                    upcomingContest: widget.contest,
-                                  ),
-                                );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (widget.contest?.payoutType == 'Reward')
-                                  Text(
-                                    'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}.\nClick to know more.',
-                                    style: Theme.of(context).textTheme.tsMedium12,
-                                    textAlign: TextAlign.center,
-                                  )
-                                else
-                                  Text(
-                                    '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L',
-                                    style: Theme.of(context).textTheme.tsMedium12,
-                                  ),
+                          SizedBox(height: 2),
+                          Text(
+                            controller
+                                .calculateSeatsLeft(
+                                  widget.contest?.maxParticipants ?? 0,
+                                  widget.contest?.participants?.length ?? 0,
+                                )
+                                .toString(),
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Image.asset(
+                          AppImages.contestTrophy,
+                          width: 36,
+                        ),
+                        Text(
+                          'Reward',
+                          style: AppStyles.tsGreyMedium12,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (widget.contest?.payoutType == 'Reward')
+                              BottomSheetHelper.openBottomSheet(
+                                context: context,
+                                child: RewardTableBottomSheet(
+                                  upcomingContest: widget.contest,
+                                ),
+                              );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (widget.contest?.payoutType == 'Reward') ...[
+                                Text(
+                                  'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)},Click to know more.',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                              if (widget.contest?.payoutType != 'Reward') ...[
+                                Text(
+                                  '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                ),
                                 if (widget.contest?.payoutCapPercentage != null &&
                                     widget.contest?.payoutCapPercentage != 0)
                                   Text(
@@ -266,27 +272,31 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                     )})',
                                     style: Theme.of(context).textTheme.tsMedium12,
                                   ),
-                              ],
-                            ),
+                              ]
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Remaining Time',
+                            style: AppStyles.tsGreyMedium12,
+                            textAlign: TextAlign.end,
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                            style: Theme.of(context).textTheme.tsMedium12,
+                            textAlign: TextAlign.end,
                           ),
                         ],
                       ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Remaining Time',
-                          style: AppStyles.tsGreyMedium12,
-                          textAlign: TextAlign.end,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
-                          style: Theme.of(context).textTheme.tsMedium12,
-                          textAlign: TextAlign.end,
-                        ),
-                      ],
                     ),
                   ],
                 ),

@@ -3,11 +3,7 @@
 //   String? message;
 //   List<CompletedContest>? data;
 
-//   CompletedContestListResponse({
-//     this.status,
-//     this.message,
-//     this.data,
-//   });
+//   CompletedContestListResponse({this.status, this.message, this.data});
 
 //   CompletedContestListResponse.fromJson(Map<String, dynamic> json) {
 //     status = json['status'];
@@ -38,9 +34,12 @@
 //   String? contestEndTime;
 //   String? description;
 //   String? contestType;
+//   String? currentLiveStatus;
 //   String? contestFor;
 //   num? entryFee;
+//   int? liveThreshold;
 //   num? payoutPercentage;
+//   bool? featured;
 //   String? portfolio;
 //   int? maxParticipants;
 //   String? contestStatus;
@@ -51,8 +50,15 @@
 //   bool? isBankNifty;
 //   bool? isFinNifty;
 //   bool? isAllIndex;
+//   String? product;
+//   num? payoutCapPercentage;
+//   List<CompletedRewards>? rewards;
+//   List<CompletedInterestedUsers>? interestedUsers;
+//   List<CompletedPurchaseIntent>? purchaseIntent;
+//   List<CompletedParticipants>? participants;
 //   String? createdOn;
 //   String? lastModifiedOn;
+//   num? dV;
 //   String? payoutStatus;
 
 //   CompletedContest({
@@ -62,9 +68,12 @@
 //     this.contestEndTime,
 //     this.description,
 //     this.contestType,
+//     this.currentLiveStatus,
 //     this.contestFor,
 //     this.entryFee,
+//     this.liveThreshold,
 //     this.payoutPercentage,
+//     this.featured,
 //     this.portfolio,
 //     this.maxParticipants,
 //     this.contestStatus,
@@ -75,8 +84,15 @@
 //     this.isBankNifty,
 //     this.isFinNifty,
 //     this.isAllIndex,
+//     this.product,
+//     this.payoutCapPercentage,
+//     this.rewards,
+//     this.interestedUsers,
+//     this.purchaseIntent,
+//     this.participants,
 //     this.createdOn,
 //     this.lastModifiedOn,
+//     this.dV,
 //     this.payoutStatus,
 //   });
 
@@ -87,9 +103,12 @@
 //     contestEndTime = json['contestEndTime'];
 //     description = json['description'];
 //     contestType = json['contestType'];
+//     currentLiveStatus = json['currentLiveStatus'];
 //     contestFor = json['contestFor'];
 //     entryFee = json['entryFee'];
+//     liveThreshold = json['liveThreshold'];
 //     payoutPercentage = json['payoutPercentage'];
+//     featured = json['featured'];
 //     portfolio = json['portfolio'];
 //     maxParticipants = json['maxParticipants'];
 //     contestStatus = json['contestStatus'];
@@ -100,8 +119,35 @@
 //     isBankNifty = json['isBankNifty'];
 //     isFinNifty = json['isFinNifty'];
 //     isAllIndex = json['isAllIndex'];
+//     product = json['product'];
+//     payoutCapPercentage = json['payoutCapPercentage'];
+//     if (json['rewards'] != null) {
+//       rewards = <CompletedRewards>[];
+//       json['rewards'].forEach((v) {
+//         rewards!.add(new CompletedRewards.fromJson(v));
+//       });
+//     }
+//     if (json['interestedUsers'] != null) {
+//       interestedUsers = <CompletedInterestedUsers>[];
+//       json['interestedUsers'].forEach((v) {
+//         interestedUsers!.add(new CompletedInterestedUsers.fromJson(v));
+//       });
+//     }
+//     if (json['purchaseIntent'] != null) {
+//       purchaseIntent = <CompletedPurchaseIntent>[];
+//       json['purchaseIntent'].forEach((v) {
+//         purchaseIntent!.add(new CompletedPurchaseIntent.fromJson(v));
+//       });
+//     }
+//     if (json['participants'] != null) {
+//       participants = <CompletedParticipants>[];
+//       json['participants'].forEach((v) {
+//         participants!.add(new CompletedParticipants.fromJson(v));
+//       });
+//     }
 //     createdOn = json['createdOn'];
 //     lastModifiedOn = json['lastModifiedOn'];
+//     dV = json['__v'];
 //     payoutStatus = json['payoutStatus'];
 //   }
 
@@ -113,9 +159,12 @@
 //     data['contestEndTime'] = this.contestEndTime;
 //     data['description'] = this.description;
 //     data['contestType'] = this.contestType;
+//     data['currentLiveStatus'] = this.currentLiveStatus;
 //     data['contestFor'] = this.contestFor;
 //     data['entryFee'] = this.entryFee;
+//     data['liveThreshold'] = this.liveThreshold;
 //     data['payoutPercentage'] = this.payoutPercentage;
+//     data['featured'] = this.featured;
 //     data['portfolio'] = this.portfolio;
 //     data['maxParticipants'] = this.maxParticipants;
 //     data['contestStatus'] = this.contestStatus;
@@ -126,9 +175,149 @@
 //     data['isBankNifty'] = this.isBankNifty;
 //     data['isFinNifty'] = this.isFinNifty;
 //     data['isAllIndex'] = this.isAllIndex;
+//     data['product'] = this.product;
+//     data['payoutCapPercentage'] = this.payoutCapPercentage;
+//     if (this.rewards != null) {
+//       data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
+//     }
+//     if (this.interestedUsers != null) {
+//       data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
+//     }
+//     if (this.purchaseIntent != null) {
+//       data['purchaseIntent'] = this.purchaseIntent!.map((v) => v.toJson()).toList();
+//     }
+//     if (this.participants != null) {
+//       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
+//     }
 //     data['createdOn'] = this.createdOn;
 //     data['lastModifiedOn'] = this.lastModifiedOn;
+//     data['__v'] = this.dV;
 //     data['payoutStatus'] = this.payoutStatus;
+//     return data;
+//   }
+// }
+
+// class CompletedRewards {
+//   int? rankStart;
+//   int? rankEnd;
+//   num? prize;
+//   String? id;
+
+//   CompletedRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+
+//   CompletedRewards.fromJson(Map<String, dynamic> json) {
+//     rankStart = json['rankStart'];
+//     rankEnd = json['rankEnd'];
+//     prize = json['prize'];
+//     id = json['_id'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['rankStart'] = this.rankStart;
+//     data['rankEnd'] = this.rankEnd;
+//     data['prize'] = this.prize;
+//     data['_id'] = this.id;
+//     return data;
+//   }
+// }
+
+// class CompletedInterestedUsers {
+//   String? userId;
+//   String? registeredOn;
+//   String? status;
+//   String? sId;
+
+//   CompletedInterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
+
+//   CompletedInterestedUsers.fromJson(Map<String, dynamic> json) {
+//     userId = json['userId'];
+//     registeredOn = json['registeredOn'];
+//     status = json['status'];
+//     sId = json['_id'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['userId'] = this.userId;
+//     data['registeredOn'] = this.registeredOn;
+//     data['status'] = this.status;
+//     data['_id'] = this.sId;
+//     return data;
+//   }
+// }
+
+// class CompletedPurchaseIntent {
+//   String? userId;
+//   String? date;
+//   String? sId;
+
+//   CompletedPurchaseIntent({this.userId, this.date, this.sId});
+
+//   CompletedPurchaseIntent.fromJson(Map<String, dynamic> json) {
+//     userId = json['userId'];
+//     date = json['date'];
+//     sId = json['_id'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['userId'] = this.userId;
+//     data['date'] = this.date;
+//     data['_id'] = this.sId;
+//     return data;
+//   }
+// }
+
+// class CompletedParticipants {
+//   String? userId;
+//   int? fee;
+//   int? actualPrice;
+//   String? participatedOn;
+//   bool? isLive;
+//   String? sId;
+//   int? bonusRedemption;
+//   int? rank;
+//   num? payout;
+//   num? tdsAmount;
+
+//   CompletedParticipants(
+//       {this.userId,
+//       this.fee,
+//       this.actualPrice,
+//       this.participatedOn,
+//       this.isLive,
+//       this.sId,
+//       this.bonusRedemption,
+//       this.rank,
+//       this.payout,
+//       this.tdsAmount});
+
+//   CompletedParticipants.fromJson(Map<String, dynamic> json) {
+//     userId = json['userId'];
+//     fee = json['fee'];
+//     actualPrice = json['actualPrice'];
+//     participatedOn = json['participatedOn'];
+//     isLive = json['isLive'];
+//     sId = json['_id'];
+//     bonusRedemption = json['bonusRedemption'];
+//     rank = json['rank'];
+//     payout = json['payout'];
+//     tdsAmount = json['tdsAmount'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['userId'] = this.userId;
+//     data['fee'] = this.fee;
+//     data['actualPrice'] = this.actualPrice;
+//     data['participatedOn'] = this.participatedOn;
+//     data['isLive'] = this.isLive;
+//     data['_id'] = this.sId;
+//     data['bonusRedemption'] = this.bonusRedemption;
+//     data['rank'] = this.rank;
+//     data['payout'] = this.payout;
+//     data['tdsAmount'] = this.tdsAmount;
 //     return data;
 //   }
 // }
@@ -172,7 +361,6 @@ class CompletedContest {
   String? currentLiveStatus;
   String? contestFor;
   num? entryFee;
-  int? liveThreshold;
   num? payoutPercentage;
   bool? featured;
   String? portfolio;
@@ -194,7 +382,9 @@ class CompletedContest {
   String? createdOn;
   String? lastModifiedOn;
   num? dV;
+  String? payoutType;
   String? payoutStatus;
+  int? liveThreshold;
 
   CompletedContest({
     this.id,
@@ -206,7 +396,6 @@ class CompletedContest {
     this.currentLiveStatus,
     this.contestFor,
     this.entryFee,
-    this.liveThreshold,
     this.payoutPercentage,
     this.featured,
     this.portfolio,
@@ -228,7 +417,9 @@ class CompletedContest {
     this.createdOn,
     this.lastModifiedOn,
     this.dV,
+    this.payoutType,
     this.payoutStatus,
+    this.liveThreshold,
   });
 
   CompletedContest.fromJson(Map<String, dynamic> json) {
@@ -241,7 +432,6 @@ class CompletedContest {
     currentLiveStatus = json['currentLiveStatus'];
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
-    liveThreshold = json['liveThreshold'];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     portfolio = json['portfolio'];
@@ -283,7 +473,9 @@ class CompletedContest {
     createdOn = json['createdOn'];
     lastModifiedOn = json['lastModifiedOn'];
     dV = json['__v'];
+    payoutType = json['payoutType'];
     payoutStatus = json['payoutStatus'];
+    liveThreshold = json['liveThreshold'];
   }
 
   Map<String, dynamic> toJson() {
@@ -297,7 +489,6 @@ class CompletedContest {
     data['currentLiveStatus'] = this.currentLiveStatus;
     data['contestFor'] = this.contestFor;
     data['entryFee'] = this.entryFee;
-    data['liveThreshold'] = this.liveThreshold;
     data['payoutPercentage'] = this.payoutPercentage;
     data['featured'] = this.featured;
     data['portfolio'] = this.portfolio;
@@ -327,32 +518,39 @@ class CompletedContest {
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['__v'] = this.dV;
+    data['payoutType'] = this.payoutType;
     data['payoutStatus'] = this.payoutStatus;
+    data['liveThreshold'] = this.liveThreshold;
     return data;
   }
 }
 
 class CompletedRewards {
+  String? id;
   int? rankStart;
   int? rankEnd;
   num? prize;
-  String? id;
 
-  CompletedRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+  CompletedRewards({
+    this.id,
+    this.rankStart,
+    this.rankEnd,
+    this.prize,
+  });
 
   CompletedRewards.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
     rankStart = json['rankStart'];
     rankEnd = json['rankEnd'];
     prize = json['prize'];
-    id = json['_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.id;
     data['rankStart'] = this.rankStart;
     data['rankEnd'] = this.rankEnd;
     data['prize'] = this.prize;
-    data['_id'] = this.id;
     return data;
   }
 }
@@ -411,10 +609,13 @@ class CompletedParticipants {
   String? participatedOn;
   bool? isLive;
   String? sId;
-  int? bonusRedemption;
   int? rank;
+  num? brokerage;
+  num? gpnl;
+  num? npnl;
   num? payout;
   num? tdsAmount;
+  int? trades;
 
   CompletedParticipants(
       {this.userId,
@@ -423,10 +624,13 @@ class CompletedParticipants {
       this.participatedOn,
       this.isLive,
       this.sId,
-      this.bonusRedemption,
       this.rank,
+      this.brokerage,
+      this.gpnl,
+      this.npnl,
       this.payout,
-      this.tdsAmount});
+      this.tdsAmount,
+      this.trades});
 
   CompletedParticipants.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
@@ -435,10 +639,13 @@ class CompletedParticipants {
     participatedOn = json['participatedOn'];
     isLive = json['isLive'];
     sId = json['_id'];
-    bonusRedemption = json['bonusRedemption'];
     rank = json['rank'];
+    brokerage = json['brokerage'];
+    gpnl = json['gpnl'];
+    npnl = json['npnl'];
     payout = json['payout'];
     tdsAmount = json['tdsAmount'];
+    trades = json['trades'];
   }
 
   Map<String, dynamic> toJson() {
@@ -449,10 +656,13 @@ class CompletedParticipants {
     data['participatedOn'] = this.participatedOn;
     data['isLive'] = this.isLive;
     data['_id'] = this.sId;
-    data['bonusRedemption'] = this.bonusRedemption;
     data['rank'] = this.rank;
+    data['brokerage'] = this.brokerage;
+    data['gpnl'] = this.gpnl;
+    data['npnl'] = this.npnl;
     data['payout'] = this.payout;
     data['tdsAmount'] = this.tdsAmount;
+    data['trades'] = this.trades;
     return data;
   }
 }
