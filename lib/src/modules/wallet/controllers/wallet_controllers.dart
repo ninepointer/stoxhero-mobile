@@ -155,7 +155,9 @@ class WalletController extends BaseController<WalletRepository> {
         totalCashAmount(0);
         walletTransactionsList((response.data?.data?.transactions ?? []));
         walletTransactionsList.forEach((element) {
-          totalCashAmount.value += element.amount ?? 0;
+          if(element.transactionType=='Cash'){
+            totalCashAmount.value += element.amount ?? 0;
+          }
         });
         walletDetails(response.data?.data);
       } else {
