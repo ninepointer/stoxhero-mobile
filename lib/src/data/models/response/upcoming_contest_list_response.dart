@@ -1,3 +1,5 @@
+import '../../data.dart';
+
 class UpComingContestListResponse {
   String? status;
   String? message;
@@ -53,7 +55,7 @@ class UpComingContest {
   num? payoutCapPercentage;
   List<UpcomingRewards>? rewards;
   List<InterestedUsers>? interestedUsers;
-  List<UpcomingParticipants>? participants;
+  List<Participants>? participants;
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
@@ -130,9 +132,9 @@ class UpComingContest {
       });
     }
     if (json['participants'] != null) {
-      participants = <UpcomingParticipants>[];
+      participants = <Participants>[];
       json['participants'].forEach((v) {
-        participants!.add(new UpcomingParticipants.fromJson(v));
+        participants!.add(new Participants.fromJson(v));
       });
     }
     createdOn = json['createdOn'];
@@ -289,35 +291,35 @@ class ContestUserId {
   }
 }
 
-class UpcomingParticipants {
-  ContestUserId? userId;
-  num? fee;
-  num? actualPrice;
-  String? participatedOn;
-  bool? isLive;
-  String? sId;
+// class UpcomingParticipants {
+//   ContestUserId? userId;
+//   num? fee;
+//   num? actualPrice;
+//   String? participatedOn;
+//   bool? isLive;
+//   String? sId;
 
-  UpcomingParticipants({this.userId, this.fee, this.actualPrice, this.participatedOn, this.isLive, this.sId});
+//   UpcomingParticipants({this.userId, this.fee, this.actualPrice, this.participatedOn, this.isLive, this.sId});
 
-  UpcomingParticipants.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new ContestUserId.fromJson(json['userId']) : null;
-    fee = json['fee'];
-    actualPrice = json['actualPrice'];
-    participatedOn = json['participatedOn'];
-    isLive = json['isLive'];
-    sId = json['_id'];
-  }
+//   UpcomingParticipants.fromJson(Map<String, dynamic> json) {
+//     userId = json['userId'] != null ? new ContestUserId.fromJson(json['userId']) : null;
+//     fee = json['fee'];
+//     actualPrice = json['actualPrice'];
+//     participatedOn = json['participatedOn'];
+//     isLive = json['isLive'];
+//     sId = json['_id'];
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.userId != null) {
-      data['userId'] = this.userId!.toJson();
-    }
-    data['fee'] = this.fee;
-    data['actualPrice'] = this.actualPrice;
-    data['participatedOn'] = this.participatedOn;
-    data['isLive'] = this.isLive;
-    data['_id'] = this.sId;
-    return data;
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     if (this.userId != null) {
+//       data['userId'] = this.userId!.toJson();
+//     }
+//     data['fee'] = this.fee;
+//     data['actualPrice'] = this.actualPrice;
+//     data['participatedOn'] = this.participatedOn;
+//     data['isLive'] = this.isLive;
+//     data['_id'] = this.sId;
+//     return data;
+//   }
+// }
