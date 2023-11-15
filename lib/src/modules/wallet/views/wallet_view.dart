@@ -45,34 +45,6 @@ class _WalletViewState extends State<WalletView> {
                     margin: EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        //  Container(
-                        //       height: 80,
-                        //       width: 80,
-                        //       decoration: BoxDecoration(
-                        //         color: AppColors.white,
-                        //         shape: BoxShape.circle,
-                        //         border: Border.all(
-                        //           color: AppColors.grey.withOpacity(.25),
-                        //         ),
-                        //       ),
-                        //       child: ClipOval(
-                        //         child: controller.walletDetails.value.userId?.profilePhoto?.url == null
-                        //             ? Image.asset(
-                        //                 AppImages.appLogo,
-                        //                 fit: BoxFit.cover,
-                        //               )
-                        //             : Image.network(
-                        //                 controller.walletDetails.value.userId?.profilePhoto?.url ?? '',
-                        //                 fit: BoxFit.cover,
-                        //               ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // SizedBox(height: 12),
-                        // Text(
-                        //   controller.getUserFullName(),
-                        //   style: Theme.of(context).textTheme.tsMedium16,
-                        // ),
                         CommonCard(
                           margin: EdgeInsets.zero,
                           padding: EdgeInsets.all(16),

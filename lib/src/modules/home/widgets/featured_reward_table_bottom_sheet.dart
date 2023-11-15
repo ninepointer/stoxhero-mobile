@@ -80,7 +80,7 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                               padding: EdgeInsets.symmetric(vertical: 12),
                               alignment: Alignment.center,
                               child: Text(
-                                '₹${reward.prize}',
+                                FormatHelper.formatNumbers(reward.prize, decimal: 0),
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
                             ),
@@ -88,7 +88,7 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                         ],
                       ),
                   if (upcomingContest != null)
-                    for (var reward in upcomingContest!.rewards ?? [])
+                    for (FeaturedRewards reward in upcomingContest!.rewards ?? [])
                       TableRow(
                         children: [
                           TableCell(
@@ -106,7 +106,7 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                               padding: EdgeInsets.symmetric(vertical: 12),
                               alignment: Alignment.center,
                               child: Text(
-                                '₹${reward.prize}',
+                                FormatHelper.formatNumbers(reward.prize, decimal: 0),
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
                             ),

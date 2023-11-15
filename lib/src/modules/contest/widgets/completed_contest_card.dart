@@ -172,8 +172,8 @@ class CompletedContestCard extends GetView<ContestController> {
                             BottomSheetHelper.openBottomSheet(
                               context: context,
                               child: RewardTableBottomSheet(
-                                  // liveContest: contest,
-                                  ),
+                                completedContest: contest,
+                              ),
                             );
                         },
                         child: Row(
@@ -181,7 +181,7 @@ class CompletedContestCard extends GetView<ContestController> {
                           children: [
                             if (contest?.payoutType == 'Reward') ...[
                               Text(
-                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},Click to know more.',
+                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}, Click to know more.',
                                 style: Theme.of(context).textTheme.tsMedium12,
                                 textAlign: TextAlign.center,
                               )

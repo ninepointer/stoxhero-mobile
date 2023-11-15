@@ -5,9 +5,12 @@ import '../../../app/app.dart';
 class RewardTableBottomSheet extends StatelessWidget {
   final LiveContest? liveContest;
   final UpComingContest? upcomingContest;
+  final CompletedContest? completedContest; // Add this property for completed contests
+
   RewardTableBottomSheet({
     this.liveContest,
     this.upcomingContest,
+    this.completedContest,
   });
 
   @override
@@ -27,7 +30,7 @@ class RewardTableBottomSheet extends StatelessWidget {
               thickness: 1,
             ),
             SizedBox(height: 16),
-            if (liveContest != null || upcomingContest != null)
+            if (liveContest != null || upcomingContest != null || completedContest != null)
               Table(
                 border: TableBorder.all(
                   color: AppColors.grey.shade50,
@@ -60,64 +63,45 @@ class RewardTableBottomSheet extends StatelessWidget {
                     ],
                   ),
                   if (liveContest != null)
-                    for (Rewards reward in liveContest!.rewards ?? [])
-                      TableRow(
-                        children: [
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              alignment: Alignment.center,
-                              child: Text(
-                                reward.rankStart == reward.rankEnd
-                                    ? '${reward.rankStart}'
-                                    : '${reward.rankStart}-${reward.rankEnd}',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              alignment: Alignment.center,
-                              child: Text(
-                                '₹${reward.prize}',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    for (Rewards reward in liveContest!.rewards ?? []) _buildRewardTableRow(context, reward),
                   if (upcomingContest != null)
-                    for (var reward in upcomingContest!.rewards ?? [])
-                      TableRow(
-                        children: [
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              alignment: Alignment.center,
-                              child: Text(
-                                '${reward.rankEnd}',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              alignment: Alignment.center,
-                              child: Text(
-                                '₹${reward.prize}',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    for (UpcomingRewards reward in upcomingContest!.rewards ?? [])
+                      _buildRewardTableRow(context, reward),
+                  if (completedContest != null)
+                    for (CompletedRewards reward in completedContest!.rewards ?? [])
+                      _buildRewardTableRow(context, reward),
                 ],
               ),
           ],
         ),
       ),
+    );
+  }
+
+  TableRow _buildRewardTableRow(BuildContext context, reward) {
+    return TableRow(
+      children: [
+        TableCell(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            alignment: Alignment.center,
+            child: Text(
+              reward.rankStart == reward.rankEnd ? '${reward.rankStart}' : '${reward.rankStart}-${reward.rankEnd}',
+              style: Theme.of(context).textTheme.tsMedium12,
+            ),
+          ),
+        ),
+        TableCell(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            alignment: Alignment.center,
+            child: Text(
+              FormatHelper.formatNumbers(reward.prize, decimal: 0),
+              style: Theme.of(context).textTheme.tsMedium12,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

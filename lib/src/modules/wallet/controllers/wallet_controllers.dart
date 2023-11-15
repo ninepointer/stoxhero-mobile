@@ -57,10 +57,14 @@ class WalletController extends BaseController<WalletRepository> {
     } else {
       withdrawals();
       Get.back();
+      amountTextController.clear();
     }
   }
 
-  void onCancel() => Get.back();
+  void onCancel() {
+    Get.back();
+    amountTextController.clear();
+  }
 
   Future loadData() async {
     getWalletTransactionsList();
@@ -155,7 +159,7 @@ class WalletController extends BaseController<WalletRepository> {
         totalCashAmount(0);
         walletTransactionsList((response.data?.data?.transactions ?? []));
         walletTransactionsList.forEach((element) {
-          if(element.transactionType=='Cash'){
+          if (element.transactionType == 'Cash') {
             totalCashAmount.value += element.amount ?? 0;
           }
         });

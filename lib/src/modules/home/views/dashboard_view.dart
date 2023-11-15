@@ -122,16 +122,6 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  // CommonTile(
-                  //   label: 'Featured Contests',
-                  //   showSeeAllButton: true,
-                  //   onPressed: () {
-                  //     contestController.loadData();
-                  //     contestController.selectedTabBarIndex(0);
-                  //     Get.to(() => ContestListView());
-                  //   },
-                  //   margin: EdgeInsets.only(bottom: 0, top: 8),
-                  // ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
