@@ -192,19 +192,19 @@ class LiveContestCard extends GetView<ContestController> {
                               ],
                               if (contest?.payoutType != 'Reward') ...[
                                 Text(
-                                  '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
-                                  style: Theme.of(context).textTheme.tsMedium12,
-                                ),
-                                if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
-                                  Text(
-                                    ' (Upto ${controller.getPaidCapAmount(
+                                  '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L\n${(contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0) ? '(Upto ${controller.getPaidCapAmount(
                                       contest?.entryFee == 0
                                           ? contest?.portfolio?.portfolioValue ?? 0
                                           : contest?.entryFee ?? 0,
                                       contest?.payoutCapPercentage ?? 0,
-                                    )})',
-                                    style: Theme.of(context).textTheme.tsMedium12,
-                                  ),
+                                    )})' : ''}',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                ),
+                                // if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                                //   Text(
+                                //     '',
+                                //     style: Theme.of(context).textTheme.tsMedium12,
+                                //   ),
                               ]
                             ],
                           ),
