@@ -80,7 +80,7 @@ class RewardTableBottomSheet extends StatelessWidget {
                               padding: EdgeInsets.symmetric(vertical: 12),
                               alignment: Alignment.center,
                               child: Text(
-                                '${reward.prize}',
+                                '₹${reward.prize}',
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
                             ),
@@ -106,7 +106,7 @@ class RewardTableBottomSheet extends StatelessWidget {
                               padding: EdgeInsets.symmetric(vertical: 12),
                               alignment: Alignment.center,
                               child: Text(
-                                '${reward.prize}',
+                                '₹${reward.prize}',
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
                             ),
