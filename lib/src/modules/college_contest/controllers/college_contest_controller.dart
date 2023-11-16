@@ -144,6 +144,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final completedContestLeaderboardList = <CompletedContestLeaderboardList>[].obs;
   final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
   final marginRequired = MarginRequiredResponse().obs;
+  final featuredCollegeContest = FeaturedCollegeContest().obs;
 
   String? experienceSelectedValue;
   String? hearAboutSelectedValue;
@@ -310,13 +311,18 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   num calculatePayout() {
-    num npnl = calculateTotalNetPNL() * liveCollegeContest.value.payoutPercentage!;
+    num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
+    num featuredPayoutPercentage = featuredCollegeContest.value.payoutPercentage ?? 0;
+    num totalNetPNL = calculateTotalNetPNL();
+    num npnl = totalNetPNL * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = npnl <= 0 ? 0 : npnl / 100;
     return payout;
   }
 
   num calculateUserPayout(dynamic netPnl) {
-    num reward = netPnl * liveCollegeContest.value.payoutPercentage!;
+    num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
+    num featuredPayoutPercentage = featuredCollegeContest.value.payoutPercentage ?? 0;
+    num reward = netPnl * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = reward <= 0 ? 0 : reward / 100;
     return payout;
   }
@@ -406,24 +412,35 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     return isPurchased;
   }
 
+  bool checkIfLiveFeaturedPurchased(FeaturedCollegeContest? contest, String userId) {
+    bool isPurchased = false;
+    for (FeaturedParticipants? user in contest?.participants ?? []) {
+      if (user?.userId?.id == userId) {
+        isPurchased = true;
+      }
+    }
+    return isPurchased;
+  }
+
   bool canUserTrade(contest) {
     bool canParticipate = false;
     if (contest.participants != null) {
       for (CollegeParticipants participant in contest.participants) {
         if (participant.userId?.sId == userDetails.value.sId) {
-          // if (liveCollegeContest.value.collegeCode == collegeCodeTextController.text) {
-          // }
           canParticipate = true;
-          // liveContest(contest);
-          // selectedContestName(contest?.contestName);
-          // liveLeaderboardList();
-          // participate(contest);
-          // loadTradingData();
-          // Get.to(() => ContestTradingView());
         }
-        // if (!userAlreadyInContest && contest.participants.length >= contest.maxParticipants) {
-        //   SnackbarHelper.showSnackbar("Contest is full, try another one.");
-        // }
+      }
+    }
+    return canParticipate;
+  }
+
+  bool canUserFeaturedTrade(contest, String userId) {
+    bool canParticipate = false;
+    if (contest.participants != null) {
+      for (FeaturedParticipants participant in contest.participants) {
+        if (participant.userId?.id == userId) {
+          canParticipate = true;
+        }
       }
     }
     return canParticipate;
@@ -443,11 +460,6 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         totalGross += position.lastaverageprice ?? 0;
         totalNet += position.amount ?? 0;
       }
-
-      // totalLots += position.lots ?? 0;
-      // totalBrokerage += position.brokerage ?? 0;
-      // totalGross += position.lastaverageprice ?? 0;
-      // totalNet += position.amount ?? 0;
     }
     tenxTotalPositionDetails(
       TenxTotalPositionDetails(
@@ -578,7 +590,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isPortfolioStateLoading(true);
     try {
       final RepoResponse<ContestPortfolioResponse> response =
-          await repository.getContestPortfolio(liveCollegeContest.value.id);
+          await repository.getContestPortfolio(featuredCollegeContest.value.id ?? liveCollegeContest.value.id);
       if (response.data != null) {
         contestPortfolio(response.data?.data);
       } else {
@@ -594,9 +606,9 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingWatchlistResponse> response = await repository.getContestWatchList(
-        liveCollegeContest.value.isNifty,
-        liveCollegeContest.value.isBankNifty,
-        liveCollegeContest.value.isFinNifty,
+        featuredCollegeContest.value.isNifty ?? liveCollegeContest.value.isNifty,
+        featuredCollegeContest.value.isBankNifty ?? liveCollegeContest.value.isBankNifty,
+        featuredCollegeContest.value.isFinNifty ?? liveCollegeContest.value.isFinNifty,
       );
       if (response.data != null) {
         if (response.data?.data! != null) {
@@ -622,7 +634,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isPositionStateLoading(true);
     try {
       final RepoResponse<TradingPositionListResponse> response =
-          await repository.getContestPositions(liveCollegeContest.value.id);
+          await repository.getContestPositions(featuredCollegeContest.value.id ?? liveCollegeContest.value.id);
       if (response.data != null) {
         if (response.data?.data! != null) {
           contestPositionsList(response.data?.data ?? []);
@@ -676,10 +688,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       trader: userDetails.value.sId,
       orderId: Uuid().v4(),
       paperTrade: false,
-      subscriptionId: liveCollegeContest.value.id,
-      battleId: liveCollegeContest.value.id,
-      contestId: liveCollegeContest.value.id,
-      marginxId: liveCollegeContest.value.id,
+      subscriptionId: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
+      battleId: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
+      contestId: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
+      marginxId: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       triggerPrice: "",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
@@ -717,9 +729,9 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
         value,
-        liveCollegeContest.value.isNifty,
-        liveCollegeContest.value.isBankNifty,
-        liveCollegeContest.value.isFinNifty,
+        featuredCollegeContest.value.isNifty ?? liveCollegeContest.value.isNifty,
+        featuredCollegeContest.value.isBankNifty ?? liveCollegeContest.value.isBankNifty,
+        featuredCollegeContest.value.isFinNifty ?? liveCollegeContest.value.isFinNifty,
       );
       if (response.data != null) {
         if (response.data?.data != null) {
@@ -1089,24 +1101,24 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       var rankData = {
         "employeeId": userDetails.value.employeeid,
         "userId": userDetails.value.sId,
-        "id": liveCollegeContest.value.id,
+        "id": featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       };
       log('Socket Emit RankData : $rankData');
 
       socketService.socket.emit('dailyContestLeaderboard', rankData);
 
       socketService.socket.on(
-        'contest-myrank${userDetails.value.sId}${liveCollegeContest.value.id}',
+        'contest-myrank${userDetails.value.sId}${featuredCollegeContest.value.id ?? liveCollegeContest.value.id}',
         (data) {
-          log('Socket MyRank : contest-myrank${userDetails.value.sId}${liveCollegeContest.value.id} : $data');
+          log('Socket MyRank : contest-myrank${userDetails.value.sId}${featuredCollegeContest.value.id ?? liveCollegeContest.value.id} : $data');
           myRank(data);
         },
       );
 
       socketService.socket.on(
-        'contest-leaderboardData${liveCollegeContest.value.id}',
+        'contest-leaderboardData${featuredCollegeContest.value.id ?? liveCollegeContest.value.id}',
         (data) {
-          log('Socket Leaderboard : contest-leaderboardData${liveCollegeContest.value.id} $data');
+          log('Socket Leaderboard : contest-leaderboardData${featuredCollegeContest.value.id ?? liveCollegeContest.value.id} $data');
           liveLeaderboardList.value = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
         },
       );
@@ -1119,7 +1131,9 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isLoading(true);
 
     try {
-      await repository.getShareContest(isUpcoming ? upComingCollegeContest.value.id : liveCollegeContest.value.id);
+      await repository.getShareContest(isUpcoming
+          ? upComingCollegeContest.value.id
+          : featuredCollegeContest.value.id ?? liveCollegeContest.value.id);
 
       if (isUpcoming) {
         getUpComingCollegeContestList();
@@ -1158,6 +1172,31 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       );
       if (response.data?.status?.toLowerCase() == "success") {
         getLiveCollegeContestList();
+        collegeCodeTextController.clear();
+        loadTradingData();
+        Get.to(() => CollegeContestTradingView());
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future verifyAndFeatureParticipate(FeaturedCollegeContest? contest) async {
+    isLoading(true);
+    CollegeContestCodeRequest data = CollegeContestCodeRequest(
+      collegeCode: collegeCodeTextController.text.trim(),
+    );
+    try {
+      final response = await repository.verifyAndParticipate(
+        featuredCollegeContest.value.id,
+        data.toJson(),
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        Get.find<ContestController>().getFeaturedContest();
         collegeCodeTextController.clear();
         loadTradingData();
         Get.to(() => CollegeContestTradingView());
@@ -1245,7 +1284,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isOrderStateLoading(true);
     try {
       final RepoResponse<ContestOrderResponse> response = await repository.getContestOrderList(
-        liveCollegeContest.value.id,
+        featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
@@ -1266,7 +1305,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isExecutedOrderStateLoading(true);
     try {
       final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
-        liveCollegeContest.value.id,
+        featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
         stopLossExecutedOrdersList(response.data?.data ?? []);
@@ -1284,7 +1323,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isPendingOrderStateLoading(true);
     try {
       final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
-        liveCollegeContest.value.id,
+        featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
         stopLossPendingOrderList(response.data?.data ?? []);
@@ -1342,7 +1381,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       stopProfitPrice: stopProfitPriceTextController.text,
       symbol: inst.tradingsymbol,
       validity: "DAY",
-      id: liveCollegeContest.value.id,
+      id: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       lastPrice: inst.lastPrice.toString(),
       variety: "regular",
       from: "Daily Contest",

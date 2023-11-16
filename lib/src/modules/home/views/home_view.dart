@@ -37,6 +37,8 @@ class _HomeViewState extends State<HomeView> {
         Get.find<ContestController>().getLiveContestList();
         Get.find<ContestController>().getUpComingContestList();
         Get.find<CollegeContestController>().getLiveCollegeContestList();
+        Get.find<WalletController>().getWalletTransactionsList();
+        Get.find<ContestController>().getFeaturedContest();
         break;
       case 1:
         Get.find<VirtualTradingController>().loadData();

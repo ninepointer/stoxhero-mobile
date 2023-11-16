@@ -181,4 +181,12 @@ class InternshipRespository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<InternshipCertificateResponse>> getInternshipCertificate() async {
+    String apiURL = AppUrls.internshipCertificate;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: InternshipCertificateResponse.fromJson(response));
+  }
 }

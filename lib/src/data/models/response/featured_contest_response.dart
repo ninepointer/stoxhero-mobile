@@ -3,14 +3,14 @@ class FeaturedContestResponse {
   String? message;
   List<LiveFeatured>? liveFeatured;
   List<UpcomingFeatured>? upcomingFeatured;
-  // List<Null>? collegeContests;
+  List<FeaturedCollegeContest>? collegeContest;
 
   FeaturedContestResponse({
     this.status,
     this.message,
     this.liveFeatured,
     this.upcomingFeatured,
-    // this.collegeContests,
+    this.collegeContest,
   });
 
   FeaturedContestResponse.fromJson(Map<String, dynamic> json) {
@@ -28,12 +28,12 @@ class FeaturedContestResponse {
         upcomingFeatured!.add(new UpcomingFeatured.fromJson(v));
       });
     }
-    // if (json['collegeContests'] != null) {
-    //   collegeContests = <Null>[];
-    //   json['collegeContests'].forEach((v) {
-    //     collegeContests!.add(new Null.fromJson(v));
-    //   });
-    // }
+    if (json['collegeContests'] != null) {
+      collegeContest = <FeaturedCollegeContest>[];
+      json['collegeContests'].forEach((v) {
+        collegeContest!.add(new FeaturedCollegeContest.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -46,9 +46,9 @@ class FeaturedContestResponse {
     if (this.upcomingFeatured != null) {
       data['stoxheroUpcomingFeatured'] = this.upcomingFeatured!.map((v) => v.toJson()).toList();
     }
-    // if (this.collegeContests != null) {
-    //   data['collegeContests'] = this.collegeContests!.map((v) => v.toJson()).toList();
-    // }
+    if (this.collegeContest != null) {
+      data['collegeContests'] = this.collegeContest!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -228,7 +228,7 @@ class FeaturedPortfolio {
 class FeaturedRewards {
   int? rankStart;
   int? rankEnd;
-  String? prize;
+  num? prize;
   String? id;
 
   FeaturedRewards({
@@ -502,6 +502,148 @@ class FeaturedInterestedUsers {
     data['registeredOn'] = this.registeredOn;
     data['status'] = this.status;
     data['_id'] = this.sId;
+    return data;
+  }
+}
+
+class FeaturedCollegeContest {
+  String? id;
+  String? contestName;
+  String? contestStartTime;
+  String? contestEndTime;
+  String? description;
+  String? contestType;
+  String? currentLiveStatus;
+  String? contestFor;
+  String? collegeCode;
+  int? entryFee;
+  double? payoutPercentage;
+  bool? featured;
+  String? payoutType;
+  FeaturedPortfolio? portfolio;
+  String? college;
+  int? maxParticipants;
+  String? contestStatus;
+  String? createdBy;
+  String? lastModifiedBy;
+  String? contestExpiry;
+  String? payoutPercentageType;
+  bool? isNifty;
+  bool? isBankNifty;
+  bool? isFinNifty;
+  String? product;
+  int? payoutCapPercentage;
+  List<FeaturedParticipants>? participants;
+  String? createdOn;
+  String? lastModifiedOn;
+  int? iV;
+
+  FeaturedCollegeContest(
+      {this.id,
+      this.contestName,
+      this.contestStartTime,
+      this.contestEndTime,
+      this.description,
+      this.contestType,
+      this.currentLiveStatus,
+      this.contestFor,
+      this.collegeCode,
+      this.entryFee,
+      this.payoutPercentage,
+      this.featured,
+      this.payoutType,
+      this.portfolio,
+      this.college,
+      this.maxParticipants,
+      this.contestStatus,
+      this.createdBy,
+      this.lastModifiedBy,
+      this.contestExpiry,
+      this.payoutPercentageType,
+      this.isNifty,
+      this.isBankNifty,
+      this.isFinNifty,
+      this.product,
+      this.payoutCapPercentage,
+      this.participants,
+      this.createdOn,
+      this.lastModifiedOn,
+      this.iV});
+
+  FeaturedCollegeContest.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
+    contestName = json['contestName'];
+    contestStartTime = json['contestStartTime'];
+    contestEndTime = json['contestEndTime'];
+    description = json['description'];
+    contestType = json['contestType'];
+    currentLiveStatus = json['currentLiveStatus'];
+    contestFor = json['contestFor'];
+    collegeCode = json['collegeCode'];
+    entryFee = json['entryFee'];
+    payoutPercentage = json['payoutPercentage'];
+    featured = json['featured'];
+    payoutType = json['payoutType'];
+    portfolio = json['portfolio'] != null ? new FeaturedPortfolio.fromJson(json['portfolio']) : null;
+    college = json['college'];
+    maxParticipants = json['maxParticipants'];
+    contestStatus = json['contestStatus'];
+    createdBy = json['createdBy'];
+    lastModifiedBy = json['lastModifiedBy'];
+    contestExpiry = json['contestExpiry'];
+    payoutPercentageType = json['payoutPercentageType'];
+    isNifty = json['isNifty'];
+    isBankNifty = json['isBankNifty'];
+    isFinNifty = json['isFinNifty'];
+    product = json['product'];
+    payoutCapPercentage = json['payoutCapPercentage'];
+    if (json['participants'] != null) {
+      participants = <FeaturedParticipants>[];
+      json['participants'].forEach((v) {
+        participants!.add(new FeaturedParticipants.fromJson(v));
+      });
+    }
+    createdOn = json['createdOn'];
+    lastModifiedOn = json['lastModifiedOn'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.id;
+    data['contestName'] = this.contestName;
+    data['contestStartTime'] = this.contestStartTime;
+    data['contestEndTime'] = this.contestEndTime;
+    data['description'] = this.description;
+    data['contestType'] = this.contestType;
+    data['currentLiveStatus'] = this.currentLiveStatus;
+    data['contestFor'] = this.contestFor;
+    data['collegeCode'] = this.collegeCode;
+    data['entryFee'] = this.entryFee;
+    data['payoutPercentage'] = this.payoutPercentage;
+    data['featured'] = this.featured;
+    data['payoutType'] = this.payoutType;
+    if (this.portfolio != null) {
+      data['portfolio'] = this.portfolio!.toJson();
+    }
+    data['college'] = this.college;
+    data['maxParticipants'] = this.maxParticipants;
+    data['contestStatus'] = this.contestStatus;
+    data['createdBy'] = this.createdBy;
+    data['lastModifiedBy'] = this.lastModifiedBy;
+    data['contestExpiry'] = this.contestExpiry;
+    data['payoutPercentageType'] = this.payoutPercentageType;
+    data['isNifty'] = this.isNifty;
+    data['isBankNifty'] = this.isBankNifty;
+    data['isFinNifty'] = this.isFinNifty;
+    data['product'] = this.product;
+    data['payoutCapPercentage'] = this.payoutCapPercentage;
+    if (this.participants != null) {
+      data['participants'] = this.participants!.map((v) => v.toJson()).toList();
+    }
+    data['createdOn'] = this.createdOn;
+    data['lastModifiedOn'] = this.lastModifiedOn;
+    data['__v'] = this.iV;
     return data;
   }
 }

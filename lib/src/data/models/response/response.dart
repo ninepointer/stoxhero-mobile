@@ -79,3 +79,4 @@ export 'virtual_trading_position_list_response.dart';
 export 'virtual_trading_watchlist_response.dart';
 export 'wallet_transactions_list_response.dart';
 export 'featured_contest_response.dart';
+export 'internship_certificate_response.dart';

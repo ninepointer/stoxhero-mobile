@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/modules/college_contest/widgets/college_contest_today_order_card.dart';
+import 'package:stoxhero/src/modules/widgets/contest_pnl_dropdown_card.dart';
 import '../../../app/app.dart';
 
 class CollegeContestTradingView extends GetView<CollegeContestController> {
@@ -10,7 +11,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '${controller.liveCollegeContest.value.contestName ?? 'Contest'}',
+          '${controller.featuredCollegeContest.value.contestName ?? controller.liveCollegeContest.value.contestName ?? 'Contest'}',
           style: Theme.of(context).textTheme.tsRegular16,
           textAlign: TextAlign.center,
         ),
@@ -99,6 +100,8 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             },
                           ),
                         ),
+                  SizedBox(height: 8),
+                  ContestPnlDropdownCard(),
                   CommonTile(
                     label: 'My Rank',
                     showSeeAllButton: true,

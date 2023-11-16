@@ -126,6 +126,22 @@ class _DashboardViewState extends State<DashboardView> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
+                        contestController.featuredCollegeContest.isEmpty
+                            ? Container()
+                            : Obx(
+                                () => Row(
+                                  children: contestController.featuredCollegeContest.map((contest) {
+                                    String userId = controller.userDetailsData.sId ?? '';
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: CollegeContestCard(
+                                        userId: userId,
+                                        contest: contest,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
                         contestController.liveFeaturedContest.isEmpty
                             ? Container()
                             : Obx(
@@ -161,25 +177,25 @@ class _DashboardViewState extends State<DashboardView> {
                       ],
                     ),
                   ),
-                  collegeContestController.liveCollegeContestList.isEmpty
-                      ? Container()
-                      : Obx(
-                          () => SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: collegeContestController.liveCollegeContestList.map((contest) {
-                                String userId = controller.userDetailsData.sId ?? '';
-                                return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: CollegeContestCard(
-                                    userId: userId,
-                                    contest: contest,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
+                  // collegeContestController.liveCollegeContestList.isEmpty
+                  //     ? Container()
+                  //     : Obx(
+                  //         () => SingleChildScrollView(
+                  //           scrollDirection: Axis.horizontal,
+                  //           child: Row(
+                  //             children: collegeContestController.liveCollegeContestList.map((contest) {
+                  //               String userId = controller.userDetailsData.sId ?? '';
+                  //               return Container(
+                  //                 width: MediaQuery.of(context).size.width,
+                  //                 child: CollegeContestCard(
+                  //                   userId: userId,
+                  //                   contest: contest,
+                  //                 ),
+                  //               );
+                  //             }).toList(),
+                  //           ),
+                  //         ),
+                  //       ),
                   contestController.liveContestList.isEmpty
                       ? Container()
                       : CommonTile(
@@ -318,7 +334,7 @@ class _DashboardViewState extends State<DashboardView> {
                             onChanged: (String? value) {
                               setState(
                                 () {
-                                  controller.selectedTradeType = value!;
+                                  controller.selectedTradeType = value ?? '';
                                 },
                               );
                             },
@@ -336,7 +352,7 @@ class _DashboardViewState extends State<DashboardView> {
                             onChanged: (String? value) {
                               setState(
                                 () {
-                                  controller.selectedTimeFrame = value!;
+                                  controller.selectedTimeFrame = value ?? '';
                                   controller.getDashboard(controller.selectedTradeType, controller.selectedTimeFrame);
                                 },
                               );

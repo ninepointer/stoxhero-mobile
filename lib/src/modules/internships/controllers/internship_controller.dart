@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
 
@@ -93,6 +95,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
   final stopLossPendingOrder = StopLossPendingOrdersList().obs;
   final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final internshipCertificate = <InternshipBatches>[].obs;
+  final internshipCertificateDownload = InternshipBatches().obs;
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
 
@@ -103,10 +107,12 @@ class InternshipController extends BaseController<InternshipRespository> {
   final rangeTotalTradingDays = 0.obs;
   final rangeTotalGreenDays = 0.obs;
   final rangeTotalRedDays = 0.obs;
+  final isEligibleForCertificate = false.obs;
 
   Future loadIntershipData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getInternshipBatchDetails();
+    await getInternshipCertificate();
     if (isParticipated()) {
       await getInternshipBatchPortfolioDetails();
     } else {
@@ -440,6 +446,19 @@ class InternshipController extends BaseController<InternshipRespository> {
       );
     }
     return barGroups;
+  }
+
+  void downloadFile() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+
+    String path = dir.path;
+    String docsFolderPath = '$path/StoxHero/docs';
+    String filePath = '$docsFolderPath/Certificate.pdf';
+    String apiUrl = '${AppUrls.internshipCertificateDownload(internshipCertificateDownload.value.id)}';
+
+    await File(filePath).create(recursive: true);
+    Get.find<NetworkService>().downloadFile(path: apiUrl, filePath: filePath);
+    await OpenFilex.open(filePath);
   }
 
   List<int> generateLotsList({String? type}) {
@@ -1245,5 +1264,24 @@ class InternshipController extends BaseController<InternshipRespository> {
       log(e.toString());
     }
     isPendingOrderStateLoading(false);
+  }
+
+  Future getInternshipCertificate() async {
+    isLoading(true);
+    try {
+      final RepoResponse<InternshipCertificateResponse> response = await repository.getInternshipCertificate();
+      if (response.data?.status?.toLowerCase() == "success") {
+        if (response.data?.message == "Eligible for certificate") {
+          isEligibleForCertificate.value = true;
+        }
+        internshipCertificate(response.data?.batches ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
   }
 }

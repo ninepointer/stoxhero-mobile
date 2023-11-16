@@ -124,12 +124,13 @@ class AppUrls {
   static const String internshipPlaceOrder = "$apiURL/internPlacingOrder";
   static const String internshipAllOrders = "$apiURL/internship/my/historyorders";
   static const String internshipTodayOrders = "$apiURL/internship/my/todayorders";
-
+  static const String internshipCertificate = "$apiURL/internbatch/eligibleforcertificate";
   static const String careerApply = "$apiURL/career/apply";
   static const String myWithdrawals = "$apiURL/withdrawals/mywithdrawals";
   static const String pendingOrderModify = "$apiURL/pendingorder/modify";
   static const String marginRequired = "$apiURL/marginrequired";
 
+  static String internshipCertificateDownload(String? id) => "$apiURL/internbatch/download/$id";
   static String tenxPortfolio(String? id) => "$apiURL/tenX/$id/trade/marginDetail";
   static String tenxTradeTodaysOrders(String? subscriptionId) => "$apiURL/tenX/my/todayorders/$subscriptionId";
   static String tenxTradeAllOrders(String? subId, String? subscribedOn, String? expiredOn) =>

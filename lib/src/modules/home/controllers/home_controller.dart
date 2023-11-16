@@ -35,8 +35,6 @@ class HomeController extends BaseController<DashboardRepository> {
     Get.find<CollegeContestController>().getLiveCollegeContestList();
     Get.find<WalletController>().getWalletTransactionsList();
     Get.find<ContestController>().getFeaturedContest();
-    // Get.find<TenxTradingController>().loadUserDetails();
-    // Get.find<TenxTradingController>().getTenxTradingActiveSubs();
   }
 
   Future loadData() async {
@@ -73,7 +71,6 @@ class HomeController extends BaseController<DashboardRepository> {
   }
 
   String getStockIndexName(int instId) {
-    // log('instToken : $instId');
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }

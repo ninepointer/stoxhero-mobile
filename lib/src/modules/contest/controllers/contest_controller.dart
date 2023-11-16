@@ -107,6 +107,8 @@ class ContestController extends BaseController<ContestRepository> {
   final marginRequired = MarginRequiredResponse().obs;
   final liveFeaturedContest = <LiveFeatured>[].obs;
   final upcomingFeaturedContest = <UpcomingFeatured>[].obs;
+  final featuredCollegeContest = <FeaturedCollegeContest>[].obs;
+  final featuredLiveCollegeContest = FeaturedCollegeContest().obs;
   final liveFeatured = LiveFeatured().obs;
   final upcomingFeatured = UpcomingFeatured().obs;
   final selectedWatchlistIndex = RxInt(-1);
@@ -312,14 +314,18 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   num calculatePayout() {
-    num payoutPercentage = liveContest.value.payoutPercentage ?? 0;
-    num npnl = calculateTotalNetPNL() * payoutPercentage;
+    num livePayoutPercentage = liveContest.value.payoutPercentage ?? 0;
+    num featuredPayoutPercentage = liveFeatured.value.payoutPercentage ?? 0;
+    num totalNetPNL = calculateTotalNetPNL();
+    num npnl = totalNetPNL * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = npnl <= 0 ? 0 : npnl / 100;
     return payout;
   }
 
   num calculateUserPayout(dynamic netPnl) {
-    num reward = netPnl * liveContest.value.payoutPercentage!;
+    num livePayoutPercentage = liveContest.value.payoutPercentage ?? 0;
+    num featuredPayoutPercentage = liveFeatured.value.payoutPercentage ?? 0;
+    num reward = netPnl * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = reward <= 0 ? 0 : reward / 100;
     return payout;
   }
@@ -500,9 +506,6 @@ class ContestController extends BaseController<ContestRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
         : (openingBalance - margin);
-    log('availableMargin $availableMargin');
-    log('calculateTotalNetPNL ${calculateTotalNetPNL()}');
-    log('margin$margin');
     return availableMargin;
   }
 
@@ -1376,6 +1379,7 @@ class ContestController extends BaseController<ContestRepository> {
         if (response.data?.status?.toLowerCase() == "success") {
           liveFeaturedContest(response.data?.liveFeatured ?? []);
           upcomingFeaturedContest(response.data?.upcomingFeatured ?? []);
+          featuredCollegeContest(response.data?.collegeContest ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

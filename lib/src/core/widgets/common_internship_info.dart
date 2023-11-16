@@ -12,12 +12,12 @@ class CommonInternshipInfo extends StatelessWidget {
         SizedBox(height: 16),
         Text(
           'Welcome to the transformative StoxHero Derivatives Trader Internship! Our program cultivates future trading experts through immersive learning, equipping you for a rewarding derivatives career. Excel with us and earn a prestigious StoxHero internship certificate.',
-          style: Theme.of(context).textTheme.tsRegular16,
+          style: Theme.of(context).textTheme.tsRegular14,
         ),
         SizedBox(height: 12),
         Text(
           'Perks & Benefits of StoxHero Internship Program:',
-          style: Theme.of(context).textTheme.tsMedium16,
+          style: Theme.of(context).textTheme.tsMedium14,
         ),
         SizedBox(height: 12),
         Text(
@@ -32,7 +32,7 @@ class CommonInternshipInfo extends StatelessWidget {
         SizedBox(height: 12),
         Text(
           'Internship Completion Rules and Issuance of Internship Certificate:',
-          style: Theme.of(context).textTheme.tsMedium16,
+          style: Theme.of(context).textTheme.tsMedium14,
         ),
         SizedBox(height: 12),
         Text(
