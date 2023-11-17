@@ -198,4 +198,6 @@ class AppUrls {
   static String marginXStopLossPendingOrder(String? id) => "$pendingOrder/todaysPending/$id/MarginX";
   static String marginXStopLossPendingCancelOrder(String? id) => "$apiURL/pendingorder/$id/MarginX";
   static String marginXTodayOrders(String? id) => "$apiURL/marginxtrade/$id/my/todayorders";
+
+  static String dayWiseContestPnl(String? id) => "$apiURL/dailycontest/trade/$id/mydaywisepnl";
 }

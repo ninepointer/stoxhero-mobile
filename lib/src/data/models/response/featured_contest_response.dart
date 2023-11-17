@@ -257,8 +257,8 @@ class FeaturedRewards {
 
 class FeaturedParticipants {
   FeaturedUserId? userId;
-  int? fee;
-  int? actualPrice;
+  num? fee;
+  num? actualPrice;
   String? participatedOn;
   bool? isLive;
   String? id;

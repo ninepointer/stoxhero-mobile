@@ -561,8 +561,8 @@ class UserIdc {
 
 class Participants {
   UserIdc? userId;
-  int? fee;
-  int? actualPrice;
+  num? fee;
+  num? actualPrice;
   String? participatedOn;
   bool? isLive;
   String? sId;
