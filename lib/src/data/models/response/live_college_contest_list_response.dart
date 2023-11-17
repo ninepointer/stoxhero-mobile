@@ -170,7 +170,7 @@ class LiveCollegeContest {
 class CollegePortfolio {
   String? sId;
   String? portfolioName;
-  int? portfolioValue;
+  num? portfolioValue;
 
   CollegePortfolio({this.sId, this.portfolioName, this.portfolioValue});
 

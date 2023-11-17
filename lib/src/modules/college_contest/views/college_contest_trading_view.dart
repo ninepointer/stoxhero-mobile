@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/modules/college_contest/widgets/college_contest_today_order_card.dart';
-import 'package:stoxhero/src/modules/widgets/contest_pnl_dropdown_card.dart';
 import '../../../app/app.dart';
 
 class CollegeContestTradingView extends GetView<CollegeContestController> {
@@ -100,8 +98,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             },
                           ),
                         ),
-                  SizedBox(height: 8),
-                  ContestPnlDropdownCard(),
+                  daysContestNetPNLCard(),
                   CommonTile(
                     label: 'My Rank',
                     showSeeAllButton: true,
@@ -298,5 +295,20 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
         ),
       ),
     );
+  }
+
+  Widget daysContestNetPNLCard() {
+    int days = controller.getDurationInDays(
+      controller.liveCollegeContest.value.contestStartTime,
+      controller.liveCollegeContest.value.contestEndTime,
+    );
+    return days > 1
+        ? Column(
+            children: [
+              SizedBox(height: 8),
+              ContestPnlDropdownCard(),
+            ],
+          )
+        : Container();
   }
 }

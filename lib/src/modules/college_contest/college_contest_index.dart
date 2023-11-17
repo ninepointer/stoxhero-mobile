@@ -13,6 +13,7 @@ export 'widgets/college_contest_search_instruments_card.dart';
 export 'widgets/college_contest_stoploss_edit_price_bottom_sheet.dart';
 export 'widgets/college_contest_stoploss_modify_price_bottom_sheet.dart';
 export 'widgets/college_contest_stoploss_pending_order_card.dart';
+export 'widgets/college_contest_today_order_card.dart';
 export 'widgets/college_contest_transaction_bottom_sheet.dart';
 export 'widgets/college_contest_watchlist_card.dart';
 export 'widgets/completed_college_contest_card.dart';

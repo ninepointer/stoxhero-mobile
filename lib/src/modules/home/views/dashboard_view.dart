@@ -136,7 +136,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       width: MediaQuery.of(context).size.width,
                                       child: CollegeContestCard(
                                         userId: userId,
-                                        contest: contest,
+                                        featuredCollegeContest: contest,
                                       ),
                                     );
                                   }).toList(),
@@ -189,7 +189,7 @@ class _DashboardViewState extends State<DashboardView> {
                   //                 width: MediaQuery.of(context).size.width,
                   //                 child: CollegeContestCard(
                   //                   userId: userId,
-                  //                   contest: contest,
+                  //                   featuredCollegeContest: contest,
                   //                 ),
                   //               );
                   //             }).toList(),

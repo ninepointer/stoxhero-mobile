@@ -135,6 +135,16 @@ class FormatHelper {
       return '-';
     }
   }
+
+  static String formatDateMonth(String? value) {
+    if (value != null) {
+      DateTime dateTime = DateTime.parse(value);
+      String formattedString = DateFormat('d MMM').format(dateTime);
+      return formattedString;
+    } else {
+      return '-';
+    }
+  }
 }
 
 class UpperCaseTextFormatter extends TextInputFormatter {

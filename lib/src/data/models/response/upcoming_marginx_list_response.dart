@@ -31,7 +31,6 @@ class UpcomingMarginX {
   String? endTime;
   String? liveTime;
   UMarginXTemplate? marginXTemplate;
-  List<Null>? potentialParticipants;
   int? maxParticipants;
   String? status;
   String? createdBy;
@@ -41,34 +40,32 @@ class UpcomingMarginX {
   bool? isBankNifty;
   bool? isFinNifty;
   List<MParticipants>? participants;
-  List<Null>? sharedBy;
   List<MPurchaseIntent>? purchaseIntent;
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
 
-  UpcomingMarginX(
-      {this.id,
-      this.marginXName,
-      this.startTime,
-      this.endTime,
-      this.liveTime,
-      this.marginXTemplate,
-      this.potentialParticipants,
-      this.maxParticipants,
-      this.status,
-      this.createdBy,
-      this.lastModifiedBy,
-      this.marginXExpiry,
-      this.isNifty,
-      this.isBankNifty,
-      this.isFinNifty,
-      this.participants,
-      this.sharedBy,
-      this.purchaseIntent,
-      this.createdOn,
-      this.lastModifiedOn,
-      this.iV});
+  UpcomingMarginX({
+    this.id,
+    this.marginXName,
+    this.startTime,
+    this.endTime,
+    this.liveTime,
+    this.marginXTemplate,
+    this.maxParticipants,
+    this.status,
+    this.createdBy,
+    this.lastModifiedBy,
+    this.marginXExpiry,
+    this.isNifty,
+    this.isBankNifty,
+    this.isFinNifty,
+    this.participants,
+    this.purchaseIntent,
+    this.createdOn,
+    this.lastModifiedOn,
+    this.iV,
+  });
 
   UpcomingMarginX.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -77,12 +74,6 @@ class UpcomingMarginX {
     endTime = json['endTime'];
     liveTime = json['liveTime'];
     marginXTemplate = json['marginXTemplate'] != null ? new UMarginXTemplate.fromJson(json['marginXTemplate']) : null;
-    if (json['potentialParticipants'] != null) {
-      potentialParticipants = <Null>[];
-      json['potentialParticipants'].forEach((v) {
-        // potentialParticipants!.add(new Null.fromJson(v));
-      });
-    }
     maxParticipants = json['maxParticipants'];
     status = json['status'];
     createdBy = json['createdBy'];
@@ -95,12 +86,6 @@ class UpcomingMarginX {
       participants = <MParticipants>[];
       json['participants'].forEach((v) {
         participants!.add(new MParticipants.fromJson(v));
-      });
-    }
-    if (json['sharedBy'] != null) {
-      sharedBy = <Null>[];
-      json['sharedBy'].forEach((v) {
-        // sharedBy!.add(new Null.fromJson(v));
       });
     }
     if (json['purchaseIntent'] != null) {
@@ -124,9 +109,6 @@ class UpcomingMarginX {
     if (this.marginXTemplate != null) {
       data['marginXTemplate'] = this.marginXTemplate!.toJson();
     }
-    if (this.potentialParticipants != null) {
-      // data['potentialParticipants'] = this.potentialParticipants!.map((v) => v.toJson()).toList();
-    }
     data['maxParticipants'] = this.maxParticipants;
     data['status'] = this.status;
     data['createdBy'] = this.createdBy;
@@ -137,9 +119,6 @@ class UpcomingMarginX {
     data['isFinNifty'] = this.isFinNifty;
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
-    }
-    if (this.sharedBy != null) {
-      // data['sharedBy'] = this.sharedBy!.map((v) => v.toJson()).toList();
     }
     if (this.purchaseIntent != null) {
       data['purchaseIntent'] = this.purchaseIntent!.map((v) => v.toJson()).toList();

@@ -4,10 +4,12 @@ import '../../../app/app.dart';
 
 class CollegeContestCard extends GetView<CollegeContestController> {
   final String userId;
-  final FeaturedCollegeContest? contest;
+  final FeaturedCollegeContest? featuredCollegeContest;
+  final LiveCollegeContest? liveCollegeContest;
   const CollegeContestCard({
     Key? key,
-    this.contest,
+    this.featuredCollegeContest,
+    this.liveCollegeContest,
     required this.userId,
   }) : super(key: key);
 
@@ -43,25 +45,26 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${contest?.contestName}',
+                        '${featuredCollegeContest?.contestName}',
                         style: Theme.of(context).textTheme.tsRegular16,
                       ),
                       SizedBox(height: 4),
                       GestureDetector(
                         child: Row(
                           children: [
-                            if (contest?.payoutType != 'Reward') ...[
+                            if (featuredCollegeContest?.payoutType != 'Reward') ...[
                               Text(
-                                '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
+                                '${featuredCollegeContest?.payoutPercentage != null ? featuredCollegeContest?.payoutPercentage : '0'}% of the Net P&L',
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
-                              if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                              if (featuredCollegeContest?.payoutCapPercentage != null &&
+                                  featuredCollegeContest?.payoutCapPercentage != 0)
                                 Text(
                                   ' (Upto ${controller.getPaidCapAmount(
-                                    contest?.entryFee == 0
-                                        ? contest?.portfolio?.portfolioValue ?? 0
-                                        : contest?.entryFee ?? 0,
-                                    contest?.payoutCapPercentage ?? 0,
+                                    featuredCollegeContest?.entryFee == 0
+                                        ? featuredCollegeContest?.portfolio?.portfolioValue ?? 0
+                                        : featuredCollegeContest?.entryFee ?? 0,
+                                    featuredCollegeContest?.payoutCapPercentage ?? 0,
                                   )})',
                                   style: Theme.of(context).textTheme.tsMedium12,
                                 ),
@@ -84,12 +87,12 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                       children: [
                         CommonCardTile(
                           label: 'Starts',
-                          value: FormatHelper.formatDateTimeOnlyToIST(contest?.contestStartTime),
+                          value: FormatHelper.formatDateTimeOnlyToIST(featuredCollegeContest?.contestStartTime),
                         ),
                         SizedBox(height: 4),
                         CommonCardTile(
                           label: 'Ends',
-                          value: FormatHelper.formatDateTimeOnlyToIST(contest?.contestEndTime),
+                          value: FormatHelper.formatDateTimeOnlyToIST(featuredCollegeContest?.contestEndTime),
                         )
                       ],
                     ),
@@ -101,7 +104,9 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                       color: AppColors.grey.withOpacity(.1),
                     ),
                     child: Text(
-                      contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
+                      featuredCollegeContest?.entryFee == 0
+                          ? 'Free'
+                          : FormatHelper.formatNumbers(featuredCollegeContest?.entryFee, decimal: 0),
                       style: Theme.of(context).textTheme.tsMedium18.copyWith(
                             color: AppColors.success,
                           ),
@@ -116,19 +121,19 @@ class CollegeContestCard extends GetView<CollegeContestController> {
         GestureDetector(
           onTap: () {
             controller.userDetails.value = AppStorage.getUserDetails();
-            controller.featuredCollegeContest(contest);
-            if (contest?.entryFee == 0) {
-              if (contest?.maxParticipants == contest?.participants?.length) {
-                if (controller.canUserFeaturedTrade(contest, userId)) {
+            controller.featuredCollegeContest(featuredCollegeContest);
+            if (featuredCollegeContest?.entryFee == 0) {
+              if (featuredCollegeContest?.maxParticipants == featuredCollegeContest?.participants?.length) {
+                if (controller.canUserFeaturedTrade(featuredCollegeContest, userId)) {
                   controller.gotoTradingView();
                 } else {
                   if (controller.collegeCodeTextController.text.isNotEmpty) {
                     Get.back();
-                    controller.verifyAndFeatureParticipate(contest);
+                    controller.verifyAndFeatureParticipate(featuredCollegeContest);
                     controller.collegeCodeTextController.clear();
                   }
                 }
-              } else if (controller.canUserFeaturedTrade(contest, userId)) {
+              } else if (controller.canUserFeaturedTrade(featuredCollegeContest, userId)) {
                 controller.gotoTradingView();
               } else {
                 BottomSheetHelper.openBottomSheet(
@@ -137,7 +142,7 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                     onSubmit: () {
                       if (controller.collegeCodeTextController.text.isNotEmpty) {
                         Get.back();
-                        controller.verifyAndFeatureParticipate(contest);
+                        controller.verifyAndFeatureParticipate(featuredCollegeContest);
                         controller.collegeCodeTextController.clear();
                       }
                     },
@@ -145,7 +150,7 @@ class CollegeContestCard extends GetView<CollegeContestController> {
                 );
               }
             } else {
-              if (controller.checkIfLiveFeaturedPurchased(contest, userId)) {
+              if (controller.checkIfLiveFeaturedPurchased(featuredCollegeContest, userId)) {
                 controller.gotoTradingView();
               } else {}
             }
@@ -161,7 +166,8 @@ class CollegeContestCard extends GetView<CollegeContestController> {
               ),
             ),
             child: Text(
-              (controller.checkIfLiveFeaturedPurchased(contest, userId) || contest?.entryFee == 0)
+              (controller.checkIfLiveFeaturedPurchased(featuredCollegeContest, userId) ||
+                      featuredCollegeContest?.entryFee == 0)
                   ? 'Start Trading'
                   : 'Click to Participate',
               style: AppStyles.tsSecondaryMedium14.copyWith(

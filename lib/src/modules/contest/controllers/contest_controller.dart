@@ -315,19 +315,53 @@ class ContestController extends BaseController<ContestRepository> {
 
   num calculatePayout() {
     num livePayoutPercentage = liveContest.value.payoutPercentage ?? 0;
+    num livePayoutCapPercentage = liveContest.value.payoutCapPercentage ?? 0;
+    num liveEntryFee = liveContest.value.entryFee ?? 0;
+    num livePortfolio = liveContest.value.portfolio?.portfolioValue ?? 0;
+
     num featuredPayoutPercentage = liveFeatured.value.payoutPercentage ?? 0;
+    num featuredPayoutCapPercentage = liveFeatured.value.payoutCapPercentage ?? 0;
+    num featuredEntryFee = liveFeatured.value.entryFee ?? 0;
+    num featuredPortfolio = liveFeatured.value.portfolio?.portfolioValue ?? 0;
+
     num totalNetPNL = calculateTotalNetPNL();
     num npnl = totalNetPNL * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = npnl <= 0 ? 0 : npnl / 100;
-    return payout;
+    num payoutCap = liveEntryFee == 0
+        ? (featuredEntryFee == 0
+            ? ((featuredPortfolio != 0 ? featuredPortfolio : livePortfolio) *
+                (featuredPayoutCapPercentage != 0 ? featuredPayoutCapPercentage : livePayoutCapPercentage) /
+                100)
+            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) * (livePayoutCapPercentage) / 100)
+        : (liveEntryFee) * (livePayoutCapPercentage) / 100;
+
+    num finalPayout = payout > payoutCap ? payoutCap : payout;
+    return finalPayout;
   }
 
   num calculateUserPayout(dynamic netPnl) {
     num livePayoutPercentage = liveContest.value.payoutPercentage ?? 0;
+    num livePayoutCapPercentage = liveContest.value.payoutCapPercentage ?? 0;
+    num liveEntryFee = liveContest.value.entryFee ?? 0;
+    num livePortfolio = liveContest.value.portfolio?.portfolioValue ?? 0;
+
     num featuredPayoutPercentage = liveFeatured.value.payoutPercentage ?? 0;
+    num featuredPayoutCapPercentage = liveFeatured.value.payoutCapPercentage ?? 0;
+    num featuredEntryFee = liveFeatured.value.entryFee ?? 0;
+    num featuredPortfolio = liveFeatured.value.portfolio?.portfolioValue ?? 0;
+
     num reward = netPnl * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = reward <= 0 ? 0 : reward / 100;
-    return payout;
+    num payoutCap = liveEntryFee == 0
+        ? (featuredEntryFee == 0
+            ? ((featuredPortfolio != 0 ? featuredPortfolio : livePortfolio) *
+                (featuredPayoutCapPercentage != 0 ? featuredPayoutCapPercentage : livePayoutCapPercentage) /
+                100)
+            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) * (livePayoutCapPercentage) / 100)
+        : (liveEntryFee) * (livePayoutCapPercentage) / 100;
+
+    num finalPayout = payout > payoutCap ? payoutCap : payout;
+    return finalPayout;
   }
 
   num calculateUserReward(dynamic rank) {

@@ -7,7 +7,6 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:stoxhero/src/data/models/response/upcoming_college_contest_list_response.dart';
-
 import '../../../app/app.dart';
 
 class CollegeContestBinding implements Bindings {
@@ -78,8 +77,6 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final completedSegmentedControlValue = 0.obs;
   final isOtpVisible = false.obs;
 
- final dayWiseCOntestPnl = <DayWiseContestPnl>[].obs; 
-
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
   final emailTextController = TextEditingController();
@@ -147,6 +144,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
   final marginRequired = MarginRequiredResponse().obs;
   final featuredCollegeContest = FeaturedCollegeContest().obs;
+  final dayWiseContestPnlList = <DayWiseContestPnl>[].obs;
+  final dayWiseContestPnl = DayWiseContestPnl().obs;
 
   String? experienceSelectedValue;
   String? hearAboutSelectedValue;
@@ -199,6 +198,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     await getStopLossExecutedOrder();
     await getContestTodaysOrderList();
     await getContestPortfolio();
+    await getDayWiseContestPnl();
     socketConnection();
     socketIndexConnection();
     socketLeaderboardConnection();
@@ -220,6 +220,17 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   void gotoTradingView() {
     loadTradingData();
     Get.to(() => CollegeContestTradingView());
+  }
+
+  int getDurationInDays(String? startTime, String? endTime) {
+    if (startTime != null && endTime != null) {
+      DateTime startDateTimeUTC = DateTime.parse(startTime);
+      DateTime endDateTimeUTC = DateTime.parse(endTime);
+      Duration difference = endDateTimeUTC.difference(startDateTimeUTC);
+      return difference.inDays;
+    } else {
+      return 0;
+    }
   }
 
   bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
@@ -314,19 +325,54 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   num calculatePayout() {
     num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
+    num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
+    num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
+    num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
+
     num featuredPayoutPercentage = featuredCollegeContest.value.payoutPercentage ?? 0;
+    num featuredPayoutCapPercentage = featuredCollegeContest.value.payoutCapPercentage ?? 0;
+    num featuredEntryFee = featuredCollegeContest.value.entryFee ?? 0;
+    num featuredPortfolio = featuredCollegeContest.value.portfolio?.portfolioValue ?? 0;
+
     num totalNetPNL = calculateTotalNetPNL();
     num npnl = totalNetPNL * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = npnl <= 0 ? 0 : npnl / 100;
-    return payout;
+
+    num payoutCap = liveEntryFee == 0
+        ? (featuredEntryFee == 0
+            ? ((featuredPortfolio != 0 ? featuredPortfolio : livePortfolio) *
+                (featuredPayoutCapPercentage != 0 ? featuredPayoutCapPercentage : livePayoutCapPercentage) /
+                100)
+            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) * (livePayoutCapPercentage) / 100)
+        : (liveEntryFee) * (livePayoutCapPercentage) / 100;
+
+    num finalPayout = payout > payoutCap ? payoutCap : payout;
+    return finalPayout;
   }
 
   num calculateUserPayout(dynamic netPnl) {
     num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
+    num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
+    num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
+    num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
+
     num featuredPayoutPercentage = featuredCollegeContest.value.payoutPercentage ?? 0;
+    num featuredPayoutCapPercentage = featuredCollegeContest.value.payoutCapPercentage ?? 0;
+    num featuredEntryFee = featuredCollegeContest.value.entryFee ?? 0;
+    num featuredPortfolio = featuredCollegeContest.value.portfolio?.portfolioValue ?? 0;
+
     num reward = netPnl * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = reward <= 0 ? 0 : reward / 100;
-    return payout;
+    num payoutCap = liveEntryFee == 0
+        ? (featuredEntryFee == 0
+            ? ((featuredPortfolio != 0 ? featuredPortfolio : livePortfolio) *
+                (featuredPayoutCapPercentage != 0 ? featuredPayoutCapPercentage : livePayoutCapPercentage) /
+                100)
+            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) * (livePayoutCapPercentage) / 100)
+        : (liveEntryFee) * (livePayoutCapPercentage) / 100;
+
+    num finalPayout = payout > payoutCap ? payoutCap : payout;
+    return finalPayout;
   }
 
   Future calculateUserWalletAmount() async {
@@ -551,6 +597,42 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     } else {
       return 0;
     }
+  }
+
+  num calculateContestGrossPNL() {
+    num gross = 0;
+    for (var pnl in dayWiseContestPnlList) {
+      gross += pnl.gpnl ?? 0;
+    }
+    num finalGross = calculateTotalGrossPNL() - gross;
+    return finalGross;
+  }
+
+  num calculateContestBrokerage() {
+    num totalBrokerage = 0;
+    for (var pnl in dayWiseContestPnlList) {
+      totalBrokerage += pnl.brokerage ?? 0;
+    }
+    num finalBrokerage = (tenxTotalPositionDetails.value.brokerage ?? 0) - totalBrokerage;
+    return finalBrokerage;
+  }
+
+  num calculateContestNetPNL() {
+    num totalNetPNL = 0;
+    for (var pnl in dayWiseContestPnlList) {
+      totalNetPNL += pnl.npnl ?? 0;
+    }
+    num finalNetPnl = calculateTotalNetPNL() - totalNetPNL;
+    return finalNetPnl;
+  }
+
+  num calculateContestTrades() {
+    num totalTrades = 0;
+    for (var pnl in dayWiseContestPnlList) {
+      totalTrades += pnl.trades ?? 0;
+    }
+    num finalTrades = contestOrdersList.length - totalTrades;
+    return finalTrades;
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
@@ -1463,5 +1545,23 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
     }
     isPendingOrderStateLoading(false);
+  }
+
+  Future getDayWiseContestPnl() async {
+    isLoading(true);
+    try {
+      final RepoResponse<DayWiseContestPnlResponse> response = await repository.getDayWiseContestPnl(
+        featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        dayWiseContestPnlList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
   }
 }

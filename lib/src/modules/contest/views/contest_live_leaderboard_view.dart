@@ -41,7 +41,7 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                     reward: reward == "Reward"
                         ? controller.calculateUserReward(rank.toString()).toString()
                         : controller.calculateUserPayout(user.npnl ?? 0).toString(),
-                    netPnL: user.npnl?.toStringAsFixed(2) ?? '0',
+                    netPnL: user.npnl?.toStringAsFixed(0) ?? '0',
                   );
                 },
               ),
