@@ -78,6 +78,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final completedSegmentedControlValue = 0.obs;
   final isOtpVisible = false.obs;
 
+ final dayWiseCOntestPnl = <DayWiseContestPnl>[].obs; 
+
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
   final emailTextController = TextEditingController();

@@ -98,7 +98,8 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                               );
                             },
                           ),
-                        ),      
+                        ),
+                              
                   CommonTile(
                     label: 'My Rank',
                     showSeeAllButton: true,

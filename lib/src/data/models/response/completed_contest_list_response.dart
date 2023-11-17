@@ -604,8 +604,8 @@ class CompletedPurchaseIntent {
 
 class CompletedParticipants {
   String? userId;
-  int? fee;
-  int? actualPrice;
+  num? fee;
+  num? actualPrice;
   String? participatedOn;
   bool? isLive;
   String? sId;
