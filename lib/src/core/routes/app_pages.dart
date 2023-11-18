@@ -169,5 +169,10 @@ class AppPages {
       page: () => InternshipSearchSymbolView(),
       binding: InternshipBinding(),
     ),
+    GetPage(
+      name: AppRoutes.contestProfile,
+      page: () => ContestProfileView(),
+      // binding: InternshipBinding(),
+    ),
   ];
 }
