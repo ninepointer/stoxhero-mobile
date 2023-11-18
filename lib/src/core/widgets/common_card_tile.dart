@@ -10,12 +10,14 @@ class CommonCardTile extends StatelessWidget {
   final bool isValueNumber;
   final IconData? icon;
   final bool hasIconTrailing;
+  final bool isCenterAlign;
   const CommonCardTile({
     super.key,
     this.label,
     this.value,
     this.valueColor,
     this.isRightAlign = false,
+    this.isCenterAlign = false,
     this.isValueNumber = false,
     this.icon,
     this.hasIconTrailing = false,
@@ -35,7 +37,7 @@ class CommonCardTile extends StatelessWidget {
             ),
           ),
         Column(
-          crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : isCenterAlign?CrossAxisAlignment.center:CrossAxisAlignment.start,
           children: [
             Text(
               label ?? '-',

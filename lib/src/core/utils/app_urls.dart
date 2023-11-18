@@ -200,4 +200,5 @@ class AppUrls {
   static String marginXTodayOrders(String? id) => "$apiURL/marginxtrade/$id/my/todayorders";
 
   static String dayWiseContestPnl(String? id) => "$apiURL/dailycontest/trade/$id/mydaywisepnl";
+  static String contestProfile(String? id) => "$apiURL/dailycontest/contestprrofile/$id";
 }
