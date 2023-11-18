@@ -32,10 +32,10 @@ class ContestProfileView extends GetView<ContestProfileController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CommonCardTile(label: 'Arenas Played', value: controller.getArenasPlayed(), isCenterAlign: true),
-                CommonCardTile(label: 'Arenas Won', value: controller.getArenasWon(),isCenterAlign: true),
+                CommonCardTile(label: 'Test Zones Played', value: controller.getArenasPlayed(), isCenterAlign: true),
+                CommonCardTile(label: 'Test Zones Won', value: controller.getArenasWon(),isCenterAlign: true),
                 CommonCardTile(label: 'Earnings', value: controller.getEarnings(),isCenterAlign: true),
-                CommonCardTile(label: 'Arenas Played', value: controller.getStrikeRate(),isCenterAlign: true),
+                CommonCardTile(label: 'Test Zones Played', value: controller.getStrikeRate(),isCenterAlign: true),
             ],),
           ),
         ),
