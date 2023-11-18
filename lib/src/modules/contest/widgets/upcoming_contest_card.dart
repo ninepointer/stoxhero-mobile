@@ -238,13 +238,12 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (widget.contest?.payoutType == 'Reward')
-                              BottomSheetHelper.openBottomSheet(
-                                context: context,
-                                child: RewardTableBottomSheet(
-                                  upcomingContest: widget.contest,
-                                ),
-                              );
+                            BottomSheetHelper.openBottomSheet(
+                              context: context,
+                              child: RewardTableBottomSheet(
+                                upcomingContest: widget.contest,
+                              ),
+                            );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -269,7 +268,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                           ? widget.contest?.portfolio?.portfolioValue ?? 0
                                           : widget.contest?.entryFee ?? 0,
                                       widget.contest?.payoutCapPercentage ?? 0,
-                                    )})',
+                                    )}) Click to know more.',
                                     style: Theme.of(context).textTheme.tsMedium12,
                                   ),
                               ]

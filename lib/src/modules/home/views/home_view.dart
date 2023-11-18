@@ -128,7 +128,7 @@ class _HomeViewState extends State<HomeView> {
       body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor: AppColors.primary,
+        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
         onPressed: () => _updateTab(2),
         child: Icon(
           Icons.currency_rupee_rounded,
@@ -154,7 +154,7 @@ class _HomeViewState extends State<HomeView> {
                 _buildTabButton(
                   context,
                   index: 1,
-                  label: 'Virtual',
+                  label: 'Market',
                   icon: Icons.analytics_rounded,
                 ),
                 SizedBox(width: 40),
@@ -167,7 +167,7 @@ class _HomeViewState extends State<HomeView> {
                 _buildTabButton(
                   context,
                   index: 4,
-                  label: 'Contest',
+                  label: 'TestZone',
                   icon: Icons.groups_rounded,
                 ),
               ],
@@ -192,13 +192,21 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Icon(
               icon,
-              color: controller.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey,
+              color: controller.selectedIndex.value == index
+                  ? Get.isDarkMode
+                      ? AppColors.darkGreen
+                      : AppColors.lightGreen
+                  : AppColors.grey,
             ),
             SizedBox(height: 4),
             Text(
               label,
               style: Theme.of(context).textTheme.tsRegular12.copyWith(
-                    color: controller.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey,
+                    color: controller.selectedIndex.value == index
+                        ? Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen
+                        : AppColors.grey,
                   ),
             )
           ],

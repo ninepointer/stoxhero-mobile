@@ -66,6 +66,12 @@ class ContestController extends BaseController<ContestRepository> {
   final isMarginStateLoading = false.obs;
   bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
 
+  final isPurchaseLoading = false.obs;
+  bool get isPurchaseLoadingStatus => isMarginStateLoading.value;
+
+  final isRecentLoading = false.obs;
+  bool get isRecentLoadingStatus => isRecentLoading.value;
+
   final selectedTabBarIndex = 0.obs;
   final selectedSecondTabBarIndex = 0.obs;
 
@@ -137,6 +143,7 @@ class ContestController extends BaseController<ContestRepository> {
   final liveLeaderboard = LiveContestLeaderboard().obs;
   final completedContestLeaderboardList = <CompletedContestLeaderboardList>[].obs;
   final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
+  final readSetting = ReadSettingResponse().obs;
 
   Future loadData() async {
     loadUserDetails();
@@ -144,6 +151,7 @@ class ContestController extends BaseController<ContestRepository> {
     await getUpComingContestList();
     await getCompletedContestList();
     await getCompletedContestPnlList();
+    await getReadSetting();
   }
 
   Future loadUserDetails() async {
@@ -160,6 +168,7 @@ class ContestController extends BaseController<ContestRepository> {
     await getStopLossExecutedOrder();
     await getContestTodaysOrderList();
     await getContestPortfolio();
+    await getReadSetting();
     await socketConnection();
     socketIndexConnection();
     socketSendConnection();
@@ -384,6 +393,30 @@ class ContestController extends BaseController<ContestRepository> {
     return totalReward;
   }
 
+  num getRewardCapAmount(num fees, num cap) {
+    num percentage = (fees * cap) / 100;
+    return percentage;
+  }
+
+  num calculateTDS() {
+    num tds = readSetting.value.tdsPercentage ?? 0;
+    num tdsPercentage = getRewardCapAmount(
+          liveContest.value.entryFee == 0
+              ? liveContest.value.portfolio?.portfolioValue ?? 0
+              : liveContest.value.entryFee ?? 0,
+          liveContest.value.payoutCapPercentage ?? 0,
+        ) *
+        tds /
+        100;
+    print(tds);
+    return tdsPercentage;
+  }
+
+  num calculatefinalPayout() {
+    num finalPayout = calculatePayout() - calculateTDS();
+    return finalPayout;
+  }
+
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   int getOpenPositionCount() {
@@ -483,6 +516,7 @@ class ContestController extends BaseController<ContestRepository> {
 
   num calculateTotalGrossPNL() {
     num totalGross = 0;
+
     for (var position in contestPositionsList) {
       if (position.id?.isLimit != true) {
         // Check if isLimit is not true
@@ -1041,7 +1075,7 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future purchaseContest(Map<String, dynamic> data) async {
-    isLoading(true);
+    isPurchaseLoading(true);
     try {
       final RepoResponse<GenericResponse> response = await repository.purchaseContest(
         data,
@@ -1056,7 +1090,7 @@ class ContestController extends BaseController<ContestRepository> {
       log('Purchase Contest: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPurchaseLoading(false);
   }
 
   Future socketLeaderboardConnection() async {
@@ -1422,5 +1456,17 @@ class ContestController extends BaseController<ContestRepository> {
       // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getReadSetting() async {
+    isRecentLoading(true);
+    try {
+      final RepoResponse<ReadSettingResponse> response = await repository.readSetting();
+      readSetting(response.data);
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isRecentLoading(false);
   }
 }

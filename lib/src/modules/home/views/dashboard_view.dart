@@ -122,6 +122,7 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
+                  ContestPortfolioWeekCard(),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -199,7 +200,7 @@ class _DashboardViewState extends State<DashboardView> {
                   contestController.liveContestList.isEmpty
                       ? Container()
                       : CommonTile(
-                          label: 'Live Contests',
+                          label: 'Open TestZones',
                           showSeeAllButton: true,
                           onPressed: () {
                             contestController.loadData();
@@ -232,7 +233,7 @@ class _DashboardViewState extends State<DashboardView> {
                     contestController.upComingContestList.isEmpty
                         ? Container()
                         : CommonTile(
-                            label: 'Upcoming Contests',
+                            label: 'Upcoming TestZones',
                             showSeeAllButton: true,
                             onPressed: () {
                               contestController.loadData();
@@ -287,7 +288,7 @@ class _DashboardViewState extends State<DashboardView> {
                             SizedBox(width: 8),
                             Expanded(
                               child: customCard(
-                                label: 'Contest Trading',
+                                label: 'TestZones Trading',
                                 percent: controller.userDashboardReturnSummary.value.contestReturn == null
                                     ? '0'
                                     : '${(controller.userDashboardReturnSummary.value.contestReturn! * 100).toStringAsFixed(2)} %',
@@ -382,7 +383,7 @@ class _DashboardViewState extends State<DashboardView> {
                                           : '0',
                                     )
                                   : customCard(
-                                      label: 'Total \nContests',
+                                      label: 'Total TestZones',
                                       percent: userDashboard.totalContests != null
                                           ? FormatHelper.formatNumbers(
                                               userDashboard.totalContests,
@@ -406,7 +407,7 @@ class _DashboardViewState extends State<DashboardView> {
                                           : '0',
                                     )
                                   : customCard(
-                                      label: 'Contests Participated',
+                                      label: 'TestZones Participated',
                                       percent: userDashboard.participatedContests != null
                                           ? FormatHelper.formatNumbers(
                                               userDashboard.participatedContests,

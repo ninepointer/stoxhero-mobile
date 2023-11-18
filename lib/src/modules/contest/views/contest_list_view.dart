@@ -21,7 +21,7 @@ class _ContestListViewState extends State<ContestListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contests'),
+        title: Text('TestZone'),
       ),
       body: Obx(
         () => CommonTabBar(

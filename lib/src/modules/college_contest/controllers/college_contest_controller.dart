@@ -68,6 +68,10 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   final isExecutedOrderStateLoading = false.obs;
   bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
+
+  final isRecentLoading = false.obs;
+  bool get isRecentLoadingStatus => isRecentLoading.value;
+
   final selectedTabBarIndex = 0.obs;
   final selectedSecondTabBarIndex = 0.obs;
 
@@ -146,7 +150,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final featuredCollegeContest = FeaturedCollegeContest().obs;
   final dayWiseContestPnlList = <DayWiseContestPnl>[].obs;
   final dayWiseContestPnl = DayWiseContestPnl().obs;
-
+  final readSetting = ReadSettingResponse().obs;
   String? experienceSelectedValue;
   String? hearAboutSelectedValue;
 
@@ -182,6 +186,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     await getUpComingCollegeContestList();
     await getCompletedCollegeContestList();
     await getCompletedContestPnlList();
+    await getReadSetting();
   }
 
   Future loadUserDetails() async {
@@ -199,6 +204,7 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     await getContestTodaysOrderList();
     await getContestPortfolio();
     await getDayWiseContestPnl();
+    await getReadSetting();
     socketConnection();
     socketIndexConnection();
     socketLeaderboardConnection();
@@ -227,10 +233,30 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       DateTime startDateTimeUTC = DateTime.parse(startTime);
       DateTime endDateTimeUTC = DateTime.parse(endTime);
       Duration difference = endDateTimeUTC.difference(startDateTimeUTC);
-      return difference.inDays;
+      return difference.inDays + 1;
     } else {
       return 0;
     }
+  }
+
+  num calculateUserReward(dynamic rank) {
+    var rewards = liveCollegeContest.value.rewards;
+    var numericRank = num.tryParse(rank) ?? 0;
+    for (var reward in rewards ?? []) {
+      if (numericRank >= reward.rankStart && numericRank <= reward.rankEnd) {
+        return reward.prize;
+      }
+    }
+    return 0;
+  }
+
+  num calculateTotalReward(rankRewards) {
+    num totalReward = 0;
+    for (var reward in rankRewards) {
+      num numberOfRanks = reward.rankEnd - reward.rankStart + 1;
+      totalReward += numberOfRanks * reward.prize;
+    }
+    return totalReward;
   }
 
   bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
@@ -300,6 +326,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   String getPaidCapAmount(num fees, num cap) {
     num percentage = (fees * cap) / 100;
     return FormatHelper.formatNumbers(percentage, showDecimal: false);
+  }
+
+  num getRewardCapAmount(num fees, num cap) {
+    num percentage = (fees * cap) / 100;
+    return percentage;
   }
 
   String getStockIndexName(int instId) {
@@ -633,6 +664,25 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     }
     num finalTrades = contestOrdersList.length - totalTrades;
     return finalTrades;
+  }
+
+  num calculateTDS() {
+    num tds = readSetting.value.tdsPercentage ?? 0;
+    num tdsPercentage = getRewardCapAmount(
+          liveCollegeContest.value.entryFee == 0
+              ? liveCollegeContest.value.portfolio?.portfolioValue ?? 0
+              : liveCollegeContest.value.entryFee ?? 0,
+          liveCollegeContest.value.payoutCapPercentage ?? 0,
+        ) *
+        tds /
+        100;
+    print(tds);
+    return tdsPercentage;
+  }
+
+  num calculatefinalPayout() {
+    num finalPayout = calculatePayout() - calculateTDS();
+    return finalPayout;
   }
 
   num getInstrumentLastPrice(int instID, int exchID) {
@@ -1563,5 +1613,17 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getReadSetting() async {
+    isRecentLoading(true);
+    try {
+      final RepoResponse<ReadSettingResponse> response = await repository.readSetting();
+      readSetting(response.data);
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isRecentLoading(false);
   }
 }

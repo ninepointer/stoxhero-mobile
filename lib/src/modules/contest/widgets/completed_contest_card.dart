@@ -168,20 +168,20 @@ class CompletedContestCard extends GetView<ContestController> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          if (contest?.payoutType == 'Reward')
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: RewardTableBottomSheet(
-                                completedContest: contest,
-                              ),
-                            );
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: RewardTableBottomSheet(
+                              completedContest: contest,
+                              completedContestPnl: completedContestPnl,
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             if (contest?.payoutType == 'Reward') ...[
                               Text(
-                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}, Click to know more.',
+                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},Click to know more.',
                                 style: Theme.of(context).textTheme.tsMedium12,
                                 textAlign: TextAlign.center,
                               )
@@ -191,6 +191,16 @@ class CompletedContestCard extends GetView<ContestController> {
                                 '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
+                              if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                                Text(
+                                  ' (Upto ${controller.getPaidCapAmount(
+                                    contest?.entryFee == 0
+                                        ? completedContestPnl?.portfolioValue ?? 0
+                                        : contest?.entryFee ?? 0,
+                                    contest?.payoutCapPercentage ?? 0,
+                                  )}) Click to know more.',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                ),
                             ]
                           ],
                         ),

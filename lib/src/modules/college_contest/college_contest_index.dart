@@ -19,3 +19,4 @@ export 'widgets/college_contest_watchlist_card.dart';
 export 'widgets/completed_college_contest_card.dart';
 export 'widgets/live_college_contest_card.dart';
 export 'widgets/upcoming_college_contest_card.dart';
+export 'widgets/college_reward_table_bottom_sheet.dart';

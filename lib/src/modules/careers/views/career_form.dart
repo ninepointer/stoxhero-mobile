@@ -204,6 +204,7 @@ class _CareerFormState extends State<CareerForm> {
                       },
                     ),
                     CommonFilledButton(
+                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         label: 'Submit',
                         onPressed: () {
                           if (controller.formKey.currentState!.validate()) {

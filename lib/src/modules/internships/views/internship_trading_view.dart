@@ -76,7 +76,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here! \nClick on + icon to add instruments',
+                          label: AppStrings.noDataFoundWatchlist,
                         )
                       : SizedBox(
                           height:
@@ -142,7 +142,9 @@ class InternshipTradingView extends GetView<InternshipController> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.internshipPositionList.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: AppStrings.noDataFoundPositions,
+                        )
                       : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
@@ -166,7 +168,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                   ),
                   controller.stopLossPendingOrderList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundPendingOrders,
                         )
                       : ListView.builder(
                           shrinkWrap: true,
@@ -186,7 +188,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                   ),
                   controller.stopLossExecutedOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundExecutedOrders,
                         )
                       : SizedBox(
                           height: controller.stopLossExecutedOrdersList.length >= 3
@@ -210,7 +212,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                   ),
                   controller.internshipTodayOrders.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundCompletedRejectedOrders,
                         )
                       : SizedBox(
                           height: controller.internshipTodayOrders.length >= 3
@@ -229,7 +231,7 @@ class InternshipTradingView extends GetView<InternshipController> {
                         ),
                   CommonTile(
                     isLoading: controller.isPortfolioStateLoadingStatus,
-                    label: 'Portfolio Details',
+                    label: 'Virtual Margin Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   PortfolioDetailCardTile(

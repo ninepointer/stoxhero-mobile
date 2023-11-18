@@ -122,6 +122,8 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                           ],
                         ),
                         CommonOutlinedButton(
+                          backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                          labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                           height: 42,
                           label: 'Show Details',
                           onPressed: () {

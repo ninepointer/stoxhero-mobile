@@ -375,7 +375,7 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Margin Required',
+                            'Virtual Margin Required',
                             style: Theme.of(context).textTheme.tsMedium14,
                           ),
                           Visibility(

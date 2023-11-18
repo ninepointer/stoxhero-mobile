@@ -74,7 +74,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here! \nClick on + icon to add instruments',
+                          label: AppStrings.noDataFoundWatchlist,
                         )
                       : SizedBox(
                           height:
@@ -140,7 +140,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.virtualPositionsList.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: AppStrings.noDataFoundPositions,
+                        )
                       : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
@@ -164,7 +166,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   ),
                   controller.stopLossPendingOrderList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundPendingOrders,
                         )
                       : ListView.builder(
                           shrinkWrap: true,
@@ -184,7 +186,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   ),
                   controller.stopLossExecutedOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundExecutedOrders,
                         )
                       : SizedBox(
                           height: controller.stopLossExecutedOrdersList.length >= 3
@@ -208,7 +210,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   ),
                   controller.virtualTradeTodaysOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundCompletedRejectedOrders,
                         )
                       : SizedBox(
                           height: controller.virtualTradeTodaysOrdersList.length >= 3
@@ -227,7 +229,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         ),
                   CommonTile(
                     isLoading: controller.isPortfolioStateLoadingStatus,
-                    label: 'Portfolio Details',
+                    label: 'Virtual Margin Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   PortfolioDetailCardTile(

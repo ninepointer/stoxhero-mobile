@@ -132,6 +132,7 @@ class _WalletViewState extends State<WalletView> {
                             SizedBox(width: 8),
                             Expanded(
                               child: CommonFilledButton(
+                                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                                 height: 42,
                                 label: 'Add Money',
                                 onPressed: () => BottomSheetHelper.openBottomSheet(

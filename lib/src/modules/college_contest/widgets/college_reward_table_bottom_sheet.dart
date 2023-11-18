@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/app.dart';
+import '../../../data/models/response/upcoming_college_contest_list_response.dart';
 
-class RewardTableBottomSheet extends GetView<ContestController> {
-  final LiveContest? liveContest;
-  final UpComingContest? upcomingContest;
-  final CompletedContest? completedContest;
+class CollegeRewardTableBottomSheet extends GetView<CollegeContestController> {
+  final LiveCollegeContest? liveContest;
+  final UpComingCollegeContest? upcomingContest;
+  final CompletedCollegeContest? completedContest;
   final CompletedContestPnl? completedContestPnl;
-  RewardTableBottomSheet({
+
+  CollegeRewardTableBottomSheet({
     this.liveContest,
     this.upcomingContest,
     this.completedContest,
@@ -32,7 +34,6 @@ class RewardTableBottomSheet extends GetView<ContestController> {
               Divider(
                 thickness: 1,
               ),
-              SizedBox(height: 12),
               if (liveContest != null) ...[
                 ContestRules(
                   startTime: liveContest?.contestStartTime,
@@ -110,12 +111,13 @@ class RewardTableBottomSheet extends GetView<ContestController> {
                         ],
                       ),
                       if (liveContest != null)
-                        for (Rewards reward in liveContest?.rewards ?? []) _buildRewardTableRow(context, reward),
+                        for (LiveCollegeRewards reward in liveContest?.rewards ?? [])
+                          _buildRewardTableRow(context, reward),
                       if (upcomingContest != null)
-                        for (UpcomingRewards reward in upcomingContest?.rewards ?? [])
+                        for (UpcomingCollegeRewards reward in upcomingContest?.rewards ?? [])
                           _buildRewardTableRow(context, reward),
                       if (completedContest != null)
-                        for (CompletedRewards reward in completedContest?.rewards ?? [])
+                        for (CompletedCollegeRewards reward in completedContest?.rewards ?? [])
                           _buildRewardTableRow(context, reward),
                     ],
                   ),

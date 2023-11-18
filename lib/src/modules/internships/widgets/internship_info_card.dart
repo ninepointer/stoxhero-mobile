@@ -106,6 +106,8 @@ class InternshipInfoCard extends GetView<InternshipController> {
                   children: [
                     Expanded(
                       child: CommonOutlinedButton(
+                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         height: 42,
                         label: 'View Orders',
                         onPressed: () {
@@ -117,6 +119,8 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     SizedBox(width: 8),
                     Expanded(
                       child: CommonOutlinedButton(
+                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         height: 42,
                         label: 'View Analytics',
                         onPressed: () {
@@ -129,6 +133,8 @@ class InternshipInfoCard extends GetView<InternshipController> {
                 ),
                 SizedBox(height: 8),
                 CommonOutlinedButton(
+                  backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                  labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                   height: 42,
                   label: 'Start Trading',
                   onPressed: () {

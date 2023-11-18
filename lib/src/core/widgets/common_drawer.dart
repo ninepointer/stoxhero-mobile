@@ -138,7 +138,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
             children: [
               ProfileListTile(
                 icon: Icons.analytics,
-                label: 'Analytics',
+                label: 'MarketGuru',
                 onTap: () => selectedItem(context, 0),
               ),
               ProfileListTile(

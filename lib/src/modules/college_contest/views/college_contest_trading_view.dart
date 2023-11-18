@@ -81,7 +81,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here! \nClick on + icon to add instruments',
+                          label: AppStrings.noDataFoundWatchlist,
                         )
                       : SizedBox(
                           height:
@@ -155,10 +155,40 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                           Row(
                             children: [
                               PositionDetailCardTile(
-                                label: 'Payout',
-                                value: controller.calculatePayout().round(),
+                                label: 'Reward',
+                                value: controller.getRewardCapAmount(
+                                  controller.liveCollegeContest.value.entryFee == 0
+                                      ? controller.liveCollegeContest.value.portfolio?.portfolioValue ?? 0
+                                      : controller.liveCollegeContest.value.entryFee ?? 0,
+                                  controller.liveCollegeContest.value.payoutCapPercentage ?? 0,
+                                ),
                                 valueColor: controller.getValueColor(
-                                  controller.calculatePayout(),
+                                  controller.getRewardCapAmount(
+                                    controller.liveCollegeContest.value.entryFee == 0
+                                        ? controller.liveCollegeContest.value.portfolio?.portfolioValue ?? 0
+                                        : controller.liveCollegeContest.value.entryFee ?? 0,
+                                    controller.liveCollegeContest.value.payoutCapPercentage ?? 0,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              PositionDetailCardTile(
+                                label: 'TDS',
+                                value: controller.calculateTDS().round(),
+                                valueColor: controller.getValueColor(
+                                  controller.calculateTDS(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              PositionDetailCardTile(
+                                label: 'Payout',
+                                value: controller.calculatefinalPayout().round(),
+                                valueColor: controller.getValueColor(
+                                  controller.calculatefinalPayout(),
                                 ),
                               ),
                             ],
@@ -176,7 +206,9 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.contestPositionsList.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: AppStrings.noDataFoundPositions,
+                        )
                       : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
@@ -200,7 +232,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                   ),
                   controller.stopLossPendingOrderList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundPendingOrders,
                         )
                       : ListView.builder(
                           shrinkWrap: true,
@@ -220,7 +252,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                   ),
                   controller.stopLossExecutedOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundExecutedOrders,
                         )
                       : SizedBox(
                           height: controller.stopLossExecutedOrdersList.length >= 3
@@ -244,7 +276,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                   ),
                   controller.contestOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundCompletedRejectedOrders,
                         )
                       : SizedBox(
                           height: controller.contestOrdersList.length >= 3
@@ -263,7 +295,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                         ),
                   CommonTile(
                     isLoading: controller.isPortfolioStateLoadingStatus,
-                    label: 'Portfolio Details',
+                    label: 'Virtual Margin Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   PortfolioDetailCardTile(

@@ -79,7 +79,7 @@ class HomeController extends BaseController<DashboardRepository> {
     String name = '';
     if (label == 'virtual') name = 'Virtual Trading';
     if (label == 'tenx') name = 'TenX Trading';
-    if (label == 'contest') name = 'Contest Trading';
+    if (label == 'contest') name = 'TestZones Trading';
     return name;
   }
 

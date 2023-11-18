@@ -58,6 +58,7 @@ class InternshipCertificateDownloadCard extends GetView<InternshipController> {
             Padding(
               padding: EdgeInsets.only(left: 16, bottom: 16, right: 16),
               child: CommonFilledButton(
+                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                 height: 42,
                 label: 'Download Certificate',
                 onPressed: () {

@@ -42,6 +42,7 @@ class ResponsibilitiesView extends GetView<CareerController> {
             ),
             SizedBox(height: 16),
             CommonFilledButton(
+              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
               label: 'Apply',
               onPressed: () {
                 controller.getCollegesList();

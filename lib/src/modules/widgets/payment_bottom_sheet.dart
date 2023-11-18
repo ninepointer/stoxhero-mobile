@@ -386,6 +386,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               width: 100,
                               padding: EdgeInsets.only(top: 16, left: 8),
                               child: CommonOutlinedButton(
+                                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                                labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                                 isLoading: controller.isCouponCodeLoadingStatus,
                                 label: 'APPLY',
                                 onPressed: () => controller.verifyCouponCode(
@@ -471,6 +473,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     children: [
                       SizedBox(height: 16),
                       CommonFilledButton(
+                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                         isLoading: controller.isLoadingStatus,
                         height: 42,
                         label: 'Proceed',

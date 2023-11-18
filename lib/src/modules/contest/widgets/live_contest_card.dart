@@ -174,13 +174,12 @@ class LiveContestCard extends GetView<ContestController> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          if (contest?.payoutType == 'Reward')
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: RewardTableBottomSheet(
-                                liveContest: contest,
-                              ),
-                            );
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: RewardTableBottomSheet(
+                              liveContest: contest,
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -204,7 +203,7 @@ class LiveContestCard extends GetView<ContestController> {
                                         ? contest?.portfolio?.portfolioValue ?? 0
                                         : contest?.entryFee ?? 0,
                                     contest?.payoutCapPercentage ?? 0,
-                                  )})',
+                                  )}) Click to know more.',
                                   style: Theme.of(context).textTheme.tsMedium12,
                                 ),
                             ]
@@ -223,6 +222,7 @@ class LiveContestCard extends GetView<ContestController> {
                           'Remaining Time',
                           style: AppStyles.tsGreyMedium12,
                           textAlign: TextAlign.end,
+                          softWrap: false,
                         ),
                         SizedBox(height: 2),
                         Text(
@@ -319,7 +319,7 @@ class LiveContestCard extends GetView<ContestController> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    controller.userDetails.value = AppStorage.getUserDetails();
+                    // controller.userDetails.value = AppStorage.getUserDetails();
                     controller.liveContest(contest);
                     if (contest?.entryFee == 0) {
                       if (contest?.maxParticipants == contest?.participants?.length) {

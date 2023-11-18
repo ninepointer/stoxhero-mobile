@@ -51,7 +51,7 @@ class UpComingCollegeContest {
   bool? isAllIndex;
   String? product;
   num? payoutCapPercentage;
-  List<Rewards>? rewards;
+  List<UpcomingCollegeRewards>? rewards;
   List<InterestedUserss>? interestedUsers;
   List<UpcomingCollegeParticipants>? participants;
   String? createdOn;
@@ -118,9 +118,9 @@ class UpComingCollegeContest {
     product = json['product'];
     payoutCapPercentage = json['payoutCapPercentage'];
     if (json['rewards'] != null) {
-      rewards = <Rewards>[];
+      rewards = <UpcomingCollegeRewards>[];
       json['rewards'].forEach((v) {
-        rewards!.add(new Rewards.fromJson(v));
+        rewards!.add(new UpcomingCollegeRewards.fromJson(v));
       });
     }
     if (json['interestedUsers'] != null) {
@@ -209,19 +209,19 @@ class Portfolio {
   }
 }
 
-class Rewards {
+class UpcomingCollegeRewards {
   int? rankStart;
   int? rankEnd;
   num? prize;
-  String? sId;
+  String? id;
 
-  Rewards({this.rankStart, this.rankEnd, this.prize, this.sId});
+  UpcomingCollegeRewards({this.rankStart, this.rankEnd, this.prize, this.id});
 
-  Rewards.fromJson(Map<String, dynamic> json) {
+  UpcomingCollegeRewards.fromJson(Map<String, dynamic> json) {
     rankStart = json['rankStart'];
     rankEnd = json['rankEnd'];
     prize = json['prize'];
-    sId = json['_id'];
+    id = json['_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -229,7 +229,7 @@ class Rewards {
     data['rankStart'] = this.rankStart;
     data['rankEnd'] = this.rankEnd;
     data['prize'] = this.prize;
-    data['_id'] = this.sId;
+    data['_id'] = this.id;
     return data;
   }
 }
