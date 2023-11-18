@@ -12,6 +12,7 @@ class _DashboardViewState extends State<DashboardView> {
   late HomeController controller;
   late ContestController contestController;
   late CollegeContestController collegeContestController;
+  late ContestProfileController contestProfileController;
   late List<String> monthsList;
 
   String? selectedValue2 = '';
@@ -22,6 +23,7 @@ class _DashboardViewState extends State<DashboardView> {
     controller = Get.find<HomeController>();
     contestController = Get.find<ContestController>();
     collegeContestController = Get.find<CollegeContestController>();
+    contestProfileController = Get.find<ContestProfileController>();
     DateTime now = DateTime.now();
     String currentMonth = DateFormat('MMMM yyyy').format(now);
     String previousMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
@@ -122,7 +124,19 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  ContestPortfolioWeekCard(),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Obx(
+                      () => Row(
+                        children: contestProfileController.weeklyTopPerformer.map((performer) {
+                          return ContestPortfolioWeekCard(
+                            // index: ,
+                            performer: performer,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(

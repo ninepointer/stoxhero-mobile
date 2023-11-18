@@ -20,7 +20,8 @@ class ContestProfileView extends StatelessWidget {
               Text('Darshan Vegad'),
               Text('@darshan.vegad'),
               Text('Member Since 11th Nov 2023')
-            ],) ,
+            ],
+          ),
         ),
         SizedBox(height: 10),
         CommonTile(label: 'Earnings'),
@@ -31,27 +32,27 @@ class ContestProfileView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CommonCardTile(label: 'Arenas Played', value: '250', isCenterAlign: true),
-                CommonCardTile(label: 'Arenas Won', value: '200',isCenterAlign: true),
-                CommonCardTile(label: 'Arenas Played', value: '250',isCenterAlign: true),
-                CommonCardTile(label: 'Arenas Played', value: '250',isCenterAlign: true),
-            ],),
+                CommonCardTile(label: 'Arenas Won', value: '200', isCenterAlign: true),
+                CommonCardTile(label: 'Arenas Played', value: '250', isCenterAlign: true),
+                CommonCardTile(label: 'Arenas Played', value: '250', isCenterAlign: true),
+              ],
+            ),
           ),
         ),
         SizedBox(height: 10),
-        CommonTile(label:'Recent Performance'),
+        CommonTile(label: 'Recent Performance'),
         Container(
-          child: Column(
-            children: [
-              ContestPerformanceCard(),
-              SizedBox(height: 10),
-              ContestPerformanceCard(),
-              SizedBox(height: 10),
-              ContestPerformanceCard(),
-              SizedBox(height: 10),
-              ContestPerformanceCard(),
-            ],
-          )
-        )
+            child: Column(
+          children: [
+            ContestPerformanceCard(),
+            SizedBox(height: 10),
+            ContestPerformanceCard(),
+            SizedBox(height: 10),
+            ContestPerformanceCard(),
+            SizedBox(height: 10),
+            ContestPerformanceCard(),
+          ],
+        ))
       ]),
     );
   }

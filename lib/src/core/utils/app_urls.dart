@@ -89,7 +89,7 @@ class AppUrls {
 
   static const String purchaseContestIntent = "$apiURL/dailycontest/purchaseintent/";
   static const String purchaseContest = "$apiURL/dailycontest/feededuct";
-
+  static const String weeklyTopPerformers = "$apiURL/dailycontest/weeklytopperformer";
   static const String liveContests = "$apiURL/dailycontest/contests/userlive";
   static const String upComingContests = "$apiURL/dailycontest/contests/userupcoming";
   static const String completedContests = "$apiURL/dailycontest/contests/completed";

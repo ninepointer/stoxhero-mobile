@@ -80,5 +80,6 @@ export 'virtual_trading_watchlist_response.dart';
 export 'wallet_transactions_list_response.dart';
 export 'featured_contest_response.dart';
 export 'internship_certificate_response.dart';
-
 export 'day_wise_contest_pnl_response.dart';
+export 'contest_profile_response.dart';
+export 'weekly_top_performer_list_response.dart';
