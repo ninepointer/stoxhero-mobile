@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:stoxhero/src/modules/contest_profile/controllers/contest_profile_controller.dart';
 import '../../../app/app.dart';
 
-class ContestProfileView extends StatelessWidget {
+class ContestProfileView extends GetView<ContestProfileController> {
   const ContestProfileView({super.key});
 
   @override
@@ -31,28 +33,28 @@ class ContestProfileView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CommonCardTile(label: 'Arenas Played', value: '250', isCenterAlign: true),
-                CommonCardTile(label: 'Arenas Won', value: '200', isCenterAlign: true),
-                CommonCardTile(label: 'Arenas Played', value: '250', isCenterAlign: true),
-                CommonCardTile(label: 'Arenas Played', value: '250', isCenterAlign: true),
-              ],
-            ),
+                CommonCardTile(label: 'Test Zones Played', value: controller.getArenasPlayed(), isCenterAlign: true),
+                CommonCardTile(label: 'Test Zones Won', value: controller.getArenasWon(),isCenterAlign: true),
+                CommonCardTile(label: 'Earnings', value: controller.getEarnings(),isCenterAlign: true),
+                CommonCardTile(label: 'Test Zones Played', value: controller.getStrikeRate(),isCenterAlign: true),
+            ],),
           ),
         ),
         SizedBox(height: 10),
-        CommonTile(label: 'Recent Performance'),
+        CommonTile(label:'Recent Performance'),
         Container(
-            child: Column(
-          children: [
-            ContestPerformanceCard(),
-            SizedBox(height: 10),
-            ContestPerformanceCard(),
-            SizedBox(height: 10),
-            ContestPerformanceCard(),
-            SizedBox(height: 10),
-            ContestPerformanceCard(),
-          ],
-        ))
+          child: Column(
+            children: [
+              ContestPerformanceCard(),
+              SizedBox(height: 10),
+              ContestPerformanceCard(),
+              SizedBox(height: 10),
+              ContestPerformanceCard(),
+              SizedBox(height: 10),
+              ContestPerformanceCard(),
+            ],
+          )
+        )
       ]),
     );
   }
