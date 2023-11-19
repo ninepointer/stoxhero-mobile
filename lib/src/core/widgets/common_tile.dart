@@ -13,6 +13,8 @@ class CommonTile extends StatelessWidget {
   final String? seeAllLabel;
   final Color? sellAllColor;
   final bool isLoading;
+  final String? value;
+  final bool isValue;
   const CommonTile({
     Key? key,
     this.label = 'Label',
@@ -25,6 +27,8 @@ class CommonTile extends StatelessWidget {
     this.seeAllLabel,
     this.sellAllColor,
     this.isLoading = false,
+    this.isValue = false,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -43,9 +47,21 @@ class CommonTile extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      label,
-                      style: AppStyles.tsSecondaryMedium14,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          style: AppStyles.tsSecondaryMedium14,
+                        ),
+                        if (isValue) ...[
+                          SizedBox(height: 4),
+                          Text(
+                            value ?? '',
+                            style: AppStyles.tsSecondaryMedium14,
+                          ),
+                        ],
+                      ],
                     ),
                     if (isLoading) ...[
                       SizedBox(width: 8),

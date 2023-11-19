@@ -16,4 +16,12 @@ class ContestProfileRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: WeeklyTopPerformersListResponse.fromJson(response));
   }
+
+  Future<RepoResponse<WeeklyTopPerformersListResponse>> getWeeklyTopPerformerFullList() async {
+    String apiURL = AppUrls.weeklyTopPerformersFullList;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: WeeklyTopPerformersListResponse.fromJson(response));
+  }
 }

@@ -30,6 +30,7 @@ class HomeController extends BaseController<DashboardRepository> {
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
     loadData();
+    Get.find<ContestProfileController>().getWeeklyTopPerformerFullList();
     Get.find<ContestController>().getLiveContestList();
     Get.find<ContestController>().getUpComingContestList();
     Get.find<CollegeContestController>().getLiveCollegeContestList();

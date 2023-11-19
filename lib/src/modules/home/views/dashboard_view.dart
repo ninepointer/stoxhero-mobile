@@ -124,16 +124,36 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
+                  if (contestProfileController.startOfWeek.value != "" &&
+                      contestProfileController.endOfWeek.value != "")
+                    CommonTile(
+                      label: 'TestZone Leaderboard of the Week',
+                      showSeeAllButton: true,
+                      isValue: true,
+                      seeAllLabel: 'View All',
+                      value: '${[
+                        '${FormatHelper.formatDateMonth(contestProfileController.startOfWeek.toString())} - ${FormatHelper.formatDateMonth(contestProfileController.endOfWeek.toString())}'
+                      ]}',
+                      onPressed: () {
+                        contestProfileController.weeklyTopPerformer();
+                        contestProfileController.getWeeklyTopPerformerFullList();
+                        Get.to(() => ContestTopPerformerCard());
+                      },
+                      margin: EdgeInsets.only(bottom: 0, top: 8),
+                    ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Obx(
-                      () => Row(
-                        children: contestProfileController.weeklyTopPerformer.map((performer) {
-                          return ContestPortfolioWeekCard(
-                            // index: ,
-                            performer: performer,
-                          );
-                        }).toList(),
+                      () => Container(
+                        child: Row(
+                          children: contestProfileController.weeklyTopPerformer.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            return ContestPortfolioWeekCard(
+                              index: index + 1,
+                              performer: entry.value,
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ),
