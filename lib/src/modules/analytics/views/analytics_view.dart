@@ -40,7 +40,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                       splashBorderRadius: BorderRadius.circular(50),
                       indicator: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: AppColors.primary,
+                        color: AppColors.lightGreen,
                       ),
                       unselectedLabelColor:
                           Theme.of(context).textTheme.bodyLarge!.color,

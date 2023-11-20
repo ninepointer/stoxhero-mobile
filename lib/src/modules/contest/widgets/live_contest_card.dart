@@ -192,22 +192,30 @@ class LiveContestCard extends GetView<ContestController> {
                               )
                             ],
                             if (contest?.payoutType != 'Reward') ...[
-                              Text(
-                                '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
+                              // Text(
+                              //   '',
+                              //   style: Theme.of(context).textTheme.tsMedium12,
+                              // ),
                               if (contest?.payoutCapPercentage != null &&
                                   contest?.payoutCapPercentage != 0)
-                                Text(
-                                  ' (Upto ${controller.getPaidCapAmount(
-                                    contest?.entryFee == 0
-                                        ? contest?.portfolio?.portfolioValue ??
-                                            0
-                                        : contest?.entryFee ?? 0,
-                                    contest?.payoutCapPercentage ?? 0,
-                                  )}) Click to know more.',
-                                  style: Theme.of(context).textTheme.tsMedium12,
-                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
+                                        contest?.entryFee == 0
+                                            ? contest?.portfolio
+                                                    ?.portfolioValue ??
+                                                0
+                                            : contest?.entryFee ?? 0,
+                                        contest?.payoutCapPercentage ?? 0,
+                                      )}) .',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium12,
+                                    ),
+                                    Text('Click to know more')
+                                  ],
+                                )
                             ]
                           ],
                         ),
@@ -401,7 +409,7 @@ class LiveContestCard extends GetView<ContestController> {
                   onTap: () {
                     controller.liveContest(contest);
                     controller.getShareContest(false);
-                    String url = 'https://stoxhero.com/contest';
+                    String url = 'https://stoxhero.com/testzone';
                     Clipboard.setData(ClipboardData(text: url));
                     SnackbarHelper.showSnackbar(
                         'Link Copied, Share with your friends.');

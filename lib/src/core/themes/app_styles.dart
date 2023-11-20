@@ -947,7 +947,7 @@ class AppStyles {
     fontSize: 12,
   );
   static TextStyle tsSecondaryMedium14 = TextStyle(
-    color: AppColors.secondary,
+    color: AppColors.lightGreen,
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w500,
     fontSize: 14,

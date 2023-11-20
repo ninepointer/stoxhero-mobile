@@ -63,7 +63,7 @@ class InviteView extends GetView<ReferralsController> {
                         ),
                         ReferralDetailsCardTile(
                           label:
-                              'Your friend gets ${FormatHelper.formatNumbers(controller.activeReferrals.value?.referralSignupBonus!.amount, decimal: 0)} in his StoxHero Wallet to participate in daily TestZones or TenX',
+                              'Your friend gets ${FormatHelper.formatNumbers(controller.activeReferrals.value?.referralSignupBonus?.amount, decimal: 0)} in his StoxHero Wallet to participate in daily TestZones or TenX',
                           iconData: Icons.share,
                         ),
                         ReferralDetailsCardTile(
@@ -171,7 +171,7 @@ class ReferralDetailsCardTile extends StatelessWidget {
       leading: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(.1),
+          color: AppColors.lightGreen.withOpacity(.1),
           shape: BoxShape.circle,
         ),
         child: Icon(iconData,

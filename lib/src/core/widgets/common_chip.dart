@@ -24,7 +24,7 @@ class CommonChip extends StatelessWidget {
           visualDensity: VisualDensity.compact,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-              color: AppColors.primary,
+              color: AppColors.lightGreen,
             ),
             borderRadius: BorderRadius.circular(50),
           ),
@@ -36,9 +36,13 @@ class CommonChip extends StatelessWidget {
               : null,
           label: Text(
             label ?? 'Label',
-            style: isSelected ? AppStyles.tsWhiteMedium12 : AppStyles.tsPrimaryMedium12,
+            style: isSelected
+                ? AppStyles.tsWhiteMedium12
+                : AppStyles.tsPrimaryMedium12
+                    .copyWith(color: AppColors.lightGreen),
           ),
-          backgroundColor: isSelected ? AppColors.primary : Theme.of(context).cardColor,
+          backgroundColor:
+              isSelected ? AppColors.lightGreen : Theme.of(context).cardColor,
         ),
       ),
     );

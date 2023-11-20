@@ -411,7 +411,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         controller.upComingContest(widget.contest);
                         controller.getNotified();
                         SnackbarHelper.showSnackbar(
-                            'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the contest starts');
+                            'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the TestZone starts');
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -437,14 +437,14 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                     widget.contest?.participants?.length ?? 0) >
                                 0
                         ? () => SnackbarHelper.showSnackbar(
-                            'The Contest has not started yet!')
+                            'The TestZone has not started yet!')
                         : () async {
                             if (controller.calculateSeatsLeft(
                                     widget.contest?.maxParticipants ?? 0,
                                     widget.contest?.participants?.length ??
                                         0) ==
                                 0) {
-                              SnackbarHelper.showSnackbar('Contest is Full');
+                              SnackbarHelper.showSnackbar('TestZone is Full');
                             } else {
                               BottomSheetHelper.openBottomSheet(
                                 context: context,
@@ -501,7 +501,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                                     ?.length ??
                                                 0) ==
                                         0
-                                    ? 'Contest Full'
+                                    ? 'TestZone Full'
                                     : 'Pay Now',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
@@ -515,7 +515,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     onTap: () {
                       controller.upComingContest(widget.contest);
                       controller.getShareContest(true);
-                      String url = 'https://stoxhero.com/contest';
+                      String url = 'https://stoxhero.com/testzone';
                       Clipboard.setData(ClipboardData(text: url));
                       SnackbarHelper.showSnackbar(
                           'Link Copied, Share with your friends.');

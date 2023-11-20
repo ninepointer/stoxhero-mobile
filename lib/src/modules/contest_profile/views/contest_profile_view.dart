@@ -119,7 +119,8 @@ class ContestProfileView extends GetView<ContestProfileController> {
                 CommonTile(label: 'Recent Performance'),
                 ListView.builder(
                   shrinkWrap: true,
-                  padding: EdgeInsets.zero,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero.copyWith(bottom: 100),
                   itemCount: controller.contestProfileDataList.length,
                   itemBuilder: (BuildContext context, index) {
                     return ContestPerformanceCard(
