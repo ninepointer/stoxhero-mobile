@@ -26,7 +26,7 @@ class ContestRules extends GetView<ContestController> {
     return Column(
       children: [
         Text(
-          'TestZone Details: TestZone begins on ${FormatHelper.formatDateTimeToIST(startTime)} and ends on ${FormatHelper.formatDateTimeToIST(endTime)} The entry fee is ${entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(entryFee)}.',
+          'TestZone Details: TestZone begins on ${FormatHelper.formatDateTimeToIST(startTime)} and ends on ${FormatHelper.formatDateTimeToIST(endTime)}. The entry fee is ${entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(entryFee)}.',
           style: Theme.of(context).textTheme.tsMedium14,
         ),
         SizedBox(height: 8),

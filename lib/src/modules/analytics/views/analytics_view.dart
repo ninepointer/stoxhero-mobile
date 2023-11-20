@@ -12,7 +12,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Analytics'),
+        title: Text('MarketGuru'),
       ),
       body: Obx(
         () => Visibility(
@@ -42,7 +42,8 @@ class AnalyticsView extends GetView<AnalyticsController> {
                         borderRadius: BorderRadius.circular(50),
                         color: AppColors.primary,
                       ),
-                      unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
+                      unselectedLabelColor:
+                          Theme.of(context).textTheme.bodyLarge!.color,
                       labelStyle: Theme.of(context).textTheme.tsFontFamily,
                       tabs: [
                         AppStrings.tenX,
@@ -65,18 +66,24 @@ class AnalyticsView extends GetView<AnalyticsController> {
                               Expanded(
                                 child: AnalyticsInfoCard(
                                   title: "Today",
-                                  grossValue: controller.overviewDetails.grossPNLDaily,
-                                  brokeValue: controller.overviewDetails.brokerageSumDaily,
-                                  netValue: controller.overviewDetails.netPNLDaily,
+                                  grossValue:
+                                      controller.overviewDetails.grossPNLDaily,
+                                  brokeValue: controller
+                                      .overviewDetails.brokerageSumDaily,
+                                  netValue:
+                                      controller.overviewDetails.netPNLDaily,
                                 ),
                               ),
                               SizedBox(width: 8),
                               Expanded(
                                 child: AnalyticsInfoCard(
                                   title: "This Month",
-                                  grossValue: controller.overviewDetails.grossPNLMonthly,
-                                  brokeValue: controller.overviewDetails.brokerageSumMonthly,
-                                  netValue: controller.overviewDetails.netPNLMonthly,
+                                  grossValue: controller
+                                      .overviewDetails.grossPNLMonthly,
+                                  brokeValue: controller
+                                      .overviewDetails.brokerageSumMonthly,
+                                  netValue:
+                                      controller.overviewDetails.netPNLMonthly,
                                 ),
                               ),
                             ],
@@ -90,18 +97,24 @@ class AnalyticsView extends GetView<AnalyticsController> {
                               Expanded(
                                 child: AnalyticsInfoCard(
                                   title: "This Year",
-                                  grossValue: controller.overviewDetails.grossPNLYearly,
-                                  brokeValue: controller.overviewDetails.brokerageSumYearly,
-                                  netValue: controller.overviewDetails.netPNLYearly,
+                                  grossValue:
+                                      controller.overviewDetails.grossPNLYearly,
+                                  brokeValue: controller
+                                      .overviewDetails.brokerageSumYearly,
+                                  netValue:
+                                      controller.overviewDetails.netPNLYearly,
                                 ),
                               ),
                               SizedBox(width: 8),
                               Expanded(
                                 child: AnalyticsInfoCard(
                                   title: "Lifetime",
-                                  grossValue: controller.overviewDetails.grossPNLLifetime,
-                                  brokeValue: controller.overviewDetails.brokerageSumLifetime,
-                                  netValue: controller.overviewDetails.netPNLLifetime,
+                                  grossValue: controller
+                                      .overviewDetails.grossPNLLifetime,
+                                  brokeValue: controller
+                                      .overviewDetails.brokerageSumLifetime,
+                                  netValue:
+                                      controller.overviewDetails.netPNLLifetime,
                                 ),
                               ),
                             ],
@@ -124,10 +137,12 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 children: [
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () => controller.showDateRangePicker(context),
+                                      onTap: () => controller
+                                          .showDateRangePicker(context),
                                       child: CommonTextField(
                                         isDisabled: true,
-                                        controller: controller.startDateTextController,
+                                        controller:
+                                            controller.startDateTextController,
                                         hasLabel: true,
                                         hintText: 'Start Date',
                                         suffixIcon: Icon(
@@ -140,12 +155,14 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   SizedBox(width: 16),
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () => controller.showDateRangePicker(
+                                      onTap: () =>
+                                          controller.showDateRangePicker(
                                         context,
                                         isStartDate: false,
                                       ),
                                       child: CommonTextField(
-                                        controller: controller.endDateTextController,
+                                        controller:
+                                            controller.endDateTextController,
                                         isDisabled: true,
                                         hasLabel: true,
                                         hintText: 'End Date',
@@ -159,18 +176,26 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 ],
                               ),
                               CommonOutlinedButton(
-                                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
-                                labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                                backgroundColor: Get.isDarkMode
+                                    ? AppColors.darkGreen
+                                    : AppColors.lightGreen,
+                                labelColor: Get.isDarkMode
+                                    ? AppColors.darkGreen
+                                    : AppColors.lightGreen,
                                 height: 42,
                                 label: 'Show Details',
                                 onPressed: () {
                                   if (controller.selectedTab.value == 0) {
-                                    controller.userDetailsData.designation == AppConstants.equityTraderType
-                                        ? controller.getInfinityTradingDateWiseDetails()
-                                        : controller.getTenxTradingDateWiseDetails();
+                                    controller.userDetailsData.designation ==
+                                            AppConstants.equityTraderType
+                                        ? controller
+                                            .getInfinityTradingDateWiseDetails()
+                                        : controller
+                                            .getTenxTradingDateWiseDetails();
                                   } else {
                                     controller.selectedTab(1);
-                                    controller.getVirtualTradingDateWiseDetails();
+                                    controller
+                                        .getVirtualTradingDateWiseDetails();
                                   }
                                 },
                               ),
@@ -187,7 +212,9 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   children: [
                                     Text(
                                       'Gross',
-                                      style: Theme.of(context).textTheme.tsRegular14,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsRegular14,
                                     ),
                                     SizedBox(height: 2),
                                     FittedBox(
@@ -195,10 +222,15 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                         FormatHelper.formatNumbers(
                                           controller.rangeGrossAmount.value,
                                         ),
-                                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                                          color: controller.rangeGrossAmount.value == 0
+                                        style: AppStyles.tsPrimaryMedium14
+                                            .copyWith(
+                                          color: controller
+                                                      .rangeGrossAmount.value ==
+                                                  0
                                               ? AppColors.info
-                                              : controller.rangeGrossAmount.value < 0
+                                              : controller.rangeGrossAmount
+                                                          .value <
+                                                      0
                                                   ? AppColors.danger
                                                   : AppColors.success,
                                         ),
@@ -214,7 +246,9 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   children: [
                                     Text(
                                       'Net',
-                                      style: Theme.of(context).textTheme.tsRegular14,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsRegular14,
                                     ),
                                     SizedBox(height: 2),
                                     FittedBox(
@@ -222,12 +256,17 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                         FormatHelper.formatNumbers(
                                           controller.rangeNetAmount.value,
                                         ),
-                                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                                          color: controller.rangeNetAmount.value == 0
-                                              ? AppColors.info
-                                              : controller.rangeNetAmount.value < 0
-                                                  ? AppColors.danger
-                                                  : AppColors.success,
+                                        style: AppStyles.tsPrimaryMedium14
+                                            .copyWith(
+                                          color:
+                                              controller.rangeNetAmount.value ==
+                                                      0
+                                                  ? AppColors.info
+                                                  : controller.rangeNetAmount
+                                                              .value <
+                                                          0
+                                                      ? AppColors.danger
+                                                      : AppColors.success,
                                         ),
                                       ),
                                     ),
@@ -241,7 +280,9 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   children: [
                                     Text(
                                       'Brokerage',
-                                      style: Theme.of(context).textTheme.tsRegular14,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsRegular14,
                                     ),
                                     SizedBox(height: 2),
                                     FittedBox(
@@ -249,10 +290,15 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                         FormatHelper.formatNumbers(
                                           controller.rangeBrokerageAmount.value,
                                         ),
-                                        style: AppStyles.tsPrimaryMedium14.copyWith(
-                                          color: controller.rangeBrokerageAmount.value == 0
+                                        style: AppStyles.tsPrimaryMedium14
+                                            .copyWith(
+                                          color: controller.rangeBrokerageAmount
+                                                      .value ==
+                                                  0
                                               ? AppColors.info
-                                              : controller.rangeBrokerageAmount.value < 0
+                                              : controller.rangeBrokerageAmount
+                                                          .value <
+                                                      0
                                                   ? AppColors.danger
                                                   : AppColors.success,
                                         ),
@@ -276,16 +322,21 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   margin: EdgeInsets.zero,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           'Orders',
-                                          style: Theme.of(context).textTheme.tsRegular14,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsRegular14,
                                         ),
                                         SizedBox(height: 2),
                                         Text(
-                                          controller.rangeTotalOrders.value.toString(),
-                                          style: AppStyles.tsPrimaryMedium14.copyWith(
+                                          controller.rangeTotalOrders.value
+                                              .toString(),
+                                          style: AppStyles.tsPrimaryMedium14
+                                              .copyWith(
                                             color: AppColors.info,
                                           ),
                                         ),
@@ -300,16 +351,21 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   margin: EdgeInsets.zero,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           'Trading Days',
-                                          style: Theme.of(context).textTheme.tsRegular14,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsRegular14,
                                         ),
                                         SizedBox(height: 2),
                                         Text(
-                                          controller.rangeTotalTradingDays.value.toString(),
-                                          style: AppStyles.tsPrimaryMedium14.copyWith(
+                                          controller.rangeTotalTradingDays.value
+                                              .toString(),
+                                          style: AppStyles.tsPrimaryMedium14
+                                              .copyWith(
                                             color: AppColors.info,
                                           ),
                                         ),
@@ -330,16 +386,21 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   margin: EdgeInsets.zero,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           'Green Days',
-                                          style: Theme.of(context).textTheme.tsRegular14,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsRegular14,
                                         ),
                                         SizedBox(height: 2),
                                         Text(
-                                          controller.rangeTotalGreenDays.value.toString(),
-                                          style: AppStyles.tsPrimaryMedium14.copyWith(
+                                          controller.rangeTotalGreenDays.value
+                                              .toString(),
+                                          style: AppStyles.tsPrimaryMedium14
+                                              .copyWith(
                                             color: AppColors.success,
                                           ),
                                         ),
@@ -354,16 +415,21 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                   margin: EdgeInsets.zero,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           'Red Days',
-                                          style: Theme.of(context).textTheme.tsRegular14,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsRegular14,
                                         ),
                                         SizedBox(height: 2),
                                         Text(
-                                          controller.rangeTotalRedDays.value.toString(),
-                                          style: AppStyles.tsPrimaryMedium14.copyWith(
+                                          controller.rangeTotalRedDays.value
+                                              .toString(),
+                                          style: AppStyles.tsPrimaryMedium14
+                                              .copyWith(
                                             color: AppColors.danger,
                                           ),
                                         ),

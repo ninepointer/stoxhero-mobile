@@ -41,7 +41,8 @@ class ContestPerformanceCard extends StatelessWidget {
               CommonCardTile(
                 isRightAlign: true,
                 label: 'Date',
-                value: FormatHelper.formatDate(contestProfile?.contestStartTime),
+                value: FormatHelper.formatDateInMonth(
+                    contestProfile?.contestStartTime),
               ),
             ],
           ),

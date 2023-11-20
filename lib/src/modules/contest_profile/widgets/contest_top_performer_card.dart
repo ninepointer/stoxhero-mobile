@@ -64,7 +64,9 @@ class ContestTopPerformerCard extends GetView<ContestProfileController> {
                               ),
                             ),
                             CommonFilledButton(
-                              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
                               label: 'View',
                               onPressed: () {
                                 controller.getContestProfileData(weekly.trader);
@@ -79,7 +81,8 @@ class ContestTopPerformerCard extends GetView<ContestProfileController> {
                         Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: AppColors.secondary.withOpacity(.25),
                                 borderRadius: BorderRadius.circular(4),
@@ -91,7 +94,7 @@ class ContestTopPerformerCard extends GetView<ContestProfileController> {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              '${weekly.firstName} ${weekly.lastName}',
+                              '${weekly.firstName!.capitalizeFirst} ${weekly.lastName!.capitalizeFirst}',
                               style: Theme.of(context).textTheme.tsMedium14,
                             ),
                           ],

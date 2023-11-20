@@ -7,7 +7,7 @@ class ContestProfileView extends GetView<ContestProfileController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Contest Profile',
+          'TestZone Profile',
           style: Theme.of(context).textTheme.tsRegular16,
         ),
       ),
@@ -35,9 +35,13 @@ class ContestProfileView extends GetView<ContestProfileController> {
                           ),
                         ),
                         child: ClipOval(
-                          child: controller.contestProfileData.value.profilePicture != null
+                          child: controller.contestProfileData.value
+                                      .profilePicture !=
+                                  null
                               ? Image.network(
-                                  controller.contestProfileData.value.profilePicture?.url ?? '',
+                                  controller.contestProfileData.value
+                                          .profilePicture?.url ??
+                                      '',
                                   fit: BoxFit.cover,
                                 )
                               : Image.asset(

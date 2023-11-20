@@ -22,14 +22,14 @@ class _CollegeContestViewState extends State<CollegeContestView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('College Contests'),
+        title: Text('College TestZone'),
       ),
       body: Obx(
         () => CommonTabBar(
           index: controller.selectedTabBarIndex.value,
           onTap: controller.changeTabBarIndex,
           tabsTitle: [
-            AppStrings.live,
+            AppStrings.testZoneLive,
             AppStrings.upcoming,
             AppStrings.completed,
           ],
@@ -54,16 +54,19 @@ class _CollegeContestViewState extends State<CollegeContestView> {
                         visible: controller.liveFreeCollegeContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForFreeLiveCollegeContest,
+                          label:
+                              AppStrings.noDataFoundForFreeLiveCollegeContest,
                         ),
                         replacement: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.liveFreeCollegeContestList.length,
+                          itemCount:
+                              controller.liveFreeCollegeContestList.length,
                           itemBuilder: (BuildContext context, index) {
                             return LiveCollegeContestCard(
-                              contest: controller.liveFreeCollegeContestList[index],
+                              contest:
+                                  controller.liveFreeCollegeContestList[index],
                             );
                           },
                         ),
@@ -82,19 +85,23 @@ class _CollegeContestViewState extends State<CollegeContestView> {
                         shimmerCard: LargeCardShimmer(),
                       ),
                       replacement: Visibility(
-                        visible: controller.livePremiumCollegeContestList.isEmpty,
+                        visible:
+                            controller.livePremiumCollegeContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForPremiumLiveCollegeContest,
+                          label: AppStrings
+                              .noDataFoundForPremiumLiveCollegeContest,
                         ),
                         replacement: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.livePremiumCollegeContestList.length,
+                          itemCount:
+                              controller.livePremiumCollegeContestList.length,
                           itemBuilder: (BuildContext context, index) {
                             return LiveCollegeContestCard(
-                              contest: controller.livePremiumCollegeContestList[index],
+                              contest: controller
+                                  .livePremiumCollegeContestList[index],
                             );
                           },
                         ),
@@ -121,19 +128,23 @@ class _CollegeContestViewState extends State<CollegeContestView> {
                         shimmerCard: LargeCardShimmer(),
                       ),
                       replacement: Visibility(
-                        visible: controller.upcomingFreeCollegeContestList.isEmpty,
+                        visible:
+                            controller.upcomingFreeCollegeContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForFreeUpcomingCollegeContest,
+                          label: AppStrings
+                              .noDataFoundForFreeUpcomingCollegeContest,
                         ),
                         replacement: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.upcomingFreeCollegeContestList.length,
+                          itemCount:
+                              controller.upcomingFreeCollegeContestList.length,
                           itemBuilder: (BuildContext context, index) {
                             return UpComingCollegeContestCard(
-                              contest: controller.upcomingFreeCollegeContestList[index],
+                              contest: controller
+                                  .upcomingFreeCollegeContestList[index],
                             );
                           },
                         ),
@@ -152,19 +163,23 @@ class _CollegeContestViewState extends State<CollegeContestView> {
                         shimmerCard: LargeCardShimmer(),
                       ),
                       replacement: Visibility(
-                        visible: controller.upcomingPremiumCollegeContestList.isEmpty,
+                        visible: controller
+                            .upcomingPremiumCollegeContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForPremiumUpcomingCollegeContest,
+                          label: AppStrings
+                              .noDataFoundForPremiumUpcomingCollegeContest,
                         ),
                         replacement: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.upcomingPremiumCollegeContestList.length,
+                          itemCount: controller
+                              .upcomingPremiumCollegeContestList.length,
                           itemBuilder: (BuildContext context, index) {
                             return UpComingCollegeContestCard(
-                              contest: controller.upcomingPremiumCollegeContestList[index],
+                              contest: controller
+                                  .upcomingPremiumCollegeContestList[index],
                             );
                           },
                         ),
@@ -191,20 +206,25 @@ class _CollegeContestViewState extends State<CollegeContestView> {
                         shimmerCard: LargeCardShimmer(),
                       ),
                       replacement: Visibility(
-                        visible: controller.completedFreeCollegeContestList.isEmpty,
+                        visible:
+                            controller.completedFreeCollegeContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForFreeCompletedCollegeContest,
+                          label: AppStrings
+                              .noDataFoundForFreeCompletedCollegeContest,
                         ),
                         replacement: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.completedFreeCollegeContestList.length,
+                          itemCount:
+                              controller.completedFreeCollegeContestList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final contest = controller.completedFreeCollegeContestList[index];
+                            final contest = controller
+                                .completedFreeCollegeContestList[index];
                             CompletedContestPnl? matchingContestPnl;
-                            for (var pnl in controller.completedContestPnlList) {
+                            for (var pnl
+                                in controller.completedContestPnlList) {
                               if (pnl.contestId == contest.id) {
                                 matchingContestPnl = pnl;
                                 break;
@@ -234,20 +254,25 @@ class _CollegeContestViewState extends State<CollegeContestView> {
                         shimmerCard: LargeCardShimmer(),
                       ),
                       replacement: Visibility(
-                        visible: controller.completedPremiumCollegeContestList.isEmpty,
+                        visible: controller
+                            .completedPremiumCollegeContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForPremiumCompletedCollegeContest,
+                          label: AppStrings
+                              .noDataFoundForPremiumCompletedCollegeContest,
                         ),
                         replacement: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.completedPremiumCollegeContestList.length,
+                          itemCount: controller
+                              .completedPremiumCollegeContestList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final contest = controller.completedPremiumCollegeContestList[index];
+                            final contest = controller
+                                .completedPremiumCollegeContestList[index];
                             CompletedContestPnl? matchingContestPnl;
-                            for (var pnl in controller.completedContestPnlList) {
+                            for (var pnl
+                                in controller.completedContestPnlList) {
                               if (pnl.contestId == contest.id) {
                                 matchingContestPnl = pnl;
                                 break;
