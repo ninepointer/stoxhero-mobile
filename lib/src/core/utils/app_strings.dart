@@ -1,15 +1,15 @@
 class AppStrings {
   static const String rupeeSign = "₹";
 
-  static const String virtual = "Virtual";
+  static const String virtual = "F&O";
   static const String tenX = "TenX";
   static const String marginX = "MarginX";
-  static const String contest = "Contest";
+  static const String contest = "TestZone";
   static const String collegeContest = "College Contest";
 
-  static const String stoxHeroContests = "StoxHero Contests";
-  static const String contests = "Contests";
-  static const String collegeContests = "College Contests";
+  static const String stoxHeroContests = "StoxHero";
+  static const String contests = "TestZone";
+  static const String collegeContests = "College";
   static const String contestsLeaderboard = "TestZone Leaderboard";
 
   static const String buy = "BUY";

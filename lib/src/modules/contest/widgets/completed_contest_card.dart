@@ -187,20 +187,37 @@ class CompletedContestCard extends GetView<ContestController> {
                               )
                             ],
                             if (contest?.payoutType != 'Reward') ...[
-                              Text(
-                                '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
-                                style: Theme.of(context).textTheme.tsMedium12,
+                              Column(
+                                children: [
+                                  // Text(
+                                  //   '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
+                                  //   style:
+                                  //       Theme.of(context).textTheme.tsMedium12,
+                                  // ),
+                                  if (contest?.payoutCapPercentage != null &&
+                                      contest?.payoutCapPercentage != 0)
+                                    Text(
+                                      '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
+                                        contest?.entryFee == 0
+                                            ? completedContestPnl
+                                                    ?.portfolioValue ??
+                                                0
+                                            : contest?.entryFee ?? 0,
+                                        contest?.payoutCapPercentage ?? 0,
+                                      )})',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium12,
+                                    ),
+                                  Text(
+                                    'Click to know more.',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  )
+                                ],
                               ),
-                              if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
-                                Text(
-                                  ' (Upto ${controller.getPaidCapAmount(
-                                    contest?.entryFee == 0
-                                        ? completedContestPnl?.portfolioValue ?? 0
-                                        : contest?.entryFee ?? 0,
-                                    contest?.payoutCapPercentage ?? 0,
-                                  )}) Click to know more.',
-                                  style: Theme.of(context).textTheme.tsMedium12,
-                                ),
                             ]
                           ],
                         ),
@@ -286,9 +303,16 @@ class CompletedContestCard extends GetView<ContestController> {
                             ),
                             SizedBox(height: 2),
                             Text(
-                              FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0),
-                              style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                                    color: (completedContestPnl?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
+                              FormatHelper.formatNumbers(
+                                  completedContestPnl?.npnl,
+                                  decimal: 0),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium12
+                                  .copyWith(
+                                    color: (completedContestPnl?.npnl ?? 0) >= 0
+                                        ? AppColors.success
+                                        : AppColors.danger,
                                   ),
                             ),
                           ],
@@ -305,10 +329,17 @@ class CompletedContestCard extends GetView<ContestController> {
                             SizedBox(height: 2),
                             Text(
                               FormatHelper.formatNumbers(
-                                (completedContestPnl?.payoutAmount ?? 0) >= 0 ? completedContestPnl?.payoutAmount : 0,
+                                (completedContestPnl?.payoutAmount ?? 0) >= 0
+                                    ? completedContestPnl?.payoutAmount
+                                    : 0,
                               ),
-                              style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                                    color: (completedContestPnl?.payoutAmount ?? 0) >= 0
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium12
+                                  .copyWith(
+                                    color: (completedContestPnl?.payoutAmount ??
+                                                0) >=
+                                            0
                                         ? AppColors.success
                                         : AppColors.danger,
                                   ),

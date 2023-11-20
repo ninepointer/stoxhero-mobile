@@ -50,23 +50,25 @@ class InviteView extends GetView<ReferralsController> {
                             style: AppStyles.tsPrimaryRegular16,
                             textAlign: TextAlign.center,
                           ),
-                        if (controller.activeReferrals.value != null) SizedBox(height: 8),
+                        if (controller.activeReferrals.value != null)
+                          SizedBox(height: 8),
                         ReferralDetailsCardTile(
-                          label: 'Invite Your Friends',
-                          iconData: Icons.share,
-                        ),
-                        ReferralDetailsCardTile(
-                          label: 'Your friend gets 10 Lakhs Virtual Currency for Paper Trading (Virtual Trading).',
-                          iconData: Icons.share,
-                        ),
-                        ReferralDetailsCardTile(
-                          label:
-                              'Your friend gets two portfolios worth 10 Lakhs each to participate in daily free contests.',
+                          label: 'Invite Your Friends using your referral code',
                           iconData: Icons.share,
                         ),
                         ReferralDetailsCardTile(
                           label:
-                              'You get ${FormatHelper.formatNumbers(controller.activeReferrals.value?.rewardPerReferral, decimal: 0)} for each referral',
+                              'Your friend gets 10 Lakhs Virtual Currency for Virtual F&O Paper Trading.',
+                          iconData: Icons.share,
+                        ),
+                        ReferralDetailsCardTile(
+                          label:
+                              'Your friend gets ${FormatHelper.formatNumbers(controller.activeReferrals.value?.referralSignupBonus!.amount, decimal: 0)} in his StoxHero Wallet to participate in daily TestZones or TenX',
+                          iconData: Icons.share,
+                        ),
+                        ReferralDetailsCardTile(
+                          label:
+                              'You get ${FormatHelper.formatNumbers(controller.activeReferrals.value?.rewardPerReferral, decimal: 0)} for each referral in your StoxHero Wallet.',
                           iconData: Icons.share,
                         ),
                         SizedBox(height: 16),
@@ -103,7 +105,8 @@ class InviteView extends GetView<ReferralsController> {
                                 ),
                                 SizedBox(height: 2),
                                 Text(
-                                  controller.userDetailsData.myReferralCode ?? '-',
+                                  controller.userDetailsData.myReferralCode ??
+                                      '-',
                                   style: Theme.of(context).textTheme.tsMedium18,
                                 ),
                               ],
@@ -124,7 +127,8 @@ class InviteView extends GetView<ReferralsController> {
                             ),
                           ),
                           child: QrImageView(
-                            data: '${AppUrls.referralWebUrl}${controller.userDetailsData.myReferralCode}',
+                            data:
+                                '${AppUrls.referralWebUrl}${controller.userDetailsData.myReferralCode}',
                             version: QrVersions.auto,
                             eyeStyle: QrEyeStyle(
                               color: AppColors.primary,
@@ -170,11 +174,9 @@ class ReferralDetailsCardTile extends StatelessWidget {
           color: AppColors.primary.withOpacity(.1),
           shape: BoxShape.circle,
         ),
-        child: Icon(
-          iconData,
-          size: 20,
-          color: AppColors.primary,
-        ),
+        child: Icon(iconData,
+            size: 20,
+            color: Get.isDarkMode ? AppColors.lightGreen : AppColors.darkGreen),
       ),
     );
   }
