@@ -32,7 +32,7 @@ class CollegeContestLiveLeaderboardView extends GetView<CollegeContestController
                     rank: rank.toString(),
                     name: user.userName ?? '',
                     reward: controller.calculateUserPayout(user.npnl ?? 0).toString(),
-                    netPnL: user.npnl?.toStringAsFixed(2) ?? '0',
+                    netPnL: user.npnl?.toStringAsFixed(0) ?? '0',
                   );
                 },
               ),

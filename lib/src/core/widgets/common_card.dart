@@ -9,7 +9,9 @@ class CommonCard extends StatelessWidget {
   final bool hasBorder;
   final Color? color;
   final Function()? onTap;
-
+  final bool isSpecialCard;
+  final Color? isSpecialCardColor;
+  final double? width;
   const CommonCard({
     super.key,
     required this.children,
@@ -18,6 +20,9 @@ class CommonCard extends StatelessWidget {
     this.hasBorder = true,
     this.onTap,
     this.color,
+    this.isSpecialCard = false,
+    this.isSpecialCardColor,
+    this.width,
   });
   @override
   Widget build(BuildContext context) {
@@ -36,13 +41,14 @@ class CommonCard extends StatelessWidget {
             ? RoundedRectangleBorder(
                 side: BorderSide(
                   color: AppColors.grey.withOpacity(.25),
+                  // color: isSpecialCard ? isSpecialCardColor as Color : AppColors.grey.withOpacity(.25),
                 ),
                 borderRadius: BorderRadius.circular(8),
               )
             : null,
         child: Container(
           padding: padding ?? EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          width: double.infinity,
+          width: width ?? double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -17,3 +17,4 @@ export 'common_internship_info.dart';
 export 'common_tab_bar.dart';
 export 'common_shimmer.dart';
 export 'common_image_upload.dart';
+export 'common_triangle_card.dart';

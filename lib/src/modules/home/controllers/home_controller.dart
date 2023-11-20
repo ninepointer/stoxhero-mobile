@@ -19,8 +19,6 @@ class HomeController extends BaseController<DashboardRepository> {
   final userDashboard = DashboardTradeSummary().obs;
   final userDashboardReturnSummary = DashboardReturnSummary().obs;
   final dashboardCarouselList = <DashboardCarousel>[].obs;
-  final dashboardCarousel = DashboardCarousel().obs;
-
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
 
@@ -32,10 +30,12 @@ class HomeController extends BaseController<DashboardRepository> {
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
     loadData();
+    Get.find<ContestProfileController>().getWeeklyTopPerformerFullList();
     Get.find<ContestController>().getLiveContestList();
     Get.find<ContestController>().getUpComingContestList();
-    // Get.find<TenxTradingController>().loadUserDetails();
-    // Get.find<TenxTradingController>().getTenxTradingActiveSubs();
+    Get.find<CollegeContestController>().getLiveCollegeContestList();
+    Get.find<WalletController>().getWalletTransactionsList();
+    Get.find<ContestController>().getFeaturedContest();
   }
 
   Future loadData() async {
@@ -66,8 +66,12 @@ class HomeController extends BaseController<DashboardRepository> {
     }
   }
 
+  String getPaidCapAmount(num fees, num cap) {
+    num percentage = (fees * cap) / 100;
+    return FormatHelper.formatNumbers(percentage, showDecimal: false);
+  }
+
   String getStockIndexName(int instId) {
-    // log('instToken : $instId');
     int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
@@ -76,7 +80,7 @@ class HomeController extends BaseController<DashboardRepository> {
     String name = '';
     if (label == 'virtual') name = 'Virtual Trading';
     if (label == 'tenx') name = 'TenX Trading';
-    if (label == 'contest') name = 'Contest Trading';
+    if (label == 'contest') name = 'TestZones Trading';
     return name;
   }
 

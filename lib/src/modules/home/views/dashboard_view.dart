@@ -11,6 +11,8 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   late HomeController controller;
   late ContestController contestController;
+  late CollegeContestController collegeContestController;
+  late ContestProfileController contestProfileController;
   late List<String> monthsList;
 
   String? selectedValue2 = '';
@@ -20,6 +22,8 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
     controller = Get.find<HomeController>();
     contestController = Get.find<ContestController>();
+    collegeContestController = Get.find<CollegeContestController>();
+    contestProfileController = Get.find<ContestProfileController>();
     DateTime now = DateTime.now();
     String currentMonth = DateFormat('MMMM yyyy').format(now);
     String previousMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
@@ -120,10 +124,117 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
+                  if (contestProfileController.startOfWeek.value != "" &&
+                      contestProfileController.endOfWeek.value != "")
+                    CommonTile(
+                      label: 'TestZone Leaderboard of the Week',
+                      showSeeAllButton: true,
+                      isValue: true,
+                      seeAllLabel: 'View All',
+                      value: '${[
+                        '${FormatHelper.formatDateMonth(contestProfileController.startOfWeek.toString())} - ${FormatHelper.formatDateMonth(contestProfileController.endOfWeek.toString())}'
+                      ]}',
+                      onPressed: () {
+                        contestProfileController.weeklyTopPerformer();
+                        contestProfileController.getWeeklyTopPerformerFullList();
+                        Get.to(() => ContestTopPerformerCard());
+                      },
+                      margin: EdgeInsets.only(bottom: 0, top: 8),
+                    ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Obx(
+                      () => Container(
+                        child: Row(
+                          children: contestProfileController.weeklyTopPerformer.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            return ContestPortfolioWeekCard(
+                              index: index + 1,
+                              performer: entry.value,
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        contestController.featuredCollegeContest.isEmpty
+                            ? Container()
+                            : Obx(
+                                () => Row(
+                                  children: contestController.featuredCollegeContest.map((contest) {
+                                    String userId = controller.userDetailsData.sId ?? '';
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: CollegeContestCard(
+                                        userId: userId,
+                                        featuredCollegeContest: contest,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                        contestController.liveFeaturedContest.isEmpty
+                            ? Container()
+                            : Obx(
+                                () => Row(
+                                  children: contestController.liveFeaturedContest.map((contest) {
+                                    String userId = controller.userDetailsData.sId ?? '';
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: LiveFeaturedCard(
+                                        userId: userId,
+                                        liveFeatured: contest,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                        contestController.upcomingFeaturedContest.isEmpty
+                            ? Container()
+                            : Obx(
+                                () => Row(
+                                  children: contestController.upcomingFeaturedContest.map((contest) {
+                                    String userId = controller.userDetailsData.sId ?? '';
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: UpcomingFeaturedCard(
+                                        userId: userId,
+                                        upcomingFeatured: contest,
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                  // collegeContestController.liveCollegeContestList.isEmpty
+                  //     ? Container()
+                  //     : Obx(
+                  //         () => SingleChildScrollView(
+                  //           scrollDirection: Axis.horizontal,
+                  //           child: Row(
+                  //             children: collegeContestController.liveCollegeContestList.map((contest) {
+                  //               String userId = controller.userDetailsData.sId ?? '';
+                  //               return Container(
+                  //                 width: MediaQuery.of(context).size.width,
+                  //                 child: CollegeContestCard(
+                  //                   userId: userId,
+                  //                   featuredCollegeContest: contest,
+                  //                 ),
+                  //               );
+                  //             }).toList(),
+                  //           ),
+                  //         ),
+                  //       ),
                   contestController.liveContestList.isEmpty
                       ? Container()
                       : CommonTile(
-                          label: 'Live Contests',
+                          label: 'Open TestZones',
                           showSeeAllButton: true,
                           onPressed: () {
                             contestController.loadData();
@@ -152,41 +263,43 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ),
                         ),
-                  contestController.upComingContestList.isEmpty
-                      ? Container()
-                      : CommonTile(
-                          label: 'Upcoming Contests',
-                          showSeeAllButton: true,
-                          onPressed: () {
-                            contestController.loadData();
-                            contestController.selectedTabBarIndex(1);
-                            Get.to(() => ContestListView());
-                          },
-                          margin: EdgeInsets.only(bottom: 0, top: 8),
-                        ),
-                  contestController.upComingContestList.isEmpty
-                      ? Container()
-                      : Obx(
-                          () => SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: contestController.upComingContestList.map((contest) {
-                                bool isVisible = contestController.isUpcomingContestVisible(contest);
-                                String userId = controller.userDetailsData.sId ?? '';
-                                return isVisible
-                                    ? SizedBox()
-                                    : Container(
-                                        width: MediaQuery.of(context).size.width,
-                                        child: UpComingContestCard(
-                                          userId: userId,
-                                          contest: contest,
-                                          margin: EdgeInsets.all(8).copyWith(bottom: 0),
-                                        ),
-                                      );
-                              }).toList(),
+                  if (contestController.liveContestList.isEmpty)
+                    contestController.upComingContestList.isEmpty
+                        ? Container()
+                        : CommonTile(
+                            label: 'Upcoming TestZones',
+                            showSeeAllButton: true,
+                            onPressed: () {
+                              contestController.loadData();
+                              contestController.selectedTabBarIndex(1);
+                              Get.to(() => ContestListView());
+                            },
+                            margin: EdgeInsets.only(bottom: 0, top: 8),
+                          ),
+                  if (contestController.liveContestList.isEmpty)
+                    contestController.upComingContestList.isEmpty
+                        ? Container()
+                        : Obx(
+                            () => SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: contestController.upComingContestList.map((contest) {
+                                  bool isVisible = contestController.isUpcomingContestVisible(contest);
+                                  String userId = controller.userDetailsData.sId ?? '';
+                                  return isVisible
+                                      ? SizedBox()
+                                      : Container(
+                                          width: MediaQuery.of(context).size.width,
+                                          child: UpComingContestCard(
+                                            userId: userId,
+                                            contest: contest,
+                                            margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                                          ),
+                                        );
+                                }).toList(),
+                              ),
                             ),
                           ),
-                        ),
                   SizedBox(height: 8),
                   CommonTile(
                     label: 'Return Summary',
@@ -209,7 +322,7 @@ class _DashboardViewState extends State<DashboardView> {
                             SizedBox(width: 8),
                             Expanded(
                               child: customCard(
-                                label: 'Contest Trading',
+                                label: 'TestZones Trading',
                                 percent: controller.userDashboardReturnSummary.value.contestReturn == null
                                     ? '0'
                                     : '${(controller.userDashboardReturnSummary.value.contestReturn! * 100).toStringAsFixed(2)} %',
@@ -256,7 +369,7 @@ class _DashboardViewState extends State<DashboardView> {
                             onChanged: (String? value) {
                               setState(
                                 () {
-                                  controller.selectedTradeType = value!;
+                                  controller.selectedTradeType = value ?? '';
                                 },
                               );
                             },
@@ -274,7 +387,7 @@ class _DashboardViewState extends State<DashboardView> {
                             onChanged: (String? value) {
                               setState(
                                 () {
-                                  controller.selectedTimeFrame = value!;
+                                  controller.selectedTimeFrame = value ?? '';
                                   controller.getDashboard(controller.selectedTradeType, controller.selectedTimeFrame);
                                 },
                               );
@@ -304,7 +417,7 @@ class _DashboardViewState extends State<DashboardView> {
                                           : '0',
                                     )
                                   : customCard(
-                                      label: 'Total \nContests',
+                                      label: 'Total TestZones',
                                       percent: userDashboard.totalContests != null
                                           ? FormatHelper.formatNumbers(
                                               userDashboard.totalContests,
@@ -328,7 +441,7 @@ class _DashboardViewState extends State<DashboardView> {
                                           : '0',
                                     )
                                   : customCard(
-                                      label: 'Contests Participated',
+                                      label: 'TestZones Participated',
                                       percent: userDashboard.participatedContests != null
                                           ? FormatHelper.formatNumbers(
                                               userDashboard.participatedContests,

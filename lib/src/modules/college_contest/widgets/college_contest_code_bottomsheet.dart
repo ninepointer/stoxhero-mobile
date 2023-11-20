@@ -50,6 +50,7 @@ class CollegeContestCodeBottomsheet extends GetView<CollegeContestController> {
                 controller: controller.collegeCodeTextController,
               ),
               CommonFilledButton(
+                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                 height: 40,
                 label: 'Submit',
                 onPressed: onSubmit,

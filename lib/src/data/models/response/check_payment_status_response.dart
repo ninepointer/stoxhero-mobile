@@ -62,7 +62,7 @@ class PaymentStatus {
   String? merchantId;
   String? merchantTransactionId;
   String? transactionId;
-  int? amount;
+  num? amount;
   String? state;
 
   PaymentStatus({

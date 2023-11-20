@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class WalletView extends StatefulWidget {
   @override
@@ -47,6 +45,53 @@ class _WalletViewState extends State<WalletView> {
                     margin: EdgeInsets.all(16),
                     child: Column(
                       children: [
+                        CommonCard(
+                          margin: EdgeInsets.zero,
+                          padding: EdgeInsets.all(16),
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CommonCardTile(
+                                    label: 'Name',
+                                    value: '${controller.getUserFullName()}',
+                                  ),
+                                ),
+                                Expanded(
+                                  child: CommonCardTile(
+                                    label: 'KYC Status',
+                                    value: '${controller.walletDetails.value.userId?.kYCStatus}',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CommonCardTile(
+                                    label: 'Bank Details Status',
+                                    value: (controller.walletDetails.value.userId?.bankName != null ||
+                                            controller.walletDetails.value.userId?.ifscCode != null ||
+                                            controller.walletDetails.value.userId?.accountNumber != null ||
+                                            controller.walletDetails.value.userId?.nameAsPerBankAccount != null)
+                                        ? 'Updated'
+                                        : 'Not Updated',
+                                  ),
+                                ),
+                                Expanded(
+                                  child: CommonCardTile(
+                                    label: 'State',
+                                    value: (controller.walletDetails.value.userId?.state != null)
+                                        ? '${controller.walletDetails.value.userId?.state}'
+                                        : 'Not Updated',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
                         Row(
                           children: [
                             Expanded(
@@ -61,7 +106,9 @@ class _WalletViewState extends State<WalletView> {
                             Expanded(
                               child: WalletCard(
                                 label: 'HeroCash',
-                                value: '₹0.00',
+                                value: FormatHelper.formatNumbers(
+                                  controller.calculateBonus(controller.walletTransactionsList),
+                                ),
                                 iconData: Icons.redeem_rounded,
                                 buttonLabel: 'Redeem',
                               ),
@@ -85,6 +132,7 @@ class _WalletViewState extends State<WalletView> {
                             SizedBox(width: 8),
                             Expanded(
                               child: CommonFilledButton(
+                                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                                 height: 42,
                                 label: 'Add Money',
                                 onPressed: () => BottomSheetHelper.openBottomSheet(
@@ -99,6 +147,51 @@ class _WalletViewState extends State<WalletView> {
                                   ),
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
+                        CommonCard(
+                          margin: EdgeInsets.only(top: 18),
+                          padding: EdgeInsets.zero,
+                          children: [
+                            Column(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      topRight: Radius.circular(8),
+                                    ),
+                                    color: AppColors.secondary.withOpacity(0.1),
+                                  ),
+                                  child: Text(
+                                    AppStrings.important,
+                                    style: Theme.of(context).textTheme.tsSecondaryMedium16,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  child: Text(
+                                    '''1. Please ensure you have filled your bank details and completed your KYC before proceeding with your withdrawal.
+
+2. Your full name on StoxHero, Bank Account, Aadhaar Card and PAN Card should match.
+
+3. TDS has already been deducted from your net winnings.
+
+4. Transfer might take upto 24-48 working hours to reflect in your bank account.
+
+5. You can only make one withdrawal in a day.
+
+6. The minimum withdrawal amount is ${FormatHelper.formatNumbers(controller.readSetting.value.minWithdrawal, decimal: 0)}.
+
+7. The maximum withdrawal limit for a day is ${FormatHelper.formatNumbers(controller.readSetting.value.maxWithdrawal, decimal: 0)}''',
+                                    style: Theme.of(context).textTheme.tsRegular14,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -144,7 +237,6 @@ class _WalletViewState extends State<WalletView> {
               ),
             ),
             CommonTabBar(
-              isScrollable: true,
               index: controller.selectedSecondTabBarIndex.value,
               onTap: controller.changeSecondTabBarIndex,
               tabsTitle: [

@@ -32,21 +32,22 @@ class TenxLeaderboardList {
   String? status;
   num? earnings;
   int? subscriptions;
-  int? subscriptionsWithPayout;
+  num? subscriptionsWithPayout;
   num? strikeRate;
   String? profilePic;
 
-  TenxLeaderboardList(
-      {this.sId,
-      this.firstName,
-      this.lastName,
-      this.userid,
-      this.status,
-      this.earnings,
-      this.subscriptions,
-      this.subscriptionsWithPayout,
-      this.strikeRate,
-      this.profilePic});
+  TenxLeaderboardList({
+    this.sId,
+    this.firstName,
+    this.lastName,
+    this.userid,
+    this.status,
+    this.earnings,
+    this.subscriptions,
+    this.subscriptionsWithPayout,
+    this.strikeRate,
+    this.profilePic,
+  });
 
   TenxLeaderboardList.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

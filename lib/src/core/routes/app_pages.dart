@@ -170,9 +170,9 @@ class AppPages {
       binding: InternshipBinding(),
     ),
     GetPage(
-      name: AppRoutes.payment,
-      page: () => PaymentView(),
-      binding: WalletBinding(),
+      name: AppRoutes.contestProfile,
+      page: () => ContestProfileView(),
+      // binding: InternshipBinding(),
     ),
   ];
 }

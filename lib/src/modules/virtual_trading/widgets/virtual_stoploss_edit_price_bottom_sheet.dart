@@ -12,6 +12,9 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
   @override
   Widget build(BuildContext context) {
     controller.quanitityTextController.text = stopLoss.quantity.toString();
+    controller.limitPriceTextController.text = stopLoss.price.toString();
+    controller.stopProfitPriceTextController.text = stopLoss.price.toString();
+    controller.stopLossPriceTextController.text = stopLoss.price.toString();
     return Obx(
       () => Wrap(
         children: [
@@ -31,9 +34,9 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                   GestureDetector(
                     onTap: () {
                       Get.back();
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
-                      controller.limitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
+                      // controller.limitPriceTextController.clear();
                     },
                     child: Column(
                       children: [
@@ -113,6 +116,7 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                             ? (stopLoss.type == 'StopLoss')
                                 ? CommonTextField(
                                     hintText: 'StopLoss Price',
+                                    keyboardType: TextInputType.number,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                                     ],
@@ -135,6 +139,7 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                                 : (stopLoss.type == 'StopProfit')
                                     ? CommonTextField(
                                         hintText: 'StopProfit Price',
+                                        keyboardType: TextInputType.number,
                                         inputFormatters: [
                                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                                         ],
@@ -221,40 +226,6 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                       ),
                     ],
                   ),
-                  //       child: CommonTextField(
-                  //         hintText: 'Limit Price',
-                  //         keyboardType: TextInputType.number,
-                  //         inputFormatters: [
-                  //           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                  //         ],
-                  //         controller: controller.limitPriceTextController,
-                  //         validator: (value) {
-                  //           final limitPrice = double.tryParse(controller.limitPriceTextController.text);
-                  //           if (limitPrice != null) {
-                  //             if (stopLoss.buyOrSell == 'BUY') {
-                  //               if (limitPrice >=
-                  //                   controller.getInstrumentLastPrice(
-                  //                     stopLoss.instrumentToken!,
-                  //                     stopLoss.exchangeInstrumentToken!,
-                  //                   )) {
-                  //                 return 'Price should be less than LTP.';
-                  //               }
-                  //             } else if (stopLoss.buyOrSell == 'SELL') {
-                  //               if (limitPrice <=
-                  //                   controller.getInstrumentLastPrice(
-                  //                     stopLoss.instrumentToken!,
-                  //                     stopLoss.exchangeInstrumentToken!,
-                  //                   )) {
-                  //                 return 'Price should be greater than LTP.';
-                  //               }
-                  //             }
-                  //           }
-                  //           return null;
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   CommonFilledButton(
                     isLoading: controller.isPendingOrderStateLoading.value,
                     label: 'Edit',
@@ -278,9 +249,9 @@ class VirtualStoplossEditPriceBottomSheet extends GetView<VirtualTradingControll
                           stopLoss.type,
                         );
                       }
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
-                      controller.limitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
+                      // controller.limitPriceTextController.clear();
                     },
                   ),
                   SizedBox(height: 36),

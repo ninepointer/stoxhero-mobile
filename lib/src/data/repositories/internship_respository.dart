@@ -141,4 +141,52 @@ class InternshipRespository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: MarginRequiredResponse.fromJson(response));
   }
+
+  Future<RepoResponse<StopLossExecutedOrdersListResponse>> getStopLossExecutedOrder(String? id) async {
+    String apiURL = AppUrls.internshipStopLossExecutedOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossExecutedOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StopLossPendingOrdersListResponse>> getStopLossPendingOrder(String? id) async {
+    String apiURL = AppUrls.internshipStopLossPendingOrder(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StopLossPendingOrdersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossPendingCancelOrder(String id) async {
+    String apiURL = AppUrls.internshipStopLossPendingCancelOrder(id);
+    var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> pendingOrderModify(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.pendingOrderModify;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossEditOrder(String? id, Map<String, dynamic> data) async {
+    String apiURL = AppUrls.stopLossEditOrder(id);
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<InternshipCertificateResponse>> getInternshipCertificate() async {
+    String apiURL = AppUrls.internshipCertificate;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: InternshipCertificateResponse.fromJson(response));
+  }
 }

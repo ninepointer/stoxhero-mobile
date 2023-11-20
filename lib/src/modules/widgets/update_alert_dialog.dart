@@ -57,6 +57,8 @@ class _UpdateAlertDialogState extends State<UpdateAlertDialog> {
               children: [
                 Expanded(
                   child: CommonOutlinedButton(
+                    backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                    labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                     width: double.infinity,
                     height: 42,
                     label: 'Cancel',
@@ -70,6 +72,7 @@ class _UpdateAlertDialogState extends State<UpdateAlertDialog> {
                     height: 42,
                     label: 'Update',
                     onPressed: openAppPage,
+                    backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                   ),
                 ),
               ],

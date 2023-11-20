@@ -159,7 +159,10 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                   labelColor: AppColors.info,
                   backgroundColor: AppColors.info.withOpacity(.25),
                   height: 32,
-                  onPressed: () => Get.toNamed(AppRoutes.orders),
+                  onPressed: () {
+                    Get.find<OrdersController>().loadData();
+                    Get.toNamed(AppRoutes.orders);
+                  },
                   label: 'Order Book',
                 ),
               ),

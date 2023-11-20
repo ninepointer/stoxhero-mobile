@@ -2,12 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/base/base.dart';
-import 'package:stoxhero/src/data/data.dart';
-import 'package:stoxhero/src/data/models/request/withdrawal_request.dart';
-
-import '../../../core/core.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 class WalletBinding implements Bindings {
   @override
@@ -34,7 +29,9 @@ class WalletController extends BaseController<WalletRepository> {
   final totalCashAmount = RxNum(0);
   final walletTransactionsList = <WalletTransaction>[].obs;
   final withdrawalTransactionsList = <MyWithdrawalsList>[].obs;
+  final walletDetails = WalletDetails().obs;
   final amountTextController = TextEditingController();
+  final readSetting = ReadSettingResponse().obs;
   final amount = 0.obs;
 
   final selectedTabBarIndex = 0.obs;
@@ -60,14 +57,37 @@ class WalletController extends BaseController<WalletRepository> {
     } else {
       withdrawals();
       Get.back();
+      amountTextController.clear();
     }
   }
 
-  void onCancel() => Get.back();
+  void onCancel() {
+    Get.back();
+    amountTextController.clear();
+  }
 
   Future loadData() async {
     getWalletTransactionsList();
     getMyWithdrawalsTransactionsList();
+    getReadSetting();
+  }
+
+  String getUserFullName() {
+    String firstName = walletDetails.value.userId?.firstName ?? '';
+    String lastName = walletDetails.value.userId?.lastName ?? '';
+    String fullName = '$firstName $lastName';
+    return fullName.capitalize!;
+  }
+
+  num calculateBonus(List<WalletTransaction> transactions) {
+    num bonus = 0;
+
+    for (var transaction in transactions) {
+      if (transaction.transactionType == 'Bonus') {
+        bonus += transaction.amount ?? 0;
+      }
+    }
+    return bonus;
   }
 
   String getPaymentProductType(ProductType type) {
@@ -139,8 +159,11 @@ class WalletController extends BaseController<WalletRepository> {
         totalCashAmount(0);
         walletTransactionsList((response.data?.data?.transactions ?? []));
         walletTransactionsList.forEach((element) {
-          totalCashAmount.value += element.amount ?? 0;
+          if (element.transactionType == 'Cash') {
+            totalCashAmount.value += element.amount ?? 0;
+          }
         });
+        walletDetails(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -282,5 +305,17 @@ class WalletController extends BaseController<WalletRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     return false;
+  }
+
+  Future getReadSetting() async {
+    isRecentLoading(true);
+    try {
+      final RepoResponse<ReadSettingResponse> response = await repository.readSetting();
+      readSetting(response.data);
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isRecentLoading(false);
   }
 }

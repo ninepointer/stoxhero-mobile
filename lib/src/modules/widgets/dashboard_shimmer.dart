@@ -22,6 +22,15 @@ class DashboardShimmer extends StatelessWidget {
           ),
           LargeCardShimmer(),
           CustomCardShimmer(),
+          Row(
+            children: [
+              Expanded(child: MediumCardShimmer()),
+              SizedBox(width: 8),
+              Expanded(child: MediumCardShimmer()),
+              SizedBox(width: 8),
+              Expanded(child: MediumCardShimmer()),
+            ],
+          ),
           LargeCardShimmer(),
           CustomCardShimmer(),
           LargeCardShimmer(),

@@ -16,4 +16,5 @@ class AppImages {
   static const String collegeContest = "$imagesDir/college_contest.png";
   static const String contestLeaderboard = "$imagesDir/contest_leaderboard.png";
   static const String trophy = '$imagesDir/trophy.png';
+  static const String diya = '$imagesDir/diya.png';
 }

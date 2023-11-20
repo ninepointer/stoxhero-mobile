@@ -25,8 +25,8 @@ class StopLossPendingCancelOrder {
   String? productType;
   String? type;
   String? status;
-  int? executionPrice;
-  double? lastPrice;
+  num? executionPrice;
+  num? lastPrice;
   int? quantity;
   String? product;
   String? buyOrSell;

@@ -66,6 +66,12 @@ class ContestController extends BaseController<ContestRepository> {
   final isMarginStateLoading = false.obs;
   bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
 
+  final isPurchaseLoading = false.obs;
+  bool get isPurchaseLoadingStatus => isMarginStateLoading.value;
+
+  final isRecentLoading = false.obs;
+  bool get isRecentLoadingStatus => isRecentLoading.value;
+
   final selectedTabBarIndex = 0.obs;
   final selectedSecondTabBarIndex = 0.obs;
 
@@ -105,7 +111,12 @@ class ContestController extends BaseController<ContestRepository> {
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
   final marginRequired = MarginRequiredResponse().obs;
-
+  final liveFeaturedContest = <LiveFeatured>[].obs;
+  final upcomingFeaturedContest = <UpcomingFeatured>[].obs;
+  final featuredCollegeContest = <FeaturedCollegeContest>[].obs;
+  final featuredLiveCollegeContest = FeaturedCollegeContest().obs;
+  final liveFeatured = LiveFeatured().obs;
+  final upcomingFeatured = UpcomingFeatured().obs;
   final selectedWatchlistIndex = RxInt(-1);
   final walletBalance = RxNum(0);
   final selectedQuantity = 0.obs;
@@ -132,6 +143,7 @@ class ContestController extends BaseController<ContestRepository> {
   final liveLeaderboard = LiveContestLeaderboard().obs;
   final completedContestLeaderboardList = <CompletedContestLeaderboardList>[].obs;
   final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
+  final readSetting = ReadSettingResponse().obs;
 
   Future loadData() async {
     loadUserDetails();
@@ -139,6 +151,7 @@ class ContestController extends BaseController<ContestRepository> {
     await getUpComingContestList();
     await getCompletedContestList();
     await getCompletedContestPnlList();
+    await getReadSetting();
   }
 
   Future loadUserDetails() async {
@@ -155,6 +168,7 @@ class ContestController extends BaseController<ContestRepository> {
     await getStopLossExecutedOrder();
     await getContestTodaysOrderList();
     await getContestPortfolio();
+    await getReadSetting();
     await socketConnection();
     socketIndexConnection();
     socketSendConnection();
@@ -234,7 +248,19 @@ class ContestController extends BaseController<ContestRepository> {
     bool canParticipate = false;
     if (contest.participants != null) {
       for (Participants participant in contest.participants) {
-        if (participant.userId?.sId == userId) {
+        if (participant.userId?.id == userId) {
+          canParticipate = true;
+        }
+      }
+    }
+    return canParticipate;
+  }
+
+  bool canUserFeaturedTrade(contest, String userId) {
+    bool canParticipate = false;
+    if (contest.participants != null) {
+      for (FeaturedParticipants participant in contest.participants) {
+        if (participant.userId?.id == userId) {
           canParticipate = true;
         }
       }
@@ -297,15 +323,98 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   num calculatePayout() {
-    num npnl = calculateTotalNetPNL() * liveContest.value.payoutPercentage!;
+    num livePayoutPercentage = liveContest.value.payoutPercentage ?? 0;
+    num livePayoutCapPercentage = liveContest.value.payoutCapPercentage ?? 0;
+    num liveEntryFee = liveContest.value.entryFee ?? 0;
+    num livePortfolio = liveContest.value.portfolio?.portfolioValue ?? 0;
+
+    num featuredPayoutPercentage = liveFeatured.value.payoutPercentage ?? 0;
+    num featuredPayoutCapPercentage = liveFeatured.value.payoutCapPercentage ?? 0;
+    num featuredEntryFee = liveFeatured.value.entryFee ?? 0;
+    num featuredPortfolio = liveFeatured.value.portfolio?.portfolioValue ?? 0;
+
+    num totalNetPNL = calculateTotalNetPNL();
+    num npnl = totalNetPNL * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = npnl <= 0 ? 0 : npnl / 100;
-    return payout;
+    num payoutCap = liveEntryFee == 0
+        ? (featuredEntryFee == 0
+            ? ((featuredPortfolio != 0 ? featuredPortfolio : livePortfolio) *
+                (featuredPayoutCapPercentage != 0 ? featuredPayoutCapPercentage : livePayoutCapPercentage) /
+                100)
+            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) * (livePayoutCapPercentage) / 100)
+        : (liveEntryFee) * (livePayoutCapPercentage) / 100;
+
+    num finalPayout = payout > payoutCap ? payoutCap : payout;
+    return finalPayout;
   }
 
   num calculateUserPayout(dynamic netPnl) {
-    num reward = netPnl * liveContest.value.payoutPercentage!;
+    num livePayoutPercentage = liveContest.value.payoutPercentage ?? 0;
+    num livePayoutCapPercentage = liveContest.value.payoutCapPercentage ?? 0;
+    num liveEntryFee = liveContest.value.entryFee ?? 0;
+    num livePortfolio = liveContest.value.portfolio?.portfolioValue ?? 0;
+
+    num featuredPayoutPercentage = liveFeatured.value.payoutPercentage ?? 0;
+    num featuredPayoutCapPercentage = liveFeatured.value.payoutCapPercentage ?? 0;
+    num featuredEntryFee = liveFeatured.value.entryFee ?? 0;
+    num featuredPortfolio = liveFeatured.value.portfolio?.portfolioValue ?? 0;
+
+    num reward = netPnl * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
     num payout = reward <= 0 ? 0 : reward / 100;
-    return payout;
+    num payoutCap = liveEntryFee == 0
+        ? (featuredEntryFee == 0
+            ? ((featuredPortfolio != 0 ? featuredPortfolio : livePortfolio) *
+                (featuredPayoutCapPercentage != 0 ? featuredPayoutCapPercentage : livePayoutCapPercentage) /
+                100)
+            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) * (livePayoutCapPercentage) / 100)
+        : (liveEntryFee) * (livePayoutCapPercentage) / 100;
+
+    num finalPayout = payout > payoutCap ? payoutCap : payout;
+    return finalPayout;
+  }
+
+  num calculateUserReward(dynamic rank) {
+    var rewards = liveContest.value.rewards;
+    var numericRank = num.tryParse(rank) ?? 0;
+    for (var reward in rewards ?? []) {
+      if (numericRank >= reward.rankStart && numericRank <= reward.rankEnd) {
+        return reward.prize;
+      }
+    }
+    return 0;
+  }
+
+  num calculateTotalReward(rankRewards) {
+    num totalReward = 0;
+    for (var reward in rankRewards) {
+      num numberOfRanks = reward.rankEnd - reward.rankStart + 1;
+      totalReward += numberOfRanks * reward.prize;
+    }
+    return totalReward;
+  }
+
+  num getRewardCapAmount(num fees, num cap) {
+    num percentage = (fees * cap) / 100;
+    return percentage;
+  }
+
+  num calculateTDS() {
+    num tds = readSetting.value.tdsPercentage ?? 0;
+    num tdsPercentage = getRewardCapAmount(
+          liveContest.value.entryFee == 0
+              ? liveContest.value.portfolio?.portfolioValue ?? 0
+              : liveContest.value.entryFee ?? 0,
+          liveContest.value.payoutCapPercentage ?? 0,
+        ) *
+        tds /
+        100;
+    print(tds);
+    return tdsPercentage;
+  }
+
+  num calculatefinalPayout() {
+    num finalPayout = calculatePayout() - calculateTDS();
+    return finalPayout;
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
@@ -341,7 +450,7 @@ class ContestController extends BaseController<ContestRepository> {
   bool checkIfPurchased(contest, String userId) {
     bool isPurchased = false;
     for (Participants? user in contest?.participants ?? []) {
-      if (user?.userId?.sId == userId) {
+      if (user?.userId?.id == userId) {
         isPurchased = true;
       }
     }
@@ -351,7 +460,17 @@ class ContestController extends BaseController<ContestRepository> {
   bool checkIfLivePurchased(LiveContest? contest, String userId) {
     bool isPurchased = false;
     for (Participants? user in contest?.participants ?? []) {
-      if (user?.userId?.sId == userId) {
+      if (user?.userId?.id == userId) {
+        isPurchased = true;
+      }
+    }
+    return isPurchased;
+  }
+
+  bool checkIfLiveFeaturedPurchased(LiveFeatured? contest, String userId) {
+    bool isPurchased = false;
+    for (FeaturedParticipants? user in contest?.participants ?? []) {
+      if (user?.userId?.id == userId) {
         isPurchased = true;
       }
     }
@@ -397,6 +516,7 @@ class ContestController extends BaseController<ContestRepository> {
 
   num calculateTotalGrossPNL() {
     num totalGross = 0;
+
     for (var position in contestPositionsList) {
       if (position.id?.isLimit != true) {
         // Check if isLimit is not true
@@ -454,9 +574,6 @@ class ContestController extends BaseController<ContestRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
         : (openingBalance - margin);
-    log('availableMargin $availableMargin');
-    log('calculateTotalNetPNL ${calculateTotalNetPNL()}');
-    log('margin$margin');
     return availableMargin;
   }
 
@@ -531,7 +648,7 @@ class ContestController extends BaseController<ContestRepository> {
       stopLoss: "",
       stopLossPrice: double.tryParse(stopLossPriceTextController.text),
       stopProfitPrice: double.tryParse(stopProfitPriceTextController.text),
-      price: limitPriceTextController.text,
+      price: double.tryParse(limitPriceTextController.text),
       uId: Uuid().v4(),
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
@@ -542,10 +659,10 @@ class ContestController extends BaseController<ContestRepository> {
       trader: userDetails.value.sId,
       orderId: Uuid().v4(),
       paperTrade: false,
-      subscriptionId: liveContest.value.id,
-      battleId: liveContest.value.id,
-      contestId: liveContest.value.id,
-      marginxId: liveContest.value.id,
+      subscriptionId: liveFeatured.value.id ?? liveContest.value.id,
+      battleId: liveFeatured.value.id ?? liveContest.value.id,
+      contestId: liveFeatured.value.id ?? liveContest.value.id,
+      marginxId: liveFeatured.value.id ?? liveContest.value.id,
       triggerPrice: "",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
@@ -716,8 +833,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestPortfolio() async {
     isPortfolioStateLoading(true);
     try {
-      final RepoResponse<ContestPortfolioResponse> response =
-          await repository.getContestPortfolio(liveContest.value.id);
+      final String? contestId = liveFeatured.value.id ?? liveContest.value.id;
+      final RepoResponse<ContestPortfolioResponse> response = await repository.getContestPortfolio(contestId);
       if (response.data != null) {
         contestPortfolio(response.data?.data);
       } else {
@@ -733,9 +850,9 @@ class ContestController extends BaseController<ContestRepository> {
     isWatchlistStateLoading(true);
     try {
       final RepoResponse<TradingWatchlistResponse> response = await repository.getContestWatchList(
-        liveContest.value.isNifty,
-        liveContest.value.isBankNifty,
-        liveContest.value.isFinNifty,
+        liveFeatured.value.isNifty ?? liveContest.value.isNifty,
+        liveFeatured.value.isBankNifty ?? liveContest.value.isBankNifty,
+        liveFeatured.value.isFinNifty ?? liveContest.value.isFinNifty,
       );
       if (response.data != null) {
         if (response.data?.data! != null) {
@@ -760,8 +877,8 @@ class ContestController extends BaseController<ContestRepository> {
   Future getContestPositions() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<TradingPositionListResponse> response =
-          await repository.getContestPositions(liveContest.value.id);
+      final String? contestId = liveFeatured.value.id ?? liveContest.value.id;
+      final RepoResponse<TradingPositionListResponse> response = await repository.getContestPositions(contestId);
       if (response.data != null) {
         if (response.data?.data! != null) {
           contestPositionsList(response.data?.data ?? []);
@@ -801,9 +918,9 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
         value,
-        liveContest.value.isNifty,
-        liveContest.value.isBankNifty,
-        liveContest.value.isFinNifty,
+        liveFeatured.value.isNifty ?? liveContest.value.isNifty,
+        liveFeatured.value.isBankNifty ?? liveContest.value.isBankNifty,
+        liveFeatured.value.isFinNifty ?? liveContest.value.isFinNifty,
       );
       if (response.data != null) {
         if (response.data?.data != null) {
@@ -958,7 +1075,7 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future purchaseContest(Map<String, dynamic> data) async {
-    isLoading(true);
+    isPurchaseLoading(true);
     try {
       final RepoResponse<GenericResponse> response = await repository.purchaseContest(
         data,
@@ -973,7 +1090,7 @@ class ContestController extends BaseController<ContestRepository> {
       log('Purchase Contest: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPurchaseLoading(false);
   }
 
   Future socketLeaderboardConnection() async {
@@ -981,22 +1098,21 @@ class ContestController extends BaseController<ContestRepository> {
       var rankData = {
         "employeeId": userDetails.value.employeeid,
         "userId": userDetails.value.sId,
-        "id": liveContest.value.id,
+        "id": liveFeatured.value.id ?? liveContest.value.id,
       };
       log('Socket Emit RankData : $rankData');
       socketService.socket.emit('dailyContestLeaderboard', rankData);
       socketService.socket.on(
-        'contest-myrank${userDetails.value.sId}${liveContest.value.id}',
+        'contest-myrank${userDetails.value.sId}${liveFeatured.value.id ?? liveContest.value.id}',
         (data) {
-          log('Socket MyRank : contest-myrank${userDetails.value.sId}${liveContest.value.id} : $data');
+          log('Socket MyRank : contest-myrank${userDetails.value.sId}${liveFeatured.value.id ?? liveContest.value.id} : $data');
           myRank(data);
         },
       );
-
       socketService.socket.on(
-        'contest-leaderboardData${liveContest.value.id}',
+        'contest-leaderboardData${liveFeatured.value.id ?? liveContest.value.id}',
         (data) {
-          log('Socket Leaderboard : contest-leaderboardData${liveContest.value.id} $data');
+          log('Socket Leaderboard : contest-leaderboardData${liveFeatured.value.id ?? liveContest.value.id} $data');
           liveLeaderboardList.value = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
         },
       );
@@ -1040,6 +1156,23 @@ class ContestController extends BaseController<ContestRepository> {
     isLoading(true);
     try {
       final response = await repository.participate(liveContest.value.id);
+      if (response.data?.status?.toLowerCase() == "success") {
+        loadTradingData();
+        Get.to(() => ContestTradingView());
+      } else if (response.error != null) {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future featuredParticipate(LiveFeatured? contest) async {
+    isLoading(true);
+    try {
+      final response = await repository.featuredParticipate(liveFeatured.value.id);
       if (response.data?.status?.toLowerCase() == "success") {
         loadTradingData();
         Get.to(() => ContestTradingView());
@@ -1097,10 +1230,10 @@ class ContestController extends BaseController<ContestRepository> {
               : 'SELL',
       quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
-      orderType: "MARKET",
+      orderType: selectedType.value,
       validity: "DAY",
       variety: "regular",
-      price: "",
+      price: limitPriceTextController.text,
       lastPrice: inst.lastPrice.toString(),
     );
 
@@ -1127,7 +1260,7 @@ class ContestController extends BaseController<ContestRepository> {
     isOrderStateLoading(true);
     try {
       final RepoResponse<ContestOrderResponse> response = await repository.getContestOrderList(
-        liveContest.value.id,
+        liveFeatured.value.id ?? liveContest.value.id,
       );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
@@ -1148,7 +1281,7 @@ class ContestController extends BaseController<ContestRepository> {
     isExecutedOrderStateLoading(true);
     try {
       final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
-        liveContest.value.id,
+        liveFeatured.value.id ?? liveContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
         stopLossExecutedOrdersList(response.data?.data ?? []);
@@ -1166,7 +1299,7 @@ class ContestController extends BaseController<ContestRepository> {
     isPendingOrderStateLoading(true);
     try {
       final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
-        liveContest.value.id,
+        liveFeatured.value.id ?? liveContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
         stopLossPendingOrderList(response.data?.data ?? []);
@@ -1187,6 +1320,7 @@ class ContestController extends BaseController<ContestRepository> {
       await getStopLossPendingOrder();
       await getContestPortfolio();
       await getStopLossExecutedOrder();
+      loadData();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1223,7 +1357,7 @@ class ContestController extends BaseController<ContestRepository> {
       stopProfitPrice: stopProfitPriceTextController.text,
       symbol: inst.tradingsymbol,
       validity: "DAY",
-      id: liveContest.value.id,
+      id: liveFeatured.value.id ?? liveContest.value.id,
       lastPrice: inst.lastPrice.toString(),
       variety: "regular",
       from: "Daily Contest",
@@ -1303,5 +1437,36 @@ class ContestController extends BaseController<ContestRepository> {
       log(e.toString());
     }
     isPendingOrderStateLoading(false);
+  }
+
+  Future getFeaturedContest() async {
+    isLoading(true);
+    try {
+      final RepoResponse<FeaturedContestResponse> response = await repository.getFeaturedContest();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          liveFeaturedContest(response.data?.liveFeatured ?? []);
+          upcomingFeaturedContest(response.data?.upcomingFeatured ?? []);
+          featuredCollegeContest(response.data?.collegeContest ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getReadSetting() async {
+    isRecentLoading(true);
+    try {
+      final RepoResponse<ReadSettingResponse> response = await repository.readSetting();
+      readSetting(response.data);
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isRecentLoading(false);
   }
 }

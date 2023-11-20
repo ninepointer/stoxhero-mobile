@@ -124,6 +124,27 @@ class FormatHelper {
       return '-';
     }
   }
+
+  static String formatDateTimeOnlyToIST(String? value) {
+    if (value != null) {
+      DateTime dateTimeUTC = DateTime.parse(value);
+      DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
+      String formattedIST = DateFormat('d MMM hh:mm a').format(dateTimeIST);
+      return formattedIST;
+    } else {
+      return '-';
+    }
+  }
+
+  static String formatDateMonth(String? value) {
+    if (value != null) {
+      DateTime dateTime = DateTime.parse(value);
+      String formattedString = DateFormat('d MMM').format(dateTime);
+      return formattedString;
+    } else {
+      return '-';
+    }
+  }
 }
 
 class UpperCaseTextFormatter extends TextInputFormatter {

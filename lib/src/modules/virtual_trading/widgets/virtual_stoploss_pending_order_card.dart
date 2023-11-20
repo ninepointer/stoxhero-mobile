@@ -146,7 +146,9 @@ class VirtualStoplossPendingOrderCard extends GetView<VirtualTradingController> 
               ),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => controller.getStopLossPendingCancelOrder(stopLoss.id),
+                  onTap: () {
+                    controller.getStopLossPendingCancelOrder(stopLoss.id);
+                  },
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(6),

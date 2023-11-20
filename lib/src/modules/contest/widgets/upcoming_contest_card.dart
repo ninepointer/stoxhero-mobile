@@ -3,11 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/data/data.dart';
-
-import '../../../core/core.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class UpComingContestCard extends StatefulWidget {
   final String userId;
@@ -77,6 +73,20 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
     );
   }
 
+  Widget getContestImage() {
+    if (widget.contest?.contestName == "Muhurat Trading - 12th Nov(6:15 PM)") {
+      return Image.asset(
+        AppImages.diya,
+        width: 48,
+      );
+    } else {
+      return Image.asset(
+        AppImages.contestTrophy,
+        width: 36,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isUserInterestedId = controller.isUserInterested(
@@ -91,15 +101,33 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            width: double.infinity,
+            alignment: Alignment.center,
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    widget.contest?.contestName ?? '-',
-                    style: AppStyles.tsSecondaryMedium14,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Text(
+                      widget.contest?.contestName ?? '-',
+                      style: AppStyles.tsSecondaryMedium14,
+                    ),
                   ),
                 ),
+                Visibility(
+                  visible: widget.contest?.featured == true,
+                  child: Container(
+                    padding: EdgeInsets.all(18),
+                    foregroundDecoration: CommonTriangleCard(
+                      badgeColor: AppColors.success,
+                      badgeSize: 62,
+                      textSpan: TextSpan(
+                        text: 'Featured',
+                        style: AppStyles.tsWhiteMedium12,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -173,10 +201,11 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Stack(
                   children: [
-                    Expanded(
+                    Positioned(
+                      left: 0,
+                      top: 0,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -207,27 +236,50 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           'Reward',
                           style: AppStyles.tsGreyMedium12,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              '${widget.contest?.payoutPercentage}% of the Net P&L',
-                              style: Theme.of(context).textTheme.tsMedium12,
-                            ),
-                            if (widget.contest?.payoutCapPercentage != null)
-                              Text(
-                                ' (Upto ${controller.getPaidCapAmount(
-                                  widget.contest?.entryFee == 0
-                                      ? widget.contest?.portfolio?.portfolioValue ?? 0
-                                      : widget.contest?.entryFee ?? 0,
-                                  widget.contest?.payoutCapPercentage ?? 0,
-                                )})',
-                                style: Theme.of(context).textTheme.tsMedium12,
+                        GestureDetector(
+                          onTap: () {
+                            BottomSheetHelper.openBottomSheet(
+                              context: context,
+                              child: RewardTableBottomSheet(
+                                upcomingContest: widget.contest,
                               ),
-                          ],
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (widget.contest?.payoutType == 'Reward') ...[
+                                Text(
+                                  'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)},Click to know more.',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                              if (widget.contest?.payoutType != 'Reward') ...[
+                                Text(
+                                  '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                ),
+                                if (widget.contest?.payoutCapPercentage != null &&
+                                    widget.contest?.payoutCapPercentage != 0)
+                                  Text(
+                                    ' (Upto ${controller.getPaidCapAmount(
+                                      widget.contest?.entryFee == 0
+                                          ? widget.contest?.portfolio?.portfolioValue ?? 0
+                                          : widget.contest?.entryFee ?? 0,
+                                      widget.contest?.payoutCapPercentage ?? 0,
+                                    )}) Click to know more.',
+                                    style: Theme.of(context).textTheme.tsMedium12,
+                                  ),
+                              ]
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                    Expanded(
+                    Positioned(
+                      right: 0,
+                      top: 0,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -336,9 +388,6 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         controller.getNotified();
                         SnackbarHelper.showSnackbar(
                             'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the contest starts');
-                        // if (isUserInterestedId) {
-                        //   SnackbarHelper.showSnackbar('Already interested in ${widget.contest?.contestName}');
-                        // } else {}
                       },
                       child: Container(
                         alignment: Alignment.center,

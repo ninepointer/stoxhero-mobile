@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core.dart';
+import '../../app/app.dart';
 
 class CommonFilledButton extends StatelessWidget {
   final String? label;
@@ -35,6 +35,7 @@ class CommonFilledButton extends StatelessWidget {
         elevation: 0,
         focusElevation: 0,
         highlightElevation: 0,
+        // color: backgroundColor ?? Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
         color: backgroundColor ?? AppColors.primary,
         shape: shape ??
             RoundedRectangleBorder(

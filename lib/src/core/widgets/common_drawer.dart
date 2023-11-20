@@ -16,8 +16,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
   late HomeController controller;
   @override
   void initState() {
-    controller = Get.find<HomeController>();
     super.initState();
+    controller = Get.find<HomeController>();
   }
 
   String getUserFullName() {
@@ -138,7 +138,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
             children: [
               ProfileListTile(
                 icon: Icons.analytics,
-                label: 'Analytics',
+                label: 'MarketGuru',
                 onTap: () => selectedItem(context, 0),
               ),
               ProfileListTile(

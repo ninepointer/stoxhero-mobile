@@ -312,32 +312,34 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           },
                         ),
                       ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: CommonRadioButtonTile(
-                          value: 1,
-                          groupValue: controller.selectedGroupValue.value,
-                          label: 'LIMIT',
-                          onChanged: (int value) {
-                            controller.handleRadioValueChanged(value, "LIMIT");
-                            controller.getMarginRequired(type, tradingInstrument);
-                            controller.stopLossPriceTextController.clear();
-                            controller.stopProfitPriceTextController.clear();
-                            controller.limitPriceTextController.clear();
-                          },
+                      if (type != TransactionType.exit) ...[
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CommonRadioButtonTile(
+                            value: 1,
+                            groupValue: controller.selectedGroupValue.value,
+                            label: 'LIMIT',
+                            onChanged: (int value) {
+                              controller.handleRadioValueChanged(value, "LIMIT");
+                              controller.getMarginRequired(type, tradingInstrument);
+                              controller.stopLossPriceTextController.clear();
+                              controller.stopProfitPriceTextController.clear();
+                              controller.limitPriceTextController.clear();
+                            },
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: CommonRadioButtonTile(
-                          value: 3,
-                          groupValue: controller.selectedGroupValue.value,
-                          label: 'SL/SP-M',
-                          onChanged: (int value) {
-                            controller.handleRadioValueChanged(value, "SL/SP-M");
-                          },
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CommonRadioButtonTile(
+                            value: 3,
+                            groupValue: controller.selectedGroupValue.value,
+                            label: 'SL/SP-M',
+                            onChanged: (int value) {
+                              controller.handleRadioValueChanged(value, "SL/SP-M");
+                            },
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                   SizedBox(height: 8),
@@ -377,7 +379,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Margin Required',
+                            'Virtual Margin Required',
                             style: Theme.of(context).textTheme.tsMedium14,
                           ),
                           Visibility(

@@ -31,9 +31,9 @@ class AppRoutes {
   static const String careers = '/careers';
   static const String Internship = '/Internship';
   static const String wallet = '/wallet';
-  static const String payment = '/payment';
   static const String marginx = '/marginx';
   static const String collegeContest = '/college_contest';
   static const String internship = '/careers/internship';
   static const String workshop = '/careers/workshop';
+  static const String contestProfile = '/contestprofile';
 }

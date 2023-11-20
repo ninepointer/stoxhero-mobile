@@ -87,24 +87,30 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                       padding: EdgeInsets.only(bottom: 8),
                     ),
                     Text(
-                      'Passport Number',
+                      'Date of Birth',
                       style: Theme.of(context).textTheme.tsGreyMedium12,
                     ),
                     SizedBox(height: 4),
-                    CommonTextField(
-                      hintText: 'Passport Number',
-                      controller: controller.passportCardNumberTextController,
-                      padding: EdgeInsets.only(bottom: 8),
+                    GestureDetector(
+                      onTap: () => controller.showDateRangePicker(context),
+                      child: CommonTextField(
+                        isDisabled: true,
+                        padding: EdgeInsets.zero,
+                        controller: controller.dobTextController,
+                        hintText: 'Date of Birth',
+                        suffixIcon: Icon(
+                          Icons.calendar_month,
+                          color: AppColors.grey,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your DOB';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
-                    Text(
-                      'Driving License Number',
-                      style: Theme.of(context).textTheme.tsGreyMedium12,
-                    ),
-                    SizedBox(height: 4),
-                    CommonTextField(
-                      hintText: 'Driving License Number',
-                      controller: controller.drivingLicenseNumberTextController,
-                    ),
+                    SizedBox(height: 12),
                     CommonImageUpload(
                       label: 'Aadhaar Card Front Image *',
                       file: controller.aadhaarCardFrontFile.value,

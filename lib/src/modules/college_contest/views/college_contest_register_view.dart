@@ -125,6 +125,7 @@ class CollegeContestRegisterView extends StatelessWidget {
               ),
               SizedBox(height: 12),
               CommonFilledButton(
+                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                 label: 'Register',
                 onPressed: () {
                   Get.to(

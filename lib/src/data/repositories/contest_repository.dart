@@ -258,4 +258,28 @@ class ContestRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
+
+  Future<RepoResponse<FeaturedContestResponse>> getFeaturedContest() async {
+    String apiURL = AppUrls.featuredContest;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: FeaturedContestResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> featuredParticipate(String? id) async {
+    String apiURL = AppUrls.participate(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ReadSettingResponse>> readSetting() async {
+    String apiURL = AppUrls.readSetting;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: ReadSettingResponse.fromJson(response[0]));
+  }
 }

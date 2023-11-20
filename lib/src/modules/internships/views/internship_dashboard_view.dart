@@ -14,8 +14,8 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
 
   @override
   void initState() {
-    controller = Get.find<InternshipController>();
     super.initState();
+    controller = Get.find<InternshipController>();
   }
 
   @override
@@ -25,70 +25,77 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
         title: Text('Internship Dashboard'),
       ),
       body: Obx(
-        () => RefreshIndicator(
-          onRefresh: controller.loadIntershipData,
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.all(16).copyWith(
-              bottom: 100,
-            ),
-            child: Visibility(
-              visible: controller.isInternshipLoadingStatus,
-              child: Column(
-                children: [
-                  SmallCardShimmer(),
-                  MediumCardShimmer(),
-                  CustomCardShimmer(),
-                  CustomCardShimmer(),
-                  CustomCardShimmer(),
-                ],
-              ),
-              replacement: Visibility(
-                visible: controller.isParticipated(),
-                child: Column(
-                  children: [
-                    CommonCard(
-                      margin: EdgeInsets.zero,
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                      onTap: () => setState(() => isExpanded = !isExpanded),
+        () => SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.all(16).copyWith(
+            bottom: 100,
+          ),
+          child: Column(
+            children: [
+              if (controller.isEligibleForCertificate.value) ...[
+                InternshipCertificateDownloadCard(),
+              ],
+              RefreshIndicator(
+                onRefresh: controller.loadIntershipData,
+                child: Visibility(
+                  visible: controller.isInternshipLoadingStatus,
+                  child: Column(
+                    children: [
+                      SmallCardShimmer(),
+                      MediumCardShimmer(),
+                      CustomCardShimmer(),
+                      CustomCardShimmer(),
+                      CustomCardShimmer(),
+                    ],
+                  ),
+                  replacement: Visibility(
+                    visible: controller.isParticipated(),
+                    child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        CommonCard(
+                          margin: EdgeInsets.zero,
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          onTap: () => setState(() => isExpanded = !isExpanded),
                           children: [
-                            Text(
-                              'What is StoxHero Internship Program ?',
-                              style: AppStyles.tsSecondaryRegular16,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'What is StoxHero Internship Program ?',
+                                  style: AppStyles.tsSecondaryRegular14,
+                                ),
+                                Icon(
+                                  isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                                  color: AppColors.grey,
+                                ),
+                              ],
                             ),
-                            Icon(
-                              isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                              color: AppColors.grey,
-                            ),
+                            if (isExpanded) CommonInternshipInfo(),
                           ],
                         ),
-                        if (isExpanded) CommonInternshipInfo(),
+                        InternshipInfoCard(),
                       ],
                     ),
-                    InternshipInfoCard(),
-                  ],
-                ),
-                replacement: ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: Get.find<CareerController>().careerList.length,
-                  itemBuilder: (context, index) {
-                    final controller = Get.find<CareerController>();
-                    final jobType = controller.careerList[index].jobType;
-                    if (jobType == "Internship" || jobType == "Workshop") {
-                      return InfoCard(
-                        career: controller.careerList[index],
-                      );
-                    }
-                    return SizedBox.shrink();
-                  },
+                    replacement: ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: Get.find<CareerController>().careerList.length,
+                      itemBuilder: (context, index) {
+                        final controller = Get.find<CareerController>();
+                        final jobType = controller.careerList[index].jobType;
+                        if (jobType == "Internship" || jobType == "Workshop") {
+                          return InfoCard(
+                            career: controller.careerList[index],
+                          );
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),

@@ -36,7 +36,7 @@ class DashboardTradeSummary {
   int? maxLossStreak;
   num? averageProfit;
   num? averageLoss;
-  int? portfolio;
+  num? portfolio;
   num? maxProfitDayProfitPercent;
   num? maxLossDayLossPercent;
   int? totalContests;

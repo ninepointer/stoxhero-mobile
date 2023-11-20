@@ -20,16 +20,32 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  contest?.contestName ?? '-',
-                  style: AppStyles.tsSecondaryMedium14,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Text(
+                    contest?.contestName ?? '-',
+                    style: AppStyles.tsSecondaryMedium14,
+                  ),
                 ),
               ),
+              Visibility(
+                visible: contest?.featured == true,
+                child: Container(
+                  padding: EdgeInsets.all(18),
+                  foregroundDecoration: CommonTriangleCard(
+                    badgeColor: AppColors.success,
+                    badgeSize: 62,
+                    textSpan: TextSpan(
+                      text: 'Featured',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -149,23 +165,43 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                         'Reward',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            '${contest?.payoutPercentage}% of the Net P&L',
-                            style: Theme.of(context).textTheme.tsMedium12,
-                          ),
-                          if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
-                            Text(
-                              ' (Upto ${controller.getPaidCapAmount(
-                                contest?.entryFee == 0
-                                    ? contest?.portfolio?.portfolioValue ?? 0
-                                    : contest?.entryFee ?? 0,
-                                contest?.payoutCapPercentage ?? 0,
-                              )})',
-                              style: Theme.of(context).textTheme.tsMedium12,
+                      GestureDetector(
+                        onTap: () {
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: CollegeRewardTableBottomSheet(
+                              liveContest: contest,
                             ),
-                        ],
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (contest?.payoutType == 'Reward') ...[
+                              Text(
+                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},Click to know more.',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                            if (contest?.payoutType != 'Reward') ...[
+                              Text(
+                                '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
+                                style: Theme.of(context).textTheme.tsMedium12,
+                              ),
+                              if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
+                                Text(
+                                  ' (Upto ${controller.getPaidCapAmount(
+                                    contest?.entryFee == 0
+                                        ? contest?.portfolio?.portfolioValue ?? 0
+                                        : contest?.entryFee ?? 0,
+                                    contest?.payoutCapPercentage ?? 0,
+                                  )}) Click to know more.',
+                                  style: Theme.of(context).textTheme.tsMedium12,
+                                ),
+                            ]
+                          ],
+                        ),
                       ),
                     ],
                   ),

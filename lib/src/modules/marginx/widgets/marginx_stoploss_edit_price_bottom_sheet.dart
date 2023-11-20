@@ -12,6 +12,9 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
   @override
   Widget build(BuildContext context) {
     controller.quanitityTextController.text = stopLoss.quantity.toString();
+    controller.limitPriceTextController.text = stopLoss.price.toString();
+    controller.stopProfitPriceTextController.text = stopLoss.price.toString();
+    controller.stopLossPriceTextController.text = stopLoss.price.toString();
     return Obx(
       () => Wrap(
         children: [
@@ -31,9 +34,9 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                   GestureDetector(
                     onTap: () {
                       Get.back();
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
-                      controller.limitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
+                      // controller.limitPriceTextController.clear();
                     },
                     child: Column(
                       children: [
@@ -115,6 +118,7 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                             ? (stopLoss.type == 'StopLoss')
                                 ? CommonTextField(
                                     hintText: 'StopLoss Price',
+                                    keyboardType: TextInputType.number,
                                     inputFormatters: [
                                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                                     ],
@@ -128,7 +132,7 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                                               stopLoss.instrumentToken!,
                                               stopLoss.exchangeInstrumentToken!,
                                             )) {
-                                          return 'Stop Loss price should \nbe less than LTP.';
+                                          return 'StopLoss price should \nbe less than LTP.';
                                         }
                                       }
                                       return null;
@@ -137,6 +141,7 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                                 : (stopLoss.type == 'StopProfit')
                                     ? CommonTextField(
                                         hintText: 'StopProfit Price',
+                                        keyboardType: TextInputType.number,
                                         inputFormatters: [
                                           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                                         ],
@@ -150,7 +155,7 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                                                   stopLoss.instrumentToken!,
                                                   stopLoss.exchangeInstrumentToken!,
                                                 )) {
-                                              return 'Stop Profit price should \nbe greater than LTP.';
+                                              return 'StopProfit price should \nbe greater than LTP.';
                                             }
                                           }
                                           return null;
@@ -223,40 +228,6 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                       ),
                     ],
                   ),
-                  //       child: CommonTextField(
-                  //         hintText: 'Limit Price',
-                  //         keyboardType: TextInputType.number,
-                  //         inputFormatters: [
-                  //           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                  //         ],
-                  //         controller: controller.limitPriceTextController,
-                  //         validator: (value) {
-                  //           final limitPrice = double.tryParse(controller.limitPriceTextController.text);
-                  //           if (limitPrice != null) {
-                  //             if (stopLoss.buyOrSell == 'BUY') {
-                  //               if (limitPrice >=
-                  //                   controller.getInstrumentLastPrice(
-                  //                     stopLoss.instrumentToken!,
-                  //                     stopLoss.exchangeInstrumentToken!,
-                  //                   )) {
-                  //                 return 'Price should be less than LTP.';
-                  //               }
-                  //             } else if (stopLoss.buyOrSell == 'SELL') {
-                  //               if (limitPrice <=
-                  //                   controller.getInstrumentLastPrice(
-                  //                     stopLoss.instrumentToken!,
-                  //                     stopLoss.exchangeInstrumentToken!,
-                  //                   )) {
-                  //                 return 'Price should be greater than LTP.';
-                  //               }
-                  //             }
-                  //           }
-                  //           return null;
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   CommonFilledButton(
                     isLoading: controller.isPendingOrderStateLoading.value,
                     label: 'Edit',
@@ -280,9 +251,9 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                           stopLoss.type,
                         );
                       }
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
-                      controller.limitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
+                      // controller.limitPriceTextController.clear();
                     },
                   ),
                   SizedBox(height: 36),

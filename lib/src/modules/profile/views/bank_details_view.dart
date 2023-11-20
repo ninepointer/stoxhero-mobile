@@ -40,7 +40,7 @@ class BankDetailsView extends GetView<ProfileController> {
             color: Theme.of(context).cardColor,
             margin: EdgeInsets.only(top: 4),
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(16).copyWith(bottom: 100),
+              padding: EdgeInsets.all(16).copyWith(bottom: 200),
               child: AbsorbPointer(
                 absorbing: !controller.isKYCEditEnabled.value,
                 child: Column(
@@ -177,6 +177,7 @@ class BankDetailsView extends GetView<ProfileController> {
                           controller: controller.accountNumberTextController,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
+                            LengthLimitingTextInputFormatter(18),
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                           padding: EdgeInsets.only(bottom: 8),
@@ -195,6 +196,84 @@ class BankDetailsView extends GetView<ProfileController> {
                           hintText: 'IFSC Code',
                           controller: controller.ifscCodeTextController,
                           padding: EdgeInsets.only(bottom: 8),
+                        ),
+                        Text(
+                          'Bank Account State',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 4),
+                        Autocomplete<String>(
+                          initialValue: TextEditingValue(
+                            text: controller.selectedStates.value,
+                          ),
+                          displayStringForOption: (option) => option,
+                          fieldViewBuilder: (
+                            BuildContext context,
+                            TextEditingController fieldTextEditingController,
+                            FocusNode fieldFocusNode,
+                            VoidCallback onFieldSubmitted,
+                          ) {
+                            return TextFormField(
+                              cursorColor: Colors.white,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter item name';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'States',
+                                contentPadding: EdgeInsets.all(14),
+                                filled: true,
+                                fillColor: AppColors.grey.withOpacity(.1),
+                                hintStyle: AppStyles.tsGreyRegular14,
+                                prefixIconColor: AppColors.grey,
+                                suffixIconColor: AppColors.grey,
+                                errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                                  color: AppColors.danger.shade700,
+                                ),
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide.none,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: AppColors.primary.shade700,
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    width: 2,
+                                    color: AppColors.danger.shade700,
+                                  ),
+                                ),
+                              ),
+                              controller: fieldTextEditingController,
+                              focusNode: fieldFocusNode,
+                            );
+                          },
+                          optionsBuilder: (TextEditingValue value) {
+                            if (value.text == '') {
+                              return const Iterable<String>.empty();
+                            }
+                            return controller.states.where((String data) {
+                              return data.toLowerCase().contains(value.text.toLowerCase());
+                            });
+                          },
+                          onSelected: (String value) {
+                            controller.selectedStates(value);
+                          },
                         ),
                       ],
                     ),
