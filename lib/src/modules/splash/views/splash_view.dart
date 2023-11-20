@@ -27,7 +27,7 @@ class SplashView extends GetView<SplashController> {
                     borderRadius: BorderRadius.circular(50),
                     child: LinearProgressIndicator(
                       backgroundColor: AppColors.grey.withOpacity(.25),
-                      color: AppColors.primary,
+                      color: AppColors.lightGreen,
                     ),
                   ),
                 ),
@@ -43,7 +43,8 @@ class SplashView extends GetView<SplashController> {
                     if (!isProd)
                       Text(
                         'DEV',
-                        style: AppStyles.tsPrimaryMedium12,
+                        style: AppStyles.tsPrimaryMedium12
+                            .copyWith(color: AppColors.lightGreen),
                       ),
                     Text(
                       controller.appVersion,

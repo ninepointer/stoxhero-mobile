@@ -39,8 +39,10 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                           ),
                         ),
                         child: ClipOval(
-                          child: contestLeaderboard?.traderProfilePhoto == null ||
-                                  contestLeaderboard!.traderProfilePhoto!.isEmpty
+                          child: contestLeaderboard?.traderProfilePhoto ==
+                                      null ||
+                                  contestLeaderboard!
+                                      .traderProfilePhoto!.isEmpty
                               ? Image.asset(
                                   AppImages.appLogo,
                                   width: 48,
@@ -95,9 +97,10 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                             contestLeaderboard?.totalPayout,
                             decimal: 0,
                           )}',
-                          style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                                color: AppColors.success,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.tsMedium14.copyWith(
+                                    color: AppColors.success,
+                                  ),
                         ),
                       ],
                     ),
@@ -113,7 +116,7 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Contests Participated',
+                          'TestZone Participated',
                           style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
@@ -132,7 +135,7 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Contests Won',
+                        'TestZone Won',
                         style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),

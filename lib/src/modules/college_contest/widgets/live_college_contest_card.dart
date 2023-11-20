@@ -418,7 +418,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                   onTap: () {
                     controller.liveCollegeContest(contest);
                     controller.getShareContest(false);
-                    String url = 'https://stoxhero.com/contest';
+                    String url = 'https://stoxhero.com/testzone';
                     Clipboard.setData(ClipboardData(text: url));
                     SnackbarHelper.showSnackbar(
                         'Link Copied, Share with your friends.');

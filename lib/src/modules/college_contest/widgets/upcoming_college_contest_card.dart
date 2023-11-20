@@ -16,10 +16,12 @@ class UpComingCollegeContestCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<UpComingCollegeContestCard> createState() => _UpComingCollegeContestCardState();
+  State<UpComingCollegeContestCard> createState() =>
+      _UpComingCollegeContestCardState();
 }
 
-class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard> {
+class _UpComingCollegeContestCardState
+    extends State<UpComingCollegeContestCard> {
   late DateTime startTimeDateTime;
   late Duration remainingTime;
   late CollegeContestController controller;
@@ -49,8 +51,9 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
     startTimeDateTime = DateTime.parse(widget.contest?.contestStartTime ?? '');
 
     setState(() {
-      remainingTime =
-          startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
+      remainingTime = startTimeDateTime.isAfter(currentTime)
+          ? startTimeDateTime.difference(currentTime)
+          : Duration.zero;
       isVisible = remainingTime == Duration.zero;
       log(isVisible.toString());
     });
@@ -228,7 +231,9 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                               Text(
                                 ' (Upto ${controller.getPaidCapAmount(
                                   widget.contest?.entryFee == 0
-                                      ? widget.contest?.portfolio?.portfolioValue ?? 0
+                                      ? widget.contest?.portfolio
+                                              ?.portfolioValue ??
+                                          0
                                       : widget.contest?.entryFee ?? 0,
                                   widget.contest?.payoutCapPercentage ?? 0,
                                 )})',
@@ -270,7 +275,8 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                         ),
                         SizedBox(height: 2),
                         Text(
-                          FormatHelper.formatDateTimeToIST(widget.contest?.contestStartTime),
+                          FormatHelper.formatDateTimeToIST(
+                              widget.contest?.contestStartTime),
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
@@ -284,7 +290,8 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                         ),
                         SizedBox(height: 2),
                         Text(
-                          FormatHelper.formatDateTimeToIST(widget.contest?.contestEndTime),
+                          FormatHelper.formatDateTimeToIST(
+                              widget.contest?.contestEndTime),
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
@@ -306,7 +313,9 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                         Text(
                           widget.contest?.entryFee == 0
                               ? 'Free'
-                              : FormatHelper.formatNumbers(widget.contest?.entryFee, decimal: 0),
+                              : FormatHelper.formatNumbers(
+                                  widget.contest?.entryFee,
+                                  decimal: 0),
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
@@ -320,7 +329,9 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                         ),
                         SizedBox(height: 2),
                         Text(
-                          FormatHelper.formatNumbers(widget.contest?.portfolio?.portfolioValue, decimal: 0),
+                          FormatHelper.formatNumbers(
+                              widget.contest?.portfolio?.portfolioValue,
+                              decimal: 0),
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
@@ -364,14 +375,19 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: (controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0) &&
+                    onTap: (controller.checkIfPurchased(widget.contest) ||
+                                widget.contest?.entryFee == 0) &&
                             controller.calculateSeatsLeft(
-                                    widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) >
+                                    widget.contest?.maxParticipants ?? 0,
+                                    widget.contest?.participants?.length ?? 0) >
                                 0
-                        ? () => SnackbarHelper.showSnackbar('The Contest has not started yet!')
+                        ? () => SnackbarHelper.showSnackbar(
+                            'The Contest has not started yet!')
                         : () async {
                             if (controller.calculateSeatsLeft(
-                                    widget.contest?.maxParticipants ?? 0, widget.contest?.participants?.length ?? 0) ==
+                                    widget.contest?.maxParticipants ?? 0,
+                                    widget.contest?.participants?.length ??
+                                        0) ==
                                 0) {
                               SnackbarHelper.showSnackbar('Contest is Full');
                             } else {
@@ -381,16 +397,21 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                                   productType: ProductType.collegeContest,
                                   productId: widget.contest?.id ?? '',
                                   buyItemPrice: widget.contest?.entryFee ?? 0,
-                                  onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                                  onPaymentSuccess:
+                                      controller.loadDataAfterPaymentSuccess,
                                   onSubmit: () {
                                     Get.back();
-                                    var walletController = Get.find<WalletController>();
+                                    var walletController =
+                                        Get.find<WalletController>();
                                     var data = {
                                       "bonusRedemption": 0,
-                                      "coupon": walletController.couponCodeTextController.text,
-                                      "contestFee": walletController.subscriptionAmount.value,
+                                      "coupon": walletController
+                                          .couponCodeTextController.text,
+                                      "contestFee": walletController
+                                          .subscriptionAmount.value,
                                       "contestId": widget.contest?.id,
-                                      "contestName": widget.contest?.contestName,
+                                      "contestName":
+                                          widget.contest?.contestName,
                                     };
                                     controller.purchaseContest(data);
                                   },
@@ -407,13 +428,22 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                       child: Text(
                         widget.contest?.entryFee == 0
                             ? 'Start Trading'
-                            : (controller.checkIfPurchased(widget.contest) || widget.contest?.entryFee == 0) &&
-                                    controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
-                                            widget.contest?.participants?.length ?? 0) >
+                            : (controller.checkIfPurchased(widget.contest) ||
+                                        widget.contest?.entryFee == 0) &&
+                                    controller.calculateSeatsLeft(
+                                            widget.contest?.maxParticipants ??
+                                                0,
+                                            widget.contest?.participants
+                                                    ?.length ??
+                                                0) >
                                         0
                                 ? 'Purchased'
-                                : controller.calculateSeatsLeft(widget.contest?.maxParticipants ?? 0,
-                                            widget.contest?.participants?.length ?? 0) ==
+                                : controller.calculateSeatsLeft(
+                                            widget.contest?.maxParticipants ??
+                                                0,
+                                            widget.contest?.participants
+                                                    ?.length ??
+                                                0) ==
                                         0
                                     ? 'Contest Full'
                                     : 'Pay Now',
@@ -429,9 +459,10 @@ class _UpComingCollegeContestCardState extends State<UpComingCollegeContestCard>
                     onTap: () {
                       controller.upComingCollegeContest(widget.contest);
                       controller.getShareContest(true);
-                      String url = 'https://stoxhero.com/contest';
+                      String url = 'https://stoxhero.com/testzone';
                       Clipboard.setData(ClipboardData(text: url));
-                      SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                      SnackbarHelper.showSnackbar(
+                          'Link Copied, Share with your friends.');
                     },
                     child: Container(
                       alignment: Alignment.center,

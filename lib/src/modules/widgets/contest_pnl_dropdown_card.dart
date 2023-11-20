@@ -31,7 +31,7 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
             Row(
               children: [
                 Text(
-                  'Contest Net P&L:',
+                  'TestZone Net P&L:',
                   style: AppStyles.tsSecondaryMedium14,
                 ),
                 SizedBox(width: 4),
@@ -46,7 +46,9 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
               ],
             ),
             Icon(
-              isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+              isExpanded
+                  ? Icons.expand_less_rounded
+                  : Icons.expand_more_rounded,
               color: AppColors.grey,
             ),
           ],
@@ -137,12 +139,15 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
                     ),
                   ],
                 ),
-                for (var i = 0; i < controller.dayWiseContestPnlList.length; i++)
+                for (var i = 0;
+                    i < controller.dayWiseContestPnlList.length;
+                    i++)
                   DataRow(
                     cells: [
                       DataCell(
                         Text(
-                          FormatHelper.formatDateMonth(controller.dayWiseContestPnlList[i].date),
+                          FormatHelper.formatDateMonth(
+                              controller.dayWiseContestPnlList[i].date),
                           style: AppStyles.tsGreyMedium12,
                         ),
                       ),
@@ -194,7 +199,9 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
                       ),
                     ],
                   ),
-                for (var i = 0; i < controller.dayWiseContestPnlList.length; i++)
+                for (var i = 0;
+                    i < controller.dayWiseContestPnlList.length;
+                    i++)
                   DataRow(
                     cells: [
                       DataCell(
@@ -207,11 +214,15 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
                         Center(
                           child: Text(
                             FormatHelper.formatNumbers(
-                              controller.calculateContestGrossPNL() + (controller.dayWiseContestPnlList[i].gpnl ?? 0),
+                              controller.calculateContestGrossPNL() +
+                                  (controller.dayWiseContestPnlList[i].gpnl ??
+                                      0),
                             ),
                             style: AppStyles.tsSecondaryMedium12.copyWith(
                               color: controller.getValueColor(
-                                controller.calculateContestGrossPNL() + (controller.dayWiseContestPnlList[i].gpnl ?? 0),
+                                controller.calculateContestGrossPNL() +
+                                    (controller.dayWiseContestPnlList[i].gpnl ??
+                                        0),
                               ),
                             ),
                           ),
@@ -222,7 +233,9 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
                           child: Text(
                             FormatHelper.formatNumbers(
                               controller.calculateContestBrokerage() +
-                                  (controller.dayWiseContestPnlList[i].brokerage ?? 0),
+                                  (controller
+                                          .dayWiseContestPnlList[i].brokerage ??
+                                      0),
                             ),
                             style: AppStyles.tsSecondaryMedium12,
                           ),
@@ -232,11 +245,15 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
                         Center(
                           child: Text(
                             FormatHelper.formatNumbers(
-                              controller.calculateContestNetPNL() + (controller.dayWiseContestPnlList[i].npnl ?? 0),
+                              controller.calculateContestNetPNL() +
+                                  (controller.dayWiseContestPnlList[i].npnl ??
+                                      0),
                             ),
                             style: AppStyles.tsSecondaryMedium12.copyWith(
                               color: controller.getValueColor(
-                                controller.calculateContestNetPNL() + (controller.dayWiseContestPnlList[i].npnl ?? 0),
+                                controller.calculateContestNetPNL() +
+                                    (controller.dayWiseContestPnlList[i].npnl ??
+                                        0),
                               ),
                             ),
                           ),

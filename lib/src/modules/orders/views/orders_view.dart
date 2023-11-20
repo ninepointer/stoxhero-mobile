@@ -14,7 +14,7 @@ class OrdersView extends GetView<OrdersController> {
         appBar: AppBar(
           title: const Text('Orders'),
           bottom: TabBar(
-            indicatorColor: AppColors.primary,
+            indicatorColor: AppColors.lightGreen,
             tabs: [
               Tab(
                 child: Text(
