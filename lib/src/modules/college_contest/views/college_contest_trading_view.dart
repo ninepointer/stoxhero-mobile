@@ -156,12 +156,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             children: [
                               PositionDetailCardTile(
                                 label: 'Reward',
-                                value: controller.getRewardCapAmount(
-                                  controller.liveCollegeContest.value.entryFee == 0
-                                      ? controller.liveCollegeContest.value.portfolio?.portfolioValue ?? 0
-                                      : controller.liveCollegeContest.value.entryFee ?? 0,
-                                  controller.liveCollegeContest.value.payoutCapPercentage ?? 0,
-                                ),
+                                value: controller.calculateRewardAmount(),
                                 valueColor: controller.getValueColor(
                                   controller.getRewardCapAmount(
                                     controller.liveCollegeContest.value.entryFee == 0
@@ -174,7 +169,8 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                               SizedBox(width: 8),
                               PositionDetailCardTile(
                                 label: 'TDS',
-                                value: controller.calculateTDS().round(),
+                                // value: controller.calculateTDS().round(),
+                                value:controller.calculateTDSAmount().round(),
                                 valueColor: controller.getValueColor(
                                   controller.calculateTDS(),
                                 ),
@@ -186,9 +182,11 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             children: [
                               PositionDetailCardTile(
                                 label: 'Payout',
-                                value: controller.calculatefinalPayout().round(),
+                                value: controller.calculateRewardAmount().round()-controller.calculateTDSAmount().round() > 0 ?
+                                  controller.calculateRewardAmount().round()-controller.calculateTDSAmount().round(): 0,
                                 valueColor: controller.getValueColor(
-                                  controller.calculatefinalPayout(),
+                                  controller.calculateRewardAmount().round()-controller.calculateTDSAmount().round() > 0 ?
+                                  controller.calculateRewardAmount().round()-controller.calculateTDSAmount().round(): 0,
                                 ),
                               ),
                             ],

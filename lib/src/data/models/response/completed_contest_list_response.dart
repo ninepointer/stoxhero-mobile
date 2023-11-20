@@ -1,3 +1,6 @@
+
+import 'package:stoxhero/src/data/models/response/upcoming_contest_list_response.dart';
+
 class CompletedContestListResponse {
   String? status;
   String? message;
@@ -39,7 +42,7 @@ class CompletedContest {
   num? entryFee;
   num? payoutPercentage;
   bool? featured;
-  String? portfolio;
+  ContestPortfolio? portfolio;
   int? maxParticipants;
   String? contestStatus;
   String? createdBy;
@@ -110,7 +113,7 @@ class CompletedContest {
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
-    portfolio = json['portfolio'];
+     portfolio = json['portfolio'] != null ? new ContestPortfolio.fromJson(json['portfolio']) : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -167,7 +170,9 @@ class CompletedContest {
     data['entryFee'] = this.entryFee;
     data['payoutPercentage'] = this.payoutPercentage;
     data['featured'] = this.featured;
-    data['portfolio'] = this.portfolio;
+    if (this.portfolio != null) {
+      data['portfolio'] = this.portfolio!.toJson();
+    }
     data['maxParticipants'] = this.maxParticipants;
     data['contestStatus'] = this.contestStatus;
     data['createdBy'] = this.createdBy;

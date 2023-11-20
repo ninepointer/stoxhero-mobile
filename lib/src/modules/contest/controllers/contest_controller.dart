@@ -852,13 +852,14 @@ class ContestController extends BaseController<ContestRepository> {
 
   Future getLiveContestList() async {
     isLiveLoading(true);
-    liveFreeContestList.clear();
-    livePremiumContestList.clear();
+    liveContestList.clear();
     try {
       final RepoResponse<LiveContestListResponse> response =
           await repository.getLiveContestList();
       if (response.data != null) {
         liveContestList(response.data?.data ?? []);
+        liveFreeContestList.clear();
+        livePremiumContestList.clear();
         if (liveContestList.isNotEmpty) {
           liveContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
