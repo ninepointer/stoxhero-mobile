@@ -1042,6 +1042,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   Future socketSendConnection() async {
     isPendingOrderStateLoading(true);
     try {
+      socketService.socket.off('sendOrderResponse${userDetails.value.sId}');
       socketService.socket.on(
         'sendOrderResponse${userDetails.value.sId}',
         (data) {

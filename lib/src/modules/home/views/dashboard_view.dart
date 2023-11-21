@@ -21,9 +21,11 @@ class _DashboardViewState extends State<DashboardView> {
   void initState() {
     super.initState();
     controller = Get.find<HomeController>();
+    contestProfileController = Get.find<ContestProfileController>();
     contestController = Get.find<ContestController>();
     collegeContestController = Get.find<CollegeContestController>();
     contestProfileController = Get.find<ContestProfileController>();
+    contestProfileController.loadData();
     DateTime now = DateTime.now();
     String currentMonth = DateFormat('MMMM yyyy').format(now);
     String previousMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
@@ -53,7 +55,11 @@ class _DashboardViewState extends State<DashboardView> {
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
-          onRefresh: controller.loadData,
+          onRefresh: () async{
+            controller.loadData();
+            contestProfileController.loadData();
+            return Future.value();
+            },
           child: Visibility(
             visible: !controller.isLoadingStatus,
             replacement: DashboardShimmer(),

@@ -1492,6 +1492,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future socketSendConnection() async {
     isPendingOrderStateLoading(true);
     try {
+      socketService.socket.off('sendOrderResponse${userDetails.value.sId}');
       socketService.socket.on(
         'sendOrderResponse${userDetails.value.sId}',
         (data) {
@@ -1521,7 +1522,7 @@ class ContestController extends BaseController<ContestRepository> {
         if (response.data?.status?.toLowerCase() == "success") {
           liveFeaturedContest(response.data?.liveFeatured ?? []);
           upcomingFeaturedContest(response.data?.upcomingFeatured ?? []);
-          featuredCollegeContest(response.data?.collegeContest ?? []);
+          featuredCollegeContest(response.data?.collegeContests ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

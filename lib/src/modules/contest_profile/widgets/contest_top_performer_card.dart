@@ -26,9 +26,9 @@ class ContestTopPerformerCard extends GetView<ContestProfileController> {
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: AlwaysScrollableScrollPhysics(),
-            itemCount: controller.weeklyTopPerformer.length,
+            itemCount: controller.weeklyTopPerformerFullList.length,
             itemBuilder: (BuildContext context, index) {
-              var weekly = controller.weeklyTopPerformer[index];
+              var weekly = controller.weeklyTopPerformerFullList[index];
               return CommonCard(
                 margin: EdgeInsets.only(left: 12, top: 8, right: 12),
                 padding: EdgeInsets.zero,

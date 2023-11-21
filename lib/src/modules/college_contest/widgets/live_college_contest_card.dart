@@ -402,10 +402,11 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      (controller.checkIfLivePurchased(contest) ||
-                              contest?.entryFee == 0)
+                     controller.checkIfLivePurchased(contest)
                           ? 'Start Trading'
-                          : 'Pay Now',
+                          :contest?.entryFee != 0 ? 
+                          'Pay Now'
+                          :'Join Now',
                       style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
                       ),
