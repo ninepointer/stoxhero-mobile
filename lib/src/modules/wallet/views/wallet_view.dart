@@ -217,7 +217,8 @@ class _WalletViewState extends State<WalletView> {
 
 6. The minimum withdrawal amount is ${FormatHelper.formatNumbers(controller.readSetting.value.minWithdrawal, decimal: 0)}.
 
-7. The maximum withdrawal limit for a day is ${FormatHelper.formatNumbers(controller.readSetting.value.maxWithdrawal, decimal: 0)}''',
+7. The maximum withdrawal limit for a day is ${FormatHelper.formatNumbers(controller.readSetting.value.maxWithdrawal, decimal: 0)}.
+8. The minimum StoxHero wallet balance should be  ${FormatHelper.formatNumbers(controller.readSetting.value.minWalletBalance, decimal: 0)}''',
                                     style:
                                         Theme.of(context).textTheme.tsRegular14,
                                   ),

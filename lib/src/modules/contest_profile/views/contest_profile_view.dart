@@ -52,7 +52,9 @@ class ContestProfileView extends GetView<ContestProfileController> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '${controller.contestProfileData.value.firstName} ${controller.contestProfileData.value.lastName}',
+                        '${controller.contestProfileData.value.firstName ?? ''} ${controller.contestProfileData.value.lastName ?? ''}'
+                                .capitalize ??
+                            '',
                         style: Theme.of(context).textTheme.tsMedium14,
                       ),
                       SizedBox(height: 2),

@@ -58,7 +58,7 @@ class ContestPerformanceCard extends StatelessWidget {
                   ),
                   Text(
                     '#${contestProfile?.rank}',
-                    style: Theme.of(context).textTheme.tsMedium14,
+                    style: Theme.of(context).textTheme.tsRegular12,
                   ),
                 ],
               ),
@@ -73,7 +73,7 @@ class ContestPerformanceCard extends StatelessWidget {
                       contestProfile?.finalPayout,
                       decimal: 0,
                     )}',
-                    style: Theme.of(context).textTheme.tsMedium14,
+                    style: Theme.of(context).textTheme.tsRegular12,
                   ),
                 ],
               ),
@@ -85,7 +85,7 @@ class ContestPerformanceCard extends StatelessWidget {
                   ),
                   Text(
                     '${contestProfile?.contestFor}',
-                    style: Theme.of(context).textTheme.tsMedium14,
+                    style: Theme.of(context).textTheme.tsRegular12,
                   ),
                 ],
               ),

@@ -89,7 +89,9 @@ class CollegeContestLeaderboardCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${contestLeaderboard?.traderFirstName!.capitalizeFirst} ${contestLeaderboard?.traderLastName!.capitalizeFirst}',
+                          '${contestLeaderboard?.traderFirstName ?? ''} ${contestLeaderboard?.traderLastName ?? ''}'
+                                  .capitalize ??
+                              '',
                           style: Theme.of(context).textTheme.tsMedium14,
                         ),
                         Text(
