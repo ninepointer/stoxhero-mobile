@@ -16,15 +16,19 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty &&
+                      controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          for (var item in controller.stockIndexDetailsList) ...[
+                          for (var item
+                              in controller.stockIndexDetailsList) ...[
                             TradingStockCard(
-                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              label: controller
+                                  .getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
@@ -34,12 +38,14 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               stockLTP: FormatHelper.formatNumbers(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
-                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockChange:
+                                  '(${item.change?.toStringAsFixed(2)}%)',
                               stockLTPColor: controller.getValueColor(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
                             ),
-                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                            if (item != controller.stockIndexDetailsList.last)
+                              SizedBox(width: 4),
                           ]
                         ],
                       ),
@@ -77,8 +83,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           label: AppStrings.noDataFoundWatchlist,
                         )
                       : SizedBox(
-                          height:
-                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
+                          height: controller.tradingWatchlist.length >= 3
+                              ? 260
+                              : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -86,12 +93,14 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                             itemBuilder: (context, index) {
                               return VirtualWatchListCard(
                                 index: index,
-                                tradingWatchlist: controller.tradingWatchlist[index],
+                                tradingWatchlist:
+                                    controller.tradingWatchlist[index],
                               );
                             },
                           ),
                         ),
-                  if (controller.virtualPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
+                  if (controller.virtualPositionsList.isNotEmpty)
+                    CommonTile(label: 'My Position Summary'),
                   if (controller.virtualPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -102,12 +111,14 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
-                                value: controller.tenxTotalPositionDetails.value.lots,
+                                value: controller
+                                    .tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
                               PositionDetailCardTile(
                                 label: 'Brokerage',
-                                value: controller.tenxTotalPositionDetails.value.brokerage,
+                                value: controller
+                                    .tenxTotalPositionDetails.value.brokerage,
                               ),
                             ],
                           ),
@@ -117,13 +128,15 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
-                                valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
+                                valueColor: controller.getValueColor(
+                                    controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
                               PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
-                                valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                                valueColor: controller.getValueColor(
+                                    controller.calculateTotalNetPNL()),
                               ),
                             ],
                           ),
@@ -149,7 +162,8 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.virtualPositionsList.length,
                           itemBuilder: (context, index) {
-                            final position = controller.virtualPositionsList[index];
+                            final position =
+                                controller.virtualPositionsList[index];
                             if (position.id?.isLimit != true) {
                               return VirtualPositionCard(
                                 position: position,
@@ -175,7 +189,8 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           itemCount: controller.stopLossPendingOrderList.length,
                           itemBuilder: (context, index) {
                             return VirtualStoplossPendingOrderCard(
-                              stopLoss: controller.stopLossPendingOrderList[index],
+                              stopLoss:
+                                  controller.stopLossPendingOrderList[index],
                             );
                           },
                         ),
@@ -189,16 +204,21 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           label: AppStrings.noDataFoundExecutedOrders,
                         )
                       : SizedBox(
-                          height: controller.stopLossExecutedOrdersList.length >= 3
-                              ? 180
-                              : controller.stopLossExecutedOrdersList.length * 130,
+                          height:
+                              controller.stopLossExecutedOrdersList.length >= 3
+                                  ? 180
+                                  : controller
+                                          .stopLossExecutedOrdersList.length *
+                                      130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemCount:
+                                controller.stopLossExecutedOrdersList.length,
                             itemBuilder: (context, index) {
                               return StoplossExecutedOrderCard(
-                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                                stopLoss: controller
+                                    .stopLossExecutedOrdersList[index],
                               );
                             },
                           ),
@@ -213,16 +233,21 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           label: AppStrings.noDataFoundCompletedRejectedOrders,
                         )
                       : SizedBox(
-                          height: controller.virtualTradeTodaysOrdersList.length >= 3
+                          height: controller
+                                      .virtualTradeTodaysOrdersList.length >=
+                                  3
                               ? 180
-                              : controller.virtualTradeTodaysOrdersList.length * 130,
+                              : controller.virtualTradeTodaysOrdersList.length *
+                                  130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.virtualTradeTodaysOrdersList.length,
+                            itemCount:
+                                controller.virtualTradeTodaysOrdersList.length,
                             itemBuilder: (context, index) {
                               return VirtualTodayOrderCard(
-                                order: controller.virtualTradeTodaysOrdersList[index],
+                                order: controller
+                                    .virtualTradeTodaysOrdersList[index],
                               );
                             },
                           ),
@@ -245,7 +270,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                   PortfolioDetailCardTile(
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
-                    value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
+                    value: controller.calculateTotalNetPNL() > 0
+                        ? 0
+                        : controller.calculateTotalNetPNL().abs(),
                     valueColor: controller.getValueColor(
                       controller.calculateTotalNetPNL(),
                     ),

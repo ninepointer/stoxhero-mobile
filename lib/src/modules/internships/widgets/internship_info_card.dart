@@ -94,20 +94,65 @@ class InternshipInfoCard extends GetView<InternshipController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          FormatHelper.formatNumbers(controller.calculateMargin().round()),
+                          FormatHelper.formatNumbers(
+                              controller.calculateMargin().round()),
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
                   ],
                 ),
+
+                //////asbdksbfkb
+                ///sdknfkgnk
+                SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Attendance",
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          "${controller.internshipBatchDetails.value.attendancePercentage}%",
+                          style: Theme.of(context).textTheme.tsMedium12,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Referral Count',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                            "${controller.internshipBatchDetails.value.referralCount}",
+                            style: Theme.of(context).textTheme.tsMedium12),
+                      ],
+                    ),
+                  ],
+                ),
+
+                ///edshfi
+                ///svhhribg
+                ///seiog
                 SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
                       child: CommonOutlinedButton(
-                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
-                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        backgroundColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
                         height: 42,
                         label: 'View Orders',
                         onPressed: () {
@@ -119,13 +164,18 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     SizedBox(width: 8),
                     Expanded(
                       child: CommonOutlinedButton(
-                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
-                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        backgroundColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
                         height: 42,
                         label: 'View Analytics',
                         onPressed: () {
                           Get.to(() => InternshipAnalyticsView());
-                          Get.find<InternshipController>().loadInternshipAnalyticsData();
+                          Get.find<InternshipController>()
+                              .loadInternshipAnalyticsData();
                         },
                       ),
                     ),
@@ -133,8 +183,12 @@ class InternshipInfoCard extends GetView<InternshipController> {
                 ),
                 SizedBox(height: 8),
                 CommonOutlinedButton(
-                  backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
-                  labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                  backgroundColor: Get.isDarkMode
+                      ? AppColors.darkGreen
+                      : AppColors.lightGreen,
+                  labelColor: Get.isDarkMode
+                      ? AppColors.darkGreen
+                      : AppColors.lightGreen,
                   height: 42,
                   label: 'Start Trading',
                   onPressed: () {

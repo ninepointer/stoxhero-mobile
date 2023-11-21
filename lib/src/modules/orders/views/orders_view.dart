@@ -25,8 +25,8 @@ class OrdersView extends GetView<OrdersController> {
               ),
               Tab(
                 child: Text(
-                  'Virtual Trade\nOrders',
-                  style: Theme.of(context).textTheme.tsRegular12,
+                  'Market',
+                  style: Theme.of(context).textTheme.tsRegular16,
                   textAlign: TextAlign.center,
                 ),
               ),

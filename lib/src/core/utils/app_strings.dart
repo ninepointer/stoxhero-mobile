@@ -55,7 +55,7 @@ class AppStrings {
   static const String tenxLeaderboard = "TenX Leaderboard";
   static const String wallet = "Wallet";
   static const String transactions = "Transactions";
-  static const String successfulTransactions = "Successful Withdrawals";
+  static const String successfulTransactions = "Withdrawals";
   static const String recentTransactions = "Recent Transactions";
 
   static const String todayOrders = 'Today Orders';

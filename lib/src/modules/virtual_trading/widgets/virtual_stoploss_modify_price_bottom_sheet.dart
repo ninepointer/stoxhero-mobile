@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class VirtualStoplossModifyPriceBottomSheet extends GetView<VirtualTradingController> {
+class VirtualStoplossModifyPriceBottomSheet
+    extends GetView<VirtualTradingController> {
   final TradingInstrument stopLoss;
   final TransactionType type;
   const VirtualStoplossModifyPriceBottomSheet({
@@ -134,7 +135,9 @@ class VirtualStoplossModifyPriceBottomSheet extends GetView<VirtualTradingContro
                     items: controller.lotsValueList.map((int number) {
                       return DropdownMenuItem<int>(
                         value: number,
-                        child: Text(number >= 0 ? number.toString() : number.toString()),
+                        child: Text(number >= 0
+                            ? number.toString()
+                            : number.toString()),
                       );
                     }).toList(),
                     dropdownStyleData: DropdownStyleData(
@@ -169,7 +172,7 @@ class VirtualStoplossModifyPriceBottomSheet extends GetView<VirtualTradingContro
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
                           width: 2,
-                          color: AppColors.primary,
+                          color: AppColors.lightGreen,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
@@ -189,13 +192,16 @@ class VirtualStoplossModifyPriceBottomSheet extends GetView<VirtualTradingContro
                           hintText: 'Stop Loss Price',
                           keyboardType: TextInputType.number,
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d*')),
                           ],
                           controller: controller.stopLossPriceTextController,
                           validator: (value) {
-                            final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
+                            final stopLossPrice = double.tryParse(
+                                controller.stopLossPriceTextController.text);
                             if (stopLossPrice != null) {
-                              final isLotSizeNegative = stopLoss.lotSize.toString().contains('-');
+                              final isLotSizeNegative =
+                                  stopLoss.lotSize.toString().contains('-');
                               final isInvalidPrice = isLotSizeNegative
                                   ? (stopLossPrice <=
                                       controller.getInstrumentLastPrice(
@@ -225,13 +231,16 @@ class VirtualStoplossModifyPriceBottomSheet extends GetView<VirtualTradingContro
                           hintText: 'StopProfit Price',
                           keyboardType: TextInputType.number,
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d*')),
                           ],
                           controller: controller.stopProfitPriceTextController,
                           validator: (value) {
-                            final stopLossPrice = double.tryParse(controller.stopProfitPriceTextController.text);
+                            final stopLossPrice = double.tryParse(
+                                controller.stopProfitPriceTextController.text);
                             if (stopLossPrice != null) {
-                              final isLotSizeNegative = stopLoss.lotSize.toString().contains('-');
+                              final isLotSizeNegative =
+                                  stopLoss.lotSize.toString().contains('-');
                               final isInvalidPrice = isLotSizeNegative
                                   ? (stopLossPrice >=
                                       controller.getInstrumentLastPrice(
@@ -278,9 +287,12 @@ class VirtualStoplossModifyPriceBottomSheet extends GetView<VirtualTradingContro
                     label: 'MODIFY',
                     onPressed: () {
                       if (controller.stopLossPriceTextController.text.isEmpty &&
-                          controller.stopProfitPriceTextController.text.isEmpty) {
-                        SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
-                      } else if (controller.stopLossFormKey.currentState!.validate()) {
+                          controller
+                              .stopProfitPriceTextController.text.isEmpty) {
+                        SnackbarHelper.showSnackbar(
+                            'Please Enter StopLoss or StopProfit Price');
+                      } else if (controller.stopLossFormKey.currentState!
+                          .validate()) {
                         controller.pendingOrderModify(type, stopLoss);
                       }
                       controller.stopLossPriceTextController.clear();

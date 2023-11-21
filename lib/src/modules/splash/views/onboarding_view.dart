@@ -102,10 +102,13 @@ class _OnBoardingViewState extends State<OnBoardingView> {
           SizedBox(height: 36),
           if (currentIndex == contents.length - 1)
             CommonFilledButton(
-              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+              backgroundColor:
+                  Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
               width: 250,
               height: 52,
-              label: (currentIndex == contents.length - 1 ? 'Get Started' : 'Next'),
+              label: (currentIndex == contents.length - 1
+                  ? 'Get Started'
+                  : 'Next'),
               onPressed: navigateToNextScreen,
             )
           else
@@ -114,7 +117,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               child: FittedBox(
                 child: FloatingActionButton(
                   elevation: 0,
-                  backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                  backgroundColor: Get.isDarkMode
+                      ? AppColors.darkGreen
+                      : AppColors.lightGreen,
                   child: Icon(
                     Icons.chevron_right_rounded,
                     color: AppColors.white,
@@ -144,7 +149,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
       width: currentIndex == index ? 24 : 8,
       margin: EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
-        color: currentIndex == index ? AppColors.secondary : AppColors.grey.withOpacity(.25),
+        color: currentIndex == index
+            ? AppColors.secondary
+            : AppColors.grey.withOpacity(.25),
         borderRadius: BorderRadius.circular(50),
       ),
     );
@@ -172,21 +179,25 @@ List<OnBoardingContent> contents = [
   OnBoardingContent(
     image: AppImages.virtualTrade,
     title: 'Learn with \n Virtual Trade',
-    description: 'Explore the world of investing risk-free \n by practicing with virtual money.',
+    description:
+        'Explore the world of investing risk-free \n by practicing with virtual money.',
   ),
   OnBoardingContent(
     image: AppImages.contests,
     title: 'Contests',
-    description: "Trade in our virtual contest, earn real cash \n rewards based on your portfolio's value!",
+    description:
+        "Trade in our virtual contest, earn real cash \n rewards based on your portfolio's value!",
   ),
   OnBoardingContent(
     image: AppImages.tenx,
     title: 'Earn Real Money \n with 10x Trading',
-    description: 'Harness your knowledge to fuel financial \n growth with strategic investments.',
+    description:
+        'Harness your knowledge to fuel financial \n growth with strategic investments.',
   ),
   OnBoardingContent(
     image: AppImages.referral,
     title: 'Grow Together \n with Referral',
-    description: 'Gather your friends, claim rewards, and \n conquer milestones together!',
+    description:
+        'Gather your friends, claim rewards, and \n conquer milestones together!',
   ),
 ];

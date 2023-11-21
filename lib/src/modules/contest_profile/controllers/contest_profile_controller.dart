@@ -7,7 +7,8 @@ class ContestProfileBinding implements Bindings {
   void dependencies() => Get.put(ContestProfileController());
 }
 
-class ContestProfileController extends BaseController<ContestProfileRepository> {
+class ContestProfileController
+    extends BaseController<ContestProfileRepository> {
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
@@ -39,7 +40,8 @@ class ContestProfileController extends BaseController<ContestProfileRepository> 
     isProfileLoading(true);
     contestProfileDataList.clear();
     contestProfileData(ContestProfile());
-    final RepoResponse<ContestProfileResponse> response = await repository.getContestProfile(
+    final RepoResponse<ContestProfileResponse> response =
+        await repository.getContestProfile(
       id,
     );
     try {
@@ -60,7 +62,8 @@ class ContestProfileController extends BaseController<ContestProfileRepository> 
 
   Future getWeeklyTopPerformer() async {
     isWeeklyLoading(true);
-    final RepoResponse<WeeklyTopPerformersListResponse> response = await repository.getWeeklyTopPerformer();
+    final RepoResponse<WeeklyTopPerformersListResponse> response =
+        await repository.getWeeklyTopPerformer();
     try {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
@@ -81,7 +84,8 @@ class ContestProfileController extends BaseController<ContestProfileRepository> 
 
   Future getWeeklyTopPerformerFullList() async {
     isWeeklyLoading(true);
-    final RepoResponse<WeeklyTopPerformersListResponse> response = await repository.getWeeklyTopPerformerFullList();
+    final RepoResponse<WeeklyTopPerformersListResponse> response =
+        await repository.getWeeklyTopPerformerFullList();
     try {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {

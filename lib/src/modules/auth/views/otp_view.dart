@@ -45,7 +45,8 @@ class OtpView extends GetView<AuthController> {
                             child: Text(
                               'We have sent a six digit verification\ncode to +91 ${controller.mobileTextController.text}',
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.tsGreyRegular16,
+                              style:
+                                  Theme.of(context).textTheme.tsGreyRegular16,
                             ),
                           ),
                           SizedBox(height: 24),
@@ -65,7 +66,8 @@ class OtpView extends GetView<AuthController> {
                                 defaultPinTheme: PinTheme(
                                   width: 64,
                                   height: 64,
-                                  textStyle: Theme.of(context).textTheme.tsSemiBold20,
+                                  textStyle:
+                                      Theme.of(context).textTheme.tsSemiBold20,
                                   decoration: BoxDecoration(
                                     color: AppColors.grey.withOpacity(.1),
                                     borderRadius: BorderRadius.circular(8),
@@ -74,11 +76,13 @@ class OtpView extends GetView<AuthController> {
                                 focusedPinTheme: PinTheme(
                                   width: 64,
                                   height: 64,
-                                  textStyle: Theme.of(context).textTheme.tsWhiteSemiBold22,
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .tsWhiteSemiBold22,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                      color: AppColors.primary,
+                                      color: AppColors.lightGreen,
                                       width: 2,
                                     ),
                                   ),
@@ -86,7 +90,9 @@ class OtpView extends GetView<AuthController> {
                                 errorPinTheme: PinTheme(
                                   width: 64,
                                   height: 64,
-                                  textStyle: Theme.of(context).textTheme.tsPrimarySemiBold20,
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .tsPrimarySemiBold20,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
@@ -107,7 +113,9 @@ class OtpView extends GetView<AuthController> {
                           SizedBox(height: 16),
                           Obx(
                             () => CommonFilledButton(
-                              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
                               label: 'Verify',
                               onPressed: controller.verifyOtp,
                               isLoading: controller.isLoadingStatus,
@@ -126,8 +134,12 @@ class OtpView extends GetView<AuthController> {
                       ),
                       SizedBox(height: 24),
                       CommonOutlinedButton(
-                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
-                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        backgroundColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
                         label: 'Send again',
                         onPressed: () => controller.resendSigninOtp(),
                       ),

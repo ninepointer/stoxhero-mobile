@@ -6,7 +6,9 @@ class InternshipBatchResponse {
 
   InternshipBatchResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    data = json['data'] != null ? new InternshipBatch.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new InternshipBatch.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -50,8 +52,11 @@ class InternshipBatch {
     payoutPercentage = json['payoutPercentage'];
     attendancePercentage = json['attendancePercentage'];
     referralCount = json['referralCount'];
-    career = json['career'] != null ? new Career.fromJson(json['career']) : null;
-    portfolio = json['portfolio'] != null ? new InternPortfolio.fromJson(json['portfolio']) : null;
+    career =
+        json['career'] != null ? new Career.fromJson(json['career']) : null;
+    portfolio = json['portfolio'] != null
+        ? new InternPortfolio.fromJson(json['portfolio'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {

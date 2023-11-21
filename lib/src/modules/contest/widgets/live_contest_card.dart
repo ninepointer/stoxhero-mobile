@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:share_plus/share_plus.dart';
 import '../../../app/app.dart';
 
 class LiveContestCard extends GetView<ContestController> {
@@ -416,6 +416,9 @@ class LiveContestCard extends GetView<ContestController> {
                     SnackbarHelper.showSnackbar(
                         'Link Copied, Share with your friends.');
                   },
+
+                  //  onTap: () => Share.share(controller.getReferralMessage()),
+
                   child: Container(
                     alignment: Alignment.center,
                     padding: EdgeInsets.all(6),

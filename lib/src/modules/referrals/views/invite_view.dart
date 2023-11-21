@@ -47,7 +47,11 @@ class InviteView extends GetView<ReferralsController> {
                         if (controller.activeReferrals.value != null)
                           Text(
                             'Get ${FormatHelper.formatNumbers(controller.activeReferrals.value?.rewardPerReferral, decimal: 0)} for every referral in\nyour StoxHero wallet',
-                            style: AppStyles.tsPrimaryRegular16,
+                            style: TextStyle(
+                                color: Colors.lightGreen,
+                                fontFamily: "Rubik",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400),
                             textAlign: TextAlign.center,
                           ),
                         if (controller.activeReferrals.value != null)
@@ -131,7 +135,7 @@ class InviteView extends GetView<ReferralsController> {
                                 '${AppUrls.referralWebUrl}${controller.userDetailsData.myReferralCode}',
                             version: QrVersions.auto,
                             eyeStyle: QrEyeStyle(
-                              color: AppColors.primary,
+                              color: AppColors.lightGreen,
                             ),
                             size: 200,
                           ),

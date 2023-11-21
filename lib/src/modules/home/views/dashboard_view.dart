@@ -28,8 +28,10 @@ class _DashboardViewState extends State<DashboardView> {
     contestProfileController.loadData();
     DateTime now = DateTime.now();
     String currentMonth = DateFormat('MMMM yyyy').format(now);
-    String previousMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
-    String nextMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month + 1));
+    String previousMonth =
+        DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+    String nextMonth =
+        DateFormat('MMMM yyyy').format(DateTime(now.year, now.month + 1));
 
     monthsList = [
       previousMonth,
@@ -43,7 +45,8 @@ class _DashboardViewState extends State<DashboardView> {
     String name = '';
     DateTime now = DateTime.now();
     if (label == 'this month') name = DateFormat('MMMM yyyy').format(now);
-    if (label == 'last month') name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+    if (label == 'last month')
+      name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
     if (label == 'lifetime') name = 'Lifetime';
     return name;
   }
@@ -69,13 +72,16 @@ class _DashboardViewState extends State<DashboardView> {
                 children: [
                   if (controller.stockIndexDetailsList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          for (var item in controller.stockIndexDetailsList) ...[
+                          for (var item
+                              in controller.stockIndexDetailsList) ...[
                             TradingStockCard(
-                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              label: controller
+                                  .getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
@@ -85,12 +91,14 @@ class _DashboardViewState extends State<DashboardView> {
                               stockLTP: FormatHelper.formatNumbers(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
-                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockChange:
+                                  '(${item.change?.toStringAsFixed(2)}%)',
                               stockLTPColor: controller.getValueColor(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
                             ),
-                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                            if (item != controller.stockIndexDetailsList.last)
+                              SizedBox(width: 4),
                           ]
                         ],
                       ),
@@ -103,7 +111,9 @@ class _DashboardViewState extends State<DashboardView> {
                       itemBuilder: (context, int index, _) {
                         return GestureDetector(
                           onTap: () => controller.navigateToCarousel(
-                            controller.dashboardCarouselList[index].linkToCarousel ?? '',
+                            controller.dashboardCarouselList[index]
+                                    .linkToCarousel ??
+                                '',
                           ),
                           child: Container(
                             width: double.infinity,
@@ -142,7 +152,8 @@ class _DashboardViewState extends State<DashboardView> {
                       ]}',
                       onPressed: () {
                         contestProfileController.weeklyTopPerformer();
-                        contestProfileController.getWeeklyTopPerformerFullList();
+                        contestProfileController
+                            .getWeeklyTopPerformerFullList();
                         Get.to(() => ContestTopPerformerCard());
                       },
                       margin: EdgeInsets.only(bottom: 0, top: 8),
@@ -152,7 +163,10 @@ class _DashboardViewState extends State<DashboardView> {
                     child: Obx(
                       () => Container(
                         child: Row(
-                          children: contestProfileController.weeklyTopPerformer.asMap().entries.map((entry) {
+                          children: contestProfileController.weeklyTopPerformer
+                              .asMap()
+                              .entries
+                              .map((entry) {
                             int index = entry.key;
                             return ContestPortfolioWeekCard(
                               index: index + 1,
@@ -171,8 +185,11 @@ class _DashboardViewState extends State<DashboardView> {
                             ? Container()
                             : Obx(
                                 () => Row(
-                                  children: contestController.featuredCollegeContest.map((contest) {
-                                    String userId = controller.userDetailsData.sId ?? '';
+                                  children: contestController
+                                      .featuredCollegeContest
+                                      .map((contest) {
+                                    String userId =
+                                        controller.userDetailsData.sId ?? '';
                                     return Container(
                                       width: MediaQuery.of(context).size.width,
                                       child: CollegeContestCard(
@@ -187,8 +204,11 @@ class _DashboardViewState extends State<DashboardView> {
                             ? Container()
                             : Obx(
                                 () => Row(
-                                  children: contestController.liveFeaturedContest.map((contest) {
-                                    String userId = controller.userDetailsData.sId ?? '';
+                                  children: contestController
+                                      .liveFeaturedContest
+                                      .map((contest) {
+                                    String userId =
+                                        controller.userDetailsData.sId ?? '';
                                     return Container(
                                       width: MediaQuery.of(context).size.width,
                                       child: LiveFeaturedCard(
@@ -203,8 +223,11 @@ class _DashboardViewState extends State<DashboardView> {
                             ? Container()
                             : Obx(
                                 () => Row(
-                                  children: contestController.upcomingFeaturedContest.map((contest) {
-                                    String userId = controller.userDetailsData.sId ?? '';
+                                  children: contestController
+                                      .upcomingFeaturedContest
+                                      .map((contest) {
+                                    String userId =
+                                        controller.userDetailsData.sId ?? '';
                                     return Container(
                                       width: MediaQuery.of(context).size.width,
                                       child: UpcomingFeaturedCard(
@@ -255,14 +278,17 @@ class _DashboardViewState extends State<DashboardView> {
                           () => SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: contestController.liveContestList.map((contest) {
-                                String userId = controller.userDetailsData.sId ?? '';
+                              children: contestController.liveContestList
+                                  .map((contest) {
+                                String userId =
+                                    controller.userDetailsData.sId ?? '';
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
                                   child: LiveContestCard(
                                     userId: userId,
                                     contest: contest,
-                                    margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                                    margin:
+                                        EdgeInsets.all(8).copyWith(bottom: 0),
                                   ),
                                 );
                               }).toList(),
@@ -289,23 +315,29 @@ class _DashboardViewState extends State<DashboardView> {
                             () => SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: contestController.upComingContestList.map((contest) {
-                                  bool isVisible = contestController.isUpcomingContestVisible(contest);
-                                  String userId = controller.userDetailsData.sId ?? '';
+                                children: contestController.upComingContestList
+                                    .map((contest) {
+                                  bool isVisible = contestController
+                                      .isUpcomingContestVisible(contest);
+                                  String userId =
+                                      controller.userDetailsData.sId ?? '';
                                   return isVisible
                                       ? SizedBox()
                                       : Container(
-                                          width: MediaQuery.of(context).size.width,
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                           child: UpComingContestCard(
                                             userId: userId,
                                             contest: contest,
-                                            margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                                            margin: EdgeInsets.all(8)
+                                                .copyWith(bottom: 0),
                                           ),
                                         );
                                 }).toList(),
                               ),
                             ),
                           ),
+
                   SizedBox(height: 8),
                   CommonTile(
                     label: 'Return Summary',
@@ -319,8 +351,10 @@ class _DashboardViewState extends State<DashboardView> {
                           children: [
                             Expanded(
                               child: customCard(
-                                label: 'Virtual Trading',
-                                percent: controller.userDashboardReturnSummary.value.virtualData?.npnl == null
+                                label: 'F&O',
+                                percent: controller.userDashboardReturnSummary
+                                            .value.virtualData?.npnl ==
+                                        null
                                     ? '0'
                                     : '${(controller.userDashboardReturnSummary.value.virtualData!.npnl! / 10000).toStringAsFixed(2)} %',
                               ),
@@ -329,7 +363,9 @@ class _DashboardViewState extends State<DashboardView> {
                             Expanded(
                               child: customCard(
                                 label: 'TestZones Trading',
-                                percent: controller.userDashboardReturnSummary.value.contestReturn == null
+                                percent: controller.userDashboardReturnSummary
+                                            .value.contestReturn ==
+                                        null
                                     ? '0'
                                     : '${(controller.userDashboardReturnSummary.value.contestReturn! * 100).toStringAsFixed(2)} %',
                               ),
@@ -342,7 +378,9 @@ class _DashboardViewState extends State<DashboardView> {
                             Expanded(
                               child: customCard(
                                 label: 'TenX Trading',
-                                percent: controller.userDashboardReturnSummary.value.tenxReturn == null
+                                percent: controller.userDashboardReturnSummary
+                                            .value.tenxReturn ==
+                                        null
                                     ? '0'
                                     : '${(controller.userDashboardReturnSummary.value.tenxReturn! * 100).toStringAsFixed(2)} %',
                               ),
@@ -394,7 +432,9 @@ class _DashboardViewState extends State<DashboardView> {
                               setState(
                                 () {
                                   controller.selectedTimeFrame = value ?? '';
-                                  controller.getDashboard(controller.selectedTradeType, controller.selectedTimeFrame);
+                                  controller.getDashboard(
+                                      controller.selectedTradeType,
+                                      controller.selectedTimeFrame);
                                 },
                               );
                             },
@@ -414,23 +454,25 @@ class _DashboardViewState extends State<DashboardView> {
                               child: controller.selectedTradeType == 'virtual'
                                   ? customCard(
                                       label: 'Market Days',
-                                      percent: userDashboard.totalMarketDays != null
-                                          ? FormatHelper.formatNumbers(
-                                              userDashboard.totalMarketDays,
-                                              decimal: 0,
-                                              showSymbol: false,
-                                            )
-                                          : '0',
+                                      percent:
+                                          userDashboard.totalMarketDays != null
+                                              ? FormatHelper.formatNumbers(
+                                                  userDashboard.totalMarketDays,
+                                                  decimal: 0,
+                                                  showSymbol: false,
+                                                )
+                                              : '0',
                                     )
                                   : customCard(
                                       label: 'Total TestZones',
-                                      percent: userDashboard.totalContests != null
-                                          ? FormatHelper.formatNumbers(
-                                              userDashboard.totalContests,
-                                              decimal: 0,
-                                              showSymbol: false,
-                                            )
-                                          : '0',
+                                      percent:
+                                          userDashboard.totalContests != null
+                                              ? FormatHelper.formatNumbers(
+                                                  userDashboard.totalContests,
+                                                  decimal: 0,
+                                                  showSymbol: false,
+                                                )
+                                              : '0',
                                     ),
                             ),
                             SizedBox(width: 8),
@@ -438,7 +480,8 @@ class _DashboardViewState extends State<DashboardView> {
                               child: controller.selectedTradeType == 'virtual'
                                   ? customCard(
                                       label: 'Trading Days',
-                                      percent: userDashboard.totalTradingDays != null
+                                      percent: userDashboard.totalTradingDays !=
+                                              null
                                           ? FormatHelper.formatNumbers(
                                               userDashboard.totalTradingDays,
                                               decimal: 0,
@@ -448,13 +491,16 @@ class _DashboardViewState extends State<DashboardView> {
                                     )
                                   : customCard(
                                       label: 'TestZones Participated',
-                                      percent: userDashboard.participatedContests != null
-                                          ? FormatHelper.formatNumbers(
-                                              userDashboard.participatedContests,
-                                              decimal: 0,
-                                              showSymbol: false,
-                                            )
-                                          : '0',
+                                      percent:
+                                          userDashboard.participatedContests !=
+                                                  null
+                                              ? FormatHelper.formatNumbers(
+                                                  userDashboard
+                                                      .participatedContests,
+                                                  decimal: 0,
+                                                  showSymbol: false,
+                                                )
+                                              : '0',
                                       valueColor: AppColors.danger,
                                     ),
                             ),
@@ -508,7 +554,7 @@ class _DashboardViewState extends State<DashboardView> {
                             SizedBox(width: 8),
                             Expanded(
                               child: customCard(
-                                label: 'Portfolio',
+                                label: 'Vartual Margin Money',
                                 percent: userDashboard.portfolio != null
                                     ? FormatHelper.formatNumbers(
                                         userDashboard.portfolio,
@@ -654,13 +700,16 @@ class _DashboardViewState extends State<DashboardView> {
                 children: [
                   Text(
                     label,
-                    style: Theme.of(context).textTheme.tsRegular12,
+                    style: Theme.of(context).textTheme.tsRegular10,
                   ),
                   SizedBox(height: 4),
                   Text(
                     percent,
-                    style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                          color: valueColor ?? (percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                    style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                          color: valueColor ??
+                              (percent.startsWith('-')
+                                  ? AppColors.danger
+                                  : AppColors.success),
                         ),
                   )
                 ],

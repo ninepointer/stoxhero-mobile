@@ -123,7 +123,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     items: controller.lotsValueList.map((int number) {
                       return DropdownMenuItem<int>(
                         value: number,
-                        child: Text(number >= 0 ? number.toString() : number.toString()),
+                        child: Text(number >= 0
+                            ? number.toString()
+                            : number.toString()),
                       );
                     }).toList(),
                     dropdownStyleData: DropdownStyleData(
@@ -158,7 +160,7 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
                           width: 2,
-                          color: AppColors.primary,
+                          color: AppColors.lightGreen,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
@@ -177,12 +179,15 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                       hintText: 'Limit Price',
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+\.?\d*')),
                       ],
                       controller: controller.limitPriceTextController,
-                      onChanged: (value) => controller.getMarginRequired(type, tradingInstrument),
+                      onChanged: (value) =>
+                          controller.getMarginRequired(type, tradingInstrument),
                       validator: (value) {
-                        final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                        final limitPrice = double.tryParse(
+                            controller.limitPriceTextController.text);
                         if (limitPrice != null) {
                           if (type == TransactionType.buy) {
                             if (limitPrice >=
@@ -223,11 +228,14 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                               hintText: 'StopLoss Price',
                               keyboardType: TextInputType.number,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d*')),
                               ],
-                              controller: controller.stopLossPriceTextController,
+                              controller:
+                                  controller.stopLossPriceTextController,
                               validator: (value) {
-                                final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
+                                final stopLossPrice = double.tryParse(controller
+                                    .stopLossPriceTextController.text);
                                 if (stopLossPrice != null) {
                                   if (type == TransactionType.buy) {
                                     if (stopLossPrice >=
@@ -264,11 +272,15 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                               hintText: 'StopProfit Price',
                               keyboardType: TextInputType.number,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d*')),
                               ],
-                              controller: controller.stopProfitPriceTextController,
+                              controller:
+                                  controller.stopProfitPriceTextController,
                               validator: (value) {
-                                final stopProfitPrice = double.tryParse(controller.stopProfitPriceTextController.text);
+                                final stopProfitPrice = double.tryParse(
+                                    controller
+                                        .stopProfitPriceTextController.text);
                                 if (stopProfitPrice != null) {
                                   if (type == TransactionType.buy) {
                                     if (stopProfitPrice <=
@@ -305,7 +317,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                           label: 'MARKET',
                           onChanged: (int value) {
                             controller.handleRadioValueChanged(value, "MARKET");
-                            controller.getMarginRequired(type, tradingInstrument);
+                            controller.getMarginRequired(
+                                type, tradingInstrument);
                             controller.stopLossPriceTextController.clear();
                             controller.stopProfitPriceTextController.clear();
                             controller.limitPriceTextController.clear();
@@ -320,8 +333,10 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                             groupValue: controller.selectedGroupValue.value,
                             label: 'LIMIT',
                             onChanged: (int value) {
-                              controller.handleRadioValueChanged(value, "LIMIT");
-                              controller.getMarginRequired(type, tradingInstrument);
+                              controller.handleRadioValueChanged(
+                                  value, "LIMIT");
+                              controller.getMarginRequired(
+                                  type, tradingInstrument);
                               controller.stopLossPriceTextController.clear();
                               controller.stopProfitPriceTextController.clear();
                               controller.limitPriceTextController.clear();
@@ -335,7 +350,8 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                             groupValue: controller.selectedGroupValue.value,
                             label: 'SL/SP-M',
                             onChanged: (int value) {
-                              controller.handleRadioValueChanged(value, "SL/SP-M");
+                              controller.handleRadioValueChanged(
+                                  value, "SL/SP-M");
                             },
                           ),
                         ),
@@ -395,11 +411,13 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                             replacement: Row(
                               children: [
                                 Text(
-                                  FormatHelper.formatNumbers(controller.marginRequired.value.margin),
+                                  FormatHelper.formatNumbers(
+                                      controller.marginRequired.value.margin),
                                   style: Theme.of(context).textTheme.tsMedium14,
                                 ),
                                 IconButton(
-                                  onPressed: () => controller.getMarginRequired(type, tradingInstrument),
+                                  onPressed: () => controller.getMarginRequired(
+                                      type, tradingInstrument),
                                   icon: Icon(Icons.refresh, size: 18),
                                   splashRadius: 18,
                                 ),
@@ -434,12 +452,15 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                     onPressed: () {
                       if (controller.selectedGroupValue.value == 3 &&
                           controller.stopLossPriceTextController.text.isEmpty &&
-                          controller.stopProfitPriceTextController.text.isEmpty) {
-                        SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                          controller
+                              .stopProfitPriceTextController.text.isEmpty) {
+                        SnackbarHelper.showSnackbar(
+                            'Please Enter StopLoss or StopProfit Price');
                       } else if (controller.selectedGroupValue.value == 1 &&
                           controller.limitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar('Please Enter Price');
-                      } else if (controller.stopLossFormKey.currentState!.validate()) {
+                      } else if (controller.stopLossFormKey.currentState!
+                          .validate()) {
                         log('CalCualte Margin ${controller.calculateMargin()}');
                         log('CalCualte Margin ${controller.marginRequired.value.margin}');
                         controller.placeTenxTradingOrder(

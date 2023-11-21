@@ -47,7 +47,8 @@ class _CareerFormState extends State<CareerForm> {
                     ),
                     SizedBox(height: 12),
                     Autocomplete<CollegeData>(
-                      displayStringForOption: (option) => option.collegeName ?? '-',
+                      displayStringForOption: (option) =>
+                          option.collegeName ?? '-',
                       fieldViewBuilder: (
                         BuildContext context,
                         TextEditingController fieldTextEditingController,
@@ -109,7 +110,8 @@ class _CareerFormState extends State<CareerForm> {
                           return const Iterable<CollegeData>.empty();
                         }
                         return controller.collegeList.where((CollegeData data) {
-                          return data.collegeName!.contains(value.text.toLowerCase());
+                          return data.collegeName!
+                              .contains(value.text.toLowerCase());
                         });
                       },
                       onSelected: (CollegeData value) {
@@ -122,7 +124,8 @@ class _CareerFormState extends State<CareerForm> {
                       hint: 'Course',
                       value: controller.courseSelectedValue,
                       dropdownItems: controller.courseList,
-                      onChanged: (value) => setState(() => controller.courseSelectedValue = value!),
+                      onChanged: (value) => setState(
+                          () => controller.courseSelectedValue = value!),
                     ),
                     SizedBox(height: 12),
                     CommonTextField(
@@ -150,16 +153,19 @@ class _CareerFormState extends State<CareerForm> {
                             hint: 'Experience',
                             value: controller.experienceSelectedValue,
                             dropdownItems: controller.experienceDropdown,
-                            onChanged: (value) => setState(() => controller.experienceSelectedValue = value!),
+                            onChanged: (value) => setState(() =>
+                                controller.experienceSelectedValue = value!),
                           ),
                         ),
                         SizedBox(width: 12),
                         Expanded(
                           child: AbsorbPointer(
-                            absorbing: controller.userDetails.value.dob == null ||
+                            absorbing: controller.userDetails.value.dob ==
+                                    null ||
                                 controller.userDetails.value.dob!.isNotEmpty,
                             child: GestureDetector(
-                              onTap: () => controller.showDateRangePicker(context),
+                              onTap: () =>
+                                  controller.showDateRangePicker(context),
                               child: CommonTextField(
                                 isDisabled: true,
                                 padding: EdgeInsets.zero,
@@ -204,7 +210,9 @@ class _CareerFormState extends State<CareerForm> {
                       },
                     ),
                     CommonFilledButton(
-                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                        backgroundColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
                         label: 'Submit',
                         onPressed: () {
                           if (controller.formKey.currentState!.validate()) {

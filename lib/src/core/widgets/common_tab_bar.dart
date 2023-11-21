@@ -52,7 +52,9 @@ class _CommonTabBarState extends State<CommonTabBar> {
                 splashBorderRadius: BorderRadius.circular(50),
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: AppColors.lightGreen,
+                  color: Get.isDarkMode
+                      ? AppColors.darkGreen
+                      : AppColors.lightGreen,
                 ),
                 labelStyle: Theme.of(context).textTheme.tsFontFamily,
                 tabs:

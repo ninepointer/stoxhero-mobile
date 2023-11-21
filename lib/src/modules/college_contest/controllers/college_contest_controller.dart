@@ -15,7 +15,8 @@ class CollegeContestBinding implements Bindings {
   void dependencies() => Get.put(CollegeContestController());
 }
 
-class CollegeContestController extends BaseController<CollegeContestRepository> {
+class CollegeContestController
+    extends BaseController<CollegeContestRepository> {
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
@@ -38,7 +39,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   bool get isLeaderboardLoadingStatus => isLeaderboardLoading.value;
 
   final isCompletedLeaderboardLoading = false.obs;
-  bool get isCompletedLeaderboardLoadingStatus => isCompletedLeaderboardLoading.value;
+  bool get isCompletedLeaderboardLoadingStatus =>
+      isCompletedLeaderboardLoading.value;
 
   final isCompletedOrdersLoading = false.obs;
   bool get isCompletedOrdersLoadingStatus => isCompletedOrdersLoading.value;
@@ -68,7 +70,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
 
   final isExecutedOrderStateLoading = false.obs;
-  bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
+  bool get isExecutedOrderStateLoadingStatus =>
+      isExecutedOrderStateLoading.value;
 
   final isRecentLoading = false.obs;
   bool get isRecentLoadingStatus => isRecentLoading.value;
@@ -112,7 +115,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final contestPortfolio = ContestCreditData().obs;
   final contestWatchList = <ContestWatchList>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
-  final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
+  final tradingInstrumentTradeDetailsList =
+      <TradingInstrumentTradeDetails>[].obs;
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
@@ -145,7 +149,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   final liveLeaderboardList = <LiveContestLeaderboard>[].obs;
   final liveLeaderboard = LiveContestLeaderboard().obs;
 
-  final completedContestLeaderboardList = <CompletedContestLeaderboardList>[].obs;
+  final completedContestLeaderboardList =
+      <CompletedContestLeaderboardList>[].obs;
   final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
   final marginRequired = MarginRequiredResponse().obs;
   final featuredCollegeContest = FeaturedCollegeContest().obs;
@@ -167,7 +172,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   ];
   final selectedDOBDateTime = ''.obs;
 
-  void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
+  void showDateRangePicker(BuildContext context,
+      {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -260,7 +266,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     return totalReward;
   }
 
-  bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
+  bool handleTextField(
+      TransactionType type, int transactionLotSize, int positionLots) {
     bool isDisabled = false;
 
     if (type == TransactionType.buy) {
@@ -295,7 +302,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     String path = dir.path;
     String docsFolderPath = '$path/StoxHero/docs';
     String filePath = '$docsFolderPath/Certificate.pdf';
-    String apiUrl = '${AppUrls.completedCollegeContestCertificate(completedCollegeContest.value.id)}';
+    String apiUrl =
+        '${AppUrls.completedCollegeContestCertificate(completedCollegeContest.value.id)}';
 
     await File(filePath).create(recursive: true);
     Get.find<NetworkService>().downloadFile(path: apiUrl, filePath: filePath);
@@ -335,7 +343,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   }
 
   String getStockIndexName(int instId) {
-    int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
+    int index = stockIndexInstrumentList
+        .indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
@@ -357,25 +366,36 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   num calculatePayout() {
     num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
-    num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
+    num livePayoutCapPercentage =
+        liveCollegeContest.value.payoutCapPercentage ?? 0;
     num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
     num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
 
-    num featuredPayoutPercentage = featuredCollegeContest.value.payoutPercentage ?? 0;
-    num featuredPayoutCapPercentage = featuredCollegeContest.value.payoutCapPercentage ?? 0;
+    num featuredPayoutPercentage =
+        featuredCollegeContest.value.payoutPercentage ?? 0;
+    num featuredPayoutCapPercentage =
+        featuredCollegeContest.value.payoutCapPercentage ?? 0;
     num featuredEntryFee = featuredCollegeContest.value.entryFee ?? 0;
-    num featuredPortfolio = featuredCollegeContest.value.portfolio?.portfolioValue ?? 0;
+    num featuredPortfolio =
+        featuredCollegeContest.value.portfolio?.portfolioValue ?? 0;
 
     num totalNetPNL = calculateTotalNetPNL();
-    num npnl = totalNetPNL * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
+    num npnl = totalNetPNL *
+        (featuredPayoutPercentage != 0
+            ? featuredPayoutPercentage
+            : livePayoutPercentage);
     num payout = npnl <= 0 ? 0 : npnl / 100;
 
     num payoutCap = liveEntryFee == 0
         ? (featuredEntryFee == 0
             ? ((featuredPortfolio != 0 ? featuredPortfolio : livePortfolio) *
-                (featuredPayoutCapPercentage != 0 ? featuredPayoutCapPercentage : livePayoutCapPercentage) /
+                (featuredPayoutCapPercentage != 0
+                    ? featuredPayoutCapPercentage
+                    : livePayoutCapPercentage) /
                 100)
-            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) * (livePayoutCapPercentage) / 100)
+            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) *
+                (livePayoutCapPercentage) /
+                100)
         : (liveEntryFee) * (livePayoutCapPercentage) / 100;
 
     num finalPayout = payout > payoutCap ? payoutCap : payout;
@@ -384,23 +404,34 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   num calculateUserPayout(dynamic netPnl) {
     num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
-    num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
+    num livePayoutCapPercentage =
+        liveCollegeContest.value.payoutCapPercentage ?? 0;
     num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
     num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
 
-    num featuredPayoutPercentage = featuredCollegeContest.value.payoutPercentage ?? 0;
-    num featuredPayoutCapPercentage = featuredCollegeContest.value.payoutCapPercentage ?? 0;
+    num featuredPayoutPercentage =
+        featuredCollegeContest.value.payoutPercentage ?? 0;
+    num featuredPayoutCapPercentage =
+        featuredCollegeContest.value.payoutCapPercentage ?? 0;
     num featuredEntryFee = featuredCollegeContest.value.entryFee ?? 0;
-    num featuredPortfolio = featuredCollegeContest.value.portfolio?.portfolioValue ?? 0;
+    num featuredPortfolio =
+        featuredCollegeContest.value.portfolio?.portfolioValue ?? 0;
 
-    num reward = netPnl * (featuredPayoutPercentage != 0 ? featuredPayoutPercentage : livePayoutPercentage);
+    num reward = netPnl *
+        (featuredPayoutPercentage != 0
+            ? featuredPayoutPercentage
+            : livePayoutPercentage);
     num payout = reward <= 0 ? 0 : reward / 100;
     num payoutCap = liveEntryFee == 0
         ? (featuredEntryFee == 0
             ? ((featuredPortfolio != 0 ? featuredPortfolio : livePortfolio) *
-                (featuredPayoutCapPercentage != 0 ? featuredPayoutCapPercentage : livePayoutCapPercentage) /
+                (featuredPayoutCapPercentage != 0
+                    ? featuredPayoutCapPercentage
+                    : livePayoutCapPercentage) /
                 100)
-            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) * (livePayoutCapPercentage) / 100)
+            : (featuredEntryFee != 0 ? featuredEntryFee : liveEntryFee) *
+                (livePayoutCapPercentage) /
+                100)
         : (liveEntryFee) * (livePayoutCapPercentage) / 100;
 
     num finalPayout = payout > payoutCap ? payoutCap : payout;
@@ -409,7 +440,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
   Future calculateUserWalletAmount() async {
     num amount = 0;
-    var response = await Get.find<WalletRepository>().getWalletTransactionsList();
+    var response =
+        await Get.find<WalletRepository>().getWalletTransactionsList();
     var list = response.data?.data?.transactions ?? [];
     for (var e in list) amount += e.amount ?? 0;
     walletBalance(amount);
@@ -492,7 +524,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     return isPurchased;
   }
 
-  bool checkIfLiveFeaturedPurchased(FeaturedCollegeContest? contest, String userId) {
+  bool checkIfLiveFeaturedPurchased(
+      FeaturedCollegeContest? contest, String userId) {
     bool isPurchased = false;
     for (FeaturedParticipants? user in contest?.participants ?? []) {
       if (user?.userId?.id == userId) {
@@ -616,7 +649,9 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       openingBalance = totalFund;
     }
     num availableMargin = (calculateTotalNetPNL() < 0)
-        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        ? (lots == 0
+            ? (openingBalance - margin + calculateTotalNetPNL())
+            : (openingBalance - margin))
         : (openingBalance - margin);
 
     return availableMargin;
@@ -645,7 +680,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     for (var pnl in dayWiseContestPnlList) {
       totalBrokerage += pnl.brokerage ?? 0;
     }
-    num finalBrokerage = (tenxTotalPositionDetails.value.brokerage ?? 0) - totalBrokerage;
+    num finalBrokerage =
+        (tenxTotalPositionDetails.value.brokerage ?? 0) - totalBrokerage;
     return finalBrokerage;
   }
 
@@ -713,11 +749,14 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     num priceValue = 0;
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
-        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        (stock) =>
+            stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) {
         int index = instrumentLivePriceList.indexWhere(
-          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+          (stock) =>
+              stock.instrumentToken == instID ||
+              stock.instrumentToken == exchID,
         );
         if (index == -1) {
           priceValue = 0;
@@ -734,10 +773,12 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   String getInstrumentChanges(int instID, int exchID) {
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
-        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        (stock) =>
+            stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price = tradingInstrumentTradeDetailsList[index].change?.toString();
+      String? price =
+          tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
@@ -748,7 +789,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isPortfolioStateLoading(true);
     try {
       final RepoResponse<ContestPortfolioResponse> response =
-          await repository.getContestPortfolio(featuredCollegeContest.value.id ?? liveCollegeContest.value.id);
+          await repository.getContestPortfolio(
+              featuredCollegeContest.value.id ?? liveCollegeContest.value.id);
       if (response.data != null) {
         contestPortfolio(response.data?.data);
       } else {
@@ -763,10 +805,14 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getContestWatchList() async {
     isWatchlistStateLoading(true);
     try {
-      final RepoResponse<TradingWatchlistResponse> response = await repository.getContestWatchList(
-        featuredCollegeContest.value.isNifty ?? liveCollegeContest.value.isNifty,
-        featuredCollegeContest.value.isBankNifty ?? liveCollegeContest.value.isBankNifty,
-        featuredCollegeContest.value.isFinNifty ?? liveCollegeContest.value.isFinNifty,
+      final RepoResponse<TradingWatchlistResponse> response =
+          await repository.getContestWatchList(
+        featuredCollegeContest.value.isNifty ??
+            liveCollegeContest.value.isNifty,
+        featuredCollegeContest.value.isBankNifty ??
+            liveCollegeContest.value.isBankNifty,
+        featuredCollegeContest.value.isFinNifty ??
+            liveCollegeContest.value.isFinNifty,
       );
       if (response.data != null) {
         if (response.data?.data! != null) {
@@ -792,7 +838,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isPositionStateLoading(true);
     try {
       final RepoResponse<TradingPositionListResponse> response =
-          await repository.getContestPositions(featuredCollegeContest.value.id ?? liveCollegeContest.value.id);
+          await repository.getContestPositions(
+              featuredCollegeContest.value.id ?? liveCollegeContest.value.id);
       if (response.data != null) {
         if (response.data?.data! != null) {
           contestPositionsList(response.data?.data ?? []);
@@ -846,7 +893,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       trader: userDetails.value.sId,
       orderId: Uuid().v4(),
       paperTrade: false,
-      subscriptionId: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
+      subscriptionId:
+          featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       battleId: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       contestId: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       marginxId: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
@@ -858,7 +906,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     );
     log('placeContestTradingOrder : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.placeContestOrder(
+      final RepoResponse<GenericResponse> response =
+          await repository.placeContestOrder(
         data.toJson(),
       );
       log(response.data.toString());
@@ -885,11 +934,15 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future searchInstruments(String? value, {bool showShimmer = true}) async {
     showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
     try {
-      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(
+      final RepoResponse<TradingInstrumentListResponse> response =
+          await repository.searchInstruments(
         value,
-        featuredCollegeContest.value.isNifty ?? liveCollegeContest.value.isNifty,
-        featuredCollegeContest.value.isBankNifty ?? liveCollegeContest.value.isBankNifty,
-        featuredCollegeContest.value.isFinNifty ?? liveCollegeContest.value.isFinNifty,
+        featuredCollegeContest.value.isNifty ??
+            liveCollegeContest.value.isNifty,
+        featuredCollegeContest.value.isBankNifty ??
+            liveCollegeContest.value.isBankNifty,
+        featuredCollegeContest.value.isFinNifty ??
+            liveCollegeContest.value.isFinNifty,
       );
       if (response.data != null) {
         if (response.data?.data != null) {
@@ -903,7 +956,9 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
+    showShimmer
+        ? isInstrumentListLoading(false)
+        : isWatchlistStateLoading(false);
   }
 
   Future removeInstrument(int? instToken) async {
@@ -946,7 +1001,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
 
     log('addInstrument : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.addInstrument(
+      final RepoResponse<GenericResponse> response =
+          await repository.addInstrument(
         data.toJson(),
       );
       if (response.data?.message == "Instrument Added") {
@@ -964,7 +1020,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getInstrumentLivePriceList() async {
     isLoading(true);
     try {
-      final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
+      final RepoResponse<InstrumentLivePriceListResponse> response =
+          await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
           instrumentLivePriceList(response.data?.data ?? []);
@@ -983,9 +1040,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     List<TradingInstrumentTradeDetails>? tempList = [];
     try {
       socketService.socket.on('tick-room', (data) {
-        tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+        tempList =
+            TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
         tempList?.forEach((element) {
-          if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+          if (tradingInstrumentTradeDetailsList
+              .any((obj) => obj.instrumentToken == element.instrumentToken)) {
             int index = tradingInstrumentTradeDetailsList.indexWhere(
               (stock) => stock.instrumentToken == element.instrumentToken,
             );
@@ -1004,7 +1063,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response =
+          await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -1025,7 +1085,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         (data) {
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (stockIndexDetailsList
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = stockIndexDetailsList.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );
@@ -1089,11 +1150,13 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getCompletedContestPnlList() async {
     isLoading(true);
     try {
-      final RepoResponse<CompletedContestPnlListResponse> response = await repository.getCompletedContestPnlList();
+      final RepoResponse<CompletedContestPnlListResponse> response =
+          await repository.getCompletedContestPnlList();
       if (response.data != null) {
         List<CompletedCollegeContest> tempList = [];
         completedContestPnlList(response.data?.data ?? []);
-        if (tempCompletedContestList.isNotEmpty && completedContestPnlList.isNotEmpty) {}
+        if (tempCompletedContestList.isNotEmpty &&
+            completedContestPnlList.isNotEmpty) {}
         completedCollegeContestList(tempList);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1134,7 +1197,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getContestOrderList(String? id) async {
     isCompletedOrdersLoading(true);
     try {
-      final RepoResponse<ContestOrderResponse> response = await repository.getContestOrderList(id);
+      final RepoResponse<ContestOrderResponse> response =
+          await repository.getContestOrderList(id);
       if (response.data != null) {
         contestOrdersList(response.data?.data ?? []);
       } else {
@@ -1152,7 +1216,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     liveFreeCollegeContestList.clear();
     livePremiumCollegeContestList.clear();
     try {
-      final RepoResponse<LiveCollegeContestListResponse> response = await repository.getLiveCollegeContestList();
+      final RepoResponse<LiveCollegeContestListResponse> response =
+          await repository.getLiveCollegeContestList();
       if (response.data != null) {
         liveCollegeContestList(response.data?.data ?? []);
         if (liveCollegeContestList.isNotEmpty) {
@@ -1175,7 +1240,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future purchaseContest(Map<String, dynamic> data) async {
     isLoading(true);
     try {
-      final RepoResponse<GenericResponse> response = await repository.purchaseContest(
+      final RepoResponse<GenericResponse> response =
+          await repository.purchaseContest(
         data,
       );
       if (response.data != null) {
@@ -1208,7 +1274,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
       );
 
       try {
-        final RepoResponse response = await repository.validateCollegeContestOtp(
+        final RepoResponse response =
+            await repository.validateCollegeContestOtp(
           data.toJson(),
         );
         if (response.data != null) {
@@ -1277,7 +1344,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
         'contest-leaderboardData${featuredCollegeContest.value.id ?? liveCollegeContest.value.id}',
         (data) {
           log('Socket Leaderboard : contest-leaderboardData${featuredCollegeContest.value.id ?? liveCollegeContest.value.id} $data');
-          liveLeaderboardList.value = LiveContestLeaderboardReponse.fromJson(data).data ?? [];
+          liveLeaderboardList.value =
+              LiveContestLeaderboardReponse.fromJson(data).data ?? [];
         },
       );
     } on Exception catch (e) {
@@ -1386,9 +1454,11 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isCompletedLeaderboardLoading(false);
   }
 
-  int calculateQuantity(TransactionType type, int tradingLots, int selectQuantity) {
+  int calculateQuantity(
+      TransactionType type, int tradingLots, int selectQuantity) {
     if (type == TransactionType.sell || type == TransactionType.exit) {
-      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
+      if (tradingLots == selectQuantity ||
+          tradingLots.abs() >= selectQuantity) {
         return 0;
       } else if (tradingLots.abs() <= selectQuantity) {
         return selectQuantity - tradingLots.abs();
@@ -1410,7 +1480,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
           : type == TransactionType.buy
               ? 'BUY'
               : 'SELL',
-      quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
+      quantity:
+          calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
       orderType: selectedType.value,
       validity: "DAY",
@@ -1420,7 +1491,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     );
 
     try {
-      final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
+      final RepoResponse<MarginRequiredResponse> response =
+          await repository.getMarginRequired(
         data.toJson(),
       );
       if (response.data != null) {
@@ -1441,7 +1513,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getContestTodaysOrderList() async {
     isOrderStateLoading(true);
     try {
-      final RepoResponse<ContestOrderResponse> response = await repository.getContestOrderList(
+      final RepoResponse<ContestOrderResponse> response =
+          await repository.getContestOrderList(
         featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       );
       if (response.data != null) {
@@ -1462,7 +1535,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getStopLossExecutedOrder() async {
     isExecutedOrderStateLoading(true);
     try {
-      final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
+      final RepoResponse<StopLossExecutedOrdersListResponse> response =
+          await repository.getStopLossExecutedOrder(
         featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
@@ -1480,7 +1554,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getStopLossPendingOrder() async {
     isPendingOrderStateLoading(true);
     try {
-      final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
+      final RepoResponse<StopLossPendingOrdersListResponse> response =
+          await repository.getStopLossPendingOrder(
         featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
@@ -1510,7 +1585,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     isPendingOrderStateLoading(false);
   }
 
-  Future pendingOrderModify(TransactionType type, TradingInstrument inst) async {
+  Future pendingOrderModify(
+      TransactionType type, TradingInstrument inst) async {
     isPendingOrderStateLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
@@ -1550,7 +1626,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
     );
     print('PendingOrderModifyRequest : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.pendingOrderModify(
+      final RepoResponse<GenericResponse> response =
+          await repository.pendingOrderModify(
         data.toJson(),
       );
       Get.back();
@@ -1625,7 +1702,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getDayWiseContestPnl() async {
     isLoading(true);
     try {
-      final RepoResponse<DayWiseContestPnlResponse> response = await repository.getDayWiseContestPnl(
+      final RepoResponse<DayWiseContestPnlResponse> response =
+          await repository.getDayWiseContestPnl(
         featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
@@ -1643,7 +1721,8 @@ class CollegeContestController extends BaseController<CollegeContestRepository> 
   Future getReadSetting() async {
     isRecentLoading(true);
     try {
-      final RepoResponse<ReadSettingResponse> response = await repository.readSetting();
+      final RepoResponse<ReadSettingResponse> response =
+          await repository.readSetting();
       readSetting(response.data);
     } catch (e) {
       log(e.toString());
