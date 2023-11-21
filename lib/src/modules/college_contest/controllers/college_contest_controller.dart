@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' as Math;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -715,7 +716,30 @@ class CollegeContestController
     print(tds);
     return tdsPercentage;
   }
-
+  num calculateTDSAmount() {
+    num tdsPercentage = readSetting.value.tdsPercentage ?? 30;
+    num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
+    num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
+    num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
+    num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
+    num netPnlPayout = calculateTotalNetPNL()*livePayoutPercentage/100;
+    num payoutCap = liveEntryFee == 0 ? livePortfolio*livePayoutCapPercentage/100 : livePayoutCapPercentage/100*liveEntryFee; 
+    num actualPayout = Math.min(netPnlPayout>0?netPnlPayout:0, payoutCap);
+    num winningAmount = (actualPayout - liveEntryFee) > 0 ? actualPayout-liveEntryFee : 0;
+    num tdsAmount = winningAmount*tdsPercentage/100;
+    print(tdsAmount);
+    return tdsAmount;
+  }
+  num calculateRewardAmount(){
+    num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
+    num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
+    num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
+    num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
+    num netPnlPayout = calculateTotalNetPNL()*livePayoutPercentage/100;
+    num payoutCap = liveEntryFee == 0 ? livePortfolio*livePayoutCapPercentage/100 : livePayoutCapPercentage/100*liveEntryFee;
+    num actualPayout = Math.min(netPnlPayout>0?netPnlPayout:0, payoutCap);
+    return actualPayout;
+  }
   num calculatefinalPayout() {
     num finalPayout = calculatePayout() - calculateTDS();
     return finalPayout;
@@ -1654,6 +1678,7 @@ class CollegeContestController
   Future socketSendConnection() async {
     isPendingOrderStateLoading(true);
     try {
+      socketService.socket.off('sendOrderResponse${userDetails.value.sId}');
       socketService.socket.on(
         'sendOrderResponse${userDetails.value.sId}',
         (data) {

@@ -852,13 +852,14 @@ class ContestController extends BaseController<ContestRepository> {
 
   Future getLiveContestList() async {
     isLiveLoading(true);
-    liveFreeContestList.clear();
-    livePremiumContestList.clear();
+    liveContestList.clear();
     try {
       final RepoResponse<LiveContestListResponse> response =
           await repository.getLiveContestList();
       if (response.data != null) {
         liveContestList(response.data?.data ?? []);
+        liveFreeContestList.clear();
+        livePremiumContestList.clear();
         if (liveContestList.isNotEmpty) {
           liveContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
@@ -1491,6 +1492,7 @@ class ContestController extends BaseController<ContestRepository> {
   Future socketSendConnection() async {
     isPendingOrderStateLoading(true);
     try {
+      socketService.socket.off('sendOrderResponse${userDetails.value.sId}');
       socketService.socket.on(
         'sendOrderResponse${userDetails.value.sId}',
         (data) {
@@ -1520,7 +1522,7 @@ class ContestController extends BaseController<ContestRepository> {
         if (response.data?.status?.toLowerCase() == "success") {
           liveFeaturedContest(response.data?.liveFeatured ?? []);
           upcomingFeaturedContest(response.data?.upcomingFeatured ?? []);
-          featuredCollegeContest(response.data?.collegeContest ?? []);
+          featuredCollegeContest(response.data?.collegeContests ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

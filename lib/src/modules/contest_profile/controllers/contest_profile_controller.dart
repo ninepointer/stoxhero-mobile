@@ -25,6 +25,7 @@ class ContestProfileController
   final contestProfileData = ContestProfile().obs;
 
   final weeklyTopPerformer = <WeeklyTopPerformers>[].obs;
+  final weeklyTopPerformerFullList = <WeeklyTopPerformers>[].obs;
 
   final startOfWeek = ''.obs;
   final endOfWeek = ''.obs;
@@ -32,7 +33,7 @@ class ContestProfileController
   void loadData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getWeeklyTopPerformer();
-    await getWeeklyTopPerformerFullList();
+    // await getWeeklyTopPerformerFullList();
   }
 
   Future getContestProfileData(String? id) async {
@@ -67,6 +68,7 @@ class ContestProfileController
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           weeklyTopPerformer(response.data?.data ?? []);
+          log('weeklytopperfomer $weeklyTopPerformer');
           startOfWeek(response.data?.startOfWeek);
           endOfWeek(response.data?.endOfWeek);
         }
@@ -87,7 +89,7 @@ class ContestProfileController
     try {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          weeklyTopPerformer(response.data?.data ?? []);
+          weeklyTopPerformerFullList(response.data?.data ?? []);
           startOfWeek(response.data?.startOfWeek);
           endOfWeek(response.data?.endOfWeek);
         }

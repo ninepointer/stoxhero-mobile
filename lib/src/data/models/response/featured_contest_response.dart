@@ -3,14 +3,14 @@ class FeaturedContestResponse {
   String? message;
   List<LiveFeatured>? liveFeatured;
   List<UpcomingFeatured>? upcomingFeatured;
-  List<FeaturedCollegeContest>? collegeContest;
+  List<FeaturedCollegeContest>? collegeContests;
 
   FeaturedContestResponse({
     this.status,
     this.message,
     this.liveFeatured,
     this.upcomingFeatured,
-    this.collegeContest,
+    this.collegeContests,
   });
 
   FeaturedContestResponse.fromJson(Map<String, dynamic> json) {
@@ -29,9 +29,9 @@ class FeaturedContestResponse {
       });
     }
     if (json['collegeContests'] != null) {
-      collegeContest = <FeaturedCollegeContest>[];
+      collegeContests = <FeaturedCollegeContest>[];
       json['collegeContests'].forEach((v) {
-        collegeContest!.add(new FeaturedCollegeContest.fromJson(v));
+        collegeContests!.add(new FeaturedCollegeContest.fromJson(v));
       });
     }
   }
@@ -46,8 +46,8 @@ class FeaturedContestResponse {
     if (this.upcomingFeatured != null) {
       data['stoxheroUpcomingFeatured'] = this.upcomingFeatured!.map((v) => v.toJson()).toList();
     }
-    if (this.collegeContest != null) {
-      data['collegeContests'] = this.collegeContest!.map((v) => v.toJson()).toList();
+    if (this.collegeContests != null) {
+      data['collegeContests'] = this.collegeContests!.map((v) => v.toJson()).toList();
     }
     return data;
   }
