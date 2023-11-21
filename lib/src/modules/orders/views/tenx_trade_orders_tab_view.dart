@@ -50,7 +50,7 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                 dropdownStyleData: DropdownStyleData(
                   maxHeight: 250,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 menuItemStyleData: MenuItemStyleData(
@@ -75,7 +75,8 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                 ),
               ),
             ),
-            if (controller.segmentedControlValue.value == 1 && controller.selectedTenxSubDatesList.isNotEmpty)
+            if (controller.segmentedControlValue.value == 1 &&
+                controller.selectedTenxSubDatesList.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(16.0).copyWith(top: 0),
                 child: DropdownButtonFormField2<UserPurchaseDetail>(
@@ -87,7 +88,8 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                   items: controller.selectedTenxSubDatesList.map((value) {
                     return DropdownMenuItem<UserPurchaseDetail>(
                       value: value,
-                      child: Text(FormatHelper.formatDateTimeToIST(value.subscribedOn ?? '')),
+                      child: Text(FormatHelper.formatDateTimeToIST(
+                          value.subscribedOn ?? '')),
                     );
                   }).toList(),
                   dropdownStyleData: DropdownStyleData(
@@ -144,7 +146,8 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                             OrderCardTile(
                               isRightAlign: true,
                               label: 'Price',
-                              value: FormatHelper.formatNumbers(order.averagePrice),
+                              value: FormatHelper.formatNumbers(
+                                  order.averagePrice),
                             ),
                           ],
                         ),
@@ -163,7 +166,9 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                               isRightAlign: true,
                               label: 'Type',
                               value: order.buyOrSell,
-                              valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
+                              valueColor: order.buyOrSell == AppConstants.buy
+                                  ? AppColors.success
+                                  : AppColors.danger,
                             ),
                           ],
                         ),
@@ -179,7 +184,9 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                               isRightAlign: true,
                               label: 'Status',
                               value: order.status,
-                              valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
+                              valueColor: order.status == AppConstants.complete
+                                  ? AppColors.success
+                                  : AppColors.danger,
                             ),
                           ],
                         ),
@@ -189,7 +196,8 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                           children: [
                             OrderCardTile(
                               label: 'Timestamp',
-                              value: FormatHelper.formatDateTime(order.tradeTimeUtc),
+                              value: FormatHelper.formatDateTime(
+                                  order.tradeTimeUtc),
                             ),
                           ],
                         )

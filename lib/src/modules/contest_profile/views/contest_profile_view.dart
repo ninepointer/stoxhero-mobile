@@ -125,9 +125,10 @@ class ContestProfileView extends GetView<ContestProfileController> {
                   itemBuilder: (BuildContext context, index) {
                     return ContestPerformanceCard(
                       contestProfile: controller.contestProfileDataList[index],
-                      index: index + 1,
+                      index: controller.contestProfileDataList.length - index,
                     );
                   },
+                  // reverse: true,
                 ),
               ],
             ),

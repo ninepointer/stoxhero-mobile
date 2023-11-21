@@ -133,7 +133,7 @@ extension CustomStyles on TextTheme {
         fontSize: 14,
       );
   TextStyle get tsPrimaryRegular16 => TextStyle(
-        color: AppColors.primary,
+        color: AppColors.lightGreen,
         fontFamily: AppTheme.fontFamily,
         fontWeight: FontWeight.w400,
         fontSize: 16,
@@ -783,7 +783,7 @@ class AppStyles {
     fontSize: 14,
   );
   static TextStyle tsPrimaryRegular16 = TextStyle(
-    color: AppColors.primary,
+    color: AppColors.lightGreen,
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w400,
     fontSize: 16,
