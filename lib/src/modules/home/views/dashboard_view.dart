@@ -58,11 +58,11 @@ class _DashboardViewState extends State<DashboardView> {
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
-          onRefresh: () async{
+          onRefresh: () async {
             controller.loadData();
             contestProfileController.loadData();
             return Future.value();
-            },
+          },
           child: Visibility(
             visible: !controller.isLoadingStatus,
             replacement: DashboardShimmer(),

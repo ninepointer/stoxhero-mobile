@@ -28,27 +28,29 @@ class InternshipBatch {
   String? batchEndDate;
   num? payoutPercentage;
   num? attendancePercentage;
+  String? myAttendance;
   int? referralCount;
   Career? career;
   InternPortfolio? portfolio;
 
-  InternshipBatch({
-    this.id,
-    this.batchName,
-    this.batchStartDate,
-    this.batchEndDate,
-    this.payoutPercentage,
-    this.attendancePercentage,
-    this.referralCount,
-    this.career,
-    this.portfolio,
-  });
+  InternshipBatch(
+      {this.id,
+      this.batchName,
+      this.batchStartDate,
+      this.batchEndDate,
+      this.payoutPercentage,
+      this.attendancePercentage,
+      this.referralCount,
+      this.career,
+      this.portfolio,
+      this.myAttendance});
 
   InternshipBatch.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     batchName = json['batchName'];
     batchStartDate = json['batchStartDate'];
     batchEndDate = json['batchEndDate'];
+    myAttendance = json['myAttendance'];
     payoutPercentage = json['payoutPercentage'];
     attendancePercentage = json['attendancePercentage'];
     referralCount = json['referralCount'];
@@ -67,6 +69,7 @@ class InternshipBatch {
     data['batchEndDate'] = this.batchEndDate;
     data['payoutPercentage'] = this.payoutPercentage;
     data['attendancePercentage'] = this.attendancePercentage;
+    data['myAttendance'] = this.myAttendance;
     data['referralCount'] = this.referralCount;
     if (this.career != null) {
       data['career'] = this.career!.toJson();
