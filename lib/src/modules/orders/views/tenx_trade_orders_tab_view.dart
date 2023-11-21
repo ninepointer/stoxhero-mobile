@@ -72,6 +72,13 @@ class TenxTradeOrdersTabView extends GetView<OrdersController> {
                       width: 2,
                     ),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: AppColors.lightGreen,
+                      width: 2,
+                    ),
+                  ),
                 ),
               ),
             ),

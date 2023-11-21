@@ -118,7 +118,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          "${controller.internshipBatchDetails.value.attendancePercentage}%",
+                          "${controller.internshipBatchDetails.value.myAttendance}%",
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],

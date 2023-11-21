@@ -63,7 +63,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                   ),
                   SizedBox(width: 8),
                   Text(
-                    '${performer?.firstName}',
+                    '${performer?.firstName ?? ''}'.capitalize ?? '',
                     style: Theme.of(context).textTheme.tsMedium14,
                   ),
                 ],
@@ -144,7 +144,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
             alignment: Alignment.center,
             padding: EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: AppColors.info.withOpacity(.25),
+              color: AppColors.success.withOpacity(.25),
               borderRadius: BorderRadius.only(
                 bottomRight: Radius.circular(8),
                 bottomLeft: Radius.circular(8),
@@ -153,7 +153,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
             child: Text(
               'Zone Profile',
               style: AppStyles.tsGreyMedium14.copyWith(
-                color: AppColors.info,
+                color: AppColors.success,
               ),
             ),
           ),
