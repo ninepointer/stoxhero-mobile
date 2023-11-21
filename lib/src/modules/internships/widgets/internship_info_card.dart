@@ -132,7 +132,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                            "${controller.internshipBatchDetails.value.referralCount}",
+                            "${controller.internshipBatchDetails.value.myReferrals}",
                             style: Theme.of(context).textTheme.tsMedium12),
                       ],
                     ),
