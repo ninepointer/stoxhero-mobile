@@ -54,7 +54,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
-
+    print(contestController.featuredCollegeContest.length);
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(

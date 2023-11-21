@@ -1522,13 +1522,14 @@ class ContestController extends BaseController<ContestRepository> {
         if (response.data?.status?.toLowerCase() == "success") {
           liveFeaturedContest(response.data?.liveFeatured ?? []);
           upcomingFeaturedContest(response.data?.upcomingFeatured ?? []);
-          featuredCollegeContest(response.data?.collegeContests ?? []);
+          featuredCollegeContest(response.data?.collegeContest ?? []);
+          print("featured contest${featuredCollegeContest.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
   }
