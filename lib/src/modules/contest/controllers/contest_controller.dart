@@ -736,18 +736,21 @@ class ContestController extends BaseController<ContestRepository> {
 
   Future getLiveContestList() async {
     isLiveLoading(true);
-    liveFreeContestList.clear();
-    livePremiumContestList.clear();
+
     try {
       final RepoResponse<LiveContestListResponse> response = await repository.getLiveContestList();
       if (response.data != null) {
         liveContestList(response.data?.data ?? []);
+        liveFreeContestList.clear();
+        livePremiumContestList.clear();
         if (liveContestList.isNotEmpty) {
           liveContestList.forEach((contest) {
             (contest.entryFee == null || contest.entryFee == 0)
                 ? liveFreeContestList.add(contest)
                 : livePremiumContestList.add(contest);
           });
+
+          print('getLiveContestList : ${livePremiumContestList.length}');
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1381,7 +1384,7 @@ class ContestController extends BaseController<ContestRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
   }

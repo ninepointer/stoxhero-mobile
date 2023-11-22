@@ -4,6 +4,7 @@ class AppBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(NetworkService(), permanent: true);
+    Get.put(NotificationServices(), permanent: true);
     Get.put(AuthRepository(), permanent: true);
     Get.put(ProfileRepository(), permanent: true);
     Get.put(PortfolioRepository(), permanent: true);

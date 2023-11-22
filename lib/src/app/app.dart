@@ -36,6 +36,11 @@ class _AppState extends State<App> {
     super.initState();
     _handleInitialUri();
     _handleIncomingLinks();
+    _initializePushNotification();
+  }
+
+  Future _initializePushNotification() async {
+    await NotificationServices.initializeNotificationService(context);
   }
 
   Future<void> _handleInitialUri() async {
