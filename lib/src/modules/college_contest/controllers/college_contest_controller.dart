@@ -736,13 +736,13 @@ class CollegeContestController
   num calculateTDS() {
     num tds = readSetting.value.tdsPercentage ?? 0;
     num rewardAmount = getRewardCapAmount(
-        liveCollegeContest.value.entryFee == 0
-            ? liveCollegeContest.value.portfolio?.portfolioValue ?? 0
-            : liveCollegeContest.value.entryFee ?? 0,
-        liveCollegeContest.value.payoutCapPercentage ?? 0,
-        liveCollegeContest.value.payoutPercentage ?? 0);
+        liveCollegeContest.value.entryFee == 0 || featuredCollegeContest.value.entryFee == 0
+            ? liveCollegeContest.value.portfolio?.portfolioValue ?? featuredCollegeContest.value.portfolio?.portfolioValue ?? 0
+            : liveCollegeContest.value.entryFee ?? featuredCollegeContest.value.entryFee ?? 0,
+        liveCollegeContest.value.payoutCapPercentage ?? featuredCollegeContest.value.payoutCapPercentage ?? 0,
+        liveCollegeContest.value.payoutPercentage ?? featuredCollegeContest.value.payoutPercentage?? 0);
 
-    num winingAmount = rewardAmount - liveCollegeContest.value.entryFee!;
+    num winingAmount = rewardAmount - (liveCollegeContest.value.entryFee ?? featuredCollegeContest.value.entryFee ?? 0);
     num tdsAmount = winingAmount * tds / 100;
 
     return tdsAmount > 0 ? tdsAmount : 0;
