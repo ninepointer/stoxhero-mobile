@@ -591,7 +591,7 @@ class ContestController extends BaseController<ContestRepository> {
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
-        margin += position.lots ?? 0;
+        margin += position.margin ?? 0;
       }
     }
     num openingBalance = 0;
