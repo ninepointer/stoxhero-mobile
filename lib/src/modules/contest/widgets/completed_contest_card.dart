@@ -180,10 +180,21 @@ class CompletedContestCard extends GetView<ContestController> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             if (contest?.payoutType == 'Reward') ...[
-                              Text(
-                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},Click to know more.',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                                textAlign: TextAlign.center,
+                              Column(
+                                children: [
+                                  Text(
+                                    'Rewards worth ${controller.calculateTotalReward(contest?.rewards)} ',
+                                    style:
+                                        Theme.of(context).textTheme.tsMedium12,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    'Click to know more',
+                                    style:
+                                        Theme.of(context).textTheme.tsMedium12,
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
                               )
                             ],
                             if (contest?.payoutType != 'Reward') ...[
@@ -210,7 +221,7 @@ class CompletedContestCard extends GetView<ContestController> {
                                           .tsMedium12,
                                     ),
                                   Text(
-                                    'Click to know more.',
+                                    'Click to know more',
                                     style: TextStyle(fontSize: 12),
                                   ),
                                   SizedBox(
@@ -237,7 +248,7 @@ class CompletedContestCard extends GetView<ContestController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Started',
+                          'Completed',
                           style: Theme.of(context).textTheme.tsMedium12,
                           textAlign: TextAlign.end,
                         ),

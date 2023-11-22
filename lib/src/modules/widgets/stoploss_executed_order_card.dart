@@ -86,7 +86,8 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                     isRightAlign: true,
                     hasBottomMargin: true,
                     label: 'Execution Time',
-                    value: FormatHelper.formatDateTimeToIST(stopLoss.time),
+                    value: FormatHelper.formatDateTimeToIST(
+                        stopLoss.excuationTime),
                   ),
                 ],
               )

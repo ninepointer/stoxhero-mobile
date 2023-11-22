@@ -382,14 +382,14 @@ class _UpComingCollegeContestCardState
                                     widget.contest?.participants?.length ?? 0) >
                                 0
                         ? () => SnackbarHelper.showSnackbar(
-                            'The Contest has not started yet!')
+                            'The TestZone has not started yet!')
                         : () async {
                             if (controller.calculateSeatsLeft(
                                     widget.contest?.maxParticipants ?? 0,
                                     widget.contest?.participants?.length ??
                                         0) ==
                                 0) {
-                              SnackbarHelper.showSnackbar('Contest is Full');
+                              SnackbarHelper.showSnackbar('TestZone is Full');
                             } else {
                               BottomSheetHelper.openBottomSheet(
                                 context: context,
@@ -445,7 +445,7 @@ class _UpComingCollegeContestCardState
                                                     ?.length ??
                                                 0) ==
                                         0
-                                    ? 'Contest Full'
+                                    ? 'TestZone Full'
                                     : 'Pay Now',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,

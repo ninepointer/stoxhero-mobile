@@ -337,11 +337,6 @@ class CollegeContestController
     return FormatHelper.formatNumbers(percentage, showDecimal: false);
   }
 
-  num getRewardCapAmount(num fees, num cap) {
-    num percentage = (fees * cap) / 100;
-    return percentage;
-  }
-
   String getStockIndexName(int instId) {
     int index = stockIndexInstrumentList
         .indexWhere((element) => element.instrumentToken == instId);
@@ -703,43 +698,61 @@ class CollegeContestController
     return finalTrades;
   }
 
-  num calculateTDS() {
-    num tds = readSetting.value.tdsPercentage ?? 0;
-    num tdsPercentage = getRewardCapAmount(
-          liveCollegeContest.value.entryFee == 0
-              ? liveCollegeContest.value.portfolio?.portfolioValue ?? 0
-              : liveCollegeContest.value.entryFee ?? 0,
-          liveCollegeContest.value.payoutCapPercentage ?? 0,
-        ) *
-        tds /
-        100;
-    print(tds);
-    return tdsPercentage;
-  }
   num calculateTDSAmount() {
     num tdsPercentage = readSetting.value.tdsPercentage ?? 30;
     num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
-    num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
+    num livePayoutCapPercentage =
+        liveCollegeContest.value.payoutCapPercentage ?? 0;
     num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
     num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
-    num netPnlPayout = calculateTotalNetPNL()*livePayoutPercentage/100;
-    num payoutCap = liveEntryFee == 0 ? livePortfolio*livePayoutCapPercentage/100 : livePayoutCapPercentage/100*liveEntryFee; 
-    num actualPayout = Math.min(netPnlPayout>0?netPnlPayout:0, payoutCap);
-    num winningAmount = (actualPayout - liveEntryFee) > 0 ? actualPayout-liveEntryFee : 0;
-    num tdsAmount = winningAmount*tdsPercentage/100;
+    num netPnlPayout = calculateTotalNetPNL() * livePayoutPercentage / 100;
+    num payoutCap = liveEntryFee == 0
+        ? livePortfolio * livePayoutCapPercentage / 100
+        : livePayoutCapPercentage / 100 * liveEntryFee;
+    num actualPayout = Math.min(netPnlPayout > 0 ? netPnlPayout : 0, payoutCap);
+    num winningAmount =
+        (actualPayout - liveEntryFee) > 0 ? actualPayout - liveEntryFee : 0;
+    num tdsAmount = winningAmount * tdsPercentage / 100;
     print(tdsAmount);
     return tdsAmount;
   }
-  num calculateRewardAmount(){
-    num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
-    num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
-    num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
-    num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
-    num netPnlPayout = calculateTotalNetPNL()*livePayoutPercentage/100;
-    num payoutCap = liveEntryFee == 0 ? livePortfolio*livePayoutCapPercentage/100 : livePayoutCapPercentage/100*liveEntryFee;
-    num actualPayout = Math.min(netPnlPayout>0?netPnlPayout:0, payoutCap);
-    return actualPayout;
+
+  num getRewardCapAmount(num fees, num cap, num payoutPercentage) {
+    // print('fee $fees');
+    // print('cap $cap');
+    // print('payout $payoutPercentage');
+    num capValue = (fees * cap) / 100;
+    num netPNL = calculateTotalNetPNL();
+    num tempReward = netPNL * payoutPercentage / 100;
+    num reward = tempReward > capValue ? capValue : tempReward;
+    return reward > 0 ? reward : 0;
   }
+
+  num calculateTDS() {
+    num tds = readSetting.value.tdsPercentage ?? 0;
+    num rewardAmount = getRewardCapAmount(
+        liveCollegeContest.value.entryFee == 0
+            ? liveCollegeContest.value.portfolio?.portfolioValue ?? 0
+            : liveCollegeContest.value.entryFee ?? 0,
+        liveCollegeContest.value.payoutCapPercentage ?? 0,
+        liveCollegeContest.value.payoutPercentage ?? 0);
+
+    num winingAmount = rewardAmount - liveCollegeContest.value.entryFee!;
+    num tdsAmount = winingAmount * tds / 100;
+
+    return tdsAmount > 0 ? tdsAmount : 0;
+  }
+
+  // num calculateRewardAmount(){
+  //   num livePayoutPercentage = liveCollegeContest.value.payoutPercentage ?? 0;
+  //   num livePayoutCapPercentage = liveCollegeContest.value.payoutCapPercentage ?? 0;
+  //   num liveEntryFee = liveCollegeContest.value.entryFee ?? 0;
+  //   num livePortfolio = liveCollegeContest.value.portfolio?.portfolioValue ?? 0;
+  //   num netPnlPayout = calculateTotalNetPNL()*livePayoutPercentage/100;
+  //   num payoutCap = liveEntryFee == 0 ? livePortfolio*livePayoutCapPercentage/100 : livePayoutCapPercentage/100*liveEntryFee;
+  //   num actualPayout = Math.min(netPnlPayout>0?netPnlPayout:0, payoutCap);
+  //   return actualPayout;
+  // }
   num calculatefinalPayout() {
     num finalPayout = calculatePayout() - calculateTDS();
     return finalPayout;

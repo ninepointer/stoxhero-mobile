@@ -166,8 +166,14 @@ class _DashboardViewState extends State<DashboardView> {
                           children: contestProfileController.weeklyTopPerformer
                               .asMap()
                               .entries
+
+                              ///     //condition for showing user who have earning greater then zero.
+                              //   .where((entry) {
+                              //   return entry.value.totalPayout! >= 1;
+                              //  })
                               .map((entry) {
                             int index = entry.key;
+
                             return ContestPortfolioWeekCard(
                               index: index + 1,
                               performer: entry.value,
@@ -554,7 +560,7 @@ class _DashboardViewState extends State<DashboardView> {
                             SizedBox(width: 8),
                             Expanded(
                               child: customCard(
-                                label: 'Vartual Margin Money',
+                                label: 'Virtual Margin Money',
                                 percent: userDashboard.portfolio != null
                                     ? FormatHelper.formatNumbers(
                                         userDashboard.portfolio,

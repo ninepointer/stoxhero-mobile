@@ -34,6 +34,7 @@ class StopLossExecutedOrdersList {
   String? symbol;
   num? amount;
   String? time;
+  String? excuationTime;
 
   StopLossExecutedOrdersList(
       {this.id,
@@ -44,7 +45,8 @@ class StopLossExecutedOrdersList {
       this.buyOrSell,
       this.symbol,
       this.amount,
-      this.time});
+      this.time,
+      this.excuationTime});
 
   StopLossExecutedOrdersList.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -56,6 +58,7 @@ class StopLossExecutedOrdersList {
     symbol = json['symbol'];
     amount = json['amount'];
     time = json['time'];
+    excuationTime = json['execution_time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +72,7 @@ class StopLossExecutedOrdersList {
     data['symbol'] = this.symbol;
     data['amount'] = this.amount;
     data['time'] = this.time;
+    data['execution_time'] = this.excuationTime;
     return data;
   }
 }

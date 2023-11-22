@@ -251,7 +251,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                             children: [
                               if (widget.contest?.payoutType == 'Reward') ...[
                                 Text(
-                                  'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)},Click to know more.',
+                                  'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)},Click to know more',
                                   style: Theme.of(context).textTheme.tsMedium12,
                                   textAlign: TextAlign.center,
                                 )
@@ -281,7 +281,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                             .tsMedium12,
                                       ),
                                       Text(
-                                        'Click to know more.',
+                                        'Click to know more',
                                         style: TextStyle(fontSize: 12),
                                       ),
                                       SizedBox(

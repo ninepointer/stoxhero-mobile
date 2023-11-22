@@ -60,13 +60,17 @@ class ContestTodayOrderCard extends StatelessWidget {
                     hasBottomMargin: false,
                     label: 'Transaction Type',
                     value: order.buyOrSell,
-                    valueColor: order.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
+                    valueColor: order.buyOrSell == "SELL"
+                        ? AppColors.danger
+                        : AppColors.success,
                   ),
                   TradeCardTile(
                     isRightAlign: true,
                     label: 'Status',
                     value: order.status,
-                    valueColor: order.status == "COMPLETE" ? AppColors.success : AppColors.danger,
+                    valueColor: order.status == "COMPLETE"
+                        ? AppColors.success
+                        : AppColors.danger,
                     hasBottomMargin: false,
                   ),
                 ],

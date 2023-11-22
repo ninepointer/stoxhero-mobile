@@ -277,7 +277,7 @@ class ContestController extends BaseController<ContestRepository> {
 
   String getPaidCapAmount(num fees, num cap) {
     num percentage = (fees * cap) / 100;
-    return FormatHelper.formatNumbers(percentage, showDecimal: false);
+    return FormatHelper.formatNumbers(percentage.round(), showDecimal: false);
   }
 
   String getStockIndexName(int instId) {
@@ -418,23 +418,27 @@ class ContestController extends BaseController<ContestRepository> {
     return totalReward;
   }
 
-  num getRewardCapAmount(num fees, num cap) {
-    num percentage = (fees * cap) / 100;
-    return percentage;
+  num getRewardCapAmount(num fees, num cap, num payoutPercentage) {
+    num capValue = (fees * cap) / 100;
+    num netPNL = calculateTotalNetPNL();
+    num tempReward = netPNL * payoutPercentage / 100;
+    num reward = tempReward > capValue ? capValue : tempReward;
+    return reward > 0 ? reward : 0;
   }
 
   num calculateTDS() {
     num tds = readSetting.value.tdsPercentage ?? 0;
-    num tdsPercentage = getRewardCapAmount(
-          liveContest.value.entryFee == 0
-              ? liveContest.value.portfolio?.portfolioValue ?? 0
-              : liveContest.value.entryFee ?? 0,
-          liveContest.value.payoutCapPercentage ?? 0,
-        ) *
-        tds /
-        100;
-    print(tds);
-    return tdsPercentage;
+    num rewardAmount = getRewardCapAmount(
+        liveContest.value.entryFee == 0
+            ? liveContest.value.portfolio?.portfolioValue ?? 0
+            : liveContest.value.entryFee ?? 0,
+        liveContest.value.payoutCapPercentage ?? 0,
+        liveContest.value.payoutPercentage ?? 0);
+
+    num winingAmount = rewardAmount - liveContest.value.entryFee!;
+    num tdsAmount = winingAmount * tds / 100;
+
+    return tdsAmount > 0 ? tdsAmount : 0;
   }
 
   num calculatefinalPayout() {
@@ -1523,13 +1527,12 @@ class ContestController extends BaseController<ContestRepository> {
           liveFeaturedContest(response.data?.liveFeatured ?? []);
           upcomingFeaturedContest(response.data?.upcomingFeatured ?? []);
           featuredCollegeContest(response.data?.collegeContest ?? []);
-          print("featured contest${featuredCollegeContest.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
   }
