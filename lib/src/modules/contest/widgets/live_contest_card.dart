@@ -186,7 +186,7 @@ class LiveContestCard extends GetView<ContestController> {
                           children: [
                             if (contest?.payoutType == 'Reward') ...[
                               Text(
-                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},Click to know more.',
+                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},Click to know more',
                                 style: Theme.of(context).textTheme.tsMedium12,
                                 textAlign: TextAlign.center,
                               )
@@ -208,7 +208,7 @@ class LiveContestCard extends GetView<ContestController> {
                                                 0
                                             : contest?.entryFee ?? 0,
                                         contest?.payoutCapPercentage ?? 0,
-                                      )}) .',
+                                      )})',
                                       style: Theme.of(context)
                                           .textTheme
                                           .tsMedium12,
@@ -395,10 +395,9 @@ class LiveContestCard extends GetView<ContestController> {
                     child: Text(
                       controller.checkIfLivePurchased(contest, userId)
                           ? 'Start Trading'
-                          :contest?.entryFee != 0 ? 
-                          'Pay Now'
-                          :'Join Now'
-                          ,
+                          : contest?.entryFee != 0
+                              ? 'Pay Now'
+                              : 'Join Now',
                       style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
                       ),

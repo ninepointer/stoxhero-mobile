@@ -44,11 +44,14 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        for (PlanValidity item in controller.tenxAvailableValidityList)
+                        for (PlanValidity item
+                            in controller.tenxAvailableValidityList)
                           CommonChip(
                             margin: EdgeInsets.only(right: 8),
                             label: item.label,
-                            isSelected: item.label == controller.tenxAvailableValiditySelected.value.label,
+                            isSelected: item.label ==
+                                controller
+                                    .tenxAvailableValiditySelected.value.label,
                             onTap: () {
                               controller.tenxAvailableValiditySelected(item);
                               controller.updateTenxAvailablePlanValidity();
@@ -83,7 +86,8 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                             var sub = controller.tenxAvailablePlans[index];
                             return TenxActiveCard(
                               subscription: sub,
-                              isActive: controller.userSubscriptionsIds.contains(sub.sId),
+                              isActive: controller.userSubscriptionsIds
+                                  .contains(sub.sId),
                             );
                           },
                         ),
@@ -105,11 +109,14 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        for (PlanValidity item in controller.tenxSubscribedValidityList)
+                        for (PlanValidity item
+                            in controller.tenxSubscribedValidityList)
                           CommonChip(
                             margin: EdgeInsets.only(right: 8),
                             label: item.label,
-                            isSelected: item.label == controller.tenxSubscribedValiditySelected.value.label,
+                            isSelected: item.label ==
+                                controller
+                                    .tenxSubscribedValiditySelected.value.label,
                             onTap: () {
                               controller.tenxSubscribedValiditySelected(item);
                               controller.updateTenxSubscribedPlanValidity();
@@ -144,7 +151,8 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                             var sub = controller.tenxSubscribedPlans[index];
                             return TenxSubscribedCard(
                               subscription: sub,
-                              isActive: controller.userSubscriptionsIds.contains(sub.sId),
+                              isActive: controller.userSubscriptionsIds
+                                  .contains(sub.sId),
                             );
                           },
                         ),
@@ -166,11 +174,14 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        for (PlanValidity item in controller.tenxExpiredValidityList)
+                        for (PlanValidity item
+                            in controller.tenxExpiredValidityList)
                           CommonChip(
                             margin: EdgeInsets.only(right: 8),
                             label: item.label,
-                            isSelected: item.label == controller.tenxExpiredValiditySelected.value.label,
+                            isSelected: item.label ==
+                                controller
+                                    .tenxExpiredValiditySelected.value.label,
                             onTap: () {
                               controller.tenxExpiredValiditySelected(item);
                               controller.updateTenxExpiredPlanValidity();
