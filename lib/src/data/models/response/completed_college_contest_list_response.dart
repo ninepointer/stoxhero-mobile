@@ -41,7 +41,7 @@ class CompletedCollegeContest {
   num? payoutPercentage;
   bool? featured;
   String? payoutType;
-  String? portfolio;
+  CompletedPortfolio? portfolio;
   String? college;
   List<String>? potentialParticipants;
   int? maxParticipants;
@@ -118,7 +118,9 @@ class CompletedCollegeContest {
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     payoutType = json['payoutType'];
-    portfolio = json['portfolio'];
+    portfolio = json['portfolio'] != null
+        ? new CompletedPortfolio.fromJson(json['portfolio'])
+        : null;
     college = json['college'];
     potentialParticipants = json['potentialParticipants'].cast<String>();
     maxParticipants = json['maxParticipants'];
@@ -184,7 +186,9 @@ class CompletedCollegeContest {
     data['payoutPercentage'] = this.payoutPercentage;
     data['featured'] = this.featured;
     data['payoutType'] = this.payoutType;
-    data['portfolio'] = this.portfolio;
+    if (this.portfolio != null) {
+      data['portfolio'] = this.portfolio!.toJson();
+    }
     data['college'] = this.college;
     data['potentialParticipants'] = this.potentialParticipants;
     data['maxParticipants'] = this.maxParticipants;
@@ -220,6 +224,28 @@ class CompletedCollegeContest {
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['__v'] = this.iV;
     data['payoutStatus'] = this.payoutStatus;
+    return data;
+  }
+}
+
+class CompletedPortfolio {
+  String? sId;
+  String? portfolioName;
+  num? portfolioValue;
+
+  CompletedPortfolio({this.sId, this.portfolioName, this.portfolioValue});
+
+  CompletedPortfolio.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    portfolioName = json['portfolioName'];
+    portfolioValue = json['portfolioValue'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['portfolioName'] = this.portfolioName;
+    data['portfolioValue'] = this.portfolioValue;
     return data;
   }
 }
