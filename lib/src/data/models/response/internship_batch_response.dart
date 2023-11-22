@@ -29,6 +29,7 @@ class InternshipBatch {
   num? payoutPercentage;
   num? attendancePercentage;
   String? myAttendance;
+  num? myReferrals;
   int? referralCount;
   Career? career;
   InternPortfolio? portfolio;
@@ -41,6 +42,7 @@ class InternshipBatch {
       this.payoutPercentage,
       this.attendancePercentage,
       this.referralCount,
+      this.myReferrals,
       this.career,
       this.portfolio,
       this.myAttendance});
@@ -51,6 +53,7 @@ class InternshipBatch {
     batchStartDate = json['batchStartDate'];
     batchEndDate = json['batchEndDate'];
     myAttendance = json['myAttendance'];
+    myReferrals = json['myReferrals'];
     payoutPercentage = json['payoutPercentage'];
     attendancePercentage = json['attendancePercentage'];
     referralCount = json['referralCount'];
@@ -70,6 +73,7 @@ class InternshipBatch {
     data['payoutPercentage'] = this.payoutPercentage;
     data['attendancePercentage'] = this.attendancePercentage;
     data['myAttendance'] = this.myAttendance;
+    data['myReferrals'] = this.myReferrals;
     data['referralCount'] = this.referralCount;
     if (this.career != null) {
       data['career'] = this.career!.toJson();

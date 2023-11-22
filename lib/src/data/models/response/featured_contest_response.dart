@@ -3,14 +3,14 @@ class FeaturedContestResponse {
   String? message;
   List<LiveFeatured>? liveFeatured;
   List<UpcomingFeatured>? upcomingFeatured;
-  List<FeaturedCollegeContest>? collegeContests;
+  List<FeaturedCollegeContest>? collegeContest;
 
   FeaturedContestResponse({
     this.status,
     this.message,
     this.liveFeatured,
     this.upcomingFeatured,
-    this.collegeContests,
+    this.collegeContest,
   });
 
   FeaturedContestResponse.fromJson(Map<String, dynamic> json) {
@@ -29,9 +29,9 @@ class FeaturedContestResponse {
       });
     }
     if (json['collegeContests'] != null) {
-      collegeContests = <FeaturedCollegeContest>[];
+      collegeContest = <FeaturedCollegeContest>[];
       json['collegeContests'].forEach((v) {
-        collegeContests!.add(new FeaturedCollegeContest.fromJson(v));
+        collegeContest!.add(new FeaturedCollegeContest.fromJson(v));
       });
     }
   }
@@ -46,8 +46,8 @@ class FeaturedContestResponse {
     if (this.upcomingFeatured != null) {
       data['stoxheroUpcomingFeatured'] = this.upcomingFeatured!.map((v) => v.toJson()).toList();
     }
-    if (this.collegeContests != null) {
-      data['collegeContests'] = this.collegeContests!.map((v) => v.toJson()).toList();
+    if (this.collegeContest != null) {
+      data['collegeContests'] = this.collegeContest!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -82,7 +82,7 @@ class LiveFeatured {
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
-  int? liveThreshold;
+  num? liveThreshold;
   String? payoutType;
 
   LiveFeatured({
@@ -516,8 +516,8 @@ class FeaturedCollegeContest {
   String? currentLiveStatus;
   String? contestFor;
   String? collegeCode;
-  int? entryFee;
-  double? payoutPercentage;
+  num? entryFee;
+  num? payoutPercentage;
   bool? featured;
   String? payoutType;
   FeaturedPortfolio? portfolio;
@@ -532,7 +532,7 @@ class FeaturedCollegeContest {
   bool? isBankNifty;
   bool? isFinNifty;
   String? product;
-  int? payoutCapPercentage;
+  num? payoutCapPercentage;
   List<FeaturedParticipants>? participants;
   String? createdOn;
   String? lastModifiedOn;
