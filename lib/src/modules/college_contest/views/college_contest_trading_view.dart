@@ -169,6 +169,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                             children: [
                               PositionDetailCardTile(
                                 label: 'Reward',
+                                isNum: true,
                                 value: controller.getRewardCapAmount(
                                     (controller.liveCollegeContest.value
                                                 .entryFee) ==

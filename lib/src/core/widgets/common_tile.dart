@@ -38,7 +38,7 @@ class CommonTile extends StatelessWidget {
       child: Container(
         margin: margin ?? EdgeInsets.symmetric(vertical: 8),
         padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        color: Theme.of(context).canvasColor,
+        color: Theme.of(context).cardColor,
         width: double.infinity,
         child: Column(
           children: [
@@ -52,7 +52,7 @@ class CommonTile extends StatelessWidget {
                       children: [
                         Text(
                           label,
-                          style: AppStyles.tsDarkGreyRegular14,
+                          style: AppStyles.tsSecondaryMedium14,
                         ),
                         if (isValue) ...[
                           SizedBox(height: 4),

@@ -20,6 +20,7 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
   bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
+    print('daywiseLength - ${controller.dayWiseContestPnlList.length}');
     return CommonCard(
       hasBorder: false,
       margin: EdgeInsets.symmetric(horizontal: 8),
@@ -199,76 +200,62 @@ class _ContestPnlDropdownCardState extends State<ContestPnlDropdownCard> {
                       ),
                     ],
                   ),
-                for (var i = 0;
-                    i < controller.dayWiseContestPnlList.length;
-                    i++)
-                  DataRow(
-                    cells: [
-                      DataCell(
-                        Text(
-                          'Total',
-                          style: Theme.of(context).textTheme.tsMedium14,
-                        ),
+                DataRow(
+                  cells: [
+                    DataCell(
+                      Text(
+                        'Total',
+                        style: Theme.of(context).textTheme.tsMedium14,
                       ),
-                      DataCell(
-                        Center(
-                          child: Text(
-                            FormatHelper.formatNumbers(
-                              controller.calculateContestGrossPNL() +
-                                  (controller.dayWiseContestPnlList[i].gpnl ??
-                                      0),
-                            ),
-                            style: AppStyles.tsSecondaryMedium12.copyWith(
-                              color: controller.getValueColor(
-                                controller.calculateContestGrossPNL() +
-                                    (controller.dayWiseContestPnlList[i].gpnl ??
-                                        0),
-                              ),
+                    ),
+                    DataCell(
+                      Center(
+                        child: Text(
+                          FormatHelper.formatNumbers(
+                            controller.calculateTotalDayPNLList()[0],
+                          ),
+                          style: AppStyles.tsSecondaryMedium12.copyWith(
+                            color: controller.getValueColor(
+                              controller.calculateTotalDayPNLList()[0],
                             ),
                           ),
                         ),
                       ),
-                      DataCell(
-                        Center(
-                          child: Text(
-                            FormatHelper.formatNumbers(
-                              controller.calculateContestBrokerage() +
-                                  (controller
-                                          .dayWiseContestPnlList[i].brokerage ??
-                                      0),
-                            ),
-                            style: AppStyles.tsSecondaryMedium12,
+                    ),
+                    DataCell(
+                      Center(
+                        child: Text(
+                          FormatHelper.formatNumbers(
+                            controller.calculateTotalDayPNLList()[1],
                           ),
+                          style: AppStyles.tsSecondaryMedium12,
                         ),
                       ),
-                      DataCell(
-                        Center(
-                          child: Text(
-                            FormatHelper.formatNumbers(
-                              controller.calculateContestNetPNL() +
-                                  (controller.dayWiseContestPnlList[i].npnl ??
-                                      0),
-                            ),
-                            style: AppStyles.tsSecondaryMedium12.copyWith(
-                              color: controller.getValueColor(
-                                controller.calculateContestNetPNL() +
-                                    (controller.dayWiseContestPnlList[i].npnl ??
-                                        0),
-                              ),
+                    ),
+                    DataCell(
+                      Center(
+                        child: Text(
+                          FormatHelper.formatNumbers(
+                            controller.calculateTotalDayPNLList()[2],
+                          ),
+                          style: AppStyles.tsSecondaryMedium12.copyWith(
+                            color: controller.getValueColor(
+                              controller.calculateTotalDayPNLList()[2],
                             ),
                           ),
                         ),
                       ),
-                      DataCell(
-                        Center(
-                          child: Text(
-                            '${(controller.calculateContestTrades()) + (controller.dayWiseContestPnlList[i].trades ?? 0)}',
-                            style: AppStyles.tsGreyMedium12,
-                          ),
+                    ),
+                    DataCell(
+                      Center(
+                        child: Text(
+                          '${controller.calculateTotalDayPNLList()[3]}',
+                          style: AppStyles.tsGreyMedium12,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

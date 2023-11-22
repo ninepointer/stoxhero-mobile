@@ -257,10 +257,33 @@ class CollegeContestController
     return 0;
   }
 
-  // num calculateTotalDayPNLList(pnl,brokerage,pnl,trades){
-  //    num pnl =0;
-
-  // }
+  List<num> calculateTotalDayPNLList() {
+    num gpnl = 0;
+    num npnl = 0;
+    num brokerage = 0;
+    num trades = 0;
+    for (var i = 0; i < dayWiseContestPnlList.length; i++) {
+      gpnl += dayWiseContestPnlList[i].gpnl ?? 0;
+      brokerage += dayWiseContestPnlList[i].brokerage ?? 0;
+      npnl += dayWiseContestPnlList[i].npnl ?? 0;
+      trades += dayWiseContestPnlList[i].trades ?? 0;
+    }
+    gpnl += calculateContestGrossPNL();
+    brokerage += calculateContestBrokerage();
+    npnl += calculateContestNetPNL();
+    trades += calculateContestTrades();
+    return [gpnl, brokerage, npnl, trades];
+  }
+  //  num gpnl = 0;
+  // num npnl = 0;
+  // num brokerage = 0;
+  // num trades = 0;
+  // for (var i = 0; i < controller.dayWiseContestPnlList.length; i++) {
+  //   gpnl += controller.dayWiseContestPnlList[i].gpnl ?? 0 + controller.calculateContestGrossPNL();
+  //   brokerage +=
+  //       controller.dayWiseContestPnlList[i].brokerage ?? 0 + controller.calculateContestBrokerage();
+  //   npnl += controller.dayWiseContestPnlList[i].npnl ?? 0 + controller.calculateContestNetPNL();
+  //   trades += controller.dayWiseContestPnlList[i].trades ?? 0 + controller.calculateContestTrades();
 
   num calculateTotalReward(rankRewards) {
     num totalReward = 0;
