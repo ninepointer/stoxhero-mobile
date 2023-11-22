@@ -428,15 +428,17 @@ class ContestController extends BaseController<ContestRepository> {
 
   num calculateTDS() {
     num tds = readSetting.value.tdsPercentage ?? 0;
-    num tdsPercentage = getRewardCapAmount(
-            liveContest.value.entryFee == 0
-                ? liveContest.value.portfolio?.portfolioValue ?? 0
-                : liveContest.value.entryFee ?? 0,
-            liveContest.value.payoutCapPercentage ?? 0,
-            liveContest.value.payoutPercentage ?? 0) -
-        liveContest.value.entryFee! * tds / 100;
+    num rewardAmount = getRewardCapAmount(
+        liveContest.value.entryFee == 0
+            ? liveContest.value.portfolio?.portfolioValue ?? 0
+            : liveContest.value.entryFee ?? 0,
+        liveContest.value.payoutCapPercentage ?? 0,
+        liveContest.value.payoutPercentage ?? 0);
 
-    return tdsPercentage > 0 ? tdsPercentage : 0;
+    num winingAmount = rewardAmount - liveContest.value.entryFee!;
+    num tdsAmount = winingAmount * tds / 100;
+
+    return tdsAmount > 0 ? tdsAmount : 0;
   }
 
   num calculatefinalPayout() {
@@ -1525,13 +1527,12 @@ class ContestController extends BaseController<ContestRepository> {
           liveFeaturedContest(response.data?.liveFeatured ?? []);
           upcomingFeaturedContest(response.data?.upcomingFeatured ?? []);
           featuredCollegeContest(response.data?.collegeContest ?? []);
-          print("featured contest${featuredCollegeContest.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
   }

@@ -1,3 +1,5 @@
+import 'upcoming_college_contest_list_response.dart';
+
 class CompletedCollegeContestListResponse {
   String? status;
   String? message;
@@ -41,7 +43,7 @@ class CompletedCollegeContest {
   num? payoutPercentage;
   bool? featured;
   String? payoutType;
-  String? portfolio;
+  Portfolio? portfolio;
   String? college;
   List<String>? potentialParticipants;
   int? maxParticipants;
@@ -202,13 +204,16 @@ class CompletedCollegeContest {
       data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
     }
     if (this.interestedUsers != null) {
-      data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
+      data['interestedUsers'] =
+          this.interestedUsers!.map((v) => v.toJson()).toList();
     }
     if (this.contestSharedBy != null) {
-      data['contestSharedBy'] = this.contestSharedBy!.map((v) => v.toJson()).toList();
+      data['contestSharedBy'] =
+          this.contestSharedBy!.map((v) => v.toJson()).toList();
     }
     if (this.purchaseIntent != null) {
-      data['purchaseIntent'] = this.purchaseIntent!.map((v) => v.toJson()).toList();
+      data['purchaseIntent'] =
+          this.purchaseIntent!.map((v) => v.toJson()).toList();
     }
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
@@ -339,7 +344,8 @@ class CollegeInterestedUsers {
   String? status;
   String? id;
 
-  CollegeInterestedUsers({this.userId, this.registeredOn, this.status, this.id});
+  CollegeInterestedUsers(
+      {this.userId, this.registeredOn, this.status, this.id});
 
   CollegeInterestedUsers.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
