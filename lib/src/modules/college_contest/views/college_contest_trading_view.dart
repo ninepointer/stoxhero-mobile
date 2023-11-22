@@ -185,6 +185,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
                                     controller.liveCollegeContest.value
                                             .payoutPercentage ??
                                         0),
+                                valueColor: AppColors.success,
                                 // valueColor: controller.getValueColor(
                                 //   // controller.getRewardCapAmount(
                                 //   //   controller.liveCollegeContest.value.entryFee == 0
@@ -375,7 +376,7 @@ class CollegeContestTradingView extends GetView<CollegeContestController> {
       controller.liveCollegeContest.value.contestStartTime,
       controller.liveCollegeContest.value.contestEndTime,
     );
-    return days > 1
+    return days > 0
         ? Column(
             children: [
               SizedBox(height: 8),

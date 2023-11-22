@@ -1,5 +1,3 @@
-import 'upcoming_college_contest_list_response.dart';
-
 class CompletedCollegeContestListResponse {
   String? status;
   String? message;
@@ -43,7 +41,7 @@ class CompletedCollegeContest {
   num? payoutPercentage;
   bool? featured;
   String? payoutType;
-  Portfolio? portfolio;
+  String? portfolio;
   String? college;
   List<String>? potentialParticipants;
   int? maxParticipants;

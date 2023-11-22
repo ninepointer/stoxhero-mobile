@@ -172,6 +172,7 @@ class ContestTradingView extends GetView<ContestController> {
                             children: [
                               PositionDetailCardTile(
                                   label: 'Reward',
+                                  // valueColor: AppColors.success,
                                   value: controller.getRewardCapAmount(
                                       (controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) == 0
                                           ? controller.liveFeatured.value

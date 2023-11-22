@@ -257,6 +257,11 @@ class CollegeContestController
     return 0;
   }
 
+  // num calculateTotalDayPNLList(pnl,brokerage,pnl,trades){
+  //    num pnl =0;
+
+  // }
+
   num calculateTotalReward(rankRewards) {
     num totalReward = 0;
     for (var reward in rankRewards) {
@@ -721,9 +726,9 @@ class CollegeContestController
     // print('fee $fees');
     // print('cap $cap');
     // print('payout $payoutPercentage');
-    num capValue = (fees * cap) / 100;
+    num capValue = ((fees * cap) / 100);
     num netPNL = calculateTotalNetPNL();
-    num tempReward = netPNL * payoutPercentage / 100;
+    num tempReward = (netPNL * payoutPercentage / 100);
     num reward = tempReward > capValue ? capValue : tempReward;
     return reward > 0 ? reward : 0;
   }

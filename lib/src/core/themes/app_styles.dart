@@ -1290,6 +1290,7 @@ class AppStyles {
     fontWeight: FontWeight.w400,
     fontSize: 10,
   );
+
   static TextStyle tsGreyRegular12 = TextStyle(
     color: AppColors.grey,
     fontFamily: AppTheme.fontFamily,
@@ -1410,5 +1411,11 @@ class AppStyles {
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w600,
     fontSize: 24,
+  );
+  static TextStyle tsDarkGreyRegular14 = TextStyle(
+    color: AppColors.grey.shade900,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
   );
 }

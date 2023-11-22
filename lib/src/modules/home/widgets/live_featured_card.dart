@@ -72,11 +72,14 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                 '${liveFeatured?.payoutPercentage != null ? liveFeatured?.payoutPercentage : '0'}% of the Net P&L',
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
-                              if (liveFeatured?.payoutCapPercentage != null && liveFeatured?.payoutCapPercentage != 0)
+                              if (liveFeatured?.payoutCapPercentage != null &&
+                                  liveFeatured?.payoutCapPercentage != 0)
                                 Text(
                                   ' (Upto ${controller.getPaidCapAmount(
                                     liveFeatured?.entryFee == 0
-                                        ? liveFeatured?.portfolio?.portfolioValue ?? 0
+                                        ? liveFeatured
+                                                ?.portfolio?.portfolioValue ??
+                                            0
                                         : liveFeatured?.entryFee ?? 0,
                                     liveFeatured?.payoutCapPercentage ?? 0,
                                   )})',
@@ -101,12 +104,14 @@ class LiveFeaturedCard extends GetView<ContestController> {
                       children: [
                         CommonCardTile(
                           label: 'Starts',
-                          value: FormatHelper.formatDateTimeOnlyToIST(liveFeatured?.contestStartTime),
+                          value: FormatHelper.formatDateTimeOnlyToIST(
+                              liveFeatured?.contestStartTime),
                         ),
                         SizedBox(height: 4),
                         CommonCardTile(
                           label: 'Ends',
-                          value: FormatHelper.formatDateTimeOnlyToIST(liveFeatured?.contestEndTime),
+                          value: FormatHelper.formatDateTimeOnlyToIST(
+                              liveFeatured?.contestEndTime),
                         )
                       ],
                     ),
@@ -120,7 +125,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
                     child: Text(
                       liveFeatured?.entryFee == 0
                           ? 'Free'
-                          : FormatHelper.formatNumbers(liveFeatured?.entryFee, decimal: 0),
+                          : FormatHelper.formatNumbers(liveFeatured?.entryFee,
+                              decimal: 0),
                       style: Theme.of(context).textTheme.tsMedium18.copyWith(
                             color: AppColors.success,
                           ),
@@ -137,7 +143,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
             controller.userDetails.value = AppStorage.getUserDetails();
             controller.liveFeatured(liveFeatured);
             if (liveFeatured?.entryFee == 0) {
-              if (liveFeatured?.maxParticipants == liveFeatured?.participants?.length) {
+              if (liveFeatured?.maxParticipants ==
+                  liveFeatured?.participants?.length) {
                 if (controller.canUserFeaturedTrade(liveFeatured, userId)) {
                   controller.gotoTradingView();
                 } else {
@@ -151,7 +158,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
                 }
               }
             } else {
-              if (controller.checkIfLiveFeaturedPurchased(liveFeatured, userId)) {
+              if (controller.checkIfLiveFeaturedPurchased(
+                  liveFeatured, userId)) {
                 controller.gotoTradingView();
               } else {
                 BottomSheetHelper.openBottomSheet(
@@ -166,7 +174,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
                       var walletController = Get.find<WalletController>();
                       var data = {
                         "bonusRedemption": 0,
-                        "coupon": walletController.couponCodeTextController.text,
+                        "coupon":
+                            walletController.couponCodeTextController.text,
                         "contestFee": walletController.subscriptionAmount.value,
                         "contestId": liveFeatured?.id,
                         "contestName": liveFeatured?.contestName,
@@ -193,10 +202,10 @@ class LiveFeaturedCard extends GetView<ContestController> {
               //     ? 'Start Trading'
               //     : 'Pay Now',
               controller.checkIfLiveFeaturedPurchased(liveFeatured, userId)
-                          ? 'Start Trading'
-                          :liveFeatured?.entryFee != 0 ? 
-                          'Pay Now'
-                          :'Join Now',
+                  ? 'Start Trading'
+                  : liveFeatured?.entryFee != 0
+                      ? 'Pay Now'
+                      : 'Join Now',
               style: AppStyles.tsSecondaryMedium14.copyWith(
                 color: AppColors.success.shade600,
               ),

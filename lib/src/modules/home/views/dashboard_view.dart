@@ -143,7 +143,7 @@ class _DashboardViewState extends State<DashboardView> {
                   if (contestProfileController.startOfWeek.value != "" &&
                       contestProfileController.endOfWeek.value != "")
                     CommonTile(
-                      label: 'TestZone Leaderboard of the Week',
+                      label: 'Weekly TestZone Leaderboard',
                       showSeeAllButton: true,
                       isValue: true,
                       seeAllLabel: 'View All',
