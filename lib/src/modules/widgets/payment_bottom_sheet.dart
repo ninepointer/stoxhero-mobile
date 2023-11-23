@@ -40,7 +40,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   String saltIndex = "1";
   String apiEndpoint = "/pg/v1/pay";
   String environment = "PRODUCTION";
-  String appId = "dcc929b3b7904f93997b89d23de36df3";
+  // String appId = "dcc929b3b7904f93997b89d23de36df3";
+  String appId = "63dff75c930b42a9af0f216bb6af6e16";
   String saltKey = "92333ad2-4277-4e69-86f1-b86a83161b74";
   String merchantId = "STOXONLINE";
 
@@ -123,7 +124,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       paymentData = PaymentRequest(
         bonusRedemption: 0,
         coupon: '',
-        paymentFor: 'Wallet',
+        paymentFor: '',
         merchantTransactionId: mtId,
         amount: amount,
       );
