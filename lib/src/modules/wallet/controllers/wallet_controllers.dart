@@ -153,8 +153,13 @@ class WalletController extends BaseController<WalletRepository> {
         }
       }
     }
-    couponCodeSuccessText(
-        "Applied $couponCode - ($discount% off upto ₹$maxDiscount)");
+    if (rewardType == 'Discount') {
+      couponCodeSuccessText(
+          "Applied $couponCode - ($discount% off upto ₹$maxDiscount)");
+    } else {
+      couponCodeSuccessText(
+          "Applied $couponCode - ($discount% cashback  upto ₹$maxDiscount)");
+    }
   }
 
   Future getWalletTransactionsList() async {
@@ -227,6 +232,9 @@ class WalletController extends BaseController<WalletRepository> {
   Future verifyCouponCode(
       BuildContext context, ProductType productType, num amount) async {
     isCouponCodeAdded(false);
+    if (amount == 0) {
+      amount = num.parse(addMoneyAmountTextController.text);
+    }
     if (couponCodeTextController.text.isEmpty) {
       SnackbarHelper.showSnackbar('Enter valid coupon code!');
       return;
@@ -242,16 +250,15 @@ class WalletController extends BaseController<WalletRepository> {
       product = '6517d3803aeb2bb27d650de0';
     } else if (productType == ProductType.marginx) {
       product = '6517d40e3aeb2bb27d650de1';
+    } else if (productType == ProductType.wallet) {
+      product = '651bdbc8da68770e8f1b8e09';
     }
-
-//else if (productType == ProductType.wallet) {
-    //   product = '651bdbc8da68770e8f1b8e09';
-    //  }
+    print('amount $amount');
     var data = VerifyCouponCodeRequest(
       code: couponCodeTextController.text.trim(),
       product: product,
       orderValue: amount,
-      paymentMode: 'wallet',
+      paymentMode: 'addition',
       platform: Platform.isAndroid ? 'Android' : 'iOS',
     );
 
