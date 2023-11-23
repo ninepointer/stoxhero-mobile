@@ -40,8 +40,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   String saltIndex = "1";
   String apiEndpoint = "/pg/v1/pay";
   String environment = "PRODUCTION";
-  // String appId = "dcc929b3b7904f93997b89d23de36df3";
-  String appId = "63dff75c930b42a9af0f216bb6af6e16";
+  String appId = "dcc929b3b7904f93997b89d23de36df3";
+  // String appId = "63dff75c930b42a9af0f216bb6af6e16";
   String saltKey = "92333ad2-4277-4e69-86f1-b86a83161b74";
   String merchantId = "STOXONLINE";
 
@@ -123,8 +123,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
           num.parse(controller.addMoneyAmountTextController.text) * 100;
       paymentData = PaymentRequest(
         bonusRedemption: 0,
-        coupon: '',
-        paymentFor: '',
+        coupon: controller.isCouponCodeAdded == true ?controller.couponCodeTextController.text:'',
+        // paymentFor: '',
         merchantTransactionId: mtId,
         amount: amount,
       );
@@ -135,7 +135,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       amount = amount * 100;
       paymentData = PaymentRequest(
         bonusRedemption: 0,
-        coupon: '',
+        coupon: controller.isCouponCodeAdded == true ?controller.couponCodeTextController.text:'',
         productId: widget.productId,
         paymentFor: controller.getPaymentProductType(widget.productType),
         merchantTransactionId: mtId,
@@ -386,43 +386,43 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ),
                     ),
-                  if (!isWalletPayment)
-                    if (walletBalance == null ||
-                        widget.buyItemPrice <= walletBalance!)
-                      if (!controller.isCouponCodeAdded.value)
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CommonTextField(
-                                controller: controller.couponCodeTextController,
-                                padding: EdgeInsets.only(top: 16),
-                                hintText: 'Enter your Coupon code',
-                                inputFormatters: [
-                                  UpperCaseTextFormatter(),
-                                ],
+                  // if (!isWalletPayment)
+                  if (walletBalance == null ||
+                      widget.buyItemPrice <= walletBalance!)
+                    if (!controller.isCouponCodeAdded.value)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CommonTextField(
+                              controller: controller.couponCodeTextController,
+                              padding: EdgeInsets.only(top: 16),
+                              hintText: 'Enter your Coupon code',
+                              inputFormatters: [
+                                UpperCaseTextFormatter(),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            padding: EdgeInsets.only(top: 16, left: 8),
+                            child: CommonOutlinedButton(
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
+                              labelColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
+                              isLoading: controller.isCouponCodeLoadingStatus,
+                              label: 'APPLY',
+                              onPressed: () => controller.verifyCouponCode(
+                                context,
+                                widget.productType,
+                                widget.buyItemPrice,
                               ),
                             ),
-                            Container(
-                              width: 100,
-                              padding: EdgeInsets.only(top: 16, left: 8),
-                              child: CommonOutlinedButton(
-                                backgroundColor: Get.isDarkMode
-                                    ? AppColors.darkGreen
-                                    : AppColors.lightGreen,
-                                labelColor: Get.isDarkMode
-                                    ? AppColors.darkGreen
-                                    : AppColors.lightGreen,
-                                isLoading: controller.isCouponCodeLoadingStatus,
-                                label: 'APPLY',
-                                onPressed: () => controller.verifyCouponCode(
-                                  context,
-                                  widget.productType,
-                                  widget.buyItemPrice,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('wallet'),
