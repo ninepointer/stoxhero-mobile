@@ -253,7 +253,6 @@ class WalletController extends BaseController<WalletRepository> {
     } else if (productType == ProductType.wallet) {
       product = '651bdbc8da68770e8f1b8e09';
     }
-    print('amount $amount');
     var data = VerifyCouponCodeRequest(
       code: couponCodeTextController.text.trim(),
       product: product,
