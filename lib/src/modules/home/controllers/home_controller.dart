@@ -49,9 +49,9 @@ class HomeController extends BaseController<DashboardRepository> {
 
   void navigateToCarousel(String link) {
     if (link == 'marginxs') {
-      selectedIndex(3);
+      selectedIndex(0);
       Get.find<MarginXController>().loadData();
-    } else if (link == 'contests') {
+    } else if (link == 'testzone') {
       selectedIndex(4);
       Get.find<ContestController>().loadData();
     } else if (link == 'tenxtrading') {
@@ -63,6 +63,14 @@ class HomeController extends BaseController<DashboardRepository> {
     } else if (link == 'wallet') {
       Get.find<WalletController>().loadData();
       Get.toNamed(AppRoutes.wallet);
+    } else if (link == 'market') {
+      selectedIndex(1);
+      Get.find<VirtualTradingController>().loadData();
+    } else if (link == 'toptestzoneportfolios') {
+      // selectedIndex(3);
+      Get.find<ContestProfileController>().loadData();
+
+      Get.to(() => ContestTopPerformerCard());
     }
   }
 

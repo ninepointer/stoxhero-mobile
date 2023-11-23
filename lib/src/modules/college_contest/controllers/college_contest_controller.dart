@@ -274,16 +274,6 @@ class CollegeContestController
     trades += calculateContestTrades();
     return [gpnl, brokerage, npnl, trades];
   }
-  //  num gpnl = 0;
-  // num npnl = 0;
-  // num brokerage = 0;
-  // num trades = 0;
-  // for (var i = 0; i < controller.dayWiseContestPnlList.length; i++) {
-  //   gpnl += controller.dayWiseContestPnlList[i].gpnl ?? 0 + controller.calculateContestGrossPNL();
-  //   brokerage +=
-  //       controller.dayWiseContestPnlList[i].brokerage ?? 0 + controller.calculateContestBrokerage();
-  //   npnl += controller.dayWiseContestPnlList[i].npnl ?? 0 + controller.calculateContestNetPNL();
-  //   trades += controller.dayWiseContestPnlList[i].trades ?? 0 + controller.calculateContestTrades();
 
   num calculateTotalReward(rankRewards) {
     num totalReward = 0;
@@ -759,13 +749,25 @@ class CollegeContestController
   num calculateTDS() {
     num tds = readSetting.value.tdsPercentage ?? 0;
     num rewardAmount = getRewardCapAmount(
-        liveCollegeContest.value.entryFee == 0 || featuredCollegeContest.value.entryFee == 0
-            ? liveCollegeContest.value.portfolio?.portfolioValue ?? featuredCollegeContest.value.portfolio?.portfolioValue ?? 0
-            : liveCollegeContest.value.entryFee ?? featuredCollegeContest.value.entryFee ?? 0,
-        liveCollegeContest.value.payoutCapPercentage ?? featuredCollegeContest.value.payoutCapPercentage ?? 0,
-        liveCollegeContest.value.payoutPercentage ?? featuredCollegeContest.value.payoutPercentage?? 0);
+        liveCollegeContest.value.entryFee == 0 ||
+                featuredCollegeContest.value.entryFee == 0
+            ? liveCollegeContest.value.portfolio?.portfolioValue ??
+                featuredCollegeContest.value.portfolio?.portfolioValue ??
+                0
+            : liveCollegeContest.value.entryFee ??
+                featuredCollegeContest.value.entryFee ??
+                0,
+        liveCollegeContest.value.payoutCapPercentage ??
+            featuredCollegeContest.value.payoutCapPercentage ??
+            0,
+        liveCollegeContest.value.payoutPercentage ??
+            featuredCollegeContest.value.payoutPercentage ??
+            0);
 
-    num winingAmount = rewardAmount - (liveCollegeContest.value.entryFee ?? featuredCollegeContest.value.entryFee ?? 0);
+    num winingAmount = rewardAmount -
+        (liveCollegeContest.value.entryFee ??
+            featuredCollegeContest.value.entryFee ??
+            0);
     num tdsAmount = winingAmount * tds / 100;
 
     return tdsAmount > 0 ? tdsAmount : 0;

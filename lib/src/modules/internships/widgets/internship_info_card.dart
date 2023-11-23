@@ -7,6 +7,16 @@ class InternshipInfoCard extends GetView<InternshipController> {
 
   @override
   Widget build(BuildContext context) {
+    // // num? mycurrentAttendance =
+    // //     controller.internshipBatchDetails.value.myAttendance as num;
+    // // print('mycurrentAtrtendece $mycurrentAttendance');
+    // // num? requiredAttendance =
+    // //     controller.internshipBatchDetails.value.attendancePercentage as num;
+    // // print('requiredAttendance $requiredAttendance');
+    // bool certificateEligibility =
+    //     double.parse(controller.internshipBatchDetails.value.myAttendance??0) >= controller.internshipBatchDetails.value.attendancePercentage??0;
+    // print('certificateEligibility $certificateEligibility');
+
     return Obx(
       () => CommonCard(
         margin: EdgeInsets.symmetric(vertical: 16),
@@ -23,7 +33,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Batch",
+                      "Batch Name",
                       style: Theme.of(context).textTheme.tsGreyMedium12,
                     ),
                     SizedBox(height: 2),
@@ -33,7 +43,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     ),
                   ],
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 6),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -46,7 +56,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          "${FormatHelper.formatDateYear(controller.internshipBatchDetails.value.batchStartDate)}",
+                          "${FormatHelper.formatDateTimeToIST(controller.internshipBatchDetails.value.batchStartDate)}",
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
@@ -60,14 +70,14 @@ class InternshipInfoCard extends GetView<InternshipController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          "${FormatHelper.formatDateYear(controller.internshipBatchDetails.value.batchEndDate)}",
+                          "${FormatHelper.formatDateTimeToIST(controller.internshipBatchDetails.value.batchEndDate)}",
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
                     ),
                   ],
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: 6),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -105,7 +115,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
 
                 //////asbdksbfkb
                 ///sdknfkgnk
-                SizedBox(height: 4),
+                SizedBox(height: 6),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -113,7 +123,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Attendance",
+                          "Current Attendance",
                           style: Theme.of(context).textTheme.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
@@ -127,12 +137,12 @@ class InternshipInfoCard extends GetView<InternshipController> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Referral Count',
+                          'Min Attendance Required',
                           style: Theme.of(context).textTheme.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
-                            "${controller.internshipBatchDetails.value.myReferrals}",
+                            "${controller.internshipBatchDetails.value.attendancePercentage}%",
                             style: Theme.of(context).textTheme.tsMedium12),
                       ],
                     ),
@@ -142,6 +152,153 @@ class InternshipInfoCard extends GetView<InternshipController> {
                 ///edshfi
                 ///svhhribg
                 ///seiog
+                SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Current Referrals",
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          "${controller.internshipBatchDetails.value.myReferrals}",
+                          style: Theme.of(context).textTheme.tsMedium12,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Required Referral',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                            "${controller.internshipBatchDetails.value.referralCount}",
+                            style: Theme.of(context).textTheme.tsMedium12),
+                      ],
+                    ),
+                  ],
+                ),
+
+                ///agege
+                ///gsaehh/sehs
+                ///shdshh
+                ///hsgh
+                SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Max Stipend Amount",
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          FormatHelper.formatNumbers('15000'),
+                          style: Theme.of(context).textTheme.tsMedium12,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Stipend',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                            "${controller.internshipBatchDetails.value.payoutPercentage}% of net P&L",
+                            style: Theme.of(context).textTheme.tsMedium12),
+                      ],
+                    ),
+                  ],
+                ),
+
+                ///sgg
+                ///sgg
+                ///sgbsh
+                SizedBox(height: 12),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "Eligibility for Certificate",
+                          style: TextStyle(color: Colors.green, fontSize: 12),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(height: 6),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          '${double.parse(controller.internshipBatchDetails.value.myAttendance ?? '0') >= double.parse(controller.internshipBatchDetails.value.attendancePercentage.toString()) ? "Yes" : 'Not Yet'}',
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(height: 3),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "Trading on a given a day is equivalent to marking attendance\nfor that day.",
+                          style: TextStyle(color: Colors.grey, fontSize: 10),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(height: 12),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "Eligibility Criteria for Stipend",
+                          style: TextStyle(color: Colors.green, fontSize: 12),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(height: 6),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "${double.parse(controller.internshipBatchDetails.value.myAttendance ?? '0') >= double.parse(controller.internshipBatchDetails.value.attendancePercentage.toString()) ? "Yes" : 'Not Yet'}",
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+
                 SizedBox(height: 12),
                 Row(
                   children: [

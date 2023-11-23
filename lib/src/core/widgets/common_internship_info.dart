@@ -21,7 +21,7 @@ class CommonInternshipInfo extends GetView<InternshipController> {
         ),
         SizedBox(height: 12),
         Text(
-          '1. Receive a stipend calculated at ${controller.internshipBatchDetails.value.payoutPercentage}% of the net profit and loss (P&L) for the duration of your internship.',
+          '1. Receive a stipend calculated at ${controller.internshipBatchDetails.value.payoutPercentage}% of the net profit and loss (P&L) for the duration of your internship on a virtual margin money of ${FormatHelper.formatNumbers(controller.internshipBatchDetails.value.portfolio?.portfolioValue)}.',
           style: Theme.of(context).textTheme.tsRegular14,
         ),
         SizedBox(height: 8),
@@ -57,6 +57,11 @@ class CommonInternshipInfo extends GetView<InternshipController> {
         SizedBox(height: 8),
         Text(
           '5. Limited to taking intraday option trades and required to close all positions before 3:20 PM daily.',
+          style: Theme.of(context).textTheme.tsRegular14,
+        ),
+        SizedBox(height: 8),
+        Text(
+          '6. Traders will be eligible for stipend if they have an ${controller.internshipBatchDetails.value.attendancePercentage}% attendance during the internship period, minimum ${controller.internshipBatchDetails.value.referralCount} referrals and a positive net P&L.  .',
           style: Theme.of(context).textTheme.tsRegular14,
         ),
       ],

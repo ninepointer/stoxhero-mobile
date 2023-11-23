@@ -9,7 +9,7 @@ class ContestTopPerformerCard extends GetView<ContestProfileController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'TestZone Leaderboard of the Week\n${[
+          'Weekly TestZone Leaderboard \n${[
             '${FormatHelper.formatDateMonth(controller.startOfWeek.toString())} - ${FormatHelper.formatDateMonth(controller.endOfWeek.toString())}'
           ]}',
           style: Theme.of(context).textTheme.tsRegular16,

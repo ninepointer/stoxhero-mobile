@@ -174,5 +174,10 @@ class AppPages {
       page: () => ContestProfileView(),
       // binding: InternshipBinding(),
     ),
+    GetPage(
+      name: AppRoutes.weeklyTopPerformersFullList,
+      page: () => ContestTopPerformerCard(),
+      binding: ContestProfileBinding(),
+    ),
   ];
 }

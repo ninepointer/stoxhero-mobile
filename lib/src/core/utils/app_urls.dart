@@ -283,4 +283,6 @@ class AppUrls {
       "$apiURL/dailycontest/contestprofile/$id";
   static const String weeklyTopPerformersFullList =
       "$apiURL/dailycontest/weeklytopperformerfulllist";
+  static const String weeklyTopPerformersFullListCarouseal =
+      "$apiURL/toptestzoneportfolios";
 }

@@ -244,6 +244,9 @@ class WalletController extends BaseController<WalletRepository> {
       product = '6517d40e3aeb2bb27d650de1';
     }
 
+//else if (productType == ProductType.wallet) {
+    //   product = '651bdbc8da68770e8f1b8e09';
+    //  }
     var data = VerifyCouponCodeRequest(
       code: couponCodeTextController.text.trim(),
       product: product,

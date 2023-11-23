@@ -98,8 +98,7 @@ class FormatHelper {
     if (value != null) {
       DateTime dateTimeUTC = DateTime.parse(value);
       DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
-      String formattedIST =
-          DateFormat('d MMM yyyy hh:mm a').format(dateTimeIST);
+      String formattedIST = DateFormat('d MMM yy hh:mm a').format(dateTimeIST);
       return formattedIST;
     } else {
       return '-';
@@ -116,16 +115,16 @@ class FormatHelper {
     }
   }
 
-  static String formatDateToIST(String? value) {
-    if (value != null) {
-      DateTime dateTimeUTC = DateTime.parse(value);
-      DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
-      String formattedIST = DateFormat('dd/MM/yyyy').format(dateTimeIST);
-      return formattedIST;
-    } else {
-      return '-';
-    }
-  }
+  // static String formatDateTimeToIST(String? value) {
+  //   if (value != null) {
+  //     DateTime dateTimeUTC = DateTime.parse(value);
+  //     DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
+  //     String formattedIST = DateFormat('d MMM yy hh:mm a').format(dateTimeIST);
+  //     return formattedIST;
+  //   } else {
+  //     return '-';
+  //   }
+  // }
 
   static String formatDateOfBirthToIST(String? value) {
     if (value != null) {
