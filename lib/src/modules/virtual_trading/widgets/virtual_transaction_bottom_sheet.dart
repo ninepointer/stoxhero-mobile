@@ -382,6 +382,55 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                       ),
                     ],
                   ),
+
+                  SizedBox(height: 8),
+                  CommonCard(
+                    margin: EdgeInsets.only(),
+                    padding: EdgeInsets.zero.copyWith(left: 12, right: 12),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Available Margin',
+                            style: Theme.of(context).textTheme.tsMedium14,
+                          ),
+                          Visibility(
+                            visible: controller.isMarginStateLoadingStatus,
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                child: CommonLoader(),
+                                height: 24,
+                                width: 24,
+                              ),
+                            ),
+                            replacement: Row(
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 12,
+                                        right: 12,
+                                        top: 24,
+                                        bottom: 24)),
+                                Text(
+                                  FormatHelper.formatNumbers(
+                                    controller
+                                        .calculateMargin()
+                                        .round()
+                                        .toString(),
+                                  ),
+                                  style: Theme.of(context).textTheme.tsMedium14,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  //sddhgvd
+                  //egdsgoihg
                   SizedBox(height: 8),
                   CommonCard(
                     margin: EdgeInsets.only(),

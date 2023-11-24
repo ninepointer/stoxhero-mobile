@@ -56,7 +56,7 @@ class ContestRules extends GetView<ContestController> {
         ),
         SizedBox(height: 8),
         Text(
-          'Payout Processing: Payouts are calculated and processed after the contest ends on ${FormatHelper.formatDateTimeToIST(endTime)}, (based on cumulative Net P&L) / (daily based on daily P&L) post 03:20.',
+          'Payout Processing: Payouts are calculated and processed after the TestZone ends on ${FormatHelper.formatDateTimeToIST(endTime)}, (based on cumulative Net P&L) / (daily based on daily P&L) post 03:20.',
           style: Theme.of(context).textTheme.tsMedium14,
         ),
         SizedBox(height: 8),

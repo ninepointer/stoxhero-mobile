@@ -47,6 +47,7 @@ class WalletController extends BaseController<WalletRepository> {
 
   final paymentGroupValue = 'wallet'.obs;
   final selectedPaymentValue = 'wallet'.obs;
+  final isHeroCashAdded = false.obs;
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
   void changeSecondTabBarIndex(int val) =>

@@ -174,7 +174,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Required Referral',
+                          'Required Referrals',
                           style: Theme.of(context).textTheme.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
@@ -234,7 +234,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                       children: [
                         Text(
                           "Eligibility for Certificate",
-                          style: TextStyle(color: Colors.green, fontSize: 12),
+                          style: TextStyle(color: Colors.green, fontSize: 14),
                         )
                       ],
                     )
@@ -246,7 +246,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     Column(
                       children: [
                         Text(
-                          '${double.parse(controller.internshipBatchDetails.value.myAttendance ?? '0') >= double.parse(controller.internshipBatchDetails.value.attendancePercentage.toString()) ? "Yes" : 'Not Yet'}',
+                          '${double.parse(controller.internshipBatchDetails.value.myAttendance ?? '0') >= double.parse(controller.internshipBatchDetails.value.attendancePercentage.toString()) && double.parse(controller.internshipBatchDetails.value.myReferrals.toString()) >= double.parse(controller.internshipBatchDetails.value.referralCount.toString()) ? "Yes" : 'Not Yet'}',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
@@ -256,27 +256,27 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     )
                   ],
                 ),
-                SizedBox(height: 3),
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          "Trading on a given a day is equivalent to marking attendance\nfor that day.",
-                          style: TextStyle(color: Colors.grey, fontSize: 10),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                // SizedBox(height: 3),
+                // Row(
+                //   children: [
+                //     Column(
+                //       children: [
+                //         Text(
+                //           "Trading on a given a day is equivalent to marking attendance\nfor that day.",
+                //           style: TextStyle(color: Colors.grey, fontSize: 10),
+                //         )
+                //       ],
+                //     )
+                //   ],
+                // ),
                 SizedBox(height: 12),
                 Row(
                   children: [
                     Column(
                       children: [
                         Text(
-                          "Eligibility Criteria for Stipend",
-                          style: TextStyle(color: Colors.green, fontSize: 12),
+                          "Eligibility for Stipend",
+                          style: TextStyle(color: Colors.green, fontSize: 14),
                         )
                       ],
                     )
@@ -288,7 +288,7 @@ class InternshipInfoCard extends GetView<InternshipController> {
                     Column(
                       children: [
                         Text(
-                          "${double.parse(controller.internshipBatchDetails.value.myAttendance ?? '0') >= double.parse(controller.internshipBatchDetails.value.attendancePercentage.toString()) ? "Yes" : 'Not Yet'}",
+                          '${double.parse(controller.internshipBatchDetails.value.myAttendance ?? '0') >= double.parse(controller.internshipBatchDetails.value.attendancePercentage.toString()) && double.parse(controller.internshipBatchDetails.value.myReferrals.toString()) >= double.parse(controller.internshipBatchDetails.value.referralCount.toString()) ? "Yes" : 'Not Yet'}',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,

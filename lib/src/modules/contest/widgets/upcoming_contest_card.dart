@@ -308,7 +308,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           ),
                           SizedBox(height: 2),
                           Text(
-                            '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                            'Starts in ${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
                             style: Theme.of(context).textTheme.tsMedium12,
                             textAlign: TextAlign.end,
                           ),
