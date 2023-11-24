@@ -49,8 +49,11 @@ class HomeController extends BaseController<DashboardRepository> {
 
   void navigateToCarousel(String link) {
     if (link == 'marginxs') {
-      selectedIndex(0);
+      selectedIndex(3);
+
       Get.find<MarginXController>().loadData();
+      // Get.toNamed(AppRoutes.marginx);
+      // Get.to(() => MarginXView());
     } else if (link == 'testzone') {
       selectedIndex(4);
       Get.find<ContestController>().loadData();
