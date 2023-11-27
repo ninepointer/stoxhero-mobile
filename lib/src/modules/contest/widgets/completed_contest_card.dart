@@ -196,7 +196,7 @@ class CompletedContestCard extends GetView<ContestController> {
               Row(
                 children: [
                   Text(
-                    'Starts:',
+                    'Started:',
                     style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
                   SizedBox(
@@ -212,7 +212,7 @@ class CompletedContestCard extends GetView<ContestController> {
               Row(
                 children: [
                   Text(
-                    'Ends:',
+                    'Ended:',
                     style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
                   SizedBox(
