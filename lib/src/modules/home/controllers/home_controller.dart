@@ -36,6 +36,7 @@ class HomeController extends BaseController<DashboardRepository> {
     Get.find<CollegeContestController>().getLiveCollegeContestList();
     Get.find<WalletController>().getWalletTransactionsList();
     Get.find<ContestController>().getFeaturedContest();
+    Get.find<ContestController>().getReadSetting();
   }
 
   Future loadData() async {

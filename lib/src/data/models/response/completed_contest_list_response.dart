@@ -1,4 +1,3 @@
-
 import 'package:stoxhero/src/data/models/response/upcoming_contest_list_response.dart';
 
 class CompletedContestListResponse {
@@ -64,6 +63,7 @@ class CompletedContest {
   String? payoutType;
   String? payoutStatus;
   int? liveThreshold;
+  int? rank;
 
   CompletedContest({
     this.id,
@@ -99,6 +99,7 @@ class CompletedContest {
     this.payoutType,
     this.payoutStatus,
     this.liveThreshold,
+    this.rank,
   });
 
   CompletedContest.fromJson(Map<String, dynamic> json) {
@@ -113,7 +114,9 @@ class CompletedContest {
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
-     portfolio = json['portfolio'] != null ? new ContestPortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null
+        ? new ContestPortfolio.fromJson(json['portfolio'])
+        : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -125,6 +128,7 @@ class CompletedContest {
     isAllIndex = json['isAllIndex'];
     product = json['product'];
     payoutCapPercentage = json['payoutCapPercentage'];
+    rank = json['rank'];
     if (json['rewards'] != null) {
       rewards = <CompletedRewards>[];
       json['rewards'].forEach((v) {
@@ -184,14 +188,17 @@ class CompletedContest {
     data['isAllIndex'] = this.isAllIndex;
     data['product'] = this.product;
     data['payoutCapPercentage'] = this.payoutCapPercentage;
+    data['rank'] = this.rank;
     if (this.rewards != null) {
       data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
     }
     if (this.interestedUsers != null) {
-      data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
+      data['interestedUsers'] =
+          this.interestedUsers!.map((v) => v.toJson()).toList();
     }
     if (this.purchaseIntent != null) {
-      data['purchaseIntent'] = this.purchaseIntent!.map((v) => v.toJson()).toList();
+      data['purchaseIntent'] =
+          this.purchaseIntent!.map((v) => v.toJson()).toList();
     }
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
@@ -242,7 +249,8 @@ class CompletedInterestedUsers {
   String? status;
   String? sId;
 
-  CompletedInterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
+  CompletedInterestedUsers(
+      {this.userId, this.registeredOn, this.status, this.sId});
 
   CompletedInterestedUsers.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];

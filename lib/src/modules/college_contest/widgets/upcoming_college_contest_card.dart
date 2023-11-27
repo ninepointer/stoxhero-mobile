@@ -248,13 +248,13 @@ class _UpComingCollegeContestCardState
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'Remaining Time',
+                            'Starts in',
                             style: AppStyles.tsGreyMedium12,
                             textAlign: TextAlign.end,
                           ),
                           SizedBox(height: 2),
                           Text(
-                            'Starts in ${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                            '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
                             style: Theme.of(context).textTheme.tsMedium12,
                             textAlign: TextAlign.end,
                           ),

@@ -7,7 +7,8 @@ class WeeklyTopPerformersListResponse {
   String? startOfWeek;
   String? endOfWeek;
 
-  WeeklyTopPerformersListResponse({this.status, this.message, this.data, this.startOfWeek, this.endOfWeek});
+  WeeklyTopPerformersListResponse(
+      {this.status, this.message, this.data, this.startOfWeek, this.endOfWeek});
 
   WeeklyTopPerformersListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -71,7 +72,9 @@ class WeeklyTopPerformers {
     firstName = json['first_name'];
     lastName = json['last_name'];
     userid = json['userid'];
-    profilePicture = json['profile_picture'] != null ? new ProfilePicture.fromJson(json['profile_picture']) : null;
+    profilePicture = json['profile_picture'] != null
+        ? new ProfilePicture.fromJson(json['profile_picture'])
+        : null;
     totalPayout = json['totalPayout'];
     strikeRate = json['strikeRate'];
   }

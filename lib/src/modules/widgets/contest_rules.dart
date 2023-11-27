@@ -10,8 +10,6 @@ class ContestRules extends GetView<ContestController> {
   final num? payoutCapPercentage;
   final num? portfolio;
   final String? payoutType;
-  // final num? tdsPercentage;
-  // final readSetting = ReadSettingResponse().obs;
 
   const ContestRules({
     Key? key,
@@ -22,7 +20,6 @@ class ContestRules extends GetView<ContestController> {
     this.payoutCapPercentage,
     this.portfolio,
     this.payoutType,
-    // this.tdsPercentage,
   }) : super(key: key);
 
   @override

@@ -13,6 +13,7 @@ class _DashboardViewState extends State<DashboardView> {
   late ContestController contestController;
   late CollegeContestController collegeContestController;
   late ContestProfileController contestProfileController;
+  late ReferralsController referralsController;
   late List<String> monthsList;
 
   String? selectedValue2 = '';
@@ -26,6 +27,8 @@ class _DashboardViewState extends State<DashboardView> {
     collegeContestController = Get.find<CollegeContestController>();
     contestProfileController = Get.find<ContestProfileController>();
     contestProfileController.loadData();
+    referralsController = Get.find<ReferralsController>();
+    referralsController.loadData();
     DateTime now = DateTime.now();
     String currentMonth = DateFormat('MMMM yyyy').format(now);
     String previousMonth =
@@ -54,7 +57,8 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
-    print(contestController.featuredCollegeContest.length);
+    print('deshboard weekly ${contestProfileController.weeklyTopPerformer}');
+
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
@@ -173,7 +177,6 @@ class _DashboardViewState extends State<DashboardView> {
                               //  })
                               .map((entry) {
                             int index = entry.key;
-
                             return ContestPortfolioWeekCard(
                               index: index + 1,
                               performer: entry.value,
@@ -183,6 +186,27 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
+
+                  // SingleChildScrollView(
+                  //   scrollDirection: Axis.horizontal,
+                  //   child: Row(
+                  //     children: [
+                  //       if (contestController
+                  //           .completedContestLeaderboardList.isNotEmpty)
+                  //         Obx(
+                  //           () => Row(
+                  //             children: contestController
+                  //                 .completedContestLeaderboardList
+                  //                 .map((contest) {
+                  //               return Container(
+                  //                   width: MediaQuery.of(context).size.width,
+                  //                   child: CompletedContestLeaderboard());
+                  //             }).toList(),
+                  //           ),
+                  //         ),
+                  //     ],
+                  //   ),
+                  // ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -216,7 +240,8 @@ class _DashboardViewState extends State<DashboardView> {
                                     String userId =
                                         controller.userDetailsData.sId ?? '';
                                     return Container(
-                                      width: MediaQuery.of(context).size.width,
+                                      width: MediaQuery.of(context).size.width -
+                                          30,
                                       child: LiveFeaturedCard(
                                         userId: userId,
                                         liveFeatured: contest,
@@ -235,7 +260,8 @@ class _DashboardViewState extends State<DashboardView> {
                                     String userId =
                                         controller.userDetailsData.sId ?? '';
                                     return Container(
-                                      width: MediaQuery.of(context).size.width,
+                                      width: MediaQuery.of(context).size.width -
+                                          30,
                                       child: UpcomingFeaturedCard(
                                         userId: userId,
                                         upcomingFeatured: contest,
@@ -289,7 +315,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 String userId =
                                     controller.userDetailsData.sId ?? '';
                                 return Container(
-                                  width: MediaQuery.of(context).size.width,
+                                  width: MediaQuery.of(context).size.width - 30,
                                   child: LiveContestCard(
                                     userId: userId,
                                     contest: contest,
@@ -330,8 +356,10 @@ class _DashboardViewState extends State<DashboardView> {
                                   return isVisible
                                       ? SizedBox()
                                       : Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              20,
                                           child: UpComingContestCard(
                                             userId: userId,
                                             contest: contest,
@@ -403,7 +431,9 @@ class _DashboardViewState extends State<DashboardView> {
                       ],
                     ),
                   ),
-                  CommonTile(label: 'Performance'),
+                  CommonTile(
+                    label: 'Performance',
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
@@ -661,7 +691,64 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 100),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Refer & Win',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "Rubik")),
+                              SizedBox(
+                                height: 4,
+                              ),
+                              Text('Bring your friends on StoxHero',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Rubik",
+                                    color: Colors.grey,
+                                  )),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ReferralsView()),
+                                  );
+                                },
+                                child: Text(
+                                  'Refer & Earn ${FormatHelper.formatNumbers(referralsController.activeReferrals.value?.rewardPerReferral, decimal: 0)}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary:
+                                      Colors.lightGreen, // Background color
+                                  onPrimary: Colors.white, // Text color
+                                  elevation: 8.0, // Elevation (shadow)
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // Border radius
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20.0,
+                                      vertical: 12.0), // Padding
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 60),
                       ],
                     ),
                   ),

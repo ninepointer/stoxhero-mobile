@@ -105,6 +105,17 @@ class FormatHelper {
     }
   }
 
+  static String formatDateTimeWithoutYearToIST(String? value) {
+    if (value != null) {
+      DateTime dateTimeUTC = DateTime.parse(value);
+      DateTime dateTimeIST = dateTimeUTC.add(Duration(hours: 5, minutes: 30));
+      String formattedIST = DateFormat('d MMM HH:mm').format(dateTimeIST);
+      return formattedIST;
+    } else {
+      return '-';
+    }
+  }
+
   static String formatDateYear(String? value) {
     if (value != null) {
       DateTime dateTime = DateTime.parse(value);

@@ -205,6 +205,7 @@ class ContestTradingView extends GetView<ContestController> {
                           ),
                           SizedBox(height: 8),
                           Row(
+                            
                             children: [
                               PositionDetailCardTile(
                                 label: 'Payout',
