@@ -205,7 +205,10 @@ class CompletedContestCard extends GetView<ContestController> {
                   Text(
                     FormatHelper.formatDateTimeWithoutYearToIST(
                         contest?.contestStartTime),
-                    style: Theme.of(context).textTheme.tsBlackMedium12,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Rubik'),
                   ),
                 ],
               ),
@@ -221,7 +224,10 @@ class CompletedContestCard extends GetView<ContestController> {
                   Text(
                     FormatHelper.formatDateTimeWithoutYearToIST(
                         contest?.contestEndTime),
-                    style: Theme.of(context).textTheme.tsBlackMedium12,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Rubik'),
                   ),
                 ],
               ),
