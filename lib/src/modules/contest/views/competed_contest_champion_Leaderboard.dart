@@ -14,6 +14,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
+    print('contestdata${controller.contestChampionList}');
     return Container(
       child: Column(
         children: [
@@ -21,13 +22,14 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
             children: [
               Text('${contestdata?.contestName} - '),
               Text(FormatHelper.formatDateMonth(contestdata?.contestDate)),
-              Text(contestdata?.topParticipants
-                      ?.map((e) => e.firstName)
-                      .join(', ') ??
-                  ''),
+              // Text(contestdata?.topParticipants
+              //         ?.map((e) => e.firstName)
+              //         .join(', ') ??
+              //     ''),
             ],
           ),
-          ListView.builder(
+          Expanded(
+              child: ListView.builder(
             itemCount: contestdata?.topParticipants?.length ?? 0,
             itemBuilder: (context, index) {
               // final LastPaidTestZoneTopPerformer participant =
@@ -52,7 +54,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
                 ],
               );
             },
-          )
+          )),
         ],
       ),
     );

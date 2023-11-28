@@ -157,7 +157,6 @@ class ContestController extends BaseController<ContestRepository> {
     await getCompletedContestList();
     await getCompletedContestPnlList();
     await getReadSetting();
-    await getPaidContestChampionList();
   }
 
   Future loadUserDetails() async {
@@ -825,6 +824,7 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       final RepoResponse<LastPaidTestZoneTopPerformerListResponse> response =
           await repository.getPaidContestChampionList();
+      print('responsedata ${response.data}');
       if (response.data != null) {
         contestChampionList(response.data!.data?.cast<ContestData>() ?? []);
       } else {

@@ -28,6 +28,7 @@ class _DashboardViewState extends State<DashboardView> {
     collegeContestController = Get.find<CollegeContestController>();
     contestProfileController = Get.find<ContestProfileController>();
     contestProfileController.loadData();
+    contestController.getPaidContestChampionList();
 
     referralsController = Get.find<ReferralsController>();
     referralsController.loadData();
@@ -59,6 +60,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
+    print('champion ${contestController.contestChampionList}');
     // print(
     //     'champion ${contestController.contestChampionList.map((element) => element.entryFee)}');
     return Scaffold(
@@ -202,15 +204,17 @@ class _DashboardViewState extends State<DashboardView> {
                   //             .entries
                   //             .map((entry) {
                   //           int index = entry.key;
-                  //           print(
-                  //               'champion ${entry.value.topParticipants?.map((e) => e.firstName)}');
-                  //           return Container(
-                  //             width: MediaQuery.of(context).size.width,
+                  //           // print(
+                  //           //     'champion ${entry.value.topParticipants?.map((e) => e.firstName)}');
+                  //           return Expanded(
+                  //               child: Container(
+                  //             height: 50,
+                  //             width: MediaQuery.of(context).size.width - 30,
                   //             child: CompletedContestChampionLeaderBoard(
                   //               index: index + 1,
                   //               contestdata: entry.value,
                   //             ),
-                  //           );
+                  //           ));
                   //         }).toList(),
                   //       ),
                   //     ),
