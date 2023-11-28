@@ -50,7 +50,8 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                                   ),
                                 ),
                                 child: ClipOval(
-                                  child: contest.image == null || contest.image!.isEmpty
+                                  child: contest.image == null ||
+                                          contest.image!.isEmpty
                                       ? Image.asset(
                                           AppImages.appLogo,
                                           width: 48,
@@ -60,7 +61,8 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                                           contest.image ?? '',
                                           width: 48,
                                           height: 48,
-                                          errorBuilder: (context, error, stackTrace) {
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
                                             return Image.asset(
                                               AppImages.appLogo,
                                               width: 48,
@@ -105,7 +107,10 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                                     contest.payout,
                                     decimal: 0,
                                   )}',
-                                  style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .tsMedium14
+                                      .copyWith(
                                         color: AppColors.success,
                                       ),
                                 ),

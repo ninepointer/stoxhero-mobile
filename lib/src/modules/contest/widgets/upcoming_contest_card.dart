@@ -224,7 +224,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                   if (widget.contest?.payoutType == 'Reward') ...[
                     Text(
                         'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}',
-                        style: Theme.of(context).textTheme.tsMedium12,
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
                         textAlign: TextAlign.center),
                   ],
                   if (widget.contest?.payoutType != 'Reward') ...[
@@ -281,6 +281,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                               color: Colors.red,
                               fontSize: 12,
                               fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),

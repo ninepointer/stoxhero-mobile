@@ -116,6 +116,8 @@ class AppUrls {
       "$apiURL/dailycontest/contests/userupcoming";
   static const String completedContests =
       "$apiURL/dailycontest/contests/completed";
+  static const String contestChampionList =
+      "$apiURL/dailycontest/lastpaidcontestchampions";
 
   static const String allContestPnl =
       "$apiURL/dailycontest/trade/allcontestPnl";

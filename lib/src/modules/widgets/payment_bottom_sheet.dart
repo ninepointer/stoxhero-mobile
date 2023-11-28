@@ -485,22 +485,24 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       ],
                     ),
                   // if (!isWalletPayment)
-                  //   Row(
-                  //     children: [
-                  //       Checkbox(
-                  //         value: controller.isHeroCashAdded.value,
-                  //         onChanged: (value) =>
-                  //             controller.isHeroCashAdded(value),
-                  //       ),
-                  //       Text(
-                  //           'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (10 / 100)} HeroCash (1 HeroCash = \u{20B9}1)'),
-                  //     ],
+                  //   Padding(
+                  //     padding: EdgeInsets.only(left: 10),
+                  //     child: Row(
+                  //       children: [
+                  //         Checkbox(
+                  //           value: controller.isHeroCashAdded.value,
+                  //           onChanged: (value) =>
+                  //               controller.isHeroCashAdded(value),
+                  //         ),
+                  //         Text(
+                  //             'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (10 / 100)} HeroCash (1 HeroCash = \u{20B9}1)'),
+                  //       ],
+                  //     ),
                   //   ),
-
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('gateway'),
-                      margin: EdgeInsets.only(top: 16),
+                      margin: EdgeInsets.only(top: 8),
                       children: [
                         Row(
                           children: [

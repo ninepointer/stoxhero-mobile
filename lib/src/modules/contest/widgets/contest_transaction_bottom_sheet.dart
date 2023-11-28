@@ -83,7 +83,13 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                                       tradingInstrument.exchangeToken!,
                                     ),
                                   )
-                                : tradingInstrument.lotSize.toString(),
+                                // : tradingInstrument.lotSize.toString(),
+                                : FormatHelper.formatNumbers(
+                                    controller.getInstrumentLastPrice(
+                                      tradingInstrument.instrumentToken!,
+                                      tradingInstrument.exchangeToken!,
+                                    ),
+                                  ),
                         style: AppStyles.tsSecondaryMedium16,
                       ),
                     ],
@@ -505,7 +511,21 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                       } else if (controller.selectedGroupValue.value == 1 &&
                           controller.limitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar('Please Enter Price');
-                      } else if (controller.stopLossFormKey.currentState!
+                      }
+                      // else if ((controller.getInstrumentLastPrice(
+                      //           tradingInstrument.instrumentToken!,
+                      //           tradingInstrument.exchangeToken!,
+                      //         )) ==
+                      //         0.00 &&
+                      //     int.parse(controller.getInstrumentChanges(
+                      //           tradingInstrument.instrumentToken!,
+                      //           tradingInstrument.exchangeToken!,
+                      //         )) ==
+                      //         0.00) {
+                      //   SnackbarHelper.showSnackbar(
+                      //       'MARKET orders are blocked for ');
+                      // }
+                      else if (controller.stopLossFormKey.currentState!
                           .validate()) {
                         controller.placeContestOrder(
                           type,
