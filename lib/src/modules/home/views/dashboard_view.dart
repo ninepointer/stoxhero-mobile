@@ -59,8 +59,8 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
-    print(
-        'champion ${contestController.contestChampionList.map((element) => element.entryFee)}');
+    // print(
+    //     'champion ${contestController.contestChampionList.map((element) => element.entryFee)}');
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
@@ -188,34 +188,34 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  CommonTile(
-                    label: 'TestZone Champions',
-                    margin: EdgeInsets.only(bottom: 8, top: 0),
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(children: [
-                      Obx(
-                        () => Row(
-                          children: contestController.contestChampionList
-                              .asMap()
-                              .entries
-                              .map((entry) {
-                            int index = entry.key;
-                            print(
-                                'champion ${entry.value.topParticipants?.map((e) => e.firstName)}');
-                            return Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: CompletedContestChampionLeaderBoard(
-                                index: index + 1,
-                                contestdata: entry.value,
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ]),
-                  ),
+                  // CommonTile(
+                  //   label: 'TestZone Champions',
+                  //   margin: EdgeInsets.only(bottom: 8, top: 0),
+                  // ),
+                  // SingleChildScrollView(
+                  //   scrollDirection: Axis.horizontal,
+                  //   child: Row(children: [
+                  //     Obx(
+                  //       () => Row(
+                  //         children: contestController.contestChampionList
+                  //             .asMap()
+                  //             .entries
+                  //             .map((entry) {
+                  //           int index = entry.key;
+                  //           print(
+                  //               'champion ${entry.value.topParticipants?.map((e) => e.firstName)}');
+                  //           return Container(
+                  //             width: MediaQuery.of(context).size.width,
+                  //             child: CompletedContestChampionLeaderBoard(
+                  //               index: index + 1,
+                  //               contestdata: entry.value,
+                  //             ),
+                  //           );
+                  //         }).toList(),
+                  //       ),
+                  //     ),
+                  //   ]),
+                  // ),
 
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
