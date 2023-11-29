@@ -258,53 +258,53 @@ class _DashboardViewState extends State<DashboardView> {
                   //     ],
                   //   ),
                   // ),
-                  Container(
-                    height: 200,
-                    child: Row(
-                      children: [
-                        CommonCard(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("3"),
-                                CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(AppImages.appLogo),
-                                ),
-                                Text('Niharika Jain'),
-                                Text('${FormatHelper.formatNumbers(337)}'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("3"),
-                                CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(AppImages.appLogo),
-                                ),
-                                Text('Niharika Jain'),
-                                Text('${FormatHelper.formatNumbers(337)}'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("3"),
-                                CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(AppImages.appLogo),
-                                ),
-                                Text('Niharika Jain'),
-                                Text('${FormatHelper.formatNumbers(337)}'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   height: 200,
+                  //   child: Row(
+                  //     children: [
+                  //       CommonCard(
+                  //         children: [
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Text("3"),
+                  //               CircleAvatar(
+                  //                 backgroundImage:
+                  //                     NetworkImage(AppImages.appLogo),
+                  //               ),
+                  //               Text('Niharika Jain'),
+                  //               Text('${FormatHelper.formatNumbers(337)}'),
+                  //             ],
+                  //           ),
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Text("3"),
+                  //               CircleAvatar(
+                  //                 backgroundImage:
+                  //                     NetworkImage(AppImages.appLogo),
+                  //               ),
+                  //               Text('Niharika Jain'),
+                  //               Text('${FormatHelper.formatNumbers(337)}'),
+                  //             ],
+                  //           ),
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Text("3"),
+                  //               CircleAvatar(
+                  //                 backgroundImage:
+                  //                     NetworkImage(AppImages.appLogo),
+                  //               ),
+                  //               Text('Niharika Jain'),
+                  //               Text('${FormatHelper.formatNumbers(337)}'),
+                  //             ],
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                   // contestController.contestChampionList.isEmpty
                   //     ? Container()
