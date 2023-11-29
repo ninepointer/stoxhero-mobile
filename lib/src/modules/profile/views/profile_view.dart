@@ -35,10 +35,14 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 child: ClipOval(
                   child: controller.userDetails.value.profilePhoto == null
-                      ? Image.asset(
-                          AppImages.appLogo,
-                          fit: BoxFit.cover,
-                        )
+                      ? Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Image.asset(
+                            Get.isDarkMode
+                                ? AppImages.darkAppLogo
+                                : AppImages.lightAppLogo,
+                            fit: BoxFit.cover,
+                          ))
                       : Image.network(
                           controller.userDetails.value.profilePhoto?.url ?? '',
                           fit: BoxFit.cover,
@@ -58,9 +62,11 @@ class ProfileView extends GetView<ProfileController> {
                 InkWell(
                   borderRadius: BorderRadius.circular(50),
                   onTap: () {
-                    String referralCode = controller.userDetailsData.myReferralCode ?? '-';
+                    String referralCode =
+                        controller.userDetailsData.myReferralCode ?? '-';
                     Clipboard.setData(ClipboardData(text: referralCode));
-                    SnackbarHelper.showSnackbar('Referral code copied to clipboard');
+                    SnackbarHelper.showSnackbar(
+                        'Referral code copied to clipboard');
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

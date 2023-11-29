@@ -1,60 +1,156 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
+import 'package:intl/intl.dart';
 
 class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
   final int? index;
   final ContestData? contestdata;
-  final LastPaidTestZoneTopPerformer? participant;
+
   const CompletedContestChampionLeaderBoard({
     Key? key,
     this.index,
     this.contestdata,
-    this.participant,
   }) : super(key: key);
+  static String formatDateMonthth(String? value) {
+    if (value != null) {
+      DateTime dateTime = DateTime.parse(value);
+      String formattedString = DateFormat('d').format(dateTime);
+
+      // Add the appropriate ordinal suffix
+      formattedString += _getDaySuffix(dateTime.day);
+
+      formattedString += ' ' + DateFormat('MMM').format(dateTime);
+      return formattedString;
+    } else {
+      return '-';
+    }
+  }
+
+  static String _getDaySuffix(int day) {
+    // if (day >= 11 && day <= 20) {
+    //   return 'th';
+    // }
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('contestdata${controller.contestChampionList}');
     return Container(
-      child: Column(
+      width: MediaQuery.of(context).size.width,
+      child: CommonCard(
         children: [
-          Row(
-            children: [
-              Text('${contestdata?.contestName} - '),
-              Text(FormatHelper.formatDateMonth(contestdata?.contestDate)),
-              // Text(contestdata?.topParticipants
-              //         ?.map((e) => e.firstName)
-              //         .join(', ') ??
-              //     ''),
-            ],
+          Padding(
+            padding: EdgeInsets.only(left: 50, top: 2),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${contestdata?.contestName}',
+                  style: AppStyles.tsSecondaryMedium14,
+                ),
+                SizedBox(
+                  height: 6,
+                ),
+                Text(
+                  '${formatDateMonthth(contestdata?.contestDate)}',
+                  style: AppStyles.tsGreyMedium14,
+                ),
+              ],
+            ),
           ),
-          Expanded(
-              child: ListView.builder(
+          SizedBox(height: 3),
+          ListView.builder(
+            shrinkWrap: true,
             itemCount: contestdata?.topParticipants?.length ?? 0,
             itemBuilder: (context, index) {
-              // final LastPaidTestZoneTopPerformer participant =
-              //     controller.contestChampionList[index].topParticipants![index];
-              return CommonCard(
-                margin: EdgeInsets.only(top: 4, left: 8, right: 8),
-                padding: EdgeInsets.only(top: 8, right: 16, left: 8, bottom: 8),
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(participant!.rank.toString()),
-                      CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(participant!.profilePhoto?.url ?? ''),
+              LastPaidTestZoneTopPerformer participant =
+                  contestdata!.topParticipants![index];
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child:
+                          // Text(
+                          //   '${participant.rank == 1 ? Image.asset(AppImages.rank1) : participant.rank == 2 ? Image.asset(AppImages.rank2) : participant.rank == 3 ? Image.asset(AppImages.rank3) : ''}',
+                          // ),
+                          Row(
+                        children: [
+                          Image.asset(
+                            participant.rank == 1
+                                ? AppImages.rank1
+                                : participant.rank == 2
+                                    ? AppImages.rank2
+                                    : participant.rank == 3
+                                        ? AppImages.rank3
+                                        : '',
+                            width: 30,
+                            height: 30,
+                          ),
+                        ],
                       ),
-                      Text(
-                          '${participant!.firstName} ${participant!.lastName}'),
-                      Text('${participant!.payout}'),
-                    ],
-                  ),
-                ],
+                    ),
+                    // SizedBox(
+                    //   width: 10,
+                    // ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 35,
+                      width: 35,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.grey.withOpacity(.25),
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: participant.profilePhoto == null
+                            ? Padding(
+                                padding: EdgeInsets.all(6),
+                                child: Image.asset(
+                                  Get.isDarkMode
+                                      ? AppImages.darkAppLogo
+                                      : AppImages.lightAppLogo,
+                                  fit: BoxFit.cover,
+                                ))
+                            : Image.network(
+                                participant.profilePhoto?.url ?? '',
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ),
+
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        width: 90,
+                        child: Text(
+                          '${participant.firstName?.toString().capitalize}',
+                          style: Theme.of(context).textTheme.tsRegular14,
+                        )),
+                    Container(
+                        alignment: Alignment.center,
+                        width: 60,
+                        child: Text(
+                          '${FormatHelper.formatNumbers(participant.payout?.round(), showDecimal: false)}',
+                          style: Theme.of(context).textTheme.tsRegular14,
+                        )),
+                  ],
+                ),
               );
             },
-          )),
+          ),
         ],
       ),
     );

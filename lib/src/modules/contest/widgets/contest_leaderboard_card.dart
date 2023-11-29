@@ -44,7 +44,9 @@ class ContestLeaderboardCard extends StatelessWidget {
                                   contestLeaderboard!
                                       .traderProfilePhoto!.isEmpty
                               ? Image.asset(
-                                  AppImages.appLogo,
+                                  Get.isDarkMode
+                                      ? AppImages.darkAppLogo
+                                      : AppImages.lightAppLogo,
                                   width: 48,
                                   height: 48,
                                 )
@@ -54,7 +56,9 @@ class ContestLeaderboardCard extends StatelessWidget {
                                   height: 48,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Image.asset(
-                                      AppImages.appLogo,
+                                      Get.isDarkMode
+                                          ? AppImages.darkAppLogo
+                                          : AppImages.lightAppLogo,
                                       width: 48,
                                       height: 48,
                                     );

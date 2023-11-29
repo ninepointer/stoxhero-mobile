@@ -56,16 +56,20 @@ class ContestTopPerformerCard extends GetView<ContestProfileController> {
                                   ),
                                 ),
                                 child: ClipOval(
-                                  child: weekly.profilePicture != null
-                                      ? Image.network(
-                                          weekly.profilePicture?.url ?? '',
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Image.asset(
-                                          AppImages.appLogo,
-                                          fit: BoxFit.cover,
-                                        ),
-                                ),
+                                    child: weekly.profilePicture != null
+                                        ? Image.network(
+                                            weekly.profilePicture?.url ?? '',
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child: Image.asset(
+                                              Get.isDarkMode
+                                                  ? AppImages.darkAppLogo
+                                                  : AppImages.lightAppLogo,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )),
                               ),
                               CommonFilledButton(
                                 backgroundColor: Get.isDarkMode

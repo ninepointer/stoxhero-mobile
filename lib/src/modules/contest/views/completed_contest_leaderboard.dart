@@ -53,7 +53,9 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                                   child: contest.image == null ||
                                           contest.image!.isEmpty
                                       ? Image.asset(
-                                          AppImages.appLogo,
+                                          Get.isDarkMode
+                                              ? AppImages.darkAppLogo
+                                              : AppImages.lightAppLogo,
                                           width: 48,
                                           height: 48,
                                         )

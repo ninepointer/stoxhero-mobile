@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import '../../../app/app.dart';
 import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';
@@ -174,11 +175,6 @@ class _DashboardViewState extends State<DashboardView> {
                           children: contestProfileController.weeklyTopPerformer
                               .asMap()
                               .entries
-
-                              ///     //condition for showing user who have earning greater then zero.
-                              //   .where((entry) {
-                              //   return entry.value.totalPayout! >= 1;
-                              //  })
                               .map((entry) {
                             int index = entry.key;
                             return ContestPortfolioWeekCard(
@@ -190,36 +186,6 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  // CommonTile(
-                  //   label: 'TestZone Champions',
-                  //   margin: EdgeInsets.only(bottom: 8, top: 0),
-                  // ),
-                  // SingleChildScrollView(
-                  //   scrollDirection: Axis.horizontal,
-                  //   child: Row(children: [
-                  //     Obx(
-                  //       () => Row(
-                  //         children: contestController.contestChampionList
-                  //             .asMap()
-                  //             .entries
-                  //             .map((entry) {
-                  //           int index = entry.key;
-                  //           // print(
-                  //           //     'champion ${entry.value.topParticipants?.map((e) => e.firstName)}');
-                  //           return Expanded(
-                  //               child: Container(
-                  //             height: 50,
-                  //             width: MediaQuery.of(context).size.width - 30,
-                  //             child: CompletedContestChampionLeaderBoard(
-                  //               index: index + 1,
-                  //               contestdata: entry.value,
-                  //             ),
-                  //           ));
-                  //         }).toList(),
-                  //       ),
-                  //     ),
-                  //   ]),
-                  // ),
 
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -386,8 +352,43 @@ class _DashboardViewState extends State<DashboardView> {
                               ),
                             ),
                           ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CommonTile(
+                    label: 'Meet Our Champions',
+                    showSeeAllButton: true,
+                    seeAllLabel: 'Join TestZone',
+                    onPressed: () {
+                      contestController.liveContestList();
+                      contestController.liveContest();
+                      Get.to(() => ContestListView());
+                    },
+                    margin: EdgeInsets.only(bottom: 0, top: 2),
+                  ),
 
-                  SizedBox(height: 8),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      // width: MediaQuery.of(context).size.width - 10,
+                      margin: EdgeInsets.only(right: 4),
+
+                      child: Row(
+                        children: contestController.contestChampionList
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                          int index = entry.key;
+                          return CompletedContestChampionLeaderBoard(
+                            index: index + 1,
+                            contestdata: entry.value,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 16),
                   CommonTile(
                     label: 'Return Summary',
                     margin: EdgeInsets.only(bottom: 8, top: 0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 import '../core.dart';
 
@@ -22,7 +23,7 @@ class AppLogoWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(100),
               child: Image.asset(
-                AppImages.appLogo,
+                AppImages.darkAppLogo,
                 height: logoSize ?? 150,
                 width: logoSize ?? 150,
               ),
