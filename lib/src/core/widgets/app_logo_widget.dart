@@ -23,7 +23,7 @@ class AppLogoWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(100),
               child: Image.asset(
-                Get.isDarkMode ? AppImages.darkAppLogo : AppImages.lightAppLogo,
+                AppImages.darkAppLogo,
                 height: logoSize ?? 150,
                 width: logoSize ?? 150,
               ),

@@ -129,7 +129,8 @@ class _HomeViewState extends State<HomeView> {
       body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+        backgroundColor:
+            Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
         onPressed: () => _updateTab(2),
         child: Icon(
           Icons.currency_rupee_rounded,
