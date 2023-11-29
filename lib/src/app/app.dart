@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:android_play_install_referrer/android_play_install_referrer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uni_links/uni_links.dart';
@@ -29,13 +30,12 @@ class _AppState extends State<App> {
   Object? err;
   bool _initialUriIsHandled = false;
 
-  StreamSubscription? sub;
-
   @override
   void initState() {
     super.initState();
     _handleInitialUri();
     _handleIncomingLinks();
+    _initializeReferrerDetails();
     _initializePushNotification();
   }
 
@@ -43,33 +43,47 @@ class _AppState extends State<App> {
     await NotificationServices.initializeNotificationService(context);
   }
 
-  Future<void> _handleInitialUri() async {
+  Future _initializeReferrerDetails() async {
+    try {
+      String referrerData;
+      ReferrerDetails referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
+      referrerData = referrerDetails.toString();
+      print('ReferrerDetails : $referrerData');
+    } catch (e) {
+      print('Error : $e');
+    }
+  }
+
+  Future _handleInitialUri() async {
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
       try {
         final uri = await getInitialUri();
         if (uri != null) {
-          print('got initial uri: $uri');
-          // if (uri.path.contains('/contest')) {
-          //   Get.toNamed(AppRoutes.contest);
-          // }
+          print('UniLinks Initial : $uri');
         }
         if (!mounted) return;
         setState(() => initialUri = uri);
       } catch (e) {
-        print('error : $e');
+        print('Error : $e');
       }
     }
   }
 
   void _handleIncomingLinks() {
+    StreamSubscription? sub;
     sub = uriLinkStream.listen((Uri? uri) {
       if (!mounted) return;
-      print('got uri: $uri');
+      print('UniLinks Incoming : $uri');
       latestUri = uri;
+      if (uri != null) {
+        final homeController = Get.find<HomeController>();
+        Get.toNamed(AppRoutes.home);
+        if (uri.path.contains('/contest')) homeController.selectedIndex(4);
+      }
     }, onError: (Object e) {
       if (!mounted) return;
-      print('got err: $err');
+      print('UniLinks Error : $err');
       latestUri = null;
     });
   }
