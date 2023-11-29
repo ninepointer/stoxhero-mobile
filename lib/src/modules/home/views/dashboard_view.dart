@@ -187,151 +187,6 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ),
 
-                  CommonTile(
-                    label: 'Meet Our Champions',
-                    showSeeAllButton: true,
-                    seeAllLabel: 'Join TestZone',
-                    onPressed: () {
-                      contestController.liveContestList();
-                      contestController.liveContest();
-                      Get.to(() => ContestListView());
-                    },
-                    margin: EdgeInsets.only(bottom: 0, top: 8),
-                  ),
-
-                  // Container(
-                  //   height: 200,
-                  //   margin: EdgeInsets.symmetric(vertical: 8),
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       // Text('Nifty Heros - 29th Nov'),
-                  //       // SizedBox(height: 8),
-                  //       CommonCard(
-                  //         children: [
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text("1"),
-                  //               CircleAvatar(
-                  //                 backgroundImage:
-                  //                     NetworkImage(AppImages.appLogo),
-                  //               ),
-                  //               Text('Nikhil Rawat'),
-                  //               Text('${FormatHelper.formatNumbers(675)}'),
-                  //             ],
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       CommonCard(
-                  //         children: [
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text("2"),
-                  //               CircleAvatar(
-                  //                 backgroundImage:
-                  //                     NetworkImage(AppImages.appLogo),
-                  //               ),
-                  //               Text('Verrrender Sharma'),
-                  //               Text('${FormatHelper.formatNumbers(450)}'),
-                  //             ],
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       CommonCard(
-                  //         children: [
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text("3"),
-                  //               CircleAvatar(
-                  //                 backgroundImage:
-                  //                     NetworkImage(AppImages.appLogo),
-                  //               ),
-                  //               Text('Niharika Jain'),
-                  //               Text('${FormatHelper.formatNumbers(337)}'),
-                  //             ],
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Container(
-                  //   height: 200,
-                  //   child: Row(
-                  //     children: [
-                  //       CommonCard(
-                  //         children: [
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text("3"),
-                  //               CircleAvatar(
-                  //                 backgroundImage:
-                  //                     NetworkImage(AppImages.appLogo),
-                  //               ),
-                  //               Text('Niharika Jain'),
-                  //               Text('${FormatHelper.formatNumbers(337)}'),
-                  //             ],
-                  //           ),
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text("3"),
-                  //               CircleAvatar(
-                  //                 backgroundImage:
-                  //                     NetworkImage(AppImages.appLogo),
-                  //               ),
-                  //               Text('Niharika Jain'),
-                  //               Text('${FormatHelper.formatNumbers(337)}'),
-                  //             ],
-                  //           ),
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text("3"),
-                  //               CircleAvatar(
-                  //                 backgroundImage:
-                  //                     NetworkImage(AppImages.appLogo),
-                  //               ),
-                  //               Text('Niharika Jain'),
-                  //               Text('${FormatHelper.formatNumbers(337)}'),
-                  //             ],
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-
-                  // contestController.contestChampionList.isEmpty
-                  //     ? Container()
-                  //     : Obx(
-                  //         () => SingleChildScrollView(
-                  //           scrollDirection: Axis.horizontal,
-                  //           child: Ro\
-                  // (
-                  //             children: contestController.contestChampionList
-                  //                 .asMap()
-                  //                 .entries
-                  //                 .map((entry) {
-                  //               int index = entry.key;
-                  //               ContestData contest = entry.value;
-
-                  //               return Container(
-                  //                 width: MediaQuery.of(context).size.width - 25,
-                  //                 child: CompletedContestChampionLeaderBoard(
-                  //                   index: index + 1,
-                  //                   contestdata: contest,
-                  //                 ),
-                  //               );
-                  //             }).toList(),
-                  //           ),
-                  //         ),
-                  //       ),
-
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -497,8 +352,43 @@ class _DashboardViewState extends State<DashboardView> {
                               ),
                             ),
                           ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CommonTile(
+                    label: 'Meet Our Champions',
+                    showSeeAllButton: true,
+                    seeAllLabel: 'Join TestZone',
+                    onPressed: () {
+                      contestController.liveContestList();
+                      contestController.liveContest();
+                      Get.to(() => ContestListView());
+                    },
+                    margin: EdgeInsets.only(bottom: 0, top: 2),
+                  ),
 
-                  SizedBox(height: 8),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      // width: MediaQuery.of(context).size.width - 10,
+                      margin: EdgeInsets.only(right: 4),
+
+                      child: Row(
+                        children: contestController.contestChampionList
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                          int index = entry.key;
+                          return CompletedContestChampionLeaderBoard(
+                            index: index + 1,
+                            contestdata: entry.value,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 16),
                   CommonTile(
                     label: 'Return Summary',
                     margin: EdgeInsets.only(bottom: 8, top: 0),
