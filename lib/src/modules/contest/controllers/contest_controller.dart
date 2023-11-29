@@ -94,8 +94,9 @@ class ContestController extends BaseController<ContestRepository> {
   final completedContestList = <CompletedContest>[].obs;
   final completedContestPnlList = <CompletedContestPnl>[].obs;
   final contestLeaderboardList = <ContestLeaderboard>[].obs;
+  final contestChampionList = <ContestData>[].obs;
   final contestOrdersList = <ContestOrderDetails>[].obs;
-  // final completedContestOrdersList = <ContestOrderDetails>[].obs;
+
   final liveContestList = <LiveContest>[].obs;
   final liveContest = LiveContest().obs;
   final livePremiumContestList = <LiveContest>[].obs;
@@ -819,6 +820,22 @@ class ContestController extends BaseController<ContestRepository> {
     isLoading(false);
   }
 
+  Future getPaidContestChampionList() async {
+    try {
+      final RepoResponse<LastPaidTestZoneTopPerformerListResponse> response =
+          await repository.getPaidContestChampionList();
+      print('responsedata ${response.data}');
+      if (response.data != null) {
+        contestChampionList(response.data!.data?.cast<ContestData>() ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('Leaderboard: ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future getContestLeaderboardList() async {
     isLeaderboardLoading(true);
     try {
@@ -1033,7 +1050,7 @@ class ContestController extends BaseController<ContestRepository> {
       exchangeInstrumentToken: inst.exchangeToken,
     );
 
-    log('addInstrument : ${data.toJson()}');
+    log('addInstrument : ${data.contractDate}');
 
     try {
       final RepoResponse<GenericResponse> response =

@@ -205,12 +205,10 @@ class ContestTradingView extends GetView<ContestController> {
                           ),
                           SizedBox(height: 8),
                           Row(
-                            
                             children: [
                               PositionDetailCardTile(
                                 label: 'Payout',
-                                value:
-                                    controller.calculatefinalPayout().round(),
+                                value: controller.calculatefinalPayout(),
                                 valueColor: controller.getValueColor(
                                   controller.calculatefinalPayout(),
                                 ),

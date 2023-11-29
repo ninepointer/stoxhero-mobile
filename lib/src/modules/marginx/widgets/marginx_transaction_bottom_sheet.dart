@@ -83,7 +83,13 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                                       tradingInstrument.exchangeToken!,
                                     ),
                                   )
-                                : tradingInstrument.lotSize.toString(),
+                                // : tradingInstrument.lotSize.toString(),
+                                : FormatHelper.formatNumbers(
+                                    controller.getInstrumentLastPrice(
+                                      tradingInstrument.instrumentToken!,
+                                      tradingInstrument.exchangeToken!,
+                                    ),
+                                  ),
                         style: AppStyles.tsSecondaryMedium16,
                       ),
                     ],

@@ -5,6 +5,7 @@ export 'analytics_monthly_pnl_overview_details_response.dart';
 export 'analytics_overview_details_response.dart';
 export 'campaign_code_response.dart';
 export 'career_response.dart';
+export 'lastPaidTestZone_top_performer_list_response.dart';
 export 'check_payment_status_response.dart';
 export 'college_contest_leaderboard_response.dart';
 export 'college_list_response.dart';

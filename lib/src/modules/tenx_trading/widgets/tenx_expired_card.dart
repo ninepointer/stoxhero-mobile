@@ -53,9 +53,10 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Subscription Price',
+                            'Price:',
                             style: AppStyles.tsSecondaryMedium12,
                           ),
+                          // Text(subscription),
                           SizedBox(width: 4),
                           Text(
                             '₹${subscription.fee}',
@@ -83,15 +84,86 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Net Payout',
+                            'Net P&L:',
                             style: AppStyles.tsSecondaryMedium12,
                           ),
                           SizedBox(width: 4),
                           Text(
-                            '₹0',
+                            '₹${subscription.npnl?.toStringAsFixed(2)}',
                             // '₹${subscription.fee}',
-                            style: AppStyles.tsSecondaryMedium14,
+                            style: AppStyles.tsSecondaryMedium14.copyWith(
+                              color: AppColors.success,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 12),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.grey.withOpacity(.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'TDS:',
+                            style: AppStyles.tsSecondaryMedium12,
                           ),
+                          // Text(subscription),
+                          SizedBox(width: 4),
+                          Text(
+                            '₹${subscription.tds}',
+                            style: AppStyles.tsSecondaryMedium14.copyWith(
+                              color: AppColors.success,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 4),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 12),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.grey.withOpacity(.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Net Payout:',
+                            style: AppStyles.tsSecondaryMedium12,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            '${subscription.payout}',
+                            // '₹${subscription.fee}',
+                            style: AppStyles.tsSecondaryMedium14.copyWith(
+                              color: AppColors.success,
+                            ),
+                          )
                         ],
                       ),
                     ),

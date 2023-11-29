@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import '../../../app/app.dart';
+import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';
 
 class DashboardView extends StatefulWidget {
   @override
@@ -27,6 +28,8 @@ class _DashboardViewState extends State<DashboardView> {
     collegeContestController = Get.find<CollegeContestController>();
     contestProfileController = Get.find<ContestProfileController>();
     contestProfileController.loadData();
+    contestController.getPaidContestChampionList();
+
     referralsController = Get.find<ReferralsController>();
     referralsController.loadData();
     DateTime now = DateTime.now();
@@ -57,8 +60,9 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
-    print('deshboard weekly ${contestProfileController.weeklyTopPerformer}');
-
+    print('champion ${contestController.contestChampionList}');
+    // print(
+    //     'champion ${contestController.contestChampionList.map((element) => element.entryFee)}');
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
@@ -186,27 +190,37 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-
+                  // CommonTile(
+                  //   label: 'TestZone Champions',
+                  //   margin: EdgeInsets.only(bottom: 8, top: 0),
+                  // ),
                   // SingleChildScrollView(
                   //   scrollDirection: Axis.horizontal,
-                  //   child: Row(
-                  //     children: [
-                  //       if (contestController
-                  //           .completedContestLeaderboardList.isNotEmpty)
-                  //         Obx(
-                  //           () => Row(
-                  //             children: contestController
-                  //                 .completedContestLeaderboardList
-                  //                 .map((contest) {
-                  //               return Container(
-                  //                   width: MediaQuery.of(context).size.width,
-                  //                   child: CompletedContestLeaderboard());
-                  //             }).toList(),
-                  //           ),
-                  //         ),
-                  //     ],
-                  //   ),
+                  //   child: Row(children: [
+                  //     Obx(
+                  //       () => Row(
+                  //         children: contestController.contestChampionList
+                  //             .asMap()
+                  //             .entries
+                  //             .map((entry) {
+                  //           int index = entry.key;
+                  //           // print(
+                  //           //     'champion ${entry.value.topParticipants?.map((e) => e.firstName)}');
+                  //           return Expanded(
+                  //               child: Container(
+                  //             height: 50,
+                  //             width: MediaQuery.of(context).size.width - 30,
+                  //             child: CompletedContestChampionLeaderBoard(
+                  //               index: index + 1,
+                  //               contestdata: entry.value,
+                  //             ),
+                  //           ));
+                  //         }).toList(),
+                  //       ),
+                  //     ),
+                  //   ]),
                   // ),
+
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -261,7 +275,7 @@ class _DashboardViewState extends State<DashboardView> {
                                         controller.userDetailsData.sId ?? '';
                                     return Container(
                                       width: MediaQuery.of(context).size.width -
-                                          30,
+                                          25,
                                       child: UpcomingFeaturedCard(
                                         userId: userId,
                                         upcomingFeatured: contest,
@@ -273,6 +287,7 @@ class _DashboardViewState extends State<DashboardView> {
                       ],
                     ),
                   ),
+
                   // collegeContestController.liveCollegeContestList.isEmpty
                   //     ? Container()
                   //     : Obx(
@@ -315,7 +330,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 String userId =
                                     controller.userDetailsData.sId ?? '';
                                 return Container(
-                                  width: MediaQuery.of(context).size.width - 30,
+                                  width: MediaQuery.of(context).size.width - 25,
                                   child: LiveContestCard(
                                     userId: userId,
                                     contest: contest,
@@ -732,9 +747,9 @@ class _DashboardViewState extends State<DashboardView> {
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 style: ElevatedButton.styleFrom(
-                                  primary:
+                                  backgroundColor:
                                       Colors.lightGreen, // Background color
-                                  onPrimary: Colors.white, // Text color
+                                  foregroundColor: Colors.white, // Text color
                                   elevation: 8.0, // Elevation (shadow)
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(

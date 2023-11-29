@@ -57,7 +57,9 @@ class ContestSearchSymbolView extends GetView<ContestController> {
                       itemCount: controller.tradingInstruments.length,
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
-                        void openBottomSheet(BuildContext context, TransactionType type) {
+                        void openBottomSheet(
+                            BuildContext context, TransactionType type) {
+                          controller.addInstrument(data);
                           FocusScope.of(context).unfocus();
                           num lastPrice = controller.getInstrumentLastPrice(
                             data.instrumentToken ?? 0,
@@ -72,24 +74,29 @@ class ContestSearchSymbolView extends GetView<ContestController> {
                             exchangeToken: data.exchangeToken,
                             instrumentToken: data.instrumentToken,
                             lastPrice: lastPrice,
-                          ); 
+                          );
                           BottomSheetHelper.openBottomSheet(
                             context: context,
                             child: ContestTransactionBottomSheet(
                               type: type,
                               tradingInstrument: tradingIntrument,
-                              marginRequired: controller.getMarginRequired(type, tradingIntrument),
+                              marginRequired: controller.getMarginRequired(
+                                  type, tradingIntrument),
                             ),
                           );
                         }
+
                         return TradingInstrumentSearchCard(
                           tradingInstrument: data,
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),
-                          buyOnTap: () => openBottomSheet(context, TransactionType.buy),
-                          sellOnTap: () => openBottomSheet(context, TransactionType.sell),
-                          removeOnTap: () => controller.removeInstrument(data.instrumentToken),
+                          buyOnTap: () =>
+                              openBottomSheet(context, TransactionType.buy),
+                          sellOnTap: () =>
+                              openBottomSheet(context, TransactionType.sell),
+                          removeOnTap: () =>
+                              controller.removeInstrument(data.instrumentToken),
                           addOnTap: () => controller.addInstrument(data),
                         );
                       },
