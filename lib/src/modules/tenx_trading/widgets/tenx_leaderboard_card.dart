@@ -39,12 +39,15 @@ class TenxLeaderboardCard extends StatelessWidget {
                         child: ClipOval(
                           child: leaderboard?.profilePic == null ||
                                   leaderboard!.profilePic!.isEmpty
-                              ? Image.asset(
-                                  Get.isDarkMode
-                                      ? AppImages.darkAppLogo
-                                      : AppImages.lightAppLogo,
-                                  width: 48,
-                                  height: 48,
+                              ? Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Image.asset(
+                                    Get.isDarkMode
+                                        ? AppImages.darkAppLogo
+                                        : AppImages.lightAppLogo,
+                                    width: 48,
+                                    height: 48,
+                                  ),
                                 )
                               : Image.network(
                                   leaderboard?.profilePic ?? '',

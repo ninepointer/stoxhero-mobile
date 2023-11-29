@@ -35,22 +35,24 @@ class ContestProfileView extends GetView<ContestProfileController> {
                           ),
                         ),
                         child: ClipOval(
-                          child: controller.contestProfileData.value
-                                      .profilePicture !=
-                                  null
-                              ? Image.network(
-                                  controller.contestProfileData.value
-                                          .profilePicture?.url ??
-                                      '',
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.asset(
-                                  Get.isDarkMode
-                                      ? AppImages.darkAppLogo
-                                      : AppImages.lightAppLogo,
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
+                            child: controller.contestProfileData.value
+                                        .profilePicture !=
+                                    null
+                                ? Image.network(
+                                    controller.contestProfileData.value
+                                            .profilePicture?.url ??
+                                        '',
+                                    fit: BoxFit.cover,
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Image.asset(
+                                      Get.isDarkMode
+                                          ? AppImages.darkAppLogo
+                                          : AppImages.lightAppLogo,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
                       ),
                       SizedBox(height: 8),
                       Text(

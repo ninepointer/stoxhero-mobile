@@ -200,69 +200,111 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
 
                   // Container(
+                  //   height: 200,
                   //   margin: EdgeInsets.symmetric(vertical: 8),
-                  //   child: SingleChildScrollView(
-                  //     scrollDirection: Axis.horizontal,
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text('Nifty Heros - 29th Nov'),
-                  //         SizedBox(height: 8),
-                  //         CommonCard(
-                  //           children: [
-                  //             Row(
-                  //               mainAxisAlignment:
-                  //                   MainAxisAlignment.spaceBetween,
-                  //               children: [
-                  //                 Text("1"),
-                  //                 CircleAvatar(
-                  //                   backgroundImage:
-                  //                       NetworkImage(AppImages.appLogo),
-                  //                 ),
-                  //                 Text('Nikhil Rawat'),
-                  //                 Text('${FormatHelper.formatNumbers(675)}'),
-                  //               ],
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         CommonCard(
-                  //           children: [
-                  //             Row(
-                  //               mainAxisAlignment:
-                  //                   MainAxisAlignment.spaceBetween,
-                  //               children: [
-                  //                 Text("2"),
-                  //                 CircleAvatar(
-                  //                   backgroundImage:
-                  //                       NetworkImage(AppImages.appLogo),
-                  //                 ),
-                  //                 Text('Verrrender Sharma'),
-                  //                 Text('${FormatHelper.formatNumbers(450)}'),
-                  //               ],
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         CommonCard(
-                  //           children: [
-                  //             Row(
-                  //               mainAxisAlignment:
-                  //                   MainAxisAlignment.spaceBetween,
-                  //               children: [
-                  //                 Text("3"),
-                  //                 CircleAvatar(
-                  //                   backgroundImage:
-                  //                       NetworkImage(AppImages.appLogo),
-                  //                 ),
-                  //                 Text('Niharika Jain'),
-                  //                 Text('${FormatHelper.formatNumbers(337)}'),
-                  //               ],
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ],
-                  //     ),
+                  //   child: Row(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       // Text('Nifty Heros - 29th Nov'),
+                  //       // SizedBox(height: 8),
+                  //       CommonCard(
+                  //         children: [
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Text("1"),
+                  //               CircleAvatar(
+                  //                 backgroundImage:
+                  //                     NetworkImage(AppImages.appLogo),
+                  //               ),
+                  //               Text('Nikhil Rawat'),
+                  //               Text('${FormatHelper.formatNumbers(675)}'),
+                  //             ],
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       CommonCard(
+                  //         children: [
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Text("2"),
+                  //               CircleAvatar(
+                  //                 backgroundImage:
+                  //                     NetworkImage(AppImages.appLogo),
+                  //               ),
+                  //               Text('Verrrender Sharma'),
+                  //               Text('${FormatHelper.formatNumbers(450)}'),
+                  //             ],
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       CommonCard(
+                  //         children: [
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Text("3"),
+                  //               CircleAvatar(
+                  //                 backgroundImage:
+                  //                     NetworkImage(AppImages.appLogo),
+                  //               ),
+                  //               Text('Niharika Jain'),
+                  //               Text('${FormatHelper.formatNumbers(337)}'),
+                  //             ],
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ],
                   //   ),
                   // ),
+                  Container(
+                    height: 200,
+                    child: Row(
+                      children: [
+                        CommonCard(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("3"),
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(AppImages.appLogo),
+                                ),
+                                Text('Niharika Jain'),
+                                Text('${FormatHelper.formatNumbers(337)}'),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("3"),
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(AppImages.appLogo),
+                                ),
+                                Text('Niharika Jain'),
+                                Text('${FormatHelper.formatNumbers(337)}'),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("3"),
+                                CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(AppImages.appLogo),
+                                ),
+                                Text('Niharika Jain'),
+                                Text('${FormatHelper.formatNumbers(337)}'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
 
                   // contestController.contestChampionList.isEmpty
                   //     ? Container()

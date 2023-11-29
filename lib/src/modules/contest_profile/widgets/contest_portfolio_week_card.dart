@@ -34,18 +34,20 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                       ),
                     ),
                     child: ClipOval(
-                      child: performer?.profilePicture != null
-                          ? Image.network(
-                              performer?.profilePicture?.url ?? '',
-                              fit: BoxFit.cover,
-                            )
-                          : Image.asset(
-                              Get.isDarkMode
-                                  ? AppImages.darkAppLogo
-                                  : AppImages.lightAppLogo,
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+                        child: performer?.profilePicture != null
+                            ? Image.network(
+                                performer?.profilePicture?.url ?? '',
+                                fit: BoxFit.cover,
+                              )
+                            : Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Image.asset(
+                                  Get.isDarkMode
+                                      ? AppImages.darkAppLogo
+                                      : AppImages.lightAppLogo,
+                                  fit: BoxFit.cover,
+                                ),
+                              )),
                   ),
                 ],
               ),

@@ -35,12 +35,14 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 child: ClipOval(
                   child: controller.userDetails.value.profilePhoto == null
-                      ? Image.asset(
-                          Get.isDarkMode
-                              ? AppImages.darkAppLogo
-                              : AppImages.lightAppLogo,
-                          fit: BoxFit.cover,
-                        )
+                      ? Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Image.asset(
+                            Get.isDarkMode
+                                ? AppImages.darkAppLogo
+                                : AppImages.lightAppLogo,
+                            fit: BoxFit.cover,
+                          ))
                       : Image.network(
                           controller.userDetails.value.profilePhoto?.url ?? '',
                           fit: BoxFit.cover,
