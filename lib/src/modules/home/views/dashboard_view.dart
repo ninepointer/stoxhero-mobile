@@ -199,9 +199,6 @@ class _DashboardViewState extends State<DashboardView> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
 
-                  //segg
-                  //shrhbrs
-                  //shrh
                   // Container(
                   //   margin: EdgeInsets.symmetric(vertical: 8),
                   //   child: SingleChildScrollView(
@@ -272,7 +269,8 @@ class _DashboardViewState extends State<DashboardView> {
                   //     : Obx(
                   //         () => SingleChildScrollView(
                   //           scrollDirection: Axis.horizontal,
-                  //           child: Row(
+                  //           child: Ro\
+                  // (
                   //             children: contestController.contestChampionList
                   //                 .asMap()
                   //                 .entries

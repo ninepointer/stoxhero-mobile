@@ -16,42 +16,63 @@ class LiveMarginxCard extends GetView<MarginXController> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  // padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    top: 8,
+                  ),
                   child: Text(
                     marginx?.marginXName ?? '',
                     style: AppStyles.tsSecondaryMedium14,
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  BottomSheetHelper.openBottomSheet(
-                    context: context,
-                    child: MarginxInfoBottomSheet(),
-                  );
-                },
-                icon: Icon(
-                  Icons.info_outline_rounded,
+              //    IconButton(
+              //   onPressed: () {
+              //     BottomSheetHelper.openBottomSheet(
+              //       context: context,
+              //       child: MarginxInfoBottomSheet(),
+              //     );
+              //   },
+              //   icon: Icon(
+              //     Icons.info_outline_rounded,
+              //     size: 20,
+              //   ),
+              // ),
+              Container(
+                height: 15, // Adjust the height as needed
+                child: InkWell(
+                  onTap: () {
+                    BottomSheetHelper.openBottomSheet(
+                      context: context,
+                      child: MarginxInfoBottomSheet(),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Icon(
+                      Icons.info,
+                      size: 20.0,
+                      color: Colors.grey, // Icon color
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
               Visibility(
                 visible: marginx?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.success,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
                   child: Text(
                     'Nifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
@@ -60,13 +81,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
                 visible: marginx?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
                   child: Text(
                     'Bank Nifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
@@ -75,164 +92,163 @@ class LiveMarginxCard extends GetView<MarginXController> {
                 visible: marginx?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.info,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
                   child: Text(
                     'Finnifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
               SizedBox(width: 4),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.danger,
-                  borderRadius: BorderRadius.circular(100),
-                ),
                 child: Text(
                   'Day',
-                  style: AppStyles.tsWhiteMedium12,
+                  style: AppStyles.tsGreyMedium12,
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 8),
-        Divider(thickness: 1, height: 0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Padding(padding: EdgeInsets.only(left: 0)),
+            Image.asset(
+              AppImages.contestTrophy,
+              width: 30,
+              height: 20,
+            ),
+            Text(
+              '% of your Investment',
+              style: Theme.of(context).textTheme.tsMedium12,
+            ),
+          ],
+        ),
         SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'No. of Seats left',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Virtual Margin',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        FormatHelper.formatNumbers(
+                            marginx?.marginXTemplate?.portfolioValue,
+                            decimal: 0),
+                        style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Started',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Entry Fee',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        FormatHelper.formatNumbers(
+                            marginx?.marginXTemplate?.entryFee,
+                            decimal: 0),
+                        style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text('Starts:',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                          FormatHelper.formatDateTimeWithoutYearToIST(
+                              marginx?.startTime),
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Spots left:',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
                           controller
                               .calculateSeatsLeft(
                                 marginx?.maxParticipants ?? 0,
                                 marginx?.participants?.length ?? 0,
                               )
                               .toString(),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Image.asset(
-                        AppImages.contestTrophy,
-                        width: 36,
-                      ),
-                      Text(
-                        'Reward',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      Text(
-                        '% of your Investment',
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
                     ],
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Remaining Time',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          'Started',
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(
-                        'Starts',
-                        style: AppStyles.tsGreyMedium12,
+                      Text('Ends:',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                      SizedBox(
+                        width: 2,
                       ),
-                      SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatDateTimeToIST(marginx?.startTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Ends',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatDateTimeToIST(marginx?.endTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
+                          FormatHelper.formatDateTimeWithoutYearToIST(
+                              marginx?.endTime),
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Investment',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatNumbers(marginx?.marginXTemplate?.entryFee, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Virtual Margin Money',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatNumbers(marginx?.marginXTemplate?.portfolioValue, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 4),
+              Padding(padding: EdgeInsets.only(bottom: 8)),
             ],
           ),
         ),
@@ -274,7 +290,8 @@ class LiveMarginxCard extends GetView<MarginXController> {
                       }
                     : () {
                         if (controller.calculateSeatsLeft(
-                                marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) ==
+                                marginx?.maxParticipants ?? 0,
+                                marginx?.participants?.length ?? 0) ==
                             0) {
                           SnackbarHelper.showSnackbar('Marginx is Full');
                         } else {
@@ -283,15 +300,20 @@ class LiveMarginxCard extends GetView<MarginXController> {
                             child: PaymentBottomSheet(
                               productType: ProductType.marginx,
                               productId: marginx?.id ?? '',
-                              buyItemPrice: marginx?.marginXTemplate?.entryFee ?? 0,
-                              onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                              buyItemPrice:
+                                  marginx?.marginXTemplate?.entryFee ?? 0,
+                              onPaymentSuccess:
+                                  controller.loadDataAfterPaymentSuccess,
                               onSubmit: () {
                                 Get.back();
-                                var walletController = Get.find<WalletController>();
+                                var walletController =
+                                    Get.find<WalletController>();
                                 var data = {
                                   "bonusRedemption": 0,
-                                  "coupon": walletController.couponCodeTextController.text,
-                                  "entryFee": walletController.subscriptionAmount.value,
+                                  "coupon": walletController
+                                      .couponCodeTextController.text,
+                                  "entryFee":
+                                      walletController.subscriptionAmount.value,
                                   "marginXId": marginx?.id,
                                   "marginXName": marginx?.marginXName,
                                 };
@@ -310,7 +332,8 @@ class LiveMarginxCard extends GetView<MarginXController> {
                   child: Text(
                     controller.checkIfLivePurchased(marginx) &&
                             controller.calculateSeatsLeft(
-                                    marginx?.maxParticipants ?? 0, marginx?.participants?.length ?? 0) >
+                                    marginx?.maxParticipants ?? 0,
+                                    marginx?.participants?.length ?? 0) >
                                 0
                         ? 'Start Trading'
                         : 'Pay Now',
@@ -328,7 +351,8 @@ class LiveMarginxCard extends GetView<MarginXController> {
                   controller.getShareMarginX(false);
                   String url = 'https://stoxhero.com/marginxs';
                   Clipboard.setData(ClipboardData(text: url));
-                  SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                  SnackbarHelper.showSnackbar(
+                      'Link Copied, Share with your friends.');
                 },
                 child: Container(
                   alignment: Alignment.center,

@@ -93,7 +93,8 @@ class _UpComingCollegeContestCardState
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    // padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: EdgeInsets.only(left: 12, right: 12, top: 8),
                     child: Text(
                       widget.contest?.contestName ?? '-',
                       style: AppStyles.tsSecondaryMedium14,
@@ -113,197 +114,149 @@ class _UpComingCollegeContestCardState
                       ),
                     ),
                   ),
-                )
+                ),
+                //                 Container(
+                //   height: 15, // Adjust the height as needed
+                //   child: InkWell(
+                //     onTap: () {
+                //       BottomSheetHelper.openBottomSheet(
+                //         context: context,
+                //         child: RewardTableBottomSheet(
+                //           upcomingContest: widget.contest,
+                //         ),
+                //       );
+                //     },
+                //     child: Container(
+                //       padding: EdgeInsets.only(right: 10),
+                //       child: Icon(
+                //         Icons.info,
+                //         size: 20.0,
+                //         color: Colors.grey, // Icon color
+                //       ),
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
             child: Row(
               children: [
                 Visibility(
                   visible: widget.contest?.isNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: AppColors.success,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     child: Text(
                       'Nifty',
-                      style: AppStyles.tsWhiteMedium12,
+                      style: AppStyles.tsGreyMedium12,
                     ),
                   ),
                 ),
-                SizedBox(width: 4),
+                SizedBox(width: 2),
                 Visibility(
                   visible: widget.contest?.isBankNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     child: Text(
                       'Bank Nifty',
-                      style: AppStyles.tsWhiteMedium12,
+                      style: AppStyles.tsGreyMedium12,
                     ),
                   ),
                 ),
-                SizedBox(width: 4),
+                SizedBox(width: 2),
                 Visibility(
                   visible: widget.contest?.isFinNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: AppColors.info,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     child: Text(
                       'FinNifty',
-                      style: AppStyles.tsWhiteMedium12,
+                      style: AppStyles.tsGreyMedium12,
                     ),
                   ),
                 ),
-                SizedBox(width: 4),
+                SizedBox(width: 2),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.danger,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   child: Text(
                     widget.contest?.contestExpiry ?? '',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 8),
-          Divider(thickness: 1, height: 0),
+          SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                AppImages.contestTrophy,
+                width: 30,
+                height: 20,
+              ),
+              GestureDetector(
+                child: Row(children: [
+                  Row(children: [
+                    Text(
+                      '${widget.contest?.payoutPercentage}% of the Net P&L',
+                      style: Theme.of(context).textTheme.tsGreyRegular12,
+                    ),
+                    if (widget.contest?.payoutCapPercentage != null)
+                      Text(
+                        ' (Upto ${controller.getPaidCapAmount(
+                          widget.contest?.entryFee == 0
+                              ? widget.contest?.portfolio?.portfolioValue ?? 0
+                              : widget.contest?.entryFee ?? 0,
+                          widget.contest?.payoutCapPercentage ?? 0,
+                        )})',
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                      ),
+                  ])
+                ]),
+              )
+            ],
+          ),
           SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'No. of Seats left',
-                            style: AppStyles.tsGreyMedium12,
-                          ),
-                          SizedBox(height: 2),
-                          Text(
-                            controller
-                                .calculateSeatsLeft(
-                                  widget.contest?.maxParticipants ?? 0,
-                                  widget.contest?.participants?.length ?? 0,
-                                )
-                                .toString(),
-                            style: Theme.of(context).textTheme.tsMedium12,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Image.asset(
-                          AppImages.contestTrophy,
-                          width: 36,
-                        ),
-                        Text(
-                          'Reward',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${widget.contest?.payoutPercentage}% of the Net P&L',
-                              style: Theme.of(context).textTheme.tsMedium12,
-                            ),
-                            if (widget.contest?.payoutCapPercentage != null)
-                              Text(
-                                ' (Upto ${controller.getPaidCapAmount(
-                                  widget.contest?.entryFee == 0
-                                      ? widget.contest?.portfolio
-                                              ?.portfolioValue ??
-                                          0
-                                      : widget.contest?.entryFee ?? 0,
-                                  widget.contest?.payoutCapPercentage ?? 0,
-                                )})',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Starts in',
-                            style: AppStyles.tsGreyMedium12,
-                            textAlign: TextAlign.end,
-                          ),
-                          SizedBox(height: 2),
-                          Text(
-                            '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
-                            style: Theme.of(context).textTheme.tsMedium12,
-                            textAlign: TextAlign.end,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Starts',
+                          'Virtual Margin',
                           style: AppStyles.tsGreyMedium12,
                         ),
                         SizedBox(height: 2),
                         Text(
-                          FormatHelper.formatDateTimeToIST(
-                              widget.contest?.contestStartTime),
+                          FormatHelper.formatNumbers(
+                              widget.contest?.portfolio?.portfolioValue,
+                              decimal: 0),
                           style: Theme.of(context).textTheme.tsMedium12,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                          // style: Theme.of(context).textTheme.tsMedium12,
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Ends',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          FormatHelper.formatDateTimeToIST(
-                              widget.contest?.contestEndTime),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Entry Fee',
@@ -317,24 +270,47 @@ class _UpComingCollegeContestCardState
                                   widget.contest?.entryFee,
                                   decimal: 0),
                           style: Theme.of(context).textTheme.tsMedium12,
+                          textAlign: TextAlign.end,
                         ),
                       ],
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                  ],
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Starts:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestStartTime)}',
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Rubik'),
+                    ),
+                    Row(
                       children: [
                         Text(
-                          'Virtual Margin Money',
-                          style: AppStyles.tsGreyMedium12,
+                          'Spots left:',
+                          style: Theme.of(context).textTheme.tsRegular12,
                         ),
-                        SizedBox(height: 2),
                         Text(
-                          FormatHelper.formatNumbers(
-                              widget.contest?.portfolio?.portfolioValue,
-                              decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
+                          '${controller.calculateSeatsLeft(
+                                widget.contest?.maxParticipants ?? 0,
+                                widget.contest?.participants?.length ?? 0,
+                              ).toString()}',
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik'),
+                        )
                       ],
+                    ),
+                    Text(
+                      'Ends:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestEndTime)}',
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Rubik'),
                     ),
                   ],
                 ),

@@ -45,7 +45,9 @@ class ContestProfileView extends GetView<ContestProfileController> {
                                   fit: BoxFit.cover,
                                 )
                               : Image.asset(
-                                  AppImages.appLogo,
+                                  Get.isDarkMode
+                                      ? AppImages.darkAppLogo
+                                      : AppImages.lightAppLogo,
                                   fit: BoxFit.cover,
                                 ),
                         ),

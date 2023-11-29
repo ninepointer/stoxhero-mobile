@@ -37,9 +37,12 @@ class TenxLeaderboardCard extends StatelessWidget {
                           ),
                         ),
                         child: ClipOval(
-                          child: leaderboard?.profilePic == null || leaderboard!.profilePic!.isEmpty
+                          child: leaderboard?.profilePic == null ||
+                                  leaderboard!.profilePic!.isEmpty
                               ? Image.asset(
-                                  AppImages.appLogo,
+                                  Get.isDarkMode
+                                      ? AppImages.darkAppLogo
+                                      : AppImages.lightAppLogo,
                                   width: 48,
                                   height: 48,
                                 )
@@ -92,9 +95,10 @@ class TenxLeaderboardCard extends StatelessWidget {
                             leaderboard?.earnings,
                             decimal: 0,
                           )}',
-                          style: Theme.of(context).textTheme.tsMedium14.copyWith(
-                                color: AppColors.success,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.tsMedium14.copyWith(
+                                    color: AppColors.success,
+                                  ),
                         ),
                       ],
                     ),

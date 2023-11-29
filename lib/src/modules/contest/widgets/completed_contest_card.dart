@@ -54,20 +54,6 @@ class CompletedContestCard extends GetView<ContestController> {
                   ),
                 ),
               ),
-              Visibility(
-                visible: contest?.featured == true,
-                child: Container(
-                  padding: EdgeInsets.all(18),
-                  foregroundDecoration: CommonTriangleCard(
-                    badgeColor: AppColors.success,
-                    badgeSize: 62,
-                    textSpan: TextSpan(
-                      text: 'Featured',
-                      style: AppStyles.tsWhiteMedium12,
-                    ),
-                  ),
-                ),
-              ),
               Container(
                 height: 15, // Adjust the height as needed
                 child: InkWell(
@@ -89,7 +75,21 @@ class CompletedContestCard extends GetView<ContestController> {
                     ),
                   ),
                 ),
-              )
+              ),
+              Visibility(
+                visible: contest?.featured == true,
+                child: Container(
+                  padding: EdgeInsets.all(18),
+                  foregroundDecoration: CommonTriangleCard(
+                    badgeColor: AppColors.success,
+                    badgeSize: 62,
+                    textSpan: TextSpan(
+                      text: 'Featured',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -184,9 +184,6 @@ class CompletedContestCard extends GetView<ContestController> {
             )
           ],
         ),
-        SizedBox(height: 4),
-        // Divider(thickness: 1, height: 0),
-
         SizedBox(height: 4),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),

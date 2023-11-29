@@ -39,20 +39,6 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ),
               ),
-              Visibility(
-                visible: contest?.featured == true,
-                child: Container(
-                  padding: EdgeInsets.all(18),
-                  foregroundDecoration: CommonTriangleCard(
-                    badgeColor: AppColors.success,
-                    badgeSize: 62,
-                    textSpan: TextSpan(
-                      text: 'Featured',
-                      style: AppStyles.tsWhiteMedium12,
-                    ),
-                  ),
-                ),
-              ),
               Container(
                 height: 15, // Adjust the height as needed
                 child: InkWell(
@@ -74,6 +60,20 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ),
               ),
+              Visibility(
+                visible: contest?.featured == true,
+                child: Container(
+                  padding: EdgeInsets.all(18),
+                  foregroundDecoration: CommonTriangleCard(
+                    badgeColor: AppColors.success,
+                    badgeSize: 62,
+                    textSpan: TextSpan(
+                      text: 'Featured',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -85,10 +85,6 @@ class LiveContestCard extends GetView<ContestController> {
                 visible: contest?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  // decoration: BoxDecoration(
-                  //   color: AppColors.success,
-                  //   borderRadius: BorderRadius.circular(100),
-                  // ),
                   child: Text(
                     'Nifty',
                     style: AppStyles.tsGreyMedium12,
@@ -100,38 +96,26 @@ class LiveContestCard extends GetView<ContestController> {
                 visible: contest?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  // decoration: BoxDecoration(
-                  //   color: AppColors.secondary,
-                  //   borderRadius: BorderRadius.circular(100),
-                  // ),
                   child: Text(
                     'Bank Nifty',
                     style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
-              // SizedBox(width: 4),
+
               Visibility(
                 visible: contest?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  // decoration: BoxDecoration(
-                  //   color: AppColors.info,
-                  //   borderRadius: BorderRadius.circular(100),
-                  // ),
                   child: Text(
                     'FinNifty',
                     style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
-              // SizedBox(width: 4),
+
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                // decoration: BoxDecoration(
-                //   color: AppColors.danger,
-                //   borderRadius: BorderRadius.circular(100),
-                // ),
                 child: Text(
                   contest?.contestExpiry ?? '',
                   style: AppStyles.tsGreyMedium12,

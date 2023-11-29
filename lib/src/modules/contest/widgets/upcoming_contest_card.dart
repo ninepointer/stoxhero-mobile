@@ -116,20 +116,6 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: widget.contest?.featured == true,
-                  child: Container(
-                    padding: EdgeInsets.all(18),
-                    foregroundDecoration: CommonTriangleCard(
-                      badgeColor: AppColors.success,
-                      badgeSize: 62,
-                      textSpan: TextSpan(
-                        text: 'Featured',
-                        style: AppStyles.tsWhiteMedium12,
-                      ),
-                    ),
-                  ),
-                ),
                 Container(
                   height: 15, // Adjust the height as needed
                   child: InkWell(
@@ -150,7 +136,21 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       ),
                     ),
                   ),
-                )
+                ),
+                Visibility(
+                  visible: widget.contest?.featured == true,
+                  child: Container(
+                    padding: EdgeInsets.all(18),
+                    foregroundDecoration: CommonTriangleCard(
+                      badgeColor: AppColors.success,
+                      badgeSize: 62,
+                      textSpan: TextSpan(
+                        text: 'Featured',
+                        style: AppStyles.tsWhiteMedium12,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -212,14 +212,6 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 height: 20,
               ),
               GestureDetector(
-                onTap: () {
-                  BottomSheetHelper.openBottomSheet(
-                    context: context,
-                    child: RewardTableBottomSheet(
-                      upcomingContest: widget.contest,
-                    ),
-                  );
-                },
                 child: Row(children: [
                   if (widget.contest?.payoutType == 'Reward') ...[
                     Text(

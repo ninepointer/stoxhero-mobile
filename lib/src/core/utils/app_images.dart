@@ -17,4 +17,8 @@ class AppImages {
   static const String contestLeaderboard = "$imagesDir/contest_leaderboard.png";
   static const String trophy = '$imagesDir/trophy.png';
   static const String diya = '$imagesDir/diya.png';
+  static const String dartAppName = '$imagesDir/Frame 2.png';
+  static const String lightAppName = '$imagesDir/Frame 1.png';
+  static const String darkAppLogo = '$imagesDir/Group 2.png';
+  static const String lightAppLogo = '$imagesDir/Frame 5.png';
 }
