@@ -5,6 +5,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
   final int? index;
   final ContestData? contestdata;
   final LastPaidTestZoneTopPerformer? participant;
+
   const CompletedContestChampionLeaderBoard({
     Key? key,
     this.index,
@@ -14,47 +15,43 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
-    print('contestdata${controller.contestChampionList}');
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text('${contestdata?.contestName} - '),
-              Text(FormatHelper.formatDateMonth(contestdata?.contestDate)),
-              // Text(contestdata?.topParticipants
-              //         ?.map((e) => e.firstName)
-              //         .join(', ') ??
-              //     ''),
-            ],
-          ),
+          Text(
+              '${contestdata?.contestName} - ${FormatHelper.formatDateMonth(contestdata?.contestDate)}'),
+          SizedBox(height: 8),
           Expanded(
-              child: ListView.builder(
-            itemCount: contestdata?.topParticipants?.length ?? 0,
-            itemBuilder: (context, index) {
-              // final LastPaidTestZoneTopPerformer participant =
-              //     controller.contestChampionList[index].topParticipants![index];
-              return CommonCard(
-                margin: EdgeInsets.only(top: 4, left: 8, right: 8),
-                padding: EdgeInsets.only(top: 8, right: 16, left: 8, bottom: 8),
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(participant!.rank.toString()),
-                      CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(participant!.profilePhoto?.url ?? ''),
-                      ),
-                      Text(
-                          '${participant!.firstName} ${participant!.lastName}'),
-                      Text('${participant!.payout}'),
-                    ],
-                  ),
-                ],
-              );
-            },
-          )),
+            child: ListView.builder(
+              itemCount: contestdata?.topParticipants?.length ?? 0,
+              itemBuilder: (context, index) {
+                LastPaidTestZoneTopPerformer participant =
+                    contestdata!.topParticipants![index];
+
+                return CommonCard(
+                  margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(participant.rank.toString()),
+                        CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(participant.profilePhoto?.url ?? ''),
+                        ),
+                        Text(
+                            '${participant.firstName} ${participant.lastName}'),
+                        Text('${participant.payout}'),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

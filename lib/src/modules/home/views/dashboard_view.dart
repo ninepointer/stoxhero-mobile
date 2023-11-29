@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import '../../../app/app.dart';
 import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';
@@ -174,11 +175,6 @@ class _DashboardViewState extends State<DashboardView> {
                           children: contestProfileController.weeklyTopPerformer
                               .asMap()
                               .entries
-
-                              ///     //condition for showing user who have earning greater then zero.
-                              //   .where((entry) {
-                              //   return entry.value.totalPayout! >= 1;
-                              //  })
                               .map((entry) {
                             int index = entry.key;
                             return ContestPortfolioWeekCard(
@@ -190,36 +186,111 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  // CommonTile(
-                  //   label: 'TestZone Champions',
-                  //   margin: EdgeInsets.only(bottom: 8, top: 0),
-                  // ),
-                  // SingleChildScrollView(
-                  //   scrollDirection: Axis.horizontal,
-                  //   child: Row(children: [
-                  //     Obx(
-                  //       () => Row(
-                  //         children: contestController.contestChampionList
-                  //             .asMap()
-                  //             .entries
-                  //             .map((entry) {
-                  //           int index = entry.key;
-                  //           // print(
-                  //           //     'champion ${entry.value.topParticipants?.map((e) => e.firstName)}');
-                  //           return Expanded(
-                  //               child: Container(
-                  //             height: 50,
-                  //             width: MediaQuery.of(context).size.width - 30,
-                  //             child: CompletedContestChampionLeaderBoard(
-                  //               index: index + 1,
-                  //               contestdata: entry.value,
+
+                  CommonTile(
+                    label: 'Meet Our Champions',
+                    showSeeAllButton: true,
+                    seeAllLabel: 'Join TestZone',
+                    onPressed: () {
+                      contestController.liveContestList();
+                      contestController.liveContest();
+                      Get.to(() => ContestListView());
+                    },
+                    margin: EdgeInsets.only(bottom: 0, top: 8),
+                  ),
+
+                  //segg
+                  //shrhbrs
+                  //shrh
+                  // Container(
+                  //   margin: EdgeInsets.symmetric(vertical: 8),
+                  //   child: SingleChildScrollView(
+                  //     scrollDirection: Axis.horizontal,
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text('Nifty Heros - 29th Nov'),
+                  //         SizedBox(height: 8),
+                  //         CommonCard(
+                  //           children: [
+                  //             Row(
+                  //               mainAxisAlignment:
+                  //                   MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Text("1"),
+                  //                 CircleAvatar(
+                  //                   backgroundImage:
+                  //                       NetworkImage(AppImages.appLogo),
+                  //                 ),
+                  //                 Text('Nikhil Rawat'),
+                  //                 Text('${FormatHelper.formatNumbers(675)}'),
+                  //               ],
                   //             ),
-                  //           ));
-                  //         }).toList(),
-                  //       ),
+                  //           ],
+                  //         ),
+                  //         CommonCard(
+                  //           children: [
+                  //             Row(
+                  //               mainAxisAlignment:
+                  //                   MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Text("2"),
+                  //                 CircleAvatar(
+                  //                   backgroundImage:
+                  //                       NetworkImage(AppImages.appLogo),
+                  //                 ),
+                  //                 Text('Verrrender Sharma'),
+                  //                 Text('${FormatHelper.formatNumbers(450)}'),
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         CommonCard(
+                  //           children: [
+                  //             Row(
+                  //               mainAxisAlignment:
+                  //                   MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Text("3"),
+                  //                 CircleAvatar(
+                  //                   backgroundImage:
+                  //                       NetworkImage(AppImages.appLogo),
+                  //                 ),
+                  //                 Text('Niharika Jain'),
+                  //                 Text('${FormatHelper.formatNumbers(337)}'),
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ],
                   //     ),
-                  //   ]),
+                  //   ),
                   // ),
+
+                  // contestController.contestChampionList.isEmpty
+                  //     ? Container()
+                  //     : Obx(
+                  //         () => SingleChildScrollView(
+                  //           scrollDirection: Axis.horizontal,
+                  //           child: Row(
+                  //             children: contestController.contestChampionList
+                  //                 .asMap()
+                  //                 .entries
+                  //                 .map((entry) {
+                  //               int index = entry.key;
+                  //               ContestData contest = entry.value;
+
+                  //               return Container(
+                  //                 width: MediaQuery.of(context).size.width - 25,
+                  //                 child: CompletedContestChampionLeaderBoard(
+                  //                   index: index + 1,
+                  //                   contestdata: contest,
+                  //                 ),
+                  //               );
+                  //             }).toList(),
+                  //           ),
+                  //         ),
+                  //       ),
 
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
