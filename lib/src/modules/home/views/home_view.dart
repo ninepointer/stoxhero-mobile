@@ -144,6 +144,7 @@ class _HomeViewState extends State<HomeView> {
           notchMargin: 4,
           child: Container(
             height: 60,
+            margin: EdgeInsets.all(0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -203,7 +204,7 @@ class _HomeViewState extends State<HomeView> {
             SizedBox(height: 4),
             Text(
               label,
-              style: Theme.of(context).textTheme.tsRegular12.copyWith(
+              style: Theme.of(context).textTheme.tsRegular11.copyWith(
                     color: controller.selectedIndex.value == index
                         ? Get.isDarkMode
                             ? AppColors.darkGreen

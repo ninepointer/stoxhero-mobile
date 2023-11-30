@@ -27,7 +27,7 @@ class ProfileView extends GetView<ProfileController> {
                 height: 80,
                 width: 80,
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  // color: AppColors.white,
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: AppColors.grey.withOpacity(.25),
@@ -36,7 +36,7 @@ class ProfileView extends GetView<ProfileController> {
                 child: ClipOval(
                   child: controller.userDetails.value.profilePhoto == null
                       ? Padding(
-                          padding: EdgeInsets.all(12),
+                          padding: EdgeInsets.all(2),
                           child: Image.asset(
                             Get.isDarkMode
                                 ? AppImages.darkAppLogo

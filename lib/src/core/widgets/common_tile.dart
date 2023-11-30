@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 import '../core.dart';
 
@@ -36,9 +37,9 @@ class CommonTile extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        margin: margin ?? EdgeInsets.symmetric(vertical: 8),
-        padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        color: Theme.of(context).cardColor,
+        margin: margin ?? EdgeInsets.symmetric(vertical: 4),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        // color: Theme.of(context).cardColor,
         width: double.infinity,
         child: Column(
           children: [
@@ -52,7 +53,9 @@ class CommonTile extends StatelessWidget {
                       children: [
                         Text(
                           label,
-                          style: AppStyles.tsSecondaryMedium14,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsprimarywhiteMedium14
+                              : AppStyles.tsprimaryGrayishBlackMedium14,
                         ),
                         if (isValue) ...[
                           SizedBox(height: 4),
@@ -78,9 +81,13 @@ class CommonTile extends StatelessWidget {
                 if (showSeeAllButton)
                   Text(
                     seeAllLabel ?? 'See All',
-                    style: AppStyles.tsSecondaryMedium14.copyWith(
-                      color: sellAllColor,
-                    ),
+                    style: Get.isDarkMode
+                        ? AppStyles.tsprimarywhiteMedium14.copyWith(
+                            color: sellAllColor,
+                          )
+                        : AppStyles.tsprimaryGrayishBlackMedium14.copyWith(
+                            color: sellAllColor,
+                          ),
                   )
                 else if (showIconButton)
                   Icon(icon),

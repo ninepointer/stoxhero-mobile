@@ -13,11 +13,17 @@ extension CustomStyles on TextTheme {
         fontWeight: FontWeight.w400,
         fontSize: 10,
       );
+  TextStyle get tsRegular11 => TextStyle(
+        fontFamily: AppTheme.fontFamily,
+        fontWeight: FontWeight.w400,
+        fontSize: 11,
+      );
   TextStyle get tsRegular12 => TextStyle(
         fontFamily: AppTheme.fontFamily,
         fontWeight: FontWeight.w400,
         fontSize: 12,
       );
+
   TextStyle get tsRegular14 => TextStyle(
         fontFamily: AppTheme.fontFamily,
         fontWeight: FontWeight.w400,
@@ -948,6 +954,18 @@ class AppStyles {
   );
   static TextStyle tsSecondaryMedium14 = TextStyle(
     color: AppColors.lightGreen,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+  );
+  static TextStyle tsprimaryGrayishBlackMedium14 = TextStyle(
+    color: AppColors.blackGrayish,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+  );
+  static TextStyle tsprimarywhiteMedium14 = TextStyle(
+    color: AppColors.white,
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w500,
     fontSize: 14,

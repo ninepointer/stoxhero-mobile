@@ -85,6 +85,20 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                   )})',
                                   style: Theme.of(context).textTheme.tsMedium12,
                                 ),
+                              Visibility(
+                                visible: liveFeatured?.featured == true,
+                                child: Container(
+                                  padding: EdgeInsets.all(18),
+                                  foregroundDecoration: CommonTriangleCard(
+                                    badgeColor: AppColors.success,
+                                    badgeSize: 62,
+                                    textSpan: TextSpan(
+                                      text: 'Featured',
+                                      style: AppStyles.tsWhiteMedium12,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ]
                           ],
                         ),
@@ -203,9 +217,9 @@ class LiveFeaturedCard extends GetView<ContestController> {
               //     : 'Pay Now',
               controller.checkIfLiveFeaturedPurchased(liveFeatured, userId)
                   ? 'Start Trading'
-                  : liveFeatured?.entryFee != 0
-                      ? 'Pay Now'
-                      : 'Join Now',
+                  // : liveFeatured?.entryFee != 0
+                  //     ? 'Pay Now'
+                  : 'Join Now',
               style: AppStyles.tsSecondaryMedium14.copyWith(
                 color: AppColors.success.shade600,
               ),

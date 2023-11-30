@@ -61,15 +61,13 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
-    print('champion ${contestController.contestChampionList}');
-    // print(
-    //     'champion ${contestController.contestChampionList.map((element) => element.entryFee)}');
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
           onRefresh: () async {
             controller.loadData();
             contestProfileController.loadData();
+            contestController.loadData();
             return Future.value();
           },
           child: Visibility(
@@ -319,7 +317,7 @@ class _DashboardViewState extends State<DashboardView> {
                               contestController.selectedTabBarIndex(1);
                               Get.to(() => ContestListView());
                             },
-                            margin: EdgeInsets.only(bottom: 0, top: 8),
+                            margin: EdgeInsets.only(bottom: 0, top: 6),
                           ),
                   if (contestController.liveContestList.isEmpty)
                     contestController.upComingContestList.isEmpty
@@ -361,37 +359,57 @@ class _DashboardViewState extends State<DashboardView> {
                     seeAllLabel: 'Join TestZone',
                     onPressed: () {
                       contestController.liveContestList();
+                      contestController.loadData();
                       contestController.liveContest();
                       Get.to(() => ContestListView());
                     },
-                    margin: EdgeInsets.only(bottom: 0, top: 2),
+                    margin: EdgeInsets.only(bottom: 0, top: 6),
                   ),
-
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Container(
-                      // width: MediaQuery.of(context).size.width - 10,
-                      margin: EdgeInsets.only(right: 4),
-
-                      child: Row(
-                        children: contestController.contestChampionList
-                            .asMap()
-                            .entries
-                            .map((entry) {
-                          int index = entry.key;
-                          return CompletedContestChampionLeaderBoard(
-                            index: index + 1,
-                            contestdata: entry.value,
-                          );
-                        }).toList(),
+                    child: Obx(
+                      () => Container(
+                        child: Row(
+                          children: contestController.contestChampionList
+                              .asMap()
+                              .entries
+                              .map((entry) {
+                            int index = entry.key;
+                            return CompletedContestChampionLeaderBoard(
+                              index: index + 1,
+                              contestdata: entry.value,
+                              cardWidth: MediaQuery.of(context).size.width - 40,
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ),
 
-                  SizedBox(height: 16),
+                  // SingleChildScrollView(
+                  //   scrollDirection: Axis.horizontal,
+                  //   child: Container(
+                  //     margin: EdgeInsets.zero,
+                  //     child: Row(
+                  //       children: contestController.contestChampionList
+                  //           .asMap()
+                  //           .entries
+                  //           .map((entry) {
+                  //         int index = entry.key;
+                  //         return CompletedContestChampionLeaderBoard(
+                  //           index: index + 1,
+                  //           contestdata: entry.value,
+                  //           cardWidth: MediaQuery.of(context).size.width - 40,
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ),
+                  // ),
+
+                  SizedBox(height: 10),
                   CommonTile(
                     label: 'Return Summary',
-                    margin: EdgeInsets.only(bottom: 8, top: 0),
+                    margin: EdgeInsets.only(bottom: 10, top: 0),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -447,8 +465,10 @@ class _DashboardViewState extends State<DashboardView> {
                       ],
                     ),
                   ),
+
                   CommonTile(
                     label: 'Performance',
+                    margin: EdgeInsets.symmetric(vertical: 8),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
@@ -708,7 +728,7 @@ class _DashboardViewState extends State<DashboardView> {
                           ],
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 16,
                         ),
                         Container(
                           alignment: Alignment.centerLeft,

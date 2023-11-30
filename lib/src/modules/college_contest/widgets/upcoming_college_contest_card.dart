@@ -422,7 +422,7 @@ class _UpComingCollegeContestCardState
                                                 0) ==
                                         0
                                     ? 'TestZone Full'
-                                    : 'Pay Now',
+                                    : 'Join Now',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),

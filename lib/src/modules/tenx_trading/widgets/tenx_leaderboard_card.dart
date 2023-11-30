@@ -40,7 +40,7 @@ class TenxLeaderboardCard extends StatelessWidget {
                           child: leaderboard?.profilePic == null ||
                                   leaderboard!.profilePic!.isEmpty
                               ? Padding(
-                                  padding: EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(2),
                                   child: Image.asset(
                                     Get.isDarkMode
                                         ? AppImages.darkAppLogo
@@ -54,10 +54,15 @@ class TenxLeaderboardCard extends StatelessWidget {
                                   width: 48,
                                   height: 48,
                                   errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                      AppImages.appLogo,
-                                      width: 48,
-                                      height: 48,
+                                    return Padding(
+                                      padding: EdgeInsets.all(2),
+                                      child: Image.asset(
+                                        Get.isDarkMode
+                                            ? AppImages.darkAppLogo
+                                            : AppImages.lightAppLogo,
+                                        width: 48,
+                                        height: 48,
+                                      ),
                                     );
                                   },
                                 ),
