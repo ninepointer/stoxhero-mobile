@@ -76,6 +76,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
           SizedBox(height: 3),
           ListView.builder(
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             itemCount: contestdata?.topParticipants?.length ?? 0,
             itemBuilder: (context, index) {
               LastPaidTestZoneTopPerformer participant =
