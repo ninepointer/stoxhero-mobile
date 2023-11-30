@@ -13,7 +13,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.only(top: 20, right: 8, left: 12, bottom: 12),
+      margin: EdgeInsets.only(top: 8, right: 8, left: 12, bottom: 8),
       padding: EdgeInsets.zero,
       width: 190,
       children: [

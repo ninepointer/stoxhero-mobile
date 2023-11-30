@@ -317,7 +317,7 @@ class _DashboardViewState extends State<DashboardView> {
                               contestController.selectedTabBarIndex(1);
                               Get.to(() => ContestListView());
                             },
-                            margin: EdgeInsets.only(bottom: 0, top: 8),
+                            margin: EdgeInsets.only(bottom: 0, top: 6),
                           ),
                   if (contestController.liveContestList.isEmpty)
                     contestController.upComingContestList.isEmpty
@@ -363,14 +363,13 @@ class _DashboardViewState extends State<DashboardView> {
                       contestController.liveContest();
                       Get.to(() => ContestListView());
                     },
-                    margin: EdgeInsets.only(bottom: 0, top: 2),
+                    margin: EdgeInsets.only(bottom: 0, top: 6),
                   ),
 
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // margin: EdgeInsets.only(right: 4),
-
+                      margin: EdgeInsets.only(right: 4, bottom: 0),
                       child: Row(
                         children: contestController.contestChampionList
                             .asMap()
@@ -387,10 +386,10 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ),
 
-                  SizedBox(height: 16),
+                  SizedBox(height: 10),
                   CommonTile(
                     label: 'Return Summary',
-                    margin: EdgeInsets.only(bottom: 8, top: 0),
+                    margin: EdgeInsets.only(bottom: 10, top: 0),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -446,8 +445,10 @@ class _DashboardViewState extends State<DashboardView> {
                       ],
                     ),
                   ),
+
                   CommonTile(
                     label: 'Performance',
+                    margin: EdgeInsets.symmetric(vertical: 8),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
@@ -707,7 +708,7 @@ class _DashboardViewState extends State<DashboardView> {
                           ],
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 16,
                         ),
                         Container(
                           alignment: Alignment.centerLeft,

@@ -48,8 +48,9 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return Container(
       // width: MediaQuery.of(context).size.width,
+
       width: cardWidth,
-      margin: EdgeInsets.only(right: 0, left: 1),
+      margin: EdgeInsets.zero,
 
       child: CommonCard(
         children: [

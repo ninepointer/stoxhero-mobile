@@ -37,8 +37,8 @@ class CommonTile extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        margin: margin ?? EdgeInsets.symmetric(vertical: 8),
-        padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        margin: margin ?? EdgeInsets.symmetric(vertical: 4),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         // color: Theme.of(context).cardColor,
         width: double.infinity,
         child: Column(

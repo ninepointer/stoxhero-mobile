@@ -43,11 +43,13 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
 
   void updateRemainingTime() {
     DateTime currentTime = DateTime.now();
-    startTimeDateTime = DateTime.parse(widget.upcomingFeatured?.contestStartTime ?? '');
+    startTimeDateTime =
+        DateTime.parse(widget.upcomingFeatured?.contestStartTime ?? '');
 
     setState(() {
-      remainingTime =
-          startTimeDateTime.isAfter(currentTime) ? startTimeDateTime.difference(currentTime) : Duration.zero;
+      remainingTime = startTimeDateTime.isAfter(currentTime)
+          ? startTimeDateTime.difference(currentTime)
+          : Duration.zero;
       isVisible = remainingTime == Duration.zero;
     });
 
@@ -108,22 +110,43 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                         children: [
                           Text(
                             '${widget.upcomingFeatured?.payoutPercentage != null ? widget.upcomingFeatured?.payoutPercentage : '0'}% of the Net P&L',
-                            style: Theme.of(context).textTheme.tsSecondaryMedium14,
+                            style:
+                                Theme.of(context).textTheme.tsSecondaryMedium14,
                           ),
-                          if (widget.upcomingFeatured?.payoutCapPercentage != null &&
+                          if (widget.upcomingFeatured?.payoutCapPercentage !=
+                                  null &&
                               widget.upcomingFeatured?.payoutCapPercentage != 0)
                             Text(
                               ' (Upto ${controller.getPaidCapAmount(
                                 widget.upcomingFeatured?.entryFee == 0
-                                    ? widget.upcomingFeatured?.portfolio?.portfolioValue ?? 0
+                                    ? widget.upcomingFeatured?.portfolio
+                                            ?.portfolioValue ??
+                                        0
                                     : widget.upcomingFeatured?.entryFee ?? 0,
-                                widget.upcomingFeatured?.payoutCapPercentage ?? 0,
+                                widget.upcomingFeatured?.payoutCapPercentage ??
+                                    0,
                               )})',
-                              style: Theme.of(context).textTheme.tsSecondaryMedium14,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsSecondaryMedium14,
                             ),
                         ],
                       ),
                     ],
+                  ),
+                  Visibility(
+                    visible: widget.upcomingFeatured?.featured == true,
+                    child: Container(
+                      padding: EdgeInsets.all(18),
+                      foregroundDecoration: CommonTriangleCard(
+                        badgeColor: AppColors.success,
+                        badgeSize: 62,
+                        textSpan: TextSpan(
+                          text: 'Featured',
+                          style: AppStyles.tsWhiteMedium12,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -138,12 +161,14 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                       children: [
                         CommonCardTile(
                           label: 'Starts',
-                          value: FormatHelper.formatDateTimeOnlyToIST(widget.upcomingFeatured?.contestStartTime),
+                          value: FormatHelper.formatDateTimeOnlyToIST(
+                              widget.upcomingFeatured?.contestStartTime),
                         ),
                         SizedBox(height: 4),
                         CommonCardTile(
                           label: 'Ends',
-                          value: FormatHelper.formatDateTimeOnlyToIST(widget.upcomingFeatured?.contestEndTime),
+                          value: FormatHelper.formatDateTimeOnlyToIST(
+                              widget.upcomingFeatured?.contestEndTime),
                         )
                       ],
                     ),
@@ -157,7 +182,9 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                     child: Text(
                       widget.upcomingFeatured?.entryFee == 0
                           ? 'Free'
-                          : FormatHelper.formatNumbers(widget.upcomingFeatured?.entryFee, decimal: 0),
+                          : FormatHelper.formatNumbers(
+                              widget.upcomingFeatured?.entryFee,
+                              decimal: 0),
                       style: Theme.of(context).textTheme.tsMedium18.copyWith(
                             color: AppColors.success,
                           ),
