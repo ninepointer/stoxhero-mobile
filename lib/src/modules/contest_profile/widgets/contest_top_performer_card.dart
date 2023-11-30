@@ -49,7 +49,7 @@ class ContestTopPerformerCard extends GetView<ContestProfileController> {
                                 height: 64,
                                 width: 64,
                                 decoration: BoxDecoration(
-                                  color: AppColors.white,
+                                  // color: AppColors.white,
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: AppColors.grey.withOpacity(.25),
@@ -62,7 +62,7 @@ class ContestTopPerformerCard extends GetView<ContestProfileController> {
                                             fit: BoxFit.cover,
                                           )
                                         : Padding(
-                                            padding: EdgeInsets.all(10),
+                                            padding: EdgeInsets.all(2),
                                             child: Image.asset(
                                               Get.isDarkMode
                                                   ? AppImages.darkAppLogo

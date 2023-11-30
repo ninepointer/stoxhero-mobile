@@ -188,8 +188,43 @@ class InternshipInfoCard extends GetView<InternshipController> {
 
                 ///agege
                 ///gsaehh/sehs
+                SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Market Days",
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          "${controller.internshipBatchDetails.value.marketDays}",
+                          style: Theme.of(context).textTheme.tsMedium12,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Trading Days',
+                          style: Theme.of(context).textTheme.tsGreyMedium12,
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                            "${controller.internshipBatchDetails.value.tradingDays}",
+                            style: Theme.of(context).textTheme.tsMedium12),
+                      ],
+                    ),
+                  ],
+                ),
+
                 ///shdshh
                 ///hsgh
+
                 SizedBox(height: 6),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

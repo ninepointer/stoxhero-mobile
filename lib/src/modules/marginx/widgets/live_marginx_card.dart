@@ -336,7 +336,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
                                     marginx?.participants?.length ?? 0) >
                                 0
                         ? 'Start Trading'
-                        : 'Pay Now',
+                        : 'Join Now',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.success,
                     ),

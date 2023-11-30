@@ -27,7 +27,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                     height: 56,
                     width: 56,
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      // color: AppColors.white,
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: AppColors.grey.withOpacity(.25),
@@ -40,7 +40,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                                 fit: BoxFit.cover,
                               )
                             : Padding(
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(2),
                                 child: Image.asset(
                                   Get.isDarkMode
                                       ? AppImages.darkAppLogo

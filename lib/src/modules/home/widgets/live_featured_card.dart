@@ -203,9 +203,9 @@ class LiveFeaturedCard extends GetView<ContestController> {
               //     : 'Pay Now',
               controller.checkIfLiveFeaturedPurchased(liveFeatured, userId)
                   ? 'Start Trading'
-                  : liveFeatured?.entryFee != 0
-                      ? 'Pay Now'
-                      : 'Join Now',
+                  // : liveFeatured?.entryFee != 0
+                  //     ? 'Pay Now'
+                  : 'Join Now',
               style: AppStyles.tsSecondaryMedium14.copyWith(
                 color: AppColors.success.shade600,
               ),

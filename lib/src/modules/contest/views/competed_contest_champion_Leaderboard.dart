@@ -5,11 +5,13 @@ import 'package:intl/intl.dart';
 class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
   final int? index;
   final ContestData? contestdata;
+  final double cardWidth;
 
   const CompletedContestChampionLeaderBoard({
     Key? key,
     this.index,
     this.contestdata,
+    required this.cardWidth,
   }) : super(key: key);
   static String formatDateMonthth(String? value) {
     if (value != null) {
@@ -45,11 +47,14 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
+      // width: MediaQuery.of(context).size.width,
+      width: cardWidth,
+      margin: EdgeInsets.only(right: 0, left: 1),
+
       child: CommonCard(
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 50, top: 2),
+            padding: EdgeInsets.only(left: 40, top: 2),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -75,7 +80,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
               LastPaidTestZoneTopPerformer participant =
                   contestdata!.topParticipants![index];
               return Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -109,7 +114,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
                       height: 35,
                       width: 35,
                       decoration: BoxDecoration(
-                        color: AppColors.white,
+                        // color: AppColors.white,
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: AppColors.grey.withOpacity(.25),
@@ -118,7 +123,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
                       child: ClipOval(
                         child: participant.profilePhoto == null
                             ? Padding(
-                                padding: EdgeInsets.all(6),
+                                padding: EdgeInsets.all(2),
                                 child: Image.asset(
                                   Get.isDarkMode
                                       ? AppImages.darkAppLogo

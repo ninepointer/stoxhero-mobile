@@ -97,22 +97,22 @@ class _CommonDrawerState extends State<CommonDrawer> {
                     ),
                   ),
                   child: ClipOval(
-                    child: Padding(
-                      padding: EdgeInsets.all(12),
-                      child: controller.userDetails.value.profilePhoto == null
-                          ? Image.asset(
+                    child: controller.userDetails.value.profilePhoto == null
+                        ? Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Image.asset(
                               Get.isDarkMode
                                   ? AppImages.darkAppLogo
                                   : AppImages.lightAppLogo,
                               width: 48,
                               height: 48,
                               fit: BoxFit.contain,
-                            )
-                          : Image.network(
-                              controller.userDetails.value.profilePhoto?.url ??
-                                  '',
                             ),
-                    ),
+                          )
+                        : Image.network(
+                            controller.userDetails.value.profilePhoto?.url ??
+                                '',
+                          ),
                   ),
                 ),
               ),

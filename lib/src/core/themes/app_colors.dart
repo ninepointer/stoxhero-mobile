@@ -16,6 +16,7 @@ class AppColors {
   static final MaterialColor black = Color(0xFF2B2F32).toMaterialColor();
   static final MaterialColor grey = Color(0xFF8091A7).toMaterialColor();
   static final MaterialColor white = Color(0xFFFFFFFF).toMaterialColor();
+  static final MaterialColor blackGrayish = Color(0xFF333333).toMaterialColor();
 
   static final MaterialColor info = Color(0xFF0052CC).toMaterialColor();
   static final MaterialColor success = Color(0xFF36B37E).toMaterialColor();

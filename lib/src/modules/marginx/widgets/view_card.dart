@@ -53,7 +53,9 @@ class _ViewCardState extends State<ViewCard> {
                       ),
                     ),
                     Icon(
-                      isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                      isExpanded
+                          ? Icons.expand_less_rounded
+                          : Icons.expand_more_rounded,
                       color: AppColors.grey,
                     ),
                   ],
@@ -167,11 +169,18 @@ class _ViewCardState extends State<ViewCard> {
                                 SizedBox(height: 2),
                                 Text(
                                   "${isUpcoming ? controller.calculateSeatsLeft(
-                                        widget.upcomingMarginX?.maxParticipants ?? 0,
-                                        widget.upcomingMarginX?.participants?.length ?? 0,
+                                        widget.upcomingMarginX
+                                                ?.maxParticipants ??
+                                            0,
+                                        widget.upcomingMarginX?.participants
+                                                ?.length ??
+                                            0,
                                       ).toString() : (isLive ? controller.calculateSeatsLeft(
-                                        widget.liveMarginX?.maxParticipants ?? 0,
-                                        widget.liveMarginX?.participants?.length ?? 0,
+                                        widget.liveMarginX?.maxParticipants ??
+                                            0,
+                                        widget.liveMarginX?.participants
+                                                ?.length ??
+                                            0,
                                       ).toString() : widget.completedMarginX?.maxParticipants)}",
                                   style: Theme.of(context).textTheme.tsMedium12,
                                 ),
@@ -196,7 +205,9 @@ class _ViewCardState extends State<ViewCard> {
                                 FormatHelper.formatDateTimeToIST(
                                   isUpcoming
                                       ? widget.upcomingMarginX?.startTime
-                                      : (isLive ? widget.liveMarginX?.startTime : widget.completedMarginX?.startTime),
+                                      : (isLive
+                                          ? widget.liveMarginX?.startTime
+                                          : widget.completedMarginX?.startTime),
                                 ),
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
@@ -214,7 +225,9 @@ class _ViewCardState extends State<ViewCard> {
                                 FormatHelper.formatDateTimeToIST(
                                   isUpcoming
                                       ? widget.upcomingMarginX?.endTime
-                                      : (isLive ? widget.liveMarginX?.endTime : widget.completedMarginX?.endTime),
+                                      : (isLive
+                                          ? widget.liveMarginX?.endTime
+                                          : widget.completedMarginX?.endTime),
                                 ),
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
@@ -237,10 +250,13 @@ class _ViewCardState extends State<ViewCard> {
                               Text(
                                 FormatHelper.formatNumbers(
                                     isUpcoming
-                                        ? widget.upcomingMarginX?.marginXTemplate?.entryFee
+                                        ? widget.upcomingMarginX
+                                            ?.marginXTemplate?.entryFee
                                         : (isLive
-                                            ? widget.liveMarginX?.marginXTemplate?.entryFee
-                                            : widget.completedMarginX?.entryFee),
+                                            ? widget.liveMarginX
+                                                ?.marginXTemplate?.entryFee
+                                            : widget
+                                                .completedMarginX?.entryFee),
                                     decimal: 0),
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
@@ -257,10 +273,15 @@ class _ViewCardState extends State<ViewCard> {
                               Text(
                                 FormatHelper.formatNumbers(
                                     isUpcoming
-                                        ? widget.upcomingMarginX?.marginXTemplate?.portfolioValue
+                                        ? widget.upcomingMarginX
+                                            ?.marginXTemplate?.portfolioValue
                                         : (isLive
-                                            ? widget.liveMarginX?.marginXTemplate?.portfolioValue
-                                            : widget.completedMarginX?.portfolioValue),
+                                            ? widget
+                                                .liveMarginX
+                                                ?.marginXTemplate
+                                                ?.portfolioValue
+                                            : widget.completedMarginX
+                                                ?.portfolioValue),
                                     decimal: 0),
                                 style: Theme.of(context).textTheme.tsMedium12,
                               ),
@@ -322,7 +343,8 @@ class _ViewCardState extends State<ViewCard> {
                         child: GestureDetector(
                           onTap: isLive
                               ? () {
-                                  if (controller.checkIfLivePurchased(widget.liveMarginX)) {
+                                  if (controller.checkIfLivePurchased(
+                                      widget.liveMarginX)) {
                                     controller.loadTradingData();
                                     controller.liveMarginX(widget.liveMarginX);
                                     Get.to(() => MarginXTradingView());
@@ -332,17 +354,24 @@ class _ViewCardState extends State<ViewCard> {
                                       child: PaymentBottomSheet(
                                         productType: ProductType.marginx,
                                         productId: widget.liveMarginX?.id ?? '',
-                                        buyItemPrice: widget.liveMarginX?.marginXTemplate?.entryFee ?? 0,
-                                        onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                                        buyItemPrice: widget.liveMarginX
+                                                ?.marginXTemplate?.entryFee ??
+                                            0,
+                                        onPaymentSuccess: controller
+                                            .loadDataAfterPaymentSuccess,
                                         onSubmit: () {
                                           Get.back();
-                                          var walletController = Get.find<WalletController>();
+                                          var walletController =
+                                              Get.find<WalletController>();
                                           var data = {
                                             "bonusRedemption": 0,
-                                            "coupon": walletController.couponCodeTextController.text,
-                                            "entryFee": walletController.subscriptionAmount.value,
+                                            "coupon": walletController
+                                                .couponCodeTextController.text,
+                                            "entryFee": walletController
+                                                .subscriptionAmount.value,
                                             "marginXId": widget.liveMarginX?.id,
-                                            "marginXName": widget.liveMarginX?.marginXName,
+                                            "marginXName":
+                                                widget.liveMarginX?.marginXName,
                                           };
                                           controller.purchaseMarginX(data);
                                         },
@@ -351,29 +380,39 @@ class _ViewCardState extends State<ViewCard> {
                                   }
                                 }
                               : () {
-                                  if (controller.checkIfPurchased(widget.upcomingMarginX)) {
+                                  if (controller.checkIfPurchased(
+                                      widget.upcomingMarginX)) {
                                   } else {
                                     BottomSheetHelper.openBottomSheet(
                                       context: context,
                                       child: PaymentBottomSheet(
                                         productType: ProductType.marginx,
-                                        productId: widget.upcomingMarginX?.id ?? '',
-                                        buyItemPrice: widget.upcomingMarginX?.marginXTemplate?.entryFee ?? 0,
+                                        productId:
+                                            widget.upcomingMarginX?.id ?? '',
+                                        buyItemPrice: widget.upcomingMarginX
+                                                ?.marginXTemplate?.entryFee ??
+                                            0,
                                         onPaymentSuccess: () async {
-                                          await Get.find<AuthController>().getUserDetails(navigate: false);
+                                          await Get.find<AuthController>()
+                                              .getUserDetails(navigate: false);
                                           controller.loadUserDetails();
                                           controller.getUpComingMarginXList();
                                           controller.getLiveMarginXList();
                                         },
                                         onSubmit: () {
                                           Get.back();
-                                          var walletController = Get.find<WalletController>();
+                                          var walletController =
+                                              Get.find<WalletController>();
                                           var data = {
                                             "bonusRedemption": 0,
-                                            "coupon": walletController.couponCodeTextController.text,
-                                            "entryFee": walletController.subscriptionAmount.value,
-                                            "marginXId": widget.upcomingMarginX?.id,
-                                            "marginXName": widget.upcomingMarginX?.marginXName,
+                                            "coupon": walletController
+                                                .couponCodeTextController.text,
+                                            "entryFee": walletController
+                                                .subscriptionAmount.value,
+                                            "marginXId":
+                                                widget.upcomingMarginX?.id,
+                                            "marginXName": widget
+                                                .upcomingMarginX?.marginXName,
                                           };
                                           controller.purchaseMarginX(data);
                                         },
@@ -392,18 +431,34 @@ class _ViewCardState extends State<ViewCard> {
                             ),
                             child: Text(
                               isLive
-                                  ? controller.checkIfLivePurchased(widget.liveMarginX) &&
-                                          controller.calculateSeatsLeft(widget.liveMarginX?.maxParticipants ?? 0,
-                                                  widget.liveMarginX?.participants?.length ?? 0) >
+                                  ? controller.checkIfLivePurchased(
+                                              widget.liveMarginX) &&
+                                          controller.calculateSeatsLeft(
+                                                  widget.liveMarginX
+                                                          ?.maxParticipants ??
+                                                      0,
+                                                  widget
+                                                          .liveMarginX
+                                                          ?.participants
+                                                          ?.length ??
+                                                      0) >
                                               0
                                       ? 'Start Trading'
-                                      : 'Pay Now'
-                                  : controller.checkIfPurchased(widget.upcomingMarginX) &&
-                                          controller.calculateSeatsLeft(widget.upcomingMarginX?.maxParticipants ?? 0,
-                                                  widget.upcomingMarginX?.participants?.length ?? 0) >
+                                      : 'Join Now'
+                                  : controller.checkIfPurchased(
+                                              widget.upcomingMarginX) &&
+                                          controller.calculateSeatsLeft(
+                                                  widget.upcomingMarginX
+                                                          ?.maxParticipants ??
+                                                      0,
+                                                  widget
+                                                          .upcomingMarginX
+                                                          ?.participants
+                                                          ?.length ??
+                                                      0) >
                                               0
                                       ? 'Purchased'
-                                      : 'Pay Now',
+                                      : 'Join Now',
                               style: AppStyles.tsWhiteMedium12.copyWith(
                                 color: AppColors.success,
                               ),
@@ -423,7 +478,8 @@ class _ViewCardState extends State<ViewCard> {
                           }
                           String url = 'https://stoxhero.com/marginxs';
                           Clipboard.setData(ClipboardData(text: url));
-                          SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                          SnackbarHelper.showSnackbar(
+                              'Link Copied, Share with your friends.');
                         },
                         child: Container(
                           alignment: Alignment.center,

@@ -31,6 +31,8 @@ class InternshipBatch {
   String? myAttendance;
   num? myReferrals;
   int? referralCount;
+  int? tradingDays;
+  int? marketDays;
   Career? career;
   InternPortfolio? portfolio;
 
@@ -43,6 +45,8 @@ class InternshipBatch {
       this.attendancePercentage,
       this.referralCount,
       this.myReferrals,
+      this.tradingDays,
+      this.marketDays,
       this.career,
       this.portfolio,
       this.myAttendance});
@@ -57,6 +61,8 @@ class InternshipBatch {
     payoutPercentage = json['payoutPercentage'];
     attendancePercentage = json['attendancePercentage'];
     referralCount = json['referralCount'];
+    tradingDays = json['tradingdays'];
+    marketDays = json['workingDays'];
     career =
         json['career'] != null ? new Career.fromJson(json['career']) : null;
     portfolio = json['portfolio'] != null
@@ -75,6 +81,8 @@ class InternshipBatch {
     data['myAttendance'] = this.myAttendance;
     data['myReferrals'] = this.myReferrals;
     data['referralCount'] = this.referralCount;
+    data['tradingdays'] = this.tradingDays;
+    data['workingDays'] = this.marketDays;
     if (this.career != null) {
       data['career'] = this.career!.toJson();
     }

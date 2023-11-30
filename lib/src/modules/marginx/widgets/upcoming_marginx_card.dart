@@ -363,7 +363,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                                         0) ==
                                 0
                             ? 'MarginX Full'
-                            : 'Pay Now',
+                            : 'Join Now',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.success,
                     ),

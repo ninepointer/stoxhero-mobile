@@ -66,7 +66,9 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                                           errorBuilder:
                                               (context, error, stackTrace) {
                                             return Image.asset(
-                                              AppImages.appLogo,
+                                              Get.isDarkMode
+                                                  ? AppImages.darkAppLogo
+                                                  : AppImages.lightAppLogo,
                                               width: 48,
                                               height: 48,
                                             );

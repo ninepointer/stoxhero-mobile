@@ -61,15 +61,13 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
-    print('champion ${contestController.contestChampionList}');
-    // print(
-    //     'champion ${contestController.contestChampionList.map((element) => element.entryFee)}');
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
           onRefresh: () async {
             controller.loadData();
             contestProfileController.loadData();
+            contestController.loadData();
             return Future.value();
           },
           child: Visibility(
@@ -361,6 +359,7 @@ class _DashboardViewState extends State<DashboardView> {
                     seeAllLabel: 'Join TestZone',
                     onPressed: () {
                       contestController.liveContestList();
+                      contestController.loadData();
                       contestController.liveContest();
                       Get.to(() => ContestListView());
                     },
@@ -370,8 +369,7 @@ class _DashboardViewState extends State<DashboardView> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // width: MediaQuery.of(context).size.width - 10,
-                      margin: EdgeInsets.only(right: 4),
+                      // margin: EdgeInsets.only(right: 4),
 
                       child: Row(
                         children: contestController.contestChampionList
@@ -382,6 +380,7 @@ class _DashboardViewState extends State<DashboardView> {
                           return CompletedContestChampionLeaderBoard(
                             index: index + 1,
                             contestdata: entry.value,
+                            cardWidth: MediaQuery.of(context).size.width - 40,
                           );
                         }).toList(),
                       ),
