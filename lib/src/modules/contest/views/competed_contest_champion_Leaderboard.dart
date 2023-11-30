@@ -50,9 +50,9 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
       // width: MediaQuery.of(context).size.width,
 
       width: cardWidth,
-      margin: EdgeInsets.zero,
 
       child: CommonCard(
+        margin: EdgeInsets.only(top: 8, right: 8, left: 12, bottom: 8),
         children: [
           Padding(
             padding: EdgeInsets.only(left: 40, top: 2),

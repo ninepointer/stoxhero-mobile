@@ -201,7 +201,10 @@ class InternshipInfoCard extends GetView<InternshipController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          "${controller.internshipBatchDetails.value.marketDays}",
+                          controller.internshipBatchDetails.value.marketDays !=
+                                  null
+                              ? "${controller.internshipBatchDetails.value.marketDays}"
+                              : '-',
                           style: Theme.of(context).textTheme.tsMedium12,
                         ),
                       ],
@@ -215,7 +218,11 @@ class InternshipInfoCard extends GetView<InternshipController> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                            "${controller.internshipBatchDetails.value.tradingDays}",
+                            controller.internshipBatchDetails.value
+                                        .tradingDays !=
+                                    null
+                                ? "${controller.internshipBatchDetails.value.tradingDays}"
+                                : '-',
                             style: Theme.of(context).textTheme.tsMedium12),
                       ],
                     ),

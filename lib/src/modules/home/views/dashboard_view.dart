@@ -365,26 +365,46 @@ class _DashboardViewState extends State<DashboardView> {
                     },
                     margin: EdgeInsets.only(bottom: 0, top: 6),
                   ),
-
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Container(
-                      margin: EdgeInsets.only(right: 4, bottom: 0),
-                      child: Row(
-                        children: contestController.contestChampionList
-                            .asMap()
-                            .entries
-                            .map((entry) {
-                          int index = entry.key;
-                          return CompletedContestChampionLeaderBoard(
-                            index: index + 1,
-                            contestdata: entry.value,
-                            cardWidth: MediaQuery.of(context).size.width - 40,
-                          );
-                        }).toList(),
+                    child: Obx(
+                      () => Container(
+                        child: Row(
+                          children: contestController.contestChampionList
+                              .asMap()
+                              .entries
+                              .map((entry) {
+                            int index = entry.key;
+                            return CompletedContestChampionLeaderBoard(
+                              index: index + 1,
+                              contestdata: entry.value,
+                              cardWidth: MediaQuery.of(context).size.width - 40,
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ),
+
+                  // SingleChildScrollView(
+                  //   scrollDirection: Axis.horizontal,
+                  //   child: Container(
+                  //     margin: EdgeInsets.zero,
+                  //     child: Row(
+                  //       children: contestController.contestChampionList
+                  //           .asMap()
+                  //           .entries
+                  //           .map((entry) {
+                  //         int index = entry.key;
+                  //         return CompletedContestChampionLeaderBoard(
+                  //           index: index + 1,
+                  //           contestdata: entry.value,
+                  //           cardWidth: MediaQuery.of(context).size.width - 40,
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ),
+                  // ),
 
                   SizedBox(height: 10),
                   CommonTile(
