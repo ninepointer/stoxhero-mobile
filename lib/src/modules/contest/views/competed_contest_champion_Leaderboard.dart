@@ -141,7 +141,9 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
                         alignment: Alignment.centerLeft,
                         width: 90,
                         child: Text(
-                          '${participant.firstName?.toString().capitalize}',
+                          participant.firstName != null
+                              ? '${participant.firstName?.toString().capitalize}'
+                              : "User",
                           style: Theme.of(context).textTheme.tsRegular14,
                         )),
                     Container(
