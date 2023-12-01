@@ -769,7 +769,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      Colors.lightGreen, // Background color
+                                      AppColors.lightGreen, // Background color
                                   foregroundColor: Colors.white, // Text color
                                   elevation: 8.0, // Elevation (shadow)
                                   shape: RoundedRectangleBorder(

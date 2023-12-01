@@ -97,50 +97,7 @@ class CompletedMarginxCard extends GetView<MarginXController> {
         SizedBox(height: 8),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12),
-          child:
-              //  Row(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Expanded(
-              //       child: Column(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           Text(
-              //             'Started On',
-              //             style: AppStyles.tsGreyMedium12,
-              //           ),
-              //           SizedBox(height: 2),
-              //           Text(
-              //             FormatHelper.formatDateTimeToIST(marginx?.startTime),
-              //             style: Theme.of(context).textTheme.tsMedium12,
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //     Column(
-              //       children: [],
-              //     ),
-              //     Expanded(
-              //       child: Column(
-              //         crossAxisAlignment: CrossAxisAlignment.end,
-              //         children: [
-              //           Text(
-              //             'Ended On',
-              //             style: AppStyles.tsGreyMedium12,
-              //           ),
-              //           SizedBox(height: 2),
-              //           Text(
-              //             FormatHelper.formatDateTimeToIST(marginx?.endTime),
-              //             style: Theme.of(context).textTheme.tsMedium12,
-              //             textAlign: TextAlign.end,
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
@@ -191,41 +148,6 @@ class CompletedMarginxCard extends GetView<MarginXController> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         Text(
-              //           'Investment',
-              //           style: AppStyles.tsGreyMedium12,
-              //         ),
-              //         SizedBox(height: 2),
-              //         Text(
-              //           FormatHelper.formatNumbers(marginx?.entryFee,
-              //               decimal: 0),
-              //           style: Theme.of(context).textTheme.tsMedium12,
-              //         ),
-              //       ],
-              //     ),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.end,
-              //       children: [
-              //         Text(
-              //           'Virtual Margin Money',
-              //           style: AppStyles.tsGreyMedium12,
-              //         ),
-              //         SizedBox(height: 2),
-              //         Text(
-              //           FormatHelper.formatNumbers(marginx?.portfolioValue,
-              //               decimal: 0),
-              //           style: Theme.of(context).textTheme.tsMedium12,
-              //         ),
-              //       ],
-              //     ),
-              //   ],
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -275,49 +197,6 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                 ],
               ),
               SizedBox(height: 4),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         Text(
-              //           'Net P&L (Profit & Loss)',
-              //           style: AppStyles.tsGreyMedium12,
-              //         ),
-              //         SizedBox(height: 2),
-              //         Text(
-              //           FormatHelper.formatNumbers(marginx?.npnl ?? 0,
-              //               decimal: 0),
-              //           style: Theme.of(context).textTheme.tsMedium12.copyWith(
-              //                 color: (marginx?.npnl ?? 0) >= 0
-              //                     ? AppColors.success
-              //                     : AppColors.danger,
-              //               ),
-              //         ),
-              //       ],
-              //     ),
-              //     Column(
-              //       crossAxisAlignment: CrossAxisAlignment.end,
-              //       children: [
-              //         Text(
-              //           'Net Earnings',
-              //           style: AppStyles.tsGreyMedium12,
-              //         ),
-              //         SizedBox(height: 2),
-              //         Text(
-              //           FormatHelper.formatNumbers(marginx?.earning ?? 0,
-              //               decimal: 0),
-              //           style: Theme.of(context).textTheme.tsMedium12.copyWith(
-              //                 color: (marginx?.earning ?? 0) >= 0
-              //                     ? AppColors.success
-              //                     : AppColors.danger,
-              //               ),
-              //         )
-              //       ],
-              //     ),
-              //   ],
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -340,6 +219,26 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                                   : AppColors.danger,
                             ),
                       ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'TDS:',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        FormatHelper.formatNumbers(marginx?.tds ?? 0,
+                            decimal: 0),
+                        style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                              color: (marginx?.earning ?? 0) >= 0
+                                  ? AppColors.success
+                                  : AppColors.danger,
+                            ),
+                      )
                     ],
                   ),
                   Row(
