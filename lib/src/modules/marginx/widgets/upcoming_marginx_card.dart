@@ -115,7 +115,7 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             children: [
               Visibility(

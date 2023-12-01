@@ -63,7 +63,7 @@ class LiveMarginxCard extends GetView<MarginXController> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 2),
           child: Row(
             children: [
               Visibility(

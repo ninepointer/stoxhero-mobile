@@ -31,13 +31,17 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
   final tenxTadingDateWiseList = <AnalyticsDateWiseDetails>[].obs;
   final infinityTadingDateWiseList = <AnalyticsDateWiseDetails>[].obs;
 
-  final virtualTadingExpectedPnlList = <AnalyticsExpectedPnLOverviewDetails>[].obs;
+  final virtualTadingExpectedPnlList =
+      <AnalyticsExpectedPnLOverviewDetails>[].obs;
   final tenxTadingExpectedPnlList = <AnalyticsExpectedPnLOverviewDetails>[].obs;
-  final infinityTadingExpectedPnlList = <AnalyticsExpectedPnLOverviewDetails>[].obs;
+  final infinityTadingExpectedPnlList =
+      <AnalyticsExpectedPnLOverviewDetails>[].obs;
 
-  final virtualTadingMonthlyPnlList = <AnalyticsMonthlyPnLOverviewDetails>[].obs;
+  final virtualTadingMonthlyPnlList =
+      <AnalyticsMonthlyPnLOverviewDetails>[].obs;
   final tenxTradingMonthlyPnlList = <AnalyticsMonthlyPnLOverviewDetails>[].obs;
-  final infinityTradingMonthlyPnlList = <AnalyticsMonthlyPnLOverviewDetails>[].obs;
+  final infinityTradingMonthlyPnlList =
+      <AnalyticsMonthlyPnLOverviewDetails>[].obs;
 
   final rangeGrossAmount = 0.0.obs;
   final rangeNetAmount = 0.0.obs;
@@ -58,7 +62,8 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     return details;
   }
 
-  void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
+  void showDateRangePicker(BuildContext context,
+      {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -68,7 +73,9 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
 
     if (pickedDate != null) {
       String date = DateFormat("dd-MM-yyyy").format(pickedDate);
-      isStartDate ? startDateTextController.text = date : endDateTextController.text = date;
+      isStartDate
+          ? startDateTextController.text = date
+          : endDateTextController.text = date;
     }
   }
 
@@ -149,7 +156,8 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
       String? dateStr = virtualTadingMonthlyPnlList[index].date;
       if (dateStr != null && dateStr.isNotEmpty) {
         try {
-          date = DateFormat("dd MMM").format(DateFormat('yyyy-MM-dd').parse(dateStr));
+          date = DateFormat("dd MMM")
+              .format(DateFormat('yyyy-MM-dd').parse(dateStr));
         } catch (e) {
           print("Error parsing date: $e");
         }
@@ -334,7 +342,8 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     return barGroups;
   }
 
-  List<BarChartGroupData> getExpectedAvgProfitChartData({required Color barColor}) {
+  List<BarChartGroupData> getExpectedAvgProfitChartData(
+      {required Color barColor}) {
     List<BarChartGroupData> barGroups = [];
 
     List<AnalyticsExpectedPnLOverviewDetails> dataList = selectedTab.value == 0
@@ -363,7 +372,8 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
     return barGroups;
   }
 
-  List<BarChartGroupData> getExpectedAvgLossChartData({required Color barColor}) {
+  List<BarChartGroupData> getExpectedAvgLossChartData(
+      {required Color barColor}) {
     List<BarChartGroupData> barGroups = [];
 
     List<AnalyticsExpectedPnLOverviewDetails> dataList = selectedTab.value == 0
@@ -530,7 +540,9 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
       rangeBrokerageAmount.value += data.brokerage ?? 0;
       rangeTotalOrders.value += data.noOfTrade ?? 0;
       if (data.npnl != null) {
-        data.npnl! >= 0 ? rangeTotalGreenDays.value++ : rangeTotalRedDays.value++;
+        data.npnl! >= 0
+            ? rangeTotalGreenDays.value++
+            : rangeTotalRedDays.value++;
       }
     });
   }
@@ -542,7 +554,8 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
           await repository.getVirtualTradingAnalyticsOverviewDetails();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          virtualTadingOverviewDetails(response.data?.data?[0] ?? AnalyticsOverviewDetails());
+          virtualTadingOverviewDetails(
+              response.data?.data?[0] ?? AnalyticsOverviewDetails());
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -586,7 +599,8 @@ class AnalyticsController extends BaseController<AnalyticsRepository> {
           await repository.getInfinityTradingAnalyticsOverviewDetails();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          infinityTadingOverviewDetails(response.data?.data?[0] ?? AnalyticsOverviewDetails());
+          infinityTadingOverviewDetails(
+              response.data?.data?[0] ?? AnalyticsOverviewDetails());
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

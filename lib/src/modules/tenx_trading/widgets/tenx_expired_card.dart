@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
+import '../views/tenx_expired_card_analytics_view.dart';
 
 class TenxExpiredCard extends GetView<TenxTradingController> {
   final TenxExpiredPlan subscription;
@@ -220,7 +221,11 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                   backgroundColor: AppColors.secondary.withOpacity(.25),
                   height: 32,
                   label: 'Analytics',
-                  onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
+                  // onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
+                  onPressed: () {
+                    Get.to(() => TenXExpiredCardAnalticsView());
+                    Get.find<TenxTradingController>().getTenxExpiredPlans();
+                  },
                 ),
               ),
               Expanded(

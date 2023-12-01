@@ -53,25 +53,27 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
 
       child: CommonCard(
         margin: EdgeInsets.only(top: 8, right: 8, left: 12, bottom: 8),
+        padding: EdgeInsets.all(8.0),
         children: [
-          Padding(
-            padding: EdgeInsets.only(left: 40, top: 2),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${contestdata?.contestName}',
-                  style: AppStyles.tsSecondaryMedium14,
-                ),
-                SizedBox(
-                  height: 6,
-                ),
-                Text(
-                  '${formatDateMonthth(contestdata?.contestDate)}',
-                  style: AppStyles.tsGreyMedium14,
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    '${contestdata?.contestName}',
+                    style: AppStyles.tsSecondaryMedium14,
+                  ),
+                  SizedBox(
+                    height: 2,
+                  ),
+                  Text(
+                    '${formatDateMonthth(contestdata?.contestDate)}',
+                    style: AppStyles.tsGreyMedium14,
+                  ),
+                ],
+              ),
+            ],
           ),
           SizedBox(height: 3),
           ListView.builder(

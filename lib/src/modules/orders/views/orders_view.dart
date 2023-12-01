@@ -12,7 +12,7 @@ class OrdersView extends GetView<OrdersController> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Orders'),
+          title: const Text('Order Book'),
           bottom: TabBar(
             indicatorColor: AppColors.lightGreen,
             tabs: [

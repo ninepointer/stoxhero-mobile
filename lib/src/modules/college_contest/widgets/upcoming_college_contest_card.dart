@@ -146,7 +146,7 @@ class _UpComingCollegeContestCardState
                 Visibility(
                   visible: widget.contest?.isNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                     child: Text(
                       'Nifty',
                       style: AppStyles.tsGreyMedium12,

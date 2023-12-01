@@ -459,7 +459,7 @@ class CompletedContestCard extends GetView<ContestController> {
                     color: AppColors.primary.withOpacity(.25),
                   ),
                   child: Text(
-                    'Leadboard',
+                    'Leaderboard',
                     style: AppStyles.tsSecondaryMedium12.copyWith(
                       color: AppColors.primary,
                     ),

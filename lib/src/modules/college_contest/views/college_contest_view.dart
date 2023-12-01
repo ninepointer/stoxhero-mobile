@@ -20,6 +20,8 @@ class _CollegeContestViewState extends State<CollegeContestView> {
 
   @override
   Widget build(BuildContext context) {
+    // print('paid ${controller.completedPremiumCollegeContestList}');
+    // print('free ${controller.completedFreeCollegeContestList}');
     return Scaffold(
       appBar: AppBar(
         title: Text('College TestZone'),
@@ -129,7 +131,8 @@ class _CollegeContestViewState extends State<CollegeContestView> {
                       ),
                       replacement: Visibility(
                         visible:
-                            controller.upcomingFreeCollegeContestList.isEmpty,
+                            controller.upcomingFreeCollegeContestList.isEmpty ==
+                                true,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
                           label: AppStrings
@@ -207,6 +210,7 @@ class _CollegeContestViewState extends State<CollegeContestView> {
                       ),
                       replacement: Visibility(
                         visible:
+                            //if there free college contest is not showing then make below line false
                             controller.completedFreeCollegeContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,

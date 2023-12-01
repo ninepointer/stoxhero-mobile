@@ -16,97 +16,109 @@ class LiveFeaturedCard extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return CommonCard(
       margin: EdgeInsets.only(left: 12, right: 12, top: 8),
-      padding: EdgeInsets.only(top: 0),
+      padding: EdgeInsets.only(top: 8),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withOpacity(.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(
-                      AppImages.contestTrophy,
-                      width: 28,
-                      height: 28,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                  child: Row(
                     children: [
-                      Text(
-                        '${liveFeatured?.contestName}',
-                        style: Theme.of(context).textTheme.tsRegular16,
-                      ),
-                      SizedBox(height: 4),
-                      GestureDetector(
-                        onTap: () {
-                          if (liveFeatured?.payoutType == 'Reward')
-                            BottomSheetHelper.openBottomSheet(
-                              context: context,
-                              child: FeaturedRewardTableBottomSheet(
-                                liveContest: liveFeatured,
-                              ),
-                            );
-                        },
-                        child: Row(
-                          children: [
-                            if (liveFeatured?.payoutType == 'Reward') ...[
-                              Text(
-                                'Rewards worth ${controller.calculateTotalReward(liveFeatured?.rewards)},Click to know more.',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                            if (liveFeatured?.payoutType != 'Reward') ...[
-                              Text(
-                                '${liveFeatured?.payoutPercentage != null ? liveFeatured?.payoutPercentage : '0'}% of the Net P&L',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                              if (liveFeatured?.payoutCapPercentage != null &&
-                                  liveFeatured?.payoutCapPercentage != 0)
-                                Text(
-                                  ' (Upto ${controller.getPaidCapAmount(
-                                    liveFeatured?.entryFee == 0
-                                        ? liveFeatured
-                                                ?.portfolio?.portfolioValue ??
-                                            0
-                                        : liveFeatured?.entryFee ?? 0,
-                                    liveFeatured?.payoutCapPercentage ?? 0,
-                                  )})',
-                                  style: Theme.of(context).textTheme.tsMedium12,
-                                ),
-                              Visibility(
-                                visible: liveFeatured?.featured == true,
-                                child: Container(
-                                  padding: EdgeInsets.all(18),
-                                  foregroundDecoration: CommonTriangleCard(
-                                    badgeColor: AppColors.success,
-                                    badgeSize: 62,
-                                    textSpan: TextSpan(
-                                      text: 'Featured',
-                                      style: AppStyles.tsWhiteMedium12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]
-                          ],
+                      Container(
+                        width: 48,
+                        height: 48,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: AppColors.secondary.withOpacity(.1),
+                          shape: BoxShape.circle,
                         ),
+                        child: Image.asset(
+                          AppImages.contestTrophy,
+                          width: 28,
+                          height: 28,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${liveFeatured?.contestName}',
+                            style: Theme.of(context).textTheme.tsRegular16,
+                          ),
+                          SizedBox(height: 4),
+                          GestureDetector(
+                            onTap: () {
+                              if (liveFeatured?.payoutType == 'Reward')
+                                BottomSheetHelper.openBottomSheet(
+                                  context: context,
+                                  child: FeaturedRewardTableBottomSheet(
+                                    liveContest: liveFeatured,
+                                  ),
+                                );
+                            },
+                            child: Row(
+                              children: [
+                                if (liveFeatured?.payoutType == 'Reward') ...[
+                                  Text(
+                                    'Rewards worth ${controller.calculateTotalReward(liveFeatured?.rewards)},Click to know more.',
+                                    style:
+                                        Theme.of(context).textTheme.tsMedium12,
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
+                                if (liveFeatured?.payoutType != 'Reward') ...[
+                                  Text(
+                                    '${liveFeatured?.payoutPercentage != null ? liveFeatured?.payoutPercentage : '0'}% of the Net P&L',
+                                    style:
+                                        Theme.of(context).textTheme.tsMedium12,
+                                  ),
+                                  if (liveFeatured?.payoutCapPercentage !=
+                                          null &&
+                                      liveFeatured?.payoutCapPercentage != 0)
+                                    Text(
+                                      ' (Upto ${controller.getPaidCapAmount(
+                                        liveFeatured?.entryFee == 0
+                                            ? liveFeatured?.portfolio
+                                                    ?.portfolioValue ??
+                                                0
+                                            : liveFeatured?.entryFee ?? 0,
+                                        liveFeatured?.payoutCapPercentage ?? 0,
+                                      )})',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium12,
+                                    ),
+                                ]
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                Visibility(
+                  visible: liveFeatured?.featured == true,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        left: 18, right: 18, bottom: 18, top: 54),
+                    foregroundDecoration: CommonTriangleCard(
+                      badgeColor: AppColors.success,
+                      badgeSize: 62,
+                      textSpan: TextSpan(
+                        text: 'Featured',
+                        style: AppStyles.tsWhiteMedium12,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

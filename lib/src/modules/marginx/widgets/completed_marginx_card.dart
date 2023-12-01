@@ -33,7 +33,7 @@ class CompletedMarginxCard extends GetView<MarginXController> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
               Visibility(
