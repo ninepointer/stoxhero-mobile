@@ -25,4 +25,5 @@ class AppImages {
   static const String rank2 = '$imagesDir/rank2.png';
   static const String rank3 = '$imagesDir/rank3.png';
   static const String xlogo = '$imagesDir/XXlogo.png';
+  static const String stock = '$imagesDir/stock.png';
 }

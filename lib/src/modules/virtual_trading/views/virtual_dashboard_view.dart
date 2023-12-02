@@ -12,6 +12,20 @@ class FutureAndOptionDashBoard extends StatelessWidget {
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Embark on a learning path",
+                style: Get.isDarkMode
+                    ? AppStyles.tsprimarywhiteMedium14
+                    : AppStyles.tsprimaryGrayishBlackMedium14,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 25,
+          ),
           customCard(
             context: context,
             title: 'Future & Options',
@@ -29,7 +43,7 @@ class FutureAndOptionDashBoard extends StatelessWidget {
           customCard(
             context: context,
             title: 'Stocks',
-            image: AppImages.workshop,
+            image: AppImages.stock,
             text: "Master essential skills in Stock trading",
             onPressed: () {},
           ),
@@ -68,12 +82,12 @@ class FutureAndOptionDashBoard extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: Theme.of(context).textTheme.tsMedium20,
+                            style: Theme.of(context).textTheme.tsMedium14,
                           ),
                           SizedBox(height: 6),
                           Text(
                             text,
-                            style: Theme.of(context).textTheme.tsGreyRegular16,
+                            style: AppStyles.tsGreyRegular12,
                             softWrap: true,
                           ),
                         ],
@@ -81,17 +95,17 @@ class FutureAndOptionDashBoard extends StatelessWidget {
                     ),
                     SizedBox(width: 8),
                     Container(
-                      height: 160,
+                      height: 120,
                       width: 100,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        // color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Image.asset(
                         image,
-                        height: 140,
-                        width: 100,
-                        fit: BoxFit.cover,
+                        // height: 120,
+                        // width: 100,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ],
