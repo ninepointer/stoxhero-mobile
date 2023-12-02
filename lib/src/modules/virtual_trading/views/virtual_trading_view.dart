@@ -7,6 +7,7 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Future & Option')),
       body: Obx(
         () => Visibility(
           visible: controller.isLoadingStatus,

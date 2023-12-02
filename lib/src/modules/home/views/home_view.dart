@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
+import '../../virtual_trading/views/virtual_dashboard_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -16,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
 
   List<Widget> _tabs = [
     DashboardView(),
-    VirtualTradingView(),
+    FutureAndOptionDashBoard(),
     TenxTradingView(),
     MarginXView(),
     ContestView(),
@@ -42,7 +43,7 @@ class _HomeViewState extends State<HomeView> {
         Get.find<ContestProfileController>().getWeeklyTopPerformerFullList();
         break;
       case 1:
-        Get.find<VirtualTradingController>().loadData();
+        // Get.find<VirtualTradingController>().loadData();
         break;
       case 2:
         Get.find<TenxTradingController>().loadData();

@@ -56,7 +56,8 @@ class ContestView extends StatelessWidget {
             buttonLabel: 'See TestZone Leaderboard!',
             onPressed: () {
               final contestController = Get.find<ContestController>();
-              final collegeContestController = Get.find<CollegeContestController>();
+              final collegeContestController =
+                  Get.find<CollegeContestController>();
               contestController.getContestLeaderboardList();
               collegeContestController.getCollegeContestLeaderboardList();
               Get.find<ContestController>().selectedTabBarIndex(0);
@@ -117,7 +118,8 @@ class ContestView extends StatelessWidget {
                 label: buttonLabel,
                 height: 42,
                 onPressed: onPressed,
-                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                backgroundColor:
+                    Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
               ),
             ],
           ),
