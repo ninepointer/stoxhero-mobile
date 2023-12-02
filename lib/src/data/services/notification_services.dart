@@ -43,14 +43,11 @@ class NotificationServices {
         ),
       ),
       onDidReceiveNotificationResponse: (NotificationResponse data) {
-        print('onMessageOpenedApp : ${data.toString()}');
-        print('onMessageOpenedApp : ${data.payload}');
+        print('onMessageClicked LocalNotification : ${data.toString()}');
+        print('onMessageClicked LocalNotification : ${data.payload}');
         if (data.payload != null) {
           Map<String, dynamic> message = jsonDecode(data.payload!);
-          if (message.isNotEmpty && message['route'] != null) {
-            String route = message['route'];
-            handelNotificationClick(route);
-          }
+          handelNotificationClick(message, isLocal: true);
         }
       },
     );
@@ -61,13 +58,15 @@ class NotificationServices {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
-        print('Message data: ${message.data}');
-
         AndroidNotificationDetails? androidNotificationDetails;
-
         androidNotificationDetails = AndroidNotificationDetails(
           channel.id,
           channel.name,
+          importance: Importance.max,
+          priority: Priority.max,
+          styleInformation: BigTextStyleInformation(
+            message.notification?.body ?? '',
+          ),
         );
 
         RemoteNotification? notification = message.notification;
@@ -77,6 +76,7 @@ class NotificationServices {
           var notificationDetails = NotificationDetails(
             android: androidNotificationDetails,
           );
+
           localNotification.show(
             notification.hashCode,
             notification.title,
@@ -89,26 +89,32 @@ class NotificationServices {
     );
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print("onMessageOpenedApp: $message");
-      print("onMessageOpenedApp: ${message.data}");
-
-      if (message.data.isNotEmpty && message.data['route'] != null) {
-        String route = message.data['route'];
-        handelNotificationClick(route);
-      }
+      print("onMessageClicked FirebaseMessaging : $message");
+      print("onMessageClicked FirebaseMessaging: ${message.data}");
+      handelNotificationClick(message.data);
     });
   }
 
-  static void handelNotificationClick(String route) {
+  static void handelNotificationClick(dynamic messageData, {bool isLocal = false}) {
+    print('onMessageClicked : isLocal : $isLocal');
+    print('onMessageClicked : $messageData');
+
     LoginDetailsResponse? userDetails = AppStorage.getUserDetails();
-    print('onMessageOpenedApp userDetails : ${userDetails.toJson()}');
+    String route = "";
+    Map<String, dynamic> actionData = jsonDecode(messageData['actions']);
+    route = actionData['route'];
+
     if (userDetails.sId != null) {
       final homeController = Get.find<HomeController>();
       Get.toNamed(AppRoutes.home);
       if (route == 'virtual') homeController.selectedIndex(1);
       if (route == 'tenx') homeController.selectedIndex(2);
       if (route == 'marginx') homeController.selectedIndex(3);
-      if (route == 'contest') homeController.selectedIndex(4);
+      if (route == 'testzone') homeController.selectedIndex(4);
+      if (route == 'analytics') Get.toNamed(AppRoutes.analytics);
+      if (route == 'careers') Get.toNamed(AppRoutes.careers);
+      if (route == 'profile') Get.toNamed(AppRoutes.profile);
+      if (route == 'wallet') Get.toNamed(AppRoutes.wallet);
     }
   }
 }

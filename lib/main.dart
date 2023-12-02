@@ -5,8 +5,8 @@ import 'package:stoxhero/firebase_options.dart';
 
 import 'src/app/app.dart';
 
-const bool isProd = true;
-const bool useTestToken = true;
+const bool isProd = false;
+const bool useTestToken = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

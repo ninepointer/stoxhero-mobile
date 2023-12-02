@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:android_play_install_referrer/android_play_install_referrer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uni_links/uni_links.dart';
@@ -44,14 +43,14 @@ class _AppState extends State<App> {
   }
 
   Future _initializeReferrerDetails() async {
-    try {
-      String referrerData;
-      ReferrerDetails referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
-      referrerData = referrerDetails.toString();
-      print('ReferrerDetails : $referrerData');
-    } catch (e) {
-      print('Error : $e');
-    }
+    // try {
+    //   String referrerData;
+    //   ReferrerDetails referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
+    //   referrerData = referrerDetails.toString();
+    //   print('ReferrerDetails : $referrerData');
+    // } catch (e) {
+    //   print('Error : $e');
+    // }
   }
 
   Future _handleInitialUri() async {
@@ -59,13 +58,11 @@ class _AppState extends State<App> {
       _initialUriIsHandled = true;
       try {
         final uri = await getInitialUri();
-        if (uri != null) {
-          print('UniLinks Initial : $uri');
-        }
+        // _linkRouting(uri);
         if (!mounted) return;
         setState(() => initialUri = uri);
       } catch (e) {
-        print('Error : $e');
+        print('UniLinks Error : $e');
       }
     }
   }
@@ -75,17 +72,22 @@ class _AppState extends State<App> {
     sub = uriLinkStream.listen((Uri? uri) {
       if (!mounted) return;
       print('UniLinks Incoming : $uri');
-      latestUri = uri;
-      if (uri != null) {
-        final homeController = Get.find<HomeController>();
-        Get.toNamed(AppRoutes.home);
-        if (uri.path.contains('/contest')) homeController.selectedIndex(4);
-      }
+      _linkRouting(uri);
     }, onError: (Object e) {
       if (!mounted) return;
       print('UniLinks Error : $err');
-      latestUri = null;
     });
+  }
+
+  void _linkRouting(Uri? uri) {
+    print('DeepLinking : ${uri?.path ?? ''}');
+    if (uri != null) {
+      final homeController = Get.find<HomeController>();
+      if (uri.path.contains('/virtual')) homeController.selectedIndex(1);
+      if (uri.path.contains('/tenx')) homeController.selectedIndex(2);
+      if (uri.path.contains('/marginx')) homeController.selectedIndex(3);
+      if (uri.path.contains('/testzone')) homeController.selectedIndex(4);
+    }
   }
 
   @override
