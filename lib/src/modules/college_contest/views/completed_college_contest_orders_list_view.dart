@@ -4,7 +4,8 @@ import 'package:stoxhero/src/modules/modules.dart';
 
 import '../../../core/core.dart';
 
-class CompletedCollegeContestOrdersListView extends GetView<CollegeContestController> {
+class CompletedCollegeContestOrdersListView
+    extends GetView<CollegeContestController> {
   const CompletedCollegeContestOrdersListView({Key? key}) : super(key: key);
 
   @override
@@ -43,7 +44,7 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                     children: [
                       OrderCardTile(
                         label: 'Quantity',
-                        value: FormatHelper.formatNumbers(order.quantity),
+                        value: order.quantity.toString(),
                       ),
                       OrderCardTile(
                         isRightAlign: true,
@@ -67,7 +68,9 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                         isRightAlign: true,
                         label: 'Type',
                         value: order.buyOrSell,
-                        valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
+                        valueColor: order.buyOrSell == AppConstants.buy
+                            ? AppColors.success
+                            : AppColors.danger,
                       ),
                     ],
                   ),
@@ -83,7 +86,9 @@ class CompletedCollegeContestOrdersListView extends GetView<CollegeContestContro
                         isRightAlign: true,
                         label: 'Status',
                         value: order.status,
-                        valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
+                        valueColor: order.status == AppConstants.complete
+                            ? AppColors.success
+                            : AppColors.danger,
                       ),
                     ],
                   ),

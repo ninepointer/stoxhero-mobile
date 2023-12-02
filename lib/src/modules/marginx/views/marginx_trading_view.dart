@@ -81,7 +81,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here! \nClick on + icon to add instruments',
+                          label: AppStrings.noDataFoundWatchlist,
                         )
                       : SizedBox(
                           height:
@@ -177,7 +177,9 @@ class MarginXTradingView extends GetView<MarginXController> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.marginXPositionList.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: AppStrings.noDataFoundPositions,
+                        )
                       : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
@@ -201,7 +203,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                   ),
                   controller.stopLossPendingOrderList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundPendingOrders,
                         )
                       : ListView.builder(
                           shrinkWrap: true,
@@ -221,7 +223,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                   ),
                   controller.stopLossExecutedOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundExecutedOrders,
                         )
                       : SizedBox(
                           height: controller.stopLossExecutedOrdersList.length >= 3
@@ -245,7 +247,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                   ),
                   controller.completedMarginXOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundCompletedRejectedOrders,
                         )
                       : SizedBox(
                           height: controller.completedMarginXOrdersList.length >= 3
@@ -264,7 +266,7 @@ class MarginXTradingView extends GetView<MarginXController> {
                         ),
                   CommonTile(
                     isLoading: controller.isPortfolioStateLoadingStatus,
-                    label: 'Portfolio Details',
+                    label: 'Virtual Margin Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   PortfolioDetailCardTile(

@@ -41,6 +41,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   String apiEndpoint = "/pg/v1/pay";
   String environment = "PRODUCTION";
   String appId = "dcc929b3b7904f93997b89d23de36df3";
+  // String appId = "63dff75c930b42a9af0f216bb6af6e16";
   String saltKey = "92333ad2-4277-4e69-86f1-b86a83161b74";
   String merchantId = "STOXONLINE";
 
@@ -56,11 +57,13 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     controller.addMoneyAmountTextController.clear();
     controller.subscriptionAmount(widget.buyItemPrice.toDouble());
     controller.actualSubscriptionAmount(widget.buyItemPrice.toDouble());
-    if (widget.paymentTransactionType == PaymentTransactionType.debit) calculateUserWalletAmount();
+    if (widget.paymentTransactionType == PaymentTransactionType.debit)
+      calculateUserWalletAmount();
     initPaymentSDK();
   }
 
-  bool get isWalletPayment => widget.paymentTransactionType == PaymentTransactionType.credit;
+  bool get isWalletPayment =>
+      widget.paymentTransactionType == PaymentTransactionType.credit;
 
   String generateSha256Hash(String input) {
     var bytes = utf8.encode(input);
@@ -86,7 +89,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       return <dynamic>{};
     });
 
-    String signature = await PhonePePaymentSdk.getPackageSignatureForAndroid() ?? '';
+    String signature =
+        await PhonePePaymentSdk.getPackageSignatureForAndroid() ?? '';
     print('Signature : $signature');
   }
 
@@ -94,7 +98,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     const int maxLength = 36;
     const String allowedCharacters = "0123456789";
 
-    String timestampPart = "mtid" + DateTime.now().millisecondsSinceEpoch.toString();
+    String timestampPart =
+        "mtid" + DateTime.now().millisecondsSinceEpoch.toString();
     int remainingLength = maxLength - timestampPart.length;
     String randomChars = List.generate(remainingLength, (index) {
       return allowedCharacters[math.Random().nextInt(allowedCharacters.length)];
@@ -114,21 +119,27 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     await generatePaymentData(mtId, muId, mobile);
     PaymentRequest paymentData = PaymentRequest();
     if (isWalletPayment) {
-      num amount = num.parse(controller.addMoneyAmountTextController.text) * 100;
+      num amount =
+          num.parse(controller.addMoneyAmountTextController.text) * 100;
       paymentData = PaymentRequest(
         bonusRedemption: 0,
-        coupon: '',
-        paymentFor: 'Wallet',
+        coupon: controller.isCouponCodeAdded == true
+            ? controller.couponCodeTextController.text
+            : '',
+        // paymentFor: '',
         merchantTransactionId: mtId,
         amount: amount,
       );
     } else {
-      num amount =
-          controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice;
+      num amount = controller.couponCodeSuccessText.isNotEmpty
+          ? controller.subscriptionAmount.value
+          : widget.buyItemPrice;
       amount = amount * 100;
       paymentData = PaymentRequest(
         bonusRedemption: 0,
-        coupon: '',
+        coupon: controller.isCouponCodeAdded == true
+            ? controller.couponCodeTextController.text
+            : '',
         productId: widget.productId,
         paymentFor: controller.getPaymentProductType(widget.productType),
         merchantTransactionId: mtId,
@@ -159,7 +170,9 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     if (isWalletPayment) {
       amount = num.parse(controller.addMoneyAmountTextController.text) * 100;
     } else {
-      amount = controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice;
+      amount = controller.couponCodeSuccessText.isNotEmpty
+          ? controller.subscriptionAmount.value
+          : widget.buyItemPrice;
       amount = amount * 100;
     }
 
@@ -212,7 +225,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       paymentStatus = true;
                       result = "Flow Completed - Status: Success!";
                     } else {
-                      result = "Flow Completed - Status: $status and Error: $error";
+                      result =
+                          "Flow Completed - Status: $status and Error: $error";
                     }
                   } else {
                     result = "Flow Incomplete";
@@ -246,11 +260,31 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     num amount = 0;
     var response = await controller.repository.getWalletTransactionsList();
     var list = response.data?.data?.transactions ?? [];
-    for (var e in list) amount += e.amount ?? 0;
+    for (var e in list) {
+      if (e.transactionType == 'Cash') {
+        amount += e.amount ?? 0;
+      }
+    }
     walletBalance = amount;
     isLoading = false;
     setState(() {});
   }
+
+  // num amountToPayAfterHeroCashDiscount() {
+  //   num amountToPay = 0;
+  //   num subAmount = (controller.couponCodeSuccessText.isNotEmpty
+  //       ? controller.subscriptionAmount.value
+  //       : widget.buyItemPrice);
+  //   num discount = subAmount * 10 / 100;
+
+  //   if (controller.isHeroCashAdded.value) {
+  //     amountToPay = subAmount - discount;
+  //   } else {
+  //     amountToPay = subAmount;
+  //   }
+
+  //   return amountToPay;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -289,7 +323,9 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   ),
                   SizedBox(height: 24),
                   Text(
-                    isWalletPayment ? 'Add money to\nwallet from bank account' : 'Choose how to pay',
+                    isWalletPayment
+                        ? 'Add money to\nwallet from bank account'
+                        : 'Choose how to pay',
                     style: AppStyles.tsSecondarySemiBold20,
                     textAlign: TextAlign.center,
                   ),
@@ -318,7 +354,10 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                                     ? controller.subscriptionAmount.value
                                     : widget.buyItemPrice,
                               ),
-                              style: Theme.of(context).textTheme.tsMedium20.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium18
+                                  .copyWith(
                                     color: AppColors.success,
                                   ),
                             ),
@@ -342,7 +381,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       onTap: controller.removeCouponCode,
                       child: Container(
                         margin: EdgeInsets.only(top: 16),
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
                           color: AppColors.success.withOpacity(.25),
                           borderRadius: BorderRadius.circular(50),
@@ -353,7 +393,10 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                             Expanded(
                               child: Text(
                                 controller.couponCodeSuccessText.value,
-                                style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsMedium12
+                                    .copyWith(
                                       color: AppColors.success,
                                     ),
                               ),
@@ -367,36 +410,43 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ),
                     ),
-                  if (!isWalletPayment)
-                    if (walletBalance == null || widget.buyItemPrice <= walletBalance!)
-                      if (!controller.isCouponCodeAdded.value)
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CommonTextField(
-                                controller: controller.couponCodeTextController,
-                                padding: EdgeInsets.only(top: 16),
-                                hintText: 'Enter your Coupon code',
-                                inputFormatters: [
-                                  UpperCaseTextFormatter(),
-                                ],
+                  // if (!isWalletPayment)
+                  if (walletBalance == null ||
+                      widget.buyItemPrice <= walletBalance!)
+                    if (!controller.isCouponCodeAdded.value)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CommonTextField(
+                              controller: controller.couponCodeTextController,
+                              padding: EdgeInsets.only(top: 16),
+                              hintText: 'Enter your Coupon code',
+                              inputFormatters: [
+                                UpperCaseTextFormatter(),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            padding: EdgeInsets.only(top: 16, left: 8),
+                            child: CommonOutlinedButton(
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
+                              labelColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
+                              isLoading: controller.isCouponCodeLoadingStatus,
+                              label: 'APPLY',
+                              onPressed: () => controller.verifyCouponCode(
+                                context,
+                                widget.productType,
+                                widget.buyItemPrice,
                               ),
                             ),
-                            Container(
-                              width: 100,
-                              padding: EdgeInsets.only(top: 16, left: 8),
-                              child: CommonOutlinedButton(
-                                isLoading: controller.isCouponCodeLoadingStatus,
-                                label: 'APPLY',
-                                onPressed: () => controller.verifyCouponCode(
-                                  context,
-                                  widget.productType,
-                                  widget.buyItemPrice,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('wallet'),
@@ -408,7 +458,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               value: 'wallet',
                               groupValue: controller.selectedPaymentValue.value,
                               onChanged: (value) {
-                                controller.selectedPaymentValue.value = value as String;
+                                controller.selectedPaymentValue.value =
+                                    value as String;
                               },
                               visualDensity: VisualDensity.compact,
                             ),
@@ -422,7 +473,10 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               FormatHelper.formatNumbers(
                                 walletBalance,
                               ),
-                              style: Theme.of(context).textTheme.tsMedium20.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium18
+                                  .copyWith(
                                     color: AppColors.success,
                                   ),
                             ),
@@ -430,10 +484,25 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ],
                     ),
+                  // if (!isWalletPayment)
+                  //   Padding(
+                  //     padding: EdgeInsets.only(left: 10),
+                  //     child: Row(
+                  //       children: [
+                  //         Checkbox(
+                  //           value: controller.isHeroCashAdded.value,
+                  //           onChanged: (value) =>
+                  //               controller.isHeroCashAdded(value),
+                  //         ),
+                  //         Text(
+                  //             'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (10 / 100)} HeroCash (1 HeroCash = \u{20B9}1)'),
+                  //       ],
+                  //     ),
+                  //   ),
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('gateway'),
-                      margin: EdgeInsets.only(top: 16),
+                      margin: EdgeInsets.only(top: 8),
                       children: [
                         Row(
                           children: [
@@ -441,7 +510,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               value: 'gateway',
                               groupValue: controller.selectedPaymentValue.value,
                               onChanged: (value) {
-                                controller.selectedPaymentValue.value = value as String;
+                                controller.selectedPaymentValue.value =
+                                    value as String;
                               },
                               visualDensity: VisualDensity.compact,
                             ),
@@ -454,7 +524,11 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ],
                     ),
-                  if (walletBalance != null && widget.buyItemPrice >= walletBalance!)
+                  //dbfbhf
+
+                  //fdhfhbd
+                  if (walletBalance != null &&
+                      widget.buyItemPrice >= walletBalance!)
                     Column(
                       children: [
                         SizedBox(height: 16),
@@ -471,14 +545,21 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     children: [
                       SizedBox(height: 16),
                       CommonFilledButton(
+                        backgroundColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
                         isLoading: controller.isLoadingStatus,
                         height: 42,
                         label: 'Proceed',
-                        onPressed: isWalletPayment || controller.selectedPaymentValue.value == 'gateway'
+                        onPressed: isWalletPayment ||
+                                controller.selectedPaymentValue.value ==
+                                    'gateway'
                             ? () => startPaymentTransaction(context)
-                            : walletBalance != null && widget.buyItemPrice >= walletBalance!
+                            : walletBalance != null &&
+                                    widget.buyItemPrice >= walletBalance!
                                 ? () {
-                                    SnackbarHelper.showSnackbar('Low wallet balance!');
+                                    SnackbarHelper.showSnackbar(
+                                        'Low wallet balance!');
                                   }
                                 : widget.onSubmit,
                       ),

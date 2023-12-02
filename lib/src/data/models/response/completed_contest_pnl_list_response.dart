@@ -29,12 +29,14 @@ class CompletedContestPnl {
   num? npnl;
   num? portfolioValue;
   num? payoutAmount;
+  int? rank;
 
   CompletedContestPnl({
     this.contestId,
     this.npnl,
     this.portfolioValue,
     this.payoutAmount,
+    this.rank,
   });
 
   CompletedContestPnl.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class CompletedContestPnl {
     npnl = json['npnl'];
     portfolioValue = json['portfolioValue'];
     payoutAmount = json['payoutAmount'];
+    rank = json['rank'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +53,7 @@ class CompletedContestPnl {
     data['npnl'] = this.npnl;
     data['portfolioValue'] = this.portfolioValue;
     data['payoutAmount'] = this.payoutAmount;
+    data['rank'] = this.rank;
     return data;
   }
 }

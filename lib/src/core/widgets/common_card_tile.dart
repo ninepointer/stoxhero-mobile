@@ -37,7 +37,11 @@ class CommonCardTile extends StatelessWidget {
             ),
           ),
         Column(
-          crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : isCenterAlign?CrossAxisAlignment.center:CrossAxisAlignment.start,
+          crossAxisAlignment: isRightAlign
+              ? CrossAxisAlignment.end
+              : isCenterAlign
+                  ? CrossAxisAlignment.center
+                  : CrossAxisAlignment.start,
           children: [
             Text(
               label ?? '-',
@@ -46,7 +50,7 @@ class CommonCardTile extends StatelessWidget {
             SizedBox(height: 2),
             Text(
               isValueNumber ? FormatHelper.formatNumbers(value) : value ?? '-',
-              style: Theme.of(context).textTheme.tsMedium14.copyWith(
+              style: Theme.of(context).textTheme.tsRegular12.copyWith(
                     color: valueColor,
                   ),
             ),

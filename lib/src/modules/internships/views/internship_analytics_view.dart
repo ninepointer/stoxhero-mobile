@@ -28,18 +28,24 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                         Expanded(
                           child: AnalyticsInfoCard(
                             title: "Today",
-                            grossValue: controller.internshipOverview.value.grossPNLDaily,
-                            netValue: controller.internshipOverview.value.netPNLDaily,
-                            brokeValue: controller.internshipOverview.value.brokerageSumDaily,
+                            grossValue: controller
+                                .internshipOverview.value.grossPNLDaily,
+                            netValue:
+                                controller.internshipOverview.value.netPNLDaily,
+                            brokeValue: controller
+                                .internshipOverview.value.brokerageSumDaily,
                           ),
                         ),
                         SizedBox(width: 8),
                         Expanded(
                           child: AnalyticsInfoCard(
                             title: "This Month",
-                            grossValue: controller.internshipOverview.value.grossPNLMonthly,
-                            netValue: controller.internshipOverview.value.netPNLMonthly,
-                            brokeValue: controller.internshipOverview.value.brokerageSumMonthly,
+                            grossValue: controller
+                                .internshipOverview.value.grossPNLMonthly,
+                            netValue: controller
+                                .internshipOverview.value.netPNLMonthly,
+                            brokeValue: controller
+                                .internshipOverview.value.brokerageSumMonthly,
                           ),
                         ),
                       ],
@@ -53,18 +59,24 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                         Expanded(
                           child: AnalyticsInfoCard(
                             title: "This Year",
-                            grossValue: controller.internshipOverview.value.grossPNLYearly,
-                            netValue: controller.internshipOverview.value.netPNLYearly,
-                            brokeValue: controller.internshipOverview.value.brokerageSumYearly,
+                            grossValue: controller
+                                .internshipOverview.value.grossPNLYearly,
+                            netValue: controller
+                                .internshipOverview.value.netPNLYearly,
+                            brokeValue: controller
+                                .internshipOverview.value.brokerageSumYearly,
                           ),
                         ),
                         SizedBox(width: 8),
                         Expanded(
                           child: AnalyticsInfoCard(
                             title: "Lifetime",
-                            grossValue: controller.internshipOverview.value.grossPNLLifetime,
-                            netValue: controller.internshipOverview.value.netPNLLifetime,
-                            brokeValue: controller.internshipOverview.value.brokerageSumLifetime,
+                            grossValue: controller
+                                .internshipOverview.value.grossPNLLifetime,
+                            netValue: controller
+                                .internshipOverview.value.netPNLLifetime,
+                            brokeValue: controller
+                                .internshipOverview.value.brokerageSumLifetime,
                           ),
                         ),
                       ],
@@ -87,10 +99,12 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: () => controller.showDateRangePicker(context),
+                                onTap: () =>
+                                    controller.showDateRangePicker(context),
                                 child: CommonTextField(
                                   isDisabled: true,
-                                  controller: controller.startDateTextController,
+                                  controller:
+                                      controller.startDateTextController,
                                   hasLabel: true,
                                   hintText: 'Start Date',
                                   suffixIcon: Icon(
@@ -122,10 +136,17 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                           ],
                         ),
                         CommonOutlinedButton(
+                          backgroundColor: Get.isDarkMode
+                              ? AppColors.darkGreen
+                              : AppColors.lightGreen,
+                          labelColor: Get.isDarkMode
+                              ? AppColors.darkGreen
+                              : AppColors.lightGreen,
                           height: 42,
                           label: 'Show Details',
                           onPressed: () {
-                            controller.getInternshipAnalyticsDateWisePnLOverviewDetails();
+                            controller
+                                .getInternshipAnalyticsDateWisePnLOverviewDetails();
                           },
                         ),
                       ],
@@ -150,7 +171,8 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                                     controller.rangeGrossAmount.value,
                                   ),
                                   style: AppStyles.tsPrimaryMedium14.copyWith(
-                                    color: controller.rangeGrossAmount.value == 0
+                                    color: controller.rangeGrossAmount.value ==
+                                            0
                                         ? AppColors.info
                                         : controller.rangeGrossAmount.value < 0
                                             ? AppColors.danger
@@ -204,11 +226,15 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                                     controller.rangeBrokerageAmount.value,
                                   ),
                                   style: AppStyles.tsPrimaryMedium14.copyWith(
-                                    color: controller.rangeBrokerageAmount.value == 0
-                                        ? AppColors.info
-                                        : controller.rangeBrokerageAmount.value < 0
-                                            ? AppColors.danger
-                                            : AppColors.success,
+                                    color:
+                                        controller.rangeBrokerageAmount.value ==
+                                                0
+                                            ? AppColors.info
+                                            : controller.rangeBrokerageAmount
+                                                        .value <
+                                                    0
+                                                ? AppColors.danger
+                                                : AppColors.success,
                                   ),
                                 ),
                               ),
@@ -230,15 +256,18 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                             margin: EdgeInsets.zero,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Orders',
-                                    style: Theme.of(context).textTheme.tsRegular14,
+                                    style:
+                                        Theme.of(context).textTheme.tsRegular14,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
-                                    controller.rangeTotalOrders.value.toString(),
+                                    controller.rangeTotalOrders.value
+                                        .toString(),
                                     style: AppStyles.tsPrimaryMedium14.copyWith(
                                       color: AppColors.info,
                                     ),
@@ -254,15 +283,18 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                             margin: EdgeInsets.zero,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Trading Days',
-                                    style: Theme.of(context).textTheme.tsRegular14,
+                                    style:
+                                        Theme.of(context).textTheme.tsRegular14,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
-                                    controller.rangeTotalTradingDays.value.toString(),
+                                    controller.rangeTotalTradingDays.value
+                                        .toString(),
                                     style: AppStyles.tsPrimaryMedium14.copyWith(
                                       color: AppColors.info,
                                     ),
@@ -284,15 +316,18 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                             margin: EdgeInsets.zero,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Green Days',
-                                    style: Theme.of(context).textTheme.tsRegular14,
+                                    style:
+                                        Theme.of(context).textTheme.tsRegular14,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
-                                    controller.rangeTotalGreenDays.value.toString(),
+                                    controller.rangeTotalGreenDays.value
+                                        .toString(),
                                     style: AppStyles.tsPrimaryMedium14.copyWith(
                                       color: AppColors.success,
                                     ),
@@ -308,15 +343,18 @@ class InternshipAnalyticsView extends GetView<InternshipController> {
                             margin: EdgeInsets.zero,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Red Days',
-                                    style: Theme.of(context).textTheme.tsRegular14,
+                                    style:
+                                        Theme.of(context).textTheme.tsRegular14,
                                   ),
                                   SizedBox(height: 2),
                                   Text(
-                                    controller.rangeTotalRedDays.value.toString(),
+                                    controller.rangeTotalRedDays.value
+                                        .toString(),
                                     style: AppStyles.tsPrimaryMedium14.copyWith(
                                       color: AppColors.danger,
                                     ),

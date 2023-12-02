@@ -32,7 +32,7 @@ class CommonOutlinedButton extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           side: BorderSide(
             width: 1,
-            color: backgroundColor ?? AppColors.primary,
+            color: backgroundColor ?? AppColors.lightGreen,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),

@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
 
@@ -53,7 +55,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
 
   final isExecutedOrderStateLoading = false.obs;
-  bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
+  bool get isExecutedOrderStateLoadingStatus =>
+      isExecutedOrderStateLoading.value;
 
   final segmentedControlValue = 0.obs;
 
@@ -70,7 +73,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   final internshipBatchPortfolio = InternshipBatchPortfolio().obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final internshipPositionList = <TradingPosition>[].obs;
-  final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
+  final tradingInstrumentTradeDetailsList =
+      <TradingInstrumentTradeDetails>[].obs;
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatchlistIds = <int>[].obs;
@@ -93,6 +97,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
   final stopLossPendingOrder = StopLossPendingOrdersList().obs;
   final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final internshipCertificate = <InternshipBatches>[].obs;
+  final internshipCertificateDownload = InternshipBatches().obs;
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
 
@@ -103,10 +109,12 @@ class InternshipController extends BaseController<InternshipRespository> {
   final rangeTotalTradingDays = 0.obs;
   final rangeTotalGreenDays = 0.obs;
   final rangeTotalRedDays = 0.obs;
+  final isEligibleForCertificate = false.obs;
 
   Future loadIntershipData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getInternshipBatchDetails();
+    await getInternshipCertificate();
     if (isParticipated()) {
       await getInternshipBatchPortfolioDetails();
     } else {
@@ -148,7 +156,8 @@ class InternshipController extends BaseController<InternshipRespository> {
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
-  bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
+  bool handleTextField(
+      TransactionType type, int transactionLotSize, int positionLots) {
     bool isDisabled = false;
 
     if (type == TransactionType.buy) {
@@ -180,7 +189,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   bool isParticipated() {
     bool isParticipated = false;
     String intershipId = internshipBatchDetails.value.id ?? '';
-    for (InternshipBatchList intership in userDetails.value.internshipBatch ?? []) {
+    for (InternshipBatchList intership
+        in userDetails.value.internshipBatch ?? []) {
       if (intership.sId == intershipId) {
         for (InternshipParticipants user in intership.participants ?? []) {
           if (user.user == userDetails.value.sId) isParticipated = true;
@@ -213,7 +223,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   }
 
   String getStockIndexName(int instId) {
-    int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
+    int index = stockIndexInstrumentList
+        .indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
@@ -223,7 +234,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     Get.toNamed(AppRoutes.internshipSearchSymbol);
   }
 
-  void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
+  void showDateRangePicker(BuildContext context,
+      {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -233,7 +245,9 @@ class InternshipController extends BaseController<InternshipRespository> {
 
     if (pickedDate != null) {
       String date = DateFormat("dd-MM-yyyy").format(pickedDate);
-      isStartDate ? startDateTextController.text = date : endDateTextController.text = date;
+      isStartDate
+          ? startDateTextController.text = date
+          : endDateTextController.text = date;
     }
   }
 
@@ -255,7 +269,9 @@ class InternshipController extends BaseController<InternshipRespository> {
       rangeBrokerageAmount.value += data.brokerage ?? 0;
       rangeTotalOrders.value += data.noOfTrade ?? 0;
       if (data.npnl != null) {
-        data.npnl! >= 0 ? rangeTotalGreenDays.value++ : rangeTotalRedDays.value++;
+        data.npnl! >= 0
+            ? rangeTotalGreenDays.value++
+            : rangeTotalRedDays.value++;
       }
     });
   }
@@ -394,10 +410,12 @@ class InternshipController extends BaseController<InternshipRespository> {
     return barGroups;
   }
 
-  List<BarChartGroupData> getMonthlyGrossPNLChartsData({required Color barColor}) {
+  List<BarChartGroupData> getMonthlyGrossPNLChartsData(
+      {required Color barColor}) {
     List<BarChartGroupData> barGroups = [];
 
-    List<AnalyticsMonthlyPnLOverviewDetails> dataList = internshipMonthlyPnlList;
+    List<AnalyticsMonthlyPnLOverviewDetails> dataList =
+        internshipMonthlyPnlList;
 
     for (var i = 0; i < dataList.length; i++) {
       var data = dataList[i];
@@ -418,10 +436,12 @@ class InternshipController extends BaseController<InternshipRespository> {
     return barGroups;
   }
 
-  List<BarChartGroupData> getMonthlyNetPNLChartsData({required Color barColor}) {
+  List<BarChartGroupData> getMonthlyNetPNLChartsData(
+      {required Color barColor}) {
     List<BarChartGroupData> barGroups = [];
 
-    List<AnalyticsMonthlyPnLOverviewDetails> dataList = internshipMonthlyPnlList;
+    List<AnalyticsMonthlyPnLOverviewDetails> dataList =
+        internshipMonthlyPnlList;
 
     for (var i = 0; i < dataList.length; i++) {
       var data = dataList[i];
@@ -440,6 +460,20 @@ class InternshipController extends BaseController<InternshipRespository> {
       );
     }
     return barGroups;
+  }
+
+  void downloadFile() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+
+    String path = dir.path;
+    String docsFolderPath = '$path/StoxHero/docs';
+    String filePath = '$docsFolderPath/Certificate.pdf';
+    String apiUrl =
+        '${AppUrls.internshipCertificateDownload(internshipCertificateDownload.value.id)}';
+
+    await File(filePath).create(recursive: true);
+    Get.find<NetworkService>().downloadFile(path: apiUrl, filePath: filePath);
+    await OpenFilex.open(filePath);
   }
 
   List<int> generateLotsList({String? type}) {
@@ -555,7 +589,9 @@ class InternshipController extends BaseController<InternshipRespository> {
       // print('openingBalance2 $openingBalance');
     }
     num availableMargin = (calculateTotalNetPNL() < 0)
-        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        ? (lots == 0
+            ? (openingBalance - margin + calculateTotalNetPNL())
+            : (openingBalance - margin))
         : (openingBalance - margin);
     return availableMargin;
   }
@@ -595,11 +631,14 @@ class InternshipController extends BaseController<InternshipRespository> {
     num priceValue = 0;
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
-        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        (stock) =>
+            stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) {
         int index = instrumentLivePriceList.indexWhere(
-          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+          (stock) =>
+              stock.instrumentToken == instID ||
+              stock.instrumentToken == exchID,
         );
         if (index == -1) {
           priceValue = 0;
@@ -616,10 +655,12 @@ class InternshipController extends BaseController<InternshipRespository> {
   String getInstrumentChanges(int instID, int exchID) {
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
-        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        (stock) =>
+            stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price = tradingInstrumentTradeDetailsList[index].change?.toString();
+      String? price =
+          tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
@@ -629,7 +670,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future getInstrumentLivePriceList() async {
     isLoading(true);
     try {
-      final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
+      final RepoResponse<InstrumentLivePriceListResponse> response =
+          await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
           instrumentLivePriceList(response.data?.data ?? []);
@@ -647,7 +689,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response =
+          await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -665,10 +708,13 @@ class InternshipController extends BaseController<InternshipRespository> {
       socketService.socket.on(
         'tick-room',
         (data) {
-          tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+          tempList =
+              TradingInstrumentTradeDetailsListResponse.fromJson(data).data ??
+                  [];
           tempList?.forEach(
             (element) {
-              if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+              if (tradingInstrumentTradeDetailsList.any(
+                  (obj) => obj.instrumentToken == element.instrumentToken)) {
                 int index = tradingInstrumentTradeDetailsList.indexWhere(
                   (stock) => stock.instrumentToken == element.instrumentToken,
                 );
@@ -707,7 +753,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     print('addInstrument : ${data.toJson()}');
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.addInstrument(
+      final RepoResponse<GenericResponse> response =
+          await repository.addInstrument(
         data.toJson(),
       );
       if (response.data?.message == "Instrument Added") {
@@ -744,14 +791,17 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future getInternshipWatchlist() async {
     isWatchlistStateLoading(true);
     try {
-      final RepoResponse<TradingWatchlistResponse> response = await repository.getInternshipWatchlist();
+      final RepoResponse<TradingWatchlistResponse> response =
+          await repository.getInternshipWatchlist();
       if (response.data != null) {
         if (response.data?.data! != null) {
           tradingWatchlist.clear();
           tradingWatchlistIds.clear();
           tradingWatchlist(response.data?.data ?? []);
           for (var element in tradingWatchlist) {
-            tradingWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+            tradingWatchlistIds.add(element.instrumentToken ??
+                element.exchangeInstrumentToken ??
+                0);
           }
         }
       } else {
@@ -768,7 +818,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     isPositionStateLoading(true);
     try {
       final RepoResponse<TradingPositionListResponse> response =
-          await repository.getInternshipPositions(internshipBatchDetails.value.id);
+          await repository
+              .getInternshipPositions(internshipBatchDetails.value.id);
       if (response.data != null) {
         if (response.data?.data! != null) {
           internshipPositionList(response.data?.data ?? []);
@@ -792,7 +843,8 @@ class InternshipController extends BaseController<InternshipRespository> {
         (data) {
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (stockIndexDetailsList
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = stockIndexDetailsList.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );
@@ -813,7 +865,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
 
     try {
-      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
+      final RepoResponse<TradingInstrumentListResponse> response =
+          await repository.searchInstruments(value);
       if (response.data != null) {
         if (response.data?.data! != null) {
           tradingInstruments.clear();
@@ -826,10 +879,13 @@ class InternshipController extends BaseController<InternshipRespository> {
       print(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
+    showShimmer
+        ? isInstrumentListLoading(false)
+        : isWatchlistStateLoading(false);
   }
 
-  Future placeInternshipOrder(TransactionType type, TradingInstrument inst) async {
+  Future placeInternshipOrder(
+      TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
@@ -879,7 +935,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     );
     print('placeVirtualTradingOrder : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.paperPlaceOrder(
+      final RepoResponse<GenericResponse> response =
+          await repository.paperPlaceOrder(
         data.toJson(),
       );
       print(response.data.toString());
@@ -906,7 +963,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future getInternshipBatchDetails() async {
     isInternshipLoading(true);
     try {
-      final RepoResponse<InternshipBatchResponse> response = await repository.getInternshipBatchDetails();
+      final RepoResponse<InternshipBatchResponse> response =
+          await repository.getInternshipBatchDetails();
       if (response.data != null) {
         internshipBatchDetails(response.data?.data);
       } else {
@@ -942,9 +1000,11 @@ class InternshipController extends BaseController<InternshipRespository> {
     isLoading(true);
     try {
       final RepoResponse<AnalyticsOverviewDetailsResponse> response =
-          await repository.getInternshipAnalyticsOverview(internshipBatchDetails.value.id);
+          await repository
+              .getInternshipAnalyticsOverview(internshipBatchDetails.value.id);
       if (response.data != null) {
-        internshipOverview(response.data?.data?[0] ?? AnalyticsOverviewDetails());
+        internshipOverview(
+            response.data?.data?[0] ?? AnalyticsOverviewDetails());
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -968,7 +1028,8 @@ class InternshipController extends BaseController<InternshipRespository> {
       };
 
       final RepoResponse<AnalyticsDateWiseDetailsResponse> response =
-          await repository.getInternshipAnalyticsDateWisePnLOverviewDetails(internshipBatchDetails.value.id, query);
+          await repository.getInternshipAnalyticsDateWisePnLOverviewDetails(
+              internshipBatchDetails.value.id, query);
       if (response.data != null) {
         internshipDateWisePnlList.value = response.data?.data ?? [];
         rangeCalculation();
@@ -986,7 +1047,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     isLoading(true);
     try {
       final RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse> response =
-          await repository.getInternshipAnalyticsMonthlyPnLOverviewDetails(internshipBatchDetails.value.id);
+          await repository.getInternshipAnalyticsMonthlyPnLOverviewDetails(
+              internshipBatchDetails.value.id);
       if (response.data != null) {
         internshipMonthlyPnlList(response.data?.data);
       } else {
@@ -1003,7 +1065,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     internshipTodayOrders.clear();
     isTodaysOrdersLoading(true);
     try {
-      final RepoResponse<InternshipOrdersListResponse> response = await repository.getInternshipTodayOrdersList();
+      final RepoResponse<InternshipOrdersListResponse> response =
+          await repository.getInternshipTodayOrdersList();
       if (response.data != null) {
         internshipTodayOrders(response.data?.data ?? []);
       } else {
@@ -1020,7 +1083,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     internshipAllOrders.clear();
     isAllOrdersLoading(true);
     try {
-      final RepoResponse<InternshipOrdersListResponse> response = await repository.getInternshipAllOrdersList();
+      final RepoResponse<InternshipOrdersListResponse> response =
+          await repository.getInternshipAllOrdersList();
       if (response.data != null) {
         internshipAllOrders(response.data?.data ?? []);
       } else {
@@ -1033,9 +1097,11 @@ class InternshipController extends BaseController<InternshipRespository> {
     isAllOrdersLoading(false);
   }
 
-  int calculateQuantity(TransactionType type, int tradingLots, int selectQuantity) {
+  int calculateQuantity(
+      TransactionType type, int tradingLots, int selectQuantity) {
     if (type == TransactionType.sell || type == TransactionType.exit) {
-      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
+      if (tradingLots == selectQuantity ||
+          tradingLots.abs() >= selectQuantity) {
         return 0;
       } else if (tradingLots.abs() <= selectQuantity) {
         return selectQuantity - tradingLots.abs();
@@ -1057,7 +1123,8 @@ class InternshipController extends BaseController<InternshipRespository> {
           : type == TransactionType.buy
               ? 'BUY'
               : 'SELL',
-      quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
+      quantity:
+          calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
       orderType: selectedType.value,
       validity: "DAY",
@@ -1067,7 +1134,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     );
 
     try {
-      final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
+      final RepoResponse<MarginRequiredResponse> response =
+          await repository.getMarginRequired(
         data.toJson(),
       );
       if (response.data != null) {
@@ -1088,7 +1156,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future getStopLossExecutedOrder() async {
     isExecutedOrderStateLoading(true);
     try {
-      final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
+      final RepoResponse<StopLossExecutedOrdersListResponse> response =
+          await repository.getStopLossExecutedOrder(
         internshipBatchDetails.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
@@ -1106,7 +1175,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future getStopLossPendingOrder() async {
     isPendingOrderStateLoading(true);
     try {
-      final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
+      final RepoResponse<StopLossPendingOrdersListResponse> response =
+          await repository.getStopLossPendingOrder(
         internshipBatchDetails.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
@@ -1136,7 +1206,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     isPendingOrderStateLoading(false);
   }
 
-  Future pendingOrderModify(TransactionType type, TradingInstrument inst) async {
+  Future pendingOrderModify(
+      TransactionType type, TradingInstrument inst) async {
     isPendingOrderStateLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
@@ -1176,7 +1247,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     );
     print('PendingOrderModifyRequest : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.pendingOrderModify(
+      final RepoResponse<GenericResponse> response =
+          await repository.pendingOrderModify(
         data.toJson(),
       );
       Get.back();
@@ -1227,6 +1299,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future socketSendConnection() async {
     isPendingOrderStateLoading(true);
     try {
+      socketService.socket.off('sendOrderResponse${userDetails.value.sId}');
       socketService.socket.on(
         'sendOrderResponse${userDetails.value.sId}',
         (data) {
@@ -1245,5 +1318,25 @@ class InternshipController extends BaseController<InternshipRespository> {
       log(e.toString());
     }
     isPendingOrderStateLoading(false);
+  }
+
+  Future getInternshipCertificate() async {
+    isLoading(true);
+    try {
+      final RepoResponse<InternshipCertificateResponse> response =
+          await repository.getInternshipCertificate();
+      if (response.data?.status?.toLowerCase() == "success") {
+        if (response.data?.message == "Eligible for certificate") {
+          isEligibleForCertificate.value = true;
+        }
+        internshipCertificate(response.data?.batches ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
   }
 }

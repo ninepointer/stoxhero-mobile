@@ -45,7 +45,7 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                   ),
                   TradeCardTile(
                     isRightAlign: true,
-                    label: 'LTP (Last Traded Price)',
+                    label: 'Amount',
                     value: FormatHelper.formatNumbers(
                       stopLoss.amount,
                     ),
@@ -65,7 +65,9 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                     hasBottomMargin: false,
                     label: 'Transaction Type',
                     value: stopLoss.buyOrSell,
-                    valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
+                    valueColor: stopLoss.buyOrSell == "SELL"
+                        ? AppColors.danger
+                        : AppColors.success,
                   ),
                 ],
               ),
@@ -75,14 +77,17 @@ class StoplossExecutedOrderCard extends StatelessWidget {
                   TradeCardTile(
                     label: 'Status',
                     value: stopLoss.status,
-                    valueColor: stopLoss.status == "Executed" ? AppColors.success : AppColors.danger,
+                    valueColor: stopLoss.status == "Executed"
+                        ? AppColors.success
+                        : AppColors.danger,
                     hasBottomMargin: false,
                   ),
                   TradeCardTile(
                     isRightAlign: true,
                     hasBottomMargin: true,
                     label: 'Execution Time',
-                    value: FormatHelper.formatDateTimeToIST(stopLoss.time),
+                    value: FormatHelper.formatDateTimeToIST(
+                        stopLoss.excuationTime),
                   ),
                 ],
               )

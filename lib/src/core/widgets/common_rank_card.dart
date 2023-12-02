@@ -38,7 +38,7 @@ class CommonRankCard extends GetView<ContestController> {
             ),
             SizedBox(width: 8),
             Text(
-              name,
+              '$name'.capitalize ?? '',
               style: Theme.of(context).textTheme.tsMedium14,
             ),
           ],

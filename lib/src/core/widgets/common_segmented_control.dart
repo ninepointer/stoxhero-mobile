@@ -39,7 +39,7 @@ class _CommonSegmentedControlState extends State<CommonSegmentedControl> {
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 8),
       child: CupertinoSegmentedControl<int>(
-        selectedColor: AppColors.primary,
+        selectedColor: AppColors.lightGreen,
         borderColor: AppColors.grey.withOpacity(.25),
         unselectedColor: Colors.transparent,
         children: widget.segments.map((key, value) {

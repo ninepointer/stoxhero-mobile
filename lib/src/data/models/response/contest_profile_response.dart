@@ -77,9 +77,7 @@ class ContestProfile {
     userid = json['userid'];
     firstName = json['first_name'];
     lastName = json['last_name'];
-    profilePicture = json['profile_picture'] != null
-        ? new ProfilePicture.fromJson(json['profile_picture'])
-        : null;
+    profilePicture = json['profile_picture'] != null ? new ProfilePicture.fromJson(json['profile_picture']) : null;
     joiningDate = json['joining_date'];
     finalPayout = json['finalPayout'];
   }

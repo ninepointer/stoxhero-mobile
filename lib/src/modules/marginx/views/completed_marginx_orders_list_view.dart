@@ -39,8 +39,10 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
                     children: [
                       OrderCardTile(
                         label: 'Quantity',
-                        value: FormatHelper.formatNumbers(order.quantity),
-                        valueColor: order.quantity! < 0 ? AppColors.danger : AppColors.success,
+                        value: order.quantity.toString(),
+                        valueColor: order.quantity! < 0
+                            ? AppColors.danger
+                            : AppColors.success,
                       ),
                       OrderCardTile(
                         isRightAlign: true,
@@ -64,7 +66,9 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
                         isRightAlign: true,
                         label: 'Type',
                         value: order.buyOrSell,
-                        valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
+                        valueColor: order.buyOrSell == AppConstants.buy
+                            ? AppColors.success
+                            : AppColors.danger,
                       ),
                     ],
                   ),
@@ -80,7 +84,9 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
                         isRightAlign: true,
                         label: 'Status',
                         value: order.status,
-                        valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
+                        valueColor: order.status == AppConstants.complete
+                            ? AppColors.success
+                            : AppColors.danger,
                       ),
                     ],
                   ),

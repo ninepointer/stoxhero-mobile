@@ -1,8 +1,4 @@
-import '../../base/base.dart';
-import '../../core/core.dart';
-import '../data.dart';
-import '../models/response/contest_profile_response.dart';
-
+import '../../app/app.dart';
 
 class ContestProfileRepository extends BaseRepository {
   Future<RepoResponse<ContestProfileResponse>> getContestProfile(String? id) async {
@@ -11,5 +7,21 @@ class ContestProfileRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: ContestProfileResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<WeeklyTopPerformersListResponse>> getWeeklyTopPerformer() async {
+    String apiURL = AppUrls.weeklyTopPerformers;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: WeeklyTopPerformersListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<WeeklyTopPerformersListResponse>> getWeeklyTopPerformerFullList() async {
+    String apiURL = AppUrls.weeklyTopPerformersFullList;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: WeeklyTopPerformersListResponse.fromJson(response));
   }
 }

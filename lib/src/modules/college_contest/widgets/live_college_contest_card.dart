@@ -25,10 +25,32 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  // padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: EdgeInsets.only(left: 12, right: 12, top: 8),
                   child: Text(
                     contest?.contestName ?? '-',
                     style: AppStyles.tsSecondaryMedium14,
+                  ),
+                ),
+              ),
+              Container(
+                height: 15, // Adjust the height as needed
+                child: InkWell(
+                  onTap: () {
+                    BottomSheetHelper.openBottomSheet(
+                      context: context,
+                      child: CollegeRewardTableBottomSheet(
+                        liveContest: contest,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Icon(
+                      Icons.info,
+                      size: 20.0,
+                      color: Colors.grey, // Icon color
+                    ),
                   ),
                 ),
               ),
@@ -45,166 +67,224 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
               Visibility(
                 visible: contest?.isNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.success,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   child: Text(
                     'Nifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
-              SizedBox(width: 4),
+              SizedBox(width: 2),
               Visibility(
                 visible: contest?.isBankNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   child: Text(
                     'Bank Nifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
-              SizedBox(width: 4),
+              SizedBox(width: 2),
               Visibility(
                 visible: contest?.isFinNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.info,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   child: Text(
                     'FinNifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
-              SizedBox(width: 4),
+              SizedBox(width: 2),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.danger,
-                  borderRadius: BorderRadius.circular(100),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 child: Text(
                   contest?.contestExpiry ?? '',
-                  style: AppStyles.tsWhiteMedium12,
+                  style: AppStyles.tsGreyMedium12,
                 ),
               ),
-              SizedBox(width: 4),
+              SizedBox(width: 2),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(100),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 child: Text(
                   contest?.contestStatus ?? '',
-                  style: AppStyles.tsWhiteMedium12,
+                  style: AppStyles.tsGreyMedium12,
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 8),
-        Divider(thickness: 1, height: 0),
-        SizedBox(height: 8),
+        SizedBox(height: 4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(padding: EdgeInsets.only(left: 5)),
+            Image.asset(
+              AppImages.contestTrophy,
+              width: 30,
+              height: 20,
+            ),
+            GestureDetector(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (contest?.payoutType == 'Reward') ...[
+                    Text(
+                      'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
+                      style: Theme.of(context).textTheme.tsGreyRegular12,
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                  if (contest?.payoutType != 'Reward') ...[
+                    if (contest?.payoutCapPercentage != null &&
+                        contest?.payoutCapPercentage != 0)
+                      Column(
+                        children: [
+                          Text(
+                            ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
+                              contest?.entryFee == 0
+                                  ? contest?.portfolio?.portfolioValue ?? 0
+                                  : contest?.entryFee ?? 0,
+                              contest?.payoutCapPercentage ?? 0,
+                            )})',
+                            style: Theme.of(context).textTheme.tsGreyRegular12,
+                          ),
+                        ],
+                      )
+                  ]
+                ],
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 4,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'No. of Seats left',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          controller
-                              .calculateSeatsLeft(
-                                contest?.maxParticipants ?? 0,
-                                contest?.participants?.length ?? 0,
-                              )
-                              .toString(),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Image.asset(
-                        AppImages.contestTrophy,
-                        width: 36,
-                      ),
-                      Text(
-                        'Reward',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '${contest?.payoutPercentage}% of the Net P&L',
-                            style: Theme.of(context).textTheme.tsMedium12,
-                          ),
-                          if (contest?.payoutCapPercentage != null && contest?.payoutCapPercentage != 0)
-                            Text(
-                              ' (Upto ${controller.getPaidCapAmount(
-                                contest?.entryFee == 0
-                                    ? contest?.portfolio?.portfolioValue ?? 0
-                                    : contest?.entryFee ?? 0,
-                                contest?.payoutCapPercentage ?? 0,
-                              )})',
-                              style: Theme.of(context).textTheme.tsMedium12,
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Remaining Time',
-                          style: AppStyles.tsGreyMedium12,
-                          textAlign: TextAlign.end,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          'Started',
-                          style: Theme.of(context).textTheme.tsMedium12,
-                          textAlign: TextAlign.end,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              // Stack(
+              //   children: [
+              //     Positioned(
+              //       left: 0,
+              //       top: 0,
+              //       child: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Text(
+              //             'No. of Seats left',
+              //             style: AppStyles.tsGreyMedium12,
+              //           ),
+              //           SizedBox(height: 2),
+              //           Text(
+              //             controller
+              //                 .calculateSeatsLeft(
+              //                   contest?.maxParticipants ?? 0,
+              //                   contest?.participants?.length ?? 0,
+              //                 )
+              //                 .toString(),
+              //             style: Theme.of(context).textTheme.tsMedium12,
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //     Column(
+              //       children: [
+              //         Image.asset(
+              //           AppImages.contestTrophy,
+              //           width: 36,
+              //         ),
+              //         Text(
+              //           'Reward',
+              //           style: AppStyles.tsGreyMedium12,
+              //         ),
+              //         GestureDetector(
+              //           onTap: () {
+              //             BottomSheetHelper.openBottomSheet(
+              //               context: context,
+              //               child: CollegeRewardTableBottomSheet(
+              //                 liveContest: contest,
+              //               ),
+              //             );
+              //           },
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.center,
+              //             children: [
+              //               if (contest?.payoutType == 'Reward') ...[
+              //                 Text(
+              //                   'Rewards worth ${controller.calculateTotalReward(contest?.rewards)},Click to know more.',
+              //                   style: Theme.of(context).textTheme.tsMedium12,
+              //                   textAlign: TextAlign.center,
+              //                 )
+              //               ],
+              //               if (contest?.payoutType != 'Reward') ...[
+              //                 Column(
+              //                   children: [
+              //                     // Text(
+              //                     //   '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L',
+              //                     //   style:
+              //                     //       Theme.of(context).textTheme.tsMedium12,
+              //                     // ),
+              //                     if (contest?.payoutCapPercentage != null &&
+              //                         contest?.payoutCapPercentage != 0)
+              //                       Text(
+              //                         '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
+              //                           contest?.entryFee == 0
+              //                               ? contest?.portfolio
+              //                                       ?.portfolioValue ??
+              //                                   0
+              //                               : contest?.entryFee ?? 0,
+              //                           contest?.payoutCapPercentage ?? 0,
+              //                         )})',
+              //                         style: Theme.of(context)
+              //                             .textTheme
+              //                             .tsMedium12,
+              //                       ),
+              //                     Text(' Click to know more.'),
+              //                   ],
+              //                 )
+              //               ]
+              //             ],
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //     Positioned(
+              //       right: 0,
+              //       top: 0,
+              //       child: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.end,
+              //         children: [
+              //           Text(
+              //             'Remaining Time',
+              //             style: AppStyles.tsGreyMedium12,
+              //             textAlign: TextAlign.end,
+              //             softWrap: false,
+              //           ),
+              //           SizedBox(height: 2),
+              //           Text(
+              //             'Started',
+              //             style: Theme.of(context).textTheme.tsMedium12,
+              //             textAlign: TextAlign.end,
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -212,55 +292,7 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Starts',
-                        style: Theme.of(context).textTheme.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatDateTimeToIST(contest?.contestStartTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Ends',
-                        style: Theme.of(context).textTheme.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        FormatHelper.formatDateTimeToIST(contest?.contestEndTime),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Entry Fee',
-                        style: Theme.of(context).textTheme.tsGreyMedium12,
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        contest?.entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(contest?.entryFee, decimal: 0),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Virtual Margin Money',
+                        'Virtual Margin',
                         style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
@@ -273,8 +305,110 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       ),
                     ],
                   ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Started',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Entry Fee',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        contest?.entryFee == 0
+                            ? 'Free'
+                            : FormatHelper.formatNumbers(contest?.entryFee,
+                                decimal: 0),
+                        style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
+                  ),
                 ],
               ),
+              SizedBox(height: 8),
+              //sgesg
+              //dsg
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text('Starts:',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                          FormatHelper.formatDateTimeWithoutYearToIST(
+                              contest?.contestStartTime),
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Spots left:',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                          controller
+                              .calculateSeatsLeft(
+                                contest?.maxParticipants ?? 0,
+                                contest?.participants?.length ?? 0,
+                              )
+                              .toString(),
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Ends:',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                          FormatHelper.formatDateTimeWithoutYearToIST(
+                              contest?.contestEndTime),
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Rubik')),
+                    ],
+                  )
+                ],
+              ),
+
               SizedBox(height: 12),
             ],
           ),
@@ -291,11 +425,13 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                   onTap: () {
                     controller.liveCollegeContest(contest);
                     if (contest?.entryFee == 0) {
-                      if (contest?.maxParticipants == contest?.participants?.length) {
+                      if (contest?.maxParticipants ==
+                          contest?.participants?.length) {
                         if (controller.canUserTrade(contest)) {
                           controller.gotoTradingView();
                         } else {
-                          if (controller.collegeCodeTextController.text.isNotEmpty) {
+                          if (controller
+                              .collegeCodeTextController.text.isNotEmpty) {
                             Get.back();
                             controller.verifyAndParticipate(contest);
                             controller.collegeCodeTextController.clear();
@@ -308,7 +444,8 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                           context: context,
                           child: CollegeContestCodeBottomsheet(
                             onSubmit: () {
-                              if (controller.collegeCodeTextController.text.isNotEmpty) {
+                              if (controller
+                                  .collegeCodeTextController.text.isNotEmpty) {
                                 Get.back();
                                 controller.verifyAndParticipate(contest);
                                 controller.collegeCodeTextController.clear();
@@ -327,14 +464,18 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                             productType: ProductType.collegeContest,
                             productId: contest?.id ?? '',
                             buyItemPrice: contest?.entryFee ?? 0,
-                            onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                            onPaymentSuccess:
+                                controller.loadDataAfterPaymentSuccess,
                             onSubmit: () {
                               Get.back();
-                              var walletController = Get.find<WalletController>();
+                              var walletController =
+                                  Get.find<WalletController>();
                               var data = {
                                 "bonusRedemption": 0,
-                                "coupon": walletController.couponCodeTextController.text,
-                                "contestFee": walletController.subscriptionAmount.value,
+                                "coupon": walletController
+                                    .couponCodeTextController.text,
+                                "contestFee":
+                                    walletController.subscriptionAmount.value,
                                 "contestId": contest?.id,
                                 "contestName": contest?.contestName,
                               };
@@ -355,9 +496,11 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                       color: AppColors.success.withOpacity(.25),
                     ),
                     child: Text(
-                      (controller.checkIfLivePurchased(contest) || contest?.entryFee == 0)
+                      controller.checkIfLivePurchased(contest)
                           ? 'Start Trading'
-                          : 'Pay Now',
+                          // : contest?.entryFee != 0
+                          //     ? 'Pay Now'
+                          : 'Join Now',
                       style: AppStyles.tsWhiteMedium12.copyWith(
                         color: AppColors.success,
                       ),
@@ -370,9 +513,10 @@ class LiveCollegeContestCard extends GetView<CollegeContestController> {
                   onTap: () {
                     controller.liveCollegeContest(contest);
                     controller.getShareContest(false);
-                    String url = 'https://stoxhero.com/contest';
+                    String url = 'https://stoxhero.com/testzone';
                     Clipboard.setData(ClipboardData(text: url));
-                    SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                    SnackbarHelper.showSnackbar(
+                        'Link Copied, Share with your friends.');
                   },
                   child: Container(
                     alignment: Alignment.center,

@@ -1,16 +1,16 @@
 class AppStrings {
   static const String rupeeSign = "₹";
 
-  static const String virtual = "Virtual";
+  static const String virtual = "F&O";
   static const String tenX = "TenX";
   static const String marginX = "MarginX";
-  static const String contest = "Contest";
+  static const String contest = "TestZone";
   static const String collegeContest = "College Contest";
 
-  static const String stoxHeroContests = "StoxHero Contests";
-  static const String contests = "Contests";
-  static const String collegeContests = "College Contests";
-  static const String contestsLeaderboard = "Contests Leaderboard";
+  static const String stoxHeroContests = "StoxHero";
+  static const String contests = "TestZone";
+  static const String collegeContests = "College";
+  static const String contestsLeaderboard = "TestZone Leaderboard";
 
   static const String buy = "BUY";
   static const String sell = "SELL";
@@ -22,6 +22,7 @@ class AppStrings {
   static const String remove = "REMOVE";
 
   static const String live = "Live";
+  static const String testZoneLive = "Open";
   static const String upcoming = "Upcoming";
   static const String completed = "Completed";
   static const String free = "Free";
@@ -54,7 +55,7 @@ class AppStrings {
   static const String tenxLeaderboard = "TenX Leaderboard";
   static const String wallet = "Wallet";
   static const String transactions = "Transactions";
-  static const String successfulTransactions = "Successful Withdrawals";
+  static const String successfulTransactions = "Withdrawals";
   static const String recentTransactions = "Recent Transactions";
 
   static const String todayOrders = 'Today Orders';
@@ -65,51 +66,65 @@ class AppStrings {
       'Note: After modifying this order, all existing pending stop loss orders will be cancelled.';
 
   static const String noDataFoundForFreeLiveContest =
-      "Oops! \nThere are no Free Live Contest at the moment.\nPlease check Upcoming Contest!";
+      "Oops! \nThere are no Free Live TestZone at the moment.\nPlease check Upcoming TestZone!";
   static const String noDataFoundForPremiumLiveContest =
-      "Oops! \nThere are no Premium Live Contest at the moment.\nPlease check Upcoming Contest!";
+      "Oops! \nThere are no Premium Live TestZone at the moment.\nPlease check Upcoming TestZone!";
 
   static const String noDataFoundForFreeUpcomingContest =
-      "Oops! \nThere are no Free Upcoming Contest at the moment.\nPlease check live Contest!";
+      "Oops! \nThere are no Free Upcoming TestZone at the moment.\nPlease check open TestZone!";
   static const String noDataFoundForPremiumUpcomingContest =
-      "Oops! \nThere are no Premium Upcoming Contest at the moment.\nPlease check live Contest!";
+      "Oops! \nThere are no Premium Upcoming TestZone at the moment.\nPlease check open TestZone!";
 
   static const String noDataFoundForFreeCompletedContest =
-      "Oops! \nThere are no Free Completed Contest at the moment.\nPlease check live Contest!";
+      "Oops! \nThere are no Free Completed TestZone at the moment.\nPlease check open TestZone!";
   static const String noDataFoundForPremiumCompletedContest =
-      "Oops! \nThere are no Premium Completed Contest at the moment.\nPlease check live Contest!";
+      "Oops! \nThere are no Premium Completed TestZone at the moment.\nPlease check open TestZone!";
 
   static const String noDataFoundForFreeLiveCollegeContest =
-      "Oops! \nThere are no Free Live College Contest at the moment.\nPlease check Upcoming College Contest!";
+      "Oops! \nThere are no Free Live College TestZone at the moment.\nPlease check Upcoming College TestZone!";
   static const String noDataFoundForPremiumLiveCollegeContest =
-      "Oops! \nThere are no Premium Live College Contest at the moment.\nPlease check Upcoming College Contest!";
+      "Oops! \nThere are no Premium Live College TestZone at the moment.\nPlease check Upcoming College TestZone!";
 
   static const String noDataFoundForFreeUpcomingCollegeContest =
-      "Oops! \nThere are no Free Upcoming College Contest at the moment.\nPlease check Live College Contest!";
+      "Oops! \nThere are no Free Upcoming College TestZone at the moment.\nPlease check open College TestZone!";
   static const String noDataFoundForPremiumUpcomingCollegeContest =
-      "Oops! \nThere are no Premium Upcoming College Contest at the moment.\nPlease check Live College Contest!";
+      "Oops! \nThere are no Premium Upcoming College TestZone at the moment.\nPlease check open College TestZone!";
 
   static const String noDataFoundForFreeCompletedCollegeContest =
-      "Oops! \nThere are no Free Completed College Contest at the moment.\nPlease check Live College Contest!";
+      "Oops! \nThere are no Free Completed College TestZone at the moment.\nPlease check open College TestZone!";
   static const String noDataFoundForPremiumCompletedCollegeContest =
-      "Oops! \nThere are no Premium Completed College Contest at the moment.\nPlease check Live College Contest!";
+      "Oops! \nThere are no Premium Completed College TestZone at the moment.\nPlease check open College TestZone!";
 
   static const String noDataFoundForPremiumLiveMarginX =
       "Oops! \nThere are no live MarginX at the moment.\nPlease check upcoming MarginX!";
   static const String noDataFoundForPremiumUpcomingMarginX =
-      "Oops!\nThere are no Upcoming MarginX at the moment.\nPlease check Live MarginX!";
+      "Oops!\nThere are no Upcoming MarginX at the moment.\nPlease check open MarginX!";
   static const String noDataFoundForPremiumCompletedMarginX =
-      "Oops!\nThere are no Completed MarginX at the moment.\nPlease check Live MarginX!";
+      "Oops!\nThere are no Completed MarginX at the moment.\nPlease check open MarginX!";
 
   static const String noDataFoundContestLeaderboard = "Oops!, \nNo Data Found!";
-  static const String noDataFoundCollegeContestLeaderboard = "Oops!, \nNo Data Found!";
+  static const String noDataFoundCollegeContestLeaderboard =
+      "Oops!, \nNo Data Found!";
   static const String noDataFoundTenxActive =
       "Oops!\nThere are no Active TenX at the moment.\nPlease check Subscribed TenX!";
   static const String noDataFoundTenxSubscribed =
       "Oops!\nThere are no Subscribed TenX at the moment.\nPlease check Active TenX!";
   static const String noDataFoundTenxExpired =
       "Oops!\nThere are no Expired TenX at the moment.\nPlease check Active TenX!";
-  static const String noDataFoundTenxLeaderboard = "Oops!\nThere are no Leaderboard for TenX at the moment.";
+  static const String noDataFoundTenxLeaderboard =
+      "Oops!\nThere are no Leaderboard for TenX at the moment.";
+
+  static const String noDataFoundCompletedRejectedOrders =
+      "All Your Completed and Rejected Orders\nwill show up here!";
+  static const String noDataFoundExecutedOrders =
+      "Your Executed Stop Loss, Stop Profit\nand Limit Orders will show up here!";
+
+  static const String noDataFoundPendingOrders =
+      "Your Pending Orders will show up here!";
+  static const String noDataFoundPositions =
+      "Your Positions will show up here!";
+  static const String noDataFoundWatchlist =
+      "Nothing here!\nClick on + icon to add instruments";
 
   static const String important = "IMPORTANT";
   static const String importantInfo =
@@ -134,8 +149,10 @@ class ErrorMessages {
   static String noDataFound = 'No Data Found!';
   static String unauthorized = 'You are not authorized';
   static String noInternet = 'Please check your internet connection';
-  static String connectionTimeout = 'Connection timeout, Please try again later.';
-  static String networkGeneral = 'Something went wrong. Please try again later.';
+  static String connectionTimeout =
+      'Connection timeout, Please try again later.';
+  static String networkGeneral =
+      'Something went wrong. Please try again later.';
   static String somethingWentWrong = "Error : Something went wrong!";
   static String passwordNotMatched = "Password doesn't match!";
 }

@@ -47,9 +47,11 @@ class WalletController extends BaseController<WalletRepository> {
 
   final paymentGroupValue = 'wallet'.obs;
   final selectedPaymentValue = 'wallet'.obs;
+  final isHeroCashAdded = false.obs;
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
-  void changeSecondTabBarIndex(int val) => selectedSecondTabBarIndex.value = val;
+  void changeSecondTabBarIndex(int val) =>
+      selectedSecondTabBarIndex.value = val;
 
   void onConfirm() {
     if (amountTextController.text.isEmpty) {
@@ -133,7 +135,9 @@ class WalletController extends BaseController<WalletRepository> {
         if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
           subscriptionAmount((planAmount - maxDiscount).toDouble());
         } else {
-          subscriptionAmount(planAmount - (planAmount * (discount / 100))).clamp(0, maxDiscount).toDouble();
+          subscriptionAmount(planAmount - (planAmount * (discount / 100)))
+              .clamp(0, maxDiscount)
+              .toDouble();
         }
       }
     } else {
@@ -144,17 +148,26 @@ class WalletController extends BaseController<WalletRepository> {
         if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
           subscriptionAmount((planAmount - maxDiscount).toDouble());
         } else {
-          subscriptionAmount(planAmount - (planAmount * (discount / 100))).clamp(0, maxDiscount).toDouble();
+          subscriptionAmount(planAmount - (planAmount * (discount / 100)))
+              .clamp(0, maxDiscount)
+              .toDouble();
         }
       }
     }
-    couponCodeSuccessText("Applied $couponCode - (₹$discount% off upto ₹$maxDiscount)");
+    if (rewardType == 'Discount') {
+      couponCodeSuccessText(
+          "Applied $couponCode - ($discount% off upto ₹$maxDiscount)");
+    } else {
+      couponCodeSuccessText(
+          "Applied $couponCode - ($discount% cashback  upto ₹$maxDiscount)");
+    }
   }
 
   Future getWalletTransactionsList() async {
     isRecentLoading(true);
     try {
-      final RepoResponse<WalletTransactionsListResponse> response = await repository.getWalletTransactionsList();
+      final RepoResponse<WalletTransactionsListResponse> response =
+          await repository.getWalletTransactionsList();
       if (response.data != null) {
         totalCashAmount(0);
         walletTransactionsList((response.data?.data?.transactions ?? []));
@@ -177,7 +190,8 @@ class WalletController extends BaseController<WalletRepository> {
   Future getMyWithdrawalsTransactionsList() async {
     isSuccessLoading(true);
     try {
-      final RepoResponse<MyWithdrawalsListResponse> response = await repository.getMyWithdrawalsTransactionsList();
+      final RepoResponse<MyWithdrawalsListResponse> response =
+          await repository.getMyWithdrawalsTransactionsList();
       if (response.data != null) {
         withdrawalTransactionsList((response.data?.data ?? []));
       } else {
@@ -197,7 +211,8 @@ class WalletController extends BaseController<WalletRepository> {
     );
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.withdrawals(
+      final RepoResponse<GenericResponse> response =
+          await repository.withdrawals(
         data.toJson(),
       );
       if (response.data != null) {
@@ -215,8 +230,12 @@ class WalletController extends BaseController<WalletRepository> {
     isLoading(false);
   }
 
-  Future verifyCouponCode(BuildContext context, ProductType productType, num amount) async {
+  Future verifyCouponCode(
+      BuildContext context, ProductType productType, num amount) async {
     isCouponCodeAdded(false);
+    if (amount == 0) {
+      amount = num.parse(addMoneyAmountTextController.text);
+    }
     if (couponCodeTextController.text.isEmpty) {
       SnackbarHelper.showSnackbar('Enter valid coupon code!');
       return;
@@ -232,18 +251,20 @@ class WalletController extends BaseController<WalletRepository> {
       product = '6517d3803aeb2bb27d650de0';
     } else if (productType == ProductType.marginx) {
       product = '6517d40e3aeb2bb27d650de1';
+    } else if (productType == ProductType.wallet) {
+      product = '651bdbc8da68770e8f1b8e09';
     }
-
     var data = VerifyCouponCodeRequest(
       code: couponCodeTextController.text.trim(),
       product: product,
       orderValue: amount,
-      paymentMode: 'wallet',
+      paymentMode: 'addition',
       platform: Platform.isAndroid ? 'Android' : 'iOS',
     );
 
     try {
-      final RepoResponse<VerifyCouponCodeResponse> response = await repository.verifyCouponCode(data.toJson());
+      final RepoResponse<VerifyCouponCodeResponse> response =
+          await repository.verifyCouponCode(data.toJson());
       if (response.data != null && response.data?.status == 'success') {
         var couponData = response.data?.data;
         isCouponCodeAdded(true);
@@ -267,7 +288,8 @@ class WalletController extends BaseController<WalletRepository> {
 
   Future<bool> initPaymentRequest(PaymentRequest data) async {
     try {
-      final RepoResponse<GenericResponse> response = await repository.makePayment(
+      final RepoResponse<GenericResponse> response =
+          await repository.makePayment(
         data.toJson(),
       );
       if (response.data != null) {
@@ -287,7 +309,8 @@ class WalletController extends BaseController<WalletRepository> {
 
   Future<bool> checkPaymentStatus(String id) async {
     try {
-      final RepoResponse<CheckPaymentStatusResponse> response = await repository.checkPaymentStatus(
+      final RepoResponse<CheckPaymentStatusResponse> response =
+          await repository.checkPaymentStatus(
         id,
       );
       if (response.data != null) {
@@ -310,7 +333,8 @@ class WalletController extends BaseController<WalletRepository> {
   Future getReadSetting() async {
     isRecentLoading(true);
     try {
-      final RepoResponse<ReadSettingResponse> response = await repository.readSetting();
+      final RepoResponse<ReadSettingResponse> response =
+          await repository.readSetting();
       readSetting(response.data);
     } catch (e) {
       log(e.toString());

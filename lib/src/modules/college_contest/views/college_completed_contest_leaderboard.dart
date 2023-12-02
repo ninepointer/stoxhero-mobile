@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class CollegeCompletedContestLeaderboard extends GetView<CollegeContestController> {
+class CollegeCompletedContestLeaderboard
+    extends GetView<CollegeContestController> {
   const CollegeCompletedContestLeaderboard({Key? key}) : super(key: key);
 
   @override
@@ -50,17 +51,24 @@ class CollegeCompletedContestLeaderboard extends GetView<CollegeContestControlle
                                   ),
                                 ),
                                 child: ClipOval(
-                                  child: contest.image == null || contest.image!.isEmpty
-                                      ? Image.asset(
-                                          AppImages.appLogo,
-                                          width: 48,
-                                          height: 48,
+                                  child: contest.image == null ||
+                                          contest.image!.isEmpty
+                                      ? Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Image.asset(
+                                            Get.isDarkMode
+                                                ? AppImages.darkAppLogo
+                                                : AppImages.lightAppLogo,
+                                            width: 48,
+                                            height: 48,
+                                          ),
                                         )
                                       : Image.network(
                                           contest.image ?? '',
                                           width: 48,
                                           height: 48,
-                                          errorBuilder: (context, error, stackTrace) {
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
                                             return Image.asset(
                                               AppImages.appLogo,
                                               width: 48,
@@ -105,7 +113,10 @@ class CollegeCompletedContestLeaderboard extends GetView<CollegeContestControlle
                                     contest.payout,
                                     decimal: 0,
                                   )}',
-                                  style: Theme.of(context).textTheme.tsMedium14.copyWith(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .tsMedium14
+                                      .copyWith(
                                         color: AppColors.success,
                                       ),
                                 ),

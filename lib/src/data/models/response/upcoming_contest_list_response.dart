@@ -62,38 +62,39 @@ class UpComingContest {
   String? payoutType;
   String? payoutPercentageType;
 
-  UpComingContest(
-      {this.id,
-      this.contestName,
-      this.contestStartTime,
-      this.contestEndTime,
-      this.description,
-      this.contestType,
-      this.currentLiveStatus,
-      this.contestFor,
-      this.entryFee,
-      this.payoutPercentage,
-      this.featured,
-      this.portfolio,
-      this.maxParticipants,
-      this.contestStatus,
-      this.createdBy,
-      this.lastModifiedBy,
-      this.contestExpiry,
-      this.isNifty,
-      this.isBankNifty,
-      this.isFinNifty,
-      this.isAllIndex,
-      this.product,
-      this.payoutCapPercentage,
-      this.rewards,
-      this.interestedUsers,
-      this.participants,
-      this.createdOn,
-      this.lastModifiedOn,
-      this.iV,
-      this.payoutType,
-      this.payoutPercentageType});
+  UpComingContest({
+    this.id,
+    this.contestName,
+    this.contestStartTime,
+    this.contestEndTime,
+    this.description,
+    this.contestType,
+    this.currentLiveStatus,
+    this.contestFor,
+    this.entryFee,
+    this.payoutPercentage,
+    this.featured,
+    this.portfolio,
+    this.maxParticipants,
+    this.contestStatus,
+    this.createdBy,
+    this.lastModifiedBy,
+    this.contestExpiry,
+    this.isNifty,
+    this.isBankNifty,
+    this.isFinNifty,
+    this.isAllIndex,
+    this.product,
+    this.payoutCapPercentage,
+    this.rewards,
+    this.interestedUsers,
+    this.participants,
+    this.createdOn,
+    this.lastModifiedOn,
+    this.iV,
+    this.payoutType,
+    this.payoutPercentageType,
+  });
 
   UpComingContest.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -290,36 +291,3 @@ class ContestUserId {
     return data;
   }
 }
-
-// class UpcomingParticipants {
-//   ContestUserId? userId;
-//   num? fee;
-//   num? actualPrice;
-//   String? participatedOn;
-//   bool? isLive;
-//   String? sId;
-
-//   UpcomingParticipants({this.userId, this.fee, this.actualPrice, this.participatedOn, this.isLive, this.sId});
-
-//   UpcomingParticipants.fromJson(Map<String, dynamic> json) {
-//     userId = json['userId'] != null ? new ContestUserId.fromJson(json['userId']) : null;
-//     fee = json['fee'];
-//     actualPrice = json['actualPrice'];
-//     participatedOn = json['participatedOn'];
-//     isLive = json['isLive'];
-//     sId = json['_id'];
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     if (this.userId != null) {
-//       data['userId'] = this.userId!.toJson();
-//     }
-//     data['fee'] = this.fee;
-//     data['actualPrice'] = this.actualPrice;
-//     data['participatedOn'] = this.participatedOn;
-//     data['isLive'] = this.isLive;
-//     data['_id'] = this.sId;
-//     return data;
-//   }
-// }

@@ -60,7 +60,9 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                       padding: EdgeInsets.only(bottom: 100),
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
-                        void openBottomSheet(BuildContext context, TransactionType type) {
+                        void openBottomSheet(
+                            BuildContext context, TransactionType type) {
+                          controller.addInstrument(data);
                           FocusScope.of(context).unfocus();
                           num lastPrice = controller.getInstrumentLastPrice(
                             data.instrumentToken ?? 0,
@@ -81,7 +83,8 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                             child: VirtualTransactionBottomSheet(
                               type: type,
                               tradingInstrument: tradingIntrument,
-                              marginRequired: controller.getMarginRequired(type, tradingIntrument),
+                              marginRequired: controller.getMarginRequired(
+                                  type, tradingIntrument),
                             ),
                           );
                         }
@@ -91,9 +94,12 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),
-                          buyOnTap: () => openBottomSheet(context, TransactionType.buy),
-                          sellOnTap: () => openBottomSheet(context, TransactionType.sell),
-                          removeOnTap: () => controller.removeInstrument(data.instrumentToken),
+                          buyOnTap: () =>
+                              openBottomSheet(context, TransactionType.buy),
+                          sellOnTap: () =>
+                              openBottomSheet(context, TransactionType.sell),
+                          removeOnTap: () =>
+                              controller.removeInstrument(data.instrumentToken),
                           addOnTap: () => controller.addInstrument(data),
                         );
                       },

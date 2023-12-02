@@ -11,7 +11,7 @@ class CommonCard extends StatelessWidget {
   final Function()? onTap;
   final bool isSpecialCard;
   final Color? isSpecialCardColor;
-
+  final double? width;
   const CommonCard({
     super.key,
     required this.children,
@@ -22,6 +22,7 @@ class CommonCard extends StatelessWidget {
     this.color,
     this.isSpecialCard = false,
     this.isSpecialCardColor,
+    this.width,
   });
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class CommonCard extends StatelessWidget {
             : null,
         child: Container(
           padding: padding ?? EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          width: double.infinity,
+          width: width ?? double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,

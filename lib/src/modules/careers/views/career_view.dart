@@ -118,6 +118,7 @@ class CareerView extends GetView<CareerController> {
                 label: buttonLabel,
                 height: 42,
                 onPressed: onPressed,
+                backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
               ),
             ),
           ],

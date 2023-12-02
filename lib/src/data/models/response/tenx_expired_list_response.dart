@@ -39,6 +39,13 @@ class TenxExpiredPlan {
   String? subscribedOn;
   String? expiredOn;
   int? validity;
+  num? tds;
+  num? npnl;
+  num? payout;
+  num? gpnl;
+  num? brokerage;
+  int? tradingDays;
+  int? trades;
 
   TenxExpiredPlan({
     this.sId,
@@ -53,6 +60,13 @@ class TenxExpiredPlan {
     this.subscribedOn,
     this.expiredOn,
     this.validity,
+    this.npnl,
+    this.payout,
+    this.tds,
+    this.gpnl,
+    this.brokerage,
+    this.tradingDays,
+    this.trades,
   });
 
   TenxExpiredPlan.fromJson(Map<String, dynamic> json) {
@@ -70,9 +84,16 @@ class TenxExpiredPlan {
     user = json['user'];
     fee = json['fee'];
     status = json['status'];
+    gpnl = json['gpnl'];
+    brokerage = json['brokerage'];
+    trades = json['trades'];
+    tradingDays = json['tradingDays'];
     subscribedOn = json['subscribedOn'];
     expiredOn = json['expiredOn'];
     validity = json['validity'];
+    npnl = json['npnl'];
+    payout = json['payout'];
+    tds = json['tdsAmount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -87,10 +108,17 @@ class TenxExpiredPlan {
     data['portfolioValue'] = this.portfolioValue;
     data['user'] = this.user;
     data['fee'] = this.fee;
+    data['gpnl'] = this.gpnl;
     data['status'] = this.status;
     data['subscribedOn'] = this.subscribedOn;
     data['expiredOn'] = this.expiredOn;
     data['validity'] = this.validity;
+    data['tds'] = this.tds;
+    data['payout'] = this.payout;
+    data['npnl'] = this.npnl;
+    data['tradingDays'] = this.tradingDays;
+    data['brokerage'] = this.brokerage;
+    data['trades'] = this.trades;
     return data;
   }
 }

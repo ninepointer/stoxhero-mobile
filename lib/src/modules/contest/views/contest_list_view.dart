@@ -21,14 +21,14 @@ class _ContestListViewState extends State<ContestListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contests'),
+        title: Text('TestZone'),
       ),
       body: Obx(
         () => CommonTabBar(
           index: controller.selectedTabBarIndex.value,
           onTap: controller.changeTabBarIndex,
           tabsTitle: [
-            AppStrings.live,
+            AppStrings.testZoneLive,
             AppStrings.upcoming,
             AppStrings.completed,
           ],
@@ -61,7 +61,8 @@ class _ContestListViewState extends State<ContestListView> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.liveFreeContestList.length,
                           itemBuilder: (BuildContext context, index) {
-                            String userId = controller.userDetailsData.sId ?? '';
+                            String userId =
+                                controller.userDetailsData.sId ?? '';
                             return LiveContestCard(
                               userId: userId,
                               contest: controller.liveFreeContestList[index],
@@ -94,7 +95,8 @@ class _ContestListViewState extends State<ContestListView> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.livePremiumContestList.length,
                           itemBuilder: (BuildContext context, index) {
-                            String userId = controller.userDetailsData.sId ?? '';
+                            String userId =
+                                controller.userDetailsData.sId ?? '';
                             return LiveContestCard(
                               userId: userId,
                               contest: controller.livePremiumContestList[index],
@@ -135,10 +137,12 @@ class _ContestListViewState extends State<ContestListView> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.upcomingFreeContestList.length,
                           itemBuilder: (BuildContext context, index) {
-                            String userId = controller.userDetailsData.sId ?? '';
+                            String userId =
+                                controller.userDetailsData.sId ?? '';
                             return UpComingContestCard(
                               userId: userId,
-                              contest: controller.upcomingFreeContestList[index],
+                              contest:
+                                  controller.upcomingFreeContestList[index],
                             );
                           },
                         ),
@@ -160,18 +164,22 @@ class _ContestListViewState extends State<ContestListView> {
                         visible: controller.upcomingPremiumContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForPremiumUpcomingContest,
+                          label:
+                              AppStrings.noDataFoundForPremiumUpcomingContest,
                         ),
                         replacement: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.upcomingPremiumContestList.length,
+                          itemCount:
+                              controller.upcomingPremiumContestList.length,
                           itemBuilder: (BuildContext context, index) {
-                            String userId = controller.userDetailsData.sId ?? '';
+                            String userId =
+                                controller.userDetailsData.sId ?? '';
                             return UpComingContestCard(
                               userId: userId,
-                              contest: controller.upcomingPremiumContestList[index],
+                              contest:
+                                  controller.upcomingPremiumContestList[index],
                             );
                           },
                         ),
@@ -209,9 +217,11 @@ class _ContestListViewState extends State<ContestListView> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.completedFreeContestList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final contest = controller.completedFreeContestList[index];
+                            final contest =
+                                controller.completedFreeContestList[index];
                             CompletedContestPnl? matchingContestPnl;
-                            for (var pnl in controller.completedContestPnlList) {
+                            for (var pnl
+                                in controller.completedContestPnlList) {
                               if (pnl.contestId == contest.id) {
                                 matchingContestPnl = pnl;
                                 break;
@@ -244,17 +254,21 @@ class _ContestListViewState extends State<ContestListView> {
                         visible: controller.completedPremiumContestList.isEmpty,
                         child: NoDataFound(
                           imagePath: AppImages.contestTrophy,
-                          label: AppStrings.noDataFoundForPremiumCompletedContest,
+                          label:
+                              AppStrings.noDataFoundForPremiumCompletedContest,
                         ),
                         replacement: ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: controller.completedPremiumContestList.length,
+                          itemCount:
+                              controller.completedPremiumContestList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final contest = controller.completedPremiumContestList[index];
+                            final contest =
+                                controller.completedPremiumContestList[index];
                             CompletedContestPnl? matchingContestPnl;
-                            for (var pnl in controller.completedContestPnlList) {
+                            for (var pnl
+                                in controller.completedContestPnlList) {
                               if (pnl.contestId == contest.id) {
                                 matchingContestPnl = pnl;
                                 break;

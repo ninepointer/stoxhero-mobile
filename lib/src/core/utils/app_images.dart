@@ -17,4 +17,12 @@ class AppImages {
   static const String contestLeaderboard = "$imagesDir/contest_leaderboard.png";
   static const String trophy = '$imagesDir/trophy.png';
   static const String diya = '$imagesDir/diya.png';
+  static const String dartAppName = '$imagesDir/4xAppNameDarkMode.png';
+  static const String lightAppName = '$imagesDir/4xAppNameLightMode.png';
+  static const String darkAppLogo = '$imagesDir/4xApplogoDarkMode.png';
+  static const String lightAppLogo = '$imagesDir/4xApplogolightmode.png';
+  static const String rank1 = '$imagesDir/rank1.png';
+  static const String rank2 = '$imagesDir/rank2.png';
+  static const String rank3 = '$imagesDir/rank3.png';
+  static const String xlogo = '$imagesDir/XXlogo.png';
 }

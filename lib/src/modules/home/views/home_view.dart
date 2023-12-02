@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
+import '../../virtual_trading/views/virtual_dashboard_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -16,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
 
   List<Widget> _tabs = [
     DashboardView(),
-    VirtualTradingView(),
+    FutureAndOptionDashBoard(),
     TenxTradingView(),
     MarginXView(),
     ContestView(),
@@ -37,9 +38,12 @@ class _HomeViewState extends State<HomeView> {
         Get.find<ContestController>().getLiveContestList();
         Get.find<ContestController>().getUpComingContestList();
         Get.find<CollegeContestController>().getLiveCollegeContestList();
+        Get.find<WalletController>().getWalletTransactionsList();
+        Get.find<ContestController>().getFeaturedContest();
+        Get.find<ContestProfileController>().getWeeklyTopPerformerFullList();
         break;
       case 1:
-        Get.find<VirtualTradingController>().loadData();
+        // Get.find<VirtualTradingController>().loadData();
         break;
       case 2:
         Get.find<TenxTradingController>().loadData();
@@ -126,7 +130,8 @@ class _HomeViewState extends State<HomeView> {
       body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor: AppColors.primary,
+        backgroundColor:
+            Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
         onPressed: () => _updateTab(2),
         child: Icon(
           Icons.currency_rupee_rounded,
@@ -140,6 +145,7 @@ class _HomeViewState extends State<HomeView> {
           notchMargin: 4,
           child: Container(
             height: 60,
+            margin: EdgeInsets.all(0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -152,7 +158,7 @@ class _HomeViewState extends State<HomeView> {
                 _buildTabButton(
                   context,
                   index: 1,
-                  label: 'Virtual',
+                  label: 'Market',
                   icon: Icons.analytics_rounded,
                 ),
                 SizedBox(width: 40),
@@ -165,7 +171,7 @@ class _HomeViewState extends State<HomeView> {
                 _buildTabButton(
                   context,
                   index: 4,
-                  label: 'Contest',
+                  label: 'TestZone',
                   icon: Icons.groups_rounded,
                 ),
               ],
@@ -190,13 +196,21 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Icon(
               icon,
-              color: controller.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey,
+              color: controller.selectedIndex.value == index
+                  ? Get.isDarkMode
+                      ? AppColors.darkGreen
+                      : AppColors.lightGreen
+                  : AppColors.grey,
             ),
             SizedBox(height: 4),
             Text(
               label,
-              style: Theme.of(context).textTheme.tsRegular12.copyWith(
-                    color: controller.selectedIndex.value == index ? Theme.of(context).primaryColor : AppColors.grey,
+              style: Theme.of(context).textTheme.tsRegular11.copyWith(
+                    color: controller.selectedIndex.value == index
+                        ? Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen
+                        : AppColors.grey,
                   ),
             )
           ],

@@ -98,13 +98,20 @@ class _CommonDrawerState extends State<CommonDrawer> {
                   ),
                   child: ClipOval(
                     child: controller.userDetails.value.profilePhoto == null
-                        ? Image.asset(
-                            AppImages.appLogo,
-                            width: 48,
-                            height: 48,
+                        ? Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Image.asset(
+                              Get.isDarkMode
+                                  ? AppImages.darkAppLogo
+                                  : AppImages.lightAppLogo,
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.contain,
+                            ),
                           )
                         : Image.network(
-                            controller.userDetails.value.profilePhoto?.url ?? '',
+                            controller.userDetails.value.profilePhoto?.url ??
+                                '',
                           ),
                   ),
                 ),
@@ -138,7 +145,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
             children: [
               ProfileListTile(
                 icon: Icons.analytics,
-                label: 'Analytics',
+                label: 'MarketGuru',
                 onTap: () => selectedItem(context, 0),
               ),
               ProfileListTile(
@@ -161,8 +168,12 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 4),
               ),
               ProfileListTile(
-                icon: ThemeService().theme == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
-                label: ThemeService().theme == ThemeMode.dark ? 'Light Mode' : 'Dark Mode',
+                icon: ThemeService().theme == ThemeMode.dark
+                    ? Icons.light_mode
+                    : Icons.dark_mode,
+                label: ThemeService().theme == ThemeMode.dark
+                    ? 'Light Mode'
+                    : 'Dark Mode',
                 onTap: () => selectedItem(context, 5),
               ),
               ProfileListTile(

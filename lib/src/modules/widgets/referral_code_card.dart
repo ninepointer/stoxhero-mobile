@@ -26,8 +26,10 @@ class ReferralCodeCard extends GetView<ReferralsController> {
               splashRadius: 24,
               padding: EdgeInsets.zero,
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: controller.getReferralMessage()));
-                SnackbarHelper.showSnackbar('Referral code copied to clipboard');
+                Clipboard.setData(
+                    ClipboardData(text: controller.getReferralMessage()));
+                SnackbarHelper.showSnackbar(
+                    'Referral code copied to clipboard');
               },
               icon: Icon(
                 Icons.copy,

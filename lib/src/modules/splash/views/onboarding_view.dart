@@ -69,7 +69,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                       Image.asset(
                         item.image,
                         width: 250,
-                        height: 250,
+                        height: 195,
                       ),
                       Spacer(),
                       Text(
@@ -77,7 +77,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.tsMedium20,
                       ),
-                      SizedBox(height: 24),
+                      SizedBox(height: 20),
                       Text(
                         item.description,
                         textAlign: TextAlign.center,
@@ -102,10 +102,13 @@ class _OnBoardingViewState extends State<OnBoardingView> {
           SizedBox(height: 36),
           if (currentIndex == contents.length - 1)
             CommonFilledButton(
-              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+              backgroundColor:
+                  Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
               width: 250,
               height: 52,
-              label: (currentIndex == contents.length - 1 ? 'Get Started' : 'Next'),
+              label: (currentIndex == contents.length - 1
+                  ? 'Get Started'
+                  : 'Next'),
               onPressed: navigateToNextScreen,
             )
           else
@@ -114,7 +117,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               child: FittedBox(
                 child: FloatingActionButton(
                   elevation: 0,
-                  backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                  backgroundColor: Get.isDarkMode
+                      ? AppColors.darkGreen
+                      : AppColors.lightGreen,
                   child: Icon(
                     Icons.chevron_right_rounded,
                     color: AppColors.white,
@@ -144,7 +149,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
       width: currentIndex == index ? 24 : 8,
       margin: EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
-        color: currentIndex == index ? AppColors.secondary : AppColors.grey.withOpacity(.25),
+        color: currentIndex == index
+            ? AppColors.secondary
+            : AppColors.grey.withOpacity(.25),
         borderRadius: BorderRadius.circular(50),
       ),
     );
@@ -171,22 +178,38 @@ List<OnBoardingContent> contents = [
   // ),
   OnBoardingContent(
     image: AppImages.virtualTrade,
-    title: 'Learn with \n Virtual Trade',
-    description: 'Explore the world of investing risk-free \n by practicing with virtual money.',
+    title: 'Experience the real F&O market',
+    description:
+        'Participate in different TestZones to test your strategies & win cash rewards!',
   ),
   OnBoardingContent(
-    image: AppImages.contests,
-    title: 'Contests',
-    description: "Trade in our virtual contest, earn real cash \n rewards based on your portfolio's value!",
+    image: AppImages.workshop,
+    title: 'Future & Options (F&O)',
+    description:
+        "Learn the basics of options trading by executing your strategies for free!",
   ),
   OnBoardingContent(
     image: AppImages.tenx,
-    title: 'Earn Real Money \n with 10x Trading',
-    description: 'Harness your knowledge to fuel financial \n growth with strategic investments.',
+    title: 'Subscribe to StoxHero TenX plans',
+    description:
+        'Subscribe to TenX plans and apply your learning to earn cash reward!',
+  ),
+  OnBoardingContent(
+    image: AppImages.job,
+    title: 'Get your real market readiness tested!',
+    description:
+        'Participate in MarginX with virtual money at a very low investment and check your market readiness!',
   ),
   OnBoardingContent(
     image: AppImages.referral,
-    title: 'Grow Together \n with Referral',
-    description: 'Gather your friends, claim rewards, and \n conquer milestones together!',
+    title: 'Refer your friends and win ',
+    description:
+        'Refer your friend & get \u{20B9}15 in your StoxHero wallet, your friend gets \u{20B9}100 as signup bonus',
+  ),
+  OnBoardingContent(
+    image: AppImages.contestLeaderboard,
+    title: 'Check TestZone Weekly Earning Leaderboard',
+    description:
+        'Check the TestZone profiles of top TestZone traders of the week along with their recent TestZone participations!',
   ),
 ];

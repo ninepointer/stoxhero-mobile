@@ -63,8 +63,16 @@ class UserPurchaseDetail {
   num? payout;
   String? expiredBy;
 
-  UserPurchaseDetail(
-      {this.userId, this.subscribedOn, this.status, this.sId, this.expiredOn, this.fee, this.payout, this.expiredBy});
+  UserPurchaseDetail({
+    this.userId,
+    this.subscribedOn,
+    this.status,
+    this.sId,
+    this.expiredOn,
+    this.fee,
+    this.payout,
+    this.expiredBy,
+  });
 
   UserPurchaseDetail.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
