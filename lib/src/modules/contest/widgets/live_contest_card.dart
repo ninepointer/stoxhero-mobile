@@ -78,7 +78,7 @@ class LiveContestCard extends GetView<ContestController> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             children: [
               Visibility(

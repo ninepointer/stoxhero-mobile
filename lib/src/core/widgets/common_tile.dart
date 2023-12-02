@@ -83,10 +83,10 @@ class CommonTile extends StatelessWidget {
                     seeAllLabel ?? 'See All',
                     style: Get.isDarkMode
                         ? AppStyles.tsprimarywhiteMedium14.copyWith(
-                            color: sellAllColor,
+                            color: AppColors.darkGreen,
                           )
                         : AppStyles.tsprimaryGrayishBlackMedium14.copyWith(
-                            color: sellAllColor,
+                            color: AppColors.lightGreen,
                           ),
                   )
                 else if (showIconButton)

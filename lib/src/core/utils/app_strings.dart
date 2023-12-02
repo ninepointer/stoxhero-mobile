@@ -71,14 +71,14 @@ class AppStrings {
       "Oops! \nThere are no Premium Live TestZone at the moment.\nPlease check Upcoming TestZone!";
 
   static const String noDataFoundForFreeUpcomingContest =
-      "Oops! \nThere are no Free Upcoming TestZone at the moment.\nPlease check live TestZone!";
+      "Oops! \nThere are no Free Upcoming TestZone at the moment.\nPlease check open TestZone!";
   static const String noDataFoundForPremiumUpcomingContest =
-      "Oops! \nThere are no Premium Upcoming TestZone at the moment.\nPlease check live TestZone!";
+      "Oops! \nThere are no Premium Upcoming TestZone at the moment.\nPlease check open TestZone!";
 
   static const String noDataFoundForFreeCompletedContest =
-      "Oops! \nThere are no Free Completed TestZone at the moment.\nPlease check live TestZone!";
+      "Oops! \nThere are no Free Completed TestZone at the moment.\nPlease check open TestZone!";
   static const String noDataFoundForPremiumCompletedContest =
-      "Oops! \nThere are no Premium Completed TestZone at the moment.\nPlease check live TestZone!";
+      "Oops! \nThere are no Premium Completed TestZone at the moment.\nPlease check open TestZone!";
 
   static const String noDataFoundForFreeLiveCollegeContest =
       "Oops! \nThere are no Free Live College TestZone at the moment.\nPlease check Upcoming College TestZone!";
@@ -86,21 +86,21 @@ class AppStrings {
       "Oops! \nThere are no Premium Live College TestZone at the moment.\nPlease check Upcoming College TestZone!";
 
   static const String noDataFoundForFreeUpcomingCollegeContest =
-      "Oops! \nThere are no Free Upcoming College TestZone at the moment.\nPlease check Live College TestZone!";
+      "Oops! \nThere are no Free Upcoming College TestZone at the moment.\nPlease check open College TestZone!";
   static const String noDataFoundForPremiumUpcomingCollegeContest =
-      "Oops! \nThere are no Premium Upcoming College TestZone at the moment.\nPlease check Live College TestZone!";
+      "Oops! \nThere are no Premium Upcoming College TestZone at the moment.\nPlease check open College TestZone!";
 
   static const String noDataFoundForFreeCompletedCollegeContest =
-      "Oops! \nThere are no Free Completed College TestZone at the moment.\nPlease check Live College TestZone!";
+      "Oops! \nThere are no Free Completed College TestZone at the moment.\nPlease check open College TestZone!";
   static const String noDataFoundForPremiumCompletedCollegeContest =
-      "Oops! \nThere are no Premium Completed College TestZone at the moment.\nPlease check Live College TestZone!";
+      "Oops! \nThere are no Premium Completed College TestZone at the moment.\nPlease check open College TestZone!";
 
   static const String noDataFoundForPremiumLiveMarginX =
       "Oops! \nThere are no live MarginX at the moment.\nPlease check upcoming MarginX!";
   static const String noDataFoundForPremiumUpcomingMarginX =
-      "Oops!\nThere are no Upcoming MarginX at the moment.\nPlease check Live MarginX!";
+      "Oops!\nThere are no Upcoming MarginX at the moment.\nPlease check open MarginX!";
   static const String noDataFoundForPremiumCompletedMarginX =
-      "Oops!\nThere are no Completed MarginX at the moment.\nPlease check Live MarginX!";
+      "Oops!\nThere are no Completed MarginX at the moment.\nPlease check open MarginX!";
 
   static const String noDataFoundContestLeaderboard = "Oops!, \nNo Data Found!";
   static const String noDataFoundCollegeContestLeaderboard =

@@ -185,6 +185,7 @@ class AnalyticsView extends GetView<AnalyticsController> {
                                 height: 42,
                                 label: 'Show Details',
                                 onPressed: () {
+                                  //  if (controller.isDateRangeValid()) {
                                   if (controller.selectedTab.value == 0) {
                                     controller.userDetailsData.designation ==
                                             AppConstants.equityTraderType

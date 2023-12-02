@@ -298,8 +298,8 @@ class _DashboardViewState extends State<DashboardView> {
                                   child: LiveContestCard(
                                     userId: userId,
                                     contest: contest,
-                                    margin:
-                                        EdgeInsets.all(8).copyWith(bottom: 0),
+                                    margin: EdgeInsets.all(8)
+                                        .copyWith(bottom: 0, left: 11),
                                   ),
                                 );
                               }).toList(),
@@ -769,7 +769,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      Colors.lightGreen, // Background color
+                                      AppColors.lightGreen, // Background color
                                   foregroundColor: Colors.white, // Text color
                                   elevation: 8.0, // Elevation (shadow)
                                   shape: RoundedRectangleBorder(

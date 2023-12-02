@@ -100,7 +100,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                       Expanded(
                         child: CommonRadioButtonTile(
                           value: 2,
-                          groupValue: 1,
+                          groupValue: 2,
                           label: 'Interaday (MIS)',
                         ),
                       ),
@@ -108,7 +108,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                       Expanded(
                         child: CommonRadioButtonTile(
                           value: 1,
-                          groupValue: 1,
+                          groupValue: 2,
                           label: 'Overnight (NRML)',
                         ),
                       ),
