@@ -29,44 +29,65 @@ class _AppState extends State<App> {
   Object? err;
   bool _initialUriIsHandled = false;
 
-  StreamSubscription? sub;
-
   @override
   void initState() {
     super.initState();
     _handleInitialUri();
     _handleIncomingLinks();
+    _initializeReferrerDetails();
+    _initializePushNotification();
   }
 
-  Future<void> _handleInitialUri() async {
+  Future _initializePushNotification() async {
+    await NotificationServices.initializeNotificationService(context);
+  }
+
+  Future _initializeReferrerDetails() async {
+    // try {
+    //   String referrerData;
+    //   ReferrerDetails referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
+    //   referrerData = referrerDetails.toString();
+    //   print('ReferrerDetails : $referrerData');
+    // } catch (e) {
+    //   print('Error : $e');
+    // }
+  }
+
+  Future _handleInitialUri() async {
     if (!_initialUriIsHandled) {
       _initialUriIsHandled = true;
       try {
         final uri = await getInitialUri();
-        if (uri != null) {
-          print('got initial uri: $uri');
-          // if (uri.path.contains('/contest')) {
-          //   Get.toNamed(AppRoutes.contest);
-          // }
-        }
+        // _linkRouting(uri);
         if (!mounted) return;
         setState(() => initialUri = uri);
       } catch (e) {
-        print('error : $e');
+        print('UniLinks Error : $e');
       }
     }
   }
 
   void _handleIncomingLinks() {
+    StreamSubscription? sub;
     sub = uriLinkStream.listen((Uri? uri) {
       if (!mounted) return;
-      print('got uri: $uri');
-      latestUri = uri;
+      print('UniLinks Incoming : $uri');
+      _linkRouting(uri);
     }, onError: (Object e) {
       if (!mounted) return;
-      print('got err: $err');
-      latestUri = null;
+      print('UniLinks Error : $err');
     });
+  }
+
+  void _linkRouting(Uri? uri) {
+    print('DeepLinking : ${uri?.path ?? ''}');
+    if (uri != null) {
+      final homeController = Get.find<HomeController>();
+      if (uri.path.contains('/virtual')) homeController.selectedIndex(1);
+      if (uri.path.contains('/tenx')) homeController.selectedIndex(2);
+      if (uri.path.contains('/marginx')) homeController.selectedIndex(3);
+      if (uri.path.contains('/testzone')) homeController.selectedIndex(4);
+    }
   }
 
   @override

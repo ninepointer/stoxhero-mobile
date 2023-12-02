@@ -18,3 +18,4 @@ export 'pending_edit_order_request.dart';
 export 'margin_required_request.dart';
 export 'payment_request.dart';
 export 'withdrawal_request.dart';
+export 'fcm_toke_data_request.dart';

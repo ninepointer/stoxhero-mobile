@@ -83,9 +83,15 @@ class AuthController extends BaseController<AuthRepository> {
 
     FocusScope.of(Get.context!).unfocus();
 
+    String deviceToken = await firebaseMessaging.getToken() ?? '-';
+    print('DeviceToken : $deviceToken');
+
     VerifySigninRequest data = VerifySigninRequest(
       mobile: mobileTextController.text,
       mobileOtp: otpTextController.text,
+      fcmTokenData: FcmTokenData(
+        token: deviceToken,
+      ),
     );
 
     try {
@@ -156,6 +162,7 @@ class AuthController extends BaseController<AuthRepository> {
       mobile: mobileTextController.text,
       dob: DateFormat('yyyy-MM-dd').format(date),
       referrerCode: referralTextController.text,
+      // campaignCode:
     );
 
     try {
@@ -184,6 +191,16 @@ class AuthController extends BaseController<AuthRepository> {
       final response = await repository.loginDetails();
       if (response.data != null) {
         await AppStorage.setUserDetails(response.data ?? LoginDetailsResponse());
+
+        String deviceToken = await firebaseMessaging.getToken() ?? '-';
+        print('DeviceToken addFcmTokenData : $deviceToken');
+
+        FcmTokenDataRequest fcmTokenDataRequest = FcmTokenDataRequest(
+          fcmTokenData: FcmTokenData(token: deviceToken),
+        );
+
+        await repository.addFcmTokenData(fcmTokenDataRequest.toJson());
+
         Get.find<HomeController>().loadUserDetails();
         if (navigate) {
           await SocketService().initSocket();

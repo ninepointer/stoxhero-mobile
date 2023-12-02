@@ -14,6 +14,7 @@ class SignupRequest {
   bool? termsAndConditions;
   String? tradingAccount;
   String? referrerCode;
+  String? campaignCode;
   String? pincode;
 
   SignupRequest({
@@ -32,6 +33,7 @@ class SignupRequest {
     this.termsAndConditions = false,
     this.tradingAccount = "",
     this.referrerCode = "",
+    this.campaignCode = "",
     this.pincode = "",
   });
 
@@ -51,6 +53,7 @@ class SignupRequest {
     termsAndConditions = json['terms_and_conditions'];
     tradingAccount = json['trading_account'];
     referrerCode = json['referrerCode'];
+    campaignCode = json['campaignCode'];
     pincode = json['pincode'];
   }
 
@@ -71,6 +74,7 @@ class SignupRequest {
     data['terms_and_conditions'] = this.termsAndConditions;
     data['trading_account'] = this.tradingAccount;
     data['referrerCode'] = this.referrerCode;
+    data['campaignCode'] = this.campaignCode;
     data['pincode'] = this.pincode;
     return data;
   }
