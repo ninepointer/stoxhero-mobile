@@ -49,7 +49,9 @@ class _DashboardViewState extends State<DashboardView> {
     String name = '';
     DateTime now = DateTime.now();
     if (label == 'this month') name = DateFormat('MMMM yyyy').format(now);
-    if (label == 'last month') name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+    if (label == 'last month')
+      name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+
     if (label == 'lifetime') name = 'Lifetime';
     return name;
   }
@@ -57,6 +59,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
+
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
@@ -441,6 +444,9 @@ class _DashboardViewState extends State<DashboardView> {
                               setState(
                                 () {
                                   controller.selectedTradeType = value ?? '';
+                                  controller.getDashboard(
+                                      controller.selectedTradeType,
+                                      controller.selectedTimeFrame);
                                 },
                               );
                             },

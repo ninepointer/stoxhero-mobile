@@ -16,15 +16,44 @@ class FutureAndOptionDashBoard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Embark on a learning path",
+                "Learn with StoxHero",
                 style: Get.isDarkMode
-                    ? AppStyles.tsprimarywhiteMedium14
-                    : AppStyles.tsprimaryGrayishBlackMedium14,
+                    ? AppStyles.tsprimarywhiteMedium20
+                    : AppStyles.tsprimaryGrayishBlackMedium20,
               )
             ],
           ),
           SizedBox(
-            height: 25,
+            height: 5,
+          ),
+          Container(
+            alignment: Alignment.center,
+            width: 250,
+            child: Text(
+              "Master finance in simple way. Choose one to get started. You can switch anytime.",
+              style: Get.isDarkMode
+                  ? AppStyles.tsGreyRegular14
+                  : AppStyles.tsGreyRegular14,
+              softWrap: true,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Embark on a learning path",
+                style: Get.isDarkMode
+                    ? AppStyles.tsprimarywhiteMedium18
+                    : AppStyles.tsprimaryGrayishBlackMedium18,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 16,
           ),
           customCard(
             context: context,
@@ -63,77 +92,96 @@ class FutureAndOptionDashBoard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onPressed,
-      child: CommonCard(
-        margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            title,
-                            style: Theme.of(context).textTheme.tsMedium14,
-                          ),
-                          SizedBox(height: 6),
-                          Text(
-                            text,
-                            style: AppStyles.tsGreyRegular12,
-                            softWrap: true,
-                          ),
-                        ],
+      child: Container(
+        child: CommonCard(
+          margin: EdgeInsets.zero,
+          padding: EdgeInsets.zero,
+          hasBorder: isComingSoonCard ? false : true,
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              title,
+                              style: Theme.of(context).textTheme.tsMedium16,
+                            ),
+                            SizedBox(height: 6),
+                            Text(
+                              text,
+                              style: AppStyles.tsGreyRegular12,
+                              softWrap: true,
+                            ),
+                            SizedBox(height: 25),
+                            Text(
+                              'Start Now',
+                              style: TextStyle(color: AppColors.lightGreen),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8),
-                    Container(
-                      height: 120,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        // color: Theme.of(context).scaffoldBackgroundColor,
-                        borderRadius: BorderRadius.circular(8),
+                      SizedBox(width: 8),
+                      Container(
+                        height: 90,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Image.asset(
+                          image,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                      child: Image.asset(
-                        image,
-                        // height: 120,
-                        // width: 100,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              if (isComingSoonCard)
-                Positioned(
-                  top: -10,
-                  left: 40,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGreen,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      "Coming Soon",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                if (isComingSoonCard)
+                  Positioned(
+                    top: 0, // Adjust this value to fine-tune the position
+                    left: 0, // Adjust this value to fine-tune the position
+                    right: 0, // Adjust this value to fine-tune the position
+                    bottom: 0, // Adjust this value to fine-tune the position
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: AppColors.brandYellow, width: 1.0),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                   ),
-                ),
-            ],
-          ),
-        ],
+                if (isComingSoonCard)
+                  Positioned(
+                    top: -10,
+                    left: 40,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.brandYellow,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        "Coming Soon",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

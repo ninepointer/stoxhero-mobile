@@ -93,7 +93,8 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+        'Authorization':
+            'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.get(
@@ -137,7 +138,8 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+        'Authorization':
+            'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.post(
@@ -181,7 +183,8 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+        'Authorization':
+            'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.patch(
@@ -225,7 +228,8 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+        'Authorization':
+            'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.put(
@@ -376,7 +380,9 @@ class NetworkService {
     Dio _authFormDio = Dio();
 
     final headers = {
-      'Cookie': useTestToken ? 'jwtoken=${AppConstants.token}' : 'jwtoken=${AppStorage.getToken()}',
+      'Cookie': useTestToken
+          ? 'jwtoken=${AppConstants.token}'
+          : 'jwtoken=${AppStorage.getToken()}',
     };
 
     BaseOptions dioOptions = BaseOptions(
@@ -457,7 +463,9 @@ class NetworkService {
   }) async {
     try {
       final headers = {
-        'Cookie': useTestToken ? 'jwtoken=${AppConstants.token}' : 'jwtoken=${AppStorage.getToken()}',
+        'Cookie': useTestToken
+            ? 'jwtoken=${AppConstants.token}'
+            : 'jwtoken=${AppStorage.getToken()}',
       };
       final response = await _dio.download(
         path,
