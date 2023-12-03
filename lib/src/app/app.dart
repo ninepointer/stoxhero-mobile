@@ -34,23 +34,11 @@ class _AppState extends State<App> {
     super.initState();
     _handleInitialUri();
     _handleIncomingLinks();
-    _initializeReferrerDetails();
     _initializePushNotification();
   }
 
   Future _initializePushNotification() async {
     await NotificationServices.initializeNotificationService(context);
-  }
-
-  Future _initializeReferrerDetails() async {
-    // try {
-    //   String referrerData;
-    //   ReferrerDetails referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
-    //   referrerData = referrerDetails.toString();
-    //   print('ReferrerDetails : $referrerData');
-    // } catch (e) {
-    //   print('Error : $e');
-    // }
   }
 
   Future _handleInitialUri() async {
