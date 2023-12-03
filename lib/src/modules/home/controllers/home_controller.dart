@@ -45,6 +45,7 @@ class HomeController extends BaseController<DashboardRepository> {
     await getDashboardReturnSummary();
     await getDashboardCarousel();
     await getDashboard(selectedTradeType, selectedTimeFrame);
+
     socketIndexConnection();
   }
 
@@ -141,11 +142,16 @@ class HomeController extends BaseController<DashboardRepository> {
     isLoading(true);
     try {
       final RepoResponse<DashboardTradeSummaryResponse> response =
-          await repository.getDashboard(tradeType, timeFame);
+          tradeType == 'virtual'
+              ? await repository.getDashboardVirtual(tradeType, timeFame)
+              : await repository.getDashboard(tradeType, timeFame);
+
       if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {
-          userDashboard(response.data?.data);
-        }
+        print(
+            'Making API request with Trade Type: $tradeType, Time Frame: $timeFame');
+        userDashboard(response.data?.data);
+      }
+      if (response.data?.status?.toLowerCase() == "success") {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

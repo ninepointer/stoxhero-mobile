@@ -964,11 +964,35 @@ class AppStyles {
     fontWeight: FontWeight.w500,
     fontSize: 14,
   );
+  static TextStyle tsprimaryGrayishBlackMedium18 = TextStyle(
+    color: AppColors.blackGrayish,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+  );
+  static TextStyle tsprimaryGrayishBlackMedium20 = TextStyle(
+    color: AppColors.blackGrayish,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+  );
   static TextStyle tsprimarywhiteMedium14 = TextStyle(
     color: AppColors.white,
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w500,
     fontSize: 14,
+  );
+  static TextStyle tsprimarywhiteMedium20 = TextStyle(
+    color: AppColors.white,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+  );
+  static TextStyle tsprimarywhiteMedium18 = TextStyle(
+    color: AppColors.white,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
   );
   static TextStyle tsSecondaryMedium16 = TextStyle(
     color: AppColors.secondary,

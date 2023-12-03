@@ -6,7 +6,9 @@ class DashboardTradeSummaryResponse {
 
   DashboardTradeSummaryResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    data = json['data'] != null ? new DashboardTradeSummary.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new DashboardTradeSummary.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
