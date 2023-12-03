@@ -62,6 +62,7 @@ class NotificationServices {
         androidNotificationDetails = AndroidNotificationDetails(
           channel.id,
           channel.name,
+          color: AppColors.lightGreen,
           importance: Importance.max,
           priority: Priority.max,
           styleInformation: BigTextStyleInformation(
@@ -95,18 +96,17 @@ class NotificationServices {
     });
   }
 
-  static void handelNotificationClick(dynamic messageData, {bool isLocal = false}) {
+  static void handelNotificationClick(dynamic messageData, {bool isLocal = false}) async {
     print('onMessageClicked : isLocal : $isLocal');
     print('onMessageClicked : $messageData');
 
     LoginDetailsResponse? userDetails = AppStorage.getUserDetails();
-    String route = "";
     Map<String, dynamic> actionData = jsonDecode(messageData['actions']);
-    route = actionData['route'];
+    String route = actionData['route'];
 
     if (userDetails.sId != null) {
       final homeController = Get.find<HomeController>();
-      Get.toNamed(AppRoutes.home);
+      if (isLocal) Get.toNamed(AppRoutes.home);
       if (route == 'virtual') homeController.selectedIndex(1);
       if (route == 'tenx') homeController.selectedIndex(2);
       if (route == 'marginx') homeController.selectedIndex(3);

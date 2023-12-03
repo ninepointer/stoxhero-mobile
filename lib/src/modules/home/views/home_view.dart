@@ -1,5 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 import '../../../core/core.dart';
 import '../../modules.dart';
@@ -26,7 +28,19 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    handelInitialNotification();
     controller = Get.find<HomeController>();
+  }
+
+  void handelInitialNotification() async {
+    print('handelInitialNotification');
+    RemoteMessage? initialMessage = await firebaseMessaging.getInitialMessage();
+    print('handelInitialNotification : ${initialMessage?.toMap()}');
+    if (initialMessage != null)
+      NotificationServices.handelNotificationClick(
+        initialMessage.data,
+        isLocal: true,
+      );
   }
 
   void _updateTab(int index) {
@@ -130,8 +144,7 @@ class _HomeViewState extends State<HomeView> {
       body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor:
-            Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
         onPressed: () => _updateTab(2),
         child: Icon(
           Icons.currency_rupee_rounded,
