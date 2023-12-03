@@ -5,8 +5,7 @@ class InternshipDashboardView extends StatefulWidget {
   const InternshipDashboardView({Key? key}) : super(key: key);
 
   @override
-  State<InternshipDashboardView> createState() =>
-      _InternshipDashboardViewState();
+  State<InternshipDashboardView> createState() => _InternshipDashboardViewState();
 }
 
 class _InternshipDashboardViewState extends State<InternshipDashboardView> {
@@ -37,7 +36,7 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                 InternshipCertificateDownloadCard(),
               ],
               RefreshIndicator(
-                onRefresh: controller.loadIntershipData,
+                onRefresh: controller.loadData,
                 child: Visibility(
                   visible: controller.isInternshipLoadingStatus,
                   child: Column(
@@ -55,8 +54,7 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                       children: [
                         CommonCard(
                           margin: EdgeInsets.zero,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 16),
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                           onTap: () => setState(() => isExpanded = !isExpanded),
                           children: [
                             Row(
@@ -67,9 +65,7 @@ class _InternshipDashboardViewState extends State<InternshipDashboardView> {
                                   style: AppStyles.tsSecondaryRegular14,
                                 ),
                                 Icon(
-                                  isExpanded
-                                      ? Icons.expand_less_rounded
-                                      : Icons.expand_more_rounded,
+                                  isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
                                   color: AppColors.grey,
                                 ),
                               ],

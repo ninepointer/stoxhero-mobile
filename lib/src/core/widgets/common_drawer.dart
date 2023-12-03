@@ -47,7 +47,7 @@ class _CommonDrawerState extends State<CommonDrawer> {
         break;
       case 4:
         Get.toNamed(AppRoutes.Internship);
-        Get.find<InternshipController>().loadIntershipData();
+        Get.find<InternshipController>().loadData();
         break;
       case 5:
         ThemeService().switchTheme();
@@ -101,17 +101,14 @@ class _CommonDrawerState extends State<CommonDrawer> {
                         ? Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: Image.asset(
-                              Get.isDarkMode
-                                  ? AppImages.darkAppLogo
-                                  : AppImages.lightAppLogo,
+                              Get.isDarkMode ? AppImages.darkAppLogo : AppImages.lightAppLogo,
                               width: 48,
                               height: 48,
                               fit: BoxFit.contain,
                             ),
                           )
                         : Image.network(
-                            controller.userDetails.value.profilePhoto?.url ??
-                                '',
+                            controller.userDetails.value.profilePhoto?.url ?? '',
                           ),
                   ),
                 ),
@@ -168,12 +165,8 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 4),
               ),
               ProfileListTile(
-                icon: ThemeService().theme == ThemeMode.dark
-                    ? Icons.light_mode
-                    : Icons.dark_mode,
-                label: ThemeService().theme == ThemeMode.dark
-                    ? 'Light Mode'
-                    : 'Dark Mode',
+                icon: ThemeService().theme == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
+                label: ThemeService().theme == ThemeMode.dark ? 'Light Mode' : 'Dark Mode',
                 onTap: () => selectedItem(context, 5),
               ),
               ProfileListTile(
