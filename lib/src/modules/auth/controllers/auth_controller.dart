@@ -35,6 +35,8 @@ class AuthController extends BaseController<AuthRepository> {
   final token = ''.obs;
   final inviteCode = CampaignCodeData().obs;
 
+  final campaignCode = ''.obs;
+
   void verifyOtp() => isSignup.value ? verifySignupOtp() : verifySigninOtp();
 
   void showDateRangePicker(BuildContext context) async {
@@ -162,7 +164,7 @@ class AuthController extends BaseController<AuthRepository> {
       mobile: mobileTextController.text,
       dob: DateFormat('yyyy-MM-dd').format(date),
       referrerCode: referralTextController.text,
-      // campaignCode:
+      campaignCode: campaignCode.value,
     );
 
     try {

@@ -27,10 +27,15 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     _initializePushNotification();
+    _initializeDynamicLink();
   }
 
   Future _initializePushNotification() async {
     await NotificationServices.initializeNotificationService(context);
+  }
+
+  Future _initializeDynamicLink() async {
+    await DynamicLinkServices.initializeDynamicLink();
   }
 
   @override
