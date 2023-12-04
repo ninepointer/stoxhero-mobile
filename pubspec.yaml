@@ -1,12 +1,7 @@
 name: stoxhero
 description: A new Flutter project.
-<<<<<<< HEAD
-# version: 1.0.0+53 # Dev
-version: 1.0.0+33 # Prod
-=======
 # version: 1.0.0+51 # Dev
 version: 1.0.0+34 # Prod
->>>>>>> b3e50e97a1b5561a9f1809e0a7353c717ce567b6
 publish_to: "none"
 
 environment:
