@@ -361,7 +361,7 @@ class ShareModalContent extends GetView<ContestController> {
                         width: 6,
                       ),
                       Text(
-                        'Share Your Achivements',
+                        'Share Your Achievements',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
