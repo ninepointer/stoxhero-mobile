@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import '../../../app/app.dart';
 import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';

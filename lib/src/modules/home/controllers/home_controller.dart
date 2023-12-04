@@ -45,7 +45,6 @@ class HomeController extends BaseController<DashboardRepository> {
     await getDashboardReturnSummary();
     await getDashboardCarousel();
     await getDashboard(selectedTradeType, selectedTimeFrame);
-
     socketIndexConnection();
   }
 

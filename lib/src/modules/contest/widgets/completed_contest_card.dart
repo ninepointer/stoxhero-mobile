@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
-// import '../widgets/share_modal_content.dart';
+import '../widgets/share_modal_content.dart';
 
 class CompletedContestCard extends GetView<ContestController> {
   final String? id;
@@ -493,35 +493,51 @@ class CompletedContestCard extends GetView<ContestController> {
                 ),
               ),
             ),
-            // Expanded(
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       controller.completedContest(contest);
-            //       showModalBottomSheet(
-            //         context: context,
-            //         builder: (BuildContext context) {
-            //           return ShareModalContent(); // Create a new widget for the modal content
-            //         },
-            //       );
-            //     },
-            //     child: Container(
-            //       alignment: Alignment.center,
-            //       padding: EdgeInsets.all(6),
-            //       decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.only(
-            //           bottomRight: Radius.circular(8),
-            //         ),
-            //         color: AppColors.primary.withOpacity(.25),
-            //       ),
-            //       child: Text(
-            //         'Share',
-            //         style: AppStyles.tsSecondaryMedium12.copyWith(
-            //           color: AppColors.primary,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () async {
+                  controller.completedContest(contest);
+                  controller.getCompletedContestOrders(contest?.id);
+
+                  CompletedContestPnl? matchingContestPnl;
+                  for (var pnl in controller.completedContestPnlList) {
+                    if (pnl.contestId == controller.completedContest.value.id) {
+                      matchingContestPnl = pnl;
+                      break;
+                    }
+                  }
+
+                  if (matchingContestPnl != null) {
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: ShareModalContent(
+                            completedContestPnl: matchingContestPnl,
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(8),
+                    ),
+                    color: AppColors.primary.withOpacity(.25),
+                  ),
+                  child: Text(
+                    'Share',
+                    style: AppStyles.tsSecondaryMedium12.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ],

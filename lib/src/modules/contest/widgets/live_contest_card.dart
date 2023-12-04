@@ -63,7 +63,8 @@ class LiveContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.featured == true,
                 child: Container(
-                  padding: EdgeInsets.all(18),
+                  padding:
+                      EdgeInsets.only(left: 18, right: 25, bottom: 18, top: 6),
                   foregroundDecoration: CommonTriangleCard(
                     badgeColor: AppColors.success,
                     badgeSize: 62,
