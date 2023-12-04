@@ -8,9 +8,7 @@ class DynamicLinkServices {
     print('DynamicLink initializeDynamicLink');
     firebaseDynamicLink.onLink.listen((PendingDynamicLinkData dynamicLinkData) {
       print('DynamicLink onLink : ${dynamicLinkData.link}');
-      String url = dynamicLinkData.link.toString();
-      if (url.isEmpty) return;
-      handleDeepLink(url);
+      handleDeepLink(dynamicLinkData);
     }).onError((e) {
       print('DynamicLink Error : $e');
     });
@@ -19,29 +17,28 @@ class DynamicLinkServices {
 
   static Future<void> initializeUniLink() async {
     try {
-      final dynamicLinkData = await firebaseDynamicLink.getInitialLink();
+      PendingDynamicLinkData? dynamicLinkData = await firebaseDynamicLink.getInitialLink();
       print('DynamicLink getInitialLink : ${dynamicLinkData?.link}');
-      if (dynamicLinkData == null) return;
-      handleDeepLink(dynamicLinkData.link.path);
+      handleDeepLink(dynamicLinkData);
     } catch (e) {
       print('DynamicLink Error : $e');
     }
   }
 
-  static void handleDeepLink(String url) {
-    print('DynamicLink handleDeepLink : $url');
-
-    try {
-      Uri uri = Uri.parse(url);
-      String? code = uri.queryParameters['campaign'];
-
-      if (code != null) {
-        print('DynamicLink Code : $code');
-        Get.find<AuthController>().campaignCode(code);
-        SnackbarHelper.showSnackbar('Code Captured : $code');
+  static void handleDeepLink(PendingDynamicLinkData? dynamicLinkData) {
+    print('DynamicLink handleDeepLink : ${dynamicLinkData?.link.toString()}');
+    if (dynamicLinkData != null) {
+      try {
+        Uri url = dynamicLinkData.link;
+        String? code = url.queryParameters['campaign'];
+        if (code != null) {
+          print('DynamicLink Code : $code');
+          Get.find<AuthController>().campaignCode(code);
+          SnackbarHelper.showSnackbar('Code Captured : $code');
+        }
+      } catch (e) {
+        print('DynamicLink Error : $e');
       }
-    } catch (e) {
-      print('DynamicLink Error : $e');
     }
   }
 }
