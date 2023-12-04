@@ -28,4 +28,7 @@ class AppImages {
   static const String stock = '$imagesDir/stockImage.png';
   static const String testZoneShareBackground =
       '$imagesDir/Black Bull Logo.png';
+  static const String tenxSymbolDarkMode = '$imagesDir/tenxSymbolDarkmode.png';
+  static const String tenxSymbolLightMode =
+      '$imagesDir/tenxSymbolLightMode.png';
 }

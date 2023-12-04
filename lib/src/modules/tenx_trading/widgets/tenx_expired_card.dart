@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
-import '../views/tenx_expired_card_analytics_view.dart';
+import 'tenx_Analitical_Bottom_sheet.dart';
 
 class TenxExpiredCard extends GetView<TenxTradingController> {
   final TenxExpiredPlan subscription;
@@ -60,7 +60,7 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                           // Text(subscription),
                           SizedBox(width: 4),
                           Text(
-                            '₹${subscription.fee}',
+                            '${FormatHelper.formatNumbers(subscription.fee)}',
                             style: AppStyles.tsSecondaryMedium14.copyWith(
                               color: AppColors.success,
                             ),
@@ -90,10 +90,12 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                           ),
                           SizedBox(width: 4),
                           Text(
-                            '₹${subscription.npnl?.toStringAsFixed(2)}',
+                            ' ${FormatHelper.formatNumbers(subscription.npnl)}',
                             // '₹${subscription.fee}',
                             style: AppStyles.tsSecondaryMedium14.copyWith(
-                              color: AppColors.success,
+                              color: subscription.npnl! >= 0
+                                  ? AppColors.success
+                                  : AppColors.danger,
                             ),
                           )
                         ],
@@ -129,7 +131,7 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                           // Text(subscription),
                           SizedBox(width: 4),
                           Text(
-                            '₹${subscription.tds}',
+                            '${FormatHelper.formatNumbers(subscription.tds ?? 0)}',
                             style: AppStyles.tsSecondaryMedium14.copyWith(
                               color: AppColors.success,
                             ),
@@ -159,7 +161,7 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                           ),
                           SizedBox(width: 4),
                           Text(
-                            '${subscription.payout}',
+                            '${FormatHelper.formatNumbers(subscription.payout)}',
                             // '₹${subscription.fee}',
                             style: AppStyles.tsSecondaryMedium14.copyWith(
                               color: AppColors.success,
@@ -221,10 +223,13 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                   backgroundColor: AppColors.secondary.withOpacity(.25),
                   height: 32,
                   label: 'Analytics',
-                  // onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
                   onPressed: () {
-                    Get.to(() => TenXExpiredCardAnalticsView());
-                    Get.find<TenxTradingController>().getTenxExpiredPlans();
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return TenXAnaliticalBottomSheet(
+                              subscription: subscription);
+                        });
                   },
                 ),
               ),

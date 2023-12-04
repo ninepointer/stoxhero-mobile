@@ -493,53 +493,6 @@ class CompletedContestCard extends GetView<ContestController> {
                 ),
               ),
             ),
-            // Expanded(
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       controller.completedContest(contest);
-            //       controller.getCompletedContestOrders(contest?.id);
-
-            //       showModalBottomSheet(
-            //         context: context,
-            //         builder: (BuildContext context) {
-            //           CompletedContestPnl? matchingContestPnl;
-            //           for (var pnl in controller.completedContestPnlList) {
-            //             if (pnl.contestId ==
-            //                 controller.completedContest.value.id) {
-            //               matchingContestPnl = pnl;
-            //               break;
-            //             }
-            //           }
-            //           return matchingContestPnl == null
-            //               ? SizedBox()
-            //               : ShareModalContent(
-            //                   // id: controller.completedContest.value.id,
-
-            //                   completedContestPnl: matchingContestPnl,
-            //                 );
-
-            //           // Create a new widget for the modal content
-            //         },
-            //       );
-            //     },
-            //     child: Container(
-            //       alignment: Alignment.center,
-            //       padding: EdgeInsets.all(6),
-            //       decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.only(
-            //           bottomRight: Radius.circular(8),
-            //         ),
-            //         color: AppColors.primary.withOpacity(.25),
-            //       ),
-            //       child: Text(
-            //         'Share',
-            //         style: AppStyles.tsSecondaryMedium12.copyWith(
-            //           color: AppColors.primary,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Expanded(
               child: GestureDetector(
                 onTap: () async {
