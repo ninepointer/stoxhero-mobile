@@ -16,7 +16,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return CommonCard(
       margin: EdgeInsets.only(left: 12, right: 12, top: 8),
-      padding: EdgeInsets.only(top: 8),
+      padding: EdgeInsets.only(top: 0),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,8 +30,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
                   child: Row(
                     children: [
                       Container(
-                        width: 48,
-                        height: 48,
+                        width: 40,
+                        height: 40,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: AppColors.secondary.withOpacity(.1),
@@ -51,7 +51,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                             '${liveFeatured?.contestName}',
                             style: Theme.of(context).textTheme.tsRegular16,
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: 2),
                           GestureDetector(
                             onTap: () {
                               if (liveFeatured?.payoutType == 'Reward')
@@ -76,7 +76,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                   Text(
                                     '${liveFeatured?.payoutPercentage != null ? liveFeatured?.payoutPercentage : '0'}% of the Net P&L',
                                     style:
-                                        Theme.of(context).textTheme.tsMedium12,
+                                        Theme.of(context).textTheme.tsMedium10,
                                   ),
                                   if (liveFeatured?.payoutCapPercentage !=
                                           null &&
@@ -92,7 +92,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                       )})',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .tsMedium12,
+                                          .tsMedium10,
                                     ),
                                 ]
                               ],

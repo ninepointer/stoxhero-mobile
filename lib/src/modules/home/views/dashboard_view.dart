@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import '../../../app/app.dart';
 import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';
@@ -57,6 +58,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     final userDashboard = controller.userDashboard.value;
+
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
@@ -441,6 +443,9 @@ class _DashboardViewState extends State<DashboardView> {
                               setState(
                                 () {
                                   controller.selectedTradeType = value ?? '';
+                                  controller.getDashboard(
+                                      controller.selectedTradeType,
+                                      controller.selectedTimeFrame);
                                 },
                               );
                             },

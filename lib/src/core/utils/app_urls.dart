@@ -219,8 +219,11 @@ class AppUrls {
   static String completedMarginXOrders(String? id) =>
       "$apiURL/marginxtrade/$id/my/allorders";
 
-  static String performance(String? tradeType, String? timeFrame) =>
+  static String virtualperformance(String? tradeType, String? timeFrame) =>
       "$apiURL/userdashboard/stats?tradeType=$tradeType&timeframe=$timeFrame";
+  static String performance(String? tradeType, String? timeFrame) =>
+      "$apiURL/userdashboard/${tradeType}stats?timeframe=$timeFrame";
+
   static String careers(String? type) => "$apiURL/career/live?type=$type";
 
   static String internshipPosition(String? id) => "$apiURL/internship/pnl/$id";
