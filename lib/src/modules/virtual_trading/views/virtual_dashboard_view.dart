@@ -146,10 +146,10 @@ class FutureAndOptionDashBoard extends StatelessWidget {
                 ),
                 if (isComingSoonCard)
                   Positioned(
-                    top: 0, // Adjust this value to fine-tune the position
-                    left: 0, // Adjust this value to fine-tune the position
-                    right: 0, // Adjust this value to fine-tune the position
-                    bottom: 0, // Adjust this value to fine-tune the position
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
