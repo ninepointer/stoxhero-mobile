@@ -18,9 +18,10 @@ class _SignupViewState extends State<SignupView> {
 
   @override
   void initState() {
+    super.initState();
     controller = Get.find<AuthController>();
     formKey = GlobalKey<FormState>();
-    super.initState();
+    print('AuthController Code : ${controller.campaignCode.value}');
   }
 
   @override

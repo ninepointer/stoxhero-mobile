@@ -11,6 +11,14 @@ class AuthRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
+  Future<RepoResponse<GenericResponse>> addFcmTokenData(Map<String, dynamic> data) async {
+    String apiURL = AppUrls.addFcmToken;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
   Future<RepoResponse<CampaignCodeResponse>> getDefaultInviteCode() async {
     String apiURL = AppUrls.defaultInviteCode;
     var response = await service.getAuth(path: apiURL);

@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:async';
 
-import '../../../core/core.dart';
-import '../../modules.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
+import 'package:uni_links/uni_links.dart';
+
 import '../../virtual_trading/views/virtual_dashboard_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -15,6 +17,10 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   late HomeController controller;
 
+  Uri? initialUri;
+  Uri? latestUri;
+  bool _initialUriIsHandled = false;
+
   List<Widget> _tabs = [
     DashboardView(),
     FutureAndOptionDashBoard(),
@@ -26,7 +32,47 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    _handleInitialUri();
+    _handleIncomingLinks();
+    _handelInitialNotification();
     controller = Get.find<HomeController>();
+  }
+
+  Future _handleInitialUri() async {
+    if (!_initialUriIsHandled) {
+      _initialUriIsHandled = true;
+      try {
+        final uri = await getInitialUri();
+        print('UniLinks Initial : $uri');
+        if (uri != null) DeepLinkingServices.handelLinkRouting(uri);
+        if (!mounted) return;
+      } catch (e) {
+        print('UniLinks Error : $e');
+      }
+    }
+  }
+
+  void _handleIncomingLinks() {
+    StreamSubscription? sub;
+    sub = uriLinkStream.listen((Uri? uri) {
+      if (!mounted) return;
+      print('UniLinks Incoming : $uri');
+      if (uri != null) DeepLinkingServices.handelLinkRouting(uri);
+    }, onError: (Object e) {
+      if (!mounted) return;
+      print('UniLinks Error : $e');
+    });
+  }
+
+  void _handelInitialNotification() async {
+    print('handelInitialNotification');
+    RemoteMessage? initialMessage = await firebaseMessaging.getInitialMessage();
+    print('handelInitialNotification : ${initialMessage?.toMap()}');
+    if (initialMessage != null)
+      NotificationServices.handelNotificationClick(
+        initialMessage.data,
+        isLocal: true,
+      );
   }
 
   void _updateTab(int index) {
@@ -130,8 +176,7 @@ class _HomeViewState extends State<HomeView> {
       body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor:
-            Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
         onPressed: () => _updateTab(2),
         child: Icon(
           Icons.currency_rupee_rounded,

@@ -25,6 +25,8 @@ class AppUrls {
 
   static const String collegeList = "$apiURL/college/collegeList";
 
+  static const String addFcmToken = "$apiURL/addfcmtoken";
+
   static const String signup = "$apiURL/signup";
   static const String phoneLogin = "$apiURL/phonelogin";
   static const String verifyPhoneLogin = "$apiURL/verifyphonelogin";
