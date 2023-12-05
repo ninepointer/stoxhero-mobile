@@ -36,6 +36,7 @@ class LiveContestCard extends GetView<ContestController> {
                   child: Text(
                     contest?.contestName ?? '-',
                     style: AppStyles.tsSecondaryMedium14,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -60,21 +61,21 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ),
               ),
-              Visibility(
-                visible: contest?.featured == true,
-                child: Container(
-                  padding:
-                      EdgeInsets.only(left: 18, right: 25, bottom: 18, top: 6),
-                  foregroundDecoration: CommonTriangleCard(
-                    badgeColor: AppColors.success,
-                    badgeSize: 62,
-                    textSpan: TextSpan(
-                      text: 'Featured',
-                      style: AppStyles.tsWhiteMedium12,
-                    ),
-                  ),
-                ),
-              ),
+              // Visibility(
+              //   visible: contest?.featured == true,
+              //   child: Container(
+              //     padding:
+              //         EdgeInsets.only(left: 18, right: 25, bottom: 18, top: 6),
+              //     foregroundDecoration: CommonTriangleCard(
+              //       badgeColor: AppColors.success,
+              //       badgeSize: 62,
+              //       textSpan: TextSpan(
+              //         text: 'Featured',
+              //         style: AppStyles.tsWhiteMedium12,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

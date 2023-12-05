@@ -89,6 +89,7 @@ class WalletController extends BaseController<WalletRepository> {
         bonus += transaction.amount ?? 0;
       }
     }
+
     return bonus;
   }
 

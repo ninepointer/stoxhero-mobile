@@ -137,20 +137,20 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     ),
                   ),
                 ),
-                Visibility(
-                  visible: widget.contest?.featured == true,
-                  child: Container(
-                    padding: EdgeInsets.all(18),
-                    foregroundDecoration: CommonTriangleCard(
-                      badgeColor: AppColors.success,
-                      badgeSize: 62,
-                      textSpan: TextSpan(
-                        text: 'Featured',
-                        style: AppStyles.tsWhiteMedium12,
-                      ),
-                    ),
-                  ),
-                ),
+                // Visibility(
+                //   visible: widget.contest?.featured == true,
+                //   child: Container(
+                //     padding: EdgeInsets.all(18),
+                //     foregroundDecoration: CommonTriangleCard(
+                //       badgeColor: AppColors.success,
+                //       badgeSize: 62,
+                //       textSpan: TextSpan(
+                //         text: 'Featured',
+                //         style: AppStyles.tsWhiteMedium12,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

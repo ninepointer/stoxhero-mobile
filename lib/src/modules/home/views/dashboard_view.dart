@@ -37,10 +37,13 @@ class _DashboardViewState extends State<DashboardView> {
     String currentMonth = DateFormat('MMMM yyyy').format(now);
     String previousMonth =
         DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+    String penultimateMonth =
+        DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 2));
     String nextMonth =
         DateFormat('MMMM yyyy').format(DateTime(now.year, now.month + 1));
 
     monthsList = [
+      penultimateMonth,
       previousMonth,
       currentMonth,
       nextMonth,
@@ -54,7 +57,8 @@ class _DashboardViewState extends State<DashboardView> {
     if (label == 'this month') name = DateFormat('MMMM yyyy').format(now);
     if (label == 'last month')
       name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
-
+    if (label == 'previous to last month')
+      name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 2));
     if (label == 'lifetime') name = 'Lifetime';
     return name;
   }
@@ -186,7 +190,20 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-
+                  contestController.liveContestList.isEmpty &&
+                          contestController.liveFeaturedContest.isEmpty &&
+                          contestController.upcomingFeaturedContest.isEmpty
+                      ? Container()
+                      : CommonTile(
+                          label: 'Featured TestZones',
+                          showSeeAllButton: true,
+                          onPressed: () {
+                            contestController.loadData();
+                            contestController.selectedTabBarIndex(1);
+                            Get.to(() => ContestListView());
+                          },
+                          margin: EdgeInsets.only(bottom: 0, top: 4),
+                        ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -478,23 +495,23 @@ class _DashboardViewState extends State<DashboardView> {
                       children: [
                         Expanded(
                           child: CommonDropdown(
-                            useSeptValue: true,
-                            getValue: controller.getProductName,
-                            color: Theme.of(context).cardColor,
-                            hint: 'Trading',
-                            value: controller.selectedTradeType,
-                            dropdownItems: controller.tradeTypes,
-                            onChanged: (String? value) {
-                              setState(
-                                () {
-                                  controller.selectedTradeType = value ?? '';
-                                  controller.getDashboard(
-                                      controller.selectedTradeType,
-                                      controller.selectedTimeFrame);
-                                },
-                              );
-                            },
-                          ),
+                              useSeptValue: true,
+                              getValue: controller.getProductName,
+                              color: Theme.of(context).cardColor,
+                              hint: 'Trading',
+                              value: controller.selectedTradeType,
+                              dropdownItems: controller.tradeTypes,
+                              onChanged: (String? value) {
+                                setState(
+                                  () {
+                                    controller.selectedTradeType = value ?? '';
+
+                                    controller.getDashboard(
+                                        controller.selectedTradeType,
+                                        controller.selectedTimeFrame);
+                                  },
+                                );
+                              }),
                         ),
                         SizedBox(width: 4),
                         Expanded(
@@ -509,6 +526,7 @@ class _DashboardViewState extends State<DashboardView> {
                               setState(
                                 () {
                                   controller.selectedTimeFrame = value ?? '';
+
                                   controller.getDashboard(
                                       controller.selectedTradeType,
                                       controller.selectedTimeFrame);
@@ -521,6 +539,7 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ),
                   SizedBox(height: 8),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Column(

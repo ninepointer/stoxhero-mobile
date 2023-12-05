@@ -103,7 +103,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
                                     ? AppImages.rank2
                                     : participant.rank == 3
                                         ? AppImages.rank3
-                                        : '',
+                                        : AppImages.rank2,
                             width: 30,
                             height: 30,
                           ),

@@ -16,7 +16,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
   Widget build(BuildContext context) {
     return CommonCard(
       margin: EdgeInsets.only(left: 12, right: 12, top: 8),
-      padding: EdgeInsets.only(top: 0),
+      padding: EdgeInsets.only(top: 0, right: 0),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,8 +25,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 13, bottom: 16, top: 8),
                   child: Row(
                     children: [
                       Container(
@@ -106,8 +106,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                 Visibility(
                   visible: liveFeatured?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.only(
-                        left: 18, right: 18, bottom: 18, top: 54),
+                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 45),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
                       badgeSize: 62,
@@ -121,49 +120,90 @@ class LiveFeaturedCard extends GetView<ContestController> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CommonCardTile(
-                          label: 'Starts',
-                          value: FormatHelper.formatDateTimeOnlyToIST(
-                              liveFeatured?.contestStartTime),
-                        ),
-                        SizedBox(height: 4),
-                        CommonCardTile(
-                          label: 'Ends',
-                          value: FormatHelper.formatDateTimeOnlyToIST(
-                              liveFeatured?.contestEndTime),
-                        )
-                      ],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Starts',
+                        style: AppStyles.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        FormatHelper.formatDateTimeOnlyToIST(
+                            liveFeatured?.contestStartTime),
+                        style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: AppColors.grey.withOpacity(.1),
-                    ),
-                    child: Text(
-                      liveFeatured?.entryFee == 0
-                          ? 'Free'
-                          : FormatHelper.formatNumbers(liveFeatured?.entryFee,
-                              decimal: 0),
-                      style: Theme.of(context).textTheme.tsMedium18.copyWith(
-                            color: AppColors.success,
-                          ),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Ends',
+                        style: AppStyles.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        FormatHelper.formatDateTimeOnlyToIST(
+                            liveFeatured?.contestEndTime),
+                        style: Theme.of(context).textTheme.tsMedium12,
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
+            SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Virtual Margin',
+                        style: AppStyles.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        FormatHelper.formatNumbers(
+                            liveFeatured?.portfolio?.portfolioValue,
+                            decimal: 0),
+                        style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Entry Fee',
+                        style: AppStyles.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        liveFeatured?.entryFee == 0
+                            ? 'Free'
+                            : FormatHelper.formatNumbers(liveFeatured?.entryFee,
+                                decimal: 0),
+                        style: Theme.of(context).textTheme.tsMedium12,
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 10),
         GestureDetector(
           onTap: () {
             controller.userDetails.value = AppStorage.getUserDetails();
@@ -215,7 +255,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
           },
           child: Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: AppColors.success.withOpacity(.25),
               borderRadius: BorderRadius.only(

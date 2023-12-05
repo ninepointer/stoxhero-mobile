@@ -25,7 +25,12 @@ class HomeController extends BaseController<DashboardRepository> {
   String selectedTradeType = 'virtual';
   String selectedTimeFrame = 'this month';
   List<String> tradeTypes = ['virtual', 'contest', 'tenx'];
-  List<String> timeFrames = ['this month', 'last month', 'lifetime'];
+  List<String> timeFrames = [
+    'this month',
+    'last month',
+    'previous to last month',
+    'lifetime'
+  ];
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());

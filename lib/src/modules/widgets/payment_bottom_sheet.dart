@@ -108,6 +108,20 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     return timestampPart + randomChars;
   }
 
+  // num bonusRedemption() {
+  //   num totalBonus = 0;
+  //   if (controller.isHeroCashAdded.value) {
+  //     totalBonus = math.min(
+  //         (amount - discountAmount) *
+  //             (controller.readSetting.value.maxBonusRedemptionPercentage ?? 0) /
+  //             100,
+  //         bonusBalance /
+  //             (controller.readSetting.value.bonusToUnitCashRatio ?? 1));
+  //   }
+
+  //   return totalBonus;
+  // }
+
   void startPaymentTransaction(BuildContext context) async {
     controller.isLoading(true);
     FocusScope.of(context).unfocus();
@@ -288,6 +302,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    print(controller.readSetting.value.time);
     return Obx(
       () => Wrap(
         children: [
@@ -349,11 +364,11 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                             ),
                             Spacer(),
                             Text(
-                              FormatHelper.formatNumbers(
-                                controller.couponCodeSuccessText.isNotEmpty
-                                    ? controller.subscriptionAmount.value
-                                    : widget.buyItemPrice,
-                              ),
+                              FormatHelper.formatNumbers((controller
+                                          .couponCodeSuccessText.isNotEmpty ||
+                                      controller.isHeroCashAdded.value)
+                                  ? controller.subscriptionAmount.value
+                                  : widget.buyItemPrice),
                               style: Theme.of(context)
                                   .textTheme
                                   .tsMedium18
@@ -494,8 +509,11 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   //           onChanged: (value) =>
                   //               controller.isHeroCashAdded(value),
                   //         ),
+                  //         // Text(
+                  //         //     'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (controller.readSetting.value.maxBonusRedemptionPercentage ?? 0)} HeroCash (1 HeroCash = ${1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0)})'
+                  //         //     )
                   //         Text(
-                  //             'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (10 / 100)} HeroCash (1 HeroCash = \u{20B9}1)'),
+                  //             'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (.1)} HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1, decimal: 0)})')
                   //       ],
                   //     ),
                   //   ),

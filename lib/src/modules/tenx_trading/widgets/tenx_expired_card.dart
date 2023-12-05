@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 import 'tenx_Analitical_Bottom_sheet.dart';
+import 'expired_tenx_share_sheet.dart';
 
 class TenxExpiredCard extends GetView<TenxTradingController> {
   final TenxExpiredPlan subscription;
@@ -246,6 +247,31 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                     Get.toNamed(AppRoutes.orders);
                   },
                   label: 'Order Book',
+                ),
+              ),
+              Expanded(
+                child: CommonFilledButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  labelColor: AppColors.secondary,
+                  backgroundColor: AppColors.secondary.withOpacity(.25),
+                  height: 32,
+                  label: 'Share',
+                  onPressed: () async {
+                    controller.tenxExpiredPlans();
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: ShareTenXModalContent(
+                            subscription: subscription,
+                          ),
+                        );
+                      },
+                    );
+                    // }
+                  },
                 ),
               ),
             ],
