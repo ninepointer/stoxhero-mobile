@@ -447,6 +447,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                           ),
                         ],
                       ),
+
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('wallet'),
@@ -484,36 +485,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ],
                     ),
-                  if (!isWalletPayment)
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: controller.isHeroCashAdded.value,
-                            onChanged: (value) {
-                              controller.isHeroCashAdded(value);
-                              if (value ?? false) {
-                                controller.addHeroCash(calculateHeroCash);
-                              } else {
-                                controller.removeHeroCash(calculateHeroCash);
-                              }
-                            },
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Use $calculateHeroCash HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
-                                style: Theme.of(context).textTheme.tsRegular14,
-                              ),
-                              Text(
-                                  "Available HeroCash  : ${controller.calculateBonus(controller.walletTransactionsList).toStringAsFixed(2)}"),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
+
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('gateway'),
@@ -540,7 +512,41 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       ],
                     ),
                   //dbfbhf
-
+                  if (!isWalletPayment)
+                    Card(
+                      margin: EdgeInsets.only(top: 16),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              value: controller.isHeroCashAdded.value,
+                              onChanged: (value) {
+                                controller.isHeroCashAdded(value);
+                                if (value ?? false) {
+                                  controller.addHeroCash(calculateHeroCash);
+                                } else {
+                                  controller.removeHeroCash(calculateHeroCash);
+                                }
+                              },
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Use $calculateHeroCash HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular14,
+                                ),
+                                Text(
+                                    "Available HeroCash  : ${controller.calculateBonus(controller.walletTransactionsList).toStringAsFixed(2)}"),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   //fdhfhbd
                   if (walletBalance != null &&
                       widget.buyItemPrice >= walletBalance!)
