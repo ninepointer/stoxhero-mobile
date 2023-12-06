@@ -60,9 +60,14 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
             children: [
               Column(
                 children: [
-                  Text(
-                    '${contestdata?.contestName}',
-                    style: AppStyles.tsSecondaryMedium14,
+                  Container(
+                    width: cardWidth - 40,
+                    child: Text(
+                      '${contestdata?.contestName}',
+                      style: AppStyles.tsSecondaryMedium14,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   SizedBox(
                     height: 2,
@@ -76,91 +81,95 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
             ],
           ),
           SizedBox(height: 3),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: contestdata?.topParticipants?.length ?? 0,
-            itemBuilder: (context, index) {
-              LastPaidTestZoneTopPerformer participant =
-                  contestdata!.topParticipants![index];
-              return Padding(
-                padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child:
-                          // Text(
-                          //   '${participant.rank == 1 ? Image.asset(AppImages.rank1) : participant.rank == 2 ? Image.asset(AppImages.rank2) : participant.rank == 3 ? Image.asset(AppImages.rank3) : ''}',
-                          // ),
-                          Row(
-                        children: [
-                          Image.asset(
-                            participant.rank == 1
-                                ? AppImages.rank1
-                                : participant.rank == 2
-                                    ? AppImages.rank2
-                                    : participant.rank == 3
-                                        ? AppImages.rank3
-                                        : AppImages.rank2,
-                            width: 30,
-                            height: 30,
-                          ),
-                        ],
-                      ),
-                    ),
-                    // SizedBox(
-                    //   width: 10,
-                    // ),
-                    Container(
-                      alignment: Alignment.center,
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                        // color: AppColors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.grey.withOpacity(.25),
+          Container(
+            height: 180,
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: contestdata?.topParticipants?.length ?? 0,
+              itemBuilder: (context, index) {
+                LastPaidTestZoneTopPerformer participant =
+                    contestdata!.topParticipants![index];
+                return Padding(
+                  padding:
+                      const EdgeInsets.only(right: 10, top: 10, bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        child:
+                            // Text(
+                            //   '${participant.rank == 1 ? Image.asset(AppImages.rank1) : participant.rank == 2 ? Image.asset(AppImages.rank2) : participant.rank == 3 ? Image.asset(AppImages.rank3) : ''}',
+                            // ),
+                            Row(
+                          children: [
+                            Image.asset(
+                              participant.rank == 1
+                                  ? AppImages.rank1
+                                  : participant.rank == 2
+                                      ? AppImages.rank2
+                                      : participant.rank == 3
+                                          ? AppImages.rank3
+                                          : AppImages.rank2,
+                              width: 30,
+                              height: 30,
+                            ),
+                          ],
                         ),
                       ),
-                      child: ClipOval(
-                        child: participant.profilePhoto == null
-                            ? Padding(
-                                padding: EdgeInsets.all(2),
-                                child: Image.asset(
-                                  Get.isDarkMode
-                                      ? AppImages.darkAppLogo
-                                      : AppImages.lightAppLogo,
-                                  fit: BoxFit.cover,
-                                ))
-                            : Image.network(
-                                participant.profilePhoto?.url ?? '',
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-                    ),
-
-                    Container(
-                        alignment: Alignment.centerLeft,
-                        width: 90,
-                        child: Text(
-                          participant.firstName != null
-                              ? '${participant.firstName?.toString().capitalize}'
-                              : "User",
-                          style: Theme.of(context).textTheme.tsRegular14,
-                        )),
-                    Container(
+                      // SizedBox(
+                      //   width: 10,
+                      // ),
+                      Container(
                         alignment: Alignment.center,
-                        width: 60,
-                        child: Text(
-                          '${FormatHelper.formatNumbers(participant.payout?.round(), showDecimal: false)}',
-                          style: Theme.of(context).textTheme.tsRegular14,
-                        )),
-                  ],
-                ),
-              );
-            },
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                          // color: AppColors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.grey.withOpacity(.25),
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: participant.profilePhoto == null
+                              ? Padding(
+                                  padding: EdgeInsets.all(2),
+                                  child: Image.asset(
+                                    Get.isDarkMode
+                                        ? AppImages.darkAppLogo
+                                        : AppImages.lightAppLogo,
+                                    fit: BoxFit.cover,
+                                  ))
+                              : Image.network(
+                                  participant.profilePhoto?.url ?? '',
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          width: 90,
+                          child: Text(
+                            participant.firstName != null
+                                ? '${participant.firstName?.toString().capitalize}'
+                                : "User",
+                            style: Theme.of(context).textTheme.tsRegular14,
+                          )),
+                      Container(
+                          alignment: Alignment.center,
+                          width: 60,
+                          child: Text(
+                            '${FormatHelper.formatNumbers(participant.payout?.round(), showDecimal: false)}',
+                            style: Theme.of(context).textTheme.tsRegular14,
+                          )),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

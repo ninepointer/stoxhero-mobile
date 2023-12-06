@@ -89,7 +89,8 @@ class HomeController extends BaseController<DashboardRepository> {
   }
 
   String getStockIndexName(int instId) {
-    int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
+    int index = stockIndexInstrumentList
+        .indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
@@ -126,7 +127,8 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboardReturnSummary() async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardReturnSummaryResponse> response = await repository.getDashboardReturnSummary();
+      final RepoResponse<DashboardReturnSummaryResponse> response =
+          await repository.getDashboardReturnSummary();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userDashboardReturnSummary(response.data?.data);
@@ -149,11 +151,10 @@ class HomeController extends BaseController<DashboardRepository> {
               : await repository.getDashboard(tradeType, timeFame);
 
       if (response.data != null) {
-        print(
-            'Making API request with Trade Type: $tradeType, Time Frame: $timeFame');
-        userDashboard(response.data?.data);
-      }
-      if (response.data?.status?.toLowerCase() == "success") {
+        if (response.data?.status?.toLowerCase() == "success") {
+          print('userdatafetch');
+          userDashboard(response.data?.data);
+        }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -166,7 +167,8 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getDashboardCarousel() async {
     isLoading(true);
     try {
-      final RepoResponse<DashboardCarouselResponse> response = await repository.getDashboardCarousel();
+      final RepoResponse<DashboardCarouselResponse> response =
+          await repository.getDashboardCarousel();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           dashboardCarouselList(response.data?.data ?? []);
@@ -183,7 +185,8 @@ class HomeController extends BaseController<DashboardRepository> {
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response =
+          await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -203,7 +206,8 @@ class HomeController extends BaseController<DashboardRepository> {
         (data) {
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (stockIndexDetailsList
+                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = stockIndexDetailsList.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );

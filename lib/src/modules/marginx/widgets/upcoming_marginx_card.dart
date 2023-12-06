@@ -330,7 +330,10 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
                                 var walletController =
                                     Get.find<WalletController>();
                                 var data = {
-                                  "bonusRedemption": 0,
+                                  "bonusRedemption": walletController
+                                          .isHeroCashAdded.value
+                                      ? walletController.heroCashAmount.value
+                                      : 0,
                                   "coupon": walletController
                                       .couponCodeTextController.text,
                                   "entryFee":

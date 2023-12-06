@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'dart:math' as math;
 
@@ -53,6 +54,10 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     super.initState();
     controller = Get.find<WalletController>();
     controller.removeCouponCode();
+    controller.getReadSetting();
+    controller.isHeroCashAdded(false);
+    controller.heroCashAmount(0.0);
+
     controller.isLoading(false);
     controller.addMoneyAmountTextController.clear();
     controller.subscriptionAmount(widget.buyItemPrice.toDouble());
@@ -121,6 +126,14 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
 
   //   return totalBonus;
   // }
+  num get calculateHeroCash {
+    return math.min(
+        (controller.actualSubscriptionAmount.value) *
+            ((controller.readSetting.value.maxBonusRedemptionPercentage ?? 0) /
+                100),
+        (controller.calculateBonus(controller.walletTransactionsList) /
+            (controller.readSetting.value.bonusToUnitCashRatio ?? 1)));
+  }
 
   void startPaymentTransaction(BuildContext context) async {
     controller.isLoading(true);
@@ -136,7 +149,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       num amount =
           num.parse(controller.addMoneyAmountTextController.text) * 100;
       paymentData = PaymentRequest(
-        bonusRedemption: 0,
+        bonusRedemption:
+            controller.isHeroCashAdded.value ? calculateHeroCash : 0,
         coupon: controller.isCouponCodeAdded == true
             ? controller.couponCodeTextController.text
             : '',
@@ -150,7 +164,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
           : widget.buyItemPrice;
       amount = amount * 100;
       paymentData = PaymentRequest(
-        bonusRedemption: 0,
+        bonusRedemption:
+            controller.isHeroCashAdded.value ? calculateHeroCash : 0,
         coupon: controller.isCouponCodeAdded == true
             ? controller.couponCodeTextController.text
             : '',
@@ -302,7 +317,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    print(controller.readSetting.value.time);
+    print("readsetting,${controller.readSetting.value.toJson()}.");
     return Obx(
       () => Wrap(
         children: [
@@ -490,7 +505,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               ),
                               style: Theme.of(context)
                                   .textTheme
-                                  .tsMedium18
+                                  .tsMedium16
                                   .copyWith(
                                     color: AppColors.success,
                                   ),
@@ -499,24 +514,34 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ],
                     ),
-                  // if (!isWalletPayment)
-                  //   Padding(
-                  //     padding: EdgeInsets.only(left: 10),
-                  //     child: Row(
-                  //       children: [
-                  //         Checkbox(
-                  //           value: controller.isHeroCashAdded.value,
-                  //           onChanged: (value) =>
-                  //               controller.isHeroCashAdded(value),
-                  //         ),
-                  //         // Text(
-                  //         //     'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (controller.readSetting.value.maxBonusRedemptionPercentage ?? 0)} HeroCash (1 HeroCash = ${1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0)})'
-                  //         //     )
-                  //         Text(
-                  //             'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (.1)} HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1, decimal: 0)})')
-                  //       ],
-                  //     ),
-                  //   ),
+                  if (!isWalletPayment)
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: controller.isHeroCashAdded.value,
+                            onChanged: (value) {
+                              controller.isHeroCashAdded(value);
+                              if (value ?? false) {
+                                controller.addHeroCash(calculateHeroCash);
+                              } else {
+                                controller.removeHeroCash();
+                              }
+                            },
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  'Use $calculateHeroCash HeroCash (1 HeroCash = ${1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0)})'),
+                              Text(
+                                  "Available HeroCash  : ${controller.calculateBonus(controller.walletTransactionsList)}"),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('gateway'),

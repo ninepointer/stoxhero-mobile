@@ -124,7 +124,8 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                       backgroundColor: AppColors.secondary.withOpacity(.25),
                       height: 32,
                       label: 'Analytics',
-                      onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
+                      onPressed: () =>
+                          SnackbarHelper.showSnackbar('Coming Soon'),
                     ),
                   ),
                   if (subscription.allowRenewal == true) ...[
@@ -147,14 +148,21 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                               productType: ProductType.tenx,
                               productId: subscription.sId ?? '',
                               buyItemPrice: subscription.discountedPrice ?? 0,
-                              onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                              onPaymentSuccess:
+                                  controller.loadDataAfterPaymentSuccess,
                               onSubmit: () {
                                 Get.back();
-                                var walletController = Get.find<WalletController>();
+                                var walletController =
+                                    Get.find<WalletController>();
                                 var data = {
-                                  "bonusRedemption": 0,
-                                  "coupon": walletController.couponCodeTextController.text,
-                                  "subscriptionAmount": walletController.subscriptionAmount.value,
+                                  "bonusRedemption": walletController
+                                          .isHeroCashAdded.value
+                                      ? walletController.heroCashAmount.value
+                                      : 0,
+                                  "coupon": walletController
+                                      .couponCodeTextController.text,
+                                  "subscriptionAmount":
+                                      walletController.subscriptionAmount.value,
                                   "subscriptionName": subscription.planName,
                                   "subscriptionId": subscription.sId,
                                 };
@@ -180,7 +188,8 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                   controller.tenxSubscribedPlanSelected(subscription);
                   controller.loadTenxData();
                   controller.selectSubscriptionName("");
-                  controller.selectSubscriptionName(subscription.planName ?? '');
+                  controller
+                      .selectSubscriptionName(subscription.planName ?? '');
                   controller.tenxExpiredPlanSelected();
                   Get.toNamed(AppRoutes.tenxDashboard);
                 },

@@ -44,6 +44,7 @@ class WalletController extends BaseController<WalletRepository> {
   final couponCodeSuccessText = "".obs;
   final actualSubscriptionAmount = 0.0.obs;
   final subscriptionAmount = 0.0.obs;
+  final heroCashAmount = 0.0.obs;
 
   final paymentGroupValue = 'wallet'.obs;
   final selectedPaymentValue = 'wallet'.obs;
@@ -118,6 +119,16 @@ class WalletController extends BaseController<WalletRepository> {
     isCouponCodeAdded(false);
     subscriptionAmount(actualSubscriptionAmount.value);
     couponCodeTextController.clear();
+  }
+
+  void addHeroCash(num heroCash) {
+    heroCashAmount(double.parse(heroCash.toString()));
+    subscriptionAmount(actualSubscriptionAmount.value - heroCash);
+  }
+
+  void removeHeroCash() {
+    heroCashAmount(0.0);
+    subscriptionAmount(actualSubscriptionAmount.value);
   }
 
   void calculateDiscount({

@@ -139,9 +139,11 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                       onPressed: () {
                         controller.tenxCountTradingDays();
                         controller.selectSubscriptionName("");
-                        controller.selectSubscriptionName(subscription.planName ?? '');
+                        controller.selectSubscriptionName(
+                            subscription.planName ?? '');
                         controller.selectedSubscription(subscription);
-                        controller.selectSubscriptionAmount(subscription.portfolio?.portfolioValue?.toInt());
+                        controller.selectSubscriptionAmount(
+                            subscription.portfolio?.portfolioValue?.toInt());
                         BottomSheetHelper.openBottomSheet(
                           context: context,
                           child: TenxLearnMoreInfo(),
@@ -191,14 +193,21 @@ class TenxActiveCard extends GetView<TenxTradingController> {
                               productType: ProductType.tenx,
                               productId: subscription.sId ?? '',
                               buyItemPrice: subscription.discountedPrice ?? 0,
-                              onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                              onPaymentSuccess:
+                                  controller.loadDataAfterPaymentSuccess,
                               onSubmit: () {
                                 Get.back();
-                                var walletController = Get.find<WalletController>();
+                                var walletController =
+                                    Get.find<WalletController>();
                                 var data = {
-                                  "bonusRedemption": 0,
-                                  "coupon": walletController.couponCodeTextController.text,
-                                  "subscriptionAmount": walletController.subscriptionAmount.value,
+                                  "bonusRedemption": walletController
+                                          .isHeroCashAdded.value
+                                      ? walletController.heroCashAmount.value
+                                      : 0,
+                                  "coupon": walletController
+                                      .couponCodeTextController.text,
+                                  "subscriptionAmount":
+                                      walletController.subscriptionAmount.value,
                                   "subscriptionName": subscription.planName,
                                   "subscribedId": subscription.sId,
                                 };

@@ -63,10 +63,10 @@ class _DashboardViewState extends State<DashboardView> {
     return name;
   }
 
+  DashboardTradeSummary get userDashboard => controller.userDashboard.value;
+
   @override
   Widget build(BuildContext context) {
-    final userDashboard = controller.userDashboard.value;
-
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
@@ -540,55 +540,65 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   SizedBox(height: 8),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      children: [
-                        Row(
+                  Obx(
+                    () {
+                      print(
+                          'userdashboarddata:${controller.userDashboard.toJson()}');
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
                           children: [
-                            Expanded(
-                              child: controller.selectedTradeType == 'virtual'
-                                  ? customCard(
-                                      label: 'Market Days',
-                                      percent:
-                                          userDashboard.totalMarketDays != null
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: controller.selectedTradeType ==
+                                          'virtual'
+                                      ? customCard(
+                                          label: 'Market Days',
+                                          percent: userDashboard
+                                                      .totalMarketDays !=
+                                                  null
                                               ? FormatHelper.formatNumbers(
                                                   userDashboard.totalMarketDays,
                                                   decimal: 0,
                                                   showSymbol: false,
                                                 )
                                               : '0',
-                                    )
-                                  : customCard(
-                                      label: 'Total TestZones',
-                                      percent:
-                                          userDashboard.totalContests != null
+                                        )
+                                      : customCard(
+                                          label: 'Total TestZones',
+                                          percent: userDashboard
+                                                      .totalContests !=
+                                                  null
                                               ? FormatHelper.formatNumbers(
                                                   userDashboard.totalContests,
                                                   decimal: 0,
                                                   showSymbol: false,
                                                 )
                                               : '0',
-                                    ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: controller.selectedTradeType == 'virtual'
-                                  ? customCard(
-                                      label: 'Trading Days',
-                                      percent: userDashboard.totalTradingDays !=
-                                              null
-                                          ? FormatHelper.formatNumbers(
-                                              userDashboard.totalTradingDays,
-                                              decimal: 0,
-                                              showSymbol: false,
-                                            )
-                                          : '0',
-                                    )
-                                  : customCard(
-                                      label: 'TestZones Participated',
-                                      percent:
-                                          userDashboard.participatedContests !=
+                                        ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: controller.selectedTradeType ==
+                                          'virtual'
+                                      ? customCard(
+                                          label: 'Trading Days',
+                                          percent:
+                                              userDashboard.totalTradingDays !=
+                                                      null
+                                                  ? FormatHelper.formatNumbers(
+                                                      userDashboard
+                                                          .totalTradingDays,
+                                                      decimal: 0,
+                                                      showSymbol: false,
+                                                    )
+                                                  : '0',
+                                        )
+                                      : customCard(
+                                          label: 'TestZones Participated',
+                                          percent: userDashboard
+                                                      .participatedContests !=
                                                   null
                                               ? FormatHelper.formatNumbers(
                                                   userDashboard
@@ -597,220 +607,225 @@ class _DashboardViewState extends State<DashboardView> {
                                                   showSymbol: false,
                                                 )
                                               : '0',
-                                      valueColor: AppColors.danger,
-                                    ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Profit Days',
-                                percent: userDashboard.profitDays != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.profitDays,
-                                        decimal: 0,
-                                        showSymbol: false,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Loss Days',
-                                percent: userDashboard.lossDays != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.lossDays,
-                                        decimal: 0,
-                                        showSymbol: false,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.danger,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Profit & Loss',
-                                percent: userDashboard.totalNPNL != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.totalNPNL,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Virtual Margin Money',
-                                percent: userDashboard.portfolio != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.portfolio,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Max Profit',
-                                percent: userDashboard.maxProfit != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.maxProfit,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Max Loss',
-                                percent: userDashboard.maxLoss != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.maxLoss,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.danger,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Avg. Profit',
-                                percent: userDashboard.averageProfit != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.averageProfit,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Avg. Loss',
-                                percent: userDashboard.averageLoss != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.averageLoss,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.danger,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Max Wins Streak',
-                                percent: userDashboard.maxProfitStreak != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.maxProfitStreak,
-                                        decimal: 0,
-                                        showSymbol: false,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.success,
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Max Loss Streak',
-                                percent: userDashboard.maxLossStreak != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.maxLossStreak,
-                                        decimal: 0,
-                                        showSymbol: false,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.danger,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(left: 16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Refer & Win',
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "Rubik")),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text('Bring your friends on StoxHero',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Rubik",
-                                    color: Colors.grey,
-                                  )),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ReferralsView()),
-                                  );
-                                },
-                                child: Text(
-                                  'Refer & Earn ${FormatHelper.formatNumbers(referralsController.activeReferrals.value?.rewardPerReferral, decimal: 0)}',
-                                  style: TextStyle(fontSize: 16),
+                                          valueColor: AppColors.danger,
+                                        ),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      AppColors.lightGreen, // Background color
-                                  foregroundColor: Colors.white, // Text color
-                                  elevation: 8.0, // Elevation (shadow)
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // Border radius
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Profit Days',
+                                    percent: userDashboard.profitDays != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.profitDays,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : '0',
                                   ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20.0,
-                                      vertical: 12.0), // Padding
                                 ),
-                              )
-                            ],
-                          ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Loss Days',
+                                    percent: userDashboard.lossDays != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.lossDays,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : '0',
+                                    valueColor: AppColors.danger,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Profit & Loss',
+                                    percent: userDashboard.totalNPNL != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.totalNPNL,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Virtual Margin Money',
+                                    percent: userDashboard.portfolio != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.portfolio,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Max Profit',
+                                    percent: userDashboard.maxProfit != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.maxProfit,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Max Loss',
+                                    percent: userDashboard.maxLoss != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.maxLoss,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                    valueColor: AppColors.danger,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Avg. Profit',
+                                    percent: userDashboard.averageProfit != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.averageProfit,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Avg. Loss',
+                                    percent: userDashboard.averageLoss != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.averageLoss,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                    valueColor: AppColors.danger,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Max Wins Streak',
+                                    percent:
+                                        userDashboard.maxProfitStreak != null
+                                            ? FormatHelper.formatNumbers(
+                                                userDashboard.maxProfitStreak,
+                                                decimal: 0,
+                                                showSymbol: false,
+                                              )
+                                            : '0',
+                                    valueColor: AppColors.success,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Max Loss Streak',
+                                    percent: userDashboard.maxLossStreak != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.maxLossStreak,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : '0',
+                                    valueColor: AppColors.danger,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.only(left: 16.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Refer & Win',
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Rubik")),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text('Bring your friends on StoxHero',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Rubik",
+                                        color: Colors.grey,
+                                      )),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ReferralsView()),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Refer & Earn ${FormatHelper.formatNumbers(referralsController.activeReferrals.value?.rewardPerReferral, decimal: 0)}',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors
+                                          .lightGreen, // Background color
+                                      foregroundColor:
+                                          Colors.white, // Text color
+                                      elevation: 8.0, // Elevation (shadow)
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            10.0), // Border radius
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0,
+                                          vertical: 12.0), // Padding
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 60),
+                          ],
                         ),
-                        SizedBox(height: 60),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),
