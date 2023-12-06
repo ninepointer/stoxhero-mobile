@@ -377,9 +377,8 @@ class _DashboardViewState extends State<DashboardView> {
                     showSeeAllButton: true,
                     seeAllLabel: 'Join TestZone',
                     onPressed: () {
-                      contestController.liveContestList();
                       contestController.loadData();
-                      contestController.liveContest();
+                      contestController.selectedTabBarIndex(0);
                       Get.to(() => ContestListView());
                     },
                     margin: EdgeInsets.only(bottom: 0, top: 6),

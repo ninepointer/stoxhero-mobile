@@ -52,7 +52,9 @@ class LiveContestCard extends GetView<ContestController> {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: contest?.featured == true
+                        ? const EdgeInsets.only(right: 25)
+                        : const EdgeInsets.only(right: 5),
                     child: Icon(
                       Icons.info,
                       size: 20.0,
@@ -61,21 +63,21 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ),
               ),
-              // Visibility(
-              //   visible: contest?.featured == true,
-              //   child: Container(
-              //     padding:
-              //         EdgeInsets.only(left: 18, right: 25, bottom: 18, top: 6),
-              //     foregroundDecoration: CommonTriangleCard(
-              //       badgeColor: AppColors.success,
-              //       badgeSize: 62,
-              //       textSpan: TextSpan(
-              //         text: 'Featured',
-              //         style: AppStyles.tsWhiteMedium12,
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              Visibility(
+                visible: contest?.featured == true,
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 18, right: 25, bottom: 18, top: 6),
+                  foregroundDecoration: CommonTriangleCard(
+                    badgeColor: AppColors.success,
+                    badgeSize: 55,
+                    textSpan: TextSpan(
+                      text: 'Featured',
+                      style: AppStyles.tsWhiteMedium12,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -306,36 +308,6 @@ class LiveContestCard extends GetView<ContestController> {
                               fontFamily: 'Rubik')),
                     ],
                   )
-                  // Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     Text(
-                  //       'Starts',
-                  //       style: Theme.of(context).textTheme.tsGreyMedium12,
-                  //     ),
-
-                  //     Text(
-                  //       FormatHelper.formatDateTimeToIST(
-                  //           contest?.contestStartTime),
-                  //       style: Theme.of(context).textTheme.tsMedium12,
-                  //     ),
-                  //   ],
-                  // ),
-                  // Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.end,
-                  //   children: [
-                  //     Text(
-                  //       'Ends',
-                  //       style: Theme.of(context).textTheme.tsGreyMedium12,
-                  //     ),
-                  //     SizedBox(height: 2),
-                  //     Text(
-                  //       FormatHelper.formatDateTimeToIST(
-                  //           contest?.contestEndTime),
-                  //       style: Theme.of(context).textTheme.tsMedium12,
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
               SizedBox(height: 4),

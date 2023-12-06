@@ -328,6 +328,28 @@ class CompletedContestCard extends GetView<ContestController> {
                           ),
                         ],
                       ),
+                      Container(
+                        margin: EdgeInsets.only(right: 20),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Rank: ',
+                              style: AppStyles.tsGreyMedium12,
+                            ),
+                            // SizedBox(width: 2),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Text(
+                              completedContestPnl?.rank?.toString() ?? '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium12
+                                  .copyWith(color: AppColors.success),
+                            ),
+                          ],
+                        ),
+                      ),
                       Row(
                         children: [
                           Text(
@@ -385,7 +407,7 @@ class CompletedContestCard extends GetView<ContestController> {
                       Row(
                         children: [
                           Text(
-                            'Rank: ',
+                            'HeroCash:',
                             style: AppStyles.tsGreyMedium12,
                           ),
                           // SizedBox(width: 2),
@@ -393,11 +415,19 @@ class CompletedContestCard extends GetView<ContestController> {
                             width: 2,
                           ),
                           Text(
-                            completedContestPnl?.rank?.toString() ?? '',
+                            ''
+                            // (completedContestPnl?.npnl ?? 0) > 0
+                            //     ? '+${FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0)}'
+                            //     : '${FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0)}',
+                            ,
                             style: Theme.of(context)
                                 .textTheme
                                 .tsMedium12
-                                .copyWith(color: AppColors.success),
+                                .copyWith(
+                                  color: (completedContestPnl?.npnl ?? 0) >= 0
+                                      ? AppColors.success
+                                      : AppColors.danger,
+                                ),
                           ),
                         ],
                       ),

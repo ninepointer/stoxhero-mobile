@@ -113,19 +113,6 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     return timestampPart + randomChars;
   }
 
-  // num bonusRedemption() {
-  //   num totalBonus = 0;
-  //   if (controller.isHeroCashAdded.value) {
-  //     totalBonus = math.min(
-  //         (amount - discountAmount) *
-  //             (controller.readSetting.value.maxBonusRedemptionPercentage ?? 0) /
-  //             100,
-  //         bonusBalance /
-  //             (controller.readSetting.value.bonusToUnitCashRatio ?? 1));
-  //   }
-
-  //   return totalBonus;
-  // }
   num get calculateHeroCash {
     return math.min(
         (controller.actualSubscriptionAmount.value) *
@@ -299,25 +286,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     setState(() {});
   }
 
-  // num amountToPayAfterHeroCashDiscount() {
-  //   num amountToPay = 0;
-  //   num subAmount = (controller.couponCodeSuccessText.isNotEmpty
-  //       ? controller.subscriptionAmount.value
-  //       : widget.buyItemPrice);
-  //   num discount = subAmount * 10 / 100;
-
-  //   if (controller.isHeroCashAdded.value) {
-  //     amountToPay = subAmount - discount;
-  //   } else {
-  //     amountToPay = subAmount;
-  //   }
-
-  //   return amountToPay;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    print("readsetting,${controller.readSetting.value.toJson()}.");
     return Obx(
       () => Wrap(
         children: [
@@ -534,11 +504,11 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Use ${FormatHelper.formatNumbers(calculateHeroCash)} HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
+                                'Use $calculateHeroCash HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
                                 style: Theme.of(context).textTheme.tsRegular14,
                               ),
                               Text(
-                                  "Available HeroCash  : ${FormatHelper.formatNumbers(controller.calculateBonus(controller.walletTransactionsList))}"),
+                                  "Available HeroCash  : ${controller.calculateBonus(controller.walletTransactionsList).toStringAsFixed(2)}"),
                             ],
                           )
                         ],
