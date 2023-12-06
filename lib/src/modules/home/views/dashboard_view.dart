@@ -370,7 +370,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ),
                   SizedBox(
-                    height: 10,
+                    height: 6,
                   ),
                   CommonTile(
                     label: 'Meet Our Champions',
