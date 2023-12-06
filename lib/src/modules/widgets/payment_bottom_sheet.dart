@@ -534,7 +534,9 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  'Use ${FormatHelper.formatNumbers(calculateHeroCash)} HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0))})'),
+                                'Use ${FormatHelper.formatNumbers(calculateHeroCash)} HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
+                                style: Theme.of(context).textTheme.tsRegular14,
+                              ),
                               Text(
                                   "Available HeroCash  : ${FormatHelper.formatNumbers(controller.calculateBonus(controller.walletTransactionsList))}"),
                             ],
