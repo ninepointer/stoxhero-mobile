@@ -267,6 +267,7 @@ class _ContestListViewState extends State<ContestListView> {
                             final contest =
                                 controller.completedPremiumContestList[index];
                             CompletedContestPnl? matchingContestPnl;
+
                             for (var pnl
                                 in controller.completedContestPnlList) {
                               if (pnl.contestId == contest.id) {

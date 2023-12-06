@@ -53,11 +53,10 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   void initState() {
     super.initState();
     controller = Get.find<WalletController>();
-    controller.removeCouponCode();
+    controller.removeCouponCode(calculateHeroCash);
     controller.getReadSetting();
     controller.isHeroCashAdded(false);
     controller.heroCashAmount(0.0);
-
     controller.isLoading(false);
     controller.addMoneyAmountTextController.clear();
     controller.subscriptionAmount(widget.buyItemPrice.toDouble());
@@ -378,7 +377,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     ),
                   if (controller.couponCodeSuccessText.isNotEmpty)
                     GestureDetector(
-                      onTap: controller.removeCouponCode,
+                      onTap: () =>
+                          controller.removeCouponCode(calculateHeroCash),
                       child: Container(
                         margin: EdgeInsets.only(top: 16),
                         padding:
@@ -496,7 +496,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               if (value ?? false) {
                                 controller.addHeroCash(calculateHeroCash);
                               } else {
-                                controller.removeHeroCash();
+                                controller.removeHeroCash(calculateHeroCash);
                               }
                             },
                           ),

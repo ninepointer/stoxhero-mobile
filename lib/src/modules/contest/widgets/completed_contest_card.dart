@@ -415,19 +415,12 @@ class CompletedContestCard extends GetView<ContestController> {
                             width: 2,
                           ),
                           Text(
-                            ''
-                            // (completedContestPnl?.npnl ?? 0) > 0
-                            //     ? '+${FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0)}'
-                            //     : '${FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0)}',
-                            ,
+                            // "${controller.herocashadd(contest, controller.userDetails.value.sId!)}",
+                            '',
                             style: Theme.of(context)
                                 .textTheme
                                 .tsMedium12
-                                .copyWith(
-                                  color: (completedContestPnl?.npnl ?? 0) >= 0
-                                      ? AppColors.success
-                                      : AppColors.danger,
-                                ),
+                                .copyWith(color: AppColors.success),
                           ),
                         ],
                       ),
