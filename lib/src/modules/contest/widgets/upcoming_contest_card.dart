@@ -128,7 +128,10 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       );
                     },
                     child: Container(
-                      padding: EdgeInsets.only(right: 10),
+                      // padding: EdgeInsets.only(right: 25),
+                      padding: widget.contest?.featured == true
+                          ? const EdgeInsets.only(right: 25)
+                          : const EdgeInsets.only(right: 5),
                       child: Icon(
                         Icons.info,
                         size: 20.0,
@@ -137,20 +140,20 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     ),
                   ),
                 ),
-                // Visibility(
-                //   visible: widget.contest?.featured == true,
-                //   child: Container(
-                //     padding: EdgeInsets.all(18),
-                //     foregroundDecoration: CommonTriangleCard(
-                //       badgeColor: AppColors.success,
-                //       badgeSize: 62,
-                //       textSpan: TextSpan(
-                //         text: 'Featured',
-                //         style: AppStyles.tsWhiteMedium12,
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Visibility(
+                  visible: widget.contest?.featured == true,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    foregroundDecoration: CommonTriangleCard(
+                      badgeColor: AppColors.success,
+                      badgeSize: 55,
+                      textSpan: TextSpan(
+                        text: 'Featured',
+                        style: AppStyles.tsWhiteMedium12,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

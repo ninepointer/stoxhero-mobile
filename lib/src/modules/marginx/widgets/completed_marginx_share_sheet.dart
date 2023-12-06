@@ -32,7 +32,7 @@ class ShareMarginXModalContent extends GetView<MarginXController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers((marginx?.earning ?? 0) + (marginx?.tds ?? 0), decimal: 0)} in ${marginx?.marginxName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nDownload the App:\nhttps://play.google.com/store/apps/details?id=com.stoxhero.app&pli=1";
+    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers((marginx?.earning ?? 0) + (marginx?.tds ?? 0), decimal: 0)} in ${marginx?.marginxName} MarginX on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nDownload the App:\nhttps://play.google.com/store/apps/details?id=com.stoxhero.app&pli=1";
   }
 
   @override

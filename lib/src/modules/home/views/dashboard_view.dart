@@ -370,16 +370,15 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ),
                   SizedBox(
-                    height: 10,
+                    height: 6,
                   ),
                   CommonTile(
                     label: 'Meet Our Champions',
                     showSeeAllButton: true,
                     seeAllLabel: 'Join TestZone',
                     onPressed: () {
-                      contestController.liveContestList();
                       contestController.loadData();
-                      contestController.liveContest();
+                      contestController.selectedTabBarIndex(0);
                       Get.to(() => ContestListView());
                     },
                     margin: EdgeInsets.only(bottom: 0, top: 6),

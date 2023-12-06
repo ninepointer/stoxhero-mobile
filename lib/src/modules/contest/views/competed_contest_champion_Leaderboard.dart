@@ -60,14 +60,11 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
             children: [
               Column(
                 children: [
-                  Container(
-                    width: cardWidth - 40,
-                    child: Text(
-                      '${contestdata?.contestName}',
-                      style: AppStyles.tsSecondaryMedium14,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  Text(
+                    '${contestdata?.contestName}',
+                    style: AppStyles.tsSecondaryMedium14,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(
                     height: 2,
@@ -82,7 +79,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
           ),
           SizedBox(height: 3),
           Container(
-            height: 180,
+            height: 170,
             child: ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),

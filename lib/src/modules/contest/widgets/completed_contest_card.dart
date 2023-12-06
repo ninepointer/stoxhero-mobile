@@ -37,6 +37,7 @@ class CompletedContestCard extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
+    print('${controller.userDetailsData.sId}');
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -328,6 +329,28 @@ class CompletedContestCard extends GetView<ContestController> {
                           ),
                         ],
                       ),
+                      Container(
+                        margin: EdgeInsets.only(right: 20),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Rank: ',
+                              style: AppStyles.tsGreyMedium12,
+                            ),
+                            // SizedBox(width: 2),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Text(
+                              completedContestPnl?.rank?.toString() ?? '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium12
+                                  .copyWith(color: AppColors.success),
+                            ),
+                          ],
+                        ),
+                      ),
                       Row(
                         children: [
                           Text(
@@ -385,7 +408,7 @@ class CompletedContestCard extends GetView<ContestController> {
                       Row(
                         children: [
                           Text(
-                            'Rank: ',
+                            'HeroCash:',
                             style: AppStyles.tsGreyMedium12,
                           ),
                           // SizedBox(width: 2),
@@ -393,7 +416,7 @@ class CompletedContestCard extends GetView<ContestController> {
                             width: 2,
                           ),
                           Text(
-                            completedContestPnl?.rank?.toString() ?? '',
+                            "${controller.herocashadd(contest, controller.userDetailsData.sId.toString())}",
                             style: Theme.of(context)
                                 .textTheme
                                 .tsMedium12

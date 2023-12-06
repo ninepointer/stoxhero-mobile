@@ -32,7 +32,7 @@ class ShareTenXModalContent extends GetView<TenxTradingController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers((subscription.payout ?? 0) + (subscription.tds ?? 0), decimal: 0)} in ${subscription.planName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nDownload the App:\nhttps://play.google.com/store/apps/details?id=com.stoxhero.app&pli=1";
+    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers((subscription.payout ?? 0) + (subscription.tds ?? 0), decimal: 0)} in ${subscription.planName} TenX on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nDownload the App:\nhttps://play.google.com/store/apps/details?id=com.stoxhero.app&pli=1";
   }
 
   @override
@@ -193,7 +193,7 @@ class ShareTenXModalContent extends GetView<TenxTradingController> {
                                       margin: EdgeInsets.only(left: 16),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.end,
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Net P&L",

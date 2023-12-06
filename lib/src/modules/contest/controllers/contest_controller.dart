@@ -252,6 +252,18 @@ class ContestController extends BaseController<ContestRepository> {
     return false;
   }
 
+  num herocashadd(contest, String userId) {
+    num herocash = 0;
+    if (contest.participants != null) {
+      for (CompletedParticipants? participant in contest.participants!) {
+        if (participant?.userId == userId) {
+          herocash = participant?.heroCash ?? 0;
+        }
+      }
+    }
+    return herocash;
+  }
+
   bool canUserTrade(contest, String userId) {
     bool canParticipate = false;
     if (contest.participants != null) {
