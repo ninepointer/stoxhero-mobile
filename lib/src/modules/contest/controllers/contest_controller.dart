@@ -255,9 +255,9 @@ class ContestController extends BaseController<ContestRepository> {
   num herocashadd(contest, String userId) {
     num herocash = 0;
     if (contest.participants != null) {
-      for (CompletedParticipants participant in contest.participants) {
-        if (participant.userId == userId) {
-          herocash = participant.heroCash!;
+      for (CompletedParticipants? participant in contest.participants!) {
+        if (participant?.userId == userId) {
+          herocash = participant?.heroCash ?? 0;
         }
       }
     }

@@ -37,6 +37,7 @@ class CompletedContestCard extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
+    print('${controller.userDetailsData.sId}');
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -415,8 +416,7 @@ class CompletedContestCard extends GetView<ContestController> {
                             width: 2,
                           ),
                           Text(
-                            // "${controller.herocashadd(contest, controller.userDetails.value.sId!)}",
-                            '',
+                            "${controller.herocashadd(contest, controller.userDetailsData.sId.toString())}",
                             style: Theme.of(context)
                                 .textTheme
                                 .tsMedium12
