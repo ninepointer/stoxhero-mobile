@@ -416,7 +416,7 @@ class CompletedContestCard extends GetView<ContestController> {
                             width: 2,
                           ),
                           Text(
-                            "${controller.herocashadd(contest, controller.userDetailsData.sId.toString())}",
+                            "${controller.herocashadd(contest, controller.userDetailsData.sId.toString()).toStringAsFixed(1)}",
                             style: Theme.of(context)
                                 .textTheme
                                 .tsMedium12

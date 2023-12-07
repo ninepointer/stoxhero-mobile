@@ -199,7 +199,7 @@ class _DashboardViewState extends State<DashboardView> {
                           showSeeAllButton: true,
                           onPressed: () {
                             contestController.loadData();
-                            contestController.selectedTabBarIndex(1);
+                            contestController.selectedTabBarIndex(0);
                             Get.to(() => ContestListView());
                           },
                           margin: EdgeInsets.only(bottom: 0, top: 4),
@@ -247,26 +247,26 @@ class _DashboardViewState extends State<DashboardView> {
                                   }).toList(),
                                 ),
                               ),
-                        contestController.upcomingFeaturedContest.isEmpty
-                            ? Container()
-                            : Obx(
-                                () => Row(
-                                  children: contestController
-                                      .upcomingFeaturedContest
-                                      .map((contest) {
-                                    String userId =
-                                        controller.userDetailsData.sId ?? '';
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width -
-                                          25,
-                                      child: UpcomingFeaturedCard(
-                                        userId: userId,
-                                        upcomingFeatured: contest,
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
+                        if (contestController.liveFeaturedContest.isEmpty &&
+                            contestController
+                                .upcomingFeaturedContest.isNotEmpty)
+                          Obx(
+                            () => Row(
+                              children: contestController
+                                  .upcomingFeaturedContest
+                                  .map((contest) {
+                                String userId =
+                                    controller.userDetailsData.sId ?? '';
+                                return Container(
+                                  width: MediaQuery.of(context).size.width - 25,
+                                  child: UpcomingFeaturedCard(
+                                    userId: userId,
+                                    upcomingFeatured: contest,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -372,6 +372,90 @@ class _DashboardViewState extends State<DashboardView> {
                   SizedBox(
                     height: 6,
                   ),
+                  CommonTile(
+                    label: 'Try TenX Subscription',
+                    showSeeAllButton: true,
+                    seeAllLabel: '',
+                    margin: EdgeInsets.only(bottom: 0, top: 6),
+                    padding: EdgeInsets.only(left: 15, top: 4),
+                  ),
+                  CommonCard(
+                      padding: EdgeInsets.zero,
+                      margin: EdgeInsets.all(10),
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            // image: DecorationImage(
+                            //   image: AssetImage(AppImages
+                            //       .tenxBackground), // Replace with your image path
+                            //   fit: BoxFit.cover,
+                            // ),
+                            color: Color(0xFFFFF5E1),
+                          ),
+                          padding: EdgeInsets.all(14),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    AppImages.dartAppName,
+                                    height: 15,
+                                    width: 70,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Introducing",
+                                    style: AppStyles.tsBlackMedium16,
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "TenX Subscription",
+                                    style: AppStyles.tsBlackMedium16,
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      // TenxTradingController()
+                                      //     .selectedTabBarIndex(0);
+                                      controller.selectedIndex(2);
+                                      Get.find<TenxTradingController>()
+                                          .loadData();
+                                    },
+                                    child: Row(children: [
+                                      Text("Subscribe Now"),
+                                      Icon(
+                                        Icons.arrow_circle_right,
+                                        color: Colors.green,
+                                        size: 20.0,
+                                      )
+                                    ]),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        )
+                      ]),
+                  SizedBox(
+                    height: 6,
+                  ),
+
                   CommonTile(
                     label: 'Meet Our Champions',
                     showSeeAllButton: true,

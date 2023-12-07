@@ -53,7 +53,7 @@ class LiveContestCard extends GetView<ContestController> {
                   },
                   child: Container(
                     padding: contest?.featured == true
-                        ? const EdgeInsets.only(right: 25)
+                        ? const EdgeInsets.only(right: 1)
                         : const EdgeInsets.only(right: 5),
                     child: Icon(
                       Icons.info,
