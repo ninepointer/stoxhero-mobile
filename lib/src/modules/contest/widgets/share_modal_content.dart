@@ -193,7 +193,8 @@ class ShareModalContent extends GetView<ContestController> {
                                         SizedBox(
                                           height: 2,
                                         ),
-                                        Text("${completedContestPnl?.rank}",
+                                        Text(
+                                            "${completedContestPnl?.rank == null ? "-" : completedContestPnl?.rank}",
                                             style: AppStyles.tsSecondaryMedium16
                                                 .copyWith(
                                                     color: AppColors.white))
