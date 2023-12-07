@@ -376,84 +376,111 @@ class _DashboardViewState extends State<DashboardView> {
                     label: 'Try TenX Subscription',
                     showSeeAllButton: true,
                     seeAllLabel: '',
-                    margin: EdgeInsets.only(bottom: 0, top: 6),
+                    margin: EdgeInsets.only(bottom: 4, top: 8),
                     padding: EdgeInsets.only(left: 15, top: 4),
                   ),
                   CommonCard(
-                      padding: EdgeInsets.zero,
-                      margin: EdgeInsets.all(10),
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            // image: DecorationImage(
-                            //   image: AssetImage(AppImages
-                            //       .tenxBackground), // Replace with your image path
-                            //   fit: BoxFit.cover,
-                            // ),
-                            color: Color(0xFFFFF5E1),
+                    padding: EdgeInsets.zero,
+                    margin: EdgeInsets.only(
+                        left: 10, right: 20, top: 10, bottom: 6),
+                    hasBorder: true,
+                    children: [
+                      Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  AppImages.testZoneShareBackground,
+                                ),
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                  Color(0xFFFFF5E1).withOpacity(0.5),
+                                  BlendMode.srcOver,
+                                ),
+                              ),
+                            ),
+                            padding: EdgeInsets.all(14),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      AppImages.dartAppName,
+                                      height: 20,
+                                      width: 80,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Introducing",
+                                      style: AppStyles.tsBlackMedium18
+                                          .copyWith(color: AppColors.white),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "TenX Subscription",
+                                      style: AppStyles.tsBlackMedium18
+                                          .copyWith(color: AppColors.white),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 6),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.selectedIndex(2);
+                                        Get.find<TenxTradingController>()
+                                            .loadData();
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "Subscribe Now",
+                                            style: AppStyles.tsBlackRegular14
+                                                .copyWith(
+                                                    color: AppColors.white),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_circle_right,
+                                            color: Colors.green,
+                                            size: 20.0,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-                          padding: EdgeInsets.all(14),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    AppImages.dartAppName,
-                                    height: 15,
-                                    width: 70,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Introducing",
-                                    style: AppStyles.tsBlackMedium16,
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "TenX Subscription",
-                                    style: AppStyles.tsBlackMedium16,
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // TenxTradingController()
-                                      //     .selectedTabBarIndex(0);
-                                      controller.selectedIndex(2);
-                                      Get.find<TenxTradingController>()
-                                          .loadData();
-                                    },
-                                    child: Row(children: [
-                                      Text("Subscribe Now"),
-                                      Icon(
-                                        Icons.arrow_circle_right,
-                                        color: Colors.green,
-                                        size: 20.0,
-                                      )
-                                    ]),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ]),
+                          Positioned(
+                              top: 0, // Adjust the position as needed
+                              right: 0, // Adjust the position as needed
+                              child: Container(
+                                height: 130,
+                                width: 150,
+                                child: Image.asset(
+                                  AppImages.tenxLogo,
+                                  fit: BoxFit.contain,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
+
                   SizedBox(
-                    height: 6,
+                    height: 2,
                   ),
 
                   CommonTile(

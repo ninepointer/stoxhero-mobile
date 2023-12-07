@@ -25,7 +25,8 @@ class AppImages {
   static const String rank2 = '$imagesDir/rank2.png';
   static const String rank3 = '$imagesDir/rank3.png';
   static const String xlogo = '$imagesDir/XXlogo.png';
-  static const String tenxBackground = '$imagesDir/tenXbackground.jpeg';
+  static const String tenxBackground = '$imagesDir/backgroundTenX.jpg';
+  static const String tenxLogo = '$imagesDir/10x_lightlight.png';
   static const String stock = '$imagesDir/stockImage.png';
   static const String testZoneShareBackground =
       '$imagesDir/Black Bull Logo.png';

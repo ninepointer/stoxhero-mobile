@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
 class ResultPage extends GetView<ContestController> {
-  const ResultPage({Key? key}) : super(key: key);
+  const ResultPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ContestController contestController = Get.find<ContestController>();
     print("server${controller.serverTime}");
     return Obx(() => Scaffold(
         appBar: AppBar(
@@ -19,7 +22,9 @@ class ResultPage extends GetView<ContestController> {
                 children: [
                   Text(
                     '${controller.liveContest.value.contestName} has Ended',
-                    style: Theme.of(context).textTheme.tsBlackMedium16,
+                    style: Get.isDarkMode
+                        ? Theme.of(context).textTheme.tsWhiteMedium16
+                        : Theme.of(context).textTheme.tsBlackMedium16,
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -46,6 +51,7 @@ class ResultPage extends GetView<ContestController> {
                           fit: BoxFit.cover,
                         ))),
               ),
+              SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: CommonCard(
@@ -99,9 +105,13 @@ class ResultPage extends GetView<ContestController> {
                                             null
                                         ? '${controller.userDetails.value.firstName?.toString().capitalize} ${controller.userDetails.value.lastName?.toString().capitalize}'
                                         : "User",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .tsBlackMedium16,
+                                    style: Get.isDarkMode
+                                        ? Theme.of(context)
+                                            .textTheme
+                                            .tsWhiteMedium16
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .tsBlackMedium16,
                                   )),
                             ],
                           ),
@@ -118,11 +128,15 @@ class ResultPage extends GetView<ContestController> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text("Net P&L :",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .tsBlackMedium14),
+                                        style: Get.isDarkMode
+                                            ? Theme.of(context)
+                                                .textTheme
+                                                .tsWhiteMedium14
+                                            : Theme.of(context)
+                                                .textTheme
+                                                .tsBlackMedium14),
                                     SizedBox(
-                                      width: 8,
+                                      width: 20,
                                     ),
                                     Text(
                                         "${FormatHelper.formatNumbers(controller.calculateTotalNetPNL())}",
@@ -141,12 +155,18 @@ class ResultPage extends GetView<ContestController> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text("Reward :",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .tsBlackMedium14),
+                                    Text(
+                                      "Reward :",
+                                      style: Get.isDarkMode
+                                          ? Theme.of(context)
+                                              .textTheme
+                                              .tsWhiteMedium16
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .tsBlackMedium16,
+                                    ),
                                     SizedBox(
-                                      width: 12,
+                                      width: 16,
                                     ),
                                     Text(
                                         "${FormatHelper.formatNumbers(controller.getRewardCapAmount((controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) == 0 ? controller.liveFeatured.value.portfolio?.portfolioValue ?? controller.liveContest.value.portfolio?.portfolioValue ?? 0 : (controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) ?? 0, controller.liveFeatured.value.payoutCapPercentage ?? controller.liveContest.value.payoutCapPercentage ?? 0, controller.liveFeatured.value.payoutPercentage ?? controller.liveContest.value.payoutPercentage ?? 0))}",
@@ -161,12 +181,18 @@ class ResultPage extends GetView<ContestController> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text("Rank :",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .tsBlackMedium14),
+                                    Text(
+                                      "Rank :",
+                                      style: Get.isDarkMode
+                                          ? Theme.of(context)
+                                              .textTheme
+                                              .tsWhiteMedium16
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .tsBlackMedium16,
+                                    ),
                                     SizedBox(
-                                      width: 35,
+                                      width: 50,
                                     ),
                                     Text(
                                       "${controller.completedContest.value.rank != null ? controller.completedContest.value.rank : '0'}",
@@ -187,6 +213,16 @@ class ResultPage extends GetView<ContestController> {
                   ],
                 ),
               ),
+              ElevatedButton(
+                  onPressed: () async {
+                    await contestController.loadData();
+                    contestController.selectedTabBarIndex(0);
+                    Get.off(() => ContestListView());
+                  },
+                  child: Text(
+                    "Check Other TestZones",
+                    style: TextStyle(color: AppColors.white),
+                  ))
             ]))));
   }
 }
