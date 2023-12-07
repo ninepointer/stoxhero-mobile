@@ -513,12 +513,11 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     ),
                   //dbfbhf
                   if (!isWalletPayment)
-                    Card(
-                      margin: EdgeInsets.only(top: 16),
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                        child: Row(
+                    CommonCard(
+                      margin:
+                          EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 0),
+                      children: [
+                        Row(
                           children: [
                             Checkbox(
                               value: controller.isHeroCashAdded.value,
@@ -545,7 +544,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                             )
                           ],
                         ),
-                      ),
+                      ],
                     ),
                   //fdhfhbd
                   if (walletBalance != null &&

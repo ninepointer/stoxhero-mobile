@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/modules/contest/views/resultView.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
 
@@ -139,6 +140,8 @@ class ContestController extends BaseController<ContestRepository> {
   final selectedGroupValue = 0.obs;
   final selectedContestId = ''.obs;
   final selectedContestName = ''.obs;
+  final serverTime = ''.obs;
+  final selectedContestEndTime = ''.obs;
 
   final myRank = 0.obs;
 
@@ -178,6 +181,7 @@ class ContestController extends BaseController<ContestRepository> {
     socketIndexConnection();
     socketSendConnection();
     socketLeaderboardConnection();
+    setupServerTimeSocketConnection();
   }
 
   Future loadDataAfterPaymentSuccess() async {
@@ -1118,6 +1122,30 @@ class ContestController extends BaseController<ContestRepository> {
             tradingInstrumentTradeDetailsList.add(element);
           }
         });
+      });
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
+  bool hasContestEnded(String serverTimeStr, String contestEndTimeStr) {
+    DateTime serverTime = DateTime.parse(serverTimeStr);
+    DateTime contestEndTime = DateTime.parse(contestEndTimeStr);
+    return serverTime.toUtc().isAfter(contestEndTime);
+  }
+
+  Future setupServerTimeSocketConnection() async {
+    try {
+      socketService.socket.on('serverTime', (data) {
+        serverTime(data);
+        print('servertime${serverTime.value.toString()}');
+        if (hasContestEnded(
+            data.toString(), liveContest.value.contestEndTime.toString())) {
+          socketService.socket.off("serverTime");
+          Get.back();
+
+          Get.to(ResultPage());
+        }
       });
     } on Exception catch (e) {
       log(e.toString());
