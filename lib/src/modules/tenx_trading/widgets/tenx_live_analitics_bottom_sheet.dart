@@ -15,6 +15,9 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => CommonCard(
+          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+          margin: EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+          hasBorder: false,
           children: [
             Column(
               children: [
@@ -74,7 +77,7 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 4),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: 12),
@@ -142,7 +145,7 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 4),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: 12),
@@ -217,7 +220,7 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 4),
+                    SizedBox(width: 10),
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(right: 12),
