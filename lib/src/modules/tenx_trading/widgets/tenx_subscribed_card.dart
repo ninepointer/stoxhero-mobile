@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../../app/app.dart';
 
 import '../widgets/tenx_live_analitics_bottom_sheet.dart';
@@ -164,16 +165,17 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                         height: 32,
                         label: 'Analytics',
                         onPressed: () async {
-                          // await controller.getTenxMyActiveSubscribedPNL(
-                          //     subscription.sId, subscription.subscribedOn);
+                          await controller.getTenxMyActiveSubscribedPNL(
+                              subscription.sId, subscription.subscribedOn);
 
-                          // showModalBottomSheet(
-                          //     context: context,
-                          //     builder: (BuildContext context) {
-                          //       return TenXLiveAnaliticalBottomSheet(
-                          //         subscription: subscription,
-                          //       );
-                          //     });
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return TenXLiveAnaliticalBottomSheet(
+                                    subscription: subscription,
+                                    pnlData:
+                                        controller.tenxSubscribedPlansPNLData);
+                              });
                         }),
                   ),
                   if (subscription.allowRenewal == true) ...[

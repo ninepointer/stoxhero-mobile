@@ -6,32 +6,8 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
     Key? key,
   }) : super(key: key);
 
-  // String getTradingStatus(DateTime currentTime) {
-  //   DateTime tradingStart =
-  //       DateTime.parse(controller.readSetting.value.appStartTime ?? '');
-  //   DateTime tradingEnd =
-  //       DateTime.parse(controller.readSetting.value.appEndTime ?? '');
-  //   DateTime squareOffTime = tradingEnd.subtract(Duration(minutes: 4));
-
-  //   if (currentTime.isAfter(tradingStart) && currentTime.isBefore(tradingEnd)) {
-  //     return 'Trading Enabled';
-  //   } else if (currentTime.isAfter(tradingEnd) &&
-  //       currentTime.isBefore(tradingStart)) {
-  //     return 'Trading Resumes at 9:20 AM';
-  //   } else if (currentTime.isAfter(squareOffTime) &&
-  //       currentTime.isBefore(squareOffTime.add(Duration(minutes: 4)))) {
-  //     return 'Trading Automatically Squared Off in 4 minutes';
-  //   } else {
-  //     return "Trading Resumes ${controller.readSetting.value.appStartTime}";
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final VirtualTradingController controller =
-        Get.find<VirtualTradingController>();
-    controller.getReadSetting();
-    print('endtime ${controller.readSetting.value.appEndTime}');
     return Scaffold(
       appBar: AppBar(title: Text('Future & Options')),
       body: Obx(

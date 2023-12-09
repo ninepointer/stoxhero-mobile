@@ -399,7 +399,7 @@ class LiveContestCard extends GetView<ContestController> {
                 ),
               ),
               Expanded(
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () {
                     controller.liveContest(contest);
                     controller.getShareContest(false);

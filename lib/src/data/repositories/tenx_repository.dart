@@ -1,7 +1,7 @@
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
-import '../models/response/tenX_subscription_pnl_response.dart';
+import '../models/response/tenx_subscription_pnl_response.dart';
 
 class TenxTradingRepository extends BaseRepository {
   Future<RepoResponse<GenericResponse>> postPurchaseIntent(

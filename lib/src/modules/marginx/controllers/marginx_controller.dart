@@ -846,22 +846,18 @@ class MarginXController extends BaseController<MarginXRepository> {
   }
 
   Future<void> getShareMarginX(bool isUpcoming) async {
-    isLiveLoading(true);
-
     try {
       await repository.getShareMarginX(
           isUpcoming ? upComingMarginX.value.id : liveMarginX.value.id);
-      if (isUpcoming) {
-        getUpComingMarginXList();
-      } else {
-        getLiveMarginXList();
-      }
+      // if (isUpcoming) {
+      //   getUpComingMarginXList();
+      // } else {
+      //   getLiveMarginXList();
+      // }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-
-    isLiveLoading(false);
   }
 
   int calculateQuantity(

@@ -1267,23 +1267,19 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future<void> getShareContest(bool isUpcoming) async {
-    isLoading(true);
-
     try {
       await repository.getShareContest(
           isUpcoming ? upComingContest.value.id : liveContest.value.id);
 
-      if (isUpcoming) {
-        getUpComingContestList();
-      } else {
-        getLiveContestList();
-      }
+      // if (isUpcoming) {
+      //   getUpComingContestList();
+      // } else {
+      //   getLiveContestList();
+      // }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-
-    isLoading(false);
   }
 
   Future getNotified() async {

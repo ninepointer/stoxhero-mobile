@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/tenX_subscription_pnl_response.dart';
 
 class TenxTradingBinding implements Bindings {
   @override
@@ -1223,7 +1222,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     try {
       final RepoResponse<TenxSubscribedPlanPNLResponse> response =
           await repository.getTenxMyActiveSubscribedPNL(id, subscribeOn);
-      print("aaaa${response.data}");
+
       if (response.data != null) {
         // Update the RxList using assignAll
         tenxSubscribedPlansPNLData(response.data?.data ?? []);

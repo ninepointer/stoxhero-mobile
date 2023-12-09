@@ -92,13 +92,14 @@ class VirtualTradingController
     userDetails.value = AppStorage.getUserDetails();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
+    await getReadSetting();
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
     await getVirtualTradingPortfolio();
     await getStopLossPendingOrder();
     await getStopLossExecutedOrder();
     await getVirtualTodayOrderList();
-    await getReadSetting();
+
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
