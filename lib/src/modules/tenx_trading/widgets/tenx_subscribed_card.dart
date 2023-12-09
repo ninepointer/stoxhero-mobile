@@ -173,8 +173,8 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                               builder: (BuildContext context) {
                                 return TenXLiveAnaliticalBottomSheet(
                                     subscription: subscription,
-                                    pnlData:
-                                        controller.tenxSubscribedPlansPNLData);
+                                    pnlData: controller
+                                        .tenxSubscribedPlansPNLData.value);
                               });
                         }),
                   ),

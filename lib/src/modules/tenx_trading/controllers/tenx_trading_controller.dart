@@ -123,7 +123,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxAvailablePlans = <TenxActivePlan>[].obs;
   final tenxAvailablePlansUnFiltered = <TenxActivePlan>[].obs;
 
-  final tenxSubscribedPlansPNLData = <TenxSubscribedPlanPnl>[].obs;
+  final tenxSubscribedPlansPNLData = TenxSubscribedPlanPnl().obs;
   final tenxSubscribedPlans = <TenxSubscribedPlan>[].obs;
   final tenxSubscribedPlansUnFiltered = <TenxSubscribedPlan>[].obs;
   final tenxSubscribedPlanSelected = TenxSubscribedPlan().obs;
@@ -1225,11 +1225,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
 
       if (response.data != null) {
         // Update the RxList using assignAll
-        tenxSubscribedPlansPNLData(response.data?.data ?? []);
+        tenxSubscribedPlansPNLData(response.data?.data?[0]);
       }
     } catch (e) {
       log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     } finally {
       isLoading(false);
     }

@@ -4,7 +4,7 @@ import '../../../app/app.dart';
 class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
   final TenxSubscribedPlan subscription;
 
-  final List<TenxSubscribedPlanPnl> pnlData;
+  final TenxSubscribedPlanPnl pnlData;
 
   TenXLiveAnaliticalBottomSheet({
     Key? key,
@@ -25,8 +25,10 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${subscription.planName}',
-                      style: AppStyles.tsBlackMedium14,
+                      '${subscription.planName != null ? subscription.planName : ''}',
+                      style: Get.isDarkMode
+                          ? AppStyles.tsWhiteMedium14
+                          : AppStyles.tsBlackMedium14,
                     ),
                   ],
                 ),
@@ -55,15 +57,17 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                '${FormatHelper.formatNumbers(controller.tenxSubscribedPlansPNLData[0].grossPnl, decimal: 0)}',
+                                '${controller.tenxSubscribedPlansPNLData.value.grossPnl != null ? FormatHelper.formatNumbers(controller.tenxSubscribedPlansPNLData.value.grossPnl, decimal: 0) : 0}',
                                 style: AppStyles.tsSecondaryMedium14.copyWith(
-                                  color: controller
-                                              .tenxSubscribedPlansPNLData[0]
-                                              .grossPnl! >=
-                                          0
-                                      ? AppColors.success
-                                      : AppColors.danger,
-                                ),
+                                    color: controller.tenxSubscribedPlansPNLData
+                                                .value.grossPnl !=
+                                            null
+                                        ? controller.tenxSubscribedPlansPNLData
+                                                    .value.grossPnl! >=
+                                                0
+                                            ? AppColors.success
+                                            : AppColors.danger
+                                        : AppColors.success),
                               ),
                             ],
                           ),
@@ -90,7 +94,7 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                '${FormatHelper.formatNumbers(controller.tenxSubscribedPlansPNLData[0].brokerage, decimal: 0)}',
+                                '${controller.tenxSubscribedPlansPNLData.value.brokerage != null ? FormatHelper.formatNumbers(controller.tenxSubscribedPlansPNLData.value.brokerage, decimal: 0) : 0}',
                                 style: AppStyles.tsSecondaryMedium14.copyWith(
                                   color: AppColors.success,
                                 ),
@@ -128,7 +132,7 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                               // Text(subscription),
                               SizedBox(width: 4),
                               Text(
-                                '${FormatHelper.formatNumbers(subscription.discountedPrice, decimal: 0)}',
+                                '${subscription.discountedPrice != null ? FormatHelper.formatNumbers(subscription.discountedPrice, decimal: 0) : 0}',
                                 style: AppStyles.tsSecondaryMedium14.copyWith(
                                   color: AppColors.success,
                                 ),
@@ -158,14 +162,17 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                '${FormatHelper.formatNumbers(controller.tenxSubscribedPlansPNLData[0].npnl, decimal: 0)}',
+                                '${controller.tenxSubscribedPlansPNLData.value.npnl != null ? FormatHelper.formatNumbers(controller.tenxSubscribedPlansPNLData.value.npnl, decimal: 0) : 0}',
                                 style: AppStyles.tsSecondaryMedium14.copyWith(
-                                  color: controller
-                                              .tenxSubscribedPlansPNLData[0]
-                                              .npnl! >=
-                                          0
-                                      ? AppColors.success
-                                      : AppColors.danger,
+                                  color: controller.tenxSubscribedPlansPNLData
+                                              .value.npnl !=
+                                          null
+                                      ? controller.tenxSubscribedPlansPNLData
+                                                  .value.npnl! >=
+                                              0
+                                          ? AppColors.success
+                                          : AppColors.danger
+                                      : AppColors.success,
                                 ),
                               )
                             ],
@@ -200,7 +207,7 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                '${controller.tenxSubscribedPlansPNLData[0].tradingDays}',
+                                '${controller.tenxSubscribedPlansPNLData.value.tradingDays != null ? controller.tenxSubscribedPlansPNLData.value.tradingDays : 0}',
                                 style: AppStyles.tsSecondaryMedium14.copyWith(
                                   color: AppColors.success,
                                 ),
@@ -230,7 +237,7 @@ class TenXLiveAnaliticalBottomSheet extends GetView<TenxTradingController> {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                '${controller.tenxSubscribedPlansPNLData[0].trades}',
+                                '${controller.tenxSubscribedPlansPNLData.value.trades != null ? controller.tenxSubscribedPlansPNLData.value.trades : 0}',
                                 // '${subscription.trades}',
                                 style: AppStyles.tsSecondaryMedium14.copyWith(
                                   color: AppColors.success,
