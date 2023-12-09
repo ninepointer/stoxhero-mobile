@@ -17,7 +17,6 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
-    print(subscription.toJson());
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -76,41 +75,6 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                     ),
                   ),
                 ),
-
-                ///hdh
-                ///grehe
-                // Expanded(
-                //   child: Padding(
-                //     padding: EdgeInsets.only(right: 12, left: 12),
-                //     child: Container(
-                //       height: 40,
-                //       decoration: BoxDecoration(
-                //         color: AppColors.grey.withOpacity(.1),
-                //         borderRadius: BorderRadius.circular(8),
-                //       ),
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         children: [
-                //           Text(
-                //             'Subscription rate',
-                //             style: AppStyles.tsSecondaryMedium14,
-                //           ),
-                //           SizedBox(width: 4),
-                //           Text(
-                //             '₹${controller.tenxSubscribedPlansPNLData.map((element) => element.grossPnl)}',
-                //             style: AppStyles.tsSecondaryMedium14.copyWith(
-                //               color: AppColors.success,
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-
-                ///rhgrh
-                ///hreh
               ],
             ),
             SizedBox(height: 4),

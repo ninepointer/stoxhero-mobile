@@ -1224,10 +1224,10 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
           await repository.getTenxMyActiveSubscribedPNL(id, subscribeOn);
 
       if (response.data != null) {
-        // Update the RxList using assignAll
         tenxSubscribedPlansPNLData(response.data?.data?[0]);
       }
     } catch (e) {
+      tenxSubscribedPlansPNLData(TenxSubscribedPlanPnl());
       log(e.toString());
       // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     } finally {
