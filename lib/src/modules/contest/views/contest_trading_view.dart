@@ -8,7 +8,7 @@ class ContestTradingView extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
-    print('servertime ${controller.serverTime.value}');
+    
     return Scaffold(
       appBar: AppBar(
           title: Text(

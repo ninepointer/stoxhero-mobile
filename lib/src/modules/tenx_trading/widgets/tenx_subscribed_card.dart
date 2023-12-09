@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
+import '../widgets/tenx_live_analitics_bottom_sheet.dart';
+
 class TenxSubscribedCard extends GetView<TenxTradingController> {
   final TenxSubscribedPlan subscription;
+
   final bool isActive;
 
   const TenxSubscribedCard({
@@ -13,6 +16,7 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
+    print(subscription.toJson());
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -71,6 +75,41 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                     ),
                   ),
                 ),
+
+                ///hdh
+                ///grehe
+                // Expanded(
+                //   child: Padding(
+                //     padding: EdgeInsets.only(right: 12, left: 12),
+                //     child: Container(
+                //       height: 40,
+                //       decoration: BoxDecoration(
+                //         color: AppColors.grey.withOpacity(.1),
+                //         borderRadius: BorderRadius.circular(8),
+                //       ),
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         children: [
+                //           Text(
+                //             'Subscription rate',
+                //             style: AppStyles.tsSecondaryMedium14,
+                //           ),
+                //           SizedBox(width: 4),
+                //           Text(
+                //             '₹${controller.tenxSubscribedPlansPNLData.map((element) => element.grossPnl)}',
+                //             style: AppStyles.tsSecondaryMedium14.copyWith(
+                //               color: AppColors.success,
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
+                ///rhgrh
+                ///hreh
               ],
             ),
             SizedBox(height: 4),
@@ -117,16 +156,25 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                 children: [
                   Expanded(
                     child: CommonFilledButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      labelColor: AppColors.secondary,
-                      backgroundColor: AppColors.secondary.withOpacity(.25),
-                      height: 32,
-                      label: 'Analytics',
-                      onPressed: () =>
-                          SnackbarHelper.showSnackbar('Coming Soon'),
-                    ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        labelColor: AppColors.secondary,
+                        backgroundColor: AppColors.secondary.withOpacity(.25),
+                        height: 32,
+                        label: 'Analytics',
+                        onPressed: () async {
+                          // await controller.getTenxMyActiveSubscribedPNL(
+                          //     subscription.sId, subscription.subscribedOn);
+
+                          // showModalBottomSheet(
+                          //     context: context,
+                          //     builder: (BuildContext context) {
+                          //       return TenXLiveAnaliticalBottomSheet(
+                          //         subscription: subscription,
+                          //       );
+                          //     });
+                        }),
                   ),
                   if (subscription.allowRenewal == true) ...[
                     Expanded(

@@ -279,10 +279,17 @@ class VirtualTradingController
   num calculateMargin() {
     num lots = 0;
     num margin = 0;
+    num amount = 0;
+    num limitMargin = 0;
     for (var position in virtualPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
         margin += position.margin ?? 0;
+      }
+      if (position.id?.isLimit == true) {
+        limitMargin += position.margin ?? 0;
+      } else {
+        amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
     num openingBalance = 0;
@@ -296,7 +303,7 @@ class VirtualTradingController
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - margin))
+            : (openingBalance - (amount.abs() + limitMargin)))
         : (openingBalance - margin);
     return availableMargin;
   }

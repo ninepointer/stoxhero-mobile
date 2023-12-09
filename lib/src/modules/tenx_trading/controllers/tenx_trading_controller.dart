@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
+import '../../../data/models/response/tenX_subscription_pnl_response.dart';
 
 class TenxTradingBinding implements Bindings {
   @override
@@ -72,6 +73,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final quanitityTextController = TextEditingController();
   final limitPriceTextController = TextEditingController();
   final selectedSubscriptionId = ''.obs;
+  final selectedSubscriptionTime = ''.obs;
   final selectSubscriptionName = ''.obs;
   final selectSubscriptionAmount = 0.obs;
   final selectedSubscription = TenxActivePlan().obs;
@@ -115,12 +117,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedGroupValue = 0.obs;
   final isMarketSelected = true.obs;
   final tenxTradeTodaysOrdersList = <TenxTradeOrder>[].obs;
+
   final sendOrder = SendOrderResponse().obs;
   final sendOrderList = <SendOrderResponse>[].obs;
 
   final tenxAvailablePlans = <TenxActivePlan>[].obs;
   final tenxAvailablePlansUnFiltered = <TenxActivePlan>[].obs;
 
+  final tenxSubscribedPlansPNLData = <TenxSubscribedPlanPnl>[].obs;
   final tenxSubscribedPlans = <TenxSubscribedPlan>[].obs;
   final tenxSubscribedPlansUnFiltered = <TenxSubscribedPlan>[].obs;
   final tenxSubscribedPlanSelected = TenxSubscribedPlan().obs;
@@ -152,6 +156,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxActivePlans();
     await getTenxSubscribedPlans();
     await getTenxExpiredPlans();
+
     await getTenxLeaderboard();
   }
 
@@ -160,6 +165,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getTenxCountTradingDays();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
+
     // await getTenXSubscriptionList();
     await getTenxTradingWatchlist();
     await getTenxPositionList();
@@ -438,10 +444,18 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   num calculateMargin() {
     num lots = 0;
     num margin = 0;
+    num amount = 0;
+    num limitMargin = 0;
     for (var position in tenxPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
         margin += position.margin ?? 0;
+      }
+
+      if (position.id?.isLimit == true) {
+        limitMargin += position.margin ?? 0;
+      } else {
+        amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
     num openingBalance = 0;
@@ -455,7 +469,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - margin))
+            : (openingBalance - (amount.abs() + limitMargin)))
         : (openingBalance - margin);
     // print('availableMargin $availableMargin');
     // print('calculateTotalNetPNL ${calculateTotalNetPNL()}');
@@ -1199,6 +1213,26 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       await repository.tenxTutorial(data);
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  Future<void> getTenxMyActiveSubscribedPNL(
+      String? id, String? subscribeOn) async {
+    isLoading(true);
+
+    try {
+      final RepoResponse<TenxSubscribedPlanPNLResponse> response =
+          await repository.getTenxMyActiveSubscribedPNL(id, subscribeOn);
+      print("aaaa${response.data}");
+      if (response.data != null) {
+        // Update the RxList using assignAll
+        tenxSubscribedPlansPNLData(response.data?.data ?? []);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isLoading(false);
     }
   }
 
