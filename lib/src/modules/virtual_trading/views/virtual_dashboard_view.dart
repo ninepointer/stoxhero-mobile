@@ -74,7 +74,9 @@ class FutureAndOptionDashBoard extends StatelessWidget {
             title: 'Stocks',
             image: AppImages.stock,
             text: "Master essential skills in Stock trading",
-            onPressed: () {},
+            onPressed: () {
+              // Get.to(() => StocksDashboardView());
+            },
           ),
         ],
       ),

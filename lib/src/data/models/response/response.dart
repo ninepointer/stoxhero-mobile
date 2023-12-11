@@ -85,3 +85,4 @@ export 'day_wise_contest_pnl_response.dart';
 export 'contest_profile_response.dart';
 export 'weekly_top_performer_list_response.dart';
 export 'tenx_subscription_pnl_response.dart';
+export 'contest_result_page_response.dart';

@@ -2,18 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:stoxhero/src/app/app.dart';
 
 final firebaseMessaging = FirebaseMessaging.instance;
 
 class NotificationServices {
-  static Future<void> initializeNotificationService(BuildContext context) async {
+  static Future<void> initializeNotificationService(
+      BuildContext context) async {
     NotificationSettings settings = await firebaseMessaging.requestPermission();
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
-    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
       print('User granted provisional permission');
     } else {
       print('User declined or has not accepted permission');
@@ -53,25 +56,45 @@ class NotificationServices {
     );
 
     await localNotification
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
-        AndroidNotificationDetails? androidNotificationDetails;
-        androidNotificationDetails = AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          color: AppColors.lightGreen,
-          importance: Importance.max,
-          priority: Priority.max,
-          styleInformation: BigTextStyleInformation(
-            message.notification?.body ?? '',
-          ),
-        );
+        Uint8List response;
+        String? mediaUrl = message.data['mediaUrl'];
 
+        AndroidNotificationDetails? androidNotificationDetails;
         RemoteNotification? notification = message.notification;
         AndroidNotification? android = message.notification?.android;
+
+        if (mediaUrl != null && mediaUrl.isNotEmpty) {
+          response = await Get.find<NetworkService>().getImageBytes(mediaUrl);
+          androidNotificationDetails = AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            priority: Priority.max,
+            importance: Importance.max,
+            color: AppColors.lightGreen,
+            icon: '@drawable/notification_icon',
+            styleInformation: BigPictureStyleInformation(
+              ByteArrayAndroidBitmap.fromBase64String(base64.encode(response)),
+            ),
+          );
+        } else {
+          androidNotificationDetails = AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            priority: Priority.max,
+            importance: Importance.max,
+            color: AppColors.lightGreen,
+            icon: '@drawable/notification_icon',
+            styleInformation: BigTextStyleInformation(
+              message.notification?.body ?? '',
+            ),
+          );
+        }
 
         if (notification != null && android != null) {
           var notificationDetails = NotificationDetails(
@@ -96,7 +119,8 @@ class NotificationServices {
     });
   }
 
-  static void handelNotificationClick(dynamic messageData, {bool isLocal = false}) async {
+  static void handelNotificationClick(dynamic messageData,
+      {bool isLocal = false}) async {
     print('onMessageClicked : isLocal : $isLocal');
     print('onMessageClicked : $messageData');
 
