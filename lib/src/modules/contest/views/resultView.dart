@@ -18,13 +18,15 @@ class ResultPage extends GetView<ContestController> {
     num netPNL = controller.resultPageDetails.value.npnl ?? 0;
     num tempReward = netPNL * payoutPercentage / 100;
     num reward = tempReward > capValue ? capValue : tempReward;
+
     return reward > 0 ? reward : 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("aaaaaa${controller.resultPageDetails.value.npnl}");
-    num reward = rewardCapAmount(
+    num reward = 0;
+    if (controller.resultPageDetails.value.npnl != null) {
+      reward = rewardCapAmount(
         (controller.liveFeatured.value.entryFee ??
                     controller.liveContest.value.entryFee) ==
                 0
@@ -39,7 +41,9 @@ class ResultPage extends GetView<ContestController> {
             0,
         controller.liveFeatured.value.payoutPercentage ??
             controller.liveContest.value.payoutPercentage ??
-            0);
+            0,
+      );
+    }
     ContestController contestController = Get.find<ContestController>();
 
     return Scaffold(
@@ -69,16 +73,16 @@ class ResultPage extends GetView<ContestController> {
                     );
                   } else {
                     return Obx(() {
-                      if (reward.isGreaterThan(
-                          controller.liveContest.value.entryFee ?? 0)) {
-                        WidgetsBinding.instance!.addPostFrameCallback((_) {
-                          Get.dialog(UpdateAlertDialog(
-                            label: "Rate now!",
-                            body: "Enjoying our App? Rate us now! ",
-                            confrimLabel: "Sure",
-                          ));
-                        });
-                      }
+                      // if (reward.isGreaterThan(
+                      //     controller.liveContest.value.entryFee ?? 0)) {
+                      //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+                      //     Get.dialog(UpdateAlertDialog(
+                      //       label: "Rate now!",
+                      //       body: "Enjoying our App? Rate us now! ",
+                      //       confrimLabel: "Sure",
+                      //     ));
+                      //   });
+                      // }
 
                       return Column(children: [
                         Row(
@@ -240,34 +244,34 @@ class ResultPage extends GetView<ContestController> {
                                                     )
                                                   ],
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Reward :",
-                                                      style: Get.isDarkMode
-                                                          ? Theme.of(context)
-                                                              .textTheme
-                                                              .tsWhiteMedium16
-                                                          : Theme.of(context)
-                                                              .textTheme
-                                                              .tsBlackMedium16,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 16,
-                                                    ),
-                                                    Text(
-                                                        "${FormatHelper.formatNumbers(reward)}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .tsMedium14
-                                                            .copyWith(
-                                                              color: AppColors
-                                                                  .success,
-                                                            ))
-                                                  ],
-                                                ),
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment.start,
+                                                //   children: [
+                                                //     Text(
+                                                //       "Reward :",
+                                                //       style: Get.isDarkMode
+                                                //           ? Theme.of(context)
+                                                //               .textTheme
+                                                //               .tsWhiteMedium16
+                                                //           : Theme.of(context)
+                                                //               .textTheme
+                                                //               .tsBlackMedium16,
+                                                //     ),
+                                                //     SizedBox(
+                                                //       width: 16,
+                                                //     ),
+                                                //     Text(
+                                                //         "${FormatHelper.formatNumbers(reward)}",
+                                                //         style: Theme.of(context)
+                                                //             .textTheme
+                                                //             .tsMedium14
+                                                //             .copyWith(
+                                                //               color: AppColors
+                                                //                   .success,
+                                                //             ))
+                                                //   ],
+                                                // ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
@@ -307,6 +311,22 @@ class ResultPage extends GetView<ContestController> {
                                   ],
                                 ),
                         ),
+                        controller.resultPageDetails.value.npnl != null
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 4),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Please check your Reward,tds and\nPayout in completed TestZones",
+                                      style: AppStyles.tsGreyMedium12,
+                                      softWrap: true,
+                                    )
+                                  ],
+                                ),
+                              )
+                            : Container(),
                         ElevatedButton(
                             onPressed: () async {
                               await contestController.loadData();
