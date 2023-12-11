@@ -9,7 +9,7 @@ class ResultPage extends GetView<ContestController> {
   @override
   Widget build(BuildContext context) {
     ContestController contestController = Get.find<ContestController>();
-    print("server${controller.serverTime}");
+
     return Obx(() => Scaffold(
         appBar: AppBar(
           title: Text('Result'),
