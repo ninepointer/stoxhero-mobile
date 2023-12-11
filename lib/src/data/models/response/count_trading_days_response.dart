@@ -29,7 +29,8 @@ class CountTradingDays {
   num? totalTradingDays;
   num? actualRemainingDay;
 
-  CountTradingDays({this.subscriptionId, this.totalTradingDays, this.actualRemainingDay});
+  CountTradingDays(
+      {this.subscriptionId, this.totalTradingDays, this.actualRemainingDay});
 
   CountTradingDays.fromJson(Map<String, dynamic> json) {
     subscriptionId = json['subscriptionId'];

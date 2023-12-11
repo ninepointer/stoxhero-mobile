@@ -204,7 +204,7 @@ class ShareModalContent extends GetView<ContestController> {
                                       margin: EdgeInsets.only(left: 12),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.end,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Net P&L",

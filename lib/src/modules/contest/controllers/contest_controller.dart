@@ -574,9 +574,7 @@ class ContestController extends BaseController<ContestRepository> {
           position.id?.instrumentToken ?? 0,
           position.id?.exchangeInstrumentToken ?? 0,
         );
-        // print('avg $avg');
-        // print('lots $lots');
-        // print('ltp $ltp');
+
         if (ltp == 0) return 0;
         num value = (avg + (lots) * ltp);
         totalGross += value;
@@ -607,14 +605,39 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   num calculateMargin() {
+    //   num lots = 0;
+    //   num margin = 0;
+    //   num amount = 0;
+    //  num limitmargin = 0;
+    //   for (var position in contestPositionsList) {
+    //     if (position.lots != 0) {
+    //       lots += position.lots ?? 0;
+    //       margin += position.margin ?? 0;
+    //     }
+    //      if (position.id.isLimit) {
+    //   margin += position.margin;
+    // } else {
+    //   amount += (position.amount - position.brokerage);
+    // }
+    //   }
     num lots = 0;
     num margin = 0;
+    num amount = 0;
+    num limitMargin = 0; // Changed to camelCase for consistency
+
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
         margin += position.margin ?? 0;
       }
+
+      if (position.id?.isLimit == true) {
+        limitMargin += position.margin ?? 0;
+      } else {
+        amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
+      }
     }
+
     num openingBalance = 0;
     num totalFund = contestPortfolio.value.totalFund ?? 0;
 
@@ -626,7 +649,7 @@ class ContestController extends BaseController<ContestRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - margin))
+            : (openingBalance - (amount.abs() + limitMargin)))
         : (openingBalance - margin);
     return availableMargin;
   }
@@ -840,7 +863,6 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       final RepoResponse<LastPaidTestZoneTopPerformerListResponse> response =
           await repository.getPaidContestChampionList();
-      print('responsedata ${response.data}');
       if (response.data != null) {
         contestChampionList(response.data!.data?.cast<ContestData>() ?? []);
       } else {
@@ -1245,23 +1267,19 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future<void> getShareContest(bool isUpcoming) async {
-    isLoading(true);
-
     try {
       await repository.getShareContest(
           isUpcoming ? upComingContest.value.id : liveContest.value.id);
 
-      if (isUpcoming) {
-        getUpComingContestList();
-      } else {
-        getLiveContestList();
-      }
+      // if (isUpcoming) {
+      //   getUpComingContestList();
+      // } else {
+      //   getLiveContestList();
+      // }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-
-    isLoading(false);
   }
 
   Future getNotified() async {
