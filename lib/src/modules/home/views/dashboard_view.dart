@@ -661,7 +661,8 @@ class _DashboardViewState extends State<DashboardView> {
                               children: [
                                 Expanded(
                                   child: controller.selectedTradeType ==
-                                          'virtual'
+                                              'virtual' ||
+                                          controller.selectedTradeType == 'tenx'
                                       ? customCard(
                                           label: 'Market Days',
                                           percent: userDashboard
@@ -690,7 +691,8 @@ class _DashboardViewState extends State<DashboardView> {
                                 SizedBox(width: 8),
                                 Expanded(
                                   child: controller.selectedTradeType ==
-                                          'virtual'
+                                              'virtual' ||
+                                          controller.selectedTradeType == 'tenx'
                                       ? customCard(
                                           label: 'Trading Days',
                                           percent:

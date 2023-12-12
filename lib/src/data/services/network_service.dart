@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:stoxhero/main.dart';
 
@@ -68,6 +69,16 @@ class NetworkService {
   }
 
   _printLog(Object object) => log(object.toString());
+
+  Future<Uint8List> getImageBytes(String imageUrl) async {
+    var response = await Dio().get<Uint8List>(
+      imageUrl,
+      options: Options(
+        responseType: ResponseType.bytes,
+      ),
+    );
+    return response.data!;
+  }
 
   Future<dynamic> getAuth({
     required String path,

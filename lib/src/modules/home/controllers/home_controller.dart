@@ -12,6 +12,7 @@ class HomeController extends BaseController<DashboardRepository> {
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
   final isLoading = false.obs;
+  final isPerformanceLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
   final selectedIndex = 0.obs;
@@ -143,7 +144,7 @@ class HomeController extends BaseController<DashboardRepository> {
   }
 
   Future getDashboard(String? tradeType, String? timeFame) async {
-    isLoading(true);
+    isPerformanceLoading(true);
     try {
       final RepoResponse<DashboardTradeSummaryResponse> response =
           tradeType == 'virtual'
@@ -161,7 +162,7 @@ class HomeController extends BaseController<DashboardRepository> {
     } catch (e) {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPerformanceLoading(false);
   }
 
   Future getDashboardCarousel() async {

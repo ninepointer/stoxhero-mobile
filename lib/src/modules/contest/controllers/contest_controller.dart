@@ -83,6 +83,8 @@ class ContestController extends BaseController<ContestRepository> {
   final upcomingSegmentedControlValue = 0.obs;
   final completedSegmentedControlValue = 0.obs;
 
+  final resultPageDetails = ResultPageData().obs;
+
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingContest>[].obs;
   final upComingContest = UpComingContest().obs;
@@ -1150,6 +1152,30 @@ class ContestController extends BaseController<ContestRepository> {
     }
   }
 
+  Future<void> pollForData(String contestId) async {
+    await Future.delayed(Duration(seconds: 2));
+
+    try {
+      final RepoResponse<ContestResultPageResponse> response =
+          await repository.getContestResultPageData(contestId);
+      if (response.data != null) {
+        resultPageDetails(response.data?.data);
+
+        if (resultPageDetails.value.npnl == null) {
+          Future.delayed(Duration(seconds: 3));
+          pollForData(contestId);
+        } else {
+          Get.to(ResultPage());
+        }
+      } else {
+        pollForData(contestId);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   bool hasContestEnded(String serverTimeStr, String contestEndTimeStr) {
     DateTime serverTime = DateTime.parse(serverTimeStr);
     DateTime contestEndTime = DateTime.parse(contestEndTimeStr);
@@ -1160,12 +1186,13 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       socketService.socket.on('serverTime', (data) {
         serverTime(data);
-        print('servertime${serverTime.value.toString()}');
+
         if (hasContestEnded(
             data.toString(), liveContest.value.contestEndTime.toString())) {
           socketService.socket.off("serverTime");
           Get.back();
-
+          Future.delayed(Duration(seconds: 5));
+          pollForData(liveContest.value.id.toString());
           Get.to(ResultPage());
         }
       });
