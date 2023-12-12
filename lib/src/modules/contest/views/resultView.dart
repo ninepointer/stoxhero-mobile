@@ -25,7 +25,7 @@ class ResultPage extends GetView<ContestController> {
             margin: EdgeInsets.only(top: 20),
             child: FutureBuilder(
                 future: Future.delayed(
-                    Duration(seconds: 1)), // Introduce a delay of 10 seconds
+                    Duration(seconds: 6)), // Introduce a delay of 10 seconds
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator with text while waiting
