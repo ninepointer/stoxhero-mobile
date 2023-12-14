@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
@@ -50,6 +51,8 @@ class VirtualTradingController
   final isOrderStateLoading = false.obs;
   bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
 
+  final apiDataLoaded = false.obs;
+
   final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();
   final stopLossPriceTextController = TextEditingController();
@@ -72,10 +75,14 @@ class VirtualTradingController
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
+  final selectedStopLossQuantity = 0.obs;
+  final selectedStopProfitQuantity = 0.obs;
   final selectedStringQuantity = "0".obs;
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
   final lotsValueList = <int>[0].obs;
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
 
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
 
@@ -99,7 +106,7 @@ class VirtualTradingController
     await getStopLossPendingOrder();
     await getStopLossExecutedOrder();
     await getVirtualTodayOrderList();
-
+    await liveIndexDetails();
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
@@ -159,7 +166,11 @@ class VirtualTradingController
   String getStockIndexName(int instId) {
     int index = stockIndexInstrumentList
         .indexWhere((element) => element.instrumentToken == instId);
-    return stockIndexInstrumentList[index].displayName ?? '-';
+    if (index != -1 && index < stockIndexInstrumentList.length) {
+      return stockIndexInstrumentList[index].displayName ?? '-';
+    } else {
+      return '-';
+    }
   }
 
   List<int> generateLotsList({String? type}) {
@@ -177,6 +188,49 @@ class VirtualTradingController
     lotsValueList.assignAll(result);
     return result;
   }
+
+  // List<int> generateLotsListFoStopLoss({String? type}) {
+  //   List<int> result = [];
+
+  //   if (type?.contains('BANK') ?? false) {
+  //     for (int i = 15; i <= 900; i += 15) result.add(i);
+  //   } else if (type?.contains('FIN') ?? false) {
+  //     for (int i = 40; i <= 1800; i += 40) result.add(i);
+  //   } else {
+  //     for (int i = 50; i <= 1800; i += 50) result.add(i);
+  //   }
+  //   selectedStopLossQuantity.value = result[0];
+
+  //   lotsValueForStopLoss.assignAll(result);
+  //   return result;
+  // }
+
+  // List<int> generateLotsListForStopProfit({String? type}) {
+  //   List<int> result = [];
+
+  //   if (type?.contains('BANK') ?? false) {
+  //     for (int i = 15; i <= 900; i += 15) result.add(i);
+  //   } else if (type?.contains('FIN') ?? false) {
+  //     for (int i = 40; i <= 1800; i += 40) result.add(i);
+  //   } else {
+  //     for (int i = 50; i <= 1800; i += 50) result.add(i);
+  //   }
+
+  //   // if (virtualPosition.value.lots! < result[result.last]) {
+  //   //   selectedStopProfitQuantity.value =
+  //   //       (selectedStopProfitQuantity.value ?? 0) +
+  //   //           (selectedStopProfitQuantity.value == 0
+  //   //               ? virtualPosition.value.lots ?? 0
+  //   //               : virtualPosition.value.lots ??
+  //   //                   0 - (selectedStopProfitQuantity.value ?? 0));
+  //   // }
+  //   //else {
+  //   selectedStopProfitQuantity.value = result[0];
+  //   // }
+
+  //   lotsValueForStopProfit.assignAll(result);
+  //   return result;
+  // }
 
   Color getValueColor(dynamic value) {
     if (value != null) {
@@ -638,27 +692,49 @@ class VirtualTradingController
     isLoading(false);
   }
 
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+      print("liveIndexDetails${stockIndexDetailsList.length}");
+    } catch (e) {
+      log(e.toString());
+
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      socketService.socket.on(
-        'index-tick',
-        (data) {
-          stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
-          for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList
-                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
-              int index = stockIndexDetailsList.indexWhere(
-                (stock) => stock.instrumentToken == element.instrumentToken,
-              );
-              stockIndexDetailsList.removeAt(index);
-              stockIndexDetailsList.insert(index, element);
-            } else {
-              stockIndexDetailsList.add(element);
-            }
+      socketService.socket.on('index-tick', (data) {
+        stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
+        for (var element in stockTemp ?? []) {
+          if (stockIndexDetailsList
+              .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            int index = stockIndexDetailsList.indexWhere(
+              (stock) => stock.instrumentToken == element.instrumentToken,
+            );
+            stockIndexDetailsList.removeAt(index);
+            stockIndexDetailsList.insert(index, element);
+          } else {
+            stockIndexDetailsList.add(element);
           }
-        },
-      );
+        }
+      });
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -819,6 +895,8 @@ class VirtualTradingController
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: virtualPortfolio.value.portfolioId,

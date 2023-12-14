@@ -72,7 +72,7 @@ class ResultPage extends GetView<ContestController> {
                           Get.dialog(UpdateAlertDialog(
                             label: "Rate now!",
                             body: "Enjoying our App? Rate us now! ",
-                            confrimLabel: "Sure",
+                            confrimLabel: "Rate",
                           ));
                         });
                       }

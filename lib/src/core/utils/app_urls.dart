@@ -22,7 +22,7 @@ class AppUrls {
   static const String tradeMarginDetails = 'trade/marginDetail';
 
   static const String stockIndex = "$apiURL/stockindex";
-
+  static const String getIndexLivePrice = "$apiURL/getIndexliveprice";
   static const String collegeList = "$apiURL/college/collegeList";
 
   static const String addFcmToken = "$apiURL/addfcmtoken";

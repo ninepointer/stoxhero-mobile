@@ -21,7 +21,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
       // Add the appropriate ordinal suffix
       formattedString += _getDaySuffix(dateTime.day);
 
-      formattedString += ' ' + DateFormat('MMM').format(dateTime);
+      formattedString += ' ' + DateFormat('MMMM').format(dateTime);
       return formattedString;
     } else {
       return '-';
