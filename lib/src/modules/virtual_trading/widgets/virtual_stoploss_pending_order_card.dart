@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class VirtualStoplossPendingOrderCard extends GetView<VirtualTradingController> {
+class VirtualStoplossPendingOrderCard
+    extends GetView<VirtualTradingController> {
   final StopLossPendingOrdersList stopLoss;
   const VirtualStoplossPendingOrderCard({
     Key? key,
@@ -97,7 +98,9 @@ class VirtualStoplossPendingOrderCard extends GetView<VirtualTradingController> 
                       hasBottomMargin: false,
                       label: 'Transaction Type',
                       value: stopLoss.buyOrSell,
-                      valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
+                      valueColor: stopLoss.buyOrSell == "SELL"
+                          ? AppColors.danger
+                          : AppColors.success,
                     ),
                   ],
                 ),
@@ -107,7 +110,9 @@ class VirtualStoplossPendingOrderCard extends GetView<VirtualTradingController> 
                     TradeCardTile(
                       label: 'Status',
                       value: stopLoss.status,
-                      valueColor: stopLoss.status == "Executed" ? AppColors.success : AppColors.danger,
+                      valueColor: stopLoss.status == "Executed"
+                          ? AppColors.success
+                          : AppColors.danger,
                       hasBottomMargin: false,
                     ),
                     TradeCardTile(

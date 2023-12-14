@@ -215,20 +215,21 @@ class VirtualTradingController
   //   } else {
   //     for (int i = 50; i <= 1800; i += 50) result.add(i);
   //   }
-
-  //   // if (virtualPosition.value.lots! < result[result.last]) {
-  //   //   selectedStopProfitQuantity.value =
-  //   //       (selectedStopProfitQuantity.value ?? 0) +
-  //   //           (selectedStopProfitQuantity.value == 0
-  //   //               ? virtualPosition.value.lots ?? 0
-  //   //               : virtualPosition.value.lots ??
-  //   //                   0 - (selectedStopProfitQuantity.value ?? 0));
-  //   // }
-  //   //else {
   //   selectedStopProfitQuantity.value = result[0];
-  //   // }
+  //   print("remainingLots${virtualPosition.value.lots}");
+  //   print("remainingLotss${stopLossPendingOrder.value.quantity}");
+  //   //1. Maximum
+  //   if ((stopLossPendingOrder.value.quantity ?? 0) <
+  //       (virtualPosition.value.lots ?? 0)) {
+  //     int remainingLots = (virtualPosition.value.lots ?? 0) -
+  //         (stopLossPendingOrder.value.quantity ?? 0);
 
-  //   lotsValueForStopProfit.assignAll(result);
+  //     lotsValueForStopProfit
+  //         .assignAll(result.where((lot) => lot <= remainingLots).toList());
+  //   } else {
+  //     lotsValueForStopProfit.assignAll(result);
+  //   }
+
   //   return result;
   // }
 
@@ -895,8 +896,8 @@ class VirtualTradingController
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
-      stopLossQuantity: selectedStopLossQuantity.value,
-      stopProfitQuantity: selectedStopProfitQuantity.value,
+      // stopLossQuantity: selectedStopLossQuantity.value,
+      // stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: virtualPortfolio.value.portfolioId,
