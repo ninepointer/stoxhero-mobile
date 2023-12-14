@@ -445,6 +445,15 @@ class ContestController extends BaseController<ContestRepository> {
     return reward > 0 ? reward : 0;
   }
 
+  num resultrewardCapAmount(num fees, num cap, num payoutPercentage) {
+    num capValue = (fees * cap) / 100;
+    num netPNL = resultPageDetails.value.npnl ?? 0;
+    num tempReward = netPNL * payoutPercentage / 100;
+    num reward = tempReward > capValue ? capValue : tempReward;
+
+    return reward > 0 ? reward : 0;
+  }
+
   num calculateTDS() {
     num tds = readSetting.value.tdsPercentage ?? 0;
     num rewardAmount = getRewardCapAmount(

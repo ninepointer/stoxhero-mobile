@@ -7,43 +7,14 @@ class ResultPage extends GetView<ContestController> {
     Key? key,
   }) : super(key: key);
 
-  void showratedailog(num reward) {
-    if (reward.isGreaterThan(controller.liveContest.value.entryFee ?? 0)) {
-      Get.dialog(Text("hello"));
-    }
-  }
-
-  num rewardCapAmount(num fees, num cap, num payoutPercentage) {
-    num capValue = (fees * cap) / 100;
-    num netPNL = controller.resultPageDetails.value.npnl ?? 0;
-    num tempReward = netPNL * payoutPercentage / 100;
-    num reward = tempReward > capValue ? capValue : tempReward;
-
-    return reward > 0 ? reward : 0;
-  }
+  // void showratedailog(num reward) {
+  //   if (reward.isGreaterThan(controller.liveContest.value.entryFee ?? 0)) {
+  //     Get.dialog(Text("hello"));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    num reward = 0;
-    if (controller.resultPageDetails.value.npnl != null) {
-      reward = rewardCapAmount(
-        (controller.liveFeatured.value.entryFee ??
-                    controller.liveContest.value.entryFee) ==
-                0
-            ? controller.liveFeatured.value.portfolio?.portfolioValue ??
-                controller.liveContest.value.portfolio?.portfolioValue ??
-                0
-            : (controller.liveFeatured.value.entryFee ??
-                    controller.liveContest.value.entryFee) ??
-                0,
-        controller.liveFeatured.value.payoutCapPercentage ??
-            controller.liveContest.value.payoutCapPercentage ??
-            0,
-        controller.liveFeatured.value.payoutPercentage ??
-            controller.liveContest.value.payoutPercentage ??
-            0,
-      );
-    }
     ContestController contestController = Get.find<ContestController>();
 
     return Scaffold(
@@ -54,7 +25,7 @@ class ResultPage extends GetView<ContestController> {
             margin: EdgeInsets.only(top: 20),
             child: FutureBuilder(
                 future: Future.delayed(
-                    Duration(seconds: 10)), // Introduce a delay of 10 seconds
+                    Duration(seconds: 6)), // Introduce a delay of 10 seconds
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator with text while waiting
@@ -72,17 +43,39 @@ class ResultPage extends GetView<ContestController> {
                       ),
                     );
                   } else {
+                    num reward = 0;
+                    if (controller.resultPageDetails.value.npnl != null) {
+                      reward = controller.resultrewardCapAmount(
+                        (controller.liveFeatured.value.entryFee ??
+                                    controller.liveContest.value.entryFee) ==
+                                0
+                            ? controller.liveFeatured.value.portfolio
+                                    ?.portfolioValue ??
+                                controller.liveContest.value.portfolio
+                                    ?.portfolioValue ??
+                                0
+                            : (controller.liveFeatured.value.entryFee ??
+                                    controller.liveContest.value.entryFee) ??
+                                0,
+                        controller.liveFeatured.value.payoutCapPercentage ??
+                            controller.liveContest.value.payoutCapPercentage ??
+                            0,
+                        controller.liveFeatured.value.payoutPercentage ??
+                            controller.liveContest.value.payoutPercentage ??
+                            0,
+                      );
+                    }
                     return Obx(() {
-                      // if (reward.isGreaterThan(
-                      //     controller.liveContest.value.entryFee ?? 0)) {
-                      //   WidgetsBinding.instance!.addPostFrameCallback((_) {
-                      //     Get.dialog(UpdateAlertDialog(
-                      //       label: "Rate now!",
-                      //       body: "Enjoying our App? Rate us now! ",
-                      //       confrimLabel: "Sure",
-                      //     ));
-                      //   });
-                      // }
+                      if (reward >=
+                          (controller.liveContest.value.entryFee ?? 0)) {
+                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                          Get.dialog(UpdateAlertDialog(
+                            label: "Rate now!",
+                            body: "Enjoying our App? Rate us now! ",
+                            confrimLabel: "Sure",
+                          ));
+                        });
+                      }
 
                       return Column(children: [
                         Row(
@@ -183,7 +176,6 @@ class ResultPage extends GetView<ContestController> {
                                               Container(
                                                   alignment:
                                                       Alignment.centerLeft,
-                                                  width: 200,
                                                   child: Text(
                                                     controller.userDetails.value
                                                                 .firstName !=
@@ -204,7 +196,8 @@ class ResultPage extends GetView<ContestController> {
                                             height: 5,
                                           ),
                                           Container(
-                                            margin: EdgeInsets.only(left: 35),
+                                            alignment: Alignment.center,
+                                            margin: EdgeInsets.only(left: 50),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
@@ -244,34 +237,34 @@ class ResultPage extends GetView<ContestController> {
                                                     )
                                                   ],
                                                 ),
-                                                // Row(
-                                                //   mainAxisAlignment:
-                                                //       MainAxisAlignment.start,
-                                                //   children: [
-                                                //     Text(
-                                                //       "Reward :",
-                                                //       style: Get.isDarkMode
-                                                //           ? Theme.of(context)
-                                                //               .textTheme
-                                                //               .tsWhiteMedium16
-                                                //           : Theme.of(context)
-                                                //               .textTheme
-                                                //               .tsBlackMedium16,
-                                                //     ),
-                                                //     SizedBox(
-                                                //       width: 16,
-                                                //     ),
-                                                //     Text(
-                                                //         "${FormatHelper.formatNumbers(reward)}",
-                                                //         style: Theme.of(context)
-                                                //             .textTheme
-                                                //             .tsMedium14
-                                                //             .copyWith(
-                                                //               color: AppColors
-                                                //                   .success,
-                                                //             ))
-                                                //   ],
-                                                // ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Reward :",
+                                                      style: Get.isDarkMode
+                                                          ? Theme.of(context)
+                                                              .textTheme
+                                                              .tsWhiteMedium16
+                                                          : Theme.of(context)
+                                                              .textTheme
+                                                              .tsBlackMedium16,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 16,
+                                                    ),
+                                                    Text(
+                                                        "${FormatHelper.formatNumbers(reward)}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .tsMedium14
+                                                            .copyWith(
+                                                              color: AppColors
+                                                                  .success,
+                                                            ))
+                                                  ],
+                                                ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
@@ -311,22 +304,22 @@ class ResultPage extends GetView<ContestController> {
                                   ],
                                 ),
                         ),
-                        controller.resultPageDetails.value.npnl != null
-                            ? Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 4),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Please check your Reward,tds and\nPayout in completed TestZones",
-                                      style: AppStyles.tsGreyMedium12,
-                                      softWrap: true,
-                                    )
-                                  ],
-                                ),
-                              )
-                            : Container(),
+                        // controller.resultPageDetails.value.npnl != null
+                        //     ? Padding(
+                        //         padding: EdgeInsets.symmetric(
+                        //             horizontal: 20, vertical: 4),
+                        //         child: Row(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           children: [
+                        //             Text(
+                        //               "Please check your Reward,tds and\nPayout in completed TestZones",
+                        //               style: AppStyles.tsGreyMedium12,
+                        //               softWrap: true,
+                        //             )
+                        //           ],
+                        //         ),
+                        //       )
+                        //     : Container(),
                         ElevatedButton(
                             onPressed: () async {
                               await contestController.loadData();
