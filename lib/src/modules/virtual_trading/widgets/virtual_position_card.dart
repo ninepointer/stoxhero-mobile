@@ -35,14 +35,15 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
     );
   }
 
-  void openModifyBottomSheet(BuildContext context, TransactionType type) {
+  void openModifyBottomSheet(BuildContext context, TransactionType type) async {
     FocusScope.of(context).unfocus();
     num lastPrice = controller.getInstrumentLastPrice(
       position.id!.instrumentToken!,
       position.id!.exchangeInstrumentToken!,
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-    controller.getVirtualPendingStoplossOrderData(position.id?.product ?? '');
+    await controller
+        .getVirtualPendingStoplossOrderData(position.id?.product ?? '');
     controller.generateLotsList(type: position.id?.symbol);
     controller.generateLotsListFoStopLoss(
         type: position.id?.symbol, openLots: position.lots);

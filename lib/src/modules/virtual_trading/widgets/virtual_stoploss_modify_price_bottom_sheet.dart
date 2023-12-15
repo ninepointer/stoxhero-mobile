@@ -354,11 +354,11 @@ class VirtualStoplossModifyPriceBottomSheet
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    AppStrings.noteModify,
-                    style: Theme.of(context).textTheme.tsGreyMedium12,
-                  ),
+                  // SizedBox(height: 8),
+                  // Text(
+                  //   AppStrings.noteModify,
+                  //   style: Theme.of(context).textTheme.tsGreyMedium12,
+                  // ),
                   SizedBox(height: 12),
                   CommonFilledButton(
                     label: 'MODIFY',

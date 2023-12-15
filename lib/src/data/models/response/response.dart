@@ -88,3 +88,4 @@ export 'tenx_subscription_pnl_response.dart';
 export 'contest_result_page_response.dart';
 export 'live_index_price_response.dart';
 export 'virtual_pending_order_stoploss_response.dart';
+export "contest_pending_order_stoploss_response.dart";

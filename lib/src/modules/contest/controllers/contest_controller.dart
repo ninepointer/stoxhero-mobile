@@ -138,6 +138,13 @@ class ContestController extends BaseController<ContestRepository> {
   final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
   final stopLossPendingOrder = StopLossPendingOrdersList().obs;
   final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+
+  final selectedContestStopLossQuantity = 0.obs;
+  final selectedContestStopProfitQuantity = 0.obs;
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
+  final contestStoplossQuantityList = <ContestStoplossQuantityData>[].obs;
+
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
   final selectedContestId = ''.obs;
@@ -180,6 +187,7 @@ class ContestController extends BaseController<ContestRepository> {
     await getContestPortfolio();
     await getReadSetting();
     await socketConnection();
+    await liveIndexDetails();
     socketIndexConnection();
     socketSendConnection();
     socketLeaderboardConnection();
@@ -316,6 +324,85 @@ class ContestController extends BaseController<ContestRepository> {
     }
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
+    return result;
+  }
+
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
+    print("stoplossQuantityList${contestStoplossQuantityList.length}");
+    var relevantQuantities = contestStoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+    print("stoplossQuantityPrev${totalQuantity}");
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+    print("newList${newList}");
+    print("genrateStopLoss${cutoff}");
+    selectedContestStopLossQuantity.value =
+        newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
+
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = contestStoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+
+    print("totalQuantity${totalQuantity}");
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedContestStopProfitQuantity.value =
+        newList.isNotEmpty ? newList.first : 0;
+    print(
+        "selectedStopProfitQuantity${selectedContestStopProfitQuantity.value}");
+    lotsValueForStopProfit.assignAll(newList);
     return result;
   }
 
@@ -789,6 +876,24 @@ class ContestController extends BaseController<ContestRepository> {
     isTradingOrderSheetLoading(false);
   }
 
+  Future getContestPendingStoplossOrderData(String id) async {
+    try {
+      final RepoResponse<ContestStopLossPendingOrderResponse> response =
+          await repository
+              .getContestStopLossPendingOrder("657a0694d9da5b2eac0c16b4");
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          contestStoplossQuantityList(response.data?.quantity ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future getUpComingContestList() async {
     isUpcomingLoading(true);
     upcomingFreeContestList.clear();
@@ -1227,6 +1332,31 @@ class ContestController extends BaseController<ContestRepository> {
     isLoading(false);
   }
 
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+      print("liveIndexDetails${stockIndexDetailsList.length}");
+    } catch (e) {
+      log(e.toString());
+
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
@@ -1506,7 +1636,7 @@ class ContestController extends BaseController<ContestRepository> {
       await getStopLossPendingOrder();
       await getContestPortfolio();
       await getStopLossExecutedOrder();
-      loadData();
+      // loadData();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1535,13 +1665,15 @@ class ContestController extends BaseController<ContestRepository> {
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedContestStopLossQuantity.value,
+      stopProfitQuantity: selectedContestStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: liveFeatured.value.id ?? liveContest.value.id,

@@ -79,6 +79,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final walletBalance = RxNum(0);
   final selectedWatchlistIndex = RxInt(-1);
 
+  final selectedStopLossQuantity = 0.obs;
+  final selectedStopProfitQuantity = 0.obs;
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
+  final stoplossQuantityList = <StoplossQuantityData>[].obs;
+
   final tradingInstrumentTradeDetailsList =
       <TradingInstrumentTradeDetails>[].obs;
   final tenxInstrumentTradeDetailsList =
@@ -172,6 +178,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getStopLossExecutedOrder();
     await getTenxTodayOrdersList();
     await getTenxTradingPortfolioDetails();
+    await liveIndexDetails();
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
@@ -326,6 +333,82 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     }
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
+    return result;
+  }
+
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+    print("stoplossQuantityPrev${totalQuantity}");
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+    print("newList${newList}");
+    print("genrateStopLoss${cutoff}");
+    selectedStopLossQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
+
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    // int cutoff = math.max(openLots ?? 0, totalQuantity) -
+    //     math.min(openLots ?? 0, totalQuantity);
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
+    print("selectedStopProfitQuantity${selectedStopProfitQuantity.value}");
+    lotsValueForStopProfit.assignAll(newList);
     return result;
   }
 
@@ -551,6 +634,25 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+    }
+  }
+
+  Future getTenXPendingStoplossOrderData(String id) async {
+    try {
+      final RepoResponse<VirtualStopLossPendingOrderResponse> response =
+          await repository
+              .getTenXStopLossPendingOrder("645cc77c2f0bba5a7a3ff427");
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          stoplossQuantityList(response.data?.quantity ?? []);
+          print("stoplossQuantityList${stoplossQuantityList.length}");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
 
@@ -947,6 +1049,31 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     isInstrumentListLoading(false);
   }
 
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+      print("liveIndexDetails${stockIndexDetailsList.length}");
+    } catch (e) {
+      log(e.toString());
+
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
@@ -1331,13 +1458,15 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: selectedSubscriptionId.value,

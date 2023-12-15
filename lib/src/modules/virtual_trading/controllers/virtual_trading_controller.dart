@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -200,8 +200,7 @@ class VirtualTradingController
       0,
       (sum, element) => sum + (element.quantity ?? 0),
     );
-    int cutoff = math.max(openLots ?? 0, totalQuantity) -
-        math.min(openLots ?? 0, totalQuantity);
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
     int startValue = 0;
     print("stoplossQuantityPrev${totalQuantity}");
 
@@ -239,8 +238,9 @@ class VirtualTradingController
       0,
       (sum, element) => sum + (element.quantity ?? 0),
     );
-    int cutoff = math.max(openLots ?? 0, totalQuantity) -
-        math.min(openLots ?? 0, totalQuantity);
+    // int cutoff = math.max(openLots ?? 0, totalQuantity) -
+    //     math.min(openLots ?? 0, totalQuantity);
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
     int startValue = 0;
 
     if (type?.contains('BANK') ?? false) {
@@ -261,7 +261,7 @@ class VirtualTradingController
     }
 
     selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
-
+    print("selectedStopProfitQuantity${selectedStopProfitQuantity.value}");
     lotsValueForStopProfit.assignAll(newList);
     return result;
   }
@@ -466,7 +466,6 @@ class VirtualTradingController
   }
 
   Future getVirtualPendingStoplossOrderData(String id) async {
-    isLoading(true);
     try {
       final RepoResponse<VirtualStopLossPendingOrderResponse> response =
           await repository
@@ -483,7 +482,6 @@ class VirtualTradingController
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
   }
 
   Future addInstrument(TradingInstrument inst) async {
@@ -767,7 +765,6 @@ class VirtualTradingController
       print("liveIndexDetails${stockIndexDetailsList.length}");
     } catch (e) {
       log(e.toString());
-
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
@@ -914,7 +911,7 @@ class VirtualTradingController
       await getStopLossPendingOrder();
       await getStopLossExecutedOrder();
       await getVirtualTradingPortfolio();
-      loadData();
+      // loadData();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -943,7 +940,7 @@ class VirtualTradingController
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
