@@ -5,6 +5,8 @@ class PendingOrderModifyRequest {
   String? symbol;
   String? buyOrSell;
   int? quantity;
+  // int? stopLossQuantity;
+  // int? stopProfitQuantity;
   String? id;
   String? product;
   String? orderType;
@@ -23,6 +25,8 @@ class PendingOrderModifyRequest {
     this.symbol,
     this.buyOrSell,
     this.quantity,
+    // this.stopLossQuantity,
+    // this.stopProfitQuantity,
     this.id,
     this.product,
     this.orderType,
@@ -42,6 +46,8 @@ class PendingOrderModifyRequest {
     symbol = json['symbol'];
     buyOrSell = json['buyOrSell'];
     quantity = json['Quantity'];
+    // stopLossQuantity = json['stopLossQuantity'];
+    // stopLossQuantity = json['stopProfitQuantity'];
     id = json['id'];
     product = json['Product'];
     orderType = json['order_type'];
@@ -53,7 +59,9 @@ class PendingOrderModifyRequest {
     instrumentToken = json['instrumentToken'];
     lastPrice = json['last_price'];
     from = json['from'];
-    deviceDetails = json['deviceDetails'] != null ? new DeviceDetails.fromJson(json['deviceDetails']) : null;
+    deviceDetails = json['deviceDetails'] != null
+        ? new DeviceDetails.fromJson(json['deviceDetails'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -62,6 +70,8 @@ class PendingOrderModifyRequest {
     data['symbol'] = this.symbol;
     data['buyOrSell'] = this.buyOrSell;
     data['Quantity'] = this.quantity;
+    // data['stopLossQuantity'] = this.stopLossQuantity;
+    // data['stopProfitQuantity'] = this.stopProfitQuantity;
     data['id'] = this.id;
     data['Product'] = this.product;
     data['order_type'] = this.orderType;

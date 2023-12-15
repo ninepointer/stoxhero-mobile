@@ -12,7 +12,6 @@ class VirtualStoplossModifyPriceBottomSheet
     required this.stopLoss,
     required this.type,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -203,10 +202,11 @@ class VirtualStoplossModifyPriceBottomSheet
                   // ),
                   // SizedBox(height: 4),
                   // DropdownButtonFormField2<int>(
-                  //   value: controller.selectedQuantity.value,
-                  //   onChanged: (value) => controller.selectedQuantity(value),
+                  //   value: controller.selectedStopProfitQuantity.value,
+                  //   onChanged: (value) =>
+                  //       controller.selectedStopProfitQuantity(value),
                   //   isDense: true,
-                  //   items: controller.lotsValueList.map((int number) {
+                  //   items: controller.lotsValueForStopProfit.map((int number) {
                   //     return DropdownMenuItem<int>(
                   //       value: number,
                   //       child: Text(number >= 0

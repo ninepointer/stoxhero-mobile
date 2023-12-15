@@ -105,7 +105,9 @@ class LiveContest {
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
-    portfolio = json['portfolio'] != null ? new LiveContestPortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null
+        ? new LiveContestPortfolio.fromJson(json['portfolio'])
+        : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -173,7 +175,8 @@ class LiveContest {
       data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
     }
     if (this.interestedUsers != null) {
-      data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
+      data['interestedUsers'] =
+          this.interestedUsers!.map((v) => v.toJson()).toList();
     }
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
@@ -243,7 +246,8 @@ class LiveInterestedUsers {
   LiveInterestedUsers({this.userId, this.registeredOn, this.status, this.id});
 
   LiveInterestedUsers.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new UserIdc.fromJson(json['userId']) : null;
+    userId =
+        json['userId'] != null ? new UserIdc.fromJson(json['userId']) : null;
     registeredOn = json['registeredOn'];
     status = json['status'];
     id = json['_id'];
@@ -297,10 +301,17 @@ class Participants {
   bool? isLive;
   String? sId;
 
-  Participants({this.userId, this.fee, this.actualPrice, this.participatedOn, this.isLive, this.sId});
+  Participants(
+      {this.userId,
+      this.fee,
+      this.actualPrice,
+      this.participatedOn,
+      this.isLive,
+      this.sId});
 
   Participants.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new UserIdc.fromJson(json['userId']) : null;
+    userId =
+        json['userId'] != null ? new UserIdc.fromJson(json['userId']) : null;
     fee = json['fee'];
     actualPrice = json['actualPrice'];
     participatedOn = json['participatedOn'];

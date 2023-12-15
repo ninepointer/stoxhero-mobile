@@ -190,8 +190,8 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  contestController.liveContestList.isEmpty &&
-                          contestController.liveFeaturedContest.isEmpty &&
+
+                  contestController.liveFeaturedContest.isEmpty &&
                           contestController.upcomingFeaturedContest.isEmpty
                       ? Container()
                       : CommonTile(
@@ -463,7 +463,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                             Positioned(
                                 top: 0, // Adjust the position as needed
-                                right: 0, // Adjust the position as needed
+                                right: 8, // Adjust the position as needed
                                 child: Container(
                                   height: 130,
                                   width: 150,
