@@ -42,10 +42,12 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
       position.id!.exchangeInstrumentToken!,
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-
+    controller.getVirtualPendingStoplossOrderData(position.id?.product ?? '');
     controller.generateLotsList(type: position.id?.symbol);
-    // controller.generateLotsListFoStopLoss(type: position.id?.symbol);
-    // controller.generateLotsListForStopProfit(type: position.id?.symbol);
+    controller.generateLotsListFoStopLoss(
+        type: position.id?.symbol, openLots: position.lots);
+    controller.generateLotsListForStopProfit(
+        type: position.id?.symbol, openLots: position.lots);
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualStoplossModifyPriceBottomSheet(

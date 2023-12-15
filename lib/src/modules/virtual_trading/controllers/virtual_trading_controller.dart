@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -94,6 +94,7 @@ class VirtualTradingController
   final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
   final stopLossPendingOrder = StopLossPendingOrdersList().obs;
   final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final stoplossQuantityList = <StoplossQuantityData>[].obs;
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
@@ -189,49 +190,81 @@ class VirtualTradingController
     return result;
   }
 
-  // List<int> generateLotsListFoStopLoss({String? type}) {
-  //   List<int> result = [];
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
 
-  //   if (type?.contains('BANK') ?? false) {
-  //     for (int i = 15; i <= 900; i += 15) result.add(i);
-  //   } else if (type?.contains('FIN') ?? false) {
-  //     for (int i = 40; i <= 1800; i += 40) result.add(i);
-  //   } else {
-  //     for (int i = 50; i <= 1800; i += 50) result.add(i);
-  //   }
-  //   selectedStopLossQuantity.value = result[0];
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = math.max(openLots ?? 0, totalQuantity) -
+        math.min(openLots ?? 0, totalQuantity);
+    int startValue = 0;
+    print("stoplossQuantityPrev${totalQuantity}");
 
-  //   lotsValueForStopLoss.assignAll(result);
-  //   return result;
-  // }
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+    print("newList${newList}");
+    print("genrateStopLoss${cutoff}");
+    selectedStopLossQuantity.value = newList.isNotEmpty ? newList.first : 0;
 
-  // List<int> generateLotsListForStopProfit({String? type}) {
-  //   List<int> result = [];
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
 
-  //   if (type?.contains('BANK') ?? false) {
-  //     for (int i = 15; i <= 900; i += 15) result.add(i);
-  //   } else if (type?.contains('FIN') ?? false) {
-  //     for (int i = 40; i <= 1800; i += 40) result.add(i);
-  //   } else {
-  //     for (int i = 50; i <= 1800; i += 50) result.add(i);
-  //   }
-  //   selectedStopProfitQuantity.value = result[0];
-  //   print("remainingLots${virtualPosition.value.lots}");
-  //   print("remainingLotss${stopLossPendingOrder.value.quantity}");
-  //   //1. Maximum
-  //   if ((stopLossPendingOrder.value.quantity ?? 0) <
-  //       (virtualPosition.value.lots ?? 0)) {
-  //     int remainingLots = (virtualPosition.value.lots ?? 0) -
-  //         (stopLossPendingOrder.value.quantity ?? 0);
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
 
-  //     lotsValueForStopProfit
-  //         .assignAll(result.where((lot) => lot <= remainingLots).toList());
-  //   } else {
-  //     lotsValueForStopProfit.assignAll(result);
-  //   }
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = math.max(openLots ?? 0, totalQuantity) -
+        math.min(openLots ?? 0, totalQuantity);
+    int startValue = 0;
 
-  //   return result;
-  // }
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopProfit.assignAll(newList);
+    return result;
+  }
 
   Color getValueColor(dynamic value) {
     if (value != null) {
@@ -421,6 +454,27 @@ class VirtualTradingController
       if (response.data != null) {
         if (response.data?.data! != null) {
           instrumentLivePriceList(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getVirtualPendingStoplossOrderData(String id) async {
+    isLoading(true);
+    try {
+      final RepoResponse<VirtualStopLossPendingOrderResponse> response =
+          await repository
+              .getVirtualStopLossPendingOrder("6433e2e5500dc2f2d20d686d");
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          stoplossQuantityList(response.data?.quantity ?? []);
+          print("stoplossQuantityList${stoplossQuantityList.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -896,8 +950,8 @@ class VirtualTradingController
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
-      // stopLossQuantity: selectedStopLossQuantity.value,
-      // stopProfitQuantity: selectedStopProfitQuantity.value,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: virtualPortfolio.value.portfolioId,

@@ -24,6 +24,8 @@ class AppUrls {
   static const String stockIndex = "$apiURL/stockindex";
   static const String getIndexLivePrice = "$apiURL/getIndexliveprice";
   static const String collegeList = "$apiURL/college/collegeList";
+  static String virtualPendingStopLoss(String id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/paperTrade";
 
   static const String addFcmToken = "$apiURL/addfcmtoken";
 

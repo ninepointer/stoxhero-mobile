@@ -127,19 +127,20 @@ class VirtualStoplossModifyPriceBottomSheet
                     ],
                   ),
                   SizedBox(height: 16),
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       "Stop Loss Quantity",
-                  //       style: AppStyles.tsGreyMedium14,
-                  //     ),
-                  //   ],
-                  // ),
+                  Row(
+                    children: [
+                      Text(
+                        "Stop Loss Quantity",
+                        style: AppStyles.tsGreyMedium14,
+                      ),
+                    ],
+                  ),
                   DropdownButtonFormField2<int>(
-                    value: controller.selectedQuantity.value,
-                    onChanged: (value) => controller.selectedQuantity(value),
+                    value: controller.selectedStopLossQuantity.value,
+                    onChanged: (value) =>
+                        controller.selectedStopLossQuantity(value),
                     isDense: true,
-                    items: controller.lotsValueList.map((int number) {
+                    items: controller.lotsValueForStopLoss.map((int number) {
                       return DropdownMenuItem<int>(
                         value: number,
                         child: Text(number >= 0
@@ -192,75 +193,75 @@ class VirtualStoplossModifyPriceBottomSheet
                     ),
                   ),
                   SizedBox(height: 8),
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       "Stop Profit Quantity",
-                  //       style: AppStyles.tsGreyMedium14,
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 4),
-                  // DropdownButtonFormField2<int>(
-                  //   value: controller.selectedStopProfitQuantity.value,
-                  //   onChanged: (value) =>
-                  //       controller.selectedStopProfitQuantity(value),
-                  //   isDense: true,
-                  //   items: controller.lotsValueForStopProfit.map((int number) {
-                  //     return DropdownMenuItem<int>(
-                  //       value: number,
-                  //       child: Text(number >= 0
-                  //           ? number.toString()
-                  //           : number.toString()),
-                  //     );
-                  //   }).toList(),
-                  //   dropdownStyleData: DropdownStyleData(
-                  //     maxHeight: 250,
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //   ),
-                  //   menuItemStyleData: MenuItemStyleData(
-                  //     padding: EdgeInsets.symmetric(horizontal: 16),
-                  //   ),
-                  //   decoration: InputDecoration(
-                  //     contentPadding: EdgeInsets.all(16).copyWith(left: 0),
-                  //     filled: true,
-                  //     fillColor: AppColors.grey.withOpacity(.1),
-                  //     hintText: 'Quantity',
-                  //     hintStyle: AppStyles.tsGreyRegular14,
-                  //     errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                  //       color: AppColors.danger.shade700,
-                  //     ),
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //       ),
-                  //     ),
-                  //     enabledBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide.none,
-                  //     ),
-                  //     focusedBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //         color: AppColors.lightGreen,
-                  //       ),
-                  //     ),
-                  //     errorBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //         color: AppColors.danger,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 8,
-                  // ),
+                  Row(
+                    children: [
+                      Text(
+                        "Stop Profit Quantity",
+                        style: AppStyles.tsGreyMedium14,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  DropdownButtonFormField2<int>(
+                    value: controller.selectedStopProfitQuantity.value,
+                    onChanged: (value) =>
+                        controller.selectedStopProfitQuantity(value),
+                    isDense: true,
+                    items: controller.lotsValueForStopProfit.map((int number) {
+                      return DropdownMenuItem<int>(
+                        value: number,
+                        child: Text(number >= 0
+                            ? number.toString()
+                            : number.toString()),
+                      );
+                    }).toList(),
+                    dropdownStyleData: DropdownStyleData(
+                      maxHeight: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    menuItemStyleData: MenuItemStyleData(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(16).copyWith(left: 0),
+                      filled: true,
+                      fillColor: AppColors.grey.withOpacity(.1),
+                      hintText: 'Quantity',
+                      hintStyle: AppStyles.tsGreyRegular14,
+                      errorStyle: AppStyles.tsGreyRegular12.copyWith(
+                        color: AppColors.danger.shade700,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.lightGreen,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: AppColors.danger,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Row(
                     children: [
                       Expanded(
