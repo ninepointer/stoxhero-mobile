@@ -474,7 +474,7 @@ class MarginXController extends BaseController<MarginXRepository> {
     if (entryFee == null) {
       return 0;
     }
-    num factor = marginXPortfolio.value.totalFund! / entryFee;
+    num factor = marginXPortfolio.value.totalFund ?? 0 / entryFee;
     num value = calculateTotalNetPNL() / factor;
     return value;
   }
@@ -537,7 +537,7 @@ class MarginXController extends BaseController<MarginXRepository> {
     try {
       final RepoResponse<VirtualStopLossPendingOrderResponse> response =
           await repository
-              .getMarginXStopLossPendingOrder("657b4f2915faa5796e996b8c");
+              .getMarginXStopLossPendingOrder(liveMarginX.value.id ?? '');
       if (response.data != null) {
         if (response.data?.data! != null) {
           stoplossQuantityList(response.data?.quantity ?? []);
@@ -746,7 +746,7 @@ class MarginXController extends BaseController<MarginXRepository> {
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
       ),
     );
-    log('placeVirtualTradingOrder : ${data.toJson()}');
+    print('placeVirtualTradingOrder : ${data.toJson()}');
     try {
       final RepoResponse<GenericResponse> response =
           await repository.paperPlaceOrder(
@@ -1092,7 +1092,12 @@ class MarginXController extends BaseController<MarginXRepository> {
         liveMarginX.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        stopLossPendingOrderList(response.data?.data ?? []);
+        List<StopLossPendingOrdersList>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
+        print("ssstopLossPendingOrderList${stopLossPendingOrderList.length}");
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -1139,7 +1144,7 @@ class MarginXController extends BaseController<MarginXRepository> {
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
@@ -1153,7 +1158,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       id: liveMarginX.value.id,
       lastPrice: inst.lastPrice.toString(),
       variety: "regular",
-      from: "MarginX Trader",
+      from: "MarginX",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
         platformType: Platform.isAndroid ? 'Android' : 'iOS',

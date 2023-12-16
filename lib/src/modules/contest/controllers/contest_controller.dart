@@ -880,16 +880,19 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       final RepoResponse<ContestStopLossPendingOrderResponse> response =
           await repository
-              .getContestStopLossPendingOrder("657a0694d9da5b2eac0c16b4");
+              .getContestStopLossPendingOrder(liveContest.value.id ?? '');
       if (response.data != null) {
         if (response.data?.data! != null) {
           contestStoplossQuantityList(response.data?.quantity ?? []);
+          print(
+              "contestStoplossQuantityList${contestStoplossQuantityList.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
       log(e.toString());
+      "contestStoplossQuantityList${e}";
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
@@ -1618,7 +1621,11 @@ class ContestController extends BaseController<ContestRepository> {
         liveFeatured.value.id ?? liveContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        stopLossPendingOrderList(response.data?.data ?? []);
+        List<StopLossPendingOrdersList>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
+class MarginXStoplossEditPriceBottomSheet extends GetView<MarginXController> {
   final StopLossPendingOrdersList stopLoss;
   const MarginXStoplossEditPriceBottomSheet({
     Key? key,
@@ -59,14 +59,24 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                           children: [
                             Text(
                               stopLoss.type ?? '',
-                              style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                                    color: stopLoss.type == 'StopLoss' ? AppColors.danger : AppColors.success,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium16
+                                  .copyWith(
+                                    color: stopLoss.type == 'StopLoss'
+                                        ? AppColors.danger
+                                        : AppColors.success,
                                   ),
                             ),
                             Text(
                               stopLoss.buyOrSell ?? '',
-                              style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                                    color: stopLoss.buyOrSell == 'SELL' ? AppColors.danger : AppColors.success,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium16
+                                  .copyWith(
+                                    color: stopLoss.buyOrSell == 'SELL'
+                                        ? AppColors.danger
+                                        : AppColors.success,
                                   ),
                             ),
                           ],
@@ -120,12 +130,15 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                                     hintText: 'StopLoss Price',
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d+\.?\d*')),
                                     ],
-                                    controller: controller.stopLossPriceTextController,
+                                    controller:
+                                        controller.stopLossPriceTextController,
                                     validator: (value) {
-                                      final stopLossPrice =
-                                          double.tryParse(controller.stopLossPriceTextController.text);
+                                      final stopLossPrice = double.tryParse(
+                                          controller.stopLossPriceTextController
+                                              .text);
                                       if (stopLossPrice != null) {
                                         if (stopLossPrice >=
                                             controller.getInstrumentLastPrice(
@@ -143,17 +156,23 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                                         hintText: 'StopProfit Price',
                                         keyboardType: TextInputType.number,
                                         inputFormatters: [
-                                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'^\d+\.?\d*')),
                                         ],
-                                        controller: controller.stopProfitPriceTextController,
+                                        controller: controller
+                                            .stopProfitPriceTextController,
                                         validator: (value) {
                                           final stopProfitPrice =
-                                              double.tryParse(controller.stopProfitPriceTextController.text);
+                                              double.tryParse(controller
+                                                  .stopProfitPriceTextController
+                                                  .text);
                                           if (stopProfitPrice != null) {
                                             if (stopProfitPrice <=
-                                                controller.getInstrumentLastPrice(
+                                                controller
+                                                    .getInstrumentLastPrice(
                                                   stopLoss.instrumentToken!,
-                                                  stopLoss.exchangeInstrumentToken!,
+                                                  stopLoss
+                                                      .exchangeInstrumentToken!,
                                                 )) {
                                               return 'StopProfit price should \nbe greater than LTP.';
                                             }
@@ -165,16 +184,23 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                                         hintText: 'Limit Price',
                                         keyboardType: TextInputType.number,
                                         inputFormatters: [
-                                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'^\d+\.?\d*')),
                                         ],
-                                        controller: controller.limitPriceTextController,
+                                        controller:
+                                            controller.limitPriceTextController,
                                         validator: (value) {
-                                          final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                                          final limitPrice = double.tryParse(
+                                              controller
+                                                  .limitPriceTextController
+                                                  .text);
                                           if (limitPrice != null) {
                                             if (limitPrice <=
-                                                controller.getInstrumentLastPrice(
+                                                controller
+                                                    .getInstrumentLastPrice(
                                                   stopLoss.instrumentToken!,
-                                                  stopLoss.exchangeInstrumentToken!,
+                                                  stopLoss
+                                                      .exchangeInstrumentToken!,
                                                 )) {
                                               return 'Price should be \ngreater than LTP.';
                                             }
@@ -182,16 +208,21 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                                           return null;
                                         },
                                       )
-                            : (stopLoss.type == 'Limit' && stopLoss.buyOrSell == 'BUY')
+                            : (stopLoss.type == 'Limit' &&
+                                    stopLoss.buyOrSell == 'BUY')
                                 ? CommonTextField(
                                     hintText: 'Limit Price',
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d+\.?\d*')),
                                     ],
-                                    controller: controller.limitPriceTextController,
+                                    controller:
+                                        controller.limitPriceTextController,
                                     validator: (value) {
-                                      final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                                      final limitPrice = double.tryParse(
+                                          controller
+                                              .limitPriceTextController.text);
                                       if (limitPrice != null) {
                                         if (limitPrice >=
                                             controller.getInstrumentLastPrice(
@@ -208,11 +239,15 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                                     hintText: 'Limit Price',
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d+\.?\d*')),
                                     ],
-                                    controller: controller.limitPriceTextController,
+                                    controller:
+                                        controller.limitPriceTextController,
                                     validator: (value) {
-                                      final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                                      final limitPrice = double.tryParse(
+                                          controller
+                                              .limitPriceTextController.text);
                                       if (limitPrice != null) {
                                         if (limitPrice <=
                                             controller.getInstrumentLastPrice(
@@ -233,19 +268,25 @@ class MarginXStoplossEditPriceBottomSheet extends GetView<ContestController> {
                     label: 'Edit',
                     backgroundColor: AppColors.secondary,
                     onPressed: () {
-                      if (stopLoss.type == 'StopLoss' || stopLoss.type == 'StopProfit') {
-                        if (controller.stopLossPriceTextController.text.isEmpty &&
-                            controller.stopProfitPriceTextController.text.isEmpty) {
-                          SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                      if (stopLoss.type == 'StopLoss' ||
+                          stopLoss.type == 'StopProfit') {
+                        if (controller
+                                .stopLossPriceTextController.text.isEmpty &&
+                            controller
+                                .stopProfitPriceTextController.text.isEmpty) {
+                          SnackbarHelper.showSnackbar(
+                              'Please Enter StopLoss or StopProfit Price');
                         } else {
                           controller.getStopLossEditOrder(
                             stopLoss.id,
                             stopLoss.type,
                           );
                         }
-                      } else if (controller.limitPriceTextController.text.isEmpty) {
+                      } else if (controller
+                          .limitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar('Please Enter Price');
-                      } else if (controller.stopLossFormKey.currentState!.validate()) {
+                      } else if (controller.stopLossFormKey.currentState!
+                          .validate()) {
                         controller.getStopLossEditOrder(
                           stopLoss.id,
                           stopLoss.type,

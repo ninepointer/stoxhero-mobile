@@ -640,8 +640,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future getTenXPendingStoplossOrderData(String id) async {
     try {
       final RepoResponse<VirtualStopLossPendingOrderResponse> response =
-          await repository
-              .getTenXStopLossPendingOrder("645cc77c2f0bba5a7a3ff427");
+          await repository.getTenXStopLossPendingOrder(
+              tenxSubscribedPlanSelected.value.sId ?? '');
       if (response.data != null) {
         if (response.data?.data! != null) {
           stoplossQuantityList(response.data?.quantity ?? []);
@@ -1411,7 +1411,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         selectedSubscriptionId.value,
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        stopLossPendingOrderList(response.data?.data ?? []);
+        List<StopLossPendingOrdersList>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

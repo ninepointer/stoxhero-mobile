@@ -42,8 +42,8 @@ class VirtualPendingStoplossOrderData {
   String? sId;
   String? type;
   String? status;
-  int? executionPrice;
-  int? price;
+  num? executionPrice;
+  num? price;
   int? quantity;
   String? buyOrSell;
   String? symbol;

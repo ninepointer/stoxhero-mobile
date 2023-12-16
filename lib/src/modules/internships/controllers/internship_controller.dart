@@ -779,8 +779,8 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future getInternshipPendingStoplossOrderData(String id) async {
     try {
       final RepoResponse<VirtualStopLossPendingOrderResponse> response =
-          await repository
-              .getInternshipStopLossPendingOrder("650e87fedab90d9b5401a916");
+          await repository.getInternshipStopLossPendingOrder(
+              internshipBatchDetails.value.id ?? '');
       if (response.data != null) {
         if (response.data?.data! != null) {
           stoplossQuantityList(response.data?.quantity ?? []);

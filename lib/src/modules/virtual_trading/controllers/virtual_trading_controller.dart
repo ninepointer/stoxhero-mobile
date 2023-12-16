@@ -480,6 +480,7 @@ class VirtualTradingController
       }
     } catch (e) {
       log(e.toString());
+      print("stoplossQuantityList${e}");
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
@@ -893,7 +894,11 @@ class VirtualTradingController
         virtualPortfolio.value.portfolioId,
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        stopLossPendingOrderList(response.data?.data ?? []);
+        List<StopLossPendingOrdersList>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

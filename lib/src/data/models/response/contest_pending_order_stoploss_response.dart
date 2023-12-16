@@ -42,15 +42,15 @@ class ContestPendingStoplossOrderData {
   String? sId;
   String? type;
   String? status;
-  int? executionPrice;
-  int? price;
+  num? executionPrice;
+  num? price;
   int? quantity;
   String? buyOrSell;
   String? symbol;
   int? instrumentToken;
   int? exchangeInstrumentToken;
   String? executionTime;
-  int? amount;
+  num? amount;
   String? time;
 
   ContestPendingStoplossOrderData(

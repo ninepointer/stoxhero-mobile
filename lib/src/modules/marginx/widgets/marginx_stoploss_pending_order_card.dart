@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class MarginXStoplossPendingOrderCard extends GetView<ContestController> {
+class MarginXStoplossPendingOrderCard extends GetView<MarginXController> {
   final StopLossPendingOrdersList stopLoss;
   const MarginXStoplossPendingOrderCard({
     Key? key,
@@ -12,7 +12,7 @@ class MarginXStoplossPendingOrderCard extends GetView<ContestController> {
     FocusScope.of(context).unfocus();
     BottomSheetHelper.openBottomSheet(
       context: context,
-      child: ContestStoplossEditPriceBottomSheet(
+      child: MarginXStoplossEditPriceBottomSheet(
         stopLoss: StopLossPendingOrdersList(
           id: stopLoss.id,
           type: stopLoss.type,
@@ -94,7 +94,9 @@ class MarginXStoplossPendingOrderCard extends GetView<ContestController> {
                       hasBottomMargin: false,
                       label: 'Transaction Type',
                       value: stopLoss.buyOrSell,
-                      valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
+                      valueColor: stopLoss.buyOrSell == "SELL"
+                          ? AppColors.danger
+                          : AppColors.success,
                     ),
                   ],
                 ),
@@ -104,7 +106,9 @@ class MarginXStoplossPendingOrderCard extends GetView<ContestController> {
                     TradeCardTile(
                       label: 'Status',
                       value: stopLoss.status,
-                      valueColor: stopLoss.status == "Executed" ? AppColors.success : AppColors.danger,
+                      valueColor: stopLoss.status == "Executed"
+                          ? AppColors.success
+                          : AppColors.danger,
                       hasBottomMargin: false,
                     ),
                     TradeCardTile(
