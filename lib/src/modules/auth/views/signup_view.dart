@@ -23,6 +23,14 @@ class _SignupViewState extends State<SignupView> {
     formKey = GlobalKey<FormState>();
     print('AuthController Code : ${controller.campaignCode.value}');
   }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (controller.campaignCode.value.isNotEmpty) {
+      controller.hasCampaignCode(true);
+      controller.referralTextController.text = controller.campaignCode.value;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +165,7 @@ class _SignupViewState extends State<SignupView> {
                               ),
                               CommonTextField(
                                 controller: controller.referralTextController,
+                                isDisabled: controller.hasCampaignCode.value,
                                 hintText: 'Enter Referral/Invite code',
                                 prefixIcon: Icon(
                                   Icons.redeem_rounded,

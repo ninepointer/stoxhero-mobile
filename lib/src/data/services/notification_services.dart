@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:stoxhero/src/app/app.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final firebaseMessaging = FirebaseMessaging.instance;
 
@@ -123,64 +124,74 @@ class NotificationServices {
       {bool isLocal = false}) async {
     print('onMessageClicked : isLocal : $isLocal');
     print('onMessageClicked : $messageData');
-
+    
     LoginDetailsResponse? userDetails = AppStorage.getUserDetails();
     Map<String, dynamic> actionData = jsonDecode(messageData['actions']);
+    bool isExternal = actionData['external'] ?? false;
     String route = actionData['route'];
 
-    if (userDetails.sId != null) {
-      final homeController = Get.find<HomeController>();
-      if (isLocal) Get.toNamed(AppRoutes.home);
-      if (route == 'market') {
-        homeController.selectedIndex(1);
+    if (isExternal) {
+      final Uri url = Uri.parse(route);
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch $url';
       }
-      if (route == 'tenxtrading') {
-        homeController.selectedIndex(2);
-        Get.find<TenxTradingController>().loadData();
-      }
-      if (route == 'marginxs') {
-        homeController.selectedIndex(3);
-        Get.find<MarginXController>().loadData();
-      }
-      if (route == 'testzone') {
-        homeController.selectedIndex(4);
-      }
+    }else{
+      if (userDetails.sId != null) {
+        final homeController = Get.find<HomeController>();
+        if (isLocal) Get.toNamed(AppRoutes.home);
+        if (route == 'market') {
+          homeController.selectedIndex(1);
+        }
+        if (route == 'tenxtrading') {
+          homeController.selectedIndex(2);
+          Get.find<TenxTradingController>().loadData();
+        }
+        if (route == 'marginxs') {
+          homeController.selectedIndex(3);
+          Get.find<MarginXController>().loadData();
+        }
+        if (route == 'testzone') {
+          homeController.selectedIndex(4);
+        }
 
-      if (route == 'collegetestzone') {
-        Get.toNamed(AppRoutes.collegeContest);
-        Get.find<CollegeContestController>().loadData();
-      }
-      if (route == 'portfolio') {
-        Get.toNamed(AppRoutes.portfolio);
-        Get.find<PortfolioController>().loadData();
-      }
-      if (route == 'internship') {
-        Get.toNamed(AppRoutes.internship);
-        Get.find<InternshipController>().loadData();
-      }
-      if (route == 'marketguru') {
-        Get.toNamed(AppRoutes.analytics);
-        Get.find<AnalyticsController>().loadData();
-      }
-      if (route == 'tutorials') {
-        Get.toNamed(AppRoutes.tutorial);
-        Get.find<TutorialController>().loadData();
-      }
+        if (route == 'collegetestzone') {
+          Get.toNamed(AppRoutes.collegeContest);
+          Get.find<CollegeContestController>().loadData();
+        }
+        if (route == 'portfolio') {
+          Get.toNamed(AppRoutes.portfolio);
+          Get.find<PortfolioController>().loadData();
+        }
+        if (route == 'internship') {
+          Get.toNamed(AppRoutes.internship);
+          Get.find<InternshipController>().loadData();
+        }
+        if (route == 'marketguru') {
+          Get.toNamed(AppRoutes.analytics);
+          Get.find<AnalyticsController>().loadData();
+        }
+        if (route == 'tutorials') {
+          Get.toNamed(AppRoutes.tutorial);
+          Get.find<TutorialController>().loadData();
+        }
 
-      if (route == 'profile') {
-        Get.toNamed(AppRoutes.profile);
-        Get.find<ProfileController>().loadData();
-      }
-      if (route == 'wallet') {
-        Get.toNamed(AppRoutes.wallet);
-        Get.find<WalletController>().loadData();
-      }
-      if (route == 'referrals') {
-        Get.toNamed(AppRoutes.referrals);
-        Get.find<ReferralsController>().loadData();
-      }
-      if (route == 'faqs') {
-        Get.toNamed(AppRoutes.faq);
+        if (route == 'profile') {
+          Get.toNamed(AppRoutes.profile);
+          Get.find<ProfileController>().loadData();
+        }
+        if (route == 'wallet') {
+          Get.toNamed(AppRoutes.wallet);
+          Get.find<WalletController>().loadData();
+        }
+        if (route == 'referrals') {
+          Get.toNamed(AppRoutes.referrals);
+          Get.find<ReferralsController>().loadData();
+        }
+        if (route == 'faqs') {
+          Get.toNamed(AppRoutes.faq);
+        }
       }
     }
   }
