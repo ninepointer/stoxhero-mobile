@@ -40,6 +40,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
       lastPrice: lastPrice,
     );
     controller.generateLotsList(type: widget.tradingWatchlist.symbol);
+    controller.isBuyButtonDisabled.value = false;
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualTransactionBottomSheet(
@@ -61,7 +62,8 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
             padding: EdgeInsets.zero,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -81,13 +83,15 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                           value: FormatHelper.formatNumbers(
                             controller.getInstrumentLastPrice(
                               widget.tradingWatchlist.instrumentToken ?? 0,
-                              widget.tradingWatchlist.exchangeInstrumentToken ?? 0,
+                              widget.tradingWatchlist.exchangeInstrumentToken ??
+                                  0,
                             ),
                           ),
                           valueColor: controller.getValueColor(
                             controller.getInstrumentLastPrice(
                               widget.tradingWatchlist.instrumentToken ?? 0,
-                              widget.tradingWatchlist.exchangeInstrumentToken ?? 0,
+                              widget.tradingWatchlist.exchangeInstrumentToken ??
+                                  0,
                             ),
                           ),
                         ),
@@ -108,12 +112,14 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                           label: 'Changes(%)',
                           value: controller.getInstrumentChanges(
                             widget.tradingWatchlist.instrumentToken ?? 0,
-                            widget.tradingWatchlist.exchangeInstrumentToken ?? 0,
+                            widget.tradingWatchlist.exchangeInstrumentToken ??
+                                0,
                           ),
                           valueColor: controller.getValueColor(
                             controller.getInstrumentChanges(
                               widget.tradingWatchlist.instrumentToken ?? 0,
-                              widget.tradingWatchlist.exchangeInstrumentToken ?? 0,
+                              widget.tradingWatchlist.exchangeInstrumentToken ??
+                                  0,
                             ),
                           ),
                         ),
@@ -126,7 +132,8 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => openBottomSheet(context, TransactionType.buy),
+                      onTap: () =>
+                          openBottomSheet(context, TransactionType.buy),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),
@@ -138,14 +145,16 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                         ),
                         child: Text(
                           'BUY',
-                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.success),
+                          style: AppStyles.tsWhiteMedium12
+                              .copyWith(color: AppColors.success),
                         ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => openBottomSheet(context, TransactionType.sell),
+                      onTap: () =>
+                          openBottomSheet(context, TransactionType.sell),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),
@@ -154,14 +163,16 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                         ),
                         child: Text(
                           'SELL',
-                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.danger),
+                          style: AppStyles.tsWhiteMedium12
+                              .copyWith(color: AppColors.danger),
                         ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                      onTap: () => controller.removeInstrument(
+                          widget.tradingWatchlist.instrumentToken),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),
@@ -173,7 +184,8 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                         ),
                         child: Text(
                           'REMOVE',
-                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.info),
+                          style: AppStyles.tsWhiteMedium12
+                              .copyWith(color: AppColors.info),
                         ),
                       ),
                     ),

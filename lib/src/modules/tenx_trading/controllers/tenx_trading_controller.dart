@@ -64,6 +64,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
 
   final selectedTabBarIndex = 0.obs;
+  final isBuyButtonDisabled = false.obs;
 
   final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();

@@ -58,7 +58,7 @@ class MarginXController extends BaseController<MarginXRepository> {
   bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
 
   final selectedTabBarIndex = 0.obs;
-
+  final isBuyButtonDisabled = false.obs;
   final searchTextController = TextEditingController();
   final upComingMarginXList = <UpcomingMarginX>[].obs;
   final upComingMarginX = UpcomingMarginX().obs;

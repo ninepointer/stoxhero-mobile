@@ -502,39 +502,44 @@ class ContestTransactionBottomSheet extends GetView<ContestController> {
                                 ? 'BUY'
                                 : 'SELL',
                     onPressed: () {
-                      if (controller.selectedGroupValue.value == 3 &&
-                          controller.stopLossPriceTextController.text.isEmpty &&
-                          controller
-                              .stopProfitPriceTextController.text.isEmpty) {
-                        SnackbarHelper.showSnackbar(
-                            'Please Enter StopLoss or StopProfit Price');
-                      } else if (controller.selectedGroupValue.value == 1 &&
-                          controller.limitPriceTextController.text.isEmpty) {
-                        SnackbarHelper.showSnackbar('Please Enter Price');
-                      }
-                      // else if ((controller.getInstrumentLastPrice(
-                      //           tradingInstrument.instrumentToken!,
-                      //           tradingInstrument.exchangeToken!,
-                      //         )) ==
-                      //         0.00 &&
-                      //     int.parse(controller.getInstrumentChanges(
-                      //           tradingInstrument.instrumentToken!,
-                      //           tradingInstrument.exchangeToken!,
-                      //         )) ==
-                      //         0.00) {
-                      //   SnackbarHelper.showSnackbar(
-                      //       'MARKET orders are blocked for ');
-                      // }
-                      else if (controller.stopLossFormKey.currentState!
-                          .validate()) {
-                        controller.placeContestOrder(
-                          type,
-                          tradingInstrument,
-                        );
-                        controller.selectedGroupValue.value = 2;
-                        controller.stopLossPriceTextController.clear();
-                        controller.stopProfitPriceTextController.clear();
-                        controller.limitPriceTextController.clear();
+                      if (!controller.isBuyButtonDisabled.value) {
+                        controller.isBuyButtonDisabled.value = true;
+                        if (controller.selectedGroupValue.value == 3 &&
+                            controller
+                                .stopLossPriceTextController.text.isEmpty &&
+                            controller
+                                .stopProfitPriceTextController.text.isEmpty) {
+                          SnackbarHelper.showSnackbar(
+                              'Please Enter StopLoss or StopProfit Price');
+                        } else if (controller.selectedGroupValue.value == 1 &&
+                            controller.limitPriceTextController.text.isEmpty) {
+                          SnackbarHelper.showSnackbar('Please Enter Price');
+                        }
+                        // else if ((controller.getInstrumentLastPrice(
+                        //           tradingInstrument.instrumentToken!,
+                        //           tradingInstrument.exchangeToken!,
+                        //         )) ==
+                        //         0.00 &&
+                        //     int.parse(controller.getInstrumentChanges(
+                        //           tradingInstrument.instrumentToken!,
+                        //           tradingInstrument.exchangeToken!,
+                        //         )) ==
+                        //         0.00) {
+                        //   SnackbarHelper.showSnackbar(
+                        //       'MARKET orders are blocked for ');
+                        // }
+                        else if (controller.stopLossFormKey.currentState!
+                            .validate()) {
+                          controller.placeContestOrder(
+                            type,
+                            tradingInstrument,
+                          );
+                          controller.selectedGroupValue.value = 2;
+                          controller.stopLossPriceTextController.clear();
+                          controller.stopProfitPriceTextController.clear();
+                          controller.limitPriceTextController.clear();
+                          controller.isBuyButtonDisabled.value = false;
+                        }
                       }
                     },
                   ),

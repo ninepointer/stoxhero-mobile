@@ -81,7 +81,7 @@ class ContestController extends BaseController<ContestRepository> {
   final liveSegmentedControlValue = 0.obs;
   final upcomingSegmentedControlValue = 0.obs;
   final completedSegmentedControlValue = 0.obs;
-
+  final isBuyButtonDisabled = false.obs;
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingContest>[].obs;
   final upComingContest = UpComingContest().obs;
