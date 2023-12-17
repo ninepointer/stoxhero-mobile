@@ -67,6 +67,10 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               remainingTime = startTimeDateTime.isAfter(DateTime.now())
                   ? startTimeDateTime.difference(DateTime.now())
                   : Duration.zero;
+              if (remainingTime == Duration.zero) {
+                controller.getUpComingContestList();
+                controller.getLiveContestList();
+              }
             },
           );
         }

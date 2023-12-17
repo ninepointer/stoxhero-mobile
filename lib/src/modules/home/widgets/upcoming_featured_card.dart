@@ -62,6 +62,9 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
               remainingTime = startTimeDateTime.isAfter(DateTime.now())
                   ? startTimeDateTime.difference(DateTime.now())
                   : Duration.zero;
+              if (remainingTime == Duration.zero) {
+                controller.getFeaturedContest();
+              }
             },
           );
         }

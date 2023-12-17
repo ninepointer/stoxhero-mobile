@@ -85,6 +85,8 @@ class ContestController extends BaseController<ContestRepository> {
 
   final resultPageDetails = ResultPageData().obs;
 
+  final isBuyButtonDisabled = false.obs;
+
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingContest>[].obs;
   final upComingContest = UpComingContest().obs;

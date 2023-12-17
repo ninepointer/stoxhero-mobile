@@ -52,6 +52,7 @@ class VirtualTradingController
   bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
 
   final apiDataLoaded = false.obs;
+  final isBuyButtonDisabled = false.obs;
 
   final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();
