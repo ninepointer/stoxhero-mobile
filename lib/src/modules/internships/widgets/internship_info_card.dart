@@ -7,16 +7,6 @@ class InternshipInfoCard extends GetView<InternshipController> {
 
   @override
   Widget build(BuildContext context) {
-    // // num? mycurrentAttendance =
-    // //     controller.internshipBatchDetails.value.myAttendance as num;
-    // // print('mycurrentAtrtendece $mycurrentAttendance');
-    // // num? requiredAttendance =
-    // //     controller.internshipBatchDetails.value.attendancePercentage as num;
-    // // print('requiredAttendance $requiredAttendance');
-    // bool certificateEligibility =
-    //     double.parse(controller.internshipBatchDetails.value.myAttendance??0) >= controller.internshipBatchDetails.value.attendancePercentage??0;
-    // print('certificateEligibility $certificateEligibility');
-
     return Obx(
       () => CommonCard(
         margin: EdgeInsets.symmetric(vertical: 16),

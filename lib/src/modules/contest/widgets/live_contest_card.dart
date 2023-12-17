@@ -36,6 +36,7 @@ class LiveContestCard extends GetView<ContestController> {
                   child: Text(
                     contest?.contestName ?? '-',
                     style: AppStyles.tsSecondaryMedium14,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -51,7 +52,9 @@ class LiveContestCard extends GetView<ContestController> {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: contest?.featured == true
+                        ? const EdgeInsets.only(right: 1)
+                        : const EdgeInsets.only(right: 5),
                     child: Icon(
                       Icons.info,
                       size: 20.0,
@@ -67,7 +70,7 @@ class LiveContestCard extends GetView<ContestController> {
                       EdgeInsets.only(left: 18, right: 25, bottom: 18, top: 6),
                   foregroundDecoration: CommonTriangleCard(
                     badgeColor: AppColors.success,
-                    badgeSize: 62,
+                    badgeSize: 55,
                     textSpan: TextSpan(
                       text: 'Featured',
                       style: AppStyles.tsWhiteMedium12,
@@ -305,36 +308,6 @@ class LiveContestCard extends GetView<ContestController> {
                               fontFamily: 'Rubik')),
                     ],
                   )
-                  // Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     Text(
-                  //       'Starts',
-                  //       style: Theme.of(context).textTheme.tsGreyMedium12,
-                  //     ),
-
-                  //     Text(
-                  //       FormatHelper.formatDateTimeToIST(
-                  //           contest?.contestStartTime),
-                  //       style: Theme.of(context).textTheme.tsMedium12,
-                  //     ),
-                  //   ],
-                  // ),
-                  // Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.end,
-                  //   children: [
-                  //     Text(
-                  //       'Ends',
-                  //       style: Theme.of(context).textTheme.tsGreyMedium12,
-                  //     ),
-                  //     SizedBox(height: 2),
-                  //     Text(
-                  //       FormatHelper.formatDateTimeToIST(
-                  //           contest?.contestEndTime),
-                  //       style: Theme.of(context).textTheme.tsMedium12,
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
               SizedBox(height: 4),
@@ -385,7 +358,10 @@ class LiveContestCard extends GetView<ContestController> {
                               var walletController =
                                   Get.find<WalletController>();
                               var data = {
-                                "bonusRedemption": 0,
+                                "bonusRedemption":
+                                    walletController.isHeroCashAdded.value
+                                        ? walletController.heroCashAmount.value
+                                        : 0,
                                 "coupon": walletController
                                     .couponCodeTextController.text,
                                 "contestFee":
@@ -423,7 +399,7 @@ class LiveContestCard extends GetView<ContestController> {
                 ),
               ),
               Expanded(
-                child: GestureDetector(
+                child: InkWell(
                   onTap: () {
                     controller.liveContest(contest);
                     controller.getShareContest(false);

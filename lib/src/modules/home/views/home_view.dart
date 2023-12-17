@@ -87,6 +87,7 @@ class _HomeViewState extends State<HomeView> {
         Get.find<WalletController>().getWalletTransactionsList();
         Get.find<ContestController>().getFeaturedContest();
         Get.find<ContestProfileController>().getWeeklyTopPerformerFullList();
+
         break;
       case 1:
         // Get.find<VirtualTradingController>().loadData();
@@ -141,7 +142,7 @@ class _HomeViewState extends State<HomeView> {
               },
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 8),
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 14),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   color: AppColors.grey.withOpacity(.1),
@@ -176,7 +177,8 @@ class _HomeViewState extends State<HomeView> {
       body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+        backgroundColor:
+            Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
         onPressed: () => _updateTab(2),
         child: Icon(
           Icons.currency_rupee_rounded,

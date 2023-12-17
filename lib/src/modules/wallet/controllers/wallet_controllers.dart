@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
@@ -44,6 +44,7 @@ class WalletController extends BaseController<WalletRepository> {
   final couponCodeSuccessText = "".obs;
   final actualSubscriptionAmount = 0.0.obs;
   final subscriptionAmount = 0.0.obs;
+  final heroCashAmount = 0.0.obs;
 
   final paymentGroupValue = 'wallet'.obs;
   final selectedPaymentValue = 'wallet'.obs;
@@ -89,6 +90,7 @@ class WalletController extends BaseController<WalletRepository> {
         bonus += transaction.amount ?? 0;
       }
     }
+
     return bonus;
   }
 
@@ -112,11 +114,31 @@ class WalletController extends BaseController<WalletRepository> {
     return productType;
   }
 
-  void removeCouponCode() {
+  void removeCouponCode(num herocash) {
     couponCodeSuccessText("");
     isCouponCodeAdded(false);
-    subscriptionAmount(actualSubscriptionAmount.value);
+    subscriptionAmount(isHeroCashAdded.value
+        ? actualSubscriptionAmount.value - herocash
+        : actualSubscriptionAmount.value);
     couponCodeTextController.clear();
+  }
+
+  void addHeroCash(num heroCash) {
+    heroCashAmount(double.parse(heroCash.toString()));
+    subscriptionAmount(subscriptionAmount.value - heroCash);
+  }
+
+  void removeHeroCash(num herocash) {
+    heroCashAmount(0.0);
+    subscriptionAmount(subscriptionAmount.value + herocash);
+  }
+
+  num get calculateHeroCash {
+    return math.min(
+        (actualSubscriptionAmount.value) *
+            ((readSetting.value.maxBonusRedemptionPercentage ?? 0) / 100),
+        (calculateBonus(walletTransactionsList) /
+            (readSetting.value.bonusToUnitCashRatio ?? 1)));
   }
 
   void calculateDiscount({
@@ -126,29 +148,38 @@ class WalletController extends BaseController<WalletRepository> {
     num? discount,
     num? maxDiscount = 1000,
     num? planAmount,
+    num? heroCashAmount,
   }) {
     if (rewardType == 'Discount') {
       if (discountType == 'Flat') {
-        subscriptionAmount((planAmount! - discount!).toDouble());
+        subscriptionAmount(
+            (planAmount! - discount! - heroCashAmount!).toDouble());
       } else if (discountType == 'Percentage') {
         double maxDiscountAmount = (planAmount! * (discount! / 100)).toDouble();
         if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
-          subscriptionAmount((planAmount - maxDiscount).toDouble());
+          subscriptionAmount(
+              (planAmount - maxDiscount - heroCashAmount!).toDouble());
         } else {
-          subscriptionAmount(planAmount - (planAmount * (discount / 100)))
+          subscriptionAmount(planAmount -
+                  (planAmount * (discount / 100)) -
+                  heroCashAmount!)
               .clamp(0, maxDiscount)
               .toDouble();
         }
       }
     } else {
       if (discountType == 'Flat') {
-        subscriptionAmount((planAmount! - discount!).toDouble());
+        subscriptionAmount(
+            (planAmount! - discount! - heroCashAmount!).toDouble());
       } else if (discountType == 'Percentage') {
         double maxDiscountAmount = (planAmount! * (discount! / 100)).toDouble();
         if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
-          subscriptionAmount((planAmount - maxDiscount).toDouble());
+          subscriptionAmount(
+              (planAmount - maxDiscount - heroCashAmount!).toDouble());
         } else {
-          subscriptionAmount(planAmount - (planAmount * (discount / 100)))
+          subscriptionAmount(planAmount -
+                  (planAmount * (discount / 100)) -
+                  heroCashAmount!)
               .clamp(0, maxDiscount)
               .toDouble();
         }
@@ -269,13 +300,13 @@ class WalletController extends BaseController<WalletRepository> {
         var couponData = response.data?.data;
         isCouponCodeAdded(true);
         calculateDiscount(
-          couponCode: couponCodeTextController.text.trim(),
-          discountType: couponData?.discountType,
-          rewardType: couponData?.rewardType,
-          discount: couponData?.discount,
-          maxDiscount: couponData?.maxDiscount,
-          planAmount: amount,
-        );
+            couponCode: couponCodeTextController.text.trim(),
+            discountType: couponData?.discountType,
+            rewardType: couponData?.rewardType,
+            discount: couponData?.discount,
+            maxDiscount: couponData?.maxDiscount,
+            planAmount: amount,
+            heroCashAmount: isHeroCashAdded.value ? calculateHeroCash : 0);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }

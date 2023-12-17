@@ -364,7 +364,11 @@ class _ViewCardState extends State<ViewCard> {
                                           var walletController =
                                               Get.find<WalletController>();
                                           var data = {
-                                            "bonusRedemption": 0,
+                                            "bonusRedemption": walletController
+                                                    .isHeroCashAdded.value
+                                                ? walletController
+                                                    .heroCashAmount.value
+                                                : 0,
                                             "coupon": walletController
                                                 .couponCodeTextController.text,
                                             "entryFee": walletController

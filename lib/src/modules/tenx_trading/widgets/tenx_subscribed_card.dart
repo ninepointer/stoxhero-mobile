@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../../app/app.dart';
+
+import '../widgets/tenx_live_analitics_bottom_sheet.dart';
 
 class TenxSubscribedCard extends GetView<TenxTradingController> {
   final TenxSubscribedPlan subscription;
+
   final bool isActive;
 
   const TenxSubscribedCard({
@@ -117,15 +121,26 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                 children: [
                   Expanded(
                     child: CommonFilledButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      labelColor: AppColors.secondary,
-                      backgroundColor: AppColors.secondary.withOpacity(.25),
-                      height: 32,
-                      label: 'Analytics',
-                      onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
-                    ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        labelColor: AppColors.secondary,
+                        backgroundColor: AppColors.secondary.withOpacity(.25),
+                        height: 32,
+                        label: 'Analytics',
+                        onPressed: () async {
+                          await controller.getTenxMyActiveSubscribedPNL(
+                              subscription.sId, subscription.subscribedOn);
+
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return TenXLiveAnaliticalBottomSheet(
+                                    subscription: subscription,
+                                    pnlData: controller
+                                        .tenxSubscribedPlansPNLData.value);
+                              });
+                        }),
                   ),
                   if (subscription.allowRenewal == true) ...[
                     Expanded(
@@ -147,14 +162,21 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                               productType: ProductType.tenx,
                               productId: subscription.sId ?? '',
                               buyItemPrice: subscription.discountedPrice ?? 0,
-                              onPaymentSuccess: controller.loadDataAfterPaymentSuccess,
+                              onPaymentSuccess:
+                                  controller.loadDataAfterPaymentSuccess,
                               onSubmit: () {
                                 Get.back();
-                                var walletController = Get.find<WalletController>();
+                                var walletController =
+                                    Get.find<WalletController>();
                                 var data = {
-                                  "bonusRedemption": 0,
-                                  "coupon": walletController.couponCodeTextController.text,
-                                  "subscriptionAmount": walletController.subscriptionAmount.value,
+                                  "bonusRedemption": walletController
+                                          .isHeroCashAdded.value
+                                      ? walletController.heroCashAmount.value
+                                      : 0,
+                                  "coupon": walletController
+                                      .couponCodeTextController.text,
+                                  "subscriptionAmount":
+                                      walletController.subscriptionAmount.value,
                                   "subscriptionName": subscription.planName,
                                   "subscriptionId": subscription.sId,
                                 };
@@ -180,7 +202,8 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                   controller.tenxSubscribedPlanSelected(subscription);
                   controller.loadTenxData();
                   controller.selectSubscriptionName("");
-                  controller.selectSubscriptionName(subscription.planName ?? '');
+                  controller
+                      .selectSubscriptionName(subscription.planName ?? '');
                   controller.tenxExpiredPlanSelected();
                   Get.toNamed(AppRoutes.tenxDashboard);
                 },

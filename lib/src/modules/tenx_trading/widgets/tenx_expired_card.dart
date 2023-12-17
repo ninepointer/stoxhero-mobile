@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 import 'tenx_Analitical_Bottom_sheet.dart';
+import 'expired_tenx_share_sheet.dart';
 
 class TenxExpiredCard extends GetView<TenxTradingController> {
   final TenxExpiredPlan subscription;
@@ -37,143 +38,6 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
         SizedBox(height: 12),
         Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 12),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Price:',
-                            style: AppStyles.tsSecondaryMedium12,
-                          ),
-                          // Text(subscription),
-                          SizedBox(width: 4),
-                          Text(
-                            '${FormatHelper.formatNumbers(subscription.fee)}',
-                            style: AppStyles.tsSecondaryMedium14.copyWith(
-                              color: AppColors.success,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 4),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 12),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Net P&L:',
-                            style: AppStyles.tsSecondaryMedium12,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            ' ${FormatHelper.formatNumbers(subscription.npnl)}',
-                            // '₹${subscription.fee}',
-                            style: AppStyles.tsSecondaryMedium14.copyWith(
-                              color: subscription.npnl! >= 0
-                                  ? AppColors.success
-                                  : AppColors.danger,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 12),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'TDS:',
-                            style: AppStyles.tsSecondaryMedium12,
-                          ),
-                          // Text(subscription),
-                          SizedBox(width: 4),
-                          Text(
-                            '${FormatHelper.formatNumbers(subscription.tds ?? 0)}',
-                            style: AppStyles.tsSecondaryMedium14.copyWith(
-                              color: AppColors.success,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 4),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 12),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Net Payout:',
-                            style: AppStyles.tsSecondaryMedium12,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '${FormatHelper.formatNumbers(subscription.payout)}',
-                            // '₹${subscription.fee}',
-                            style: AppStyles.tsSecondaryMedium14.copyWith(
-                              color: AppColors.success,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
             SizedBox(height: 4),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 12),
@@ -246,6 +110,31 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                     Get.toNamed(AppRoutes.orders);
                   },
                   label: 'Order Book',
+                ),
+              ),
+              Expanded(
+                child: CommonFilledButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  labelColor: AppColors.secondary,
+                  backgroundColor: AppColors.secondary.withOpacity(.25),
+                  height: 32,
+                  label: 'Share',
+                  onPressed: () async {
+                    controller.tenxExpiredPlans();
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: ShareTenXModalContent(
+                            subscription: subscription,
+                          ),
+                        );
+                      },
+                    );
+                    // }
+                  },
                 ),
               ),
             ],

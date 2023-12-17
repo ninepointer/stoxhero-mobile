@@ -35,10 +35,15 @@ class _DashboardViewState extends State<DashboardView> {
     referralsController.loadData();
     DateTime now = DateTime.now();
     String currentMonth = DateFormat('MMMM yyyy').format(now);
-    String previousMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
-    String nextMonth = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month + 1));
+    String previousMonth =
+        DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
+    String penultimateMonth =
+        DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 2));
+    String nextMonth =
+        DateFormat('MMMM yyyy').format(DateTime(now.year, now.month + 1));
 
     monthsList = [
+      penultimateMonth,
       previousMonth,
       currentMonth,
       nextMonth,
@@ -52,15 +57,16 @@ class _DashboardViewState extends State<DashboardView> {
     if (label == 'this month') name = DateFormat('MMMM yyyy').format(now);
     if (label == 'last month')
       name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 1));
-
+    if (label == 'previous to last month')
+      name = DateFormat('MMMM yyyy').format(DateTime(now.year, now.month - 2));
     if (label == 'lifetime') name = 'Lifetime';
     return name;
   }
 
+  DashboardTradeSummary get userDashboard => controller.userDashboard.value;
+
   @override
   Widget build(BuildContext context) {
-    final userDashboard = controller.userDashboard.value;
-
     return Scaffold(
       body: Obx(
         () => RefreshIndicator(
@@ -79,13 +85,16 @@ class _DashboardViewState extends State<DashboardView> {
                 children: [
                   if (controller.stockIndexDetailsList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          for (var item in controller.stockIndexDetailsList) ...[
+                          for (var item
+                              in controller.stockIndexDetailsList) ...[
                             TradingStockCard(
-                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              label: controller
+                                  .getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
@@ -95,12 +104,14 @@ class _DashboardViewState extends State<DashboardView> {
                               stockLTP: FormatHelper.formatNumbers(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
-                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockChange:
+                                  '(${item.change?.toStringAsFixed(2)}%)',
                               stockLTPColor: controller.getValueColor(
                                 item.lastPrice! - (item.ohlc?.close ?? 0),
                               ),
                             ),
-                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                            if (item != controller.stockIndexDetailsList.last)
+                              SizedBox(width: 4),
                           ]
                         ],
                       ),
@@ -113,7 +124,9 @@ class _DashboardViewState extends State<DashboardView> {
                       itemBuilder: (context, int index, _) {
                         return GestureDetector(
                           onTap: () => controller.navigateToCarousel(
-                            controller.dashboardCarouselList[index].linkToCarousel ?? '',
+                            controller.dashboardCarouselList[index]
+                                    .linkToCarousel ??
+                                '',
                           ),
                           child: Container(
                             width: double.infinity,
@@ -152,7 +165,8 @@ class _DashboardViewState extends State<DashboardView> {
                       ]}',
                       onPressed: () {
                         contestProfileController.weeklyTopPerformer();
-                        contestProfileController.getWeeklyTopPerformerFullList();
+                        contestProfileController
+                            .getWeeklyTopPerformerFullList();
                         Get.to(() => ContestTopPerformerCard());
                       },
                       margin: EdgeInsets.only(bottom: 0, top: 8),
@@ -162,7 +176,10 @@ class _DashboardViewState extends State<DashboardView> {
                     child: Obx(
                       () => Container(
                         child: Row(
-                          children: contestProfileController.weeklyTopPerformer.asMap().entries.map((entry) {
+                          children: contestProfileController.weeklyTopPerformer
+                              .asMap()
+                              .entries
+                              .map((entry) {
                             int index = entry.key;
                             return ContestPortfolioWeekCard(
                               index: index + 1,
@@ -174,6 +191,19 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ),
 
+                  contestController.liveFeaturedContest.isEmpty &&
+                          contestController.upcomingFeaturedContest.isEmpty
+                      ? Container()
+                      : CommonTile(
+                          label: 'Featured TestZones',
+                          showSeeAllButton: true,
+                          onPressed: () {
+                            contestController.loadData();
+                            contestController.selectedTabBarIndex(0);
+                            Get.to(() => ContestListView());
+                          },
+                          margin: EdgeInsets.only(bottom: 0, top: 4),
+                        ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -182,8 +212,11 @@ class _DashboardViewState extends State<DashboardView> {
                             ? Container()
                             : Obx(
                                 () => Row(
-                                  children: contestController.featuredCollegeContest.map((contest) {
-                                    String userId = controller.userDetailsData.sId ?? '';
+                                  children: contestController
+                                      .featuredCollegeContest
+                                      .map((contest) {
+                                    String userId =
+                                        controller.userDetailsData.sId ?? '';
                                     return Container(
                                       width: MediaQuery.of(context).size.width,
                                       child: CollegeContestCard(
@@ -198,10 +231,14 @@ class _DashboardViewState extends State<DashboardView> {
                             ? Container()
                             : Obx(
                                 () => Row(
-                                  children: contestController.liveFeaturedContest.map((contest) {
-                                    String userId = controller.userDetailsData.sId ?? '';
+                                  children: contestController
+                                      .liveFeaturedContest
+                                      .map((contest) {
+                                    String userId =
+                                        controller.userDetailsData.sId ?? '';
                                     return Container(
-                                      width: MediaQuery.of(context).size.width - 30,
+                                      width: MediaQuery.of(context).size.width -
+                                          30,
                                       child: LiveFeaturedCard(
                                         userId: userId,
                                         liveFeatured: contest,
@@ -210,22 +247,26 @@ class _DashboardViewState extends State<DashboardView> {
                                   }).toList(),
                                 ),
                               ),
-                        contestController.upcomingFeaturedContest.isEmpty
-                            ? Container()
-                            : Obx(
-                                () => Row(
-                                  children: contestController.upcomingFeaturedContest.map((contest) {
-                                    String userId = controller.userDetailsData.sId ?? '';
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width - 25,
-                                      child: UpcomingFeaturedCard(
-                                        userId: userId,
-                                        upcomingFeatured: contest,
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
+                        if (contestController.liveFeaturedContest.isEmpty &&
+                            contestController
+                                .upcomingFeaturedContest.isNotEmpty)
+                          Obx(
+                            () => Row(
+                              children: contestController
+                                  .upcomingFeaturedContest
+                                  .map((contest) {
+                                String userId =
+                                    controller.userDetailsData.sId ?? '';
+                                return Container(
+                                  width: MediaQuery.of(context).size.width - 25,
+                                  child: UpcomingFeaturedCard(
+                                    userId: userId,
+                                    upcomingFeatured: contest,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -267,14 +308,17 @@ class _DashboardViewState extends State<DashboardView> {
                           () => SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: contestController.liveContestList.map((contest) {
-                                String userId = controller.userDetailsData.sId ?? '';
+                              children: contestController.liveContestList
+                                  .map((contest) {
+                                String userId =
+                                    controller.userDetailsData.sId ?? '';
                                 return Container(
                                   width: MediaQuery.of(context).size.width - 25,
                                   child: LiveContestCard(
                                     userId: userId,
                                     contest: contest,
-                                    margin: EdgeInsets.all(8).copyWith(bottom: 0, left: 11),
+                                    margin: EdgeInsets.all(8)
+                                        .copyWith(bottom: 0, left: 11),
                                   ),
                                 );
                               }).toList(),
@@ -301,17 +345,24 @@ class _DashboardViewState extends State<DashboardView> {
                             () => SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: contestController.upComingContestList.map((contest) {
-                                  bool isVisible = contestController.isUpcomingContestVisible(contest);
-                                  String userId = controller.userDetailsData.sId ?? '';
+                                children: contestController.upComingContestList
+                                    .map((contest) {
+                                  bool isVisible = contestController
+                                      .isUpcomingContestVisible(contest);
+                                  String userId =
+                                      controller.userDetailsData.sId ?? '';
                                   return isVisible
                                       ? SizedBox()
                                       : Container(
-                                          width: MediaQuery.of(context).size.width - 20,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              20,
                                           child: UpComingContestCard(
                                             userId: userId,
                                             contest: contest,
-                                            margin: EdgeInsets.all(8).copyWith(bottom: 0),
+                                            margin: EdgeInsets.all(8)
+                                                .copyWith(bottom: 0),
                                           ),
                                         );
                                 }).toList(),
@@ -319,16 +370,125 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ),
                   SizedBox(
-                    height: 10,
+                    height: 6,
                   ),
+                  CommonTile(
+                    label: 'Try TenX Subscription',
+                    showSeeAllButton: true,
+                    seeAllLabel: '',
+                    margin: EdgeInsets.only(bottom: 4, top: 8),
+                    padding: EdgeInsets.only(left: 15, top: 4),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      controller.selectedIndex(2);
+                      Get.find<TenxTradingController>().loadData();
+                    },
+                    child: CommonCard(
+                      padding: EdgeInsets.zero,
+                      margin: EdgeInsets.only(
+                          left: 10, right: 20, top: 10, bottom: 6),
+                      hasBorder: true,
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    AppImages.testZoneShareBackground,
+                                  ),
+                                  fit: BoxFit.cover,
+                                  colorFilter: ColorFilter.mode(
+                                    Color(0xFFFFF5E1).withOpacity(0.5),
+                                    BlendMode.srcOver,
+                                  ),
+                                ),
+                              ),
+                              padding: EdgeInsets.all(14),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        AppImages.dartAppName,
+                                        height: 20,
+                                        width: 80,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Introducing",
+                                        style: AppStyles.tsBlackMedium18
+                                            .copyWith(color: AppColors.white),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "TenX Subscription",
+                                        style: AppStyles.tsBlackMedium18
+                                            .copyWith(color: AppColors.white),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 6),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Subscribe Now",
+                                            style: AppStyles.tsBlackRegular14
+                                                .copyWith(
+                                                    color: AppColors.white),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_circle_right,
+                                            color: Colors.green,
+                                            size: 20.0,
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                                top: 0, // Adjust the position as needed
+                                right: 15, // Adjust the position as needed
+                                child: Container(
+                                  height: 130,
+                                  width: 150,
+                                  child: Image.asset(
+                                    AppImages.tenxLogo,
+                                    fit: BoxFit.contain,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 2,
+                  ),
+
                   CommonTile(
                     label: 'Meet Our Champions',
                     showSeeAllButton: true,
                     seeAllLabel: 'Join TestZone',
                     onPressed: () {
-                      contestController.liveContestList();
                       contestController.loadData();
-                      contestController.liveContest();
+                      contestController.selectedTabBarIndex(0);
                       Get.to(() => ContestListView());
                     },
                     margin: EdgeInsets.only(bottom: 0, top: 6),
@@ -338,7 +498,10 @@ class _DashboardViewState extends State<DashboardView> {
                     child: Obx(
                       () => Container(
                         child: Row(
-                          children: contestController.contestChampionList.asMap().entries.map((entry) {
+                          children: contestController.contestChampionList
+                              .asMap()
+                              .entries
+                              .map((entry) {
                             int index = entry.key;
                             return CompletedContestChampionLeaderBoard(
                               index: index + 1,
@@ -385,7 +548,9 @@ class _DashboardViewState extends State<DashboardView> {
                             Expanded(
                               child: customCard(
                                 label: 'F&O',
-                                percent: controller.userDashboardReturnSummary.value.virtualData?.npnl == null
+                                percent: controller.userDashboardReturnSummary
+                                            .value.virtualData?.npnl ==
+                                        null
                                     ? '0'
                                     : '${(controller.userDashboardReturnSummary.value.virtualData!.npnl! / 10000).toStringAsFixed(2)} %',
                               ),
@@ -394,7 +559,9 @@ class _DashboardViewState extends State<DashboardView> {
                             Expanded(
                               child: customCard(
                                 label: 'TestZones Trading',
-                                percent: controller.userDashboardReturnSummary.value.contestReturn == null
+                                percent: controller.userDashboardReturnSummary
+                                            .value.contestReturn ==
+                                        null
                                     ? '0'
                                     : '${(controller.userDashboardReturnSummary.value.contestReturn! * 100).toStringAsFixed(2)} %',
                               ),
@@ -407,7 +574,9 @@ class _DashboardViewState extends State<DashboardView> {
                             Expanded(
                               child: customCard(
                                 label: 'TenX Trading',
-                                percent: controller.userDashboardReturnSummary.value.tenxReturn == null
+                                percent: controller.userDashboardReturnSummary
+                                            .value.tenxReturn ==
+                                        null
                                     ? '0'
                                     : '${(controller.userDashboardReturnSummary.value.tenxReturn! * 100).toStringAsFixed(2)} %',
                               ),
@@ -435,23 +604,23 @@ class _DashboardViewState extends State<DashboardView> {
                       children: [
                         Expanded(
                           child: CommonDropdown(
-                            useSeptValue: true,
-                            getValue: controller.getProductName,
-                            color: Theme.of(context).cardColor,
-                            hint: 'Trading',
-                            value: controller.selectedTradeType,
-                            dropdownItems: controller.tradeTypes,
-                            onChanged: (String? value) {
-                              setState(
-                                () {
-                                  controller.selectedTradeType = value ?? '';
-                                  controller.getDashboard(
-                                      controller.selectedTradeType,
-                                      controller.selectedTimeFrame);
-                                },
-                              );
-                            },
-                          ),
+                              useSeptValue: true,
+                              getValue: controller.getProductName,
+                              color: Theme.of(context).cardColor,
+                              hint: 'Trading',
+                              value: controller.selectedTradeType,
+                              dropdownItems: controller.tradeTypes,
+                              onChanged: (String? value) {
+                                setState(
+                                  () {
+                                    controller.selectedTradeType = value ?? '';
+
+                                    controller.getDashboard(
+                                        controller.selectedTradeType,
+                                        controller.selectedTimeFrame);
+                                  },
+                                );
+                              }),
                         ),
                         SizedBox(width: 4),
                         Expanded(
@@ -466,7 +635,10 @@ class _DashboardViewState extends State<DashboardView> {
                               setState(
                                 () {
                                   controller.selectedTimeFrame = value ?? '';
-                                  controller.getDashboard(controller.selectedTradeType, controller.selectedTimeFrame);
+
+                                  controller.getDashboard(
+                                      controller.selectedTradeType,
+                                      controller.selectedTimeFrame);
                                 },
                               );
                             },
@@ -476,263 +648,295 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      children: [
-                        Row(
+
+                  Obx(
+                    () {
+                      print(
+                          'userdashboarddata:${controller.userDashboard.toJson()}');
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
                           children: [
-                            Expanded(
-                              child: controller.selectedTradeType == 'virtual'
-                                  ? customCard(
-                                      label: 'Market Days',
-                                      percent: userDashboard.totalMarketDays != null
-                                          ? FormatHelper.formatNumbers(
-                                              userDashboard.totalMarketDays,
-                                              decimal: 0,
-                                              showSymbol: false,
-                                            )
-                                          : '0',
-                                    )
-                                  : customCard(
-                                      label: 'Total TestZones',
-                                      percent: userDashboard.totalContests != null
-                                          ? FormatHelper.formatNumbers(
-                                              userDashboard.totalContests,
-                                              decimal: 0,
-                                              showSymbol: false,
-                                            )
-                                          : '0',
-                                    ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: controller.selectedTradeType == 'virtual'
-                                  ? customCard(
-                                      label: 'Trading Days',
-                                      percent: userDashboard.totalTradingDays != null
-                                          ? FormatHelper.formatNumbers(
-                                              userDashboard.totalTradingDays,
-                                              decimal: 0,
-                                              showSymbol: false,
-                                            )
-                                          : '0',
-                                    )
-                                  : customCard(
-                                      label: 'TestZones Participated',
-                                      percent: userDashboard.participatedContests != null
-                                          ? FormatHelper.formatNumbers(
-                                              userDashboard.participatedContests,
-                                              decimal: 0,
-                                              showSymbol: false,
-                                            )
-                                          : '0',
-                                      valueColor: AppColors.danger,
-                                    ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Profit Days',
-                                percent: userDashboard.profitDays != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.profitDays,
-                                        decimal: 0,
-                                        showSymbol: false,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Loss Days',
-                                percent: userDashboard.lossDays != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.lossDays,
-                                        decimal: 0,
-                                        showSymbol: false,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.danger,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Profit & Loss',
-                                percent: userDashboard.totalNPNL != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.totalNPNL,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Virtual Margin Money',
-                                percent: userDashboard.portfolio != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.portfolio,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Max Profit',
-                                percent: userDashboard.maxProfit != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.maxProfit,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Max Loss',
-                                percent: userDashboard.maxLoss != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.maxLoss,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.danger,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Avg. Profit',
-                                percent: userDashboard.averageProfit != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.averageProfit,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Avg. Loss',
-                                percent: userDashboard.averageLoss != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.averageLoss,
-                                        decimal: 0,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.danger,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: customCard(
-                                label: 'Max Wins Streak',
-                                percent: userDashboard.maxProfitStreak != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.maxProfitStreak,
-                                        decimal: 0,
-                                        showSymbol: false,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.success,
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: customCard(
-                                label: 'Max Loss Streak',
-                                percent: userDashboard.maxLossStreak != null
-                                    ? FormatHelper.formatNumbers(
-                                        userDashboard.maxLossStreak,
-                                        decimal: 0,
-                                        showSymbol: false,
-                                      )
-                                    : '0',
-                                valueColor: AppColors.danger,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(left: 16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Refer & Win',
-                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, fontFamily: "Rubik")),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text('Bring your friends on StoxHero',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Rubik",
-                                    color: Colors.grey,
-                                  )),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => ReferralsView()),
-                                  );
-                                },
-                                child: Text(
-                                  'Refer & Earn ${FormatHelper.formatNumbers(referralsController.activeReferrals.value?.rewardPerReferral, decimal: 0)}',
-                                  style: TextStyle(fontSize: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: controller.selectedTradeType ==
+                                              'virtual' ||
+                                          controller.selectedTradeType == 'tenx'
+                                      ? customCard(
+                                          label: 'Market Days',
+                                          percent: userDashboard
+                                                      .totalMarketDays !=
+                                                  null
+                                              ? FormatHelper.formatNumbers(
+                                                  userDashboard.totalMarketDays,
+                                                  decimal: 0,
+                                                  showSymbol: false,
+                                                )
+                                              : '0',
+                                        )
+                                      : customCard(
+                                          label: 'Total TestZones',
+                                          percent: userDashboard
+                                                      .totalContests !=
+                                                  null
+                                              ? FormatHelper.formatNumbers(
+                                                  userDashboard.totalContests,
+                                                  decimal: 0,
+                                                  showSymbol: false,
+                                                )
+                                              : '0',
+                                        ),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.lightGreen, // Background color
-                                  foregroundColor: Colors.white, // Text color
-                                  elevation: 8.0, // Elevation (shadow)
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0), // Border radius
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: controller.selectedTradeType ==
+                                              'virtual' ||
+                                          controller.selectedTradeType == 'tenx'
+                                      ? customCard(
+                                          label: 'Trading Days',
+                                          percent:
+                                              userDashboard.totalTradingDays !=
+                                                      null
+                                                  ? FormatHelper.formatNumbers(
+                                                      userDashboard
+                                                          .totalTradingDays,
+                                                      decimal: 0,
+                                                      showSymbol: false,
+                                                    )
+                                                  : '0',
+                                        )
+                                      : customCard(
+                                          label: 'TestZones Participated',
+                                          percent: userDashboard
+                                                      .participatedContests !=
+                                                  null
+                                              ? FormatHelper.formatNumbers(
+                                                  userDashboard
+                                                      .participatedContests,
+                                                  decimal: 0,
+                                                  showSymbol: false,
+                                                )
+                                              : '0',
+                                          valueColor: AppColors.danger,
+                                        ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Profit Days',
+                                    percent: userDashboard.profitDays != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.profitDays,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : '0',
                                   ),
-                                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0), // Padding
                                 ),
-                              )
-                            ],
-                          ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Loss Days',
+                                    percent: userDashboard.lossDays != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.lossDays,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : '0',
+                                    valueColor: AppColors.danger,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Profit & Loss',
+                                    percent: userDashboard.totalNPNL != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.totalNPNL,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Virtual Margin Money',
+                                    percent: userDashboard.portfolio != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.portfolio,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Max Profit',
+                                    percent: userDashboard.maxProfit != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.maxProfit,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Max Loss',
+                                    percent: userDashboard.maxLoss != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.maxLoss,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                    valueColor: AppColors.danger,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Avg. Profit',
+                                    percent: userDashboard.averageProfit != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.averageProfit,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Avg. Loss',
+                                    percent: userDashboard.averageLoss != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.averageLoss,
+                                            decimal: 0,
+                                          )
+                                        : '0',
+                                    valueColor: AppColors.danger,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Max Wins Streak',
+                                    percent:
+                                        userDashboard.maxProfitStreak != null
+                                            ? FormatHelper.formatNumbers(
+                                                userDashboard.maxProfitStreak,
+                                                decimal: 0,
+                                                showSymbol: false,
+                                              )
+                                            : '0',
+                                    valueColor: AppColors.success,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    label: 'Max Loss Streak',
+                                    percent: userDashboard.maxLossStreak != null
+                                        ? FormatHelper.formatNumbers(
+                                            userDashboard.maxLossStreak,
+                                            decimal: 0,
+                                            showSymbol: false,
+                                          )
+                                        : '0',
+                                    valueColor: AppColors.danger,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.only(left: 16.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Refer & Win',
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "Rubik")),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text('Bring your friends on StoxHero',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Rubik",
+                                        color: Colors.grey,
+                                      )),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ReferralsView()),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Refer & Earn ${FormatHelper.formatNumbers(referralsController.activeReferrals.value?.rewardPerReferral, decimal: 0)}',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors
+                                          .lightGreen, // Background color
+                                      foregroundColor:
+                                          Colors.white, // Text color
+                                      elevation: 8.0, // Elevation (shadow)
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            10.0), // Border radius
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0,
+                                          vertical: 12.0), // Padding
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 60),
+                          ],
                         ),
-                        SizedBox(height: 60),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -781,7 +985,10 @@ class _DashboardViewState extends State<DashboardView> {
                   Text(
                     percent,
                     style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                          color: valueColor ?? (percent.startsWith('-') ? AppColors.danger : AppColors.success),
+                          color: valueColor ??
+                              (percent.startsWith('-')
+                                  ? AppColors.danger
+                                  : AppColors.success),
                         ),
                   )
                 ],

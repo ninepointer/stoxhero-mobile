@@ -5,24 +5,24 @@ class ReadSettingResponse {
   String? sId;
   String? appEndTime;
   String? appStartTime;
-  int? iV;
+  num? iV;
   bool? infinityLive;
-  int? infinityPrice;
+  num? infinityPrice;
   bool? isAppLive;
-  int? leaderBoardTimming;
-  int? maxWithdrawal;
-  int? minWithdrawal;
+  num? leaderBoardTimming;
+  num? maxWithdrawal;
+  num? minWithdrawal;
   String? modifiedBy;
   String? modifiedOn;
   bool? timer;
-  int? maxWithdrawalHigh;
-  int? walletBalanceUpperLimit;
-  int? gstPercentage;
-  int? tdsPercentage;
+  num? maxWithdrawalHigh;
+  num? walletBalanceUpperLimit;
+  num? gstPercentage;
+  num? tdsPercentage;
   String? mobileAppVersion;
-  int? bonusToUnitCashRatio;
-  int? maxBonusRedemptionPercentage;
-  int? minWalletBalance;
+  num? bonusToUnitCashRatio;
+  num? maxBonusRedemptionPercentage;
+  num? minWalletBalance;
 
   ReadSettingResponse(
       {this.toggle,
@@ -51,8 +51,10 @@ class ReadSettingResponse {
       this.minWalletBalance});
 
   ReadSettingResponse.fromJson(Map<String, dynamic> json) {
-    toggle = json['toggle'] != null ? new Toggle.fromJson(json['toggle']) : null;
-    contest = json['contest'] != null ? new Contest.fromJson(json['contest']) : null;
+    toggle =
+        json['toggle'] != null ? new Toggle.fromJson(json['toggle']) : null;
+    contest =
+        json['contest'] != null ? new Contest.fromJson(json['contest']) : null;
     time = json['time'] != null ? new Time.fromJson(json['time']) : null;
     sId = json['_id'];
     appEndTime = json['AppEndTime'];

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/data/data.dart';
 import 'package:stoxhero/src/modules/marginx/marginx_index.dart';
+import 'completed_marginx_share_sheet.dart';
 
 import '../../../core/core.dart';
 
@@ -317,11 +318,20 @@ class CompletedMarginxCard extends GetView<MarginXController> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  String url = 'https://stoxhero.com/marginxs';
-                  Clipboard.setData(ClipboardData(text: url));
-                  SnackbarHelper.showSnackbar(
-                      'Link Copied, Share with your friends.');
+                onTap: () async {
+                  controller.completedMarginX(marginx);
+
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Center(
+                        child: ShareMarginXModalContent(
+                          marginx: marginx,
+                        ),
+                      );
+                    },
+                  );
+                  // }
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -333,7 +343,7 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                     ),
                   ),
                   child: Text(
-                    'Share P&L',
+                    'Share',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.secondary.shade600,
                     ),

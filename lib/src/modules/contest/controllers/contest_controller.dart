@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/modules/contest/views/resultView.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
 
@@ -82,6 +83,8 @@ class ContestController extends BaseController<ContestRepository> {
   final upcomingSegmentedControlValue = 0.obs;
   final completedSegmentedControlValue = 0.obs;
   final isBuyButtonDisabled = false.obs;
+  final resultPageDetails = ResultPageData().obs;
+
   final searchTextController = TextEditingController();
   final upComingContestList = <UpComingContest>[].obs;
   final upComingContest = UpComingContest().obs;
@@ -139,6 +142,8 @@ class ContestController extends BaseController<ContestRepository> {
   final selectedGroupValue = 0.obs;
   final selectedContestId = ''.obs;
   final selectedContestName = ''.obs;
+  final serverTime = ''.obs;
+  final selectedContestEndTime = ''.obs;
 
   final myRank = 0.obs;
 
@@ -178,6 +183,7 @@ class ContestController extends BaseController<ContestRepository> {
     socketIndexConnection();
     socketSendConnection();
     socketLeaderboardConnection();
+    setupServerTimeSocketConnection();
   }
 
   Future loadDataAfterPaymentSuccess() async {
@@ -250,6 +256,18 @@ class ContestController extends BaseController<ContestRepository> {
       }
     }
     return false;
+  }
+
+  num herocashadd(contest, String userId) {
+    num herocash = 0;
+    if (contest.participants != null) {
+      for (CompletedParticipants? participant in contest.participants!) {
+        if (participant?.userId == userId) {
+          herocash = participant?.heroCash ?? 0;
+        }
+      }
+    }
+    return herocash;
   }
 
   bool canUserTrade(contest, String userId) {
@@ -427,6 +445,15 @@ class ContestController extends BaseController<ContestRepository> {
     return reward > 0 ? reward : 0;
   }
 
+  num resultrewardCapAmount(num fees, num cap, num payoutPercentage) {
+    num capValue = (fees * cap) / 100;
+    num netPNL = resultPageDetails.value.npnl ?? 0;
+    num tempReward = netPNL * payoutPercentage / 100;
+    num reward = tempReward > capValue ? capValue : tempReward;
+
+    return reward > 0 ? reward : 0;
+  }
+
   num calculateTDS() {
     num tds = readSetting.value.tdsPercentage ?? 0;
     num rewardAmount = getRewardCapAmount(
@@ -558,9 +585,7 @@ class ContestController extends BaseController<ContestRepository> {
           position.id?.instrumentToken ?? 0,
           position.id?.exchangeInstrumentToken ?? 0,
         );
-        // print('avg $avg');
-        // print('lots $lots');
-        // print('ltp $ltp');
+
         if (ltp == 0) return 0;
         num value = (avg + (lots) * ltp);
         totalGross += value;
@@ -591,14 +616,39 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   num calculateMargin() {
+    //   num lots = 0;
+    //   num margin = 0;
+    //   num amount = 0;
+    //  num limitmargin = 0;
+    //   for (var position in contestPositionsList) {
+    //     if (position.lots != 0) {
+    //       lots += position.lots ?? 0;
+    //       margin += position.margin ?? 0;
+    //     }
+    //      if (position.id.isLimit) {
+    //   margin += position.margin;
+    // } else {
+    //   amount += (position.amount - position.brokerage);
+    // }
+    //   }
     num lots = 0;
     num margin = 0;
+    num amount = 0;
+    num limitMargin = 0; // Changed to camelCase for consistency
+
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
         margin += position.margin ?? 0;
       }
+
+      if (position.id?.isLimit == true) {
+        limitMargin += position.margin ?? 0;
+      } else {
+        amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
+      }
     }
+
     num openingBalance = 0;
     num totalFund = contestPortfolio.value.totalFund ?? 0;
 
@@ -610,7 +660,7 @@ class ContestController extends BaseController<ContestRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - margin))
+            : (openingBalance - (amount.abs() + limitMargin)))
         : (openingBalance - margin);
     return availableMargin;
   }
@@ -824,7 +874,6 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       final RepoResponse<LastPaidTestZoneTopPerformerListResponse> response =
           await repository.getPaidContestChampionList();
-      print('responsedata ${response.data}');
       if (response.data != null) {
         contestChampionList(response.data!.data?.cast<ContestData>() ?? []);
       } else {
@@ -1112,6 +1161,55 @@ class ContestController extends BaseController<ContestRepository> {
     }
   }
 
+  Future<void> pollForData(String contestId) async {
+    await Future.delayed(Duration(seconds: 2));
+
+    try {
+      final RepoResponse<ContestResultPageResponse> response =
+          await repository.getContestResultPageData(contestId);
+      if (response.data != null) {
+        resultPageDetails(response.data?.data);
+
+        if (resultPageDetails.value.npnl == null) {
+          Future.delayed(Duration(seconds: 3));
+          pollForData(contestId);
+        } else {
+          Get.to(ResultPage());
+        }
+      } else {
+        pollForData(contestId);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
+  bool hasContestEnded(String serverTimeStr, String contestEndTimeStr) {
+    DateTime serverTime = DateTime.parse(serverTimeStr);
+    DateTime contestEndTime = DateTime.parse(contestEndTimeStr);
+    return serverTime.toUtc().isAfter(contestEndTime);
+  }
+
+  Future setupServerTimeSocketConnection() async {
+    try {
+      socketService.socket.on('serverTime', (data) {
+        serverTime(data);
+
+        if (hasContestEnded(
+            data.toString(), liveContest.value.contestEndTime.toString())) {
+          socketService.socket.off("serverTime");
+          Get.back();
+          Future.delayed(Duration(seconds: 5));
+          pollForData(liveContest.value.id.toString());
+          Get.to(ResultPage());
+        }
+      });
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
@@ -1205,23 +1303,19 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future<void> getShareContest(bool isUpcoming) async {
-    isLoading(true);
-
     try {
       await repository.getShareContest(
           isUpcoming ? upComingContest.value.id : liveContest.value.id);
 
-      if (isUpcoming) {
-        getUpComingContestList();
-      } else {
-        getLiveContestList();
-      }
+      // if (isUpcoming) {
+      //   getUpComingContestList();
+      // } else {
+      //   getLiveContestList();
+      // }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-
-    isLoading(false);
   }
 
   Future getNotified() async {

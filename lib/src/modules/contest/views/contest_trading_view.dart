@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/modules/contest/views/resultView.dart';
 // import 'package:get_storage/get_storage.dart';
 import '../../../app/app.dart';
 
@@ -7,6 +8,7 @@ class ContestTradingView extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
           title: Text(

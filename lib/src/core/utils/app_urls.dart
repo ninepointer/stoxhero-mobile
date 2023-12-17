@@ -22,7 +22,7 @@ class AppUrls {
   static const String tradeMarginDetails = 'trade/marginDetail';
 
   static const String stockIndex = "$apiURL/stockindex";
-
+  static const String getIndexLivePrice = "$apiURL/getIndexliveprice";
   static const String collegeList = "$apiURL/college/collegeList";
 
   static const String addFcmToken = "$apiURL/addfcmtoken";
@@ -41,6 +41,7 @@ class AppUrls {
   static const String tenxActive = "$apiURL/tenx/active";
   static const String tenxSubscription = "$apiURL/tenX/mySubscription";
   static const String tenxMyActiveSubscribed = "$apiURL/tenX/myactivesubs";
+
   static const String tenxMyExpiredSubscription =
       "$apiURL/tenX/myexpiredsubscription";
   static const String tenxleaderboard = "$apiURL/tenX/tenxleaderboard";
@@ -185,6 +186,9 @@ class AppUrls {
       '$apiURL/dailycontest/trade/$id/my/todayorders';
   static String completedCollegeContestCertificate(String? id) =>
       "$apiURL/dailycontest/download/$id";
+  static String tenXSubscribePNL(
+          String? subscriptionId, String? subscribedOnTime) =>
+      "$apiURL/tenX/$subscriptionId/trade/livesubscriptionpnl/$subscribedOnTime";
 
   static String contestInstrumentWatchList(
           bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
@@ -292,4 +296,6 @@ class AppUrls {
       "$apiURL/dailycontest/weeklytopperformerfulllist";
   static const String weeklyTopPerformersFullListCarouseal =
       "$apiURL/toptestzoneportfolios";
+  static String contestResultPage(String? id) =>
+      "$apiURL/dailycontest/trade/$id/result";
 }

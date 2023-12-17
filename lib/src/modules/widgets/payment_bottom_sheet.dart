@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'dart:math' as math;
 
@@ -52,7 +53,10 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   void initState() {
     super.initState();
     controller = Get.find<WalletController>();
-    controller.removeCouponCode();
+    controller.removeCouponCode(calculateHeroCash);
+    controller.getReadSetting();
+    controller.isHeroCashAdded(false);
+    controller.heroCashAmount(0.0);
     controller.isLoading(false);
     controller.addMoneyAmountTextController.clear();
     controller.subscriptionAmount(widget.buyItemPrice.toDouble());
@@ -108,6 +112,15 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     return timestampPart + randomChars;
   }
 
+  num get calculateHeroCash {
+    return math.min(
+        (controller.actualSubscriptionAmount.value) *
+            ((controller.readSetting.value.maxBonusRedemptionPercentage ?? 0) /
+                100),
+        (controller.calculateBonus(controller.walletTransactionsList) /
+            (controller.readSetting.value.bonusToUnitCashRatio ?? 1)));
+  }
+
   void startPaymentTransaction(BuildContext context) async {
     controller.isLoading(true);
     FocusScope.of(context).unfocus();
@@ -122,7 +135,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       num amount =
           num.parse(controller.addMoneyAmountTextController.text) * 100;
       paymentData = PaymentRequest(
-        bonusRedemption: 0,
+        bonusRedemption:
+            controller.isHeroCashAdded.value ? calculateHeroCash : 0,
         coupon: controller.isCouponCodeAdded == true
             ? controller.couponCodeTextController.text
             : '',
@@ -136,7 +150,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
           : widget.buyItemPrice;
       amount = amount * 100;
       paymentData = PaymentRequest(
-        bonusRedemption: 0,
+        bonusRedemption:
+            controller.isHeroCashAdded.value ? calculateHeroCash : 0,
         coupon: controller.isCouponCodeAdded == true
             ? controller.couponCodeTextController.text
             : '',
@@ -270,22 +285,6 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     setState(() {});
   }
 
-  // num amountToPayAfterHeroCashDiscount() {
-  //   num amountToPay = 0;
-  //   num subAmount = (controller.couponCodeSuccessText.isNotEmpty
-  //       ? controller.subscriptionAmount.value
-  //       : widget.buyItemPrice);
-  //   num discount = subAmount * 10 / 100;
-
-  //   if (controller.isHeroCashAdded.value) {
-  //     amountToPay = subAmount - discount;
-  //   } else {
-  //     amountToPay = subAmount;
-  //   }
-
-  //   return amountToPay;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -349,11 +348,11 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                             ),
                             Spacer(),
                             Text(
-                              FormatHelper.formatNumbers(
-                                controller.couponCodeSuccessText.isNotEmpty
-                                    ? controller.subscriptionAmount.value
-                                    : widget.buyItemPrice,
-                              ),
+                              FormatHelper.formatNumbers((controller
+                                          .couponCodeSuccessText.isNotEmpty ||
+                                      controller.isHeroCashAdded.value)
+                                  ? controller.subscriptionAmount.value
+                                  : widget.buyItemPrice),
                               style: Theme.of(context)
                                   .textTheme
                                   .tsMedium18
@@ -378,7 +377,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     ),
                   if (controller.couponCodeSuccessText.isNotEmpty)
                     GestureDetector(
-                      onTap: controller.removeCouponCode,
+                      onTap: () =>
+                          controller.removeCouponCode(calculateHeroCash),
                       child: Container(
                         margin: EdgeInsets.only(top: 16),
                         padding:
@@ -447,6 +447,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                           ),
                         ],
                       ),
+
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('wallet'),
@@ -475,7 +476,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               ),
                               style: Theme.of(context)
                                   .textTheme
-                                  .tsMedium18
+                                  .tsMedium16
                                   .copyWith(
                                     color: AppColors.success,
                                   ),
@@ -484,21 +485,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                         ),
                       ],
                     ),
-                  // if (!isWalletPayment)
-                  //   Padding(
-                  //     padding: EdgeInsets.only(left: 10),
-                  //     child: Row(
-                  //       children: [
-                  //         Checkbox(
-                  //           value: controller.isHeroCashAdded.value,
-                  //           onChanged: (value) =>
-                  //               controller.isHeroCashAdded(value),
-                  //         ),
-                  //         Text(
-                  //             'Use ${(controller.couponCodeSuccessText.isNotEmpty ? controller.subscriptionAmount.value : widget.buyItemPrice) * (10 / 100)} HeroCash (1 HeroCash = \u{20B9}1)'),
-                  //       ],
-                  //     ),
-                  //   ),
+
                   if (!isWalletPayment)
                     CommonCard(
                       onTap: () => controller.selectedPaymentValue('gateway'),
@@ -525,7 +512,40 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       ],
                     ),
                   //dbfbhf
-
+                  if (!isWalletPayment)
+                    CommonCard(
+                      margin:
+                          EdgeInsets.only(top: 8, bottom: 8, left: 0, right: 0),
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: controller.isHeroCashAdded.value,
+                              onChanged: (value) {
+                                controller.isHeroCashAdded(value);
+                                if (value ?? false) {
+                                  controller.addHeroCash(calculateHeroCash);
+                                } else {
+                                  controller.removeHeroCash(calculateHeroCash);
+                                }
+                              },
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Use $calculateHeroCash HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular14,
+                                ),
+                                Text(
+                                    "Available HeroCash  : ${controller.calculateBonus(controller.walletTransactionsList).toStringAsFixed(2)}"),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   //fdhfhbd
                   if (walletBalance != null &&
                       widget.buyItemPrice >= walletBalance!)

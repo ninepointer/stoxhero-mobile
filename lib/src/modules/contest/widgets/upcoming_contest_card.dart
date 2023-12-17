@@ -67,6 +67,10 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               remainingTime = startTimeDateTime.isAfter(DateTime.now())
                   ? startTimeDateTime.difference(DateTime.now())
                   : Duration.zero;
+              if (remainingTime == Duration.zero) {
+                controller.getUpComingContestList();
+                controller.getLiveContestList();
+              }
             },
           );
         }
@@ -128,7 +132,10 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       );
                     },
                     child: Container(
-                      padding: EdgeInsets.only(right: 10),
+                      // padding: EdgeInsets.only(right: 25),
+                      padding: widget.contest?.featured == true
+                          ? const EdgeInsets.only(right: 25)
+                          : const EdgeInsets.only(right: 5),
                       child: Icon(
                         Icons.info,
                         size: 20.0,
@@ -140,10 +147,10 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 Visibility(
                   visible: widget.contest?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.all(18),
+                    padding: EdgeInsets.all(10),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
-                      badgeSize: 62,
+                      badgeSize: 55,
                       textSpan: TextSpan(
                         text: 'Featured',
                         style: AppStyles.tsWhiteMedium12,
@@ -403,7 +410,11 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                     var walletController =
                                         Get.find<WalletController>();
                                     var data = {
-                                      "bonusRedemption": 0,
+                                      "bonusRedemption":
+                                          walletController.isHeroCashAdded.value
+                                              ? walletController
+                                                  .heroCashAmount.value
+                                              : 0,
                                       "coupon": walletController
                                           .couponCodeTextController.text,
                                       "contestFee": walletController

@@ -305,6 +305,7 @@ class CompletedParticipants {
   num? payout;
   num? tdsAmount;
   int? trades;
+  num? heroCash;
 
   CompletedParticipants(
       {this.userId,
@@ -319,6 +320,7 @@ class CompletedParticipants {
       this.npnl,
       this.payout,
       this.tdsAmount,
+      this.heroCash,
       this.trades});
 
   CompletedParticipants.fromJson(Map<String, dynamic> json) {
@@ -333,6 +335,7 @@ class CompletedParticipants {
     gpnl = json['gpnl'];
     npnl = json['npnl'];
     payout = json['payout'];
+    heroCash = json['herocashPayout'];
     tdsAmount = json['tdsAmount'];
     trades = json['trades'];
   }
@@ -349,6 +352,7 @@ class CompletedParticipants {
     data['brokerage'] = this.brokerage;
     data['gpnl'] = this.gpnl;
     data['npnl'] = this.npnl;
+    data['herocashPayout'] = this.heroCash;
     data['payout'] = this.payout;
     data['tdsAmount'] = this.tdsAmount;
     data['trades'] = this.trades;
