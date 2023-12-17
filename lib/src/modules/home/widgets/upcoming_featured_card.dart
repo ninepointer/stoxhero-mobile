@@ -110,10 +110,10 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${widget.upcomingFeatured?.contestName}',
-                            style: Theme.of(context).textTheme.tsRegular16,
-                          ),
+                          Text('${widget.upcomingFeatured?.contestName}',
+                              style: Theme.of(context).textTheme.tsRegular14,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1),
                           SizedBox(height: 2),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

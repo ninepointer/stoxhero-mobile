@@ -49,7 +49,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                         children: [
                           Text(
                             '${liveFeatured?.contestName}',
-                            style: Theme.of(context).textTheme.tsRegular16,
+                            style: Theme.of(context).textTheme.tsRegular14,
                           ),
                           SizedBox(height: 2),
                           GestureDetector(
