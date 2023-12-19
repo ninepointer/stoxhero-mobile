@@ -50,7 +50,7 @@ class VirtualPendingStoplossOrderData {
   int? instrumentToken;
   int? exchangeInstrumentToken;
   String? executionTime;
-  int? amount;
+  num? amount;
   String? time;
 
   VirtualPendingStoplossOrderData(

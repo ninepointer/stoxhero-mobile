@@ -203,7 +203,6 @@ class VirtualTradingController
     );
     int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
     int startValue = 0;
-    print("stoplossQuantityPrev${totalQuantity}");
 
     if (type?.contains('BANK') ?? false) {
       for (int i = 0; i <= 900; i += 15) result.add(i);
@@ -221,8 +220,7 @@ class VirtualTradingController
         break;
       }
     }
-    print("newList${newList}");
-    print("genrateStopLoss${cutoff}");
+
     selectedStopLossQuantity.value = newList.isNotEmpty ? newList.first : 0;
 
     lotsValueForStopLoss.assignAll(newList);
@@ -239,8 +237,7 @@ class VirtualTradingController
       0,
       (sum, element) => sum + (element.quantity ?? 0),
     );
-    // int cutoff = math.max(openLots ?? 0, totalQuantity) -
-    //     math.min(openLots ?? 0, totalQuantity);
+
     int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
     int startValue = 0;
 
@@ -262,7 +259,7 @@ class VirtualTradingController
     }
 
     selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
-    print("selectedStopProfitQuantity${selectedStopProfitQuantity.value}");
+
     lotsValueForStopProfit.assignAll(newList);
     return result;
   }

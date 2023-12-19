@@ -40,7 +40,7 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
       lastPrice: lastPrice,
     );
     controller.generateLotsList(type: widget.tradingWatchlist.symbol);
-    controller.isBuyButtonDisabled.value = false;
+    // controller.isBuyButtonDisabled.value = false;
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualTransactionBottomSheet(

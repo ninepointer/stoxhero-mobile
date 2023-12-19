@@ -545,14 +545,28 @@ class ContestController extends BaseController<ContestRepository> {
 
   num calculateTDS() {
     num tds = readSetting.value.tdsPercentage ?? 0;
-    num rewardAmount = getRewardCapAmount(
+    num rewardAmount;
+
+    if (liveContest.value != null) {
+      rewardAmount = getRewardCapAmount(
         liveContest.value.entryFee == 0
             ? liveContest.value.portfolio?.portfolioValue ?? 0
             : liveContest.value.entryFee ?? 0,
         liveContest.value.payoutCapPercentage ?? 0,
-        liveContest.value.payoutPercentage ?? 0);
-
-    num winingAmount = rewardAmount - liveContest.value.entryFee!;
+        liveContest.value.payoutPercentage ?? 0,
+      );
+    } else {
+      rewardAmount = getRewardCapAmount(
+        liveFeatured.value.entryFee == 0
+            ? liveFeatured.value.portfolio?.portfolioValue ?? 0
+            : liveFeatured.value.entryFee ?? 0,
+        liveFeatured.value.payoutCapPercentage ?? 0,
+        liveFeatured.value.payoutPercentage ?? 0,
+      );
+    }
+    num winingAmount = liveContest.value != null
+        ? rewardAmount - (liveContest.value?.entryFee ?? 0)
+        : rewardAmount - (liveFeatured.value?.entryFee ?? 0);
     num tdsAmount = winingAmount * tds / 100;
 
     return tdsAmount > 0 ? tdsAmount : 0;
@@ -1454,7 +1468,7 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future getNotified() async {
-    isLoading(true);
+    // isLoading(true);
     try {
       await repository.getNotified(upComingContest.value.id);
       getUpComingContestList();
@@ -1462,7 +1476,7 @@ class ContestController extends BaseController<ContestRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    // isLoading(false);
   }
 
   Future participate(LiveContest? contest) async {

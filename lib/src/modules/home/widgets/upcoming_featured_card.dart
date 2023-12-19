@@ -112,7 +112,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                         children: [
                           Text(
                             '${widget.upcomingFeatured?.contestName}',
-                            style: Theme.of(context).textTheme.tsRegular16,
+                            style: Theme.of(context).textTheme.tsRegular14,
                           ),
                           SizedBox(height: 2),
                           Row(
