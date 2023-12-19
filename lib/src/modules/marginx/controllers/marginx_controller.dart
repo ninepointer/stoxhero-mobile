@@ -349,6 +349,7 @@ class MarginXController extends BaseController<MarginXRepository> {
     num margin = 0;
     num amount = 0;
     num limitMargin = 0;
+    num subtractAmount = 0;
     for (var position in marginXPositionList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
@@ -357,6 +358,11 @@ class MarginXController extends BaseController<MarginXRepository> {
       if (position.id?.isLimit == true) {
         limitMargin += position.margin ?? 0;
       } else {
+        if (position.lots! < 0) {
+          limitMargin += position.margin ?? 0;
+          subtractAmount +=
+              ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
+        }
         amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
@@ -371,7 +377,8 @@ class MarginXController extends BaseController<MarginXRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - (amount.abs() + limitMargin)))
+            : (openingBalance -
+                ((amount - subtractAmount).abs() + limitMargin)))
         : (openingBalance - margin);
 
     return availableMargin;
