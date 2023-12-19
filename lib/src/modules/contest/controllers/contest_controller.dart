@@ -193,9 +193,11 @@ class ContestController extends BaseController<ContestRepository> {
     getLiveContestList();
   }
 
-  void gotoTradingView() {
+  void gotoTradingView({bool isLiveContest=true}) {
+    contestPositionsList.clear();
+    isLiveContest?liveFeatured(LiveFeatured()):liveContest(LiveContest());
     loadTradingData();
-    Get.to(() => ContestTradingView());
+    Get.to(() => ContestTradingView(isLiveContest: isLiveContest));
   }
 
   bool handleTextField(
@@ -454,16 +456,44 @@ class ContestController extends BaseController<ContestRepository> {
     return reward > 0 ? reward : 0;
   }
 
+  // num calculateTDS() {
+  //   num tds = readSetting.value.tdsPercentage ?? 0;
+  //   num rewardAmount = getRewardCapAmount(
+  //       liveContest.value.entryFee == 0
+  //           ? liveContest.value.portfolio?.portfolioValue ?? 0
+  //           : liveContest.value.entryFee ?? 0,
+  //       liveContest.value.payoutCapPercentage ?? 0,
+  //       liveContest.value.payoutPercentage ?? 0);
+
+  //   num winingAmount = rewardAmount - liveContest.value.entryFee!;
+  //   num tdsAmount = winingAmount * tds / 100;
+
+  //   return tdsAmount > 0 ? tdsAmount : 0;
+  // }
   num calculateTDS() {
     num tds = readSetting.value.tdsPercentage ?? 0;
-    num rewardAmount = getRewardCapAmount(
+    num rewardAmount;
+
+    if (liveContest?.value != null) {
+      rewardAmount = getRewardCapAmount(
         liveContest.value.entryFee == 0
             ? liveContest.value.portfolio?.portfolioValue ?? 0
             : liveContest.value.entryFee ?? 0,
         liveContest.value.payoutCapPercentage ?? 0,
-        liveContest.value.payoutPercentage ?? 0);
-
-    num winingAmount = rewardAmount - liveContest.value.entryFee!;
+        liveContest.value.payoutPercentage ?? 0,
+      );
+    } else {
+      rewardAmount = getRewardCapAmount(
+        liveFeatured.value.entryFee == 0
+            ? liveFeatured.value.portfolio?.portfolioValue ?? 0
+            : liveFeatured.value.entryFee ?? 0,
+        liveFeatured.value.payoutCapPercentage ?? 0,
+        liveFeatured.value.payoutPercentage ?? 0,
+      );
+    }
+    num winingAmount = liveContest?.value != null
+        ? rewardAmount - (liveContest?.value?.entryFee ?? 0)
+        : rewardAmount - (liveFeatured.value?.entryFee ?? 0);
     num tdsAmount = winingAmount * tds / 100;
 
     return tdsAmount > 0 ? tdsAmount : 0;
@@ -700,6 +730,7 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   String getInstrumentChanges(int instID, int exchID) {
+   
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) =>
@@ -710,7 +741,7 @@ class ContestController extends BaseController<ContestRepository> {
           tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
-      return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
   }
 
@@ -1336,6 +1367,7 @@ class ContestController extends BaseController<ContestRepository> {
       final response = await repository.participate(liveContest.value.id);
       if (response.data?.status?.toLowerCase() == "success") {
         loadTradingData();
+        liveFeatured(LiveFeatured());
         Get.to(() => ContestTradingView());
       } else if (response.error != null) {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1354,7 +1386,8 @@ class ContestController extends BaseController<ContestRepository> {
           await repository.featuredParticipate(liveFeatured.value.id);
       if (response.data?.status?.toLowerCase() == "success") {
         loadTradingData();
-        Get.to(() => ContestTradingView());
+        liveContest(LiveContest());
+        Get.to(() => ContestTradingView(isLiveContest: false));
       } else if (response.error != null) {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
