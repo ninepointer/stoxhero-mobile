@@ -719,25 +719,11 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   num calculateMargin() {
-    //   num lots = 0;
-    //   num margin = 0;
-    //   num amount = 0;
-    //  num limitmargin = 0;
-    //   for (var position in contestPositionsList) {
-    //     if (position.lots != 0) {
-    //       lots += position.lots ?? 0;
-    //       margin += position.margin ?? 0;
-    //     }
-    //      if (position.id.isLimit) {
-    //   margin += position.margin;
-    // } else {
-    //   amount += (position.amount - position.brokerage);
-    // }
-    //   }
     num lots = 0;
     num margin = 0;
     num amount = 0;
-    num limitMargin = 0; // Changed to camelCase for consistency
+    num limitMargin = 0;
+    num subtractAmount = 0; // Changed to camelCase for consistency
 
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
@@ -748,6 +734,11 @@ class ContestController extends BaseController<ContestRepository> {
       if (position.id?.isLimit == true) {
         limitMargin += position.margin ?? 0;
       } else {
+        if (position.lots! < 0) {
+          limitMargin += position.margin ?? 0;
+          subtractAmount +=
+              ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
+        }
         amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
@@ -763,7 +754,8 @@ class ContestController extends BaseController<ContestRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - (amount.abs() + limitMargin)))
+            : (openingBalance -
+                ((amount - subtractAmount).abs() + limitMargin)))
         : (openingBalance - margin);
     return availableMargin;
   }
@@ -1468,15 +1460,15 @@ class ContestController extends BaseController<ContestRepository> {
   }
 
   Future getNotified() async {
-    // isLoading(true);
+    isLoading(true);
     try {
       await repository.getNotified(upComingContest.value.id);
-      getUpComingContestList();
+      // getUpComingContestList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    // isLoading(false);
+    isLoading(false);
   }
 
   Future participate(LiveContest? contest) async {

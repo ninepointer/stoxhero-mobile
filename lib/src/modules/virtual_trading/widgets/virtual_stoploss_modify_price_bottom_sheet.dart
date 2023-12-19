@@ -368,6 +368,11 @@ class VirtualStoplossModifyPriceBottomSheet
                               .stopProfitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar(
                             'Please Enter StopLoss or StopProfit Price');
+                      } else if (controller.selectedStopLossQuantity.value ==
+                              0 &&
+                          controller.selectedStopProfitQuantity.value == 0) {
+                        SnackbarHelper.showSnackbar(
+                            'Please Select StopLoss or StopProfit Quantity');
                       } else if (controller.stopLossFormKey.currentState!
                           .validate()) {
                         controller.pendingOrderModify(type, stopLoss);

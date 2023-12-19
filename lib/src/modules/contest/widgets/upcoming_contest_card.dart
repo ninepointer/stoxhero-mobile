@@ -27,11 +27,16 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
   late ContestController controller;
   late Timer timer;
   bool isVisible = true;
+  bool isUserInterestedId = false;
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<ContestController>();
+    isUserInterestedId = controller.isUserInterested(
+      widget.contest,
+      widget.userId,
+    );
   }
 
   @override
@@ -94,10 +99,6 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
 
   @override
   Widget build(BuildContext context) {
-    bool isUserInterestedId = controller.isUserInterested(
-      widget.contest,
-      widget.userId,
-    );
     return Visibility(
       visible: !isVisible,
       replacement: SizedBox(),
@@ -361,6 +362,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       onTap: () {
                         controller.upComingContest(widget.contest);
                         controller.getNotified();
+                        isUserInterestedId = true;
                         SnackbarHelper.showSnackbar(
                             'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the TestZone starts');
                       },

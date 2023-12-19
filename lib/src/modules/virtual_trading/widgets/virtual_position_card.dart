@@ -287,7 +287,8 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                   child: GestureDetector(
                     onTap: () {
                       if (position.lots!.toInt() == 0) {
-                        // SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                        SnackbarHelper.showSnackbar(
+                            "You don't have any open position for this symbol.");
                       } else if (controller.selectedQuantity.value
                           .toString()
                           .contains('-')) {
