@@ -999,13 +999,17 @@ class VirtualTradingController
   }
 
   Future getStopLossEditOrder(String? id, String? type) async {
+    print("typess${type}");
     isPendingOrderStateLoading(true);
+    // PendingEditOrderRequest data = PendingEditOrderRequest(
+    //   executionPrice: type == "StopLoss"
+    //       ? stopLossPriceTextController.text
+    //       : (type == "StopProfit"
+    //           ? stopProfitPriceTextController.text
+    //           : (type == "Limit" ? limitPriceTextController.text : '0')),
+    // );
     PendingEditOrderRequest data = PendingEditOrderRequest(
-      executionPrice: type == "StopLoss"
-          ? stopLossPriceTextController.text
-          : (type == "StopProfit"
-              ? stopProfitPriceTextController.text
-              : (type == "Limit" ? limitPriceTextController.text : '0')),
+      executionPrice: limitPriceTextController.text,
     );
     try {
       final response = await repository.getStopLossEditOrder(
