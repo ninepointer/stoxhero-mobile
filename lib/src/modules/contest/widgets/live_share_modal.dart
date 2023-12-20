@@ -8,13 +8,11 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 
-class ShareModalContent extends GetView<ContestController> {
-  final CompletedContestPnl? completedContestPnl;
-  final CompletedContest? contest;
-  const ShareModalContent({
-    Key? key,
-    this.completedContestPnl,
+class LiveShareModalContent extends GetView<ContestController> {
+  final LiveContest? contest;
+  const LiveShareModalContent({
     this.contest,
+    Key? key,
   }) : super(key: key);
 
   Future<void> _captureAndSharePng(GlobalKey cardKey) async {
@@ -34,7 +32,7 @@ class ShareModalContent extends GetView<ContestController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers(completedContestPnl?.payoutAmount)} in ${controller.completedContest.value.contestName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nSignUp now and get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet \n\nhttps://stoxhero.page.link/ctz";
+    return "Hey!! \n\n I just joined the ${contest?.contestName} TestZone on StoxHero.\n\nShow your trading skills and earn upto  ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)} or ${contest?.payoutPercentage} of your net p&l.\n\nLet's see who can take winning trades!!\n\nUse this link to join me now!\n\nSignup now to get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet.\n\n http://stoxhero.page.link/testzone";
   }
 
   @override
@@ -43,7 +41,7 @@ class ShareModalContent extends GetView<ContestController> {
     return Container(
         height: 700,
         padding: EdgeInsets.zero,
-        margin: EdgeInsets.only(top: 150),
+        margin: EdgeInsets.only(top: 160),
         child: Column(
           // shrinkWrap: true,
 
@@ -90,54 +88,25 @@ class ShareModalContent extends GetView<ContestController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'TestZone',
+                                    'Test Your Trading Skills',
                                     style: AppStyles.tsSecondaryMedium24
                                         .copyWith(color: AppColors.warning),
                                   ),
                                 ],
                               ),
                               SizedBox(
-                                height: 4,
+                                height: 10,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('WINNER',
-                                      style: AppStyles.tsSecondaryRegular16
-                                          .copyWith(color: AppColors.white)),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 40,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: AppColors.white.withOpacity(.50),
-                                      ),
-                                    ),
-                                    child: ClipOval(
-                                      child: controller.userDetails.value
-                                                  .profilePhoto ==
-                                              null
-                                          ? Image.asset(
-                                              AppImages.darkAppLogo,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Image.network(
-                                              controller.userDetails.value
-                                                      .profilePhoto?.url ??
-                                                  '',
-                                              //     fit: BoxFit.cover,
-                                            ),
-                                    ),
-                                  ),
+                                  Text(
+                                    "Join ${contest?.contestName}"
+                                        .capitalize
+                                        .toString(),
+                                    style: AppStyles.tsSecondaryMedium16
+                                        .copyWith(color: AppColors.white),
+                                  )
                                 ],
                               ),
                               SizedBox(
@@ -147,36 +116,27 @@ class ShareModalContent extends GetView<ContestController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName}',
-                                      style: AppStyles.tsSecondaryMedium16
-                                          .copyWith(color: AppColors.white))
+                                    "& Earn upto ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)}",
+                                    style: AppStyles.tsSecondaryMedium16
+                                        .copyWith(color: AppColors.white),
+                                  )
                                 ],
                               ),
                               SizedBox(
-                                height: 2,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      '@${controller.userDetails.value.employeeid}',
-                                      style: AppStyles.tsSecondaryRegular16
-                                          .copyWith(color: AppColors.white))
-                                ],
-                              ),
-                              SizedBox(
-                                height: 40,
+                                height: 30,
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 2.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text("Rank",
+                                        Text("Start Time",
                                             style: AppStyles
                                                 .tsSecondaryRegular14
                                                 .copyWith(
@@ -185,44 +145,18 @@ class ShareModalContent extends GetView<ContestController> {
                                           height: 2,
                                         ),
                                         Text(
-                                            "${completedContestPnl?.rank == null ? "-" : completedContestPnl?.rank}",
+                                            // "${completedContestPnl?.rank == null ? "-" : completedContestPnl?.rank}",
+                                            "${FormatHelper.formatDateTimeWithoutYearToIST(contest?.contestStartTime)}",
                                             style: AppStyles.tsSecondaryMedium16
                                                 .copyWith(
                                                     color: AppColors.white))
                                       ],
                                     ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: 12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Net P&L",
-                                            style: AppStyles
-                                                .tsSecondaryRegular14
-                                                .copyWith(
-                                              color: AppColors.white,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          SizedBox(
-                                            height: 2,
-                                          ),
-                                          Text(
-                                              FormatHelper.formatNumbers(
-                                                  completedContestPnl?.npnl,
-                                                  decimal: 0),
-                                              style: AppStyles
-                                                  .tsSecondaryMedium16
-                                                  .copyWith(
-                                                      color: AppColors.white))
-                                        ],
-                                      ),
-                                    ),
                                     Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
-                                        Text("Reward",
+                                        Text("End Time",
                                             style: AppStyles
                                                 .tsSecondaryRegular14
                                                 .copyWith(
@@ -231,19 +165,7 @@ class ShareModalContent extends GetView<ContestController> {
                                           height: 2,
                                         ),
                                         Text(
-                                            FormatHelper.formatNumbers(
-                                                completedContestPnl
-                                                    ?.payoutAmount,
-                                                decimal: 0),
-                                            // FormatHelper.formatNumbers(
-                                            //     calculateReward(
-                                            //       contest?.entryFee == 0
-                                            //           ? contest?.portfolio
-                                            //                   ?.portfolioValue ??
-                                            //               0
-                                            //           : contest?.entryFee ?? 0,
-                                            //     ).toString(),
-                                            //     decimal: 2),
+                                            '${FormatHelper.formatDateTimeWithoutYearToIST(contest?.contestEndTime)}',
                                             style: AppStyles.tsSecondaryMedium16
                                                 .copyWith(
                                                     color: AppColors.white))
@@ -266,42 +188,85 @@ class ShareModalContent extends GetView<ContestController> {
                               SizedBox(
                                 height: 20,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('TestZone',
-                                      style: AppStyles.tsSecondaryRegular12
-                                          .copyWith(
-                                        color: AppColors.white,
-                                      ))
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      "${controller.completedContest.value.contestName}",
-                                      style: AppStyles.tsSecondaryMedium14
-                                          .copyWith(color: AppColors.white))
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      FormatHelper.formatDateInMonth(controller
-                                          .completedContest
-                                          .value
-                                          .contestEndTime),
-                                      style: AppStyles.tsSecondaryRegular12
-                                          .copyWith(color: AppColors.white))
-                                ],
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Entry Fee",
+                                            style: AppStyles
+                                                .tsSecondaryRegular14
+                                                .copyWith(
+                                                    color: AppColors.white)),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                            contest?.entryFee == 0
+                                                ? 'Free'
+                                                : FormatHelper.formatNumbers(
+                                                    contest?.entryFee,
+                                                    decimal: 0),
+                                            style: AppStyles.tsSecondaryMedium16
+                                                .copyWith(
+                                                    color: AppColors.white))
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Reward",
+                                          style: AppStyles.tsSecondaryRegular14
+                                              .copyWith(
+                                            color: AppColors.white,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                            "${contest?.payoutPercentage}% of Net P&L",
+                                            style: AppStyles.tsSecondaryMedium16
+                                                .copyWith(
+                                                    color: AppColors.white))
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          "Virtual Margin",
+                                          style: AppStyles.tsSecondaryRegular14
+                                              .copyWith(
+                                            color: AppColors.white,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                            FormatHelper.formatNumbers(
+                                                contest
+                                                    ?.portfolio?.portfolioValue,
+                                                decimal: 0),
+                                            style: AppStyles.tsSecondaryMedium16
+                                                .copyWith(
+                                                    color: AppColors.white))
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 height: 20,
