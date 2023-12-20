@@ -34,7 +34,7 @@ class DynamicLinkServices {
         if (code != null) {
           print('DynamicLink Code : $code');
           Get.find<AuthController>().campaignCode(code);
-          SnackbarHelper.showSnackbar('Code Captured : $code');
+          // SnackbarHelper.showSnackbar('Code Captured : $code');
         }
       } catch (e) {
         print('DynamicLink Error : $e');
