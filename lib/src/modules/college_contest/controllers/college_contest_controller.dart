@@ -1421,7 +1421,7 @@ class CollegeContestController
     isLoading(true);
     try {
       await repository.getNotified(upComingCollegeContest.value.id);
-      getUpComingCollegeContestList();
+      // getUpComingCollegeContestList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

@@ -387,7 +387,7 @@ class _DashboardViewState extends State<DashboardView> {
                     child: CommonCard(
                       padding: EdgeInsets.zero,
                       margin: EdgeInsets.only(
-                          left: 10, right: 20, top: 10, bottom: 6),
+                          left: 10, right: 10, top: 10, bottom: 6),
                       hasBorder: true,
                       children: [
                         Stack(

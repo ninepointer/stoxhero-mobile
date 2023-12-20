@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:share_plus/share_plus.dart';
 import '../../../app/app.dart';
+import '../widgets/live_share_modal.dart';
 
 class LiveContestCard extends GetView<ContestController> {
   final String userId;
@@ -402,11 +402,22 @@ class LiveContestCard extends GetView<ContestController> {
                 child: InkWell(
                   onTap: () {
                     controller.liveContest(contest);
-                    controller.getShareContest(false);
-                    String url = 'https://stoxhero.com/testzone';
-                    Clipboard.setData(ClipboardData(text: url));
-                    SnackbarHelper.showSnackbar(
-                        'Link Copied, Share with your friends.');
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: LiveShareModalContent(
+                            contest: contest,
+                          ),
+                        );
+                      },
+                    );
+
+                    // controller.getShareContest(false);
+                    // String url = 'https://stoxhero.com/testzone';
+                    // Clipboard.setData(ClipboardData(text: url));
+                    // SnackbarHelper.showSnackbar(
+                    //     'Link Copied, Share with your friends.');
                   },
                   child: Container(
                     alignment: Alignment.center,

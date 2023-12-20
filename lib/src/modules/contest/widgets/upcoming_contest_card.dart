@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
+import '../widgets/upcoming_share_model_content.dart';
 
 class UpComingContestCard extends StatefulWidget {
   final String userId;
@@ -361,6 +362,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     child: GestureDetector(
                       onTap: () {
                         controller.upComingContest(widget.contest);
+
                         controller.getNotified();
                         isUserInterestedId = true;
                         SnackbarHelper.showSnackbar(
@@ -471,11 +473,21 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                   child: GestureDetector(
                     onTap: () {
                       controller.upComingContest(widget.contest);
-                      controller.getShareContest(true);
-                      String url = 'https://stoxhero.com/testzone';
-                      Clipboard.setData(ClipboardData(text: url));
-                      SnackbarHelper.showSnackbar(
-                          'Link Copied, Share with your friends.');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: UpComingShareModalContent(
+                              contest: widget.contest,
+                            ),
+                          );
+                        },
+                      );
+                      // controller.getShareContest(true);
+                      // String url = 'https://stoxhero.com/testzone';
+                      // Clipboard.setData(ClipboardData(text: url));
+                      // SnackbarHelper.showSnackbar(
+                      //     'Link Copied, Share with your friends.');
                     },
                     child: Container(
                       alignment: Alignment.center,
