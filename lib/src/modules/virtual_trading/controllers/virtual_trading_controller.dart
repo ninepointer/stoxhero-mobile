@@ -581,15 +581,17 @@ class VirtualTradingController
   Future placeVirtualTradingOrder(
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
-
+    print("rrrrr${type}");
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
+        print("typeaaa${selectedStringQuantity.value}");
         type = TransactionType.buy;
       } else {
         type = TransactionType.sell;
       }
     } else {
       if (selectedStringQuantity.value.contains('-')) {
+        print("typesss${selectedStringQuantity.value}");
         if (type == TransactionType.buy) {
           type = TransactionType.sell;
         } else {
