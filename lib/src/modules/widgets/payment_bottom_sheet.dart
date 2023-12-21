@@ -15,6 +15,7 @@ class PaymentBottomSheet extends StatefulWidget {
   final VoidCallback onSubmit;
   final VoidCallback onPaymentSuccess;
   final PaymentTransactionType paymentTransactionType;
+  final String paymentMode;
 
   PaymentBottomSheet({
     required this.productType,
@@ -22,6 +23,7 @@ class PaymentBottomSheet extends StatefulWidget {
     required this.buyItemPrice,
     required this.onSubmit,
     required this.onPaymentSuccess,
+    required this.paymentMode,
     this.paymentTransactionType = PaymentTransactionType.debit,
   });
 
@@ -411,8 +413,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       ),
                     ),
                   // if (!isWalletPayment)
-                  if (walletBalance == null ||
-                      widget.buyItemPrice <= walletBalance!)
+                  if (walletBalance != null)
                     if (!controller.isCouponCodeAdded.value)
                       Row(
                         children: [
@@ -442,6 +443,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                                 context,
                                 widget.productType,
                                 widget.buyItemPrice,
+                                widget.paymentMode,
                               ),
                             ),
                           ),
@@ -534,7 +536,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Use $calculateHeroCash HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
+                                  'Use ${calculateHeroCash.toStringAsFixed(2)} HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
                                   style:
                                       Theme.of(context).textTheme.tsRegular14,
                                 ),
@@ -553,7 +555,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       children: [
                         SizedBox(height: 16),
                         Text(
-                          'Your wallet balance is low kindly refer more users on this platform to buy this subscription.',
+                          'Your wallet balance is low kindly recharge your wallet to buy this subscription.',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.tsRegular14,
                         ),

@@ -261,8 +261,8 @@ class WalletController extends BaseController<WalletRepository> {
     isLoading(false);
   }
 
-  Future verifyCouponCode(
-      BuildContext context, ProductType productType, num amount) async {
+  Future verifyCouponCode(BuildContext context, ProductType productType,
+      num amount, String paymentMode) async {
     isCouponCodeAdded(false);
     if (amount == 0) {
       amount = num.parse(addMoneyAmountTextController.text);
@@ -285,11 +285,17 @@ class WalletController extends BaseController<WalletRepository> {
     } else if (productType == ProductType.wallet) {
       product = '651bdbc8da68770e8f1b8e09';
     }
+
+    print("productType${product}");
     var data = VerifyCouponCodeRequest(
       code: couponCodeTextController.text.trim(),
       product: product,
       orderValue: amount,
-      paymentMode: 'addition',
+      paymentMode: selectedPaymentValue == "wallet"
+          ? "wallet"
+          : selectedPaymentValue == "gateway"
+              ? "bank"
+              : "addition",
       platform: Platform.isAndroid ? 'Android' : 'iOS',
     );
 
