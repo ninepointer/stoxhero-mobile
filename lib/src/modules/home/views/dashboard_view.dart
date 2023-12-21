@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import '../../../app/app.dart';
 import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';
@@ -83,13 +84,19 @@ class _DashboardViewState extends State<DashboardView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                            height: 4,
+                          ),
                   if (controller.stockIndexDetailsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 12, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // SizedBox(
+                          //   width: 4,
+                          // ),
                           for (var item
                               in controller.stockIndexDetailsList) ...[
                             TradingStockCard(
@@ -116,8 +123,10 @@ class _DashboardViewState extends State<DashboardView> {
                         ],
                       ),
                     ),
-                  SizedBox(height: 2),
+                  SizedBox(height: 4),
                   Container(
+                    height: 250,
+                    width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: CarouselSlider.builder(
                       itemCount: controller.dashboardCarouselList.length,
@@ -130,6 +139,7 @@ class _DashboardViewState extends State<DashboardView> {
                           ),
                           child: Container(
                             width: double.infinity,
+                            height: 150,
                             decoration: BoxDecoration(
                               color: AppColors.grey.withOpacity(.1),
                               borderRadius: BorderRadius.circular(8),
@@ -139,6 +149,7 @@ class _DashboardViewState extends State<DashboardView> {
                               child: Image.network(
                                 "${controller.dashboardCarouselList[index].carouselImage}",
                                 fit: BoxFit.fill,
+                                height: 150,
                                 width: double.infinity,
                               ),
                             ),
@@ -152,7 +163,7 @@ class _DashboardViewState extends State<DashboardView> {
                         autoPlayInterval: const Duration(seconds: 6),
                       ),
                     ),
-                  ),
+                  ), 
                   if (contestProfileController.startOfWeek.value != "" &&
                       contestProfileController.endOfWeek.value != "")
                     CommonTile(
@@ -171,6 +182,9 @@ class _DashboardViewState extends State<DashboardView> {
                       },
                       margin: EdgeInsets.only(bottom: 0, top: 8),
                     ),
+                    SizedBox(
+                    height: 4,
+                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Obx(
@@ -190,6 +204,51 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
+                  // CommonTile(
+                  //   label: 'Merry Christmas',
+                  //   showSeeAllButton: true,
+                  //   seeAllLabel: '',
+                  //   margin: EdgeInsets.only(bottom: 4, top: 8),
+                  //   padding: EdgeInsets.only(left: 15, top: 4),
+                  // ),
+                  SizedBox(
+                    height: 4,
+                  ), 
+                  GestureDetector(
+                    onTap: () {
+                      controller.selectedIndex(2);
+                      Get.find<TenxTradingController>().loadData();
+                    },
+                    child: CommonCard(
+                      padding: EdgeInsets.zero,
+                      margin: EdgeInsets.only(
+                          left: 10, right: 10, top: 10, bottom: 6),
+                      hasBorder: true,
+                      children: [
+                        Container(
+                          height: 130,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                AppImages.santa,
+                              ),
+                              fit: BoxFit.fill,
+                              // colorFilter: ColorFilter.mode(
+                              //   Color(0xFFFFF5E1).withOpacity(0.5),
+                              //   BlendMode.srcOver,
+                              // ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 4,
+                  ),  
 
                   contestController.liveFeaturedContest.isEmpty &&
                           contestController.upcomingFeaturedContest.isEmpty
@@ -258,7 +317,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 String userId =
                                     controller.userDetailsData.sId ?? '';
                                 return Container(
-                                  width: MediaQuery.of(context).size.width - 25,
+                                  width: contestController.upcomingFeaturedContest.length ==1 ? MediaQuery.of(context).size.width: MediaQuery.of(context).size.width - 55,
                                   child: UpcomingFeaturedCard(
                                     userId: userId,
                                     upcomingFeatured: contest,
@@ -313,7 +372,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 String userId =
                                     controller.userDetailsData.sId ?? '';
                                 return Container(
-                                  width: MediaQuery.of(context).size.width - 25,
+                                  width: MediaQuery.of(context).size.width - 55,
                                   child: LiveContestCard(
                                     userId: userId,
                                     contest: contest,
@@ -325,6 +384,9 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ),
                         ),
+                  SizedBox(
+                    height: 4,
+                  ),       
                   if (contestController.liveContestList.isEmpty)
                     contestController.upComingContestList.isEmpty
                         ? Container()
@@ -357,7 +419,7 @@ class _DashboardViewState extends State<DashboardView> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width -
-                                              20,
+                                              55,
                                           child: UpComingContestCard(
                                             userId: userId,
                                             contest: contest,
@@ -493,6 +555,9 @@ class _DashboardViewState extends State<DashboardView> {
                     },
                     margin: EdgeInsets.only(bottom: 0, top: 6),
                   ),
+                  SizedBox(
+                    height: 4,
+                  ), 
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Obx(
@@ -534,7 +599,7 @@ class _DashboardViewState extends State<DashboardView> {
                   //   ),
                   // ),
 
-                  SizedBox(height: 10),
+                  SizedBox(height: 4),
                   CommonTile(
                     label: 'Return Summary',
                     margin: EdgeInsets.only(bottom: 10, top: 0),

@@ -187,10 +187,10 @@ class WalletController extends BaseController<WalletRepository> {
     }
     if (rewardType == 'Discount') {
       couponCodeSuccessText(
-          "Applied $couponCode - ($discount% off upto ₹$maxDiscount)");
+          "Applied $couponCode - ($discount% off upto ${FormatHelper.formatNumbers(maxDiscount, decimal: 0)})");
     } else {
       couponCodeSuccessText(
-          "Applied $couponCode - ($discount% cashback  upto ₹$maxDiscount)");
+          "Applied $couponCode - ($discount% cashback  upto ${FormatHelper.formatNumbers(maxDiscount, decimal: 0)})");
     }
   }
 
@@ -285,11 +285,17 @@ class WalletController extends BaseController<WalletRepository> {
     } else if (productType == ProductType.wallet) {
       product = '651bdbc8da68770e8f1b8e09';
     }
+
+    print("productType${product}");
     var data = VerifyCouponCodeRequest(
       code: couponCodeTextController.text.trim(),
       product: product,
       orderValue: amount,
-      paymentMode: 'addition',
+      paymentMode: selectedPaymentValue == "wallet"
+          ? "wallet"
+          : selectedPaymentValue == "gateway"
+              ? "bank"
+              : "addition",
       platform: Platform.isAndroid ? 'Android' : 'iOS',
     );
 
