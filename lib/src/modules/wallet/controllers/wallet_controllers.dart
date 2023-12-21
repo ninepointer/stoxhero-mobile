@@ -187,10 +187,10 @@ class WalletController extends BaseController<WalletRepository> {
     }
     if (rewardType == 'Discount') {
       couponCodeSuccessText(
-          "Applied $couponCode - ($discount% off upto ₹$maxDiscount)");
+          "Applied $couponCode - ($discount% off upto ${FormatHelper.formatNumbers(maxDiscount, decimal: 0)})");
     } else {
       couponCodeSuccessText(
-          "Applied $couponCode - ($discount% cashback  upto ₹$maxDiscount)");
+          "Applied $couponCode - ($discount% cashback  upto ${FormatHelper.formatNumbers(maxDiscount, decimal: 0)})");
     }
   }
 
