@@ -15,7 +15,6 @@ class PaymentBottomSheet extends StatefulWidget {
   final VoidCallback onSubmit;
   final VoidCallback onPaymentSuccess;
   final PaymentTransactionType paymentTransactionType;
-  final String paymentMode;
 
   PaymentBottomSheet({
     required this.productType,
@@ -23,7 +22,6 @@ class PaymentBottomSheet extends StatefulWidget {
     required this.buyItemPrice,
     required this.onSubmit,
     required this.onPaymentSuccess,
-    required this.paymentMode,
     this.paymentTransactionType = PaymentTransactionType.debit,
   });
 
@@ -440,11 +438,9 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               isLoading: controller.isCouponCodeLoadingStatus,
                               label: 'APPLY',
                               onPressed: () => controller.verifyCouponCode(
-                                context,
-                                widget.productType,
-                                widget.buyItemPrice,
-                                widget.paymentMode,
-                              ),
+                                  context,
+                                  widget.productType,
+                                  widget.buyItemPrice),
                             ),
                           ),
                         ],

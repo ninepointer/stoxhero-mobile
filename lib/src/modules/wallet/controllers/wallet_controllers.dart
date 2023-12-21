@@ -261,8 +261,8 @@ class WalletController extends BaseController<WalletRepository> {
     isLoading(false);
   }
 
-  Future verifyCouponCode(BuildContext context, ProductType productType,
-      num amount, String paymentMode) async {
+  Future verifyCouponCode(
+      BuildContext context, ProductType productType, num amount) async {
     isCouponCodeAdded(false);
     if (amount == 0) {
       amount = num.parse(addMoneyAmountTextController.text);
