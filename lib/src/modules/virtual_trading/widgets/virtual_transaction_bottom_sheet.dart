@@ -118,8 +118,12 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                   DropdownButtonFormField2<int>(
                     value: controller.selectedQuantity.value,
                     onChanged: (value) {
-                      controller.selectedQuantity(value);
+                      controller.selectedQuantity(value?.abs());
+                      controller
+                          .selectedStringQuantity(value?.abs().toString());
                       controller.getMarginRequired(type, tradingInstrument);
+                      print(
+                          "typein${controller.selectedQuantity(value?.abs())}");
                     },
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {

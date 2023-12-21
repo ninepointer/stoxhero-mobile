@@ -29,6 +29,7 @@ class VirtualStoplossPendingOrderCard
         ),
       ),
     );
+    print("stoplosss${stopLoss.toJson()}");
   }
 
   @override

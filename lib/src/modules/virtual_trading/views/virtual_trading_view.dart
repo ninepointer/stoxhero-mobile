@@ -12,9 +12,6 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
       appBar: AppBar(title: Text('Future & Options')),
       body: Obx(
         () {
-          print(
-              "API Data: ${controller.stockIndexDetailsList.map((element) => element.instrumentToken)}");
-          print("API Data: ${controller.stockIndexDetailsList.length}");
           return Visibility(
             visible: controller.isLoadingStatus,
             child: TradingShimmer(),

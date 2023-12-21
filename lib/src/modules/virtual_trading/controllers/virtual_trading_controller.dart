@@ -581,17 +581,15 @@ class VirtualTradingController
   Future placeVirtualTradingOrder(
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
-    print("rrrrr${type}");
+    print("typein584${type} ${selectedStringQuantity.value}");
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
-        print("typeaaa${selectedStringQuantity.value}");
         type = TransactionType.buy;
       } else {
         type = TransactionType.sell;
       }
     } else {
       if (selectedStringQuantity.value.contains('-')) {
-        print("typesss${selectedStringQuantity.value}");
         if (type == TransactionType.buy) {
           type = TransactionType.sell;
         } else {
@@ -599,7 +597,7 @@ class VirtualTradingController
         }
       }
     }
-
+    print("typein600${type} ${selectedStringQuantity.value}");
     VirtualTradingPlaceOrderRequest data = VirtualTradingPlaceOrderRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -627,7 +625,7 @@ class VirtualTradingController
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
       ),
     );
-    log('placeVirtualTradingOrder : ${data.toJson()}');
+    log('typein628 : ${data.toJson()} ${type}');
     try {
       final RepoResponse<GenericResponse> response =
           await repository.paperPlaceOrder(
@@ -640,6 +638,7 @@ class VirtualTradingController
         await getStopLossPendingOrder();
         await getVirtualTodayOrderList();
         await getVirtualTradingPortfolio();
+        selectedStringQuantity("");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -771,7 +770,6 @@ class VirtualTradingController
           stockIndexDetailsList.assignAll(stockIndexDetailsList);
         }
       }
-      print("liveIndexDetails${stockIndexDetailsList.length}");
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1001,16 +999,16 @@ class VirtualTradingController
   Future getStopLossEditOrder(String? id, String? type) async {
     print("typess${type}");
     isPendingOrderStateLoading(true);
-    // PendingEditOrderRequest data = PendingEditOrderRequest(
-    //   executionPrice: type == "StopLoss"
-    //       ? stopLossPriceTextController.text
-    //       : (type == "StopProfit"
-    //           ? stopProfitPriceTextController.text
-    //           : (type == "Limit" ? limitPriceTextController.text : '0')),
-    // );
     PendingEditOrderRequest data = PendingEditOrderRequest(
-      executionPrice: limitPriceTextController.text,
+      executionPrice: type == "StopLoss"
+          ? stopLossPriceTextController.text
+          : (type == "StopProfit"
+              ? stopProfitPriceTextController.text
+              : (type == "Limit" ? limitPriceTextController.text : '0')),
     );
+    // PendingEditOrderRequest data = PendingEditOrderRequest(
+    //   executionPrice: limitPriceTextController.text,
+    // );
     try {
       final response = await repository.getStopLossEditOrder(
         id,
