@@ -190,6 +190,9 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 2,
+                  ),
 
                   contestController.liveFeaturedContest.isEmpty &&
                           contestController.upcomingFeaturedContest.isEmpty
@@ -372,6 +375,7 @@ class _DashboardViewState extends State<DashboardView> {
                   SizedBox(
                     height: 6,
                   ),
+
                   CommonTile(
                     label: 'Try TenX Subscription',
                     showSeeAllButton: true,
@@ -476,10 +480,6 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                       ],
                     ),
-                  ),
-
-                  SizedBox(
-                    height: 2,
                   ),
 
                   CommonTile(

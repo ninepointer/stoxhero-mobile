@@ -128,7 +128,7 @@ class _WalletViewState extends State<WalletView> {
                                 value: FormatHelper.formatNumbers(
                                   controller.calculateBonus(
                                       controller.walletTransactionsList),
-                                      showSymbol: false,
+                                  showSymbol: false,
                                 ),
                                 iconData: Icons.redeem_rounded,
                                 buttonLabel: 'Redeem',
