@@ -13,6 +13,7 @@ class VirtualStoplossEditPriceBottomSheet
   @override
   Widget build(BuildContext context) {
     print("stoploss${stopLoss.toJson()}");
+    print("line16 ${stopLoss.quantity.toString()}");
     controller.quanitityTextController.text = stopLoss.quantity.toString();
     controller.limitPriceTextController.text = stopLoss.price.toString();
     controller.stopProfitPriceTextController.text = stopLoss.price.toString();

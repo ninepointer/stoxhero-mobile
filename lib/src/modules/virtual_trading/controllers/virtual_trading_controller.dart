@@ -1009,6 +1009,7 @@ class VirtualTradingController
     // PendingEditOrderRequest data = PendingEditOrderRequest(
     //   executionPrice: limitPriceTextController.text,
     // );
+    print("typein1012${data.toJson()}");
     try {
       final response = await repository.getStopLossEditOrder(
         id,

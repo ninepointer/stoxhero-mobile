@@ -220,6 +220,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       List<int> lots = controller.generateLotsList(
                           type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
+
                       int maxLots = lots.last;
                       if (exitLots == 0) {
                         SnackbarHelper.showSnackbar(
@@ -242,9 +243,11 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         } else {
                           controller.selectedQuantity.value = exitLots;
                         }
+
                         controller.lotsValueList.assignAll(lots);
                         controller.selectedStringQuantity.value =
                             position.lots?.toString() ?? "0";
+
                         TradingInstrument trading = TradingInstrument(
                           name: position.id?.symbol,
                           exchange: position.id?.exchange,
