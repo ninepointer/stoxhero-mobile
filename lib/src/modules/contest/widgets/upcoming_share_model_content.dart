@@ -32,7 +32,7 @@ class UpComingShareModalContent extends GetView<ContestController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\n I just joined the ${contest?.contestName} TestZone on StoxHero.\n\nShow your trading skills and earn upto  ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)} or ${contest?.payoutPercentage} of your net p&l.\n\nLet's see who can take winning trades!!\n\nUse this link to join me now!\n\nSignup now to get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet.\n\n http://stoxhero.page.link/testzone ";
+    return "Hey!! \n\nI just joined the ${contest?.contestName} TestZone on StoxHero.\n\nShow your trading skills and earn upto  ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)} or ${contest?.payoutPercentage}% of your net p&l.\n\nLet's see who can take winning trades!!\n\nUse this link to join me now!\n\nSignup now to get ${FormatHelper.formatNumbers("100", decimal: 0)} in your StoxHero wallet.\n\n http://stoxhero.page.link/testzone ";
   }
 
   @override
