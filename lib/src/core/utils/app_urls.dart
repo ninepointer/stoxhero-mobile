@@ -55,6 +55,8 @@ class AppUrls {
   static const String referralsLeaderboard = "$apiURL/referrals/leaderboard";
   static const String referralsMyRank = "$apiURL/referrals/myrank";
   static const String myReferrals = "$apiURL/myreferrals";
+  static const String myRefferdProduct = "$apiURL/referrals/referredproduct";
+
   static const String withdrawal = "$apiURL/withdrawals";
   static const String userWalletTransactions = "$apiURL/userwallet/my";
   static const String returnSummary = "$apiURL/userdashboard/summary";

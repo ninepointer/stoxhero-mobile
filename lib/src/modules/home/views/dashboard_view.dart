@@ -85,8 +85,8 @@ class _DashboardViewState extends State<DashboardView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                            height: 4,
-                          ),
+                    height: 4,
+                  ),
                   if (controller.stockIndexDetailsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -123,9 +123,9 @@ class _DashboardViewState extends State<DashboardView> {
                         ],
                       ),
                     ),
-                  SizedBox(height: 4),
+
                   Container(
-                    height: 250,
+                    height: 230,
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: CarouselSlider.builder(
@@ -163,7 +163,7 @@ class _DashboardViewState extends State<DashboardView> {
                         autoPlayInterval: const Duration(seconds: 6),
                       ),
                     ),
-                  ), 
+                  ),
                   if (contestProfileController.startOfWeek.value != "" &&
                       contestProfileController.endOfWeek.value != "")
                     CommonTile(
@@ -182,7 +182,7 @@ class _DashboardViewState extends State<DashboardView> {
                       },
                       margin: EdgeInsets.only(bottom: 0, top: 8),
                     ),
-                    SizedBox(
+                  SizedBox(
                     height: 4,
                   ),
                   SingleChildScrollView(
@@ -204,11 +204,6 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-<<<<<<< HEAD
-                  SizedBox(
-                    height: 2,
-                  ),
-=======
                   // CommonTile(
                   //   label: 'Merry Christmas',
                   //   showSeeAllButton: true,
@@ -218,7 +213,7 @@ class _DashboardViewState extends State<DashboardView> {
                   // ),
                   SizedBox(
                     height: 4,
-                  ), 
+                  ),
                   GestureDetector(
                     onTap: () {
                       controller.selectedIndex(2);
@@ -253,8 +248,7 @@ class _DashboardViewState extends State<DashboardView> {
 
                   SizedBox(
                     height: 4,
-                  ),  
->>>>>>> c3d55c0f9dbcf468954efe8710c0606180852ee0
+                  ),
 
                   contestController.liveFeaturedContest.isEmpty &&
                           contestController.upcomingFeaturedContest.isEmpty
@@ -323,7 +317,11 @@ class _DashboardViewState extends State<DashboardView> {
                                 String userId =
                                     controller.userDetailsData.sId ?? '';
                                 return Container(
-                                  width: contestController.upcomingFeaturedContest.length ==1 ? MediaQuery.of(context).size.width: MediaQuery.of(context).size.width - 55,
+                                  width: contestController
+                                              .upcomingFeaturedContest.length ==
+                                          1
+                                      ? MediaQuery.of(context).size.width
+                                      : MediaQuery.of(context).size.width - 55,
                                   child: UpcomingFeaturedCard(
                                     userId: userId,
                                     upcomingFeatured: contest,
@@ -392,7 +390,7 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                   SizedBox(
                     height: 4,
-                  ),       
+                  ),
                   if (contestController.liveContestList.isEmpty)
                     contestController.upComingContestList.isEmpty
                         ? Container()
@@ -560,7 +558,7 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   SizedBox(
                     height: 4,
-                  ), 
+                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Obx(
