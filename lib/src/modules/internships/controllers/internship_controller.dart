@@ -1028,6 +1028,9 @@ class InternshipController extends BaseController<InternshipRespository> {
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -1087,6 +1090,7 @@ class InternshipController extends BaseController<InternshipRespository> {
         await getStopLossPendingOrder();
         await getInternshipTodayOrdersList();
         await getInternshipBatchPortfolioDetails();
+        selectedStringQuantity("");
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);

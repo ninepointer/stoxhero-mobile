@@ -892,6 +892,9 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -951,6 +954,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         await getStopLossPendingOrder();
         await getTenxTodayOrdersList();
         await getTenxTradingPortfolioDetails();
+        selectedStringQuantity("");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);

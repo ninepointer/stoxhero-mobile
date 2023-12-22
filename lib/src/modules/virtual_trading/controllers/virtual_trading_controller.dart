@@ -583,6 +583,9 @@ class VirtualTradingController
     isTradingOrderSheetLoading(true);
     print("typein584${type} ${selectedStringQuantity.value}");
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {

@@ -812,6 +812,9 @@ class ContestController extends BaseController<ContestRepository> {
   Future placeContestOrder(TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -871,6 +874,7 @@ class ContestController extends BaseController<ContestRepository> {
         await getStopLossPendingOrder();
         await getContestTodaysOrderList();
         await getContestPortfolio();
+        selectedStringQuantity("");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
