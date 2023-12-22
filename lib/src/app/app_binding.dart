@@ -1,3 +1,5 @@
+import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
+
 import 'app.dart';
 
 class AppBinding extends Bindings {
@@ -22,6 +24,7 @@ class AppBinding extends Bindings {
     Get.put(InternshipRespository(), permanent: true);
     Get.put(CollegeContestRepository(), permanent: true);
     Get.put(ContestProfileRepository(), permanent: true);
+    Get.put(StocksTradingRepository(), permanent: true);
 
     Get.put(AppController(), permanent: true);
     Get.put(AuthController(), permanent: true);
@@ -42,5 +45,7 @@ class AppBinding extends Bindings {
     Get.put(CollegeContestController(), permanent: true);
     Get.put(InternshipController(), permanent: true);
     Get.put(ContestProfileController(), permanent: true);
+    Get.put(StocksTradingController(), permanent: true);
+
   }
 }

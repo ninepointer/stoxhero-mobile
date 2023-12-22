@@ -49,6 +49,7 @@ class _AppState extends State<App> {
       darkTheme: AppTheme.darkThemeData(context),
       initialBinding: AppBinding(),
       getPages: AppPages.pages,
+      initialRoute: AppRoutes.stocks,
     );
   }
 }

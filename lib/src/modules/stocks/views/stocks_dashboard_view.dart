@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/app/app.dart';
-import 'package:stoxhero/src/modules/stocks/widget/watchlist.dart';
+import 'package:stoxhero/src/modules/stocks/views/tabs/beststocks_tab.dart';
+import 'package:stoxhero/src/modules/stocks/views/tabs/funds_tab.dart';
+import 'package:stoxhero/src/modules/stocks/views/tabs/portfolio_tab.dart';
+import 'package:stoxhero/src/modules/stocks/views/tabs/orders_tab.dart';
+import 'package:stoxhero/src/modules/stocks/views/tabs/watchlist_tab.dart';
+import 'package:stoxhero/src/modules/stocks/widget/expansion_tile.dart';
 
 class StocksDashboardView extends StatefulWidget {
-  const StocksDashboardView({Key? key});
+  const StocksDashboardView({Key? key}) : super(key: key);
 
   @override
   State<StocksDashboardView> createState() => _StocksDashboardViewState();
 }
 
-
-//tickerprovider is to connect tabview for each tabbar
 class _StocksDashboardViewState extends State<StocksDashboardView>
     with TickerProviderStateMixin {
   late TabController _tabController;
@@ -29,46 +31,25 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
 
   @override
   Widget build(BuildContext context) {
-    // Create a list of featureTabCategory objects for each tab
-    List<featureTabCategory> tabCategories = [
-      featureTabCategory(false, Category("My Watchlist")),
-      featureTabCategory(false, Category("Holdings"),),
-      featureTabCategory(false, Category("Best Stocks"),),
-      featureTabCategory(false, Category("Orders"),),
-      featureTabCategory(false, Category("Funds"),),
-    ];
-
     return Scaffold(
-appBar: AppBar(
-  backgroundColor: Colors.green,
-  leading: IconButton(
-    icon: Icon(Icons.arrow_back, color: Colors.black),
-    onPressed: () {
-      // Handle back button press here
-    },
-  ),
-  title: Text("Stocks Trading"),
-),
-
-
-
-
-
-
-
-
-
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.yellow),
+          onPressed: () {
+            // Handle back button press here
+          },
+        ),
+        title: Text("Stocks Trading"),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           
-            
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     margin: EdgeInsets.all(10),
@@ -117,68 +98,93 @@ appBar: AppBar(
                 ],
               ),
             ),
+             Container(
+              child: CustomExpansionTile(
+        invested: '929360',
+        profitloss: '-2720.00', 
+        percentage: '(0.29%)', 
+        currentvalue: '926640', 
+        availablemargin: '50000',
+        marginmoney: '678888',
+        marginused: '678',
+        openpositions: '4',
+       
+      ),
+
+             ),
             Container(
               margin: EdgeInsets.all(10),
-              width: 400,
-              height: 60,
-              padding: EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                color: Colors.white54,
+                borderRadius: BorderRadius.circular(25),
               ),
-              child: Center(child: Text("Net P&L")),
-
-
-
-
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 0,right: 0),
+                    child: TabBar(
+                      isScrollable: true,
+                      labelColor: Colors.green[600],
+                      unselectedLabelColor: Colors.grey,
+                      indicator: BoxDecoration(
+                         color: Colors.green[200],
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      controller: _tabController,
+                      tabs: [
+                        Tab(
+                          text: 'Watchlist', // Change 'Holdings' to 'Watchlist'
+                        ),
+                        Tab(
+                          text: 'Portfolio',
+                        ),
+                        Tab(
+                          text: 'BestStocks',
+                        ),
+                        Tab(
+                          text: '  Orders  ',
+                        ),
+                        Tab(
+                          text: '  Funds  ',
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          Container(
-  height: 80,
-  
-  child: TabBar(
-    
-    controller: _tabController,
-      //        indicator: BoxDecoration(
-       //       color: Colors.grey, // Change this color to the highlight color you want
-        //      borderRadius: BorderRadius.circular(10),
-          //  ),
-    indicatorWeight: 4.0, // Adjust the indicator weight as needed
-    isScrollable: true,
-    tabs: List.generate(5, (index) => _featureTabWidget(tabCategories[index])),
-     // Add this line for hard edge clipping
-  ),
-),
-
-
-
-
-
-            
             Expanded(
               child: Container(
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                  Container(
-                     color: Colors.white, // Different UI for Tab 1
-                      child: Center(child: Text("Content for Tab 1")),
-                   ),
-                   Container(
-                     color: Colors.blue, // Different UI for Tab 2
-                      child: Center(child: Text("Content for Tab 2")),
-                   ),
-                   Container(
-                    color: Colors.green, // Different UI for Tab 3
-                      child: Center(child: Text("Content for Tab 3")),
-                   ),
-                   Container(
-                    color: Colors.yellow, // Different UI for Tab 4
-                      child: Center(child: Text("Content for Tab 4")),
-                   ),
-                   Container(
-                    color: Colors.orange, // Different UI for Tab 5
-                      child: Center(child: Text("Content for Tab 5")),
-                   ),
+                    Container(
+                     
+                      child: ToDoListScreen(),
+                    ),
+                    Container(
+                      child: holding(),
+                    ),
+                    Container(
+                      child: BestStocks(),
+                    ),
+                    Container(
+                    
+                      child: orders(),
+                    ),
+                    Container(
+                      child: Funds( 
+                        marginavailable:'4000',
+                        usedmargin:'789',
+                        allocatedmargin:'7869870',
+                        investementamount:'89879',
+                        returns:'78',
+                        unrealisedPL:'7689',
+                        returnpercentage:'3456'
+
+                       ),
+                    ),
                   ],
                 ),
               ),
@@ -190,53 +196,10 @@ appBar: AppBar(
   }
 }
 
- 
-
-
-
-
-class _featureTabWidget extends StatelessWidget {
-  const _featureTabWidget(this.tabCategory);
-  final featureTabCategory tabCategory;
-
-  @override
-  Widget build(BuildContext context) {
-    final selected = tabCategory.selected;
-    return Opacity(
-      opacity: selected ? 0 : 1,
-      child: Card(
-        
-        elevation: selected ? 16 : 0,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            tabCategory.category.name,
-            
-            // style: TextStyle(
-            //   fontWeight: FontWeight.bold,
-            //   fontSize: 13,
-            // ),
-          ),
-        ),
-      ),
-    );
-  }
+void main() {
+  runApp(
+    MaterialApp(
+      home: StocksDashboardView(),
+    ),
+  );
 }
-
-class featureTabCategory {
-  
-  final bool selected;
-  final Category category;
-  
-  featureTabCategory(this.selected, this.category);
-}
-
-class Category {
-  final String name;
-
-  Category(this.name);
-}
-
-
-
-

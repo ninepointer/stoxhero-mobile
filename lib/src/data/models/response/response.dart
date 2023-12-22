@@ -84,3 +84,4 @@ export 'internship_certificate_response.dart';
 export 'day_wise_contest_pnl_response.dart';
 export 'contest_profile_response.dart';
 export 'weekly_top_performer_list_response.dart';
+export 'stock_watchlist_search_data_response.dart';

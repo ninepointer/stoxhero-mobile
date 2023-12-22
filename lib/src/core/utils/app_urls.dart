@@ -1,3 +1,5 @@
+import 'package:stoxhero/src/modules/stocks/views/stocks_dashboard_view.dart';
+
 import '../../../main.dart';
 
 class AppUrls {
@@ -296,4 +298,6 @@ class AppUrls {
       "$apiURL/dailycontest/weeklytopperformerfulllist";
   static const String weeklyTopPerformersFullListCarouseal =
       "$apiURL/toptestzoneportfolios";
+  static String StocksDashboardView_watchlist(String? searchQuery) =>
+      "$apiURL/equityInstrument?search=$searchQuery";
 }
