@@ -582,6 +582,11 @@ class VirtualTradingController
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
     print("typein584${type} ${selectedStringQuantity.value}");
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
       stopLossPriceTextController.text = '';
       stopProfitPriceTextController.text = '';
@@ -601,6 +606,8 @@ class VirtualTradingController
       }
     }
     print("typein600${type} ${selectedStringQuantity.value}");
+    print(
+        "typein601${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
     VirtualTradingPlaceOrderRequest data = VirtualTradingPlaceOrderRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -642,6 +649,11 @@ class VirtualTradingController
         await getVirtualTodayOrderList();
         await getVirtualTradingPortfolio();
         selectedStringQuantity("");
+        stopLossPriceTextController.text = '';
+        stopProfitPriceTextController.text = '';
+        limitPriceTextController.text = '';
+        print(
+            "typein652${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -981,11 +993,16 @@ class VirtualTradingController
         data.toJson(),
       );
       Get.back();
-      print(response.data.toString());
+      print("type in991 ${response.data.toString()}");
+
       if (response.data?.status == "Success") {
         SnackbarHelper.showSnackbar(response.data?.message);
         await getStopLossPendingOrder();
         await getVirtualTodayOrderList();
+        selectedStringQuantity("");
+
+        print(
+            "typein1001 ${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1022,6 +1039,9 @@ class VirtualTradingController
       getStopLossPendingOrder();
       if (response.data?.status?.toLowerCase() == "Success") {
         getStopLossPendingOrder();
+        stopLossPriceTextController.text = '';
+        stopProfitPriceTextController.text = '';
+        limitPriceTextController.text = '';
       }
     } catch (e) {
       print(e.toString());

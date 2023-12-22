@@ -28,6 +28,8 @@ class AppUrls {
       "$apiURL/pendingorder/my/todaysPending/$id/paperTrade";
   static String contestPendingStopLoss(String id) =>
       "$apiURL/pendingorder/my/todaysPending/$id/Daily%20Contest";
+  static String collegeContestPendingStopLoss(String id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/Daily%20Contest";
   static String marginXPendingStopLoss(String id) =>
       "$apiURL/pendingorder/my/todaysPending/$id/MarginX";
   static String tenXPendingStopLoss(String id) =>

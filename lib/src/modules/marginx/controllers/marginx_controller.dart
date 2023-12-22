@@ -707,6 +707,11 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   Future placeMarginXOrder(TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
       stopLossPriceTextController.text = '';
       stopProfitPriceTextController.text = '';

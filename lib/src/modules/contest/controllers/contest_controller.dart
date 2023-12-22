@@ -811,6 +811,11 @@ class ContestController extends BaseController<ContestRepository> {
 
   Future placeContestOrder(TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
       stopLossPriceTextController.text = '';
       stopProfitPriceTextController.text = '';
