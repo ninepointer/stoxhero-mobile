@@ -172,6 +172,7 @@ class _SignupViewState extends State<SignupView> {
                                   color: AppColors.grey,
                                 ),
                               ),
+                              if(!controller.hasCampaignCode.value)
                               if (controller.inviteCode.value.campaignCode != null &&
                                   controller.inviteCode.value.campaignCode!.isNotEmpty) ...[
                                 Text(
