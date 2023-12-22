@@ -400,6 +400,7 @@ class VirtualTradingController
             : (openingBalance -
                 ((amount - subtractAmount).abs() + limitMargin)))
         : (openingBalance - margin);
+
     return availableMargin;
   }
 
@@ -937,7 +938,7 @@ class VirtualTradingController
       await getStopLossPendingOrder();
       await getStopLossExecutedOrder();
       await getVirtualTradingPortfolio();
-      // loadData();
+      await getVirtualPositionsList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

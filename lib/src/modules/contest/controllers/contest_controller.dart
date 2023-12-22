@@ -865,7 +865,7 @@ class ContestController extends BaseController<ContestRepository> {
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
       ),
     );
-    log('placeContestTradingOrder : ${data.toJson()}');
+
     try {
       final RepoResponse<GenericResponse> response =
           await repository.placeContestOrder(
@@ -901,15 +901,13 @@ class ContestController extends BaseController<ContestRepository> {
       if (response.data != null) {
         if (response.data?.data! != null) {
           contestStoplossQuantityList(response.data?.quantity ?? []);
-          print(
-              "contestStoplossQuantityList${contestStoplossQuantityList.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
       log(e.toString());
-      "contestStoplossQuantityList${e}";
+
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
@@ -1660,7 +1658,7 @@ class ContestController extends BaseController<ContestRepository> {
       await getStopLossPendingOrder();
       await getContestPortfolio();
       await getStopLossExecutedOrder();
-      // loadData();
+      await getContestPositions();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1709,7 +1707,7 @@ class ContestController extends BaseController<ContestRepository> {
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
       ),
     );
-    print('PendingOrderModifyRequest : ${data.toJson()}');
+
     try {
       final RepoResponse<GenericResponse> response =
           await repository.pendingOrderModify(

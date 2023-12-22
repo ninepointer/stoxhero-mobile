@@ -1347,7 +1347,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       await getStopLossPendingOrder();
       await getInternshipBatchPortfolioDetails();
       await getStopLossExecutedOrder();
-      // loadTradingData();
+      await getInternshipPositions();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

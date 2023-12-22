@@ -1449,7 +1449,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       await getStopLossPendingOrder();
       await getTenxTradingPortfolioDetails();
       await getStopLossExecutedOrder();
-      loadData();
+      await getTenxPositionList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

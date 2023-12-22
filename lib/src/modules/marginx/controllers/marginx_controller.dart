@@ -1131,7 +1131,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       await getStopLossPendingOrder();
       await getMarginXPortfolioDetails();
       await getStopLossExecutedOrder();
-      loadData();
+      await getMarginXPositions();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
