@@ -32,5 +32,6 @@ class AppImages {
       '$imagesDir/Black Bull Logo.png';
   static const String tenxSymbolDarkMode = '$imagesDir/tenxSymbolDarkmode.png';
   static const String tenxSymbolLightMode =
-      '$imagesDir/tenxSymbolLightMode.png';
+      '$imagesDir/tenxSymbolLightMode.png';    
+  static const String santa = '$imagesDir/santa2.png';    
 }
