@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:stoxhero/src/modules/profile/widgets/profile_list_tile.dart';
 
 import '../../modules/modules.dart';
@@ -50,9 +51,13 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<InternshipController>().loadData();
         break;
       case 5:
-        ThemeService().switchTheme();
+        Get.toNamed(AppRoutes.affiliate);
+        Get.find<AffiliateController>().loadData();
         break;
       case 6:
+        ThemeService().switchTheme();
+        break;
+      case 7:
         AppStorage.clearStorage();
         Get.offAllNamed(AppRoutes.signin);
         // AppStorage.clearLoginDetails();
@@ -101,14 +106,17 @@ class _CommonDrawerState extends State<CommonDrawer> {
                         ? Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: Image.asset(
-                              Get.isDarkMode ? AppImages.darkAppLogo : AppImages.lightAppLogo,
+                              Get.isDarkMode
+                                  ? AppImages.darkAppLogo
+                                  : AppImages.lightAppLogo,
                               width: 48,
                               height: 48,
                               fit: BoxFit.contain,
                             ),
                           )
                         : Image.network(
-                            controller.userDetails.value.profilePhoto?.url ?? '',
+                            controller.userDetails.value.profilePhoto?.url ??
+                                '',
                           ),
                   ),
                 ),
@@ -165,14 +173,23 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 onTap: () => selectedItem(context, 4),
               ),
               ProfileListTile(
-                icon: ThemeService().theme == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
-                label: ThemeService().theme == ThemeMode.dark ? 'Light Mode' : 'Dark Mode',
+                icon: Icons.school,
+                label: 'Affiliate Dashboard',
                 onTap: () => selectedItem(context, 5),
+              ),
+              ProfileListTile(
+                icon: ThemeService().theme == ThemeMode.dark
+                    ? Icons.light_mode
+                    : Icons.dark_mode,
+                label: ThemeService().theme == ThemeMode.dark
+                    ? 'Light Mode'
+                    : 'Dark Mode',
+                onTap: () => selectedItem(context, 6),
               ),
               ProfileListTile(
                 icon: Icons.logout,
                 label: 'Logout',
-                onTap: () => selectedItem(context, 6),
+                onTap: () => selectedItem(context, 7),
               ),
             ],
           ),

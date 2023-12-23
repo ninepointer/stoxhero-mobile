@@ -241,6 +241,8 @@ class AppUrls {
       "$apiURL/analytics/internship/mystats/$id";
   static String internshipBatchPortfolio(String? id) =>
       "$apiURL/internship/marginDetail/$id";
+  static String internshipBatchLeaderBoard(String? id) =>
+      "$apiURL/internship/leaderboard/$id";
 
   static String tenxCountTradingDays(String? id) =>
       "$apiURL/tenX/$id/trade/countTradingDays";
@@ -300,4 +302,6 @@ class AppUrls {
       "$apiURL/toptestzoneportfolios";
   static String contestResultPage(String? id) =>
       "$apiURL/dailycontest/trade/$id/result";
+
+  static String getAffiliateSummary = "$apiURL/affiliate/mysummery";
 }

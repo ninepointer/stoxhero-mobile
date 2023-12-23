@@ -371,19 +371,42 @@ class InternshipInfoCard extends GetView<InternshipController> {
                   ],
                 ),
                 SizedBox(height: 8),
-                CommonOutlinedButton(
-                  backgroundColor: Get.isDarkMode
-                      ? AppColors.darkGreen
-                      : AppColors.lightGreen,
-                  labelColor: Get.isDarkMode
-                      ? AppColors.darkGreen
-                      : AppColors.lightGreen,
-                  height: 42,
-                  label: 'Start Trading',
-                  onPressed: () {
-                    controller.loadTradingData();
-                    Get.to(() => InternshipTradingView());
-                  },
+                Row(
+                  children: [
+                    Expanded(
+                      child: CommonOutlinedButton(
+                        backgroundColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
+                        height: 42,
+                        label: 'Leaderboard',
+                        onPressed: () {
+                          controller.getInternshipBatchLeaderBoard();
+                          Get.to(() => InternshipLeaderBoardView());
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: CommonOutlinedButton(
+                        backgroundColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
+                        labelColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
+                        height: 42,
+                        label: 'Start Trading',
+                        onPressed: () {
+                          controller.loadTradingData();
+                          Get.to(() => InternshipTradingView());
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 16),
               ],

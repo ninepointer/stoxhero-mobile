@@ -42,6 +42,10 @@ class InternshipController extends BaseController<InternshipRespository> {
   final isPortfolioStateLoading = false.obs;
   bool get isPortfolioStateLoadingStatus => isPortfolioStateLoading.value;
 
+  final isInternShipLeaderBoardLoading = false.obs;
+  bool get isInternShipLeaderBoardLoadingStatus =>
+      isInternShipLeaderBoardLoading.value;
+
   final isInstrumentListLoading = false.obs;
   bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
 
@@ -71,6 +75,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   final internshipMonthlyPnlList = <AnalyticsMonthlyPnLOverviewDetails>[].obs;
   final internshipBatchDetails = InternshipBatch().obs;
   final internshipBatchPortfolio = InternshipBatchPortfolio().obs;
+  final internshipBatchLeaderboard = <InternshipLeaderBoard>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final internshipPositionList = <TradingPosition>[].obs;
   final tradingInstrumentTradeDetailsList =
@@ -113,6 +118,7 @@ class InternshipController extends BaseController<InternshipRespository> {
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
+
     await getInternshipBatchDetails();
     await getInternshipCertificate();
     if (isParticipated()) {
@@ -120,6 +126,7 @@ class InternshipController extends BaseController<InternshipRespository> {
     } else {
       await Get.find<CareerController>().getCareerList('Job');
     }
+    await getInternshipBatchLeaderBoard();
   }
 
   Future loadInternshipAnalyticsData() async {
@@ -141,6 +148,7 @@ class InternshipController extends BaseController<InternshipRespository> {
     await getStopLossExecutedOrder();
     await getInternshipTodayOrdersList();
     await getInternshipBatchPortfolioDetails();
+
     await getInternshipWatchlist();
     socketIndexConnection();
     socketConnection();
@@ -1008,6 +1016,26 @@ class InternshipController extends BaseController<InternshipRespository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isPortfolioStateLoading(false);
+  }
+
+  Future getInternshipBatchLeaderBoard() async {
+    isInternShipLeaderBoardLoading(true);
+    try {
+      final RepoResponse<InternshipLeaderBoardResponse> response =
+          await repository.getInternshipBatchLeaderBoard(
+        internshipBatchDetails.value.id,
+      );
+
+      if (response.data?.data != null) {
+        internshipBatchLeaderboard(response.data?.data);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isInternShipLeaderBoardLoading(false);
   }
 
   Future getInternshipAnalyticsOverview() async {
