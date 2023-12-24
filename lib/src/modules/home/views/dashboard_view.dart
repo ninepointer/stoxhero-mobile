@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import '../../../app/app.dart';
 import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';
@@ -125,7 +124,7 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
 
                   Container(
-                    height: 230,
+                    height: 225,
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: CarouselSlider.builder(
@@ -296,8 +295,12 @@ class _DashboardViewState extends State<DashboardView> {
                                     String userId =
                                         controller.userDetailsData.sId ?? '';
                                     return Container(
-                                      width: MediaQuery.of(context).size.width -
-                                          30,
+                                      width: contestController
+                                                  .liveFeaturedContest.length ==
+                                              1
+                                          ? MediaQuery.of(context).size.width
+                                          : MediaQuery.of(context).size.width -
+                                              55,
                                       child: LiveFeaturedCard(
                                         userId: userId,
                                         liveFeatured: contest,

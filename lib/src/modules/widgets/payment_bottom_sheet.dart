@@ -556,7 +556,11 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     ),
                   //fdhfhbd
                   if (walletBalance != null &&
-                      widget.buyItemPrice >= walletBalance!)
+                      ((controller.couponCodeSuccessText.isNotEmpty ||
+                                  controller.isHeroCashAdded.value)
+                              ? controller.subscriptionAmount.value
+                              : widget.buyItemPrice) >=
+                          walletBalance!)
                     Column(
                       children: [
                         SizedBox(height: 16),
@@ -584,7 +588,14 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                                     'gateway'
                             ? () => startPaymentTransaction(context)
                             : walletBalance != null &&
-                                    widget.buyItemPrice >= walletBalance!
+                                    ((controller.couponCodeSuccessText
+                                                    .isNotEmpty ||
+                                                controller
+                                                    .isHeroCashAdded.value)
+                                            ? controller
+                                                .subscriptionAmount.value
+                                            : widget.buyItemPrice) >=
+                                        walletBalance!
                                 ? () {
                                     SnackbarHelper.showSnackbar(
                                         'Low wallet balance!');
