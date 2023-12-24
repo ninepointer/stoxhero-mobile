@@ -36,28 +36,32 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<AnalyticsController>().loadData();
         break;
       case 1:
-        Get.toNamed(AppRoutes.portfolio);
-        Get.find<PortfolioController>().loadData();
-        break;
-      case 2:
-        Get.toNamed(AppRoutes.orders);
-        Get.find<OrdersController>().loadData();
-        break;
-      case 3:
-        Get.toNamed(AppRoutes.careers);
-        break;
-      case 4:
-        Get.toNamed(AppRoutes.Internship);
-        Get.find<InternshipController>().loadData();
-        break;
-      case 5:
         Get.toNamed(AppRoutes.affiliate);
         Get.find<AffiliateController>().loadData();
         break;
+      case 2:
+        Get.toNamed(AppRoutes.portfolio);
+        Get.find<PortfolioController>().loadData();
+        break;
+      case 3:
+        Get.toNamed(AppRoutes.orders);
+        Get.find<OrdersController>().loadData();
+        break;
+      case 4:
+        Get.toNamed(AppRoutes.careers);
+        break;
+      case 5:
+        Get.toNamed(AppRoutes.Internship);
+        Get.find<InternshipController>().loadData();
+        break;
       case 6:
-        ThemeService().switchTheme();
+        Get.toNamed(AppRoutes.affiliate);
+        Get.find<AffiliateController>().loadData();
         break;
       case 7:
+        ThemeService().switchTheme();
+        break;
+      case 8:
         AppStorage.clearStorage();
         Get.offAllNamed(AppRoutes.signin);
         // AppStorage.clearLoginDetails();
@@ -153,30 +157,36 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 label: 'MarketGuru',
                 onTap: () => selectedItem(context, 0),
               ),
+              if (controller.userDetails.value.isAffiliate ?? false)
+                ProfileListTile(
+                  icon: Icons.school,
+                  label: 'Affiliate Dashboard',
+                  onTap: () => selectedItem(context, 1),
+                ),
               ProfileListTile(
                 icon: Icons.person,
                 label: 'Portfolio',
-                onTap: () => selectedItem(context, 1),
-              ),
-              ProfileListTile(
-                label: 'Order Book',
                 onTap: () => selectedItem(context, 2),
               ),
               ProfileListTile(
-                icon: Icons.school,
-                label: 'Careers',
+                label: 'Order Book',
                 onTap: () => selectedItem(context, 3),
               ),
               ProfileListTile(
                 icon: Icons.school,
-                label: 'Internship/Workshop',
+                label: 'Careers',
                 onTap: () => selectedItem(context, 4),
+              ),
+              ProfileListTile(
+                icon: Icons.school,
+                label: 'Internship/Workshop',
+                onTap: () => selectedItem(context, 5),
               ),
               if (controller.userDetails.value.isAffiliate ?? false)
                 ProfileListTile(
                   icon: Icons.school,
                   label: 'Affiliate Dashboard',
-                  onTap: () => selectedItem(context, 5),
+                  onTap: () => selectedItem(context, 6),
                 ),
               ProfileListTile(
                 icon: ThemeService().theme == ThemeMode.dark
@@ -185,12 +195,12 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 label: ThemeService().theme == ThemeMode.dark
                     ? 'Light Mode'
                     : 'Dark Mode',
-                onTap: () => selectedItem(context, 6),
+                onTap: () => selectedItem(context, 7),
               ),
               ProfileListTile(
                 icon: Icons.logout,
                 label: 'Logout',
-                onTap: () => selectedItem(context, 7),
+                onTap: () => selectedItem(context, 8),
               ),
             ],
           ),
