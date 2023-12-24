@@ -8,12 +8,12 @@ import '../../modules.dart';
 class InviteView extends GetView<ReferralsController> {
   const InviteView({Key? key}) : super(key: key);
 
-  num? totalEarning() {
-    num sum = 0;
-    sum = (controller.earnings.value.earnings ?? 0) +
-        (controller.summeryList.first.payout ?? 0);
-    return sum;
-  }
+  // num? totalEarning() {
+  //   num sum = 0;
+  //   sum = (controller.earnings.value.earnings ?? 0) +
+  //       (controller.summeryList.first.payout ?? 0);
+  //   return sum;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -154,103 +154,103 @@ class InviteView extends GetView<ReferralsController> {
                 ),
               ),
               //gdf
-              CommonTile(
-                label: "Affiliate Summary",
-                margin: EdgeInsets.only(bottom: 0, top: 0),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16)
-                    .copyWith(top: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: customCard(
-                        context,
-                        label: 'Friends\nJoined',
-                        earning:
-                            controller.earnings.value.joined?.toString() ?? '0',
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: customCard(
-                        context,
-                        label: 'Signup \nEarnings',
-                        earning:
-                            "${FormatHelper.formatNumbers(controller.earnings.value.earnings?.toString() ?? '0', decimal: 0)}",
-                        valueColor: AppColors.success,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // CommonTile(
+              //   label: "Affiliate Summary",
+              //   margin: EdgeInsets.only(bottom: 0, top: 0),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16)
+              //       .copyWith(top: 12),
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //         child: customCard(
+              //           context,
+              //           label: 'Friends\nJoined',
+              //           earning:
+              //               controller.earnings.value.joined?.toString() ?? '0',
+              //         ),
+              //       ),
+              //       SizedBox(width: 8),
+              //       Expanded(
+              //         child: customCard(
+              //           context,
+              //           label: 'Signup \nEarnings',
+              //           earning:
+              //               "${FormatHelper.formatNumbers(controller.earnings.value.earnings?.toString() ?? '0', decimal: 0)}",
+              //           valueColor: AppColors.success,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               //line2
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16)
-                    .copyWith(top: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: customCard(
-                        context,
-                        label: 'Product\nTransaction',
-                        earning: controller.summeryList.first.count.toString(),
-                        // controller.summaryCount().toString()
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: customCard(
-                        context,
-                        label: 'Product \nEarnings',
-                        earning:
-                            "${FormatHelper.formatNumbers(controller.summeryList.first.payout ?? 0, decimal: 0)}",
-                        valueColor: AppColors.success,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //line2 end
-              //line 3start
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16)
-                    .copyWith(top: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: customCard(
-                        context,
-                        label: 'Total Earnings',
-                        earning: FormatHelper.formatNumbers(totalEarning(),
-                            decimal: 0),
-                        valueColor: AppColors.success,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 4),
-              CommonTile(
-                label: "Affiliate Transactions",
-                margin: EdgeInsets.only(bottom: 6, top: 10),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: controller.transactionList.length,
-                padding: EdgeInsets.zero,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  var user = controller.transactionList[index];
-                  return ReferralsAffilateTransactionCard(
-                    name: '${user.buyerFirstName!.capitalizeFirst ?? ""}',
-                    productName: "${user.productName ?? ''}",
-                    transactionId: "${user.transactionId ?? ''}",
-                    earnings: user.payout ?? 0,
-                    date: "${user.date ?? ""}",
-                  );
-                },
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16)
+              //       .copyWith(top: 12),
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //         child: customCard(
+              //           context,
+              //           label: 'Product\nTransaction',
+              //           earning: controller.summeryList.first.count.toString(),
+              //           // controller.summaryCount().toString()
+              //         ),
+              //       ),
+              //       SizedBox(width: 8),
+              //       Expanded(
+              //         child: customCard(
+              //           context,
+              //           label: 'Product \nEarnings',
+              //           earning:
+              //               "${FormatHelper.formatNumbers(controller.summeryList.first.payout ?? 0, decimal: 0)}",
+              //           valueColor: AppColors.success,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // //line2 end
+              // //line 3start
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16)
+              //       .copyWith(top: 12),
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //         child: customCard(
+              //           context,
+              //           label: 'Total Earnings',
+              //           earning: FormatHelper.formatNumbers(totalEarning(),
+              //               decimal: 0),
+              //           valueColor: AppColors.success,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // SizedBox(height: 4),
+              // CommonTile(
+              //   label: "Affiliate Transactions",
+              //   margin: EdgeInsets.only(bottom: 6, top: 10),
+              // ),
+              // ListView.builder(
+              //   shrinkWrap: true,
+              //   itemCount: controller.transactionList.length,
+              //   padding: EdgeInsets.zero,
+              //   physics: NeverScrollableScrollPhysics(),
+              //   itemBuilder: (context, index) {
+              //     var user = controller.transactionList[index];
+              //     return ReferralsAffilateTransactionCard(
+              //       name: '${user.buyerFirstName!.capitalizeFirst ?? ""}',
+              //       productName: "${user.productName ?? ''}",
+              //       transactionId: "${user.transactionId ?? ''}",
+              //       earnings: user.payout ?? 0,
+              //       date: "${user.date ?? ""}",
+              //     );
+              //   },
+              // ),
               //line3 end
             ],
           ),
