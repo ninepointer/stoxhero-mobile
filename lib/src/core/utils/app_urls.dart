@@ -304,4 +304,5 @@ class AppUrls {
       "$apiURL/dailycontest/trade/$id/result";
 
   static String getAffiliateSummary = "$apiURL/affiliate/mysummery";
+  static String getAffiliateSignup = "$apiURL/affiliate/myaffiliaterafferals";
 }

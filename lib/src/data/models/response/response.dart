@@ -90,3 +90,4 @@ export 'live_index_price_response.dart';
 export "referrals_product_response.dart";
 export "internship_leaderboard_response.dart";
 export "affiliate_summary_response.dart";
+export "affiliate_refferals_signup_response.dart";

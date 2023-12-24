@@ -13,13 +13,21 @@ class AffiliateRespository extends BaseRepository {
         : RepoResponse(data: AffiliateSummaryResponse.fromJson(response));
   }
 
-  // Future<RepoResponse<AffiliateSummaryResponse>> getVirtualTradingDateWiseAnalyticsDetails(
-  //   Map<String, dynamic> query,
-  // ) async {
-  //   String apiURL = AppUrls.virtualTradingDateWiseAnalytics;
-  //   var response = await service.getAuth(path: apiURL, query: query);
+  Future<RepoResponse<AffiliateRefferralsResponse>> getAffiliateSignupData(
+    Map<String, dynamic> query,
+  ) async {
+    String apiURL = AppUrls.getAffiliateSignup;
+    var response = await service.getAuth(path: apiURL, query: query);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: AffiliateRefferralsResponse.fromJson(response));
+  }
+  // Future<RepoResponse<AffiliateRefferralsResponse>>
+  //     getAffiliateSignupData() async {
+  //   String apiURL = AppUrls.getAffiliateSignup;
+  //   var response = await service.getAuth(path: apiURL);
   //   return response is APIException
   //       ? RepoResponse(error: response)
-  //       : RepoResponse(data: AffiliateSummaryResponse.fromJson(response));
+  //       : RepoResponse(data: AffiliateRefferralsResponse.fromJson(response));
   // }
 }

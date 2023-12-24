@@ -1,9 +1,11 @@
 class AffiliateSummaryResponse {
   String? status;
   List<AffiliateSummaryData>? data;
+  List<AffiliateRafferalSummery>? affiliateRafferalSummery;
   String? message;
 
-  AffiliateSummaryResponse({this.status, this.data, this.message});
+  AffiliateSummaryResponse(
+      {this.status, this.data, this.affiliateRafferalSummery, this.message});
 
   AffiliateSummaryResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -11,6 +13,12 @@ class AffiliateSummaryResponse {
       data = <AffiliateSummaryData>[];
       json['data'].forEach((v) {
         data!.add(new AffiliateSummaryData.fromJson(v));
+      });
+    }
+    if (json['affiliateRafferalSummery'] != null) {
+      affiliateRafferalSummery = <AffiliateRafferalSummery>[];
+      json['affiliateRafferalSummery'].forEach((v) {
+        affiliateRafferalSummery!.add(new AffiliateRafferalSummery.fromJson(v));
       });
     }
     message = json['message'];
@@ -21,6 +29,10 @@ class AffiliateSummaryResponse {
     data['status'] = this.status;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    if (this.affiliateRafferalSummery != null) {
+      data['affiliateRafferalSummery'] =
+          this.affiliateRafferalSummery!.map((v) => v.toJson()).toList();
     }
     data['message'] = this.message;
     return data;
@@ -112,6 +124,26 @@ class AffiliateSummery {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['totalProductCount'] = this.totalProductCount;
     data['totalProductCPayout'] = this.totalProductCPayout;
+    return data;
+  }
+}
+
+class AffiliateRafferalSummery {
+  num? affiliateRefferalCount;
+  num? affiliateRefferalPayout;
+
+  AffiliateRafferalSummery(
+      {this.affiliateRefferalCount, this.affiliateRefferalPayout});
+
+  AffiliateRafferalSummery.fromJson(Map<String, dynamic> json) {
+    affiliateRefferalCount = json['affiliateRefferalCount'];
+    affiliateRefferalPayout = json['affiliateRefferalPayout'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['affiliateRefferalCount'] = this.affiliateRefferalCount;
+    data['affiliateRefferalPayout'] = this.affiliateRefferalPayout;
     return data;
   }
 }

@@ -22,6 +22,10 @@ class AffiliateController extends BaseController<AffiliateRespository> {
   final affiliateSummaryDetails = <AffiliateSummaryData>[].obs;
   final summeryList = <AffiliateSummery>[].obs;
   final transactionList = <AffiliateTransaction>[].obs;
+  final affiliateSignupSummeryList = <AffiliateRafferalSummery>[].obs;
+
+  //  final affiliateSignUpDetails = <AffiliateRefferalsSignupData>[].obs;
+  final affiliateSignUpDetails = AffiliateRefferalsSignupData().obs;
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
@@ -29,11 +33,13 @@ class AffiliateController extends BaseController<AffiliateRespository> {
 
   void loadData() async {
     loadUserDetails();
-    getAffiliateSummaryDetails();
 
-    String date = DateFormat("dd-MM-yyyy").format(DateTime.now());
-    startDateTextController.text = date;
-    endDateTextController.text = date;
+    String startDate = DateFormat("01-MM-yyyy").format(DateTime.now());
+    String endDate = DateFormat("dd-MM-yyyy").format(DateTime.now());
+    startDateTextController.text = startDate;
+    endDateTextController.text = endDate;
+    getAffiliateSummaryDetails();
+    getAffiliateSignUpDetails();
   }
 
   void showDateRangePicker(BuildContext context,
@@ -70,11 +76,41 @@ class AffiliateController extends BaseController<AffiliateRespository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           affiliateSummaryDetails(response.data?.data ?? []);
+          affiliateSignupSummeryList(
+              response.data?.affiliateRafferalSummery ?? []);
           for (AffiliateSummaryData affiliateSummary
               in affiliateSummaryDetails) {
             summeryList(affiliateSummary.summery ?? []);
             transactionList(affiliateSummary.transaction ?? []);
           }
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getAffiliateSignUpDetails() async {
+    isLoading(true);
+    try {
+      Map<String, dynamic> query = {
+        "startDate": DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(startDateTextController.text),
+        ),
+        "endDate": DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(endDateTextController.text),
+        ),
+      };
+
+      final RepoResponse<AffiliateRefferralsResponse> response =
+          await repository.getAffiliateSignupData(query);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          affiliateSignUpDetails(response.data?.data);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

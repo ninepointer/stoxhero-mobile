@@ -34,6 +34,7 @@ class InternshipLeaderBoard {
   int? noOfTrade;
   int? referralCount;
   num? totalreturn;
+  num? portfolioValue;
   String? attendancePercentage;
   String? profileImage;
 
@@ -48,6 +49,7 @@ class InternshipLeaderBoard {
       this.referralCount,
       this.totalreturn,
       this.attendancePercentage,
+      this.portfolioValue,
       this.profileImage});
 
   InternshipLeaderBoard.fromJson(Map<String, dynamic> json) {
@@ -62,6 +64,7 @@ class InternshipLeaderBoard {
     totalreturn = json['return'];
     attendancePercentage = json['attendancePercentage'];
     profileImage = json['profileImage'];
+    portfolioValue = json['portfolioValue'];
   }
 
   Map<String, dynamic> toJson() {
@@ -77,6 +80,7 @@ class InternshipLeaderBoard {
     data['return'] = this.totalreturn;
     data['attendancePercentage'] = this.attendancePercentage;
     data['profileImage'] = this.profileImage;
+    data['portfolioValue'] = this.portfolioValue;
     return data;
   }
 }

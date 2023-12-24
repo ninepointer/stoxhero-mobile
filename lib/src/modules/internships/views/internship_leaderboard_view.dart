@@ -76,7 +76,7 @@ class InternshipLeaderBoardView extends GetView<InternshipController> {
                                       ),
                                     ),
                                     Text(
-                                      "${((user.npnl ?? 0) / (500000) * 100).toStringAsFixed(2)}%",
+                                      "${((user.npnl ?? 0) / (user.portfolioValue ?? 0) * 100).toStringAsFixed(2)}%",
                                       style: Theme.of(context)
                                           .textTheme
                                           .tsMedium16
@@ -104,7 +104,7 @@ class InternshipLeaderBoardView extends GetView<InternshipController> {
                                               .tsGreyRegular12,
                                         ),
                                         Text(
-                                          "${FormatHelper.formatNumbers("500000", decimal: 0)}",
+                                          "${FormatHelper.formatNumbers(user.portfolioValue, decimal: 0)}",
                                           style: Theme.of(context)
                                               .textTheme
                                               .tsRegular12
