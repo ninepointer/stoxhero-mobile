@@ -44,7 +44,7 @@ class AffilateTransactionCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          "Commission for ${name ?? '-'}'s $productName purchase ",
+                          "Commission for ${name ?? '-'}'s $productName \npurchase ",
                           style: Theme.of(context).textTheme.tsRegular12,
                         ),
                       ),
