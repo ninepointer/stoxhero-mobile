@@ -24,6 +24,18 @@ class AppUrls {
   static const String stockIndex = "$apiURL/stockindex";
   static const String getIndexLivePrice = "$apiURL/getIndexliveprice";
   static const String collegeList = "$apiURL/college/collegeList";
+  static String virtualPendingStopLoss(String id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/paperTrade";
+  static String contestPendingStopLoss(String id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/Daily%20Contest";
+  static String collegeContestPendingStopLoss(String id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/Daily%20Contest";
+  static String marginXPendingStopLoss(String id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/MarginX";
+  static String tenXPendingStopLoss(String id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/TenX%20Trader";
+  static String internshipPendingStopLoss(String id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/Internship%20Trader";
 
   static const String addFcmToken = "$apiURL/addfcmtoken";
 
@@ -56,7 +68,6 @@ class AppUrls {
   static const String referralsMyRank = "$apiURL/referrals/myrank";
   static const String myReferrals = "$apiURL/myreferrals";
   static const String myRefferdProduct = "$apiURL/referrals/referredproduct";
-
   static const String withdrawal = "$apiURL/withdrawals";
   static const String userWalletTransactions = "$apiURL/userwallet/my";
   static const String returnSummary = "$apiURL/userdashboard/summary";

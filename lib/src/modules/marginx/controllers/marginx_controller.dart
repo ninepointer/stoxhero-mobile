@@ -59,7 +59,13 @@ class MarginXController extends BaseController<MarginXRepository> {
       isExecutedOrderStateLoading.value;
 
   final selectedTabBarIndex = 0.obs;
-  final isBuyButtonDisabled = false.obs;
+
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
+  final selectedStopLossQuantity = 0.obs;
+  final selectedStopProfitQuantity = 0.obs;
+  final stoplossQuantityList = <StoplossQuantityData>[].obs;
+
   final searchTextController = TextEditingController();
   final upComingMarginXList = <UpcomingMarginX>[].obs;
   final upComingMarginX = UpcomingMarginX().obs;
@@ -124,6 +130,7 @@ class MarginXController extends BaseController<MarginXRepository> {
     await getMarginXTodayOrdersList();
     await getMarginXPortfolioDetails();
     socketConnection();
+    await liveIndexDetails();
     socketIndexConnection();
     socketSendConnection();
   }
@@ -247,6 +254,82 @@ class MarginXController extends BaseController<MarginXRepository> {
 
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
+    return result;
+  }
+
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+    print("stoplossQuantityPrev${openLots}");
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+    print("newList${newList}");
+    print("genrateStopLoss${cutoff}");
+    selectedStopLossQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
+
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    // int cutoff = math.max(openLots ?? 0, totalQuantity) -
+    //     math.min(openLots ?? 0, totalQuantity);
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+    print("selectedStopProfitQuantity${result}");
+    selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopProfit.assignAll(newList);
     return result;
   }
 
@@ -398,7 +481,7 @@ class MarginXController extends BaseController<MarginXRepository> {
     if (entryFee == null) {
       return 0;
     }
-    num factor = marginXPortfolio.value.totalFund! / entryFee;
+    num factor = marginXPortfolio.value.totalFund ?? 0 / entryFee;
     num value = calculateTotalNetPNL() / factor;
     return value;
   }
@@ -454,6 +537,25 @@ class MarginXController extends BaseController<MarginXRepository> {
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
+    }
+  }
+
+  Future getMarginXPendingStoplossOrderData(String id) async {
+    try {
+      final RepoResponse<VirtualStopLossPendingOrderResponse> response =
+          await repository
+              .getMarginXStopLossPendingOrder(liveMarginX.value.id ?? '');
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          stoplossQuantityList(response.data?.quantity ?? []);
+          print("stoplossQuantityList${stoplossQuantityList.length}");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
 
@@ -605,7 +707,15 @@ class MarginXController extends BaseController<MarginXRepository> {
 
   Future placeMarginXOrder(TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -651,7 +761,7 @@ class MarginXController extends BaseController<MarginXRepository> {
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
       ),
     );
-    log('placeVirtualTradingOrder : ${data.toJson()}');
+    print('placeVirtualTradingOrder : ${data.toJson()}');
     try {
       final RepoResponse<GenericResponse> response =
           await repository.paperPlaceOrder(
@@ -665,6 +775,7 @@ class MarginXController extends BaseController<MarginXRepository> {
         await getStopLossPendingOrder();
         await getMarginXTodayOrdersList();
         await getMarginXPortfolioDetails();
+        selectedStringQuantity("");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -804,6 +915,31 @@ class MarginXController extends BaseController<MarginXRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+      print("liveIndexDetails${stockIndexDetailsList.length}");
+    } catch (e) {
+      log(e.toString());
+
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future socketIndexConnection() async {
@@ -972,7 +1108,12 @@ class MarginXController extends BaseController<MarginXRepository> {
         liveMarginX.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        stopLossPendingOrderList(response.data?.data ?? []);
+        List<StopLossPendingOrdersList>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
+        print("ssstopLossPendingOrderList${stopLossPendingOrderList.length}");
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -990,7 +1131,7 @@ class MarginXController extends BaseController<MarginXRepository> {
       await getStopLossPendingOrder();
       await getMarginXPortfolioDetails();
       await getStopLossExecutedOrder();
-      loadData();
+      await getMarginXPositions();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1019,19 +1160,21 @@ class MarginXController extends BaseController<MarginXRepository> {
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: liveMarginX.value.id,
       lastPrice: inst.lastPrice.toString(),
       variety: "regular",
-      from: "MarginX Trader",
+      from: "MarginX",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
         platformType: Platform.isAndroid ? 'Android' : 'iOS',

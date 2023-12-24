@@ -11,6 +11,14 @@ class InternshipRespository extends BaseRepository {
             data: AnalyticsOverviewDetailsResponse.fromJson(response));
   }
 
+  Future<RepoResponse<IndexLivePriceListResponse>> getIndexLivePrices() async {
+    String apiURL = AppUrls.getIndexLivePrice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
+  }
+
   Future<RepoResponse<AnalyticsDateWiseDetailsResponse>>
       getInternshipAnalyticsDateWisePnLOverviewDetails(
     String? id,
@@ -22,6 +30,16 @@ class InternshipRespository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(
             data: AnalyticsDateWiseDetailsResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<VirtualStopLossPendingOrderResponse>>
+      getInternshipStopLossPendingOrder(String id) async {
+    String apiURL = AppUrls.internshipPendingStopLoss(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(
+            data: VirtualStopLossPendingOrderResponse.fromJson(response));
   }
 
   Future<RepoResponse<AnalyticsMonthlyPnLOverviewDetailsResponse>>

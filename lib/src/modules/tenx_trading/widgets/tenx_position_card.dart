@@ -37,14 +37,20 @@ class TenxPositionCard extends GetView<TenxTradingController> {
     );
   }
 
-  void openModifyBottomSheet(BuildContext context, TransactionType type) {
+  void openModifyBottomSheet(BuildContext context, TransactionType type) async {
     FocusScope.of(context).unfocus();
     num lastPrice = controller.getInstrumentLastPrice(
       position.id!.instrumentToken!,
       position.id!.exchangeInstrumentToken!,
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    await controller
+        .getTenXPendingStoplossOrderData(position.id?.product ?? '');
     controller.generateLotsList(type: position.id?.symbol);
+    controller.generateLotsListFoStopLoss(
+        type: position.id?.symbol, openLots: position.lots);
+    controller.generateLotsListForStopProfit(
+        type: position.id?.symbol, openLots: position.lots);
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: StoplossModifyPriceBottomSheet(
@@ -213,11 +219,13 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                   child: GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
-                      List<int> lots = controller.generateLotsList(type: position.id?.symbol);
+                      List<int> lots = controller.generateLotsList(
+                          type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
                       int maxLots = lots.last;
                       if (exitLots == 0) {
-                        SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                        SnackbarHelper.showSnackbar(
+                            "You don't have any open position for this symbol.");
                       } else {
                         if (exitLots.toString().contains('-')) {
                           if (exitLots < 0) {
@@ -237,7 +245,8 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                           controller.selectedQuantity.value = exitLots;
                         }
                         controller.lotsValueList.assignAll(lots);
-                        controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+                        controller.selectedStringQuantity.value =
+                            position.lots?.toString() ?? "0";
                         TradingInstrument trading = TradingInstrument(
                           name: position.id?.symbol,
                           exchange: position.id?.exchange,
@@ -255,7 +264,8 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                           child: TenxTransactionBottomSheet(
                             type: TransactionType.exit,
                             tradingInstrument: trading,
-                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
+                            marginRequired: controller.getMarginRequired(
+                                TransactionType.exit, trading),
                           ),
                         );
                       }
@@ -280,7 +290,9 @@ class TenxPositionCard extends GetView<TenxTradingController> {
                     onTap: () {
                       if (position.lots!.toInt() == 0) {
                         // SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
-                      } else if (controller.selectedQuantity.value.toString().contains('-')) {
+                      } else if (controller.selectedQuantity.value
+                          .toString()
+                          .contains('-')) {
                         openModifyBottomSheet(context, TransactionType.sell);
                       } else {
                         openModifyBottomSheet(context, TransactionType.buy);

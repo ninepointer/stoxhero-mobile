@@ -35,17 +35,20 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
     );
   }
 
-  void openModifyBottomSheet(BuildContext context, TransactionType type) {
+  void openModifyBottomSheet(BuildContext context, TransactionType type) async {
     FocusScope.of(context).unfocus();
     num lastPrice = controller.getInstrumentLastPrice(
       position.id!.instrumentToken!,
       position.id!.exchangeInstrumentToken!,
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-
+    await controller
+        .getVirtualPendingStoplossOrderData(position.id?.product ?? '');
     controller.generateLotsList(type: position.id?.symbol);
-    // controller.generateLotsListFoStopLoss(type: position.id?.symbol);
-    // controller.generateLotsListForStopProfit(type: position.id?.symbol);
+    controller.generateLotsListFoStopLoss(
+        type: position.id?.symbol, openLots: position.lots);
+    controller.generateLotsListForStopProfit(
+        type: position.id?.symbol, openLots: position.lots);
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualStoplossModifyPriceBottomSheet(
@@ -217,6 +220,7 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                       List<int> lots = controller.generateLotsList(
                           type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
+
                       int maxLots = lots.last;
                       if (exitLots == 0) {
                         SnackbarHelper.showSnackbar(
@@ -239,9 +243,11 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                         } else {
                           controller.selectedQuantity.value = exitLots;
                         }
+
                         controller.lotsValueList.assignAll(lots);
                         controller.selectedStringQuantity.value =
                             position.lots?.toString() ?? "0";
+
                         TradingInstrument trading = TradingInstrument(
                           name: position.id?.symbol,
                           exchange: position.id?.exchange,
@@ -284,7 +290,8 @@ class VirtualPositionCard extends GetView<VirtualTradingController> {
                   child: GestureDetector(
                     onTap: () {
                       if (position.lots!.toInt() == 0) {
-                        // SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                        SnackbarHelper.showSnackbar(
+                            "You don't have any open position for this symbol.");
                       } else if (controller.selectedQuantity.value
                           .toString()
                           .contains('-')) {

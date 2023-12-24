@@ -12,6 +12,14 @@ class DashboardRepository extends BaseRepository {
         : RepoResponse(data: DashboardReturnSummaryResponse.fromJson(response));
   }
 
+  Future<RepoResponse<IndexLivePriceListResponse>> getIndexLivePrices() async {
+    String apiURL = AppUrls.getIndexLivePrice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
+  }
+
   Future<RepoResponse<DashboardTradeSummaryResponse>> getDashboard(
       String? tradeType, String? timeFame) async {
     String apiURL = AppUrls.performance(tradeType, timeFame);

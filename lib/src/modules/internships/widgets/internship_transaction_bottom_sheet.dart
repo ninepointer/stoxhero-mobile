@@ -113,7 +113,9 @@ class InternshipTransactionBottomSheet extends GetView<InternshipController> {
                   DropdownButtonFormField2<int>(
                     value: controller.selectedQuantity.value,
                     onChanged: (value) {
-                      controller.selectedQuantity(value);
+                      controller.selectedQuantity(value?.abs());
+                      controller
+                          .selectedStringQuantity(value?.abs().toString());
                       controller.getMarginRequired(type, tradingInstrument);
                     },
                     isDense: true,

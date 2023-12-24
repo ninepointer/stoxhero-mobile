@@ -720,8 +720,6 @@ class _DashboardViewState extends State<DashboardView> {
 
                   Obx(
                     () {
-                      print(
-                          'userdashboarddata:${controller.userDashboard.toJson()}');
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Column(

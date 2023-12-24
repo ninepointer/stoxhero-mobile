@@ -14,6 +14,24 @@ class ContestRepository extends BaseRepository {
         : RepoResponse(data: UpComingContestListResponse.fromJson(response));
   }
 
+  Future<RepoResponse<IndexLivePriceListResponse>> getIndexLivePrices() async {
+    String apiURL = AppUrls.getIndexLivePrice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ContestStopLossPendingOrderResponse>>
+      getContestStopLossPendingOrder(String id) async {
+    String apiURL = AppUrls.contestPendingStopLoss(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(
+            data: ContestStopLossPendingOrderResponse.fromJson(response));
+  }
+
   Future<RepoResponse<LiveContestListResponse>> getLiveContestList() async {
     String apiURL = AppUrls.liveContests;
     var response = await service.getAuth(path: apiURL);
