@@ -53,7 +53,7 @@ class VirtualTradingController
 
   final isBuyButtonDisabled = false.obs;
   final apiDataLoaded = false.obs;
-  final isBuyButtonDisabled = false.obs;
+  // final isBuyButtonDisabled = false.obs;
 
   final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();
