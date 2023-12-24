@@ -206,10 +206,12 @@ class AffiliateView extends GetView<AffiliateController> {
                                 0
                             ? SizedBox(height: 12)
                             : Container(),
-                        CommonTile(
-                          label: "Affiliate Transactions",
-                          margin: EdgeInsets.zero,
-                        ),
+                        controller.transactionList.length != 0
+                            ? CommonTile(
+                                label: "Affiliate Transactions",
+                                margin: EdgeInsets.zero,
+                              )
+                            : Container(),
                         ListView.builder(
                           shrinkWrap: true,
                           itemCount: controller.transactionList.length,
