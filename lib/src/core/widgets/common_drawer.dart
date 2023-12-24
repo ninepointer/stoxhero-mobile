@@ -172,11 +172,12 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 label: 'Internship/Workshop',
                 onTap: () => selectedItem(context, 4),
               ),
-              ProfileListTile(
-                icon: Icons.school,
-                label: 'Affiliate Dashboard',
-                onTap: () => selectedItem(context, 5),
-              ),
+              if (controller.userDetails.value.isAffiliate ?? false)
+                ProfileListTile(
+                  icon: Icons.school,
+                  label: 'Affiliate Dashboard',
+                  onTap: () => selectedItem(context, 5),
+                ),
               ProfileListTile(
                 icon: ThemeService().theme == ThemeMode.dark
                     ? Icons.light_mode

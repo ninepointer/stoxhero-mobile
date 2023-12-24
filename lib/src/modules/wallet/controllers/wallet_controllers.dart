@@ -45,6 +45,7 @@ class WalletController extends BaseController<WalletRepository> {
   final actualSubscriptionAmount = 0.0.obs;
   final subscriptionAmount = 0.0.obs;
   final heroCashAmount = 0.0.obs;
+  final amountAfterCouponAdded = 0.0.obs;
 
   final paymentGroupValue = 'wallet'.obs;
   final selectedPaymentValue = 'wallet'.obs;
@@ -124,8 +125,11 @@ class WalletController extends BaseController<WalletRepository> {
   }
 
   void addHeroCash(num heroCash) {
-    heroCashAmount(double.parse(heroCash.toString()));
-    subscriptionAmount(subscriptionAmount.value - heroCash);
+    if (isCouponCodeAdded.value) {
+      subscriptionAmount(amountAfterCouponAdded.value - heroCash);
+    } else {
+      subscriptionAmount(subscriptionAmount.value - heroCash);
+    }
   }
 
   void removeHeroCash(num herocash) {
@@ -134,11 +138,18 @@ class WalletController extends BaseController<WalletRepository> {
   }
 
   num get calculateHeroCash {
-    return math.min(
-        (actualSubscriptionAmount.value) *
-            ((readSetting.value.maxBonusRedemptionPercentage ?? 0) / 100),
-        (calculateBonus(walletTransactionsList) /
-            (readSetting.value.bonusToUnitCashRatio ?? 1)));
+    return isCouponCodeAdded.value
+        ? math.min(
+            (amountAfterCouponAdded.value) *
+                ((readSetting.value.maxBonusRedemptionPercentage ?? 0) / 100),
+            (calculateBonus(walletTransactionsList) /
+                (readSetting.value.bonusToUnitCashRatio ?? 1)),
+          )
+        : math.min(
+            (actualSubscriptionAmount.value) *
+                ((readSetting.value.maxBonusRedemptionPercentage ?? 0) / 100),
+            (calculateBonus(walletTransactionsList) /
+                (readSetting.value.bonusToUnitCashRatio ?? 1)));
   }
 
   void calculateDiscount({
@@ -185,6 +196,7 @@ class WalletController extends BaseController<WalletRepository> {
         }
       }
     }
+
     if (rewardType == 'Discount') {
       couponCodeSuccessText(
           "Applied $couponCode - ($discount% off upto ${FormatHelper.formatNumbers(maxDiscount, decimal: 0)})");
@@ -192,6 +204,7 @@ class WalletController extends BaseController<WalletRepository> {
       couponCodeSuccessText(
           "Applied $couponCode - ($discount% cashback  upto ${FormatHelper.formatNumbers(maxDiscount, decimal: 0)})");
     }
+    amountAfterCouponAdded(subscriptionAmount.value);
   }
 
   Future getWalletTransactionsList() async {

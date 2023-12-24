@@ -113,12 +113,22 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   }
 
   num get calculateHeroCash {
-    return math.min(
-        (controller.actualSubscriptionAmount.value) *
-            ((controller.readSetting.value.maxBonusRedemptionPercentage ?? 0) /
-                100),
-        (controller.calculateBonus(controller.walletTransactionsList) /
-            (controller.readSetting.value.bonusToUnitCashRatio ?? 1)));
+    return controller.isCouponCodeAdded.value
+        ? math.min(
+            (controller.amountAfterCouponAdded.value) *
+                ((controller.readSetting.value.maxBonusRedemptionPercentage ??
+                        0) /
+                    100),
+            (controller.calculateBonus(controller.walletTransactionsList) /
+                (controller.readSetting.value.bonusToUnitCashRatio ?? 1)),
+          )
+        : math.min(
+            (controller.actualSubscriptionAmount.value) *
+                ((controller.readSetting.value.maxBonusRedemptionPercentage ??
+                        0) /
+                    100),
+            (controller.calculateBonus(controller.walletTransactionsList) /
+                (controller.readSetting.value.bonusToUnitCashRatio ?? 1)));
   }
 
   void startPaymentTransaction(BuildContext context) async {
