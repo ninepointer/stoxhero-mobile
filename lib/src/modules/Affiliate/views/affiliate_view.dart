@@ -83,9 +83,8 @@ class AffiliateView extends GetView<AffiliateController> {
                   backgroundColor: Get.isDarkMode
                       ? AppColors.darkGreen
                       : AppColors.lightGreen,
-                  labelColor: Get.isDarkMode
-                      ? AppColors.darkGreen
-                      : AppColors.lightGreen,
+                  labelColor:
+                      Get.isDarkMode ? AppColors.white : AppColors.lightGreen,
                   height: 42,
                   label: 'Show Details',
                   onPressed: () {
@@ -175,10 +174,14 @@ class AffiliateView extends GetView<AffiliateController> {
                           ],
                         ),
                         SizedBox(height: 12),
-                        CommonTile(
-                          label: "Referrals",
-                          margin: EdgeInsets.zero,
-                        ),
+                        controller.affiliateSignUpDetails.value
+                                    .affiliateReferrals?.length !=
+                                0
+                            ? CommonTile(
+                                label: "Referrals",
+                                margin: EdgeInsets.zero,
+                              )
+                            : Container(),
                         ListView.builder(
                           shrinkWrap: true,
                           itemCount: controller.affiliateSignUpDetails.value
@@ -198,7 +201,11 @@ class AffiliateView extends GetView<AffiliateController> {
                             );
                           },
                         ),
-                        SizedBox(height: 12),
+                        controller.affiliateSignUpDetails.value
+                                    .affiliateReferrals?.length !=
+                                0
+                            ? SizedBox(height: 12)
+                            : Container(),
                         CommonTile(
                           label: "Affiliate Transactions",
                           margin: EdgeInsets.zero,
