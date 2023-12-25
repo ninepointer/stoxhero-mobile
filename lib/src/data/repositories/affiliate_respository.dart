@@ -13,27 +13,24 @@ class AffiliateRespository extends BaseRepository {
         : RepoResponse(data: AffiliateSummaryResponse.fromJson(response));
   }
 
-  Future<RepoResponse<MyAffiliateRefferalsListResponse>> getAffiliateSignupData(
+  Future<RepoResponse<MyAffiliateRefferalsListResponse>> getMyAffiliateReferralsData(
     Map<String, dynamic> query,
   ) async {
-    String apiURL = AppUrls.getAffiliateSignup;
+    String apiURL = AppUrls.getMyAffiliateReferrals;
     var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(
-            data: MyAffiliateRefferalsListResponse.fromJson(response));
+        : RepoResponse(data: MyAffiliateRefferalsListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<MyAffiliateTransctionListResponse>>
-      getMyAffiliateTranscationList(
+  Future<RepoResponse<MyAffiliateTransctionListResponse>> getMyAffiliateTranscationList(
     Map<String, dynamic> query,
   ) async {
     String apiURL = AppUrls.getMyAffiliateTransactionList;
     var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(
-            data: MyAffiliateTransctionListResponse.fromJson(response));
+        : RepoResponse(data: MyAffiliateTransctionListResponse.fromJson(response));
   }
   // Future<RepoResponse<AffiliateRefferralsResponse>>
   //     getAffiliateSignupData() async {

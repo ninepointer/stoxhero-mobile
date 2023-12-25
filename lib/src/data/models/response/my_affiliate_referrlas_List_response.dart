@@ -1,16 +1,20 @@
 class MyAffiliateRefferalsListResponse {
   String? status;
-  List<MyAffiliateRefferalsList>? data;
+  List<MyAffiliateRefferal>? data;
   int? count;
 
-  MyAffiliateRefferalsListResponse({this.status, this.data, this.count});
+  MyAffiliateRefferalsListResponse({
+    this.status,
+    this.data,
+    this.count,
+  });
 
   MyAffiliateRefferalsListResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <MyAffiliateRefferalsList>[];
+      data = <MyAffiliateRefferal>[];
       json['data'].forEach((v) {
-        data!.add(new MyAffiliateRefferalsList.fromJson(v));
+        data!.add(new MyAffiliateRefferal.fromJson(v));
       });
     }
     count = json['count'];
@@ -27,14 +31,18 @@ class MyAffiliateRefferalsListResponse {
   }
 }
 
-class MyAffiliateRefferalsList {
+class MyAffiliateRefferal {
   String? name;
   String? joiningDate;
   num? payout;
 
-  MyAffiliateRefferalsList({this.name, this.joiningDate, this.payout});
+  MyAffiliateRefferal({
+    this.name,
+    this.joiningDate,
+    this.payout,
+  });
 
-  MyAffiliateRefferalsList.fromJson(Map<String, dynamic> json) {
+  MyAffiliateRefferal.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     joiningDate = json['joining_date'];
     payout = json['payout'];
