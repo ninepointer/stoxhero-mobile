@@ -32,7 +32,7 @@ class AffilateSignUpDetailsCard extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Joining Date : ${FormatHelper.formatDateInMonth(date)}',
+                    'Joining Date :',
                     style: Theme.of(context).textTheme.tsGreyRegular10,
                   ),
                 ],

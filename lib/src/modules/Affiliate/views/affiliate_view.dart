@@ -95,6 +95,7 @@ class AffiliateView extends GetView<AffiliateController> {
                   onPressed: () {
                     controller.getAffiliateSummaryDetails();
                     controller.getAffiliateSignUpDetails();
+                    controller.getMyAffiliateTransctionDetails();
                   },
                 ),
                 SizedBox(
@@ -179,9 +180,7 @@ class AffiliateView extends GetView<AffiliateController> {
                           ],
                         ),
                         SizedBox(height: 12),
-                        controller.affiliateSignUpDetails.value
-                                    .affiliateReferrals?.length !=
-                                0
+                        controller.affiliateSignUpDetails.length != 0
                             ? CommonTile(
                                 label: "Referrals",
                                 margin: EdgeInsets.zero,
@@ -189,29 +188,23 @@ class AffiliateView extends GetView<AffiliateController> {
                             : Container(),
                         ListView.builder(
                           shrinkWrap: true,
-                          itemCount: controller.affiliateSignUpDetails.value
-                              .affiliateReferrals?.length,
+                          itemCount: controller.affiliateSignUpDetails.length,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            var user = controller.affiliateSignUpDetails.value
-                                .affiliateReferrals?[index];
+                            var user = controller.affiliateSignUpDetails[index];
                             return AffilateSignUpDetailsCard(
                               rank: index + 1,
-                              name:
-                                  '${user?.referredUserId?.firstName!.capitalizeFirst ?? ""} ${user?.referredUserId?.lastName!.capitalizeFirst ?? ""} ',
-                              earnings: user?.affiliateEarning ?? 0,
-                              date:
-                                  "${user?.referredUserId?.joiningDate ?? ''}",
+                              name: '${user.name ?? ""} ',
+                              earnings: user.payout ?? 0,
+                              date: "${user.joiningDate ?? ''}",
                             );
                           },
                         ),
-                        controller.affiliateSignUpDetails.value
-                                    .affiliateReferrals?.length !=
-                                0
+                        controller.affiliateSignUpDetails.length != 0
                             ? SizedBox(height: 12)
                             : Container(),
-                        controller.transactionList.length != 0
+                        controller.myAffiliateTransctionList.length != 0
                             ? CommonTile(
                                 label: "Affiliate Transactions",
                                 margin: EdgeInsets.zero,
@@ -219,11 +212,13 @@ class AffiliateView extends GetView<AffiliateController> {
                             : Container(),
                         ListView.builder(
                           shrinkWrap: true,
-                          itemCount: controller.transactionList.length,
+                          itemCount:
+                              controller.myAffiliateTransctionList.length,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            var user = controller.transactionList[index];
+                            var user =
+                                controller.myAffiliateTransctionList[index];
                             return AffilateTransactionCard(
                               name:
                                   '${user.buyerFirstName!.capitalizeFirst ?? ""}',
@@ -233,6 +228,40 @@ class AffiliateView extends GetView<AffiliateController> {
                               date: "${user.date ?? ""}",
                             );
                           },
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: controller.isPreviousButtonDisabled
+                                  ? null
+                                  : controller.previousPage,
+                              child: Text(
+                                'Previous',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsMedium12
+                                    .copyWith(
+                                      color: AppColors.primary,
+                                    ),
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            GestureDetector(
+                                onTap: controller.isNextButtonDisabled
+                                    ? null
+                                    : controller.nextPage,
+                                child: Text('Next',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .tsMedium12
+                                        .copyWith(
+                                          color: AppColors.primary,
+                                        ))),
+                          ],
                         ),
                       ],
                     ),

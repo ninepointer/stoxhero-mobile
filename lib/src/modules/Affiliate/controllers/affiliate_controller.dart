@@ -22,10 +22,15 @@ class AffiliateController extends BaseController<AffiliateRespository> {
   final affiliateSummaryDetails = <AffiliateSummaryData>[].obs;
   final summeryList = <AffiliateSummery>[].obs;
   final transactionList = <AffiliateTransaction>[].obs;
+  final myAffiliateTransctionList = <MyTranscationListData>[].obs;
   final affiliateSignupSummeryList = <AffiliateRafferalSummery>[].obs;
 
   //  final affiliateSignUpDetails = <AffiliateRefferalsSignupData>[].obs;
-  final affiliateSignUpDetails = AffiliateRefferalsSignupData().obs;
+  final affiliateSignUpDetails = <MyAffiliateRefferalsList>[].obs;
+
+  final currentPage = 0.obs;
+  final itemsPerPage = 0.obs;
+  final totalItems = 0.obs;
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
@@ -40,6 +45,7 @@ class AffiliateController extends BaseController<AffiliateRespository> {
     endDateTextController.text = endDate;
     getAffiliateSummaryDetails();
     getAffiliateSignUpDetails();
+    getMyAffiliateTransctionDetails();
   }
 
   String getUserFullName() {
@@ -85,6 +91,7 @@ class AffiliateController extends BaseController<AffiliateRespository> {
           affiliateSummaryDetails(response.data?.data ?? []);
           affiliateSignupSummeryList(
               response.data?.affiliateRafferalSummery ?? []);
+
           for (AffiliateSummaryData affiliateSummary
               in affiliateSummaryDetails) {
             summeryList(affiliateSummary.summery ?? []);
@@ -101,6 +108,64 @@ class AffiliateController extends BaseController<AffiliateRespository> {
     isLoading(false);
   }
 
+  Future getMyAffiliateTransctionDetails() async {
+    isLoading(true);
+    try {
+      int skip = currentPage.value * itemsPerPage.value;
+      Map<String, dynamic> query = {
+        "startDate": DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(startDateTextController.text),
+        ),
+        "endDate": DateFormat('yyyy-MM-dd').format(
+          DateFormat('dd-MM-yyyy').parse(endDateTextController.text),
+        ),
+        "skip": skip,
+        "limit": itemsPerPage.value,
+      };
+
+      final RepoResponse<MyAffiliateTransctionListResponse> response =
+          await repository.getMyAffiliateTranscationList(query);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          myAffiliateTransctionList(response.data?.data ?? []);
+          itemsPerPage(2);
+          totalItems(myAffiliateTransctionList.length ?? 0);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  void nextPage() {
+    final lastPage = totalItems.value ~/ itemsPerPage.value - 1;
+    if (totalItems.value > 0 && currentPage.value < lastPage) {
+      currentPage.value++;
+      getMyAffiliateTransctionDetails();
+    }
+  }
+
+  void previousPage() {
+    if (currentPage.value > 0) {
+      currentPage.value--;
+      getMyAffiliateTransctionDetails();
+    }
+  }
+
+  bool get isPreviousButtonDisabled => currentPage.value == 0;
+  bool get isNextButtonDisabled {
+    if (totalItems.value <= 0) {
+      return true;
+    }
+
+    final lastPage = totalItems.value ~/ itemsPerPage.value - 1;
+    return currentPage.value == lastPage || lastPage < 1;
+  }
+
   Future getAffiliateSignUpDetails() async {
     isLoading(true);
     try {
@@ -113,7 +178,7 @@ class AffiliateController extends BaseController<AffiliateRespository> {
         ),
       };
 
-      final RepoResponse<AffiliateRefferralsResponse> response =
+      final RepoResponse<MyAffiliateRefferalsListResponse> response =
           await repository.getAffiliateSignupData(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {

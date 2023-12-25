@@ -316,4 +316,6 @@ class AppUrls {
 
   static String getAffiliateSummary = "$apiURL/affiliate/mysummery";
   static String getAffiliateSignup = "$apiURL/affiliate/myaffiliaterafferals";
+  static String getMyAffiliateTransactionList =
+      "$apiURL/affiliate/mytransactions";
 }
