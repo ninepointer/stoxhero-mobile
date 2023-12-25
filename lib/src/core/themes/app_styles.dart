@@ -767,6 +767,12 @@ extension CustomStyles on TextTheme {
         fontWeight: FontWeight.w600,
         fontSize: 24,
       );
+      TextStyle get tsLightGrey16 => TextStyle(
+        color: AppColors.grey[200],
+        fontFamily: AppTheme.fontFamily,
+        fontWeight: FontWeight.w600,
+        fontSize: 24,
+      );
 }
 
 class AppStyles {

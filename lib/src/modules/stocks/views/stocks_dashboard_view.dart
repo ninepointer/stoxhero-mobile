@@ -4,7 +4,7 @@ import 'package:stoxhero/src/modules/stocks/views/tabs/funds_tab.dart';
 import 'package:stoxhero/src/modules/stocks/views/tabs/portfolio_tab.dart';
 import 'package:stoxhero/src/modules/stocks/views/tabs/orders_tab.dart';
 import 'package:stoxhero/src/modules/stocks/views/tabs/watchlist_tab.dart';
-import 'package:stoxhero/src/modules/stocks/widget/expansion_tile.dart';
+import 'package:stoxhero/src/modules/stocks/widget/profit_summary_expansion_tile.dart';
 
 class StocksDashboardView extends StatefulWidget {
   const StocksDashboardView({Key? key}) : super(key: key);
@@ -98,20 +98,18 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                 ],
               ),
             ),
-             Container(
+            Container(
               child: CustomExpansionTile(
-        invested: '929360',
-        profitloss: '-2720.00', 
-        percentage: '(0.29%)', 
-        currentvalue: '926640', 
-        availablemargin: '50000',
-        marginmoney: '678888',
-        marginused: '678',
-        openpositions: '4',
-       
-      ),
-
-             ),
+                invested: '929360',
+                profitloss: '-2720.00',
+                percentage: '(0.29%)',
+                currentvalue: '926640',
+                availablemargin: '50000',
+                marginmoney: '678888',
+                marginused: '678',
+                openpositions: '4',
+              ),
+            ),
             Container(
               margin: EdgeInsets.all(10),
               width: MediaQuery.of(context).size.width,
@@ -122,13 +120,13 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 0,right: 0),
+                    padding: EdgeInsets.only(left: 0, right: 0),
                     child: TabBar(
                       isScrollable: true,
                       labelColor: Colors.green[600],
                       unselectedLabelColor: Colors.grey,
                       indicator: BoxDecoration(
-                         color: Colors.green[200],
+                        color: Colors.green[200],
                         borderRadius: BorderRadius.circular(25),
                       ),
                       controller: _tabController,
@@ -160,7 +158,6 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                   controller: _tabController,
                   children: [
                     Container(
-                     
                       child: ToDoListScreen(),
                     ),
                     Container(
@@ -170,20 +167,17 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                       child: BestStocks(),
                     ),
                     Container(
-                    
                       child: orders(),
                     ),
                     Container(
-                      child: Funds( 
-                        marginavailable:'4000',
-                        usedmargin:'789',
-                        allocatedmargin:'7869870',
-                        investementamount:'89879',
-                        returns:'78',
-                        unrealisedPL:'7689',
-                        returnpercentage:'3456'
-
-                       ),
+                      child: Funds(
+                          marginavailable: '1',
+                          usedmargin: '2',
+                          allocatedmargin: '3',
+                          investmentamount: '4',
+                          returns: '5',
+                          unrealisedPL: '6',
+                          returnpercentage: '7'),
                     ),
                   ],
                 ),

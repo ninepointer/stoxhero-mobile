@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/core.dart';
-
 class Funds extends StatelessWidget {
-  const Funds({Key? key, 
-  required this.marginavailable, 
-  required this.usedmargin, 
-  required this.allocatedmargin, 
-  required this.investementamount, 
-  required this.returns, 
-  required this.unrealisedPL, 
-  required this.returnpercentage
-  
-  });
-  
-  final String  marginavailable;
-  final String  usedmargin;
-  final String  allocatedmargin;
-  final String  investementamount;
-  final String  returns;
-  final String  unrealisedPL;
-  final String  returnpercentage;
+  const Funds({
+    Key? key,
+    required this.marginavailable,
+    required this.usedmargin,
+    required this.allocatedmargin,
+    required this.investmentamount,
+    required this.returns,
+    required this.unrealisedPL,
+    required this.returnpercentage,
+  }) : super(key: key);
+
+  final String marginavailable;
+  final String usedmargin;
+  final String allocatedmargin;
+  final String investmentamount;
+  final String returns;
+  final String unrealisedPL;
+  final String returnpercentage;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class Funds extends StatelessWidget {
         padding: EdgeInsets.all(9),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(25.0), // Adjust the radius as needed
+          borderRadius: BorderRadius.circular(25.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
@@ -42,99 +40,77 @@ class Funds extends StatelessWidget {
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 7),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Left side
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                 
-                  Text(
-                    "Margin available",
-                    style: AppStyles.tsBlackMedium14,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    "Used Margin",
-                    style: AppStyles.tsBlackMedium14,
-                  ),
-                     SizedBox(height: 5),
-                  Text(
-                    "Allocated Margin",
-                    style: AppStyles.tsBlackMedium14,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    "Investement Amount",
-                    style: AppStyles.tsBlackMedium14,
-                  ),
-                   SizedBox(height: 5),
-                  Text(
-                    "Returns",
-                    style: AppStyles.tsBlackMedium14,
-                  )
-                  ,
-                   SizedBox(height: 5),
-                  Text(
-                    "Unrealised P&L",
-                    style: AppStyles.tsBlackMedium14,
-                  )
-                  ,
-                   SizedBox(height: 5),
-                  Text(
-                    "Return percentage",
-                     style: AppStyles.tsBlackMedium14,
-                  )
-                  
-                ],
-              ),
+        child: Column(
+          children: [
+            FundsCard(
+                cardname: "Margin available",
+                cardvalue: marginavailable,
+                index: 0),
+            FundsCard(cardname: "Used margin", cardvalue: usedmargin, index: 1),
+            FundsCard(
+                cardname: "Allocated margin",
+                cardvalue: allocatedmargin,
+                index: 2),
+            FundsCard(
+                cardname: "investmentamount",
+                cardvalue: investmentamount,
+                index: 3),
+            FundsCard(cardname: "returns", cardvalue: returns, index: 4),
+            FundsCard(
+                cardname: "unrealisedPL", cardvalue: unrealisedPL, index: 5),
+            FundsCard(
+                cardname: "Return Percentage",
+                cardvalue: returnpercentage,
+                index: 6),
+            // Add more FundsCard widgets as needed
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-              // Right side
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                   Text(
-                    marginavailable,
-                    style: AppStyles.tsGreyRegular12,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    usedmargin,
-                    style: AppStyles.tsGreyRegular12,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                   allocatedmargin,
-                    style: AppStyles.tsGreyRegular12,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    investementamount,
-                    style: AppStyles.tsBlackMedium14,
-                  ),
-                    SizedBox(height: 5),
-                  Text(
-                    returns,
-                    style: AppStyles.tsGreyRegular12,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    unrealisedPL,
-                    style: AppStyles.tsBlackMedium14,
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    returnpercentage,
-                    style: AppStyles.tsGreyRegular12,
-                  ),
-                 
-                ],
-              ),
-            ],
-          ),
+class FundsCard extends StatelessWidget {
+  const FundsCard({
+    Key? key,
+    required this.cardname,
+    required this.cardvalue,
+    required this.index,
+  }) : super(key: key);
+
+  final String cardname;
+  final String cardvalue;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: index % 2 == 0 ? Colors.white : Colors.grey[200],
+      elevation: 0,
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  cardname,
+                  // style: AppStyles.tsBlackRegular16, // Uncomment if needed
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  cardvalue,
+                  style: TextStyle(),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

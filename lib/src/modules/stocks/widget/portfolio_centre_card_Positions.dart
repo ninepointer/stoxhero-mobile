@@ -21,7 +21,7 @@ class CentreCardPositions extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only( left: 40, right: 40),
         padding: EdgeInsets.symmetric(horizontal: 20),
-        height: 65,
+        height: 70,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),

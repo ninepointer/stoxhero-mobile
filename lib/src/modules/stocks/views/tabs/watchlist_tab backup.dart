@@ -118,7 +118,31 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
                       title: "Reliance Power",
                       price: "₹61.8",
                       percentage: "+0.70 (3.01%)",
-                    ),                   
+                    ),
+                    WatchlistCard(
+                      imagePath: 'assets/images/10Xlogo.jpg',
+                      title: "Reliance Power",
+                      price: "₹61.8",
+                      percentage: "+0.70 (3.01%)",
+                    ),
+                    WatchlistCard(
+                      imagePath: 'assets/images/10Xlogo.jpg',
+                      title: "Reliance Power",
+                      price: "₹61.8",
+                      percentage: "+0.70 (3.01%)",
+                    ),
+                    WatchlistCard(
+                      imagePath: 'assets/images/10Xlogo.jpg',
+                      title: "Reliance Power",
+                      price: "₹61.8",
+                      percentage: "+0.70 (3.01%)",
+                    ),
+                    WatchlistCard(
+                      imagePath: 'assets/images/10Xlogo.jpg',
+                      title: "Reliance Power",
+                      price: "₹61.8",
+                      percentage: "+0.70 (3.01%)",
+                    ),
                   ],
                 )
               ],

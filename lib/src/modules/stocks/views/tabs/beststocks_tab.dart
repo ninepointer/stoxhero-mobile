@@ -73,14 +73,8 @@ class _BestStocksState extends State<BestStocks> {
       color: Colors.white,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        
         borderRadius: BorderRadius.circular(15.0),
-        
       ),
-      
-    
-   
-  
       child: Stack(
         children: [
           Column(
@@ -88,7 +82,8 @@ class _BestStocksState extends State<BestStocks> {
             children: [
               //Image (10x logo)
               Padding(
-                padding: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 0),
+                padding: const EdgeInsets.only(
+                    top: 8, left: 16, right: 16, bottom: 0),
                 child: Image.asset(
                   stock.imageLocation,
                   width: 50.0,
@@ -105,7 +100,7 @@ class _BestStocksState extends State<BestStocks> {
                       stock.name.length > 15
                           ? '${stock.name.substring(0, 13)}...'
                           : stock.name,
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.black),
                     ),
                     SizedBox(height: 8),
                     Text(
@@ -118,7 +113,9 @@ class _BestStocksState extends State<BestStocks> {
                     Text(
                       stock.percentageChange,
                       style: TextStyle(
-                        color: stock.percentageChange.startsWith('+') ? Colors.green : Colors.red,
+                        color: stock.percentageChange.startsWith('+')
+                            ? Colors.green
+                            : Colors.red,
                         fontSize: 12.0,
                       ),
                     ),
