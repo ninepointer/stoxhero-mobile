@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:math' as math;
 
 import '../../../app/app.dart';
 
@@ -27,9 +28,13 @@ class AffiliateController extends BaseController<AffiliateRespository> {
 
   final myAffiliateRefferalsList = <MyAffiliateRefferal>[].obs;
 
-  final currentPage = 0.obs;
-  final itemsPerPage = 0.obs;
-  final totalItems = 0.obs;
+  final transctionCurrentPage = 0.obs;
+  final transctionItemsPerPage = 0.obs;
+  final transctionTotalItems = 0.obs;
+
+  final reffralsCurrentPage = 0.obs;
+  final reffralsItemsPerPage = 0.obs;
+  final reffralsTotalItems = 0.obs;
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
@@ -42,11 +47,13 @@ class AffiliateController extends BaseController<AffiliateRespository> {
     String endDate = DateFormat("dd-MM-yyyy").format(DateTime.now());
     startDateTextController.text = startDate;
     endDateTextController.text = endDate;
+    transctionCurrentPage.value = 0;
+    transctionItemsPerPage.value = 10;
+    transctionTotalItems.value = myAffiliateTransctionList.length;
 
-    currentPage(0);
-    itemsPerPage(0);
-    totalItems(0);
-
+    reffralsCurrentPage.value = 0;
+    reffralsItemsPerPage.value = 10;
+    reffralsTotalItems.value = myAffiliateRefferalsList.length;
     await getAffiliateSummaryDetails();
     await getAffiliateSignUpDetails();
     await getMyAffiliateTransctionDetails();
@@ -60,34 +67,62 @@ class AffiliateController extends BaseController<AffiliateRespository> {
   }
 
   void nextPage() {
-    print('nextPage');
-    final lastPage = totalItems.value ~/ itemsPerPage.value - 1;
-    if (totalItems.value > 0 && currentPage.value < lastPage) {
-      currentPage.value++;
+    final lastPage =
+        (transctionTotalItems.value / transctionItemsPerPage.value).ceil() - 1;
+
+    if (transctionTotalItems.value > 0 &&
+        transctionCurrentPage.value < lastPage) {
+      transctionCurrentPage.value++;
       getMyAffiliateTransctionDetails();
+    }
+  }
+
+  void refferalsNextPage() {
+    final lastPage =
+        (reffralsTotalItems.value / reffralsItemsPerPage.value).ceil();
+    print(
+        "lastpage ${lastPage} ${reffralsTotalItems.value} ${reffralsItemsPerPage}");
+
+    if (reffralsTotalItems.value > 0 && reffralsCurrentPage.value < lastPage) {
+      reffralsCurrentPage.value++;
+      getAffiliateSignUpDetails();
     }
   }
 
   void previousPage() {
-    print('previousPage');
-    totalItems(totalItems.value - 2);
-    if (currentPage.value > 0) {
-      currentPage.value--;
+    if (transctionCurrentPage.value > 0) {
+      transctionCurrentPage.value--;
       getMyAffiliateTransctionDetails();
     }
   }
 
-  bool get isPreviousButtonDisabled => currentPage.value == 0;
+  void reffralsPreviousPage() {
+    if (reffralsCurrentPage.value > 0) {
+      reffralsCurrentPage.value--;
+      getAffiliateSignUpDetails();
+    }
+  }
+
+  bool get isPreviousButtonDisabled => transctionCurrentPage.value == 0;
   bool get isNextButtonDisabled {
-    if (totalItems.value <= 0) {
+    if (transctionTotalItems.value <= 0) {
       return true;
     }
 
-    final lastPage = totalItems.value ~/ itemsPerPage.value - 1;
-    return currentPage.value == lastPage || lastPage < 1;
+    final lastPage =
+        (transctionTotalItems.value / transctionItemsPerPage.value).ceil() - 1;
+    return transctionCurrentPage.value == lastPage || lastPage < 1;
   }
 
-  void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
+  bool get isrefferlsPreviousButtonDisabled => reffralsCurrentPage.value == 0;
+  bool get isreferralsNextButtonDisabled {
+    final lastPage =
+        (reffralsTotalItems.value / reffralsItemsPerPage.value).ceil() - 1;
+    return reffralsCurrentPage.value == lastPage || lastPage < 1;
+  }
+
+  void showDateRangePicker(BuildContext context,
+      {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -97,7 +132,9 @@ class AffiliateController extends BaseController<AffiliateRespository> {
 
     if (pickedDate != null) {
       String date = DateFormat("dd-MM-yyyy").format(pickedDate);
-      isStartDate ? startDateTextController.text = date : endDateTextController.text = date;
+      isStartDate
+          ? startDateTextController.text = date
+          : endDateTextController.text = date;
     }
   }
 
@@ -113,12 +150,15 @@ class AffiliateController extends BaseController<AffiliateRespository> {
         ),
       };
 
-      final RepoResponse<AffiliateSummaryResponse> response = await repository.getAffiliateDashboardSummary(query);
+      final RepoResponse<AffiliateSummaryResponse> response =
+          await repository.getAffiliateDashboardSummary(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           affiliateSummaryDetails(response.data?.data ?? []);
-          affiliateSignupSummeryList(response.data?.affiliateRafferalSummery ?? []);
-          for (AffiliateSummaryData affiliateSummary in affiliateSummaryDetails) {
+          affiliateSignupSummeryList(
+              response.data?.affiliateRafferalSummery ?? []);
+          for (AffiliateSummaryData affiliateSummary
+              in affiliateSummaryDetails) {
             summeryList(affiliateSummary.summery ?? []);
             transactionList(affiliateSummary.transaction ?? []);
           }
@@ -134,9 +174,8 @@ class AffiliateController extends BaseController<AffiliateRespository> {
   }
 
   Future getMyAffiliateTransctionDetails() async {
-    isLoading(true);
     try {
-      int skip = currentPage.value * itemsPerPage.value;
+      int skip = transctionCurrentPage.value * transctionItemsPerPage.value;
       Map<String, dynamic> query = {
         "startDate": DateFormat('yyyy-MM-dd').format(
           DateFormat('dd-MM-yyyy').parse(startDateTextController.text),
@@ -145,16 +184,16 @@ class AffiliateController extends BaseController<AffiliateRespository> {
           DateFormat('dd-MM-yyyy').parse(endDateTextController.text),
         ),
         "skip": skip,
-        "limit": totalItems,
+        "limit": transctionItemsPerPage.value,
       };
-
+      print("skipdaat${skip} ${transctionItemsPerPage.value}");
       final RepoResponse<MyAffiliateTransctionListResponse> response =
           await repository.getMyAffiliateTranscationList(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           myAffiliateTransctionList(response.data?.data ?? []);
-          totalItems(response.data!.count!);
-          itemsPerPage(response.data!.count! - 5);
+          transctionTotalItems(response.data!.count!);
+          transctionItemsPerPage(10);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -163,12 +202,11 @@ class AffiliateController extends BaseController<AffiliateRespository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
   }
 
   Future getAffiliateSignUpDetails() async {
-    isLoading(true);
     try {
+      num skip = reffralsCurrentPage.value * reffralsItemsPerPage.value;
       Map<String, dynamic> query = {
         "startDate": DateFormat('yyyy-MM-dd').format(
           DateFormat('dd-MM-yyyy').parse(startDateTextController.text),
@@ -176,14 +214,20 @@ class AffiliateController extends BaseController<AffiliateRespository> {
         "endDate": DateFormat('yyyy-MM-dd').format(
           DateFormat('dd-MM-yyyy').parse(endDateTextController.text),
         ),
+        "skip": skip,
+        "limit": reffralsItemsPerPage.value,
       };
-
-      final RepoResponse<MyAffiliateRefferalsListResponse> response = await repository.getMyAffiliateReferralsData(
+      print(
+          "skipskip ${skip} ${reffralsItemsPerPage.value} ${reffralsCurrentPage.value}");
+      final RepoResponse<MyAffiliateRefferalsListResponse> response =
+          await repository.getMyAffiliateReferralsData(
         query,
       );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           myAffiliateRefferalsList(response.data?.data);
+          reffralsTotalItems(response.data!.count!);
+          reffralsItemsPerPage(10);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -192,6 +236,5 @@ class AffiliateController extends BaseController<AffiliateRespository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
   }
 }

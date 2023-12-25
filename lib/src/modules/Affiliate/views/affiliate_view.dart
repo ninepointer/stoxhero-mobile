@@ -8,9 +8,13 @@ class AffiliateView extends GetView<AffiliateController> {
   num? totalEarning() {
     num sum = 0;
     sum = (controller.affiliateSignupSummeryList.isNotEmpty
-            ? controller.affiliateSignupSummeryList.first.affiliateRefferalPayout ?? 0
+            ? controller
+                    .affiliateSignupSummeryList.first.affiliateRefferalPayout ??
+                0
             : 0) +
-        (controller.summeryList.isNotEmpty ? controller.summeryList.first.totalProductCPayout ?? 0 : 0);
+        (controller.summeryList.isNotEmpty
+            ? controller.summeryList.first.totalProductCPayout ?? 0
+            : 0);
     return sum;
   }
 
@@ -76,8 +80,11 @@ class AffiliateView extends GetView<AffiliateController> {
                     ],
                   ),
                   CommonOutlinedButton(
-                    backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
-                    labelColor: Get.isDarkMode ? AppColors.white : AppColors.lightGreen,
+                    backgroundColor: Get.isDarkMode
+                        ? AppColors.darkGreen
+                        : AppColors.lightGreen,
+                    labelColor:
+                        Get.isDarkMode ? AppColors.white : AppColors.lightGreen,
                     height: 42,
                     label: 'Show Details',
                     onPressed: () {
@@ -107,7 +114,9 @@ class AffiliateView extends GetView<AffiliateController> {
                                   context,
                                   label: 'Product\nTransaction',
                                   earning: controller.summeryList.isNotEmpty
-                                      ? controller.summeryList.first.totalProductCount.toString()
+                                      ? controller
+                                          .summeryList.first.totalProductCount
+                                          .toString()
                                       : "0",
                                 ),
                               ),
@@ -130,8 +139,14 @@ class AffiliateView extends GetView<AffiliateController> {
                                 child: customCard(
                                   context,
                                   label: 'Total\nSignup',
-                                  earning: (controller.affiliateSignupSummeryList.isNotEmpty
-                                          ? controller.affiliateSignupSummeryList.first.affiliateRefferalCount ?? 0
+                                  earning: (controller
+                                              .affiliateSignupSummeryList
+                                              .isNotEmpty
+                                          ? controller
+                                                  .affiliateSignupSummeryList
+                                                  .first
+                                                  .affiliateRefferalCount ??
+                                              0
                                           : 0)
                                       .toString(),
                                   // controller.summaryCount().toString()
@@ -170,18 +185,83 @@ class AffiliateView extends GetView<AffiliateController> {
                           if (controller.myAffiliateRefferalsList.isNotEmpty)
                             ListView.builder(
                               shrinkWrap: true,
-                              itemCount: controller.myAffiliateRefferalsList.length,
+                              itemCount:
+                                  controller.myAffiliateRefferalsList.length,
                               padding: EdgeInsets.zero,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                MyAffiliateRefferal? affiliateReferral = controller.myAffiliateRefferalsList[index];
+                                MyAffiliateRefferal? affiliateReferral =
+                                    controller.myAffiliateRefferalsList[index];
                                 return MyAffilateReferralDetailCard(
-                                  rank: index + 1,
+                                  rank: (controller.reffralsCurrentPage.value *
+                                          controller
+                                              .reffralsItemsPerPage.value) +
+                                      index +
+                                      1,
                                   affiliateReferral: affiliateReferral,
                                 );
                               },
                             ),
-                          if (controller.myAffiliateRefferalsList.isNotEmpty) SizedBox(height: 12),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          if (controller.reffralsTotalItems > 10)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    onTap: controller
+                                            .isrefferlsPreviousButtonDisabled
+                                        ? null
+                                        : controller.reffralsPreviousPage,
+                                    child: Text(
+                                      'Previous',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium14
+                                          .copyWith(
+                                            color: AppColors.primary,
+                                          ),
+                                    ),
+                                  ),
+                                  // SizedBox(width: 16),
+                                  // Text(
+                                  //   'Page ${controller.reffralsCurrentPage + 1} of ${controller.reffralsLastPage + 1}',
+                                  //   style: Theme.of(context)
+                                  //       .textTheme
+                                  //       .tsMedium14
+                                  //       .copyWith(
+                                  //         color: AppColors.primary,
+                                  //       ),
+                                  // ),
+                                  SizedBox(width: 16),
+                                  GestureDetector(
+                                    onTap:
+                                        controller.isreferralsNextButtonDisabled
+                                            ? null
+                                            : controller.refferalsNextPage,
+                                    child: Text(
+                                      'Next',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium14
+                                          .copyWith(
+                                            color: AppColors.primary,
+                                          ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          if (controller.myAffiliateRefferalsList.isNotEmpty)
+                            SizedBox(height: 12),
                           if (controller.transactionList.isNotEmpty)
                             CommonTile(
                               label: "Affiliate Transactions",
@@ -190,13 +270,16 @@ class AffiliateView extends GetView<AffiliateController> {
                           if (controller.myAffiliateTransctionList.isNotEmpty)
                             ListView.builder(
                               shrinkWrap: true,
-                              itemCount: controller.myAffiliateTransctionList.length,
+                              itemCount:
+                                  controller.myAffiliateTransctionList.length,
                               padding: EdgeInsets.zero,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                var user = controller.myAffiliateTransctionList[index];
+                                var user =
+                                    controller.myAffiliateTransctionList[index];
                                 return AffilateTransactionCard(
-                                  name: '${user.buyerFirstName!.capitalizeFirst ?? ""}',
+                                  name:
+                                      '${user.buyerFirstName!.capitalizeFirst ?? ""}',
                                   productName: "${user.productName ?? ''}",
                                   transactionId: "${user.transactionId ?? ''}",
                                   earnings: user.payout ?? 0,
@@ -205,30 +288,56 @@ class AffiliateView extends GetView<AffiliateController> {
                               },
                             ),
                           SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: controller.isPreviousButtonDisabled ? null : controller.previousPage,
-                                child: Text(
-                                  'Previous',
-                                  style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                                        color: AppColors.primary,
-                                      ),
-                                ),
+                          if (controller.transctionTotalItems > 10)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    onTap: controller.isPreviousButtonDisabled
+                                        ? null
+                                        : controller.previousPage,
+                                    child: Text(
+                                      'Previous',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium14
+                                          .copyWith(
+                                            color: AppColors.primary,
+                                          ),
+                                    ),
+                                  ),
+                                  // SizedBox(width: 16),
+                                  // Text(
+                                  //   'Page ${controller.transctionCurrentPage + 1} of ${controller.transctionLastPage + 1}',
+                                  //   style: Theme.of(context)
+                                  //       .textTheme
+                                  //       .tsMedium14
+                                  //       .copyWith(
+                                  //         color: AppColors.primary,
+                                  //       ),
+                                  // ),
+                                  SizedBox(width: 16),
+                                  GestureDetector(
+                                    onTap: controller.isNextButtonDisabled
+                                        ? null
+                                        : controller.nextPage,
+                                    child: Text(
+                                      'Next',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium14
+                                          .copyWith(
+                                            color: AppColors.primary,
+                                          ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              SizedBox(width: 16),
-                              GestureDetector(
-                                onTap: controller.isNextButtonDisabled ? null : controller.nextPage,
-                                child: Text(
-                                  'Next',
-                                  style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                                        color: AppColors.primary,
-                                      ),
-                                ),
-                              )
-                            ],
-                          ),
+                            ),
                         ],
                       ),
                     ),
