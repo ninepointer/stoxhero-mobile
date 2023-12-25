@@ -28,11 +28,15 @@ class AffiliateView extends GetView<AffiliateController> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          // Column(
-          //  children: [
-          //   return
-          //  ],
-          // ),
+          Center(
+            child: MyAffilateDashboardSummary(),
+          ),
+          AffiliateChart(
+            title: 'Last 30 days daily earning',
+            // barGroups: controller.getGrossChartsData(
+            //   barColor: AppColors.success,
+            // ),
+          ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 8),
             padding: EdgeInsets.all(16),
