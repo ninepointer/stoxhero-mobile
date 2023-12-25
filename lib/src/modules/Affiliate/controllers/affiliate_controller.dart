@@ -25,8 +25,7 @@ class AffiliateController extends BaseController<AffiliateRespository> {
   final myAffiliateTransctionList = <MyTranscationListData>[].obs;
   final affiliateSignupSummeryList = <AffiliateRafferalSummery>[].obs;
 
-  //  final affiliateSignUpDetails = <AffiliateRefferalsSignupData>[].obs;
-  final affiliateSignUpDetails = <MyAffiliateRefferalsList>[].obs;
+  final myAffiliateRefferalsList = <MyAffiliateRefferal>[].obs;
 
   final currentPage = 0.obs;
   final itemsPerPage = 0.obs;
@@ -43,9 +42,14 @@ class AffiliateController extends BaseController<AffiliateRespository> {
     String endDate = DateFormat("dd-MM-yyyy").format(DateTime.now());
     startDateTextController.text = startDate;
     endDateTextController.text = endDate;
-    getAffiliateSummaryDetails();
-    getAffiliateSignUpDetails();
-    getMyAffiliateTransctionDetails();
+
+    currentPage(0);
+    itemsPerPage(0);
+    totalItems(0);
+
+    await getAffiliateSummaryDetails();
+    await getAffiliateSignUpDetails();
+    await getMyAffiliateTransctionDetails();
   }
 
   String getUserFullName() {
@@ -55,8 +59,35 @@ class AffiliateController extends BaseController<AffiliateRespository> {
     return fullName.capitalize!;
   }
 
-  void showDateRangePicker(BuildContext context,
-      {bool isStartDate = true}) async {
+  void nextPage() {
+    print('nextPage');
+    final lastPage = totalItems.value ~/ itemsPerPage.value - 1;
+    if (totalItems.value > 0 && currentPage.value < lastPage) {
+      currentPage.value++;
+      getMyAffiliateTransctionDetails();
+    }
+  }
+
+  void previousPage() {
+    print('previousPage');
+    totalItems(totalItems.value - 2);
+    if (currentPage.value > 0) {
+      currentPage.value--;
+      getMyAffiliateTransctionDetails();
+    }
+  }
+
+  bool get isPreviousButtonDisabled => currentPage.value == 0;
+  bool get isNextButtonDisabled {
+    if (totalItems.value <= 0) {
+      return true;
+    }
+
+    final lastPage = totalItems.value ~/ itemsPerPage.value - 1;
+    return currentPage.value == lastPage || lastPage < 1;
+  }
+
+  void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -66,9 +97,7 @@ class AffiliateController extends BaseController<AffiliateRespository> {
 
     if (pickedDate != null) {
       String date = DateFormat("dd-MM-yyyy").format(pickedDate);
-      isStartDate
-          ? startDateTextController.text = date
-          : endDateTextController.text = date;
+      isStartDate ? startDateTextController.text = date : endDateTextController.text = date;
     }
   }
 
@@ -84,16 +113,12 @@ class AffiliateController extends BaseController<AffiliateRespository> {
         ),
       };
 
-      final RepoResponse<AffiliateSummaryResponse> response =
-          await repository.getAffiliateDashboardSummary(query);
+      final RepoResponse<AffiliateSummaryResponse> response = await repository.getAffiliateDashboardSummary(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           affiliateSummaryDetails(response.data?.data ?? []);
-          affiliateSignupSummeryList(
-              response.data?.affiliateRafferalSummery ?? []);
-
-          for (AffiliateSummaryData affiliateSummary
-              in affiliateSummaryDetails) {
+          affiliateSignupSummeryList(response.data?.affiliateRafferalSummery ?? []);
+          for (AffiliateSummaryData affiliateSummary in affiliateSummaryDetails) {
             summeryList(affiliateSummary.summery ?? []);
             transactionList(affiliateSummary.transaction ?? []);
           }
@@ -120,7 +145,7 @@ class AffiliateController extends BaseController<AffiliateRespository> {
           DateFormat('dd-MM-yyyy').parse(endDateTextController.text),
         ),
         "skip": skip,
-        "limit": itemsPerPage.value,
+        "limit": totalItems,
       };
 
       final RepoResponse<MyAffiliateTransctionListResponse> response =
@@ -128,8 +153,8 @@ class AffiliateController extends BaseController<AffiliateRespository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           myAffiliateTransctionList(response.data?.data ?? []);
-          itemsPerPage(2);
-          totalItems(myAffiliateTransctionList.length ?? 0);
+          totalItems(response.data!.count!);
+          itemsPerPage(response.data!.count! - 5);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -139,31 +164,6 @@ class AffiliateController extends BaseController<AffiliateRespository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
-  }
-
-  void nextPage() {
-    final lastPage = totalItems.value ~/ itemsPerPage.value - 1;
-    if (totalItems.value > 0 && currentPage.value < lastPage) {
-      currentPage.value++;
-      getMyAffiliateTransctionDetails();
-    }
-  }
-
-  void previousPage() {
-    if (currentPage.value > 0) {
-      currentPage.value--;
-      getMyAffiliateTransctionDetails();
-    }
-  }
-
-  bool get isPreviousButtonDisabled => currentPage.value == 0;
-  bool get isNextButtonDisabled {
-    if (totalItems.value <= 0) {
-      return true;
-    }
-
-    final lastPage = totalItems.value ~/ itemsPerPage.value - 1;
-    return currentPage.value == lastPage || lastPage < 1;
   }
 
   Future getAffiliateSignUpDetails() async {
@@ -178,11 +178,12 @@ class AffiliateController extends BaseController<AffiliateRespository> {
         ),
       };
 
-      final RepoResponse<MyAffiliateRefferalsListResponse> response =
-          await repository.getAffiliateSignupData(query);
+      final RepoResponse<MyAffiliateRefferalsListResponse> response = await repository.getMyAffiliateReferralsData(
+        query,
+      );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          affiliateSignUpDetails(response.data?.data);
+          myAffiliateRefferalsList(response.data?.data);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

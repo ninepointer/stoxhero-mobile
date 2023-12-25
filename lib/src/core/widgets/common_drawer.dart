@@ -54,10 +54,6 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.toNamed(AppRoutes.Internship);
         Get.find<InternshipController>().loadData();
         break;
-      // case 6:
-      //   Get.toNamed(AppRoutes.affiliate);
-      //   Get.find<AffiliateController>().loadData();
-      //   break;
       case 6:
         ThemeService().switchTheme();
         break;
@@ -110,17 +106,14 @@ class _CommonDrawerState extends State<CommonDrawer> {
                         ? Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: Image.asset(
-                              Get.isDarkMode
-                                  ? AppImages.darkAppLogo
-                                  : AppImages.lightAppLogo,
+                              Get.isDarkMode ? AppImages.darkAppLogo : AppImages.lightAppLogo,
                               width: 48,
                               height: 48,
                               fit: BoxFit.contain,
                             ),
                           )
                         : Image.network(
-                            controller.userDetails.value.profilePhoto?.url ??
-                                '',
+                            controller.userDetails.value.profilePhoto?.url ?? '',
                           ),
                   ),
                 ),
@@ -182,19 +175,9 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 label: 'Internship/Workshop',
                 onTap: () => selectedItem(context, 5),
               ),
-              // if (controller.userDetails.value.isAffiliate ?? false)
-              //   ProfileListTile(
-              //     icon: Icons.school,
-              //     label: 'Affiliate Dashboard',
-              //     onTap: () => selectedItem(context, 6),
-              //   ),
               ProfileListTile(
-                icon: ThemeService().theme == ThemeMode.dark
-                    ? Icons.light_mode
-                    : Icons.dark_mode,
-                label: ThemeService().theme == ThemeMode.dark
-                    ? 'Light Mode'
-                    : 'Dark Mode',
+                icon: ThemeService().theme == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
+                label: ThemeService().theme == ThemeMode.dark ? 'Light Mode' : 'Dark Mode',
                 onTap: () => selectedItem(context, 6),
               ),
               ProfileListTile(

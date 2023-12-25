@@ -1,45 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/core/core.dart';
 
-class AffilateSignUpDetailsCard extends StatelessWidget {
+import '../../../app/app.dart';
+
+class MyAffilateReferralDetailCard extends StatelessWidget {
   final int? rank;
-  final String? name;
-  final num? earnings;
-  final String? date;
-  const AffilateSignUpDetailsCard({
+  final MyAffiliateRefferal? affiliateReferral;
+
+  const MyAffilateReferralDetailCard({
     super.key,
     this.rank,
-    this.name,
-    this.earnings,
-    this.date,
+    this.affiliateReferral,
   });
+
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.all(0).copyWith(bottom: 0, top: 8),
+      margin: EdgeInsets.only(top: 8),
       children: [
         Row(
           children: [
             Text("$rank"),
-            SizedBox(width: 20),
+            SizedBox(width: 24),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${name ?? '-'}",
+                    '${affiliateReferral?.name ?? ""}',
                     style: Theme.of(context).textTheme.tsRegular14,
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Joining Date :',
+                    'Joining Date : ${FormatHelper.formatDateInMonth(affiliateReferral?.joiningDate)}',
                     style: Theme.of(context).textTheme.tsGreyRegular10,
                   ),
                 ],
               ),
             ),
             Text(
-              FormatHelper.formatNumbers(earnings),
+              FormatHelper.formatNumbers(affiliateReferral?.payout ?? 0),
               style: Theme.of(context).textTheme.tsMedium16.copyWith(
                     color: AppColors.success,
                   ),
