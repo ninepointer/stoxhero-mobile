@@ -42,6 +42,13 @@ class AffiliateController extends BaseController<AffiliateRespository> {
     getAffiliateSignUpDetails();
   }
 
+  String getUserFullName() {
+    String firstName = userDetailsData.firstName ?? '';
+    String lastName = userDetailsData.lastName ?? '';
+    String fullName = '$firstName $lastName';
+    return fullName.capitalize!;
+  }
+
   void showDateRangePicker(BuildContext context,
       {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(

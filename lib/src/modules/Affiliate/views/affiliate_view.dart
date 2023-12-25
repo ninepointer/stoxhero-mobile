@@ -28,6 +28,11 @@ class AffiliateView extends GetView<AffiliateController> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          // Column(
+          //  children: [
+          //   return
+          //  ],
+          // ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 8),
             padding: EdgeInsets.all(16),
