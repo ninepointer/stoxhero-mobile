@@ -28,6 +28,11 @@ class AffiliateView extends GetView<AffiliateController> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          // Column(
+          //  children: [
+          //   return
+          //  ],
+          // ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 8),
             padding: EdgeInsets.all(16),
@@ -83,9 +88,8 @@ class AffiliateView extends GetView<AffiliateController> {
                   backgroundColor: Get.isDarkMode
                       ? AppColors.darkGreen
                       : AppColors.lightGreen,
-                  labelColor: Get.isDarkMode
-                      ? AppColors.darkGreen
-                      : AppColors.lightGreen,
+                  labelColor:
+                      Get.isDarkMode ? AppColors.white : AppColors.lightGreen,
                   height: 42,
                   label: 'Show Details',
                   onPressed: () {
@@ -175,10 +179,14 @@ class AffiliateView extends GetView<AffiliateController> {
                           ],
                         ),
                         SizedBox(height: 12),
-                        CommonTile(
-                          label: "Referrals",
-                          margin: EdgeInsets.zero,
-                        ),
+                        controller.affiliateSignUpDetails.value
+                                    .affiliateReferrals?.length !=
+                                0
+                            ? CommonTile(
+                                label: "Referrals",
+                                margin: EdgeInsets.zero,
+                              )
+                            : Container(),
                         ListView.builder(
                           shrinkWrap: true,
                           itemCount: controller.affiliateSignUpDetails.value
@@ -198,11 +206,17 @@ class AffiliateView extends GetView<AffiliateController> {
                             );
                           },
                         ),
-                        SizedBox(height: 12),
-                        CommonTile(
-                          label: "Affiliate Transactions",
-                          margin: EdgeInsets.zero,
-                        ),
+                        controller.affiliateSignUpDetails.value
+                                    .affiliateReferrals?.length !=
+                                0
+                            ? SizedBox(height: 12)
+                            : Container(),
+                        controller.transactionList.length != 0
+                            ? CommonTile(
+                                label: "Affiliate Transactions",
+                                margin: EdgeInsets.zero,
+                              )
+                            : Container(),
                         ListView.builder(
                           shrinkWrap: true,
                           itemCount: controller.transactionList.length,

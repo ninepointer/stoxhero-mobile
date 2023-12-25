@@ -17,7 +17,7 @@ class InviteView extends GetView<ReferralsController> {
 
   @override
   Widget build(BuildContext context) {
-    print("transitionList ${controller.transactionList.first.toJson()}");
+    // print("transitionList ${controller.transactionList.first.toJson()}");
     return Obx(
       () => SingleChildScrollView(
         padding: EdgeInsets.only(bottom: 100),

@@ -29,7 +29,9 @@ class InternshipLeaderBoardView extends GetView<InternshipController> {
                         children: [
                           Text(
                             "${index + 1}",
-                            style: Theme.of(context).textTheme.tsBlackRegular14,
+                            style: Get.isDarkMode
+                                ? Theme.of(context).textTheme.tsWhiteRegular14
+                                : Theme.of(context).textTheme.tsBlackRegular14,
                           ),
                           SizedBox(width: 16),
                           Container(
@@ -75,16 +77,26 @@ class InternshipLeaderBoardView extends GetView<InternshipController> {
                                             .tsRegular16,
                                       ),
                                     ),
-                                    Text(
-                                      "${((user.npnl ?? 0) / (user.portfolioValue ?? 0) * 100).toStringAsFixed(2)}%",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .tsMedium16
-                                          .copyWith(
-                                            color: user.totalreturn! > 0
-                                                ? AppColors.success
-                                                : AppColors.danger,
-                                          ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "ROI:",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12,
+                                        ),
+                                        Text(
+                                          "  ${((user.npnl ?? 0) / (user.portfolioValue ?? 0) * 100).toStringAsFixed(2)}%",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsRegular12
+                                              .copyWith(
+                                                color: user.totalreturn! > 0
+                                                    ? AppColors.success
+                                                    : AppColors.danger,
+                                              ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -98,7 +110,7 @@ class InternshipLeaderBoardView extends GetView<InternshipController> {
                                     Row(
                                       children: [
                                         Text(
-                                          "Portfolio Value: ",
+                                          "Virtual Margin: ",
                                           style: Theme.of(context)
                                               .textTheme
                                               .tsGreyRegular12,
