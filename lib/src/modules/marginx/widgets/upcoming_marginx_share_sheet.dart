@@ -8,10 +8,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 
-class LiveShareModalContent extends GetView<ContestController> {
-  final LiveContest? contest;
-  const LiveShareModalContent({
-    this.contest,
+class UpcomingMarginXShareModalContent extends GetView<ContestController> {
+  final UpcomingMarginX? marginx;
+  const UpcomingMarginXShareModalContent({
+    this.marginx,
     Key? key,
   }) : super(key: key);
 
@@ -32,7 +32,7 @@ class LiveShareModalContent extends GetView<ContestController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\nI just joined the ${contest?.contestName} TestZone on StoxHero.\n\nShow your trading skills and earn upto  ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)} or ${contest?.payoutPercentage}% of your net p&l.\n\nLet's see who can take winning trades!!\n\nUse this link to join me now!\n\nSignup now to get ${FormatHelper.formatNumbers("100", decimal: 0)} in your StoxHero wallet.\n\n http://stoxhero.page.link/testzone";
+    return "Hey!! \n\nI just joined the ${marginx?.marginXName} MarginX on StoxHero.\n\nShow your trading skills and earn reward based on your ROI. Let's see how  big you can win!!\n\nSignup now to get ${FormatHelper.formatNumbers("100", decimal: 0)} in your StoxHero wallet.\n\nDownload the App:\nhttps://play.google.com/store/apps/details?id=com.stoxhero.app&pli=1";
   }
 
   @override
@@ -101,7 +101,7 @@ class LiveShareModalContent extends GetView<ContestController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Join ${contest?.contestName}"
+                                    "Join ${marginx?.marginXName}"
                                         .capitalize
                                         .toString(),
                                     style: AppStyles.tsSecondaryMedium16
@@ -109,19 +109,20 @@ class LiveShareModalContent extends GetView<ContestController> {
                                   )
                                 ],
                               ),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "& Earn upto ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)}",
-                                    style: AppStyles.tsSecondaryMedium16
-                                        .copyWith(color: AppColors.white),
-                                  )
-                                ],
-                              ),
+                              // SizedBox(
+                              //   height: 6,
+                              // ),
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     Text(
+                              //       // "& Earn upto ${controller.getPaidCapAmount(marginx?.entryFee == 0 ? marginx?.portfolio?.portfolioValue ?? 0 : marginx?.entryFee ?? 0, marginx?.payoutCapPercentage ?? 0)}",
+                              //       "",
+                              //       style: AppStyles.tsSecondaryMedium16
+                              //           .copyWith(color: AppColors.white),
+                              //     )
+                              //   ],
+                              // ),
                               SizedBox(
                                 height: 30,
                               ),
@@ -146,7 +147,7 @@ class LiveShareModalContent extends GetView<ContestController> {
                                         ),
                                         Text(
                                             // "${completedContestPnl?.rank == null ? "-" : completedContestPnl?.rank}",
-                                            "${FormatHelper.formatDateTimeWithoutYearToIST(contest?.contestStartTime)}",
+                                            "${FormatHelper.formatDateTimeWithoutYearToIST(marginx?.startTime)}",
                                             style: AppStyles.tsSecondaryMedium16
                                                 .copyWith(
                                                     color: AppColors.white))
@@ -165,7 +166,7 @@ class LiveShareModalContent extends GetView<ContestController> {
                                           height: 2,
                                         ),
                                         Text(
-                                            '${FormatHelper.formatDateTimeWithoutYearToIST(contest?.contestEndTime)}',
+                                            '${FormatHelper.formatDateTimeWithoutYearToIST(marginx?.endTime)}',
                                             style: AppStyles.tsSecondaryMedium16
                                                 .copyWith(
                                                     color: AppColors.white))
@@ -208,10 +209,13 @@ class LiveShareModalContent extends GetView<ContestController> {
                                           height: 2,
                                         ),
                                         Text(
-                                            contest?.entryFee == 0
+                                            marginx?.marginXTemplate
+                                                        ?.entryFee ==
+                                                    0
                                                 ? 'Free'
                                                 : FormatHelper.formatNumbers(
-                                                    contest?.entryFee,
+                                                    marginx?.marginXTemplate
+                                                        ?.entryFee,
                                                     decimal: 0),
                                             style: AppStyles.tsSecondaryMedium16
                                                 .copyWith(
@@ -234,7 +238,8 @@ class LiveShareModalContent extends GetView<ContestController> {
                                           height: 2,
                                         ),
                                         Text(
-                                            "${contest?.payoutPercentage}% of Net P&L",
+                                            // "${marginx?.payoutPercentage}% of Net P&L",
+                                            'As Per Your ROI',
                                             style: AppStyles.tsSecondaryMedium16
                                                 .copyWith(
                                                     color: AppColors.white))
@@ -257,8 +262,8 @@ class LiveShareModalContent extends GetView<ContestController> {
                                         ),
                                         Text(
                                             FormatHelper.formatNumbers(
-                                                contest
-                                                    ?.portfolio?.portfolioValue,
+                                                marginx?.marginXTemplate
+                                                    ?.portfolioValue,
                                                 decimal: 0),
                                             style: AppStyles.tsSecondaryMedium16
                                                 .copyWith(

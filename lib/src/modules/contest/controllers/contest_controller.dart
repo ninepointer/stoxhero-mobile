@@ -653,6 +653,16 @@ class ContestController extends BaseController<ContestRepository> {
     return isPurchased;
   }
 
+  bool checkIfUpcomingFeaturedPurchased(contest, String userId) {
+    bool isPurchased = false;
+    for (FeaturedParticipants? user in contest?.participants ?? []) {
+      if (user?.userId?.id == userId) {
+        isPurchased = true;
+      }
+    }
+    return isPurchased;
+  }
+
   num calculateGrossPNL(num amount, int lots, num ltp) {
     if (ltp == 0) return 0;
     num pnl = 0;

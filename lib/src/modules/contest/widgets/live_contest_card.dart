@@ -412,12 +412,6 @@ class LiveContestCard extends GetView<ContestController> {
                         );
                       },
                     );
-
-                    // controller.getShareContest(false);
-                    // String url = 'https://stoxhero.com/testzone';
-                    // Clipboard.setData(ClipboardData(text: url));
-                    // SnackbarHelper.showSnackbar(
-                    //     'Link Copied, Share with your friends.');
                   },
                   child: Container(
                     alignment: Alignment.center,
