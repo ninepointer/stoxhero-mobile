@@ -251,25 +251,128 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
           ],
         ),
         SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {},
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppColors.success.withOpacity(.25),
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(8),
-                bottomLeft: Radius.circular(8),
+        Row(
+          children: [
+            Container(
+              width: 100,
+              child: GestureDetector(
+                onTap: (controller.checkIfUpcomingFeaturedPurchased(
+                                widget.upcomingFeatured, widget.userId) ||
+                            widget.upcomingFeatured?.entryFee == 0) &&
+                        controller.calculateSeatsLeft(
+                                widget.upcomingFeatured?.maxParticipants ?? 0,
+                                widget.upcomingFeatured?.participants?.length ??
+                                    0) >
+                            0
+                    ? () => SnackbarHelper.showSnackbar(
+                        'The TestZone has not started yet!')
+                    : () async {
+                        if (controller.calculateSeatsLeft(
+                                widget.upcomingFeatured?.maxParticipants ?? 0,
+                                widget.upcomingFeatured?.participants?.length ??
+                                    0) ==
+                            0) {
+                          SnackbarHelper.showSnackbar('TestZone is Full');
+                        } else {
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: PaymentBottomSheet(
+                              productType: ProductType.contest,
+                              productId: widget.upcomingFeatured?.id ?? '',
+                              buyItemPrice:
+                                  widget.upcomingFeatured?.entryFee ?? 0,
+                              onPaymentSuccess:
+                                  controller.loadDataAfterPaymentSuccess,
+                              onSubmit: () {
+                                Get.back();
+                                var walletController =
+                                    Get.find<WalletController>();
+                                var data = {
+                                  "bonusRedemption": walletController
+                                          .isHeroCashAdded.value
+                                      ? walletController.heroCashAmount.value
+                                      : 0,
+                                  "coupon": walletController
+                                      .couponCodeTextController.text,
+                                  "contestFee":
+                                      walletController.subscriptionAmount.value,
+                                  "contestId": widget.upcomingFeatured?.id,
+                                  "contestName":
+                                      widget.upcomingFeatured?.contestName,
+                                };
+                                controller.purchaseContest(data);
+                              },
+                            ),
+                          );
+                        }
+                      },
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.success.withOpacity(.25),
+                    borderRadius: BorderRadius.only(
+                      // bottomRight: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    widget.upcomingFeatured?.entryFee == 0
+                        ? 'Start Trading'
+                        : (controller.checkIfUpcomingFeaturedPurchased(
+                                        widget.upcomingFeatured,
+                                        widget.userId) ||
+                                    widget.upcomingFeatured?.entryFee == 0) &&
+                                controller
+                                        .calculateSeatsLeft(
+                                            widget.upcomingFeatured
+                                                    ?.maxParticipants ??
+                                                0,
+                                            widget.upcomingFeatured
+                                                    ?.participants?.length ??
+                                                0) >
+                                    0
+                            ? 'Purchased'
+                            : controller.calculateSeatsLeft(
+                                        widget.upcomingFeatured
+                                                ?.maxParticipants ??
+                                            0,
+                                        widget.upcomingFeatured?.participants
+                                                ?.length ??
+                                            0) ==
+                                    0
+                                ? 'TestZone Full'
+                                : 'Join Now',
+                    style: AppStyles.tsWhiteMedium12.copyWith(
+                      color: AppColors.success,
+                    ),
+                  ),
+                ),
               ),
             ),
-            child: Text(
-              '${remainingTime.inDays}Days ${remainingTime.inHours.remainder(24)}Hours ${remainingTime.inMinutes.remainder(60)}Minutes ${remainingTime.inSeconds.remainder(60)}Seconds',
-              style: AppStyles.tsSecondaryMedium12.copyWith(
-                color: AppColors.success.shade600,
+            Expanded(
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(.25),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(8),
+                      // bottomLeft: Radius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    '${remainingTime.inDays}Days ${remainingTime.inHours.remainder(24)}Hours ${remainingTime.inMinutes.remainder(60)}Minutes ${remainingTime.inSeconds.remainder(60)}Seconds',
+                    style: AppStyles.tsSecondaryMedium12.copyWith(
+                      color: AppColors.primary.shade600,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ],
     );

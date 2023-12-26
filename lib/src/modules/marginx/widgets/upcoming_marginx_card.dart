@@ -375,14 +375,28 @@ class _UpcomingMarginxCardState extends State<UpcomingMarginxCard> {
               ),
             ),
             Expanded(
-              child: GestureDetector(
+              // child: GestureDetector(
+              //   onTap: () {
+              //     controller.upComingMarginX(widget.marginx);
+              //     controller.getShareMarginX(true);
+              //     String url = 'https://stoxhero.com/marginxs';
+              //     Clipboard.setData(ClipboardData(text: url));
+              //     SnackbarHelper.showSnackbar(
+              //         'Link Copied, Share with your friends.');
+              //   },  child: InkWell(
+              child: InkWell(
                 onTap: () {
                   controller.upComingMarginX(widget.marginx);
-                  controller.getShareMarginX(true);
-                  String url = 'https://stoxhero.com/marginxs';
-                  Clipboard.setData(ClipboardData(text: url));
-                  SnackbarHelper.showSnackbar(
-                      'Link Copied, Share with your friends.');
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Center(
+                        child: UpcomingMarginXShareModalContent(
+                          marginx: widget.marginx,
+                        ),
+                      );
+                    },
+                  );
                 },
                 child: Container(
                   alignment: Alignment.center,

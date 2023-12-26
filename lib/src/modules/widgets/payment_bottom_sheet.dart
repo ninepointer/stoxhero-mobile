@@ -531,6 +531,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               value: controller.isHeroCashAdded.value,
                               onChanged: (value) {
                                 controller.isHeroCashAdded(value);
+                                controller.heroCashAmount(
+                                    calculateHeroCash.toDouble());
                                 if (value ?? false) {
                                   controller.addHeroCash(calculateHeroCash);
                                 } else {

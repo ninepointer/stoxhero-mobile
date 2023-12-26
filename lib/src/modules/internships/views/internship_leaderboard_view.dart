@@ -16,10 +16,10 @@ class InternshipLeaderBoardView extends GetView<InternshipController> {
             replacement: CommonLoader(),
             child: Container(
               child: ListView.builder(
-                shrinkWrap: true,
+                shrinkWrap: false,
                 itemCount: controller.internshipBatchLeaderboard.length,
                 padding: EdgeInsets.zero,
-                physics: NeverScrollableScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   var user = controller.internshipBatchLeaderboard[index];
                   return CommonCard(
@@ -33,7 +33,7 @@ class InternshipLeaderBoardView extends GetView<InternshipController> {
                                 ? Theme.of(context).textTheme.tsWhiteRegular14
                                 : Theme.of(context).textTheme.tsBlackRegular14,
                           ),
-                          SizedBox(width: 16),
+                          SizedBox(width: 12),
                           Container(
                             alignment: Alignment.center,
                             height: 35,
@@ -61,7 +61,7 @@ class InternshipLeaderBoardView extends GetView<InternshipController> {
                                     ),
                             ),
                           ),
-                          SizedBox(width: 16),
+                          SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               children: [
