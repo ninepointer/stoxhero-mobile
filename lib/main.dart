@@ -6,6 +6,7 @@ import 'src/app/app.dart';
 
 const bool isProd = false;
 const bool useTestToken = true;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

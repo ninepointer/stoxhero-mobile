@@ -13,7 +13,7 @@ class VirtualStoplossPendingOrderCard
 
   void openBottomSheet(BuildContext context) {
     FocusScope.of(context).unfocus();
-    log(stopLoss.type.toString());
+
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: VirtualStoplossEditPriceBottomSheet(
@@ -29,6 +29,7 @@ class VirtualStoplossPendingOrderCard
         ),
       ),
     );
+    print("stoplosss${stopLoss.toJson()}");
   }
 
   @override

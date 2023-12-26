@@ -91,3 +91,7 @@ export "referrals_product_response.dart";
 export "internship_leaderboard_response.dart";
 export "affiliate_summary_response.dart";
 export "affiliate_refferals_signup_response.dart";
+export 'virtual_pending_order_stoploss_response.dart';
+export "contest_pending_order_stoploss_response.dart";
+export 'my_affiliate_transaction_list_response.dart';
+export "my_affiliate_referrlas_List_response.dart";
