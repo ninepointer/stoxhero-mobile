@@ -119,7 +119,7 @@ class WalletController extends BaseController<WalletRepository> {
     couponCodeSuccessText("");
     isCouponCodeAdded(false);
     subscriptionAmount(isHeroCashAdded.value
-        ? actualSubscriptionAmount.value - herocash
+        ? actualSubscriptionAmount.value - calculateHeroCash
         : actualSubscriptionAmount.value);
     couponCodeTextController.clear();
   }
