@@ -38,6 +38,8 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                   int rank = index + 1;
                   LiveContestLeaderboard user =
                       controller.liveLeaderboardList[index];
+                  print(
+                      "liveleaderboardlist ${controller.liveLeaderboardList[index].userName}");
                   var reward = controller.liveContest.value.payoutType;
                   return CommonRankCard(
                     rank: rank.toString(),

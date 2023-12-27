@@ -402,6 +402,30 @@ class LiveContestCard extends GetView<ContestController> {
                 child: InkWell(
                   onTap: () {
                     controller.liveContest(contest);
+                    Get.toNamed(AppRoutes.contestLiveLeaderboard);
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(.25),
+                      // borderRadius: BorderRadius.only(
+                      //   bottomRight: Radius.circular(8),
+                      // ),
+                    ),
+                    child: Text(
+                      'Leaderboard',
+                      style: AppStyles.tsSecondaryMedium12.copyWith(
+                        color: AppColors.primary.shade600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    controller.liveContest(contest);
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {

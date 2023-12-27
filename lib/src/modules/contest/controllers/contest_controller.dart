@@ -1467,6 +1467,7 @@ class ContestController extends BaseController<ContestRepository> {
         'contest-leaderboardData${liveFeatured.value.id ?? liveContest.value.id}',
         (data) {
           log('Socket Leaderboard : contest-leaderboardData${liveFeatured.value.id ?? liveContest.value.id} $data');
+          print('Socket Leaderboard Data: $data');
           liveLeaderboardList.value =
               LiveContestLeaderboardReponse.fromJson(data).data ?? [];
         },
