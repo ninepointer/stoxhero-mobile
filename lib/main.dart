@@ -5,7 +5,8 @@ import 'package:stoxhero/firebase_options.dart';
 
 import 'src/app/app.dart';
 
-const bool isProd = true;
+const bool isProd = false;
+
 const bool useTestToken = true;
 
 void main() async {
