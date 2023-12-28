@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/modules/Affiliate/widgets/affiliate_pie_chart.dart';
 
 import '../../../app/app.dart';
 
@@ -16,28 +17,6 @@ class _AffiliateViewState extends State<AffiliateView> {
     controller = Get.find<AffiliateController>();
   }
 
-  //   String getProductMonth(String? label) {
-  //   String name = '';
-  //    DateTime now = DateTime.now();
-  //   if (label == 'today') {
-  //     name = DateFormat('MMMM yyyy').format(now);
-
-  //   }
-  //   if (label == 'yesterday') {
-  //     name = "yesterday";
-  //   }
-  //   if (label == 'this week') {
-  //     name = "this week";
-  //   }
-  //   if (label == 'this month') {
-  //     name = "this month";
-  //   }
-  //   if (label == 'custom') {
-  //     name = "custom";
-  //   }
-  //   return name;
-  // }
-
   num? totalEarning() {
     num sum = 0;
     sum = (controller.affiliateSignupSummeryList.isNotEmpty
@@ -53,7 +32,6 @@ class _AffiliateViewState extends State<AffiliateView> {
 
   @override
   Widget build(BuildContext context) {
-    print("selectedTimeFrame${controller.selectedTimeFrame}");
     return Scaffold(
       appBar: AppBar(
         title: Text('Affiliate Dashboard'),
@@ -62,9 +40,20 @@ class _AffiliateViewState extends State<AffiliateView> {
         child: Column(
           children: [
             MyAffilateDashboardSummary(),
+            // AffiliateChart(
+            //   title: "Last 30 days daily earnings",
+            //   barGroups:
+            // ),
+            // AffiliateChart(
+            //   title: "Last 30 days daily",
+            // ),
             SizedBox(
               height: 8,
             ),
+            // AffiliateChart(
+            //   title: "Last 30 days daily ",
+            // ),
+            // Text("hello"),
             Container(
               margin: EdgeInsets.symmetric(vertical: 8),
               padding: EdgeInsets.all(16),
@@ -188,22 +177,63 @@ class _AffiliateViewState extends State<AffiliateView> {
                                 Expanded(
                                   child: customCard(
                                     context,
-                                    label: 'Product\nTransaction',
-                                    earning: controller.summeryList.isNotEmpty
-                                        ? controller
-                                            .summeryList.first.totalProductCount
-                                            .toString()
-                                        : "0",
+                                    label: 'No of\nReferrals',
+                                    earning: "3",
                                   ),
                                 ),
                                 SizedBox(width: 8),
                                 Expanded(
                                   child: customCard(
                                     context,
-                                    label: 'Product \nEarnings',
+                                    label: 'Active \nReferrlas',
+                                    earning: "3",
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    context,
+                                    label: 'Act\nConversion',
+                                    earning: "2.3%",
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    context,
+                                    label: 'Paid \nReferrals',
+                                    earning: "3%",
+                                    // valueColor: AppColors.success,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    context,
+                                    label: 'Paid \nConversion',
+                                    earning: "2.3%",
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: customCard(
+                                    context,
+                                    label: 'Referral\nAmount',
                                     earning:
-                                        "${FormatHelper.formatNumbers(controller.summeryList.isNotEmpty ? controller.summeryList.first.totalProductCPayout ?? 0 : 0, decimal: 0)}",
-                                    valueColor: AppColors.success,
+                                        "${FormatHelper.formatNumbers("15", decimal: 0)}",
+                                    // valueColor: AppColors.success,
                                   ),
                                 ),
                               ],
@@ -212,29 +242,44 @@ class _AffiliateViewState extends State<AffiliateView> {
                             Row(
                               children: [
                                 Expanded(
+                                  child: customCard(context,
+                                      label: 'Activation\nAmount',
+                                      earning:
+                                          "${FormatHelper.formatNumbers("15", decimal: 0)}"
+                                      // controller.summaryCount().toString()
+                                      ),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
                                   child: customCard(
                                     context,
-                                    label: 'Total\nSignup',
-                                    earning: (controller
-                                                .affiliateSignupSummeryList
-                                                .isNotEmpty
-                                            ? controller
-                                                    .affiliateSignupSummeryList
-                                                    .first
-                                                    .affiliateRefferalCount ??
-                                                0
-                                            : 0)
-                                        .toString(),
-                                    // controller.summaryCount().toString()
+                                    label: 'No. of \nPurchases',
+                                    earning: "15",
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customCard(
+                                    context,
+                                    label: 'Commission',
+                                    earning:
+                                        "${FormatHelper.formatNumbers("15", decimal: 0)}",
+                                    // valueColor: AppColors.success,
                                   ),
                                 ),
                                 SizedBox(width: 8),
                                 Expanded(
                                   child: customCard(
                                     context,
-                                    label: 'SignUp \nEarnings',
+                                    label: 'Total\nAmount',
                                     earning:
-                                        "${FormatHelper.formatNumbers(controller.affiliateSignupSummeryList.isNotEmpty ? controller.affiliateSignupSummeryList.first.affiliateRefferalPayout ?? 0 : 0, decimal: 0)}",
+                                        "${FormatHelper.formatNumbers("15", decimal: 0)}",
                                     valueColor: AppColors.success,
                                   ),
                                 ),
