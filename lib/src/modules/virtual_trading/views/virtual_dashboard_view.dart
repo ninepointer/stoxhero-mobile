@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/app/app.dart';
 import 'package:stoxhero/src/core/core.dart';
+import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
+import 'package:stoxhero/src/modules/stocks/views/stocks_dashboard_view.dart';
 
 class FutureAndOptionDashBoard extends StatelessWidget {
   const FutureAndOptionDashBoard({Key? key}) : super(key: key);
@@ -74,7 +76,11 @@ class FutureAndOptionDashBoard extends StatelessWidget {
             title: 'Stocks',
             image: AppImages.stock,
             text: "Master essential skills in Stock trading",
-            onPressed: () {},
+            onPressed: () {
+              Get.find<StocksTradingController>().loadData();
+              // Get.find<VirtualTradingController>().selectedTabBarIndex(0);
+              Get.to(() => StocksDashboardView());
+            },
           ),
         ],
       ),

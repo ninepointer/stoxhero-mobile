@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
 import '../../../app/app.dart';
 import 'dart:async';
-import 'dart:developer';
 
 class SearchBottomSheet extends StatefulWidget {
   const SearchBottomSheet({Key? key}) : super(key: key);
@@ -37,109 +35,110 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
     super.dispose();
   }
 
-  // ... your existing code ...
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 55),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
+    return Obx(
+      () => Scaffold(
+        body: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 55),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 25),
-            child: Expanded(
-              child: Container(
-                margin: EdgeInsets.only(left: 25, right: 25),
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        focusNode: myFocusNode,
-                        controller: controller.searchTextController,
-                        onChanged: (value) {
-                          if (value.isEmpty || value == "") {
-                            controller.isSearchCleared.value = true;
-                          } else {
-                            controller.isSearchCleared(false);
-                          }
-                          controller.getStocksTradingInstruments(value);
+            Padding(
+              padding: const EdgeInsets.only(top: 25),
+              child: Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 25, right: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
-                        decoration: InputDecoration(
-                          hintText: "Search & add...",
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: InputBorder.none,
-                          suffixIcon: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  controller.isSearchCleared(false);
-                                  controller.tradingInstruments([]);
-                                  controller.searchTextController.clear();
-                                  // Request focus after clearing text
-                                  Future.delayed(Duration.zero, () {
-                                    myFocusNode.requestFocus();
-                                  });
-                                },
-                                icon: Text(
-                                  'Clear',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 12,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          focusNode: myFocusNode,
+                          controller: controller.searchTextController,
+                          onChanged: (value) {
+                            if (value.isEmpty || value == "") {
+                              controller.isSearchCleared.value = true;
+                            } else {
+                              controller.isSearchCleared(false);
+                            }
+                            controller.getStocksTradingInstruments(value);
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Search & add...",
+                            hintStyle: TextStyle(color: Colors.grey),
+                            border: InputBorder.none,
+                            suffixIcon: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    controller.isSearchCleared(false);
+                                    controller.tradingInstruments([]);
+                                    controller.searchTextController.clear();
+                                    // Request focus after clearing text
+                                    Future.delayed(Duration.zero, () {
+                                      myFocusNode.requestFocus();
+                                    });
+                                  },
+                                  icon: Text(
+                                    'Clear',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 100,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Obx(
-              () => ListView.builder(
+            Positioned(
+              top: 100,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: ListView.builder(
                 itemCount: controller.tradingInstruments.length,
                 itemBuilder: (context, index) {
                   var stock = controller.tradingInstruments[index];
+                  // var ltp = controller.tradingInstrumentTradeDetailsList[index];
+
+                  //var data = controller.tradingInstruments[index];//for ontap-add feature
 
                   return Card(
                     elevation: 0,
@@ -163,11 +162,18 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                                   Row(
                                     children: [
                                       Text(
-                                        "LTP: ₹150.75",
-                                        style: TextStyle(color: Colors.green),
+                                        controller
+                                            .getInstrumentLastPrice(
+                                              stock.instrumentToken ?? 0,
+                                              stock.exchangeToken ?? 0,
+                                            )
+                                            .toString(),
                                       ),
                                       Text(
-                                        " (+2.5%)",
+                                        controller.getInstrumentChanges(
+                                          stock.instrumentToken ?? 0,
+                                          stock.exchangeToken ?? 0,
+                                        ),
                                         style: TextStyle(color: Colors.green),
                                       ),
                                     ],
@@ -180,6 +186,8 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                                   IconButton(
                                     icon: Icon(Icons.add),
                                     onPressed: () {
+                                      controller.addInstrument(
+                                          controller.tradingInstruments[index]);
                                       controller.selectedWatchlistStock(stock);
                                       controller.addStocktoWatchlist();
                                       print(
@@ -203,8 +211,8 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                 },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

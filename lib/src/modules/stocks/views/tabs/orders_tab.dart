@@ -28,66 +28,64 @@ class _ordersState extends State<orders> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left:8,right:8),
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: [
-                
-                Container(
-                  //height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.white54,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top:0),
-                        child: TabBar(
-                           labelColor: Colors.green[600],
-                           isScrollable: true,
-                           unselectedLabelColor: Colors.grey,
-                           indicator: BoxDecoration(
-                            color: Colors.green[200],
-                            borderRadius: BorderRadius.circular(25),
-                           ),
-                          controller: tabController,
-                          tabs: [
-                            Tab(
-                              text: 'All Orders', // Change 'Holdings' to 'holdings'
-                            ),
-                            Tab(
-                              text: 'Executed Orders',
-                            ),
-                            Tab(
-                              text: 'Pending Orders',
-                            ),
-                            
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 8, right: 8),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              Container(
+                //height: 50,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white54,
+                  borderRadius: BorderRadius.circular(25),
                 ),
-                //Conten for the 2 tabs 
-                Expanded(
-                  child: TabBarView(
-                    controller: tabController,
+                child: Column(
                   children: [
-                 AllOrders(),
-                 ExecutedOrders(),
-                 PendingOrders(),
-
-
-                ],))
-
-
-              ],
-            ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 0),
+                      child: TabBar(
+                        labelColor: Colors.green[600],
+                        isScrollable: true,
+                        unselectedLabelColor: Colors.grey,
+                        indicator: BoxDecoration(
+                          color: Colors.green[200],
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        controller: tabController,
+                        tabs: [
+                          Tab(
+                            text:
+                                'All Orders', // Change 'Holdings' to 'holdings'
+                          ),
+                          Tab(
+                            text: 'Executed Orders',
+                          ),
+                          Tab(
+                            text: 'Pending Orders',
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              //Conten for the 2 tabs
+              Expanded(
+                  child: Container(
+                height: MediaQuery.of(context).size.height,
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: tabController,
+                  children: [
+                    AllOrders(),
+                    ExecutedOrders(),
+                    PendingOrders(),
+                  ],
+                ),
+              ))
+            ],
           ),
         ),
       ),

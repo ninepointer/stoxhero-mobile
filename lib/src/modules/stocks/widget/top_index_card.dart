@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../core/core.dart';
+import '../../../core/core.dart';
 
-class TradingStockCard extends StatelessWidget {
+class IndexCard extends StatelessWidget {
   final String? label;
   final dynamic stockPrice;
   final String? stockLTP;
   final String? stockChange;
   final Color? stockColor;
   final Color? stockLTPColor;
-  const TradingStockCard({
+  const IndexCard({
     Key? key,
     required this.label,
     required this.stockPrice,
@@ -21,7 +21,8 @@ class TradingStockCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Container(
+      width: 150,
       child: CommonCard(
         margin: EdgeInsets.zero,
         padding: EdgeInsets.zero,

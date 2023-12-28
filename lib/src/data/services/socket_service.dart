@@ -24,12 +24,13 @@ class SocketService extends GetxController {
         print('Socket : Connected : $userId');
         socket.emit('userId', userId);
         socket.emit('user-ticks', userId);
+        socket.emit('equity-watchlist', userId);
       });
 
       socket.onAny((event, data) {
         // print('Socket : Event : $event with data: $data');
       });
-
+         
       socket.onConnectError((err) => print('Socket : onConnectError : $err'));
 
       socket.onDisconnect((_) => print('Socket : onDisconnect'));

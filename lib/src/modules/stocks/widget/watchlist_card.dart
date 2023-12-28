@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../../../core/core.dart';
+
 class WatchlistCard extends StatelessWidget {
   const WatchlistCard({
     Key? key,
@@ -15,6 +17,10 @@ class WatchlistCard extends StatelessWidget {
   final String price;
   final String percentage;
 
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,7 +33,7 @@ class WatchlistCard extends StatelessWidget {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  // Handle phone action
+                  openBottomSheet(context, TransactionType.buy);
                 },
                 icon: Icons.shopping_cart,
                 backgroundColor: Colors.green,
@@ -35,7 +41,7 @@ class WatchlistCard extends StatelessWidget {
               ),
               SlidableAction(
                 onPressed: (context) {
-                  // Handle delete action
+                  openBottomSheet(context, TransactionType.sell);
                 },
                 icon: Icons.shopping_cart,
                 backgroundColor: Colors.red,

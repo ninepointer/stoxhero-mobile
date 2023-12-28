@@ -40,7 +40,7 @@ class Funds extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
+        child: ListView(
           children: [
             FundsCard(
                 cardname: "Margin available",
