@@ -222,28 +222,33 @@ class UpcomingMarginXShareModalContent extends GetView<ContestController> {
                                                     color: AppColors.white))
                                       ],
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Reward",
-                                          style: AppStyles.tsSecondaryRegular14
-                                              .copyWith(
-                                            color: AppColors.white,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                            // "${marginx?.payoutPercentage}% of Net P&L",
-                                            'As Per Your ROI',
-                                            style: AppStyles.tsSecondaryMedium16
+                                    Container(
+                                      margin: EdgeInsets.only(left: 15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Reward",
+                                            style: AppStyles
+                                                .tsSecondaryRegular14
                                                 .copyWith(
-                                                    color: AppColors.white))
-                                      ],
+                                              color: AppColors.white,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                              // "${marginx?.payoutPercentage}% of Net P&L",
+                                              'As Per Your ROI',
+                                              style: AppStyles
+                                                  .tsSecondaryMedium16
+                                                  .copyWith(
+                                                      color: AppColors.white))
+                                        ],
+                                      ),
                                     ),
                                     Column(
                                       crossAxisAlignment:

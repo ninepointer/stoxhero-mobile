@@ -222,28 +222,36 @@ class UpComingShareModalContent extends GetView<ContestController> {
                                                     color: AppColors.white))
                                       ],
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Reward",
-                                          style: AppStyles.tsSecondaryRegular14
-                                              .copyWith(
-                                            color: AppColors.white,
+                                    // SizedBox(
+                                    //   width: 1,
+                                    // ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 14),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Reward",
+                                            style: AppStyles
+                                                .tsSecondaryRegular14
+                                                .copyWith(
+                                              color: AppColors.white,
+                                            ),
+                                            textAlign: TextAlign.start,
                                           ),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          "${contest?.payoutPercentage}% of Net P&L",
-                                          style: AppStyles.tsSecondaryMedium16
-                                              .copyWith(color: AppColors.white),
-                                          textAlign: TextAlign.end,
-                                        )
-                                      ],
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            "${contest?.payoutPercentage}% of Net P&L",
+                                            style: AppStyles.tsSecondaryMedium16
+                                                .copyWith(
+                                                    color: AppColors.white),
+                                            textAlign: TextAlign.end,
+                                          )
+                                        ],
+                                      ),
                                     ),
                                     Column(
                                       crossAxisAlignment:

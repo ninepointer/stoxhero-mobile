@@ -401,9 +401,17 @@ class LiveContestCard extends GetView<ContestController> {
               Expanded(
                 child: InkWell(
                   onTap: () {
+                    controller.disconnectLeaderboardSocket();
+                    controller.liveContest(LiveContest());
                     controller.liveContest(contest);
 
                     controller.liveLeaderboardList([]);
+
+                    controller.getContestPositions();
+
+                    controller.getContestWatchList();
+                    controller.socketConnection();
+
                     controller.socketLeaderboardConnection();
                     controller.userDetails.value = AppStorage.getUserDetails();
                     controller.liveLeaderboardList();

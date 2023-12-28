@@ -164,10 +164,10 @@ class ContestController extends BaseController<ContestRepository> {
   final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
   final readSetting = ReadSettingResponse().obs;
 
-  void onClose() {
-    disconnectLeaderboardSocket();
-    super.onClose();
-  }
+  // void onClose() {
+  //   disconnectLeaderboardSocket();
+  //   super.onClose();
+  // }
 
   Future loadData() async {
     loadUserDetails();
@@ -1475,7 +1475,7 @@ class ContestController extends BaseController<ContestRepository> {
         (data) {
           log('Socket Leaderboard : contest-leaderboardData${liveFeatured.value.id ?? liveContest.value.id} $data');
           print(
-              'Socket Leaderboard Date:  ${liveContest.value.contestName} ${liveContest.value.id}  ${liveFeatured.value.contestName} ${liveFeatured.value.id}');
+              'Socket Leaderboard Data:  ${liveContest.value.contestName} ${data}');
           print(
               "contestid ${liveContest.value.id}  ${liveContest.value.contestName}");
           liveLeaderboardList.value =
