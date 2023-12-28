@@ -75,7 +75,7 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                       )
                     : Center(
                         child: Text(
-                          "No data found",
+                          "Nothing here yet",
                           style: AppStyles.tsBlackRegular14,
                         ),
                       ),
