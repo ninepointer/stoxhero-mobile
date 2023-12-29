@@ -1,101 +1,89 @@
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/core/core.dart';
-import 'package:stoxhero/src/modules/modules.dart';
+// import 'package:flutter/material.dart';
+// import 'package:fl_chart/fl_chart.dart';
 
-class AffiliateChart extends StatefulWidget {
-  final String title;
-  final List<BarChartGroupData> barGroups;
+// class GroupedBarChartWidget extends StatelessWidget {
+//   final List<PricePoint> points;
 
-  const AffiliateChart({
-    Key? key,
-    required this.title,
-    required this.barGroups,
-  }) : super(key: key);
+//   GroupedBarChartWidget({required this.points});
 
-  @override
-  State<AffiliateChart> createState() => _AnalyticsChartState();
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return AspectRatio(
+//       aspectRatio: 2,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         children: [
+//           BarChartWidget(points: points, barColors: [Colors.red, Colors.blue, Colors.green]),
+//           BarChartWidget(points: points, barColors: [Colors.yellow, Colors.orange, Colors.purple]),
+//           // Add more BarChartWidget instances for additional groups
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class _AnalyticsChartState extends State<AffiliateChart> {
-  late AffiliateController controller;
+// class BarChartWidget extends StatelessWidget {
+//   final List<PricePoint> points;
+//   final List<Color> barColors;
 
-  @override
-  void initState() {
-    controller = Get.find<AffiliateController>();
-    super.initState();
-  }
+//   BarChartWidget({required this.points, required this.barColors});
 
-  Widget leftTitles(double value, TitleMeta meta) {
-    if (value == meta.max) return Container();
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: Text(
-        meta.formattedValue.toString(),
-        style: AppStyles.tsGreyRegular10,
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return BarChart(
+//       BarChartData(
+//         barGroups: _chartGroups(),
+//         titlesData: FlTitlesData(
+//           leftTitles: SideTitles(
+//             showTitles: true,
+//             interval: 200, // Set the interval for left titles
+//           ),
+//           bottomTitles: SideTitles(
+//             showTitles: true,
+//             getTitles: (double value) {
+//               int index = value.toInt();
+//               if (index >= 0 && index < points.length) {
+//                 return points[index].month;
+//               }
+//               return '';
+//             },
+//           ),
+//         ),
+//       ),
+//     );
+//   }
 
-  Widget bottomTitless(double value, TitleMeta meta) {
-    List<String> dates = ['24 Dec', '25 Dec', '26 Dec', "27 Dec"];
-    if (value == meta.max) return Container();
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      angle: 55,
-      child: Text(
-        dates.toString(),
-        style: AppStyles.tsGreyRegular10,
-      ),
-    );
-  }
+//   List<BarChartGroupData> _chartGroups() {
+//     return points.asMap().entries.map((entry) {
+//       int index = entry.key;
+//       PricePoint point = entry.value;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CommonTile(label: widget.title),
-        AspectRatio(
-          aspectRatio: 1.5,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return BarChart(
-                  BarChartData(
-                    alignment: BarChartAlignment.spaceEvenly,
-                    titlesData: FlTitlesData(
-                      show: true,
-                      topTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      rightTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 36,
-                            interval: 1,
-                            getTitlesWidget: bottomTitless),
-                      ),
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                            showTitles: true,
-                            reservedSize: 56,
-                            interval: 1,
-                            getTitlesWidget: leftTitles),
-                      ),
-                    ),
-                    // barGroups: widget.barGroups,
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//       return BarChartGroupData(
+//         x: index,
+//         barRods: [
+//           BarChartRodData(
+//             y: point.total,
+//             colors: [barColors[0]],
+//           ),
+//           BarChartRodData(
+//             y: point.contest,
+//             colors: [barColors[1]],
+//           ),
+//           BarChartRodData(
+//             y: point.tenx,
+//             colors: [barColors[2]],
+//           ),
+//         ],
+//       );
+//     }).toList();
+//   }
+// }
+
+// class PricePoint {
+//   final String month;
+//   final double total;
+//   final double contest;
+//   final double tenx;
+
+//   PricePoint({required this.month, required this.total, required this.contest, required this.tenx});
+// }

@@ -5,3 +5,5 @@ export 'widgets/affiliate_signupDetails_card.dart';
 export 'widgets/my_affiliate_dashboard_summary_card.dart';
 export "widgets/affililate_barchart.dart";
 export 'widgets/affiliate_pie_chart.dart';
+export 'widgets/indicator_pie_chart.dart';
+// export 'widgets/affiliate_paid_referrlas_pie_chart.dart';

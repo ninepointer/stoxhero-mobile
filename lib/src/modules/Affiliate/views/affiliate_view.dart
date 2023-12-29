@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/modules/Affiliate/widgets/affiliate_pie_chart.dart';
-
+import 'package:stoxhero/src/modules/Affiliate/widgets/affiliate_paid_referrlas_pie_chart.dart';
 import '../../../app/app.dart';
 
 class AffiliateView extends StatefulWidget {
@@ -44,6 +43,11 @@ class _AffiliateViewState extends State<AffiliateView> {
             //   title: "Last 30 days daily earnings",
             //   barGroups:
             // ),
+            PieChartReferrals(),
+            SizedBox(
+              height: 8,
+            ),
+            PieChartPaidReferrals(),
             // AffiliateChart(
             //   title: "Last 30 days daily",
             // ),

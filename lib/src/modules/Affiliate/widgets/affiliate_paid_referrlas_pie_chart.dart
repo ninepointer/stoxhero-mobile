@@ -6,14 +6,14 @@ import 'package:get/get.dart';
 import 'package:stoxhero/src/core/core.dart';
 import 'package:stoxhero/src/modules/modules.dart';
 
-class PieChartReferrals extends StatefulWidget {
-  const PieChartReferrals({super.key});
+class PieChartPaidReferrals extends StatefulWidget {
+  const PieChartPaidReferrals({super.key});
 
   @override
-  State<StatefulWidget> createState() => PieChartReferralsState();
+  State<StatefulWidget> createState() => PieChartPaidReferralsState();
 }
 
-class PieChartReferralsState extends State {
+class PieChartPaidReferralsState extends State {
   int touchedIndex = -1;
 
   @override
@@ -68,11 +68,16 @@ class PieChartReferralsState extends State {
               ),
               Indicator(
                 color: AppColors.primary,
-                text: 'Toatl Active',
+                text: 'Total Active',
                 isSquare: true,
               ),
               SizedBox(
                 height: 4,
+              ),
+              Indicator(
+                color: AppColors.brandYellow,
+                text: 'Total Paid',
+                isSquare: true,
               ),
               SizedBox(
                 height: 10,
@@ -88,7 +93,7 @@ class PieChartReferralsState extends State {
   }
 
   List<PieChartSectionData> showingSections(int touchedIndex) {
-    return List.generate(2, (i) {
+    return List.generate(3, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
       final radius = isTouched ? 60.0 : 50.0;
@@ -112,6 +117,19 @@ class PieChartReferralsState extends State {
             color: AppColors.primary,
             value: 7,
             title: '7',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: AppColors.white,
+              shadows: shadows,
+            ),
+          );
+        case 2:
+          return PieChartSectionData(
+            color: AppColors.brandYellow,
+            value: 1,
+            title: '1',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
