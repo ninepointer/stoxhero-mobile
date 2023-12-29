@@ -42,7 +42,9 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                       ),
                       Text(
                         "Loading your leaderboard...",
-                        style: AppStyles.tsBlackRegular14,
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteRegular14
+                            : AppStyles.tsBlackRegular14,
                       )
                     ],
                   ),
