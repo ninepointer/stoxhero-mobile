@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:stoxhero/src/modules/story/view/story_view.dart';
 import '../../../app/app.dart';
 import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';
 
@@ -218,8 +219,7 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      controller.selectedIndex(2);
-                      Get.find<TenxTradingController>().loadData();
+                      Get.to(StoryView());
                     },
                     child: CommonCard(
                       padding: EdgeInsets.zero,
