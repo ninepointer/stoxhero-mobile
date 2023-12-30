@@ -24,6 +24,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
     super.initState();
+
     controller = Get.find<HomeController>();
     contestProfileController = Get.find<ContestProfileController>();
     contestController = Get.find<ContestController>();
@@ -180,7 +181,11 @@ class _DashboardViewState extends State<DashboardView> {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Color.fromARGB(255, 3, 31, 65),
+                            border: Border.all(
+                              color: AppColors.brandYellow,
+                              width: 1.0,
+                            ),
+                            color: Colors.transparent,
                           ),
                           padding: EdgeInsets.all(14),
                           child: Column(
@@ -199,8 +204,10 @@ class _DashboardViewState extends State<DashboardView> {
                                 children: [
                                   Text(
                                     "StoxHero 2023 In Review",
-                                    style: AppStyles.tsBlackMedium18
-                                        .copyWith(color: AppColors.white),
+                                    style: AppStyles.tsBlackMedium18.copyWith(
+                                        color: Get.isDarkMode
+                                            ? AppColors.white
+                                            : AppColors.black),
                                   )
                                 ],
                               ),

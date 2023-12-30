@@ -37,7 +37,7 @@ class _StoryViewState extends State<StoryView> {
   }
 
   void _startWatching() {
-    timer = Timer.periodic(Duration(milliseconds: 80), (timer) {
+    timer = Timer.periodic(Duration(milliseconds: 70), (timer) {
       if (!isPaused) {
         setState(() {
           // Only add 0.01 as long as it's below 1
@@ -78,7 +78,7 @@ class _StoryViewState extends State<StoryView> {
     });
   }
 
-  void _onTapDown(TapDownDetails details) {
+  void _onTapDown(TapUpDetails details) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double dx = details.globalPosition.dx;
     // User taps the first half of the screen
@@ -117,7 +117,7 @@ class _StoryViewState extends State<StoryView> {
       body: GestureDetector(
         onLongPress: _onLongPress,
         onLongPressEnd: _onLongPressEnd,
-        onTapDown: _onTapDown,
+        onTapUp: _onTapDown,
         child: Stack(
           children: [
             myStories[currentStoryIndex],

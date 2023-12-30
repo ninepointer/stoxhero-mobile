@@ -18,18 +18,18 @@ class _Story5State extends State<Story5> with SingleTickerProviderStateMixin {
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: 1300),
+      duration: Duration(milliseconds: 1700),
       vsync: this,
     );
 
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _opacityAnimation = Tween<double>(begin: 0.2, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Interval(0.0, 0.8, curve: Curves.easeInOut),
       ),
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.1, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Interval(0.2, 1.0, curve: Curves.easeInOutBack),
@@ -67,7 +67,7 @@ class _Story5State extends State<Story5> with SingleTickerProviderStateMixin {
                             isRepeatingAnimation: true,
                             animatedTexts: [
                               ColorizeAnimatedText(
-                                "Thank you for making our 2023 awesome.\nWe wish you a happy and prosperous new year 2024.",
+                                "Thank you for making our 2023 awesome.\n\nWe wish you a happy and prosperous new year 2024.",
                                 textStyle: TextStyle(
                                   fontSize: 30.0,
                                   fontWeight: FontWeight.bold,

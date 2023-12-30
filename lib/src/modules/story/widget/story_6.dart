@@ -17,7 +17,7 @@ class _Story6State extends State<Story6> with SingleTickerProviderStateMixin {
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: 1300),
+      duration: Duration(milliseconds: 1700),
       vsync: this,
     );
 
@@ -68,8 +68,8 @@ class _Story6State extends State<Story6> with SingleTickerProviderStateMixin {
                             child: Text(
                               "We promise 2024 will be exponentially bigger. With your support, We'll scale new highs, register new peaks and flourish together.",
                               style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 shadows: [
                                   Shadow(

@@ -58,16 +58,16 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
       body: Stack(
         children: [
           // Background image with entrance animation
-          Positioned.fill(
-            child: AnimatedOpacity(
-              opacity: _opacityAnimation.value,
-              duration: Duration(milliseconds: 800),
-              child: Image.asset(
-                AppImages.storybg1, // Replace with your image asset
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          // Positioned.fill(
+          //   child: AnimatedOpacity(
+          //     opacity: _opacityAnimation.value,
+          //     duration: Duration(milliseconds: 800),
+          //     child: Image.asset(
+          //       AppImages.storybg1, // Replace with your image asset
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
           // Content with animations
           SlideTransition(
             position: _slideAnimation,
@@ -104,10 +104,11 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
                                               Duration(milliseconds: 2200))
                                     ],
                                     child: Text(
-                                      "Much like the nature of markets 📈 , there were bumps along the road. But with your support, we stuck it out together.",
+                                      "Much like the nature of markets 📈, there were bumps along the road. But with your support, we stuck it out together.",
                                       style: TextStyle(
                                         fontSize: 22.0,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'monospace',
                                         color: Colors.white,
                                         shadows: [
                                           Shadow(
@@ -123,6 +124,7 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
                                   "We're a community of 30,000+ traders and counting, enough to fill the Wankhede Cricket Stadium in full capacity.",
                                   style: TextStyle(
                                     fontSize: 18.0,
+                                    fontFamily: 'monospace',
                                     color: Colors.white,
                                     shadows: [
                                       Shadow(

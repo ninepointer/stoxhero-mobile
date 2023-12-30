@@ -88,7 +88,8 @@ class _Story1State extends State<Story1> with SingleTickerProviderStateMixin {
                                   "We Started out in May, 2023",
                                   style: TextStyle(
                                     fontSize: 28.0,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: "Sans-serif",
                                     color: Colors.white,
                                     shadows: [
                                       Shadow(
