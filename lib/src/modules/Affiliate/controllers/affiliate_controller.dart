@@ -19,10 +19,11 @@ class AffiliateController extends BaseController<AffiliateRespository> {
   final endDateTextController = TextEditingController();
 
   final affiliateSummaryDetails = <AffiliateSummaryData>[].obs;
-  final summeryList = <AffiliateSummery>[].obs;
-  final transactionList = <AffiliateTransaction>[].obs;
+  final summeryList = <AffiliateSummaryDetails>[].obs;
+  // final transactionList = <AffiliateTransaction>[].obs;
   final myAffiliateTransctionList = <MyTranscationListData>[].obs;
-  final affiliateSignupSummeryList = <AffiliateRafferalSummery>[].obs;
+  final affiliateSignupSummeryList = <AffiliateRafferalSummeryData>[].obs;
+  final affilateOverviewDetails = AffiliateOverviewData().obs;
 
   final myAffiliateRefferalsList = <MyAffiliateRefferal>[].obs;
 
@@ -82,9 +83,11 @@ class AffiliateController extends BaseController<AffiliateRespository> {
     reffralsCurrentPage.value = 0;
     reffralsItemsPerPage.value = 10;
     reffralsTotalItems.value = myAffiliateRefferalsList.length;
+
     await getAffiliateSummaryDetails();
     await getAffiliateSignUpDetails();
     await getMyAffiliateTransctionDetails();
+    await getAffiliateOverViewDetails();
   }
 
   String getUserFullName() {
@@ -185,11 +188,13 @@ class AffiliateController extends BaseController<AffiliateRespository> {
           affiliateSummaryDetails(response.data?.data ?? []);
           affiliateSignupSummeryList(
               response.data?.affiliateRafferalSummery ?? []);
+          affiliateSignupSummeryList(
+              response.data?.affiliateRafferalSummery ?? []);
           for (AffiliateSummaryData affiliateSummary
               in affiliateSummaryDetails) {
             summeryList(affiliateSummary.summery ?? []);
-            transactionList(affiliateSummary.transaction ?? []);
           }
+          print("summeryList${summeryList.first.totalProductCPayout}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -264,5 +269,31 @@ class AffiliateController extends BaseController<AffiliateRespository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
+  }
+
+  Future getAffiliateOverViewDetails() async {
+    isLoading(true);
+    try {
+      Map<String, dynamic> query = {
+        "affiliateId": "affiliateType"
+            "affiliatePrograme"
+      };
+
+      final RepoResponse<AffiliateOverViewResponse> response =
+          await repository.getAffiliateOverViewList(query);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          affilateOverviewDetails(response.data?.data);
+          print(
+              "affilateOverview ${affilateOverviewDetails.value.lifetimeEarning}");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
   }
 }

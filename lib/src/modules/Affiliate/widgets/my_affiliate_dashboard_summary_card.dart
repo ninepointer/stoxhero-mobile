@@ -42,7 +42,7 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
               ),
               SizedBox(height: 8),
               Text(
-                controller.getUserFullName(),
+                controller.affilateOverviewDetails.value.userName.toString(),
                 style: Theme.of(context).textTheme.tsMedium18,
               ),
               SizedBox(
@@ -55,7 +55,7 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                       context,
                       label: 'Lifetime Earnings',
                       earning:
-                          "${FormatHelper.formatNumbers("100", decimal: 0)}",
+                          "${FormatHelper.formatNumbers(controller.affilateOverviewDetails.value.lifetimeEarning, decimal: 0)}",
                       valueColor: AppColors.success,
                     ),
                   ),
@@ -66,8 +66,9 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                     child: signUpCard(
                       context,
                       label: 'Total Referrals',
-                      earning: "100",
-                      valueColor: AppColors.black,
+                      earning: controller
+                          .affilateOverviewDetails.value.affiliateRefferalCount
+                          .toString(),
                       labelColor: AppColors.brandYellow,
                     ),
                   ),
@@ -82,8 +83,9 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                     child: signUpCard(
                       context,
                       label: 'Active Referrals',
-                      earning: "100",
-                      valueColor: AppColors.black,
+                      earning: controller.affilateOverviewDetails.value
+                          .activeAffiliateRefferalCount
+                          .toString(),
                       labelColor: Colors.blueAccent,
                     ),
                   ),
@@ -94,8 +96,9 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                     child: signUpCard(
                       context,
                       label: 'Paid Referrals',
-                      earning: "100",
-                      valueColor: AppColors.black,
+                      earning: controller.affilateOverviewDetails.value
+                          .paidAffiliateRefferalCount
+                          .toString(),
                       labelColor: AppColors.lightGreen,
                     ),
                   ),
@@ -109,9 +112,9 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                   Expanded(
                     child: signUpCard(
                       context,
-                      label: 'Total/Active',
-                      earning: "3%",
-                      valueColor: AppColors.black,
+                      label: 'Active/Total',
+                      earning:
+                          "${(controller.affilateOverviewDetails.value.activeAffiliateRefferalCount ?? 0) / (controller.affilateOverviewDetails.value.affiliateRefferalCount ?? 1)}",
                       labelColor: AppColors.secondary,
                     ),
                   ),
@@ -121,9 +124,9 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                   Expanded(
                     child: signUpCard(
                       context,
-                      label: 'Total/Paid',
-                      earning: "1.5%",
-                      valueColor: AppColors.black,
+                      label: 'Paid/Total',
+                      earning:
+                          "${(controller.affilateOverviewDetails.value.paidActiveAffiliateRefferalCount ?? 0) / (controller.affilateOverviewDetails.value.affiliateRefferalCount ?? 1)}",
                       labelColor: Colors.blueAccent,
                     ),
                   ),
@@ -139,7 +142,7 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                       context,
                       label: 'Amount/Referral',
                       earning:
-                          "${FormatHelper.formatNumbers("100", decimal: 0)}",
+                          "${FormatHelper.formatNumbers(controller.affilateOverviewDetails.value.rewardPerReferral, decimal: 0)}",
                       valueColor: AppColors.success,
                     ),
                   ),
@@ -150,8 +153,8 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                     child: signUpCard(
                       context,
                       label: 'Commission %',
-                      earning: "12%",
-                      valueColor: AppColors.black,
+                      earning:
+                          "${controller.affilateOverviewDetails.value.commissionPercentage}%",
                     ),
                   ),
                 ],
@@ -191,12 +194,23 @@ Widget signUpCard(
               ),
             ),
             SizedBox(height: 4),
-            Text(
-              earning,
-              style: Theme.of(context).textTheme.tsMedium16.copyWith(
-                    color: valueColor,
-                  ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  earning,
+                  style: Theme.of(context)
+                      .textTheme
+                      .tsRegular14
+                      .copyWith(color: valueColor),
+                ),
+              ),
             ),
+            // Text(earning,
+            //     style: Theme.of(context)
+            //         .textTheme
+            //         .tsRegular14
+            //         .copyWith(color: valueColor)),
           ],
         ),
       ),

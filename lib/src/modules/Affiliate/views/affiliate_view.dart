@@ -182,7 +182,11 @@ class _AffiliateViewState extends State<AffiliateView> {
                                   child: customCard(
                                     context,
                                     label: 'No of\nReferrals',
-                                    earning: "3",
+                                    earning: controller
+                                        .affiliateSignupSummeryList
+                                        .first
+                                        .affiliateRefferalCount
+                                        .toString(),
                                   ),
                                 ),
                                 SizedBox(width: 8),
@@ -190,7 +194,11 @@ class _AffiliateViewState extends State<AffiliateView> {
                                   child: customCard(
                                     context,
                                     label: 'Active \nReferrlas',
-                                    earning: "3",
+                                    earning: controller
+                                        .affiliateSignupSummeryList
+                                        .first
+                                        .activeAffiliateRefferalCount
+                                        .toString(),
                                   ),
                                 ),
                               ],
@@ -204,7 +212,8 @@ class _AffiliateViewState extends State<AffiliateView> {
                                   child: customCard(
                                     context,
                                     label: 'Act\nConversion',
-                                    earning: "2.3%",
+                                    earning:
+                                        "${(controller.affiliateSignupSummeryList.first.activeAffiliateRefferalCount ?? 0) / (controller.affiliateSignupSummeryList.first.affiliateRefferalCount ?? 1)}",
                                   ),
                                 ),
                                 SizedBox(width: 8),
@@ -212,7 +221,11 @@ class _AffiliateViewState extends State<AffiliateView> {
                                   child: customCard(
                                     context,
                                     label: 'Paid \nReferrals',
-                                    earning: "3%",
+                                    earning: controller
+                                        .affiliateSignupSummeryList
+                                        .first
+                                        .paidAffiliateRefferalCount
+                                        .toString(),
                                     // valueColor: AppColors.success,
                                   ),
                                 ),
@@ -227,7 +240,8 @@ class _AffiliateViewState extends State<AffiliateView> {
                                   child: customCard(
                                     context,
                                     label: 'Paid \nConversion',
-                                    earning: "2.3%",
+                                    earning:
+                                        "${(controller.affiliateSignupSummeryList.first.paidAffiliateRefferalCount ?? 0) / (controller.affiliateSignupSummeryList.first.affiliateRefferalCount ?? 1)}",
                                   ),
                                 ),
                                 SizedBox(width: 8),
@@ -236,7 +250,7 @@ class _AffiliateViewState extends State<AffiliateView> {
                                     context,
                                     label: 'Referral\nAmount',
                                     earning:
-                                        "${FormatHelper.formatNumbers("15", decimal: 0)}",
+                                        "${FormatHelper.formatNumbers(controller.affiliateSignupSummeryList.first.affiliateRefferalPayout.toString(), decimal: 0)}",
                                     // valueColor: AppColors.success,
                                   ),
                                 ),
@@ -249,7 +263,7 @@ class _AffiliateViewState extends State<AffiliateView> {
                                   child: customCard(context,
                                       label: 'Activation\nAmount',
                                       earning:
-                                          "${FormatHelper.formatNumbers("15", decimal: 0)}"
+                                          "${FormatHelper.formatNumbers("0", decimal: 0)}"
                                       // controller.summaryCount().toString()
                                       ),
                                 ),
@@ -258,7 +272,9 @@ class _AffiliateViewState extends State<AffiliateView> {
                                   child: customCard(
                                     context,
                                     label: 'No. of \nPurchases',
-                                    earning: "15",
+                                    earning: controller
+                                        .summeryList.first.totalProductCount
+                                        .toString(),
                                   ),
                                 ),
                               ],
@@ -271,9 +287,9 @@ class _AffiliateViewState extends State<AffiliateView> {
                                 Expanded(
                                   child: customCard(
                                     context,
-                                    label: 'Commission',
+                                    label: 'Total\nCommission',
                                     earning:
-                                        "${FormatHelper.formatNumbers("15", decimal: 0)}",
+                                        "${FormatHelper.formatNumbers(controller.summeryList.first.totalProductCPayout, decimal: 0)}",
                                     // valueColor: AppColors.success,
                                   ),
                                 ),
@@ -282,8 +298,17 @@ class _AffiliateViewState extends State<AffiliateView> {
                                   child: customCard(
                                     context,
                                     label: 'Total\nAmount',
-                                    earning:
-                                        "${FormatHelper.formatNumbers("15", decimal: 0)}",
+                                    earning: "${FormatHelper.formatNumbers(
+                                      (controller.summeryList.first
+                                                  .totalProductCPayout ??
+                                              0) +
+                                          (controller
+                                                  .affiliateSignupSummeryList
+                                                  .first
+                                                  .affiliateRefferalPayout ??
+                                              0),
+                                      decimal: 0,
+                                    )}",
                                     valueColor: AppColors.success,
                                   ),
                                 ),
@@ -389,7 +414,7 @@ class _AffiliateViewState extends State<AffiliateView> {
                             ),
                             if (controller.myAffiliateRefferalsList.isNotEmpty)
                               SizedBox(height: 12),
-                            if (controller.transactionList.isNotEmpty)
+                            if (controller.myAffiliateTransctionList.isNotEmpty)
                               CommonTile(
                                 label: "Affiliate Transactions",
                                 margin: EdgeInsets.zero,
