@@ -32,6 +32,12 @@ class AppImages {
       '$imagesDir/Black Bull Logo.png';
   static const String tenxSymbolDarkMode = '$imagesDir/tenxSymbolDarkmode.png';
   static const String tenxSymbolLightMode =
-      '$imagesDir/tenxSymbolLightMode.png';    
-  static const String santa = '$imagesDir/santa2.png';    
+      '$imagesDir/tenxSymbolLightMode.png';
+  static const String santa = '$imagesDir/santa2.png';
+  static const String storybg1 = '$imagesDir/storybg1.jpg';
+  static const String newyearStory5 = '$imagesDir/story5up.png';
+  static const String wankhede = '$imagesDir/wankhade.jpeg';
+  static const String pathan = '$imagesDir/pathan.jpg';
+  static const String animal = '$imagesDir/animal.jpg';
+  static const String gadar = '$imagesDir/gadar2.jpg';
 }

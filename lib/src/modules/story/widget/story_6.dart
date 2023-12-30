@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 
-class Story5 extends StatefulWidget {
-  const Story5({Key? key}) : super(key: key);
+class Story6 extends StatefulWidget {
+  const Story6({Key? key}) : super(key: key);
 
   @override
-  _Story5State createState() => _Story5State();
+  _Story6State createState() => _Story6State();
 }
 
-class _Story5State extends State<Story5> with SingleTickerProviderStateMixin {
+class _Story6State extends State<Story6> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
@@ -63,35 +62,45 @@ class _Story5State extends State<Story5> with SingleTickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AnimatedTextKit(
-                            isRepeatingAnimation: true,
-                            animatedTexts: [
-                              ColorizeAnimatedText(
-                                "Thank you for making our 2023 awesome.\nWe wish you a happy and prosperous new year 2024.",
-                                textStyle: TextStyle(
-                                  fontSize: 30.0,
-                                  fontWeight: FontWeight.bold,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 10.0,
-                                      color: Colors.black,
-                                    ),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
-                                colors: [
-                                  Colors.red,
-                                  Colors.orange,
-                                  Colors.yellow,
-                                  Colors.green,
-                                  Colors.blue,
-                                  Colors.indigo,
-                                  Colors.purple,
+                          AnimatedContainer(
+                            duration: Duration(milliseconds: 800),
+                            curve: Curves.easeInOut,
+                            child: Text(
+                              "We promise 2024 will be exponentially bigger. With your support, We'll scale new highs, register new peaks and flourish together.",
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.black,
+                                  ),
                                 ],
                               ),
-                            ],
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                           SizedBox(height: 10.0),
+                          AnimatedContainer(
+                            duration: Duration(milliseconds: 800),
+                            curve: Curves.easeInOut,
+                            child: Text(
+                              "To infinity and beyond!",
+                              style: TextStyle(
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 10.0,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ],
                       ),
                     ),

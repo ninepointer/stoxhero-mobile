@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import '../../../app/app.dart';
 
 class StoryView extends StatefulWidget {
-  const StoryView({super.key});
+  const StoryView({Key? key}) : super(key: key);
 
   @override
   State<StoryView> createState() => _StoryViewState();
@@ -17,49 +17,71 @@ class _StoryViewState extends State<StoryView> {
     Story2(),
     Story3(),
     Story4(),
+    Story7(),
     Story5(),
+    Story6(),
   ];
   List<double> percentageWatched = [];
+  bool isPaused = false;
+  Timer? timer;
+
   @override
   void initState() {
     super.initState();
-    //initally all stories have't watch yet
+    // Initially, all stories haven't been watched yet
     for (int i = 0; i < myStories.length; i++) {
       percentageWatched.add(0);
     }
+
     _startWatching();
   }
 
   void _startWatching() {
-    Timer.periodic(Duration(milliseconds: 50), (timer) {
-      setState(() {
-        //only add 0.01 as long its below 1
-        if (percentageWatched[currentStoryIndex] + 0.01 < 1) {
-          percentageWatched[currentStoryIndex] += 0.01;
-        }
-        //if adding 0.01 exceed 1 ,set percentage to 1 and cancle timer
-        else {
-          percentageWatched[currentStoryIndex] = 1;
-          timer.cancel();
-          //also go to next story as long as there are more stories to go through
-          if (currentStoryIndex < myStories.length - 1) {
-            currentStoryIndex++;
-            //restart story timer
-            _startWatching();
+    timer = Timer.periodic(Duration(milliseconds: 80), (timer) {
+      if (!isPaused) {
+        setState(() {
+          // Only add 0.01 as long as it's below 1
+          if (percentageWatched[currentStoryIndex] + 0.01 < 1) {
+            percentageWatched[currentStoryIndex] += 0.01;
           }
-          //if we are finishing the last story then return the homePage
+          // If adding 0.01 exceeds 1, set percentage to 1 and cancel timer
           else {
-            Navigator.pop(context);
+            percentageWatched[currentStoryIndex] = 1;
+            timer.cancel();
+            // Also go to the next story as long as there are more stories to go through
+            if (currentStoryIndex < myStories.length - 1) {
+              currentStoryIndex++;
+              // Restart the story timer
+              _startWatching();
+            }
+            // If we are finishing the last story, then return to the HomePage
+            else {
+              Navigator.pop(context);
+            }
           }
-        }
-      });
+        });
+      }
     });
   }
 
-  void _onTapDown(details) {
+  void _onLongPress() {
+    setState(() {
+      isPaused = true;
+      timer?.cancel(); // Cancel the timer when the story is paused
+    });
+  }
+
+  void _onLongPressEnd(LongPressEndDetails details) {
+    setState(() {
+      isPaused = false;
+      _startWatching(); // Resume watching when the long press is released
+    });
+  }
+
+  void _onTapDown(TapDownDetails details) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double dx = details.globalPosition.dx;
-    //user tap first half of the screen then
+    // User taps the first half of the screen
     if (dx < screenWidth / 2) {
       setState(() {
         if (currentStoryIndex > 0) {
@@ -69,7 +91,7 @@ class _StoryViewState extends State<StoryView> {
         }
       });
     }
-    //user tab last half of the screen
+    // User taps the last half of the screen
     else {
       setState(() {
         if (currentStoryIndex < myStories.length - 1) {
@@ -86,10 +108,16 @@ class _StoryViewState extends State<StoryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Story"),
+        title: Text(
+          "StoxHero 2023 in review",
+          style: TextStyle(color: AppColors.white),
+        ),
+        backgroundColor: Color.fromARGB(255, 3, 31, 65),
       ),
       body: GestureDetector(
-        onTapDown: (details) => _onTapDown(details),
+        onLongPress: _onLongPress,
+        onLongPressEnd: _onLongPressEnd,
+        onTapDown: _onTapDown,
         child: Stack(
           children: [
             myStories[currentStoryIndex],

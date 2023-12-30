@@ -167,8 +167,55 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  if (contestProfileController.startOfWeek.value != "" &&
-                      contestProfileController.endOfWeek.value != "")
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(StoryView());
+                    },
+                    child: CommonCard(
+                      padding: EdgeInsets.zero,
+                      margin: EdgeInsets.only(
+                          left: 10, right: 10, top: 10, bottom: 2),
+                      hasBorder: true,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Color.fromARGB(255, 3, 31, 65),
+                          ),
+                          padding: EdgeInsets.all(14),
+                          child: Column(
+                            children: [
+                              // Row(
+                              //   children: [
+                              //     Image.asset(
+                              //       AppImages.lightAppName,
+                              //       height: 20,
+                              //       width: 80,
+                              //     ),
+                              //   ],
+                              // ),
+                              // SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Text(
+                                    "StoxHero 2023 In Review",
+                                    style: AppStyles.tsBlackMedium18
+                                        .copyWith(color: AppColors.white),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
+                  if ((contestProfileController.startOfWeek.value != "" &&
+                          contestProfileController.endOfWeek.value != "") ||
+                      contestProfileController.weeklyTopPerformer.isNotEmpty)
                     CommonTile(
                       label: 'Weekly TestZone Leaderboard',
                       showSeeAllButton: true,
@@ -219,7 +266,8 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(StoryView());
+                      controller.selectedIndex(2);
+                      Get.find<TenxTradingController>().loadData();
                     },
                     child: CommonCard(
                       padding: EdgeInsets.zero,
