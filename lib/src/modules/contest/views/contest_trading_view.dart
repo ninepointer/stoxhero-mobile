@@ -5,15 +5,15 @@ import '../../../app/app.dart';
 
 class ContestTradingView extends GetView<ContestController> {
   final bool isLiveContest;
-  const ContestTradingView({Key? key, this.isLiveContest=true}) : super(key: key);
+  const ContestTradingView({Key? key, this.isLiveContest = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        '${isLiveContest ? controller.liveContest.value.contestName:controller.liveFeatured.value.contestName}',
+        '${isLiveContest ? controller.liveContest.value.contestName : controller.liveFeatured.value.contestName}',
         style: Theme.of(context).textTheme.tsRegular16,
         textAlign: TextAlign.center,
       )),

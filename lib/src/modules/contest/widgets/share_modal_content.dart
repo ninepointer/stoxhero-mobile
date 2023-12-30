@@ -195,16 +195,15 @@ class ShareModalContent extends GetView<ContestController> {
                                       margin: EdgeInsets.only(left: 12),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "Net P&L",
+                                            "  Net P&L",
                                             style: AppStyles
                                                 .tsSecondaryRegular14
                                                 .copyWith(
                                               color: AppColors.white,
                                             ),
-                                            textAlign: TextAlign.center,
                                           ),
                                           SizedBox(
                                             height: 2,

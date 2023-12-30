@@ -379,7 +379,11 @@ class _DashboardViewState extends State<DashboardView> {
                                 String userId =
                                     controller.userDetailsData.sId ?? '';
                                 return Container(
-                                  width: MediaQuery.of(context).size.width - 55,
+                                  width: contestController
+                                              .liveContestList.length ==
+                                          1
+                                      ? MediaQuery.of(context).size.width
+                                      : MediaQuery.of(context).size.width - 55,
                                   child: LiveContestCard(
                                     userId: userId,
                                     contest: contest,
@@ -423,10 +427,17 @@ class _DashboardViewState extends State<DashboardView> {
                                   return isVisible
                                       ? SizedBox()
                                       : Container(
-                                          width: MediaQuery.of(context)
+                                          width: contestController
+                                                      .upComingContestList
+                                                      .length ==
+                                                  1
+                                              ? MediaQuery.of(context)
                                                   .size
-                                                  .width -
-                                              55,
+                                                  .width
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  55,
                                           child: UpComingContestCard(
                                             userId: userId,
                                             contest: contest,

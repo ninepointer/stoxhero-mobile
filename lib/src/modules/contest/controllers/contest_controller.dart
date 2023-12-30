@@ -164,6 +164,11 @@ class ContestController extends BaseController<ContestRepository> {
   final completedContestLeaderboard = CompletedContestLeaderboardList().obs;
   final readSetting = ReadSettingResponse().obs;
 
+  // void onClose() {
+  //   disconnectLeaderboardSocket();
+  //   super.onClose();
+  // }
+
   Future loadData() async {
     loadUserDetails();
     await getLiveContestList();
@@ -1455,18 +1460,24 @@ class ContestController extends BaseController<ContestRepository> {
         "id": liveFeatured.value.id ?? liveContest.value.id,
       };
       log('Socket Emit RankData : $rankData');
+
       socketService.socket.emit('dailyContestLeaderboard', rankData);
       socketService.socket.on(
         'contest-myrank${userDetails.value.sId}${liveFeatured.value.id ?? liveContest.value.id}',
         (data) {
           log('Socket MyRank : contest-myrank${userDetails.value.sId}${liveFeatured.value.id ?? liveContest.value.id} : $data');
           myRank(data);
+          print("mycontest ${liveContest.value.contestName}");
         },
       );
       socketService.socket.on(
         'contest-leaderboardData${liveFeatured.value.id ?? liveContest.value.id}',
         (data) {
           log('Socket Leaderboard : contest-leaderboardData${liveFeatured.value.id ?? liveContest.value.id} $data');
+          print(
+              'Socket Leaderboard Data:  ${liveContest.value.contestName} ${data}');
+          print(
+              "contestid ${liveContest.value.id}  ${liveContest.value.contestName}");
           liveLeaderboardList.value =
               LiveContestLeaderboardReponse.fromJson(data).data ?? [];
         },
@@ -1474,6 +1485,13 @@ class ContestController extends BaseController<ContestRepository> {
     } on Exception catch (e) {
       log(e.toString());
     }
+  }
+
+  void disconnectLeaderboardSocket() {
+    socketService.socket.off(
+        'contest-myrank${userDetails.value.sId}${liveFeatured.value.id ?? liveContest.value.id}');
+    socketService.socket.off(
+        'contest-leaderboardData${liveFeatured.value.id ?? liveContest.value.id}');
   }
 
   Future<void> getShareContest(bool isUpcoming) async {
