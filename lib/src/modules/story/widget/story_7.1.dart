@@ -4,14 +4,14 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter_animate/flutter_animate.dart';
 
-class Story7 extends StatefulWidget {
-  const Story7({Key? key}) : super(key: key);
+class Story71 extends StatefulWidget {
+  const Story71({Key? key}) : super(key: key);
 
   @override
-  _Story41State createState() => _Story41State();
+  _Story71State createState() => _Story71State();
 }
 
-class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
+class _Story71State extends State<Story71> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
@@ -53,7 +53,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
             child: Opacity(
             opacity: 0.55, // Adjusting opacity to 0.85
             child: Image.asset(
-              AppImages.tenxhero,
+              AppImages.hero,
               fit: BoxFit.cover,
             ),
           ),
@@ -77,90 +77,32 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // AnimatedTextKit(
-                          //   isRepeatingAnimation: false,
-                          //   animatedTexts: [
-                          //     TyperAnimatedText(
-                          //         "You showed us a lot of love ❤️",
-                          //         textStyle: TextStyle(
-                          //           fontSize: 30.0,
-                          //           fontWeight: FontWeight.bold,
-                          //           color: Colors.red,
-                          //           shadows: [
-                          //             Shadow(
-                          //               blurRadius: 10.0,
-                          //               color: Colors.black,
-                          //             ),
-                          //           ],
-                          //         ),
-                          //         textAlign: TextAlign.center,
-                          //         speed: Duration(milliseconds: 100)),
-                          //   ],
-                          // ),
-                          // SizedBox(height: 10.0),
-                          Text(
-                            "TenX Hero",
-                            style: TextStyle(
-                              fontSize: 50.0,
-                              fontFamily: 'Sans-serif',
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.brandYellow,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                              .animate()
-                              .fadeIn(duration: Duration(milliseconds: 3000)),
+                          AnimatedTextKit(
+                            isRepeatingAnimation: false,
+                            animatedTexts: [
+                              TyperAnimatedText(
+                                  "You've brought us here in 2023. Here's to you. Our Champions, our Trailblazers, our Heroes",
+                                  textStyle: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.brandYellow,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 10.0,
+                                        color: Colors.black,
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  speed: Duration(milliseconds: 45)),
+                            ],
+                          ),
                           SizedBox(height: 10.0),
-                          Text(
-                            "Anvesh Shetty",
-                            style: TextStyle(
-                              fontSize: 32.0,
-                              fontFamily: 'Sans-serif',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                              .animate()
-                              .fadeIn(duration: Duration(milliseconds: 3000)),
-                          SizedBox(height: 10.0),
-                           Text(
-                            "Reward: ₹68,606",
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontFamily: 'Sans-serif',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                              .animate()
-                              .fadeIn(duration: Duration(milliseconds: 3000)),
                           // Text(
-                          //   "1800+",
+                          //   "We held 904 TestZone this year, saw 25,699 participations.",
                           //   style: TextStyle(
-                          //     fontSize: 60.0,
-                          //     fontFamily: 'Sans-serif',
-                          //     fontWeight: FontWeight.bold,
-                          //     color: AppColors.brandYellow,
+                          //     fontSize: 16.0,
+                          //     color: Colors.white,
                           //     shadows: [
                           //       Shadow(
                           //         blurRadius: 10.0,
@@ -174,11 +116,9 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                           //     .fadeIn(duration: Duration(milliseconds: 3000)),
                           // SizedBox(height: 10.0),
                           // Text(
-                          //   "Traders honed their skills with Virtual F&O",
+                          //   "In 49 TenX plans, we had 1211 subscriptions from you.",
                           //   style: TextStyle(
-                          //     fontSize: 24.0,
-                          //     fontFamily: 'Sans-serif',
-                          //     fontWeight: FontWeight.bold,
+                          //     fontSize: 16.0,
                           //     color: Colors.white,
                           //     shadows: [
                           //       Shadow(

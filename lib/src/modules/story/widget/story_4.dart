@@ -49,12 +49,15 @@ class _Story4State extends State<Story4> with SingleTickerProviderStateMixin {
       body: Stack(
         children: [
           // Background image
-          // Positioned.fill(
-          //   child: Image.asset(
-          //     AppImages.storybg1, // Replace with your image asset
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
+          Positioned.fill(
+            child: Opacity(
+            opacity: 0.55, // Adjusting opacity to 0.85
+            child: Image.asset(
+              AppImages.love,
+              fit: BoxFit.cover,
+            ),
+          ),
+          ),
           // Content with animations
           Center(
             child: AnimatedBuilder(
@@ -80,9 +83,9 @@ class _Story4State extends State<Story4> with SingleTickerProviderStateMixin {
                               TyperAnimatedText(
                                   "You showed us a lot of love ❤️",
                                   textStyle: TextStyle(
-                                    fontSize: 30.0,
+                                    fontSize: 40.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.red,
+                                    color: AppColors.brandYellow,
                                     shadows: [
                                       Shadow(
                                         blurRadius: 10.0,
@@ -95,73 +98,73 @@ class _Story4State extends State<Story4> with SingleTickerProviderStateMixin {
                             ],
                           ),
                           SizedBox(height: 10.0),
-                          Text(
-                            "We held 904 TestZone this year, saw 25,699 participations.",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                              .animate()
-                              .fadeIn(duration: Duration(milliseconds: 3000)),
-                          SizedBox(height: 10.0),
-                          Text(
-                            "In 49 TenX plans, we had 1211 subscriptions from you.",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                              .animate()
-                              .fadeIn(duration: Duration(milliseconds: 3000)),
-                          SizedBox(height: 10.0),
-                          Text(
-                            "414 MarginXs and 2021 participations",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                              .animate()
-                              .fadeIn(duration: Duration(milliseconds: 3000)),
-                          SizedBox(height: 10.0),
-                          Text(
-                            "And 1800 of you honed your skills in virtual F&O trading.",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                              .animate()
-                              .fadeIn(duration: Duration(milliseconds: 3000)),
+                          // Text(
+                          //   "We held 904 TestZone this year, saw 25,699 participations.",
+                          //   style: TextStyle(
+                          //     fontSize: 16.0,
+                          //     color: Colors.white,
+                          //     shadows: [
+                          //       Shadow(
+                          //         blurRadius: 10.0,
+                          //         color: Colors.black,
+                          //       ),
+                          //     ],
+                          //   ),
+                          //   textAlign: TextAlign.center,
+                          // )
+                          //     .animate()
+                          //     .fadeIn(duration: Duration(milliseconds: 3000)),
+                          // SizedBox(height: 10.0),
+                          // Text(
+                          //   "In 49 TenX plans, we had 1211 subscriptions from you.",
+                          //   style: TextStyle(
+                          //     fontSize: 16.0,
+                          //     color: Colors.white,
+                          //     shadows: [
+                          //       Shadow(
+                          //         blurRadius: 10.0,
+                          //         color: Colors.black,
+                          //       ),
+                          //     ],
+                          //   ),
+                          //   textAlign: TextAlign.center,
+                          // )
+                          //     .animate()
+                          //     .fadeIn(duration: Duration(milliseconds: 3000)),
+                          // SizedBox(height: 10.0),
+                          // Text(
+                          //   "414 MarginXs and 2021 participations",
+                          //   style: TextStyle(
+                          //     fontSize: 16.0,
+                          //     color: Colors.white,
+                          //     shadows: [
+                          //       Shadow(
+                          //         blurRadius: 10.0,
+                          //         color: Colors.black,
+                          //       ),
+                          //     ],
+                          //   ),
+                          //   textAlign: TextAlign.center,
+                          // )
+                          //     .animate()
+                          //     .fadeIn(duration: Duration(milliseconds: 3000)),
+                          // SizedBox(height: 10.0),
+                          // Text(
+                          //   "And 1800 of you honed your skills in virtual F&O trading.",
+                          //   style: TextStyle(
+                          //     fontSize: 16.0,
+                          //     color: Colors.white,
+                          //     shadows: [
+                          //       Shadow(
+                          //         blurRadius: 10.0,
+                          //         color: Colors.black,
+                          //       ),
+                          //     ],
+                          //   ),
+                          //   textAlign: TextAlign.center,
+                          // )
+                          //     .animate()
+                          //     .fadeIn(duration: Duration(milliseconds: 3000)),
                         ],
                       ),
                     ),

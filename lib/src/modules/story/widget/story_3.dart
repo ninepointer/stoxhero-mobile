@@ -43,16 +43,19 @@ class _Story3State extends State<Story3> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 3, 31, 65),
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           // Background image
-          // Positioned.fill(
-          //   child: Image.asset(
-          //     AppImages.storybg1, // Replace with your image asset
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
+          Positioned.fill(
+          child: Opacity(
+            opacity: 0.55, // Adjusting opacity to 0.85
+            child: Image.asset(
+              AppImages.srk,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
           // Content with animations
           Center(
             child: AnimatedBuilder(
@@ -73,11 +76,11 @@ class _Story3State extends State<Story3> with SingleTickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Rs 4,284 Crores",
+                            "₹4000 Cr+",
                             style: TextStyle(
-                              fontSize: 32.0,
+                              fontSize: 50.0,
                               fontWeight: FontWeight.bold,
-                              color: Colors.green,
+                              color: AppColors.brandYellow,
                               shadows: [
                                 Shadow(
                                   blurRadius: 10.0,
@@ -96,9 +99,10 @@ class _Story3State extends State<Story3> with SingleTickerProviderStateMixin {
                           // .blurXY(),
                           SizedBox(height: 10.0),
                           Text(
-                            "This is our options turnover in the 8 months. That is the equivalent of a third of Bollywood's revenue in 2023.",
+                            "Our options turnover",
                             style: TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 32.0,
+                              fontWeight: FontWeight.bold,
                               color: Colors.white,
                               shadows: [
                                 Shadow(
@@ -117,59 +121,82 @@ class _Story3State extends State<Story3> with SingleTickerProviderStateMixin {
                           SizedBox(
                             height: 20,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                  height: 120,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    // color: AppColors.white,
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      color: AppColors.grey.withOpacity(.25),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Image.asset(
-                                        AppImages.pathan,
-                                        fit: BoxFit.cover,
-                                      ))),
-                              Container(
-                                  height: 120,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    // color: AppColors.white,
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      color: AppColors.grey.withOpacity(.25),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Image.asset(
-                                        AppImages.animal,
-                                        fit: BoxFit.cover,
-                                      ))),
-                              Container(
-                                  height: 120,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    // color: AppColors.white,
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      color: AppColors.grey.withOpacity(.25),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Image.asset(
-                                        AppImages.gadar,
-                                        fit: BoxFit.cover,
-                                      )))
-                            ],
+                          Text(
+                            "Almost equivalent to Shah Rukh Khan's net worth",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
                           )
+                              .animate()
+                              .fadeIn(duration: 600.ms)
+                              .then(delay: 200.ms) // baseline=800ms
+                              .slide(),
+
+                          SizedBox(
+                            height: 20,
+                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //   children: [
+                          //     Container(
+                          //         height: 120,
+                          //         width: 80,
+                          //         decoration: BoxDecoration(
+                          //           // color: AppColors.white,
+                          //           shape: BoxShape.rectangle,
+                          //           border: Border.all(
+                          //             color: AppColors.grey.withOpacity(.25),
+                          //           ),
+                          //         ),
+                          //         child: Padding(
+                          //             padding: EdgeInsets.all(2),
+                          //             child: Image.asset(
+                          //               AppImages.pathan,
+                          //               fit: BoxFit.cover,
+                          //             ))),
+                          //     Container(
+                          //         height: 120,
+                          //         width: 80,
+                          //         decoration: BoxDecoration(
+                          //           // color: AppColors.white,
+                          //           shape: BoxShape.rectangle,
+                          //           border: Border.all(
+                          //             color: AppColors.grey.withOpacity(.25),
+                          //           ),
+                          //         ),
+                          //         child: Padding(
+                          //             padding: EdgeInsets.all(2),
+                          //             child: Image.asset(
+                          //               AppImages.animal,
+                          //               fit: BoxFit.cover,
+                          //             ))),
+                          //     Container(
+                          //         height: 120,
+                          //         width: 80,
+                          //         decoration: BoxDecoration(
+                          //           // color: AppColors.white,
+                          //           shape: BoxShape.rectangle,
+                          //           border: Border.all(
+                          //             color: AppColors.grey.withOpacity(.25),
+                          //           ),
+                          //         ),
+                          //         child: Padding(
+                          //             padding: EdgeInsets.all(2),
+                          //             child: Image.asset(
+                          //               AppImages.gadar,
+                          //               fit: BoxFit.cover,
+                          //             )))
+                          //   ],
+                          // )
                         ],
                       ),
                     ),

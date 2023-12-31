@@ -4,14 +4,14 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter_animate/flutter_animate.dart';
 
-class Story7 extends StatefulWidget {
-  const Story7({Key? key}) : super(key: key);
+class Story73 extends StatefulWidget {
+  const Story73({Key? key}) : super(key: key);
 
   @override
   _Story41State createState() => _Story41State();
 }
 
-class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
+class _Story41State extends State<Story73> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
@@ -53,7 +53,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
             child: Opacity(
             opacity: 0.55, // Adjusting opacity to 0.85
             child: Image.asset(
-              AppImages.tenxhero,
+              AppImages.marginxhero,
               fit: BoxFit.cover,
             ),
           ),
@@ -99,7 +99,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                           // ),
                           // SizedBox(height: 10.0),
                           Text(
-                            "TenX Hero",
+                            "MarginX Hero",
                             style: TextStyle(
                               fontSize: 50.0,
                               fontFamily: 'Sans-serif',
@@ -118,7 +118,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                               .fadeIn(duration: Duration(milliseconds: 3000)),
                           SizedBox(height: 10.0),
                           Text(
-                            "Anvesh Shetty",
+                            "Saswata Dutta",
                             style: TextStyle(
                               fontSize: 32.0,
                               fontFamily: 'Sans-serif',
@@ -137,7 +137,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                               .fadeIn(duration: Duration(milliseconds: 3000)),
                           SizedBox(height: 10.0),
                            Text(
-                            "Reward: ₹68,606",
+                            "Reward: ₹5,609",
                             style: TextStyle(
                               fontSize: 24.0,
                               fontFamily: 'Sans-serif',

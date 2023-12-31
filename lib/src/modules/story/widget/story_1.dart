@@ -56,81 +56,96 @@ class _Story1State extends State<Story1> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
+   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 3, 31, 65),
-      body: Center(
-        child: FadeTransition(
-          opacity: _opacityAnimation,
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.fromLTRB(24, 0, 24, 80),
-            child: Center(
-              child: AnimatedBuilder(
-                animation: _controller,
-                builder: (context, child) {
-                  return Transform.translate(
-                    offset: Offset(0.0, _parallaxAnimation.value),
-                    child: Transform.rotate(
-                      angle: _rotationAnimation.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation.value,
-                        child: Container(
-                          padding: EdgeInsets.all(16.0),
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(AppImages.lightAppName),
-                                SizedBox(height: 20),
-                                Text(
-                                  "We Started out in May, 2023",
-                                  style: TextStyle(
-                                    fontSize: 28.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: "Sans-serif",
-                                    color: Colors.white,
-                                    shadows: [
-                                      Shadow(
-                                        blurRadius: 10.0,
-                                        color: Colors.black,
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              AppImages.storyhome, // your background image
+              fit: BoxFit.cover, // Cover the entire screen area
+            ),
+          ),
+          // Existing body wrapped in Center
+          Center(
+            child: FadeTransition(
+              opacity: _opacityAnimation,
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(24, 0, 24, 80),
+                child: Center(
+                  child: AnimatedBuilder(
+                    animation: _controller,
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(0.0, _parallaxAnimation.value),
+                        child: Transform.rotate(
+                          angle: _rotationAnimation.value,
+                          child: Transform.scale(
+                            scale: _scaleAnimation.value,
+                            child: Container(
+                              padding: EdgeInsets.all(16.0),
+                              child: Center(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(AppImages.lightAppName), // Make sure this asset is defined
+                                    SizedBox(height: 20),
+                                    Text(
+                                      "2023",
+                                      style: TextStyle(
+                                        fontSize: 60.0,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: "Sans-serif",
+                                        color: Colors.white,
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 10.0,
+                                            color: Colors.black,
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: 24.0),
-                                Text(
-                                  "Together we walked 🚶, we sprinted 🏃, we ran 🏃‍♂️, and we flew ✈️.",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.white,
-                                    shadows: [
-                                      Shadow(
-                                        blurRadius: 10.0,
-                                        color: Colors.black,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 14.0),
+                                    Text(
+                                      "In Review",
+                                      style: TextStyle(
+                                        fontSize: 28.0,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: "Sans-serif",
+                                        color: Colors.white,
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 10.0,
+                                            color: Colors.black,
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  textAlign: TextAlign.center,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 24.0),
+                                    // Add more widgets or texts if you like
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
-
   @override
   void dispose() {
     _controller.dispose();

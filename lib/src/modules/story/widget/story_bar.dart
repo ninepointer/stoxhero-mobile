@@ -32,6 +32,24 @@ class StoryBar extends StatelessWidget {
           Expanded(
             child: ProgressBar(percentWatched: percentWatched[6]),
           ),
+          Expanded(
+            child: ProgressBar(percentWatched: percentWatched[7]),
+          ),
+          Expanded(
+            child: ProgressBar(percentWatched: percentWatched[8]),
+          ),
+          Expanded(
+            child: ProgressBar(percentWatched: percentWatched[9]),
+          ),
+          Expanded(
+            child: ProgressBar(percentWatched: percentWatched[10]),
+          ),
+          Expanded(
+            child: ProgressBar(percentWatched: percentWatched[11]),
+          ),
+          // Expanded(
+          //   child: ProgressBar(percentWatched: percentWatched[6]),
+          // ),
         ],
       ),
     );
