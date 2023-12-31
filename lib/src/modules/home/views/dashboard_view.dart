@@ -51,6 +51,13 @@ class _DashboardViewState extends State<DashboardView> {
       nextMonth,
     ];
     selectedValue2 = currentMonth;
+
+    Future.delayed(Duration(seconds: 2), () {
+      if (controller.firstTimeshowStatus) {
+        Get.to(StoryView());
+      }
+      controller.firstTimeshow.value = false;
+    });
   }
 
   String getProductMonth(String? label) {
@@ -168,55 +175,55 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(StoryView());
-                    },
-                    child: CommonCard(
-                      padding: EdgeInsets.zero,
-                      margin: EdgeInsets.only(
-                          left: 10, right: 10, top: 10, bottom: 2),
-                      hasBorder: true,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: AppColors.brandYellow,
-                              width: 1.0,
-                            ),
-                            color: Colors.transparent,
-                          ),
-                          padding: EdgeInsets.all(14),
-                          child: Column(
-                            children: [
-                              // Row(
-                              //   children: [
-                              //     Image.asset(
-                              //       AppImages.lightAppName,
-                              //       height: 20,
-                              //       width: 80,
-                              //     ),
-                              //   ],
-                              // ),
-                              // SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Text(
-                                    "StoxHero 2023 In Review",
-                                    style: AppStyles.tsBlackMedium18.copyWith(
-                                        color: Get.isDarkMode
-                                            ? AppColors.white
-                                            : AppColors.black),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Get.to(StoryView());
+                  //   },
+                  //   child: CommonCard(
+                  //     padding: EdgeInsets.zero,
+                  //     margin: EdgeInsets.only(
+                  //         left: 10, right: 10, top: 10, bottom: 2),
+                  //     hasBorder: true,
+                  //     children: [
+                  //       Container(
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           border: Border.all(
+                  //             color: AppColors.brandYellow,
+                  //             width: 1.0,
+                  //           ),
+                  //           color: Colors.transparent,
+                  //         ),
+                  //         padding: EdgeInsets.all(14),
+                  //         child: Column(
+                  //           children: [
+                  //             // Row(
+                  //             //   children: [
+                  //             //     Image.asset(
+                  //             //       AppImages.lightAppName,
+                  //             //       height: 20,
+                  //             //       width: 80,
+                  //             //     ),
+                  //             //   ],
+                  //             // ),
+                  //             // SizedBox(height: 10),
+                  //             Row(
+                  //               children: [
+                  //                 Text(
+                  //                   "StoxHero 2023 In Review",
+                  //                   style: AppStyles.tsBlackMedium18.copyWith(
+                  //                       color: Get.isDarkMode
+                  //                           ? AppColors.white
+                  //                           : AppColors.black),
+                  //                 )
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   // SizedBox(
                   //   height: 10,
                   // ),
@@ -268,40 +275,40 @@ class _DashboardViewState extends State<DashboardView> {
                   //   margin: EdgeInsets.only(bottom: 4, top: 8),
                   //   padding: EdgeInsets.only(left: 15, top: 4),
                   // ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectedIndex(2);
-                      Get.find<TenxTradingController>().loadData();
-                    },
-                    child: CommonCard(
-                      padding: EdgeInsets.zero,
-                      margin: EdgeInsets.only(
-                          left: 10, right: 10, top: 10, bottom: 6),
-                      hasBorder: true,
-                      children: [
-                        Container(
-                          height: 130,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                AppImages.santa,
-                              ),
-                              fit: BoxFit.fill,
-                              // colorFilter: ColorFilter.mode(
-                              //   Color(0xFFFFF5E1).withOpacity(0.5),
-                              //   BlendMode.srcOver,
-                              // ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 4,
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     controller.selectedIndex(2);
+                  //     Get.find<TenxTradingController>().loadData();
+                  //   },
+                  //   child: CommonCard(
+                  //     padding: EdgeInsets.zero,
+                  //     margin: EdgeInsets.only(
+                  //         left: 10, right: 10, top: 10, bottom: 6),
+                  //     hasBorder: true,
+                  //     children: [
+                  //       Container(
+                  //         height: 130,
+                  //         width: double.infinity,
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           image: DecorationImage(
+                  //             image: AssetImage(
+                  //               AppImages.santa,
+                  //             ),
+                  //             fit: BoxFit.fill,
+                  //             // colorFilter: ColorFilter.mode(
+                  //             //   Color(0xFFFFF5E1).withOpacity(0.5),
+                  //             //   BlendMode.srcOver,
+                  //             // ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                   SizedBox(
                     height: 4,
