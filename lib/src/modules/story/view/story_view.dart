@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import '../../../app/app.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class StoryView extends StatefulWidget {
   const StoryView({Key? key}) : super(key: key);
@@ -31,6 +33,8 @@ class _StoryViewState extends State<StoryView> {
   bool isPaused = false;
   Timer? timer;
 
+  AudioPlayer audioPlayer = AudioPlayer();
+
   @override
   void initState() {
     super.initState();
@@ -40,8 +44,16 @@ class _StoryViewState extends State<StoryView> {
     }
 
     _startWatching();
+    _playMusic("audio/bgm.mp3");
   }
-
+  void _playMusic(String filePath) async {
+  await audioPlayer.play(AssetSource(filePath));
+}
+  @override
+  void dispose() {
+    audioPlayer.stop();
+    super.dispose();
+  }
   void _startWatching() {
     timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
       if (!isPaused) {
@@ -73,24 +85,32 @@ class _StoryViewState extends State<StoryView> {
   void _onLongPress() {
     setState(() {
       isPaused = true;
-      timer?.cancel(); // Cancel the timer when the story is paused
+      timer?.cancel();
+      audioPlayer.pause(); // Cancel the timer when the story is paused
     });
   }
 
   void _onLongPressEnd(LongPressEndDetails details) {
     setState(() {
       isPaused = false;
-      _startWatching(); // Resume watching when the long press is released
+      _startWatching();
+      audioPlayer.resume(); // Resume watching when the long press is released
     });
   }
 
-  void _onTapDown(TapUpDetails details) {
+  void _onTapDown (TapUpDetails details) async{
     final double screenWidth = MediaQuery.of(context).size.width;
     final double dx = details.globalPosition.dx;
     // User taps the first half of the screen
+
+    Duration currentPosition = await audioPlayer.getCurrentPosition() ?? Duration();
+    Duration newPosition;
     if (dx < screenWidth / 2) {
       setState(() {
         if (currentStoryIndex > 0) {
+          //newPosition = Duration(milliseconds: max(0, currentPosition.inMilliseconds - 5000));
+          //audioPlayer.seek(newPosition);
+
           percentageWatched[currentStoryIndex - 1] = 0;
           percentageWatched[currentStoryIndex] = 0;
           currentStoryIndex--;
@@ -101,6 +121,9 @@ class _StoryViewState extends State<StoryView> {
     else {
       setState(() {
         if (currentStoryIndex < myStories.length - 1) {
+          //newPosition = Duration(milliseconds: currentPosition.inMilliseconds + 5000);
+          //audioPlayer.seek(newPosition);
+
           percentageWatched[currentStoryIndex] = 1;
           currentStoryIndex++;
         } else {
