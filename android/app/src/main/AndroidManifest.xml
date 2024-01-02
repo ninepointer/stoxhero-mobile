@@ -3,7 +3,7 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<application
 		android:label="StoxHero"
-		android:name="${applicationName}"
+		android:name=".MainApplication"
 		android:icon="@mipmap/ic_launcher2">
 		<meta-data
 			android:name="com.google.firebase.messaging.default_notification_icon"
@@ -11,6 +11,7 @@
 		<meta-data
 			android:name="com.google.firebase.messaging.default_notification_color"
 			android:resource="@color/primary_color" />
+		<meta-data android:name="com.webengage.sdk.android.environment" android:value="in" />	
 		<activity
 			android:name=".MainActivity"
 			android:exported="true"

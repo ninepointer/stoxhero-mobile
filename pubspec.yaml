@@ -1,7 +1,7 @@
 name: stoxhero
 description: A new Flutter project.
-# version: 1.0.0+80 # Dev
-version: 1.0.0+51 # Prod
+version: 1.0.0+80 # Dev
+# version: 1.0.0+51 # Prod
 publish_to: "none"
 
 environment:
@@ -52,6 +52,7 @@ dependencies:
   flutter_animate: ^4.3.0
   animated_text_kit: ^4.2.1
   audioplayers: ^5.2.1
+  webengage_flutter: ^1.3.0
 
 dev_dependencies:
   flutter_launcher_icons: any
