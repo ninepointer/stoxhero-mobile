@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 import 'package:uni_links/uni_links.dart';
@@ -66,11 +66,13 @@ class _HomeViewState extends State<HomeView> {
 
   void _handelInitialNotification() async {
     print('handelInitialNotification');
-    RemoteMessage? initialMessage = await firebaseMessaging.getInitialMessage();
-    print('handelInitialNotification : ${initialMessage?.toMap()}');
+    // RemoteMessage? initialMessage = await firebaseMessaging.getInitialMessage();
+    // print('handelInitialNotification : ${initialMessage?.toMap()}');
+    ReceivedAction? initialMessage = await AwesomeNotifications().getInitialNotificationAction();
+    print('getInitialNotificationAction : ${initialMessage?.payload}');
     if (initialMessage != null)
       NotificationServices.handelNotificationClick(
-        initialMessage.data,
+        initialMessage.payload,
         isLocal: true,
       );
   }
@@ -178,8 +180,7 @@ class _HomeViewState extends State<HomeView> {
       body: Obx(() => _tabs[controller.selectedIndex.value]),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
-        backgroundColor:
-            Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
         onPressed: () => _updateTab(2),
         child: Icon(
           Icons.currency_rupee_rounded,
