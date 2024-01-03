@@ -15,3 +15,5 @@ export 'widgets/marginx_transaction_bottom_sheet.dart';
 export 'widgets/marginx_watchlist_card.dart';
 export 'widgets/upcoming_marginx_card.dart';
 export 'widgets/view_card.dart';
+export 'widgets/live_marginx_share_sheet.dart';
+export 'widgets/upcoming_marginx_share_sheet.dart';

@@ -401,6 +401,44 @@ class LiveContestCard extends GetView<ContestController> {
               Expanded(
                 child: InkWell(
                   onTap: () {
+                    controller.disconnectLeaderboardSocket();
+                    controller.liveContest(LiveContest());
+                    controller.liveContest(contest);
+
+                    controller.liveLeaderboardList([]);
+
+                    controller.getContestPositions();
+
+                    controller.getContestWatchList();
+                    controller.socketConnection();
+
+                    controller.socketLeaderboardConnection();
+                    controller.userDetails.value = AppStorage.getUserDetails();
+                    controller.liveLeaderboardList();
+
+                    Get.toNamed(AppRoutes.contestLiveLeaderboard);
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(.25),
+                      // borderRadius: BorderRadius.only(
+                      //   bottomRight: Radius.circular(8),
+                      // ),
+                    ),
+                    child: Text(
+                      'Leaderboard',
+                      style: AppStyles.tsSecondaryMedium12.copyWith(
+                        color: AppColors.primary.shade600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
                     controller.liveContest(contest);
                     showDialog(
                       context: context,
@@ -412,12 +450,6 @@ class LiveContestCard extends GetView<ContestController> {
                         );
                       },
                     );
-
-                    // controller.getShareContest(false);
-                    // String url = 'https://stoxhero.com/testzone';
-                    // Clipboard.setData(ClipboardData(text: url));
-                    // SnackbarHelper.showSnackbar(
-                    //     'Link Copied, Share with your friends.');
                   },
                   child: Container(
                     alignment: Alignment.center,

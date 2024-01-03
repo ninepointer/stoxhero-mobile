@@ -41,7 +41,7 @@ class LiveShareModalContent extends GetView<ContestController> {
     return Container(
         height: 700,
         padding: EdgeInsets.zero,
-        margin: EdgeInsets.only(top: 160),
+        margin: EdgeInsets.only(top: 190),
         child: Column(
           // shrinkWrap: true,
 
@@ -218,27 +218,32 @@ class LiveShareModalContent extends GetView<ContestController> {
                                                     color: AppColors.white))
                                       ],
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Reward",
-                                          style: AppStyles.tsSecondaryRegular14
-                                              .copyWith(
-                                            color: AppColors.white,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                            "${contest?.payoutPercentage}% of Net P&L",
-                                            style: AppStyles.tsSecondaryMedium16
+                                    Container(
+                                      margin: EdgeInsets.only(left: 15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Reward",
+                                            style: AppStyles
+                                                .tsSecondaryRegular14
                                                 .copyWith(
-                                                    color: AppColors.white))
-                                      ],
+                                              color: AppColors.white,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                              "${contest?.payoutPercentage}% of Net P&L",
+                                              style: AppStyles
+                                                  .tsSecondaryMedium16
+                                                  .copyWith(
+                                                      color: AppColors.white))
+                                        ],
+                                      ),
                                     ),
                                     Column(
                                       crossAxisAlignment:
@@ -338,7 +343,7 @@ class LiveShareModalContent extends GetView<ContestController> {
                         width: 6,
                       ),
                       Text(
-                        'Share Your Achievements',
+                        'Share With Friends',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],

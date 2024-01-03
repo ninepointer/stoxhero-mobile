@@ -29,6 +29,11 @@ class CommonInternshipInfo extends GetView<InternshipController> {
           '2. Upon completion, receive an internship certificate from StoxHero.',
           style: Theme.of(context).textTheme.tsRegular14,
         ),
+        // SizedBox(height: 8),
+        // Text(
+        //   "3. Upon successful completion of the internship with at least ${controller.internshipBatchDetails.value.attendancePercentage}% attendance, you will receive a participation bonus of ${"5000"} HeroCash",
+        //   style: Theme.of(context).textTheme.tsRegular14,
+        // ),
         SizedBox(height: 12),
         Text(
           'Internship Completion Rules and Issuance of Internship Certificate:',
