@@ -11,6 +11,7 @@ const bool useTestToken = true;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   WebEngagePlugin _webEngagePlugin = new WebEngagePlugin();
+  print('webengage$_webEngagePlugin');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

@@ -1,3 +1,4 @@
+package com.stoxhero.app;
 import io.flutter.app.FlutterApplication;
 import com.webengage.webengage_plugin.WebengageInitializer;
 import com.webengage.sdk.android.WebEngageConfig;
