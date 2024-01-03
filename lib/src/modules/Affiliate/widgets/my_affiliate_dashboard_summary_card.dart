@@ -55,7 +55,7 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                       context,
                       label: 'Lifetime Earnings',
                       earning:
-                          "${FormatHelper.formatNumbers(controller.affilateOverviewDetails.value.lifetimeEarning, decimal: 0)}",
+                          "${FormatHelper.formatNumbers(controller.affilateOverviewDetails.value.lifetimeEarning ?? 0, decimal: 0)}",
                       valueColor: AppColors.success,
                     ),
                   ),
@@ -66,8 +66,9 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                     child: signUpCard(
                       context,
                       label: 'Total Referrals',
-                      earning: controller
-                          .affilateOverviewDetails.value.affiliateRefferalCount
+                      earning: (controller.affilateOverviewDetails.value
+                                  .affiliateRefferalCount ??
+                              0)
                           .toString(),
                       labelColor: AppColors.brandYellow,
                     ),
@@ -83,8 +84,9 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                     child: signUpCard(
                       context,
                       label: 'Active Referrals',
-                      earning: controller.affilateOverviewDetails.value
-                          .activeAffiliateRefferalCount
+                      earning: (controller.affilateOverviewDetails.value
+                                  .activeAffiliateRefferalCount ??
+                              0)
                           .toString(),
                       labelColor: Colors.blueAccent,
                     ),
@@ -96,8 +98,9 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                     child: signUpCard(
                       context,
                       label: 'Paid Referrals',
-                      earning: controller.affilateOverviewDetails.value
-                          .paidAffiliateRefferalCount
+                      earning: (controller.affilateOverviewDetails.value
+                                  .paidAffiliateRefferalCount ??
+                              0)
                           .toString(),
                       labelColor: AppColors.lightGreen,
                     ),
@@ -114,7 +117,7 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                       context,
                       label: 'Active/Total',
                       earning:
-                          "${(controller.affilateOverviewDetails.value.activeAffiliateRefferalCount ?? 0) / (controller.affilateOverviewDetails.value.affiliateRefferalCount ?? 1)}",
+                          "${(controller.affilateOverviewDetails.value.activeAffiliateRefferalCount ?? 0) ~/ (controller.affilateOverviewDetails.value.affiliateRefferalCount ?? 1)}",
                       labelColor: AppColors.secondary,
                     ),
                   ),
@@ -126,7 +129,7 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                       context,
                       label: 'Paid/Total',
                       earning:
-                          "${(controller.affilateOverviewDetails.value.paidActiveAffiliateRefferalCount ?? 0) / (controller.affilateOverviewDetails.value.affiliateRefferalCount ?? 1)}",
+                          "${((controller.affilateOverviewDetails.value.paidActiveAffiliateRefferalCount ?? 0) ~/ (controller.affilateOverviewDetails.value.affiliateRefferalCount ?? 1))}",
                       labelColor: Colors.blueAccent,
                     ),
                   ),
@@ -142,7 +145,7 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                       context,
                       label: 'Amount/Referral',
                       earning:
-                          "${FormatHelper.formatNumbers(controller.affilateOverviewDetails.value.rewardPerReferral, decimal: 0)}",
+                          "${FormatHelper.formatNumbers(controller.affilateOverviewDetails.value.rewardPerReferral ?? 0, decimal: 0)}",
                       valueColor: AppColors.success,
                     ),
                   ),
@@ -154,7 +157,7 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
                       context,
                       label: 'Commission %',
                       earning:
-                          "${controller.affilateOverviewDetails.value.commissionPercentage}%",
+                          "${controller.affilateOverviewDetails.value.commissionPercentage ?? 0}%",
                     ),
                   ),
                 ],

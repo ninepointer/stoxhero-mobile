@@ -1,25 +1,25 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stoxhero/src/core/core.dart';
+import 'package:stoxhero/src/modules/modules.dart';
 
-import '../../../core/core.dart';
-import '../../modules.dart';
-
-class AfiliateThirtyDaysChart extends StatefulWidget {
+class AffiliateLast30DaysOrders extends StatefulWidget {
   final String title;
   final List<BarChartGroupData> barGroups;
-  const AfiliateThirtyDaysChart({
-    Key? key,
+
+  const AffiliateLast30DaysOrders({
+    super.key,
     required this.title,
     required this.barGroups,
-  }) : super(key: key);
+  });
 
   @override
-  State<AfiliateThirtyDaysChart> createState() =>
-      _AfiliateThirtyDaysChartState();
+  State<AffiliateLast30DaysOrders> createState() =>
+      _AffiliateLast30DaysOrdersState();
 }
 
-class _AfiliateThirtyDaysChartState extends State<AfiliateThirtyDaysChart> {
+class _AffiliateLast30DaysOrdersState extends State<AffiliateLast30DaysOrders> {
   late AffiliateController controller;
 
   @override
@@ -78,39 +78,6 @@ class _AfiliateThirtyDaysChartState extends State<AfiliateThirtyDaysChart> {
                       ),
                     ),
                     barGroups: widget.barGroups,
-                    barTouchData: BarTouchData(
-                      touchTooltipData: BarTouchTooltipData(
-                        tooltipBgColor: Colors.blueAccent,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          String title;
-                          double? value;
-
-                          switch (rodIndex) {
-                            case 0:
-                              title = 'Total';
-                              value = rod.toY;
-                              break;
-                            case 1:
-                              title = 'Testzone';
-                              value = rod.toY;
-                              break;
-                            case 2:
-                              title = 'TenX';
-                              value = rod.toY;
-                              break;
-                            default:
-                              title = '';
-                              value = 0;
-                          }
-
-                          return BarTooltipItem(
-                            "$title : $value",
-                            TextStyle(color: Colors.white),
-                            // value.toString(),
-                          );
-                        },
-                      ),
-                    ),
                     gridData: FlGridData(
                       show: false,
                     ),

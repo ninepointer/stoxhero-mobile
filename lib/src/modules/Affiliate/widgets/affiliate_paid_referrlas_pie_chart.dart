@@ -14,7 +14,14 @@ class PieChartPaidReferrals extends StatefulWidget {
 }
 
 class PieChartPaidReferralsState extends State {
+  late AffiliateController controller;
   int touchedIndex = -1;
+
+  @override
+  void initState() {
+    controller = Get.find<AffiliateController>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +109,11 @@ class PieChartPaidReferralsState extends State {
         case 0:
           return PieChartSectionData(
             color: AppColors.lightGreen,
-            value: 12,
-            title: '12',
+            value: controller
+                .affilateOverviewDetails.value.affiliateRefferalCount
+                ?.toDouble(),
+            title:
+                '${controller.affilateOverviewDetails.value.affiliateRefferalCount ?? 0}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -115,8 +125,11 @@ class PieChartPaidReferralsState extends State {
         case 1:
           return PieChartSectionData(
             color: AppColors.primary,
-            value: 7,
-            title: '7',
+            value: controller
+                .affilateOverviewDetails.value.activeAffiliateRefferalCount
+                ?.toDouble(),
+            title:
+                '${controller.affilateOverviewDetails.value.activeAffiliateRefferalCount ?? 0}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -128,8 +141,11 @@ class PieChartPaidReferralsState extends State {
         case 2:
           return PieChartSectionData(
             color: AppColors.brandYellow,
-            value: 1,
-            title: '1',
+            value: controller
+                .affilateOverviewDetails.value.paidActiveAffiliateRefferalCount
+                ?.toDouble(),
+            title:
+                '${controller.affilateOverviewDetails.value.paidActiveAffiliateRefferalCount ?? 0}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

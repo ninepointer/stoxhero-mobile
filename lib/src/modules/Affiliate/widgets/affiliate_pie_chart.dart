@@ -14,7 +14,14 @@ class PieChartReferrals extends StatefulWidget {
 }
 
 class PieChartReferralsState extends State {
+  late AffiliateController controller;
   int touchedIndex = -1;
+
+  @override
+  void initState() {
+    controller = Get.find<AffiliateController>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +75,7 @@ class PieChartReferralsState extends State {
               ),
               Indicator(
                 color: AppColors.primary,
-                text: 'Toatl Active',
+                text: 'Total Active',
                 isSquare: true,
               ),
               SizedBox(
@@ -97,8 +104,11 @@ class PieChartReferralsState extends State {
         case 0:
           return PieChartSectionData(
             color: AppColors.lightGreen,
-            value: 12,
-            title: '12',
+            value: controller
+                .affilateOverviewDetails.value.affiliateRefferalCount
+                ?.toDouble(),
+            title:
+                "${controller.affilateOverviewDetails.value.affiliateRefferalCount ?? 0}",
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -110,8 +120,11 @@ class PieChartReferralsState extends State {
         case 1:
           return PieChartSectionData(
             color: AppColors.primary,
-            value: 7,
-            title: '7',
+            value: controller
+                .affilateOverviewDetails.value.activeAffiliateRefferalCount
+                ?.toDouble(),
+            title:
+                "${controller.affilateOverviewDetails.value.activeAffiliateRefferalCount ?? 0}",
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

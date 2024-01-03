@@ -320,4 +320,5 @@ class AppUrls {
   static String getMyAffiliateTransactionList =
       "$apiURL/affiliate/mytransactions";
   static String getAffiliateOverView = "$apiURL/affiliate/overview";
+  static String getAffiliateLast30daysData = "$apiURL/affiliate/last30daysdata";
 }

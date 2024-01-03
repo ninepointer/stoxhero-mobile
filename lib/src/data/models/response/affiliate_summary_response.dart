@@ -64,8 +64,8 @@ class AffiliateSummaryData {
 }
 
 class AffiliateSummaryDetails {
-  int? totalProductCount;
-  double? totalProductCPayout;
+  num? totalProductCount;
+  num? totalProductCPayout;
 
   AffiliateSummaryDetails({this.totalProductCount, this.totalProductCPayout});
 
