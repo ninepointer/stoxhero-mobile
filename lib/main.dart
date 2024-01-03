@@ -6,7 +6,7 @@ import 'package:webengage_flutter/webengage_flutter.dart';
 import 'src/app/app.dart';
 
 const bool isProd = false;
-const bool useTestToken = true;
+const bool useTestToken = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
