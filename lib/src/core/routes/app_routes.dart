@@ -41,6 +41,7 @@ class AppRoutes {
   static const String weeklyTopPerformersFullList = '/toptestzoneportfolios';
   static const String affiliate = '/affiliate';
   static const String newyearstory = '/newyearstory';
+  static const String kycVarification = '/kycvarification';
 
   // static const String stocks = '/stocks';
 }

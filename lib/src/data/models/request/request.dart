@@ -19,3 +19,5 @@ export 'margin_required_request.dart';
 export 'payment_request.dart';
 export 'withdrawal_request.dart';
 export 'fcm_toke_data_request.dart';
+export 'verify_kyc_genrate_otp_request.dart';
+export "verify_kyc_verify_otp_request.dart";

@@ -58,6 +58,11 @@ class AppPages {
       // binding: BankBinding(),
     ),
     GetPage(
+      name: AppRoutes.kycVarification,
+      page: () => KycVarificationView(),
+      // binding: BankBinding(),
+    ),
+    GetPage(
       name: AppRoutes.portfolio,
       page: () => PortfolioView(),
       binding: PortfolioBinding(),

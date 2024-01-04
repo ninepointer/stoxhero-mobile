@@ -95,3 +95,4 @@ export 'virtual_pending_order_stoploss_response.dart';
 export "contest_pending_order_stoploss_response.dart";
 export 'my_affiliate_transaction_list_response.dart';
 export "my_affiliate_referrlas_List_response.dart";
+export "verify_kyc_genrate_otp_response.dart";

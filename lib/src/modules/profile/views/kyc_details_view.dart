@@ -27,7 +27,9 @@ class _KycDetailsViewState extends State<KycDetailsView> {
           actions: [
             IconButton(
               splashRadius: 24,
-              icon: controller.isKYCEditEnabled.value ? Icon(Icons.save) : Icon(Icons.edit),
+              icon: controller.isKYCEditEnabled.value
+                  ? Icon(Icons.save)
+                  : Icon(Icons.edit),
               onPressed: controller.isKYCApproved
                   ? null
                   : () {
@@ -110,19 +112,47 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                         },
                       ),
                     ),
-                    SizedBox(height: 12),
-                    CommonImageUpload(
-                      label: 'Aadhaar Card Front Image *',
-                      file: controller.aadhaarCardFrontFile.value,
-                      selectFile: () => controller.filePicker(
-                        KycDocumentType.aadhaarCardFront,
-                      ),
-                      removeFile: () => controller.filePicker(
-                        KycDocumentType.aadhaarCardFront,
-                        removeFile: true,
-                      ),
-                    ),
-                    SizedBox(height: 12),
+                    // SizedBox(height: 4),
+                    // CommonTextField(
+                    //   hintText: 'Bank Account Number',
+                    //   controller: controller.accountNumberTextController,
+                    //   padding: EdgeInsets.only(bottom: 8),
+                    // ),
+                    // SizedBox(height: 4),
+                    // CommonTextField(
+                    //   hintText: 'Ifsc Code',
+                    //   controller: controller.ifscCodeTextController,
+                    //   padding: EdgeInsets.only(bottom: 8),
+                    // ),
+                    // SizedBox(height: 12),
+                    // CommonImageUpload(
+                    //   label: 'Aadhaar Card Front Image *',
+                    //   file: controller.aadhaarCardFrontFile.value,
+                    //   selectFile: () => controller.filePicker(
+                    //     KycDocumentType.aadhaarCardFront,
+                    //   ),
+                    //   removeFile: () => controller.filePicker(
+                    //     KycDocumentType.aadhaarCardFront,
+                    //     removeFile: true,
+                    //   ),
+                    // ),
+                    // SizedBox(height: 12),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: FilledButton(
+                    //           onPressed: () {}, child: Text("Reset")),
+                    //     ),
+                    //     SizedBox(
+                    //       width: 10,
+                    //     ),
+                    //     Expanded(
+                    //       child: FilledButton(
+                    //           onPressed: () {}, child: Text("Genrate Otp")),
+                    //     ),
+                    //   ],
+                    // )
+
                     CommonImageUpload(
                       label: 'Aadhaar Card Back Image *',
                       file: controller.aadhaarCardBackFile.value,

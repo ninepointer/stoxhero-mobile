@@ -254,7 +254,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
         Row(
           children: [
             Container(
-              width: 100,
+              width: 130,
               child: GestureDetector(
                 onTap: (controller.checkIfUpcomingFeaturedPurchased(
                                 widget.upcomingFeatured, widget.userId) ||
@@ -364,7 +364,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                     ),
                   ),
                   child: Text(
-                    '${remainingTime.inDays}Days ${remainingTime.inHours.remainder(24)}Hours ${remainingTime.inMinutes.remainder(60)}Minutes ${remainingTime.inSeconds.remainder(60)}Seconds',
+                    '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
                     style: AppStyles.tsSecondaryMedium12.copyWith(
                       color: AppColors.primary.shade600,
                     ),

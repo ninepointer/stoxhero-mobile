@@ -42,7 +42,13 @@ class ProfileController extends BaseController<ProfileRepository> {
   final isBankLoading = false.obs;
   bool get isBankLoadingStatus => isBankLoading.value;
 
+  final isverifyKycLoading = false.obs;
+  bool get isverifyKycLoadingStatus => isverifyKycLoading.value;
+
   bool get isKYCApproved => userDetails.value.kYCStatus == 'Approved';
+
+  final isOTPGenerated = false.obs;
+  bool get isOTPGeneratedStatus => isOTPGenerated.value;
 
   final isEditEnabled = false.obs;
   final isKYCEditEnabled = false.obs;
@@ -51,6 +57,14 @@ class ProfileController extends BaseController<ProfileRepository> {
   String? genderValue;
   List<String> dropdownItems = ['Male', 'Female', 'Other'];
   final selectedStates = ''.obs;
+
+  final otpFormKey = GlobalKey<FormState>();
+  final otpTextController = TextEditingController();
+
+  final kycAadhaarNumberTextController = TextEditingController();
+  final kycPanCardNumberTextController = TextEditingController();
+  final kycAccountNumberTextController = TextEditingController();
+  final kycIfscCodeTextController = TextEditingController();
 
   final userNameTextController = TextEditingController();
   final positionTextController = TextEditingController();
@@ -77,10 +91,14 @@ class ProfileController extends BaseController<ProfileRepository> {
   final accountNumberTextController = TextEditingController();
   final ifscCodeTextController = TextEditingController();
 
+  final verifyKYCOtpController = TextEditingController();
+
   final aadhaarCardNumberTextController = TextEditingController();
   final panCardNumberTextController = TextEditingController();
   final drivingLicenseNumberTextController = TextEditingController();
   final passportCardNumberTextController = TextEditingController();
+
+  final verifyKYCGenrateOtpDataList = VerifyKYCGenrateOTPData().obs;
 
   final Rx<PlatformFile?> aadhaarCardFrontFile =
       PlatformFile(name: '', size: 0).obs;
@@ -126,6 +144,16 @@ class ProfileController extends BaseController<ProfileRepository> {
     "Uttarakhand",
     "West Bengal",
   ];
+
+  final isVerifyButtonVisible = false.obs;
+
+  void showGenerateOTPButton() {
+    isVerifyButtonVisible.value = false;
+  }
+
+  void showVerifyButton() {
+    isVerifyButtonVisible.value = true;
+  }
 
   void loadData() {
     loadProfileDetails();
@@ -473,5 +501,99 @@ class ProfileController extends BaseController<ProfileRepository> {
       }
       isBankLoading(false);
     }
+  }
+
+  Future saveVerifyUserKYCDetailsthroughAPI() async {
+    isBankLoading(true);
+
+    Map<String, dynamic> data = {
+      "otp": verifyKYCOtpController.text,
+      'panNumber': kycPanCardNumberTextController.text,
+      'bankAccountNumber': kycAccountNumberTextController.text,
+      'ifsc': kycIfscCodeTextController.text,
+      "aadhaarNumber": kycAadhaarNumberTextController.text,
+    };
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.updateUserDetails(data);
+      if (response.data != null) {
+        await Get.find<AuthController>().getUserDetails(navigate: false);
+        loadData();
+        // await AppStorage.setUserDetails(
+        //   LoginDetailsResponse.fromJson(response.data?.data),
+        // );
+        log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('Save: ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isBankLoading(false);
+  }
+
+  Future verifyKYCGenrateOtpDetails() async {
+    isverifyKycLoading(true);
+    Map<String, dynamic> data = {
+      "aadhaarNumber": kycAadhaarNumberTextController.text,
+    };
+    try {
+      final RepoResponse<VerifyKYCGenrateOTPResponse> response =
+          await repository.verifyKYCOtpGenrate(data);
+      if (response.data != null) {
+        // await Get.find<AuthController>().getUserDetails(navigate: false);
+        verifyKYCGenrateOtpDataList(response.data?.data);
+
+        if (response.data?.status == "success") {
+          SnackbarHelper.showSnackbar("Aadhaar Otp Sent");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('Save: ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isverifyKycLoading(false);
+  }
+
+  Future verifyKYCVerifyOtpDetails() async {
+    isverifyKycLoading(true);
+    Map<String, dynamic> data = {
+      'client_id': verifyKYCGenrateOtpDataList.value.clientId ?? '',
+      "otp": verifyKYCOtpController.text,
+      'panNumber': kycPanCardNumberTextController.text,
+      'bankAccountNumber': kycAccountNumberTextController.text,
+      'ifsc': kycIfscCodeTextController.text,
+    };
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.verifyKYCOtpVerify(data);
+      if (response.data != null) {
+        await Get.find<AuthController>().getUserDetails(navigate: false);
+        loadData();
+        SnackbarHelper.showSnackbar(response.data?.message);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log('Save: ${e.toString()}');
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isverifyKycLoading(false);
+  }
+
+  void generateOTP() {
+    isOTPGenerated(true);
+  }
+
+  void reset() {
+    kycAadhaarNumberTextController.clear();
+    kycIfscCodeTextController.clear();
+    kycAccountNumberTextController.clear();
+    kycPanCardNumberTextController.clear();
+    isOTPGenerated(false);
+    otpTextController.clear();
   }
 }
