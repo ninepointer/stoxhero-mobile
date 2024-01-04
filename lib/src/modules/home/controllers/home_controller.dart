@@ -17,6 +17,9 @@ class HomeController extends BaseController<DashboardRepository> {
 
   final selectedIndex = 0.obs;
 
+  final firstTimeshow = true.obs;
+   bool get firstTimeshowStatus => firstTimeshow.value;
+
   final userDashboard = DashboardTradeSummary().obs;
   final userDashboardReturnSummary = DashboardReturnSummary().obs;
   final dashboardCarouselList = <DashboardCarousel>[].obs;

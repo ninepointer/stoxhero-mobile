@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:stoxhero/src/modules/story/view/story_view.dart';
 import '../../../app/app.dart';
 import '../../../modules/contest/views/competed_contest_champion_Leaderboard.dart';
 
@@ -23,6 +24,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
     super.initState();
+
     controller = Get.find<HomeController>();
     contestProfileController = Get.find<ContestProfileController>();
     contestController = Get.find<ContestController>();
@@ -49,6 +51,13 @@ class _DashboardViewState extends State<DashboardView> {
       nextMonth,
     ];
     selectedValue2 = currentMonth;
+
+    Future.delayed(Duration(seconds: 2), () {
+      if (controller.firstTimeshowStatus) {
+        Get.to(StoryView());
+      }
+      controller.firstTimeshow.value = false;
+    });
   }
 
   String getProductMonth(String? label) {
@@ -105,15 +114,18 @@ class _DashboardViewState extends State<DashboardView> {
                                 item.lastPrice,
                               ),
                               stockColor: controller.getValueColor(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                               stockLTP: FormatHelper.formatNumbers(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                               stockChange:
                                   '(${item.change?.toStringAsFixed(2)}%)',
                               stockLTPColor: controller.getValueColor(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                             ),
                             if (item != controller.stockIndexDetailsList.last)
@@ -163,8 +175,12 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  if (contestProfileController.startOfWeek.value != "" &&
-                      contestProfileController.endOfWeek.value != "")
+                  SizedBox(
+                    height: 10,
+                  ),
+                  if ((contestProfileController.startOfWeek.value != "" &&
+                          contestProfileController.endOfWeek.value != "") ||
+                      contestProfileController.weeklyTopPerformer.isNotEmpty)
                     CommonTile(
                       label: 'Weekly TestZone Leaderboard',
                       showSeeAllButton: true,
@@ -203,20 +219,12 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  // CommonTile(
-                  //   label: 'Merry Christmas',
-                  //   showSeeAllButton: true,
-                  //   seeAllLabel: '',
-                  //   margin: EdgeInsets.only(bottom: 4, top: 8),
-                  //   padding: EdgeInsets.only(left: 15, top: 4),
-                  // ),
                   SizedBox(
                     height: 4,
                   ),
                   GestureDetector(
                     onTap: () {
-                      controller.selectedIndex(2);
-                      Get.find<TenxTradingController>().loadData();
+                      Get.to(StoryView());
                     },
                     child: CommonCard(
                       padding: EdgeInsets.zero,
@@ -225,13 +233,13 @@ class _DashboardViewState extends State<DashboardView> {
                       hasBorder: true,
                       children: [
                         Container(
-                          height: 130,
+                          height: 80,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: AssetImage(
-                                AppImages.santa,
+                                AppImages.shstory,
                               ),
                               fit: BoxFit.fill,
                               // colorFilter: ColorFilter.mode(
@@ -248,7 +256,6 @@ class _DashboardViewState extends State<DashboardView> {
                   SizedBox(
                     height: 4,
                   ),
-
                   contestController.liveFeaturedContest.isEmpty &&
                           contestController.upcomingFeaturedContest.isEmpty
                       ? Container()

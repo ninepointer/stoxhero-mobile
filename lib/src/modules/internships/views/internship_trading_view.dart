@@ -18,30 +18,39 @@ class InternshipTradingView extends GetView<InternshipController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty &&
+                      controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          for (var item in controller.stockIndexDetailsList) ...[
+                          for (var item
+                              in controller.stockIndexDetailsList) ...[
                             TradingStockCard(
-                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              label: controller
+                                  .getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
                               stockColor: controller.getValueColor(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                               stockLTP: FormatHelper.formatNumbers(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
-                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockChange:
+                                  '(${item.change?.toStringAsFixed(2)}%)',
                               stockLTPColor: controller.getValueColor(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                             ),
-                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                            if (item != controller.stockIndexDetailsList.last)
+                              SizedBox(width: 4),
                           ]
                         ],
                       ),
@@ -79,8 +88,9 @@ class InternshipTradingView extends GetView<InternshipController> {
                           label: AppStrings.noDataFoundWatchlist,
                         )
                       : SizedBox(
-                          height:
-                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
+                          height: controller.tradingWatchlist.length >= 3
+                              ? 260
+                              : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -88,12 +98,14 @@ class InternshipTradingView extends GetView<InternshipController> {
                             itemBuilder: (context, index) {
                               return InternshipWatchlistCard(
                                 index: index,
-                                tradingWatchlist: controller.tradingWatchlist[index],
+                                tradingWatchlist:
+                                    controller.tradingWatchlist[index],
                               );
                             },
                           ),
                         ),
-                  if (controller.internshipPositionList.isNotEmpty) CommonTile(label: 'My Position Summary'),
+                  if (controller.internshipPositionList.isNotEmpty)
+                    CommonTile(label: 'My Position Summary'),
                   if (controller.internshipPositionList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -104,12 +116,14 @@ class InternshipTradingView extends GetView<InternshipController> {
                               PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
-                                value: controller.tenxTotalPositionDetails.value.lots,
+                                value: controller
+                                    .tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
                               PositionDetailCardTile(
                                 label: 'Brokerage',
-                                value: controller.tenxTotalPositionDetails.value.brokerage,
+                                value: controller
+                                    .tenxTotalPositionDetails.value.brokerage,
                               ),
                             ],
                           ),
@@ -119,13 +133,15 @@ class InternshipTradingView extends GetView<InternshipController> {
                               PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
-                                valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
+                                valueColor: controller.getValueColor(
+                                    controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
                               PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
-                                valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                                valueColor: controller.getValueColor(
+                                    controller.calculateTotalNetPNL()),
                               ),
                             ],
                           ),
@@ -151,7 +167,8 @@ class InternshipTradingView extends GetView<InternshipController> {
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.internshipPositionList.length,
                           itemBuilder: (context, index) {
-                            final position = controller.internshipPositionList[index];
+                            final position =
+                                controller.internshipPositionList[index];
                             if (position.id?.isLimit != true) {
                               return InternshipPositionCard(
                                 position: position,
@@ -177,7 +194,8 @@ class InternshipTradingView extends GetView<InternshipController> {
                           itemCount: controller.stopLossPendingOrderList.length,
                           itemBuilder: (context, index) {
                             return InternshipStoplossPendingOrderCard(
-                              stopLoss: controller.stopLossPendingOrderList[index],
+                              stopLoss:
+                                  controller.stopLossPendingOrderList[index],
                             );
                           },
                         ),
@@ -191,16 +209,21 @@ class InternshipTradingView extends GetView<InternshipController> {
                           label: AppStrings.noDataFoundExecutedOrders,
                         )
                       : SizedBox(
-                          height: controller.stopLossExecutedOrdersList.length >= 3
-                              ? 180
-                              : controller.stopLossExecutedOrdersList.length * 130,
+                          height:
+                              controller.stopLossExecutedOrdersList.length >= 3
+                                  ? 180
+                                  : controller
+                                          .stopLossExecutedOrdersList.length *
+                                      130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemCount:
+                                controller.stopLossExecutedOrdersList.length,
                             itemBuilder: (context, index) {
                               return StoplossExecutedOrderCard(
-                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                                stopLoss: controller
+                                    .stopLossExecutedOrdersList[index],
                               );
                             },
                           ),
@@ -247,14 +270,21 @@ class InternshipTradingView extends GetView<InternshipController> {
                   PortfolioDetailCardTile(
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
-                    value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
-                    valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                    value: controller.calculateTotalNetPNL() > 0
+                        ? 0
+                        : controller.calculateTotalNetPNL().abs(),
+                    valueColor: controller
+                        .getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   PortfolioDetailCardTile(
                     label: 'Opening Balance',
                     info: 'Cash available at the beginning of the day',
-                    value: (controller.internshipBatchPortfolio.value.openingBalance ?? 0) > 0
-                        ? controller.internshipBatchPortfolio.value.openingBalance
+                    value: (controller.internshipBatchPortfolio.value
+                                    .openingBalance ??
+                                0) >
+                            0
+                        ? controller
+                            .internshipBatchPortfolio.value.openingBalance
                         : controller.internshipBatchPortfolio.value.totalFund,
                   ),
                   PortfolioDetailCardTile(

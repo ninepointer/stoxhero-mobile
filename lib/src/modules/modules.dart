@@ -21,3 +21,4 @@ export 'widgets/widgets.dart';
 export 'contest_profile/contest_profile_index.dart';
 export 'stocks/views/stocks_dashboard_view.dart';
 export 'affiliate/affilate_index.dart';
+export "story/story_index.dart";
