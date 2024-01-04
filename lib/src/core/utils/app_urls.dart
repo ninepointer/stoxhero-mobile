@@ -319,6 +319,8 @@ class AppUrls {
       "$apiURL/affiliate/myaffiliaterafferals";
   static String getMyAffiliateTransactionList =
       "$apiURL/affiliate/mytransactions";
+  static String getAffiliateOverView = "$apiURL/affiliate/overview";
+  static String getAffiliateLast30daysData = "$apiURL/affiliate/last30daysdata";
 
   static String kycVerificationGenrateOtp = "$apiURL/KYC/generateotp";
   static String kycVerificationVerifyOtp = "$apiURL/KYC/verifyotp";

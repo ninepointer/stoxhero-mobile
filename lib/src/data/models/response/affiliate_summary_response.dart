@@ -1,7 +1,7 @@
 class AffiliateSummaryResponse {
   String? status;
   List<AffiliateSummaryData>? data;
-  List<AffiliateRafferalSummery>? affiliateRafferalSummery;
+  List<AffiliateRafferalSummeryData>? affiliateRafferalSummery;
   String? message;
 
   AffiliateSummaryResponse(
@@ -16,9 +16,10 @@ class AffiliateSummaryResponse {
       });
     }
     if (json['affiliateRafferalSummery'] != null) {
-      affiliateRafferalSummery = <AffiliateRafferalSummery>[];
+      affiliateRafferalSummery = <AffiliateRafferalSummeryData>[];
       json['affiliateRafferalSummery'].forEach((v) {
-        affiliateRafferalSummery!.add(new AffiliateRafferalSummery.fromJson(v));
+        affiliateRafferalSummery!
+            .add(new AffiliateRafferalSummeryData.fromJson(v));
       });
     }
     message = json['message'];
@@ -40,31 +41,21 @@ class AffiliateSummaryResponse {
 }
 
 class AffiliateSummaryData {
-  List<AffiliateTransaction>? transaction;
-  List<AffiliateSummery>? summery;
+  List<AffiliateSummaryDetails>? summery;
 
-  AffiliateSummaryData({this.transaction, this.summery});
+  AffiliateSummaryData({this.summery});
 
   AffiliateSummaryData.fromJson(Map<String, dynamic> json) {
-    if (json['transaction'] != null) {
-      transaction = <AffiliateTransaction>[];
-      json['transaction'].forEach((v) {
-        transaction!.add(new AffiliateTransaction.fromJson(v));
-      });
-    }
     if (json['summery'] != null) {
-      summery = <AffiliateSummery>[];
+      summery = <AffiliateSummaryDetails>[];
       json['summery'].forEach((v) {
-        summery!.add(new AffiliateSummery.fromJson(v));
+        summery!.add(new AffiliateSummaryDetails.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.transaction != null) {
-      data['transaction'] = this.transaction!.map((v) => v.toJson()).toList();
-    }
     if (this.summery != null) {
       data['summery'] = this.summery!.map((v) => v.toJson()).toList();
     }
@@ -72,50 +63,13 @@ class AffiliateSummaryData {
   }
 }
 
-class AffiliateTransaction {
-  String? buyerFirstName;
-  String? productName;
-  num? payout;
-  num? productDiscountedPrice;
-  String? date;
-  String? transactionId;
-
-  AffiliateTransaction(
-      {this.buyerFirstName,
-      this.productName,
-      this.payout,
-      this.productDiscountedPrice,
-      this.date,
-      this.transactionId});
-
-  AffiliateTransaction.fromJson(Map<String, dynamic> json) {
-    buyerFirstName = json['buyer_first_name'];
-    productName = json['product_name'];
-    payout = json['payout'];
-    productDiscountedPrice = json['productDiscountedPrice'];
-    date = json['date'];
-    transactionId = json['transactionId'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['buyer_first_name'] = this.buyerFirstName;
-    data['product_name'] = this.productName;
-    data['payout'] = this.payout;
-    data['productDiscountedPrice'] = this.productDiscountedPrice;
-    data['date'] = this.date;
-    data['transactionId'] = this.transactionId;
-    return data;
-  }
-}
-
-class AffiliateSummery {
+class AffiliateSummaryDetails {
   num? totalProductCount;
   num? totalProductCPayout;
 
-  AffiliateSummery({this.totalProductCount, this.totalProductCPayout});
+  AffiliateSummaryDetails({this.totalProductCount, this.totalProductCPayout});
 
-  AffiliateSummery.fromJson(Map<String, dynamic> json) {
+  AffiliateSummaryDetails.fromJson(Map<String, dynamic> json) {
     totalProductCount = json['totalProductCount'];
     totalProductCPayout = json['totalProductCPayout'];
   }
@@ -128,21 +82,30 @@ class AffiliateSummery {
   }
 }
 
-class AffiliateRafferalSummery {
-  num? affiliateRefferalCount;
-  num? affiliateRefferalPayout;
+class AffiliateRafferalSummeryData {
+  int? affiliateRefferalCount;
+  int? activeAffiliateRefferalCount;
+  int? paidAffiliateRefferalCount;
+  int? affiliateRefferalPayout;
 
-  AffiliateRafferalSummery(
-      {this.affiliateRefferalCount, this.affiliateRefferalPayout});
+  AffiliateRafferalSummeryData(
+      {this.affiliateRefferalCount,
+      this.activeAffiliateRefferalCount,
+      this.paidAffiliateRefferalCount,
+      this.affiliateRefferalPayout});
 
-  AffiliateRafferalSummery.fromJson(Map<String, dynamic> json) {
+  AffiliateRafferalSummeryData.fromJson(Map<String, dynamic> json) {
     affiliateRefferalCount = json['affiliateRefferalCount'];
+    activeAffiliateRefferalCount = json['activeAffiliateRefferalCount'];
+    paidAffiliateRefferalCount = json['paidAffiliateRefferalCount'];
     affiliateRefferalPayout = json['affiliateRefferalPayout'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['affiliateRefferalCount'] = this.affiliateRefferalCount;
+    data['activeAffiliateRefferalCount'] = this.activeAffiliateRefferalCount;
+    data['paidAffiliateRefferalCount'] = this.paidAffiliateRefferalCount;
     data['affiliateRefferalPayout'] = this.affiliateRefferalPayout;
     return data;
   }
