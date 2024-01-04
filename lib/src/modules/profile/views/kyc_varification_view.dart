@@ -15,11 +15,13 @@ class _KycVarificationViewState extends State<KycVarificationView> {
   @override
   void initState() {
     controller = Get.find<ProfileController>();
+    VerifyKYCGenrateOTPData emptyData = VerifyKYCGenrateOTPData();
+    controller.verifyKYCGenrateOtpDataList(emptyData);
+
     controller.isVerifyButtonVisible.value = false;
     controller.otpTextController.clear();
     controller.isOTPGenerated(false);
-    VerifyKYCGenrateOTPData emptyData = VerifyKYCGenrateOTPData();
-    controller.verifyKYCGenrateOtpDataList(emptyData);
+    controller.saveVerifyUserKYCDetailsthroughAPI();
     super.initState();
   }
 
@@ -109,12 +111,12 @@ class _KycVarificationViewState extends State<KycVarificationView> {
                     padding: EdgeInsets.only(bottom: 8),
                   ),
                   Text(
-                    'Ifsc Code',
+                    'IFSC Code',
                     style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
                   SizedBox(height: 8),
                   CommonTextField(
-                    hintText: 'Ifsc Code',
+                    hintText: 'IFSC Code',
                     controller: controller.kycIfscCodeTextController,
                     enabled:
                         controller.userDetails.value.kYCStatus != 'Approved',

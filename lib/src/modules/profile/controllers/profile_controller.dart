@@ -251,6 +251,7 @@ class ProfileController extends BaseController<ProfileRepository> {
     dobTextController.text =
         FormatHelper.formatDateOfBirthToIST(userDetails.value.dob);
     selectedStates.value = userDetails.value.bankState ?? '';
+    kycAadhaarNumberTextController.text = userDetails.value.aadhaarNumber ?? '';
     isBankLoading(false);
   }
 
@@ -507,7 +508,6 @@ class ProfileController extends BaseController<ProfileRepository> {
     isBankLoading(true);
 
     Map<String, dynamic> data = {
-      "otp": verifyKYCOtpController.text,
       'panNumber': kycPanCardNumberTextController.text,
       'bankAccountNumber': kycAccountNumberTextController.text,
       'ifsc': kycIfscCodeTextController.text,
@@ -519,9 +519,6 @@ class ProfileController extends BaseController<ProfileRepository> {
       if (response.data != null) {
         await Get.find<AuthController>().getUserDetails(navigate: false);
         loadData();
-        // await AppStorage.setUserDetails(
-        //   LoginDetailsResponse.fromJson(response.data?.data),
-        // );
         log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
