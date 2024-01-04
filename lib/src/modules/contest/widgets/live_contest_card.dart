@@ -405,6 +405,7 @@ class LiveContestCard extends GetView<ContestController> {
                     controller.liveContest(LiveContest());
                     controller.liveContest(contest);
 
+                    controller.myRank(0);
                     controller.liveLeaderboardList([]);
 
                     controller.getContestPositions();
