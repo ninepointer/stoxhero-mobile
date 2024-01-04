@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import '../../../app/app.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class StoryView extends StatefulWidget {
   const StoryView({Key? key}) : super(key: key);
@@ -17,13 +19,21 @@ class _StoryViewState extends State<StoryView> {
     Story2(),
     Story3(),
     Story4(),
+    Story41(),
+    Story42(),
+    Story71(),
     Story7(),
+    Story72(),
+    Story73(),
+    Story74(),
     Story5(),
-    Story6(),
+    // Story6(),
   ];
   List<double> percentageWatched = [];
   bool isPaused = false;
   Timer? timer;
+
+  AudioPlayer audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -34,10 +44,18 @@ class _StoryViewState extends State<StoryView> {
     }
 
     _startWatching();
+    _playMusic("audio/bgm.mp3");
   }
-
+  void _playMusic(String filePath) async {
+  await audioPlayer.play(AssetSource(filePath));
+}
+  @override
+  void dispose() {
+    audioPlayer.stop();
+    super.dispose();
+  }
   void _startWatching() {
-    timer = Timer.periodic(Duration(milliseconds: 70), (timer) {
+    timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
       if (!isPaused) {
         setState(() {
           // Only add 0.01 as long as it's below 1
@@ -67,24 +85,32 @@ class _StoryViewState extends State<StoryView> {
   void _onLongPress() {
     setState(() {
       isPaused = true;
-      timer?.cancel(); // Cancel the timer when the story is paused
+      timer?.cancel();
+      audioPlayer.pause(); // Cancel the timer when the story is paused
     });
   }
 
   void _onLongPressEnd(LongPressEndDetails details) {
     setState(() {
       isPaused = false;
-      _startWatching(); // Resume watching when the long press is released
+      _startWatching();
+      audioPlayer.resume(); // Resume watching when the long press is released
     });
   }
 
-  void _onTapDown(TapUpDetails details) {
+  void _onTapDown (TapUpDetails details) async{
     final double screenWidth = MediaQuery.of(context).size.width;
     final double dx = details.globalPosition.dx;
     // User taps the first half of the screen
+
+    Duration currentPosition = await audioPlayer.getCurrentPosition() ?? Duration();
+    Duration newPosition;
     if (dx < screenWidth / 2) {
       setState(() {
         if (currentStoryIndex > 0) {
+          //newPosition = Duration(milliseconds: max(0, currentPosition.inMilliseconds - 5000));
+          //audioPlayer.seek(newPosition);
+
           percentageWatched[currentStoryIndex - 1] = 0;
           percentageWatched[currentStoryIndex] = 0;
           currentStoryIndex--;
@@ -95,6 +121,9 @@ class _StoryViewState extends State<StoryView> {
     else {
       setState(() {
         if (currentStoryIndex < myStories.length - 1) {
+          //newPosition = Duration(milliseconds: currentPosition.inMilliseconds + 5000);
+          //audioPlayer.seek(newPosition);
+
           percentageWatched[currentStoryIndex] = 1;
           currentStoryIndex++;
         } else {
@@ -112,7 +141,7 @@ class _StoryViewState extends State<StoryView> {
           "StoxHero 2023 in review",
           style: TextStyle(color: AppColors.white),
         ),
-        backgroundColor: Color.fromARGB(255, 3, 31, 65),
+        backgroundColor: Colors.black,
       ),
       body: GestureDetector(
         onLongPress: _onLongPress,

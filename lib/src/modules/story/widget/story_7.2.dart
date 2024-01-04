@@ -4,14 +4,14 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter_animate/flutter_animate.dart';
 
-class Story7 extends StatefulWidget {
-  const Story7({Key? key}) : super(key: key);
+class Story72 extends StatefulWidget {
+  const Story72({Key? key}) : super(key: key);
 
   @override
   _Story41State createState() => _Story41State();
 }
 
-class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
+class _Story41State extends State<Story72> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
@@ -53,7 +53,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
             child: Opacity(
             opacity: 0.55, // Adjusting opacity to 0.85
             child: Image.asset(
-              AppImages.tenxhero,
+              AppImages.testzonehero,
               fit: BoxFit.cover,
             ),
           ),
@@ -99,7 +99,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                           // ),
                           // SizedBox(height: 10.0),
                           Text(
-                            "TenX Hero",
+                            "TestZone Hero",
                             style: TextStyle(
                               fontSize: 50.0,
                               fontFamily: 'Sans-serif',
@@ -137,7 +137,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                               .fadeIn(duration: Duration(milliseconds: 3000)),
                           SizedBox(height: 10.0),
                            Text(
-                            "Reward: ₹68,606",
+                            "Reward: ₹54,588",
                             style: TextStyle(
                               fontSize: 24.0,
                               fontFamily: 'Sans-serif',

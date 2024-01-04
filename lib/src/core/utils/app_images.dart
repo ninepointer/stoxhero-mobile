@@ -36,8 +36,21 @@ class AppImages {
   static const String santa = '$imagesDir/santa2.png';
   static const String storybg1 = '$imagesDir/storybg1.jpg';
   static const String newyearStory5 = '$imagesDir/story5up.png';
-  static const String wankhede = '$imagesDir/wankhade.jpeg';
+  static const String wankhede = '$imagesDir/wankhedemini.png';
   static const String pathan = '$imagesDir/pathan.jpg';
   static const String animal = '$imagesDir/animal.jpg';
   static const String gadar = '$imagesDir/gadar2.jpg';
+  static const String srk = '$imagesDir/srkmini.png';
+  static const String love = '$imagesDir/lovenew.png';
+  static const String tz = '$imagesDir/testzones.png';
+  static const String tx = '$imagesDir/tenx.png';
+  static const String storyhome = '$imagesDir/storyhomegold.png';
+  static const String storymarginx = '$imagesDir/marginx.png';
+  static const String tenxhero = '$imagesDir/tenxhero.png';
+  static const String marginxhero = '$imagesDir/marginxhero.png';
+  static const String testzonehero = '$imagesDir/tetszonehero.png';
+  static const String virtualhero = '$imagesDir/papertradehero.png';
+  static const String hero = '$imagesDir/heroes.png';
+  static const String shstory = '$imagesDir/rerewind.png';
+  static const String hny = '$imagesDir/hny.png';
 }

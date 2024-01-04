@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 class Story5 extends StatefulWidget {
@@ -45,6 +46,15 @@ class _Story5State extends State<Story5> with SingleTickerProviderStateMixin {
       backgroundColor: Color.fromARGB(255, 3, 31, 65),
       body: Stack(
         children: [
+          Positioned.fill(
+            child: Opacity(
+            opacity: 0.95, // Adjusting opacity to 0.85
+            child: Image.asset(
+              AppImages.hny,
+              fit: BoxFit.cover,
+            ),
+          ),
+          ),
           Center(
             child: AnimatedBuilder(
               animation: _controller,
@@ -55,7 +65,7 @@ class _Story5State extends State<Story5> with SingleTickerProviderStateMixin {
                     scale: _scaleAnimation.value,
                     child: Container(
                       width: 300.0,
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.fromLTRB(16,0,16,100),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16.0),
                       ),
@@ -67,7 +77,7 @@ class _Story5State extends State<Story5> with SingleTickerProviderStateMixin {
                             isRepeatingAnimation: true,
                             animatedTexts: [
                               ColorizeAnimatedText(
-                                "Thank you for making our 2023 awesome.\n\nWe wish you a happy and prosperous new year 2024.",
+                                "thanks you for making our 2023 awesome.",
                                 textStyle: TextStyle(
                                   fontSize: 30.0,
                                   fontWeight: FontWeight.bold,
@@ -80,6 +90,7 @@ class _Story5State extends State<Story5> with SingleTickerProviderStateMixin {
                                 ),
                                 textAlign: TextAlign.center,
                                 colors: [
+                                  Colors.white,
                                   Colors.red,
                                   Colors.orange,
                                   Colors.yellow,

@@ -54,20 +54,19 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 3, 31, 65),
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           // Background image with entrance animation
-          // Positioned.fill(
-          //   child: AnimatedOpacity(
-          //     opacity: _opacityAnimation.value,
-          //     duration: Duration(milliseconds: 800),
-          //     child: Image.asset(
-          //       AppImages.storybg1, // Replace with your image asset
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          // ),
+          Positioned.fill(
+          child: Opacity(
+            opacity: 0.55, // Adjusting opacity to 0.85
+            child: Image.asset(
+              AppImages.wankhede,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
           // Content with animations
           SlideTransition(
             position: _slideAnimation,
@@ -76,7 +75,7 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                padding: EdgeInsets.all(24.0),
+                // padding: EdgeInsets.all(24.0),
                 child: Center(
                   child: AnimatedBuilder(
                     animation: _controller,
@@ -84,7 +83,7 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
                       return Transform.scale(
                         scale: _scaleAnimation.value,
                         child: Container(
-                          padding: EdgeInsets.all(16.0),
+                          // padding: EdgeInsets.all(16.0),
                           // decoration: BoxDecoration(
                           //   border: Border.all(
                           //     color: Colors.white,
@@ -104,12 +103,12 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
                                               Duration(milliseconds: 2200))
                                     ],
                                     child: Text(
-                                      "Much like the nature of markets 📈, there were bumps along the road. But with your support, we stuck it out together.",
+                                      "30000+",
                                       style: TextStyle(
-                                        fontSize: 22.0,
+                                        fontSize: 60.0,
                                         fontWeight: FontWeight.w600,
-                                        fontFamily: 'monospace',
-                                        color: Colors.white,
+                                        fontFamily: 'Sans-serif',
+                                        color: AppColors.brandYellow,
                                         shadows: [
                                           Shadow(
                                             blurRadius: 5.0,
@@ -121,10 +120,28 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
                                     )),
                                 SizedBox(height: 16.0),
                                 Text(
-                                  "We're a community of 30,000+ traders and counting, enough to fill the Wankhede Cricket Stadium in full capacity.",
+                                  "Community of traders",
                                   style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontFamily: 'monospace',
+                                    fontSize: 32.0,
+                                    fontFamily: 'Sans-serif',
+                                    color: AppColors.lightGreen,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 5.0,
+                                        color: Colors.black,
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ).animate().tint(color: Colors.white),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "Enough to fill Wankhede Cricket Stadium in full capacity.",
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontFamily: 'Sans-serif',
                                     color: Colors.white,
                                     shadows: [
                                       Shadow(
@@ -134,26 +151,26 @@ class _Story2State extends State<Story2> with SingleTickerProviderStateMixin {
                                     ],
                                   ),
                                   textAlign: TextAlign.center,
-                                ).animate().tint(color: Colors.amber),
+                                ).animate().tint(color: Colors.white),
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Container(
-                                    height: 140,
-                                    width: 180,
-                                    decoration: BoxDecoration(
-                                      // color: AppColors.white,
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: AppColors.grey.withOpacity(.25),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                        padding: EdgeInsets.all(2),
-                                        child: Image.asset(
-                                          AppImages.wankhede,
-                                          fit: BoxFit.cover,
-                                        )))
+                                // Container(
+                                //     // height: ,
+                                //     width: double.infinity,
+                                //     decoration: BoxDecoration(
+                                //       // color: AppColors.white,
+                                //       shape: BoxShape.rectangle,
+                                //       border: Border.all(
+                                //         color: AppColors.grey.withOpacity(.25),
+                                //       ),
+                                //     ),
+                                //     child: Padding(
+                                //         padding: EdgeInsets.all(0),
+                                //         child: Image.asset(
+                                //           AppImages.wankhede,
+                                //           fit: BoxFit.cover,
+                                //         )))
                               ]),
                         ),
                       );

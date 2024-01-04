@@ -4,14 +4,14 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter_animate/flutter_animate.dart';
 
-class Story7 extends StatefulWidget {
-  const Story7({Key? key}) : super(key: key);
+class Story42 extends StatefulWidget {
+  const Story42({Key? key}) : super(key: key);
 
   @override
   _Story41State createState() => _Story41State();
 }
 
-class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
+class _Story41State extends State<Story42> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _scaleAnimation;
@@ -53,7 +53,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
             child: Opacity(
             opacity: 0.55, // Adjusting opacity to 0.85
             child: Image.asset(
-              AppImages.tenxhero,
+              AppImages.storymarginx,
               fit: BoxFit.cover,
             ),
           ),
@@ -99,9 +99,9 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                           // ),
                           // SizedBox(height: 10.0),
                           Text(
-                            "TenX Hero",
+                            "2000+",
                             style: TextStyle(
-                              fontSize: 50.0,
+                              fontSize: 60.0,
                               fontFamily: 'Sans-serif',
                               fontWeight: FontWeight.bold,
                               color: AppColors.brandYellow,
@@ -118,26 +118,7 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                               .fadeIn(duration: Duration(milliseconds: 3000)),
                           SizedBox(height: 10.0),
                           Text(
-                            "Anvesh Shetty",
-                            style: TextStyle(
-                              fontSize: 32.0,
-                              fontFamily: 'Sans-serif',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 10.0,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                              .animate()
-                              .fadeIn(duration: Duration(milliseconds: 3000)),
-                          SizedBox(height: 10.0),
-                           Text(
-                            "Reward: ₹68,606",
+                            "Traders learnt risk management with MarginX",
                             style: TextStyle(
                               fontSize: 24.0,
                               fontFamily: 'Sans-serif',
@@ -154,43 +135,44 @@ class _Story41State extends State<Story7> with SingleTickerProviderStateMixin {
                           )
                               .animate()
                               .fadeIn(duration: Duration(milliseconds: 3000)),
-                          // Text(
-                          //   "1800+",
-                          //   style: TextStyle(
-                          //     fontSize: 60.0,
-                          //     fontFamily: 'Sans-serif',
-                          //     fontWeight: FontWeight.bold,
-                          //     color: AppColors.brandYellow,
-                          //     shadows: [
-                          //       Shadow(
-                          //         blurRadius: 10.0,
-                          //         color: Colors.black,
-                          //       ),
-                          //     ],
-                          //   ),
-                          //   textAlign: TextAlign.center,
-                          // )
-                          //     .animate()
-                          //     .fadeIn(duration: Duration(milliseconds: 3000)),
-                          // SizedBox(height: 10.0),
-                          // Text(
-                          //   "Traders honed their skills with Virtual F&O",
-                          //   style: TextStyle(
-                          //     fontSize: 24.0,
-                          //     fontFamily: 'Sans-serif',
-                          //     fontWeight: FontWeight.bold,
-                          //     color: Colors.white,
-                          //     shadows: [
-                          //       Shadow(
-                          //         blurRadius: 10.0,
-                          //         color: Colors.black,
-                          //       ),
-                          //     ],
-                          //   ),
-                          //   textAlign: TextAlign.center,
-                          // )
-                          //     .animate()
-                          //     .fadeIn(duration: Duration(milliseconds: 3000)),
+                          SizedBox(height: 25.0),
+                          Text(
+                            "1800+",
+                            style: TextStyle(
+                              fontSize: 60.0,
+                              fontFamily: 'Sans-serif',
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.brandYellow,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                              .animate()
+                              .fadeIn(duration: Duration(milliseconds: 3000)),
+                          SizedBox(height: 10.0),
+                          Text(
+                            "Traders honed their skills with Virtual F&O",
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontFamily: 'Sans-serif',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+                              .animate()
+                              .fadeIn(duration: Duration(milliseconds: 3000)),
                           // SizedBox(height: 10.0),
                           // Text(
                           //   "414 MarginXs and 2021 participations",
