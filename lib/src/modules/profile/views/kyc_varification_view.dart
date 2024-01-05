@@ -59,9 +59,9 @@ class _KycVarificationViewState extends State<KycVarificationView> {
                         '${controller.userDetails.value.kYCStatus}',
                         style: Theme.of(context).textTheme.tsMedium16.copyWith(
                             color: controller.userDetails.value.kYCStatus ==
-                                    "Not Initiated"
-                                ? AppColors.danger
-                                : AppColors.success),
+                                    "Approved"
+                                ? AppColors.success
+                                : AppColors.danger),
                       ),
                     ],
                   ),
