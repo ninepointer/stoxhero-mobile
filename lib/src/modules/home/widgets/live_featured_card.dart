@@ -181,6 +181,23 @@ class LiveFeaturedCard extends GetView<ContestController> {
                     ],
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Spots Left',
+                        style: AppStyles.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        '${controller.calculateSeatsLeft(
+                              liveFeatured?.maxParticipants ?? 0,
+                              liveFeatured?.participants?.length ?? 0,
+                            ).toString()}',
+                        style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
+                  ),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(

@@ -41,7 +41,7 @@ class UpComingShareModalContent extends GetView<ContestController> {
     return Container(
         height: 700,
         padding: EdgeInsets.zero,
-        margin: EdgeInsets.only(top: 150),
+        margin: EdgeInsets.only(top: 180),
         child: Column(
           // shrinkWrap: true,
 

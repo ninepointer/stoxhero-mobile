@@ -1,6 +1,7 @@
 import 'package:get/route_manager.dart';
 import 'package:stoxhero/src/modules/contest/views/contest_search_symbol_view.dart';
 import 'package:stoxhero/src/modules/stocks/views/stocks_dashboard_view.dart';
+import 'package:stoxhero/src/modules/story/view/story_view.dart';
 
 import '../../modules/modules.dart';
 import 'routes.dart';
@@ -197,5 +198,10 @@ class AppPages {
     //    binding: ContestProfileBinding(),
 
     // ),
+    GetPage(
+      name: AppRoutes.newyearstory,
+      page: () => StoryView(),
+      // binding: AffiliateBinding(),
+    ),
   ];
 }
