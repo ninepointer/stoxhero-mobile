@@ -181,7 +181,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                     ],
                   ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         'Spots Left',
