@@ -179,7 +179,7 @@ class _KycVarificationViewState extends State<KycVarificationView> {
                             child: FilledButton(
                               onPressed: () {
                                 controller.verifyKYCVerifyOtpDetails();
-                                controller.saveVerifyUserKYCDetailsthroughAPI();
+                                // controller.saveVerifyUserKYCDetailsthroughAPI();
                                 controller.otpTextController.clear();
                               },
                               style: ButtonStyle(

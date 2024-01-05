@@ -252,6 +252,10 @@ class ProfileController extends BaseController<ProfileRepository> {
         FormatHelper.formatDateOfBirthToIST(userDetails.value.dob);
     selectedStates.value = userDetails.value.bankState ?? '';
     kycAadhaarNumberTextController.text = userDetails.value.aadhaarNumber ?? '';
+    kycPanCardNumberTextController.text = userDetails.value.panNumber ?? '';
+    kycAccountNumberTextController.text = userDetails.value.accountNumber ?? '';
+    kycIfscCodeTextController.text = userDetails.value.ifscCode ?? '';
+
     isBankLoading(false);
   }
 
@@ -531,7 +535,6 @@ class ProfileController extends BaseController<ProfileRepository> {
   }
 
   Future verifyKYCGenrateOtpDetails() async {
-    isverifyKycLoading(true);
     Map<String, dynamic> data = {
       "aadhaarNumber": kycAadhaarNumberTextController.text,
     };
@@ -552,7 +555,6 @@ class ProfileController extends BaseController<ProfileRepository> {
       log('Save: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isverifyKycLoading(false);
   }
 
   Future verifyKYCVerifyOtpDetails() async {
