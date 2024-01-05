@@ -57,7 +57,7 @@ class _ordersState extends State<orders> with SingleTickerProviderStateMixin {
                         tabs: [
                           Tab(
                             text:
-                                'All Orders', // Change 'Holdings' to 'holdings'
+                                'Today Orders', // Change 'Holdings' to 'holdings'
                           ),
                           Tab(
                             text: 'Executed Orders',
@@ -79,7 +79,7 @@ class _ordersState extends State<orders> with SingleTickerProviderStateMixin {
                   physics: NeverScrollableScrollPhysics(),
                   controller: tabController,
                   children: [
-                    AllOrders(),
+                   StockTodayOrders(),
                     ExecutedOrders(),
                     PendingOrders(),
                   ],

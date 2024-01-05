@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../../app/app.dart';
 
 import '../widgets/tenx_live_analitics_bottom_sheet.dart';
@@ -16,7 +17,6 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
 
   @override
   Widget build(BuildContext context) {
-    print(subscription.toJson());
     return CommonCard(
       padding: EdgeInsets.zero,
       children: [
@@ -75,41 +75,6 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                     ),
                   ),
                 ),
-
-                ///hdh
-                ///grehe
-                // Expanded(
-                //   child: Padding(
-                //     padding: EdgeInsets.only(right: 12, left: 12),
-                //     child: Container(
-                //       height: 40,
-                //       decoration: BoxDecoration(
-                //         color: AppColors.grey.withOpacity(.1),
-                //         borderRadius: BorderRadius.circular(8),
-                //       ),
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.center,
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         children: [
-                //           Text(
-                //             'Subscription rate',
-                //             style: AppStyles.tsSecondaryMedium14,
-                //           ),
-                //           SizedBox(width: 4),
-                //           Text(
-                //             '₹${controller.tenxSubscribedPlansPNLData.map((element) => element.grossPnl)}',
-                //             style: AppStyles.tsSecondaryMedium14.copyWith(
-                //               color: AppColors.success,
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-
-                ///rhgrh
-                ///hreh
               ],
             ),
             SizedBox(height: 4),
@@ -164,16 +129,17 @@ class TenxSubscribedCard extends GetView<TenxTradingController> {
                         height: 32,
                         label: 'Analytics',
                         onPressed: () async {
-                          // await controller.getTenxMyActiveSubscribedPNL(
-                          //     subscription.sId, subscription.subscribedOn);
+                          await controller.getTenxMyActiveSubscribedPNL(
+                              subscription.sId, subscription.subscribedOn);
 
-                          // showModalBottomSheet(
-                          //     context: context,
-                          //     builder: (BuildContext context) {
-                          //       return TenXLiveAnaliticalBottomSheet(
-                          //         subscription: subscription,
-                          //       );
-                          //     });
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return TenXLiveAnaliticalBottomSheet(
+                                    subscription: subscription,
+                                    pnlData: controller
+                                        .tenxSubscribedPlansPNLData.value);
+                              });
                         }),
                   ),
                   if (subscription.allowRenewal == true) ...[

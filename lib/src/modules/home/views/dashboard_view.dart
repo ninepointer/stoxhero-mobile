@@ -83,13 +83,19 @@ class _DashboardViewState extends State<DashboardView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(
+                    height: 4,
+                  ),
                   if (controller.stockIndexDetailsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 12, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // SizedBox(
+                          //   width: 4,
+                          // ),
                           for (var item
                               in controller.stockIndexDetailsList) ...[
                             TradingStockCard(
@@ -116,8 +122,10 @@ class _DashboardViewState extends State<DashboardView> {
                         ],
                       ),
                     ),
-                  SizedBox(height: 2),
+
                   Container(
+                    height: 225,
+                    width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 12),
                     child: CarouselSlider.builder(
                       itemCount: controller.dashboardCarouselList.length,
@@ -130,6 +138,7 @@ class _DashboardViewState extends State<DashboardView> {
                           ),
                           child: Container(
                             width: double.infinity,
+                            height: 150,
                             decoration: BoxDecoration(
                               color: AppColors.grey.withOpacity(.1),
                               borderRadius: BorderRadius.circular(8),
@@ -139,6 +148,7 @@ class _DashboardViewState extends State<DashboardView> {
                               child: Image.network(
                                 "${controller.dashboardCarouselList[index].carouselImage}",
                                 fit: BoxFit.fill,
+                                height: 150,
                                 width: double.infinity,
                               ),
                             ),
@@ -171,6 +181,9 @@ class _DashboardViewState extends State<DashboardView> {
                       },
                       margin: EdgeInsets.only(bottom: 0, top: 8),
                     ),
+                  SizedBox(
+                    height: 4,
+                  ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Obx(
@@ -190,8 +203,53 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                   ),
-                  contestController.liveContestList.isEmpty &&
-                          contestController.liveFeaturedContest.isEmpty &&
+                  // CommonTile(
+                  //   label: 'Merry Christmas',
+                  //   showSeeAllButton: true,
+                  //   seeAllLabel: '',
+                  //   margin: EdgeInsets.only(bottom: 4, top: 8),
+                  //   padding: EdgeInsets.only(left: 15, top: 4),
+                  // ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      controller.selectedIndex(2);
+                      Get.find<TenxTradingController>().loadData();
+                    },
+                    child: CommonCard(
+                      padding: EdgeInsets.zero,
+                      margin: EdgeInsets.only(
+                          left: 10, right: 10, top: 10, bottom: 6),
+                      hasBorder: true,
+                      children: [
+                        Container(
+                          height: 130,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                AppImages.santa,
+                              ),
+                              fit: BoxFit.fill,
+                              // colorFilter: ColorFilter.mode(
+                              //   Color(0xFFFFF5E1).withOpacity(0.5),
+                              //   BlendMode.srcOver,
+                              // ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 4,
+                  ),
+
+                  contestController.liveFeaturedContest.isEmpty &&
                           contestController.upcomingFeaturedContest.isEmpty
                       ? Container()
                       : CommonTile(
@@ -237,8 +295,12 @@ class _DashboardViewState extends State<DashboardView> {
                                     String userId =
                                         controller.userDetailsData.sId ?? '';
                                     return Container(
-                                      width: MediaQuery.of(context).size.width -
-                                          30,
+                                      width: contestController
+                                                  .liveFeaturedContest.length ==
+                                              1
+                                          ? MediaQuery.of(context).size.width
+                                          : MediaQuery.of(context).size.width -
+                                              55,
                                       child: LiveFeaturedCard(
                                         userId: userId,
                                         liveFeatured: contest,
@@ -258,7 +320,11 @@ class _DashboardViewState extends State<DashboardView> {
                                 String userId =
                                     controller.userDetailsData.sId ?? '';
                                 return Container(
-                                  width: MediaQuery.of(context).size.width - 25,
+                                  width: contestController
+                                              .upcomingFeaturedContest.length ==
+                                          1
+                                      ? MediaQuery.of(context).size.width
+                                      : MediaQuery.of(context).size.width - 55,
                                   child: UpcomingFeaturedCard(
                                     userId: userId,
                                     upcomingFeatured: contest,
@@ -313,7 +379,11 @@ class _DashboardViewState extends State<DashboardView> {
                                 String userId =
                                     controller.userDetailsData.sId ?? '';
                                 return Container(
-                                  width: MediaQuery.of(context).size.width - 25,
+                                  width: contestController
+                                              .liveContestList.length ==
+                                          1
+                                      ? MediaQuery.of(context).size.width
+                                      : MediaQuery.of(context).size.width - 55,
                                   child: LiveContestCard(
                                     userId: userId,
                                     contest: contest,
@@ -325,6 +395,9 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ),
                         ),
+                  SizedBox(
+                    height: 4,
+                  ),
                   if (contestController.liveContestList.isEmpty)
                     contestController.upComingContestList.isEmpty
                         ? Container()
@@ -354,10 +427,17 @@ class _DashboardViewState extends State<DashboardView> {
                                   return isVisible
                                       ? SizedBox()
                                       : Container(
-                                          width: MediaQuery.of(context)
+                                          width: contestController
+                                                      .upComingContestList
+                                                      .length ==
+                                                  1
+                                              ? MediaQuery.of(context)
                                                   .size
-                                                  .width -
-                                              20,
+                                                  .width
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  55,
                                           child: UpComingContestCard(
                                             userId: userId,
                                             contest: contest,
@@ -372,6 +452,7 @@ class _DashboardViewState extends State<DashboardView> {
                   SizedBox(
                     height: 6,
                   ),
+
                   CommonTile(
                     label: 'Try TenX Subscription',
                     showSeeAllButton: true,
@@ -387,7 +468,7 @@ class _DashboardViewState extends State<DashboardView> {
                     child: CommonCard(
                       padding: EdgeInsets.zero,
                       margin: EdgeInsets.only(
-                          left: 10, right: 20, top: 10, bottom: 6),
+                          left: 10, right: 10, top: 10, bottom: 6),
                       hasBorder: true,
                       children: [
                         Stack(
@@ -463,7 +544,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                             Positioned(
                                 top: 0, // Adjust the position as needed
-                                right: 0, // Adjust the position as needed
+                                right: 15, // Adjust the position as needed
                                 child: Container(
                                   height: 130,
                                   width: 150,
@@ -478,10 +559,6 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ),
 
-                  SizedBox(
-                    height: 2,
-                  ),
-
                   CommonTile(
                     label: 'Meet Our Champions',
                     showSeeAllButton: true,
@@ -492,6 +569,9 @@ class _DashboardViewState extends State<DashboardView> {
                       Get.to(() => ContestListView());
                     },
                     margin: EdgeInsets.only(bottom: 0, top: 6),
+                  ),
+                  SizedBox(
+                    height: 4,
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -534,7 +614,7 @@ class _DashboardViewState extends State<DashboardView> {
                   //   ),
                   // ),
 
-                  SizedBox(height: 10),
+                  SizedBox(height: 4),
                   CommonTile(
                     label: 'Return Summary',
                     margin: EdgeInsets.only(bottom: 10, top: 0),
@@ -651,8 +731,6 @@ class _DashboardViewState extends State<DashboardView> {
 
                   Obx(
                     () {
-                      print(
-                          'userdashboarddata:${controller.userDashboard.toJson()}');
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Column(
@@ -661,7 +739,8 @@ class _DashboardViewState extends State<DashboardView> {
                               children: [
                                 Expanded(
                                   child: controller.selectedTradeType ==
-                                          'virtual'
+                                              'virtual' ||
+                                          controller.selectedTradeType == 'tenx'
                                       ? customCard(
                                           label: 'Market Days',
                                           percent: userDashboard
@@ -690,7 +769,8 @@ class _DashboardViewState extends State<DashboardView> {
                                 SizedBox(width: 8),
                                 Expanded(
                                   child: controller.selectedTradeType ==
-                                          'virtual'
+                                              'virtual' ||
+                                          controller.selectedTradeType == 'tenx'
                                       ? customCard(
                                           label: 'Trading Days',
                                           percent:

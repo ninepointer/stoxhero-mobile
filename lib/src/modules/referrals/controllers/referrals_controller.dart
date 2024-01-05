@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../../base/base.dart';
@@ -30,6 +31,9 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   final referralsLeaderboardList = <LeaderboardUserDetails>[].obs;
   final earnings = EarningData().obs;
   final myReferralsList = <MyReferralData>[].obs;
+  // final summeryList = <Summery>[].obs;
+  // final transactionList = <Transaction>[].obs;
+  // final myReferralsProductList = <ReferralsProduct>[].obs;
 
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => AppStorage.getUserDetails();
@@ -40,6 +44,7 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     getActiveReferrals();
     getMyReferrals();
     getReferralsLeaderboard();
+    // getMyReferralsProduct();
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
@@ -121,6 +126,29 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     }
     isLoading(false);
   }
+
+  // Future getMyReferralsProduct() async {
+  //   isLoading(true);
+  //   try {
+  //     final RepoResponse<ReferralsProductResponse> response =
+  //         await repository.getMyReferralsProduct();
+  //     if (response.data != null) {
+  //       myReferralsProductList(response.data?.data ?? []);
+  //       for (ReferralsProduct referralsProduct in myReferralsProductList) {
+  //         summeryList(referralsProduct.summery ?? []);
+  //         transactionList(referralsProduct.transaction ?? []);
+  //         print("aatrans${transactionList.toJson()}");
+  //       }
+  //     } else {
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //     print("myReferralsProductList${e}");
+  //   }
+  //   isLoading(false);
+  // }
 
   Future getReferralsLeaderboard() async {
     isReferralLoading(true);

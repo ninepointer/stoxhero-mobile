@@ -12,6 +12,7 @@ class HomeController extends BaseController<DashboardRepository> {
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
   final isLoading = false.obs;
+  final isPerformanceLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
 
   final selectedIndex = 0.obs;
@@ -50,6 +51,7 @@ class HomeController extends BaseController<DashboardRepository> {
     await getDashboardReturnSummary();
     await getDashboardCarousel();
     await getDashboard(selectedTradeType, selectedTimeFrame);
+    await liveIndexDetails();
     socketIndexConnection();
   }
 
@@ -143,7 +145,7 @@ class HomeController extends BaseController<DashboardRepository> {
   }
 
   Future getDashboard(String? tradeType, String? timeFame) async {
-    isLoading(true);
+    isPerformanceLoading(true);
     try {
       final RepoResponse<DashboardTradeSummaryResponse> response =
           tradeType == 'virtual'
@@ -161,7 +163,7 @@ class HomeController extends BaseController<DashboardRepository> {
     } catch (e) {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isPerformanceLoading(false);
   }
 
   Future getDashboardCarousel() async {
@@ -196,6 +198,29 @@ class HomeController extends BaseController<DashboardRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+      print("liveIndexDetails${stockIndexDetailsList.length}");
+    } catch (e) {
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future socketIndexConnection() async {

@@ -49,7 +49,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                         children: [
                           Text(
                             '${liveFeatured?.contestName}',
-                            style: Theme.of(context).textTheme.tsRegular16,
+                            style: Theme.of(context).textTheme.tsRegular14,
                           ),
                           SizedBox(height: 2),
                           GestureDetector(
@@ -212,13 +212,13 @@ class LiveFeaturedCard extends GetView<ContestController> {
               if (liveFeatured?.maxParticipants ==
                   liveFeatured?.participants?.length) {
                 if (controller.canUserFeaturedTrade(liveFeatured, userId)) {
-                  controller.gotoTradingView();
+                  controller.gotoTradingView(isLiveContest: false);
                 } else {
                   controller.featuredParticipate(liveFeatured);
                 }
               } else {
                 if (controller.canUserFeaturedTrade(liveFeatured, userId)) {
-                  controller.gotoTradingView();
+                  controller.gotoTradingView(isLiveContest: false);
                 } else {
                   controller.featuredParticipate(liveFeatured);
                 }
@@ -226,7 +226,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
             } else {
               if (controller.checkIfLiveFeaturedPurchased(
                   liveFeatured, userId)) {
-                controller.gotoTradingView();
+                controller.gotoTradingView(isLiveContest: false);
               } else {
                 BottomSheetHelper.openBottomSheet(
                   context: context,

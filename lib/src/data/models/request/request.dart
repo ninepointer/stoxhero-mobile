@@ -20,3 +20,4 @@ export 'payment_request.dart';
 export 'withdrawal_request.dart';
 export 'fcm_toke_data_request.dart';
 export 'add_stock_watchlist_request.dart';
+export 'stock_order_place_request.dart';

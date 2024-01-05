@@ -113,12 +113,22 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   }
 
   num get calculateHeroCash {
-    return math.min(
-        (controller.actualSubscriptionAmount.value) *
-            ((controller.readSetting.value.maxBonusRedemptionPercentage ?? 0) /
-                100),
-        (controller.calculateBonus(controller.walletTransactionsList) /
-            (controller.readSetting.value.bonusToUnitCashRatio ?? 1)));
+    return controller.isCouponCodeAdded.value
+        ? math.min(
+            (controller.amountAfterCouponAdded.value) *
+                ((controller.readSetting.value.maxBonusRedemptionPercentage ??
+                        0) /
+                    100),
+            (controller.calculateBonus(controller.walletTransactionsList) /
+                (controller.readSetting.value.bonusToUnitCashRatio ?? 1)),
+          )
+        : math.min(
+            (controller.actualSubscriptionAmount.value) *
+                ((controller.readSetting.value.maxBonusRedemptionPercentage ??
+                        0) /
+                    100),
+            (controller.calculateBonus(controller.walletTransactionsList) /
+                (controller.readSetting.value.bonusToUnitCashRatio ?? 1)));
   }
 
   void startPaymentTransaction(BuildContext context) async {
@@ -411,42 +421,40 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       ),
                     ),
                   // if (!isWalletPayment)
-                  if (walletBalance == null ||
-                      widget.buyItemPrice <= walletBalance!)
-                    if (!controller.isCouponCodeAdded.value)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CommonTextField(
-                              controller: controller.couponCodeTextController,
-                              padding: EdgeInsets.only(top: 16),
-                              hintText: 'Enter your Coupon code',
-                              inputFormatters: [
-                                UpperCaseTextFormatter(),
-                              ],
-                            ),
+                  // if (walletBalance != null)
+                  if (!controller.isCouponCodeAdded.value)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CommonTextField(
+                            controller: controller.couponCodeTextController,
+                            padding: EdgeInsets.only(top: 16),
+                            hintText: 'Enter your Coupon code',
+                            inputFormatters: [
+                              UpperCaseTextFormatter(),
+                            ],
                           ),
-                          Container(
-                            width: 100,
-                            padding: EdgeInsets.only(top: 16, left: 8),
-                            child: CommonOutlinedButton(
-                              backgroundColor: Get.isDarkMode
-                                  ? AppColors.darkGreen
-                                  : AppColors.lightGreen,
-                              labelColor: Get.isDarkMode
-                                  ? AppColors.darkGreen
-                                  : AppColors.lightGreen,
-                              isLoading: controller.isCouponCodeLoadingStatus,
-                              label: 'APPLY',
-                              onPressed: () => controller.verifyCouponCode(
+                        ),
+                        Container(
+                          width: 100,
+                          padding: EdgeInsets.only(top: 16, left: 8),
+                          child: CommonOutlinedButton(
+                            backgroundColor: Get.isDarkMode
+                                ? AppColors.darkGreen
+                                : AppColors.lightGreen,
+                            labelColor: Get.isDarkMode
+                                ? AppColors.darkGreen
+                                : AppColors.lightGreen,
+                            isLoading: controller.isCouponCodeLoadingStatus,
+                            label: 'APPLY',
+                            onPressed: () => controller.verifyCouponCode(
                                 context,
                                 widget.productType,
-                                widget.buyItemPrice,
-                              ),
-                            ),
+                                widget.buyItemPrice),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
 
                   if (!isWalletPayment)
                     CommonCard(
@@ -523,6 +531,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               value: controller.isHeroCashAdded.value,
                               onChanged: (value) {
                                 controller.isHeroCashAdded(value);
+                                controller.heroCashAmount(
+                                    calculateHeroCash.toDouble());
                                 if (value ?? false) {
                                   controller.addHeroCash(calculateHeroCash);
                                 } else {
@@ -534,7 +544,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Use $calculateHeroCash HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
+                                  'Use ${calculateHeroCash.toStringAsFixed(2)} HeroCash (1 HeroCash = ${FormatHelper.formatNumbers(1 / (controller.readSetting.value.bonusToUnitCashRatio ?? 0), decimal: 0)})',
                                   style:
                                       Theme.of(context).textTheme.tsRegular14,
                                 ),
@@ -548,17 +558,21 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     ),
                   //fdhfhbd
                   if (walletBalance != null &&
-                      widget.buyItemPrice >= walletBalance!)
+                      ((controller.couponCodeSuccessText.isNotEmpty ||
+                                  controller.isHeroCashAdded.value)
+                              ? controller.subscriptionAmount.value
+                              : widget.buyItemPrice) >=
+                          walletBalance!)
                     Column(
                       children: [
                         SizedBox(height: 16),
                         Text(
-                          'Your wallet balance is low kindly refer more users on this platform to buy this subscription.',
+                          'Your wallet balance is low kindly recharge your wallet to buy this subscription.',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.tsRegular14,
                         ),
                         SizedBox(height: 16),
-                        ReferralCodeCard(),
+                        // ReferralCodeCard(),
                       ],
                     ),
                   Column(
@@ -576,7 +590,14 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                                     'gateway'
                             ? () => startPaymentTransaction(context)
                             : walletBalance != null &&
-                                    widget.buyItemPrice >= walletBalance!
+                                    ((controller.couponCodeSuccessText
+                                                    .isNotEmpty ||
+                                                controller
+                                                    .isHeroCashAdded.value)
+                                            ? controller
+                                                .subscriptionAmount.value
+                                            : widget.buyItemPrice) >=
+                                        walletBalance!
                                 ? () {
                                     SnackbarHelper.showSnackbar(
                                         'Low wallet balance!');

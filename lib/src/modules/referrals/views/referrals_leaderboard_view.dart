@@ -6,7 +6,8 @@ class ReferralsLeaderboardView extends StatefulWidget {
   const ReferralsLeaderboardView({Key? key}) : super(key: key);
 
   @override
-  State<ReferralsLeaderboardView> createState() => _ReferralsLeaderboardViewState();
+  State<ReferralsLeaderboardView> createState() =>
+      _ReferralsLeaderboardViewState();
 }
 
 class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
@@ -57,7 +58,8 @@ class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
                     var user = controller.referralsLeaderboardList[index];
                     return ReferralsLeaderboardCard(
                       rank: '#${index + 1}',
-                      name: '${user.firstName!.capitalizeFirst} ${user.lastName!.capitalizeFirst}',
+                      name:
+                          '${user.firstName!.capitalizeFirst} ${user.lastName!.capitalizeFirst}',
                       count: user.referralCount,
                       earnings: user.earnings,
                     );
@@ -80,14 +82,17 @@ class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
                 replacement: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 16)
+                          .copyWith(top: 12),
                       child: Row(
                         children: [
                           Expanded(
                             child: customCard(
                               context,
                               label: 'Friend\nJoined',
-                              earning: controller.earnings.value.joined?.toString() ?? '0',
+                              earning: controller.earnings.value.joined
+                                      ?.toString() ??
+                                  '0',
                             ),
                           ),
                           SizedBox(width: 8),
@@ -95,7 +100,8 @@ class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
                             child: customCard(
                               context,
                               label: 'Total \n Earnings',
-                              earning: "₹ ${controller.earnings.value.earnings?.toString() ?? '0'}",
+                              earning:
+                                  "₹ ${controller.earnings.value.earnings?.toString() ?? '0'}",
                               valueColor: AppColors.success,
                             ),
                           ),
@@ -112,9 +118,13 @@ class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
                         var user = controller.myReferralsList[index];
                         return ReferralsLeaderboardCard(
                           rank: '#${index + 1}',
-                          name: '${user.firstName!.capitalizeFirst} ${user.lastName!.capitalizeFirst}',
-                          count: user.referrals != null ? (user.referrals!.length).toString() : '0',
-                          earnings: getTotalUserReferralEarning(user.referrals ?? []),
+                          name:
+                              '${user.firstName!.capitalizeFirst} ${user.lastName!.capitalizeFirst}',
+                          count: user.referrals != null
+                              ? (user.referrals!.length).toString()
+                              : '0',
+                          earnings:
+                              getTotalUserReferralEarning(user.referrals ?? []),
                         );
                       },
                     ),

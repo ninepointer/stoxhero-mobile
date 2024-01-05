@@ -15,16 +15,16 @@ class _PendingOrdersState extends State<PendingOrders> {
       children: [
         Column(
           children: [
-            OrdersCard(
-              status: "PENDING",
-              type: "BUY",
-              symbol: "Adani Power",
-              quantity: "35",
-              price: "5.30",
-              totalamount: "9,540.00",
-              orderid: "231219669591731",
-              timestamp: "19 Dec 2023 05:22 PM",
-            ),
+            // OrdersCard(
+            //   status: "PENDING",
+            //   type: "BUY",
+            //   symbol: "Adani Power",
+            //   quantity: "35",
+            //   price: "5.30",
+            //   totalamount: "9,540.00",
+            //   orderid: "231219669591731",
+            //   timestamp: "19 Dec 2023 05:22 PM",
+            // ),
 
             // Add more cards as needed
           ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:share_plus/share_plus.dart';
 import '../../../app/app.dart';
+import '../widgets/live_share_modal.dart';
 
 class LiveContestCard extends GetView<ContestController> {
   final String userId;
@@ -399,14 +399,57 @@ class LiveContestCard extends GetView<ContestController> {
                 ),
               ),
               Expanded(
-                child: GestureDetector(
+                child: InkWell(
+                  onTap: () {
+                    controller.disconnectLeaderboardSocket();
+                    controller.liveContest(LiveContest());
+                    controller.liveContest(contest);
+
+                    controller.liveLeaderboardList([]);
+
+                    controller.getContestPositions();
+
+                    controller.getContestWatchList();
+                    controller.socketConnection();
+
+                    controller.socketLeaderboardConnection();
+                    controller.userDetails.value = AppStorage.getUserDetails();
+                    controller.liveLeaderboardList();
+
+                    Get.toNamed(AppRoutes.contestLiveLeaderboard);
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(.25),
+                      // borderRadius: BorderRadius.only(
+                      //   bottomRight: Radius.circular(8),
+                      // ),
+                    ),
+                    child: Text(
+                      'Leaderboard',
+                      style: AppStyles.tsSecondaryMedium12.copyWith(
+                        color: AppColors.primary.shade600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
                   onTap: () {
                     controller.liveContest(contest);
-                    controller.getShareContest(false);
-                    String url = 'https://stoxhero.com/testzone';
-                    Clipboard.setData(ClipboardData(text: url));
-                    SnackbarHelper.showSnackbar(
-                        'Link Copied, Share with your friends.');
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: LiveShareModalContent(
+                            contest: contest,
+                          ),
+                        );
+                      },
+                    );
                   },
                   child: Container(
                     alignment: Alignment.center,

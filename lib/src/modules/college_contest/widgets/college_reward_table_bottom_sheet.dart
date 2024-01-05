@@ -78,7 +78,9 @@ class CollegeRewardTableBottomSheet extends GetView<CollegeContestController> {
                   thickness: 1,
                 ),
                 SizedBox(height: 16),
-                if (liveContest != null || upcomingContest != null || completedContest != null)
+                if (liveContest != null ||
+                    upcomingContest != null ||
+                    completedContest != null)
                   Table(
                     border: TableBorder.all(
                       color: AppColors.grey.shade50,
@@ -93,7 +95,9 @@ class CollegeRewardTableBottomSheet extends GetView<CollegeContestController> {
                               alignment: Alignment.center,
                               child: Text(
                                 'Rank',
-                                style: Theme.of(context).textTheme.tsPrimaryMedium14,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsPrimaryMedium14,
                               ),
                             ),
                           ),
@@ -104,20 +108,25 @@ class CollegeRewardTableBottomSheet extends GetView<CollegeContestController> {
                               alignment: Alignment.center,
                               child: Text(
                                 'Prize',
-                                style: Theme.of(context).textTheme.tsPrimaryMedium14,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsPrimaryMedium14,
                               ),
                             ),
                           ),
                         ],
                       ),
                       if (liveContest != null)
-                        for (LiveCollegeRewards reward in liveContest?.rewards ?? [])
+                        for (LiveCollegeRewards reward
+                            in liveContest?.rewards ?? [])
                           _buildRewardTableRow(context, reward),
                       if (upcomingContest != null)
-                        for (UpcomingCollegeRewards reward in upcomingContest?.rewards ?? [])
+                        for (UpcomingCollegeRewards reward
+                            in upcomingContest?.rewards ?? [])
                           _buildRewardTableRow(context, reward),
                       if (completedContest != null)
-                        for (CompletedCollegeRewards reward in completedContest?.rewards ?? [])
+                        for (CompletedCollegeRewards reward
+                            in completedContest?.rewards ?? [])
                           _buildRewardTableRow(context, reward),
                     ],
                   ),
@@ -137,7 +146,9 @@ class CollegeRewardTableBottomSheet extends GetView<CollegeContestController> {
             padding: EdgeInsets.symmetric(vertical: 12),
             alignment: Alignment.center,
             child: Text(
-              reward.rankStart == reward.rankEnd ? '${reward.rankStart}' : '${reward.rankStart}-${reward.rankEnd}',
+              reward.rankStart == reward.rankEnd
+                  ? '${reward.rankStart}'
+                  : '${reward.rankStart}-${reward.rankEnd}',
               style: Theme.of(context).textTheme.tsMedium12,
             ),
           ),

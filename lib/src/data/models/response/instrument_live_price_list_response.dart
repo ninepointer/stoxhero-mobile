@@ -16,12 +16,13 @@ class InstrumentLivePrice {
   num? lastPrice;
   num? averagePrice;
   String? timestamp;
-
+  num? change;
   InstrumentLivePrice({
     this.instrumentToken,
     this.lastPrice,
     this.averagePrice,
     this.timestamp,
+    this.change,
   });
 
   InstrumentLivePrice.fromJson(Map<String, dynamic> json) {
@@ -29,6 +30,7 @@ class InstrumentLivePrice {
     lastPrice = json['last_price'];
     averagePrice = json['average_price'];
     timestamp = json['timestamp'];
+    change = json['change'];
   }
 
   Map<String, dynamic> toJson() {
@@ -37,6 +39,7 @@ class InstrumentLivePrice {
     data['last_price'] = this.lastPrice;
     data['average_price'] = this.averagePrice;
     data['timestamp'] = this.timestamp;
+    data['change'] = this.change;
     return data;
   }
 }

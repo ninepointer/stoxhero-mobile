@@ -31,7 +31,7 @@ class AuthController extends BaseController<AuthRepository> {
   bool get isLoadingStatus => isLoading.value;
 
   final isSignup = false.obs;
-
+  final hasCampaignCode = false.obs;
   final token = ''.obs;
   final inviteCode = CampaignCodeData().obs;
 
@@ -130,7 +130,8 @@ class AuthController extends BaseController<AuthRepository> {
       mobile: mobileTextController.text,
       mobileOtp: otpTextController.text,
       dob: DateFormat('yyyy-MM-dd').format(date),
-      referrerCode: referralTextController.text,
+      referrerCode: hasCampaignCode.value ? campaignCode.value : referralTextController.text,
+      campaignCode: campaignCode.value,
     );
 
     try {
@@ -163,7 +164,7 @@ class AuthController extends BaseController<AuthRepository> {
       email: emailTextController.text,
       mobile: mobileTextController.text,
       dob: DateFormat('yyyy-MM-dd').format(date),
-      referrerCode: referralTextController.text,
+      referrerCode: hasCampaignCode.value ? campaignCode.value : referralTextController.text,
       campaignCode: campaignCode.value,
     );
 

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
+import '../widgets/upcoming_share_model_content.dart';
 
 class UpComingContestCard extends StatefulWidget {
   final String userId;
@@ -27,11 +28,16 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
   late ContestController controller;
   late Timer timer;
   bool isVisible = true;
+  bool isUserInterestedId = false;
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<ContestController>();
+    isUserInterestedId = controller.isUserInterested(
+      widget.contest,
+      widget.userId,
+    );
   }
 
   @override
@@ -67,6 +73,10 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               remainingTime = startTimeDateTime.isAfter(DateTime.now())
                   ? startTimeDateTime.difference(DateTime.now())
                   : Duration.zero;
+              if (remainingTime == Duration.zero) {
+                controller.getUpComingContestList();
+                controller.getLiveContestList();
+              }
             },
           );
         }
@@ -90,10 +100,6 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
 
   @override
   Widget build(BuildContext context) {
-    bool isUserInterestedId = controller.isUserInterested(
-      widget.contest,
-      widget.userId,
-    );
     return Visibility(
       visible: !isVisible,
       replacement: SizedBox(),
@@ -356,7 +362,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     child: GestureDetector(
                       onTap: () {
                         controller.upComingContest(widget.contest);
+
                         controller.getNotified();
+                        isUserInterestedId = true;
                         SnackbarHelper.showSnackbar(
                             'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the TestZone starts');
                       },
@@ -465,11 +473,21 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                   child: GestureDetector(
                     onTap: () {
                       controller.upComingContest(widget.contest);
-                      controller.getShareContest(true);
-                      String url = 'https://stoxhero.com/testzone';
-                      Clipboard.setData(ClipboardData(text: url));
-                      SnackbarHelper.showSnackbar(
-                          'Link Copied, Share with your friends.');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: UpComingShareModalContent(
+                              contest: widget.contest,
+                            ),
+                          );
+                        },
+                      );
+                      // controller.getShareContest(true);
+                      // String url = 'https://stoxhero.com/testzone';
+                      // Clipboard.setData(ClipboardData(text: url));
+                      // SnackbarHelper.showSnackbar(
+                      //     'Link Copied, Share with your friends.');
                     },
                     child: Container(
                       alignment: Alignment.center,

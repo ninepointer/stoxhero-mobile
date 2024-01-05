@@ -56,4 +56,88 @@ class StocksTradingRepository extends BaseRepository {
         : RepoResponse(
             data: EquityInstrumentDetailsResponse.fromJson(response));
   }
+
+  Future<RepoResponse<GenericResponse>> removeInstrument(int instrumentToken) async {
+    String apiURL = AppUrls.RemoveStockCard(instrumentToken);
+    var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> stockPlaceOrder(
+      Map<String, dynamic> data) async {
+    String apiURL = AppUrls.stockOrderPlace;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+
+}
+ Future<RepoResponse<StockMarginRequiredResponse>> getMarginRequired(
+      Map<String, dynamic> data) async {
+    String apiURL = AppUrls.stockMarginRequired;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StockMarginRequiredResponse.fromJson(response));
+  }
+
+    Future<RepoResponse<StocksTradingPortfolioResponse>>
+      getStocksTradingPortfolio() async {
+    String apiURL = AppUrls.stocksTradingPortfolio;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(
+            data: StocksTradingPortfolioResponse.fromJson(response));
+  }
+
+ Future<RepoResponse<StocksPositionsListResponse>>
+      getstocksPositions() async {
+    String apiURL = AppUrls.stockTradePosition;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StocksPositionsListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StocksHoldingsListResponse>>
+      getstocksHoldings() async {
+    String apiURL = AppUrls.stockTradeHolding;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StocksHoldingsListResponse.fromJson(response));
+  }
+  Future<RepoResponse<VirtualStopLossPendingOrderResponse>>
+      getVirtualStopLossPendingOrder(String id) async {
+    String apiURL = AppUrls.virtualPendingStopLoss(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(
+            data: VirtualStopLossPendingOrderResponse.fromJson(response));
+  }
+
+ Future<RepoResponse<StocksTodayOrderResponse>>
+      getStockTradeTodaysOrdersList() async {
+    String apiURL = AppUrls.stockTradeTodaysOrders;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StocksTodayOrderResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StocksFundsMarginResponse>>
+      getStockFundsMargin() async {
+    String apiURL = AppUrls.stockFundsMargin;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StocksFundsMarginResponse.fromJson(response));
+  }
+
+
+
 }

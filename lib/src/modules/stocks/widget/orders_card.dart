@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
+import '../../../app/app.dart';
 import '../../../core/core.dart';
 
 class OrdersCard extends StatelessWidget {
   const OrdersCard({
     Key? key,
-    required this.quantity,
-    required this.price,
-    required this.totalamount,
-    required this.timestamp,
-    required this.orderid,
-    required this.status,
-    required this.symbol,
-    required this.type,
+    // required this.quantity,
+    // required this.price,
+    // required this.totalamount,
+    // required this.timestamp,
+    // required this.orderid,
+    // required this.status,
+    // required this.symbol,
+    // required this.type,
+    required this.order,
   }) : super(key: key);
 
-  final String quantity;
-  final String price;
-  final String totalamount;
-  final String timestamp;
-  final String orderid;
-  final String status;
-  final String symbol;
-  final String type;
+  // final String quantity;
+  // final String price;
+  // final String totalamount;
+  // final String timestamp;
+  // final String orderid;
+  // final String status;
+  // final String symbol;
+  // final String type;
+  final StockTodayTradeOrder order;
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +57,17 @@ class OrdersCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    status,
+                    //status,
+                    order.status ?? '',
                     style: AppStyles.tsBlackSemiBold16.copyWith(
-                      color:
-                          status == "COMPLETED" ? Colors.green : Colors.yellow,
+                      color: order.status == "COMPLETE"
+                          ? AppColors.success
+                          : AppColors.danger,
                     ),
                   ),
                   SizedBox(height: 5),
                   Text(
-                    symbol,
+                    order.symbol ?? '',
                     style: AppStyles.tsBlackMedium14,
                   ),
                   SizedBox(height: 5),
@@ -71,7 +76,10 @@ class OrdersCard extends StatelessWidget {
                     style: AppStyles.tsGreyRegular12,
                   ),
                   Text(
-                    "₹$price",
+                    //  "₹$price",
+                    FormatHelper.formatNumbers(
+                      order.averagePrice,
+                    ),
                     style: AppStyles.tsBlackMedium14,
                   ),
                   SizedBox(height: 5),
@@ -80,7 +88,7 @@ class OrdersCard extends StatelessWidget {
                     style: AppStyles.tsGreyRegular12,
                   ),
                   Text(
-                    orderid,
+                    order.orderId ?? '',
                     style: AppStyles.tsBlackMedium14,
                   )
                 ],
@@ -90,20 +98,24 @@ class OrdersCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(type,
+                  Text(
+                      //type,
+                      order.buyOrSell ?? '',
                       style: AppStyles.tsBlackSemiBold16.copyWith(
-                        color: type == "BUY" ? Colors.green : Colors.red,
+                        color: order.buyOrSell == "SELL"
+                            ? AppColors.danger
+                            : AppColors.success,
                       )),
                   SizedBox(height: 5),
                   Row(
                     children: [
                       Text(
-                        quantity,
+                        order.quantity.toString(),
                         style: AppStyles.tsBlackMedium12,
                       ),
                       Text(
                         " Quantity",
-                        style: AppStyles.tsBlackMedium14,
+                        style: AppStyles.tsBlackMedium12,
                       ),
                     ],
                   ),
@@ -113,7 +125,10 @@ class OrdersCard extends StatelessWidget {
                     style: AppStyles.tsGreyRegular12,
                   ),
                   Text(
-                    "₹$totalamount",
+                    // "₹$totalamount",
+                    FormatHelper.formatNumbers(
+                      order.amount,
+                    ),
                     style: AppStyles.tsBlackMedium14,
                   ),
                   SizedBox(height: 5),
@@ -122,7 +137,8 @@ class OrdersCard extends StatelessWidget {
                     style: AppStyles.tsGreyRegular12,
                   ),
                   Text(
-                    timestamp,
+                    //timestamp,
+                    FormatHelper.formatDateTime(order.tradeTime),
                     style: AppStyles.tsBlackMedium14,
                   ),
                 ],

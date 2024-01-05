@@ -122,7 +122,9 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                   DropdownButtonFormField2<int>(
                     value: controller.selectedQuantity.value,
                     onChanged: (value) {
-                      controller.selectedQuantity(value);
+                      controller.selectedQuantity(value?.abs());
+                      controller
+                          .selectedStringQuantity(value?.abs().toString());
                       controller.getMarginRequired(type, tradingInstrument);
                     },
                     isDense: true,
@@ -507,27 +509,32 @@ class TenxTransactionBottomSheet extends GetView<TenxTradingController> {
                                 ? 'BUY'
                                 : 'SELL',
                     onPressed: () {
-                      if (controller.selectedGroupValue.value == 3 &&
-                          controller.stopLossPriceTextController.text.isEmpty &&
-                          controller
-                              .stopProfitPriceTextController.text.isEmpty) {
-                        SnackbarHelper.showSnackbar(
-                            'Please Enter StopLoss or StopProfit Price');
-                      } else if (controller.selectedGroupValue.value == 1 &&
-                          controller.limitPriceTextController.text.isEmpty) {
-                        SnackbarHelper.showSnackbar('Please Enter Price');
-                      } else if (controller.stopLossFormKey.currentState!
-                          .validate()) {
-                        log('CalCualte Margin ${controller.calculateMargin()}');
-                        log('CalCualte Margin ${controller.marginRequired.value.margin}');
-                        controller.placeTenxTradingOrder(
-                          type,
-                          tradingInstrument,
-                        );
-                        controller.selectedGroupValue.value = 2;
-                        controller.stopLossPriceTextController.clear();
-                        controller.stopProfitPriceTextController.clear();
-                        controller.limitPriceTextController.clear();
+                      if (!controller.isBuyButtonDisabled.value) {
+                        controller.isBuyButtonDisabled.value = true;
+                        if (controller.selectedGroupValue.value == 3 &&
+                            controller
+                                .stopLossPriceTextController.text.isEmpty &&
+                            controller
+                                .stopProfitPriceTextController.text.isEmpty) {
+                          SnackbarHelper.showSnackbar(
+                              'Please Enter StopLoss or StopProfit Price');
+                        } else if (controller.selectedGroupValue.value == 1 &&
+                            controller.limitPriceTextController.text.isEmpty) {
+                          SnackbarHelper.showSnackbar('Please Enter Price');
+                        } else if (controller.stopLossFormKey.currentState!
+                            .validate()) {
+                          log('CalCualte Margin ${controller.calculateMargin()}');
+                          log('CalCualte Margin ${controller.marginRequired.value.margin}');
+                          controller.placeTenxTradingOrder(
+                            type,
+                            tradingInstrument,
+                          );
+                          controller.selectedGroupValue.value = 2;
+                          controller.stopLossPriceTextController.clear();
+                          controller.stopProfitPriceTextController.clear();
+                          controller.limitPriceTextController.clear();
+                          controller.isBuyButtonDisabled.value = false;
+                        }
                       }
                     },
                   ),

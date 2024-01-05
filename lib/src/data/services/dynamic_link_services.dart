@@ -17,7 +17,8 @@ class DynamicLinkServices {
 
   static Future<void> initializeUniLink() async {
     try {
-      PendingDynamicLinkData? dynamicLinkData = await firebaseDynamicLink.getInitialLink();
+      PendingDynamicLinkData? dynamicLinkData =
+          await firebaseDynamicLink.getInitialLink();
       print('DynamicLink getInitialLink : ${dynamicLinkData?.link}');
       handleDeepLink(dynamicLinkData);
     } catch (e) {
@@ -34,7 +35,7 @@ class DynamicLinkServices {
         if (code != null) {
           print('DynamicLink Code : $code');
           Get.find<AuthController>().campaignCode(code);
-          SnackbarHelper.showSnackbar('Code Captured : $code');
+          // SnackbarHelper.showSnackbar('Code Captured : $code');
         }
       } catch (e) {
         print('DynamicLink Error : $e');

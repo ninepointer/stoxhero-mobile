@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 
-class CollegeContestStoplossPendingOrderCard extends GetView<CollegeContestController> {
+class CollegeContestStoplossPendingOrderCard
+    extends GetView<CollegeContestController> {
   final StopLossPendingOrdersList stopLoss;
   const CollegeContestStoplossPendingOrderCard({
     Key? key,
@@ -94,7 +95,9 @@ class CollegeContestStoplossPendingOrderCard extends GetView<CollegeContestContr
                       hasBottomMargin: false,
                       label: 'Transaction Type',
                       value: stopLoss.buyOrSell,
-                      valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
+                      valueColor: stopLoss.buyOrSell == "SELL"
+                          ? AppColors.danger
+                          : AppColors.success,
                     ),
                   ],
                 ),
@@ -104,7 +107,9 @@ class CollegeContestStoplossPendingOrderCard extends GetView<CollegeContestContr
                     TradeCardTile(
                       label: 'Status',
                       value: stopLoss.status,
-                      valueColor: stopLoss.status == "Executed" ? AppColors.success : AppColors.danger,
+                      valueColor: stopLoss.status == "Executed"
+                          ? AppColors.success
+                          : AppColors.danger,
                       hasBottomMargin: false,
                     ),
                     TradeCardTile(

@@ -31,27 +31,54 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
             ),
             CommonTile(label: 'Leaderboard'),
             Expanded(
-              child: ListView.separated(
-                itemCount: controller.liveLeaderboardList.length,
-                separatorBuilder: (context, index) => SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  int rank = index + 1;
-                  LiveContestLeaderboard user =
-                      controller.liveLeaderboardList[index];
-                  var reward = controller.liveContest.value.payoutType;
-                  return CommonRankCard(
-                    rank: rank.toString(),
-                    name: user.userName ?? '',
-                    reward: reward == "Reward"
-                        ? controller
-                            .calculateUserReward(rank.toString())
-                            .toString()
-                        : controller
-                            .calculateUserPayout(user.npnl ?? 0)
-                            .toString(),
-                    netPnL: user.npnl?.toStringAsFixed(0) ?? '0',
-                  );
-                },
+              child: Visibility(
+                visible: controller.liveLeaderboardList.isNotEmpty,
+                replacement: Center(
+                  child: Column(
+                    children: [
+                      CommonLoader(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Loading your leaderboard...",
+                        style: AppStyles.tsBlackRegular14,
+                      )
+                    ],
+                  ),
+                ),
+                child: controller.liveLeaderboardList.isNotEmpty
+                    ? ListView.separated(
+                        itemCount: controller.liveLeaderboardList.length,
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 8),
+                        itemBuilder: (context, index) {
+                          int rank = index + 1;
+                          LiveContestLeaderboard user =
+                              controller.liveLeaderboardList[index];
+
+                          var reward = controller.liveContest.value.payoutType;
+
+                          return CommonRankCard(
+                            rank: rank.toString(),
+                            name: user.userName ?? '',
+                            reward: reward == "Reward"
+                                ? controller
+                                    .calculateUserReward(rank.toString())
+                                    .toString()
+                                : controller
+                                    .calculateUserPayout(user.npnl ?? 0)
+                                    .toString(),
+                            netPnL: user.npnl?.toStringAsFixed(0) ?? '0',
+                          );
+                        },
+                      )
+                    : Center(
+                        child: Text(
+                          "Nothing here yet",
+                          style: AppStyles.tsBlackRegular14,
+                        ),
+                      ),
               ),
             ),
           ],

@@ -6,8 +6,7 @@ class CentreCardPositions extends StatelessWidget {
     Key? key,
     required this.netpl,
     required this.plInPosition,
-    required this.roiPositions, 
-  
+    required this.roiPositions,
   }) : super(key: key);
 
   final String netpl;
@@ -19,7 +18,7 @@ class CentreCardPositions extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
-        margin: EdgeInsets.only( left: 40, right: 40),
+        margin: EdgeInsets.only(left: 40, right: 40),
         padding: EdgeInsets.symmetric(horizontal: 20),
         height: 70,
         decoration: BoxDecoration(
@@ -35,9 +34,8 @@ class CentreCardPositions extends StatelessWidget {
           ],
         ),
         child: Container(
-
           child: Padding(
-            padding: const EdgeInsets.only(top:5),
+            padding: const EdgeInsets.only(top: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -46,7 +44,7 @@ class CentreCardPositions extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                     'Invested',
+                      'Invested',
                       style: AppStyles.tsBlackMedium14,
                     ),
                     Text(
@@ -57,7 +55,6 @@ class CentreCardPositions extends StatelessWidget {
                       'ROI',
                       style: AppStyles.tsBlackMedium14,
                     ),
-                    
                   ],
                 ),
                 // Right side
@@ -65,22 +62,22 @@ class CentreCardPositions extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                     "₹$netpl",
-                     style: AppStyles.tsBlackMedium14.copyWith(
-                      color:  Colors.green ,
-                    ),
+                      "₹$netpl",
+                      style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Colors.green,
+                      ),
                     ),
                     Text(
                       "₹$plInPosition",
-                     style: AppStyles.tsBlackMedium14.copyWith(
-                     color:  Colors.green ,
-                    ),
+                      style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Colors.green,
+                      ),
                     ),
                     Text(
                       roiPositions,
-                    style: AppStyles.tsBlackMedium14.copyWith(
-                     color:  Colors.green ,
-                    ),
+                      style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Colors.green,
+                      ),
                     ),
                   ],
                 ),

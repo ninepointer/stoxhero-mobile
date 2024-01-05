@@ -1,7 +1,7 @@
 import '../../base/base.dart';
 import '../../core/core.dart';
 import '../data.dart';
-import '../models/response/tenX_subscription_pnl_response.dart';
+import '../models/response/tenx_subscription_pnl_response.dart';
 
 class TenxTradingRepository extends BaseRepository {
   Future<RepoResponse<GenericResponse>> postPurchaseIntent(
@@ -21,6 +21,14 @@ class TenxTradingRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: TradingInstrumentListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<IndexLivePriceListResponse>> getIndexLivePrices() async {
+    String apiURL = AppUrls.getIndexLivePrice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
   }
 
   Future<RepoResponse<TenxActivePlanListResponse>>
@@ -47,6 +55,16 @@ class TenxTradingRepository extends BaseRepository {
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: TradingPositionListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<VirtualStopLossPendingOrderResponse>>
+      getTenXStopLossPendingOrder(String id) async {
+    String apiURL = AppUrls.tenXPendingStopLoss(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(
+            data: VirtualStopLossPendingOrderResponse.fromJson(response));
   }
 
   Future<RepoResponse<InstrumentLivePriceListResponse>>

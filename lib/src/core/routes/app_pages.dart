@@ -179,7 +179,6 @@ class AppPages {
       name: AppRoutes.weeklyTopPerformersFullList,
       page: () => ContestTopPerformerCard(),
       binding: ContestProfileBinding(),
-      
     ),
     GetPage(
       name: AppRoutes.stocks,
@@ -187,5 +186,16 @@ class AppPages {
       binding: ContestProfileBinding(),
       
     ),
+    GetPage(
+      name: AppRoutes.affiliate,
+      page: () => AffiliateView(),
+      binding: AffiliateBinding(),
+    ),
+    // GetPage(
+    //   name: AppRoutes.stocks,
+    //   page: () => StocksDashboardView(),
+    //    binding: ContestProfileBinding(),
+
+    // ),
   ];
 }

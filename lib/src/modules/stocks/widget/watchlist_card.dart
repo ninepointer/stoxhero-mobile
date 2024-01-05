@@ -1,24 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:stoxhero/src/app/app.dart';
+import 'package:stoxhero/src/modules/stocks/widget/stock_transaction_bottom_sheet.dart';
 
 import '../../../core/core.dart';
+import '../controllers/stocks_controller.dart';
 
-class WatchlistCard extends StatelessWidget {
+class WatchlistCard extends StatefulWidget {
   const WatchlistCard({
     Key? key,
     required this.imagePath,
     required this.title,
     required this.price,
     required this.percentage,
+    required this.equityInstrumentDetail,
   }) : super(key: key);
 
   final String imagePath;
   final String title;
   final String price;
   final String percentage;
+  final EquityInstrumentDetail equityInstrumentDetail;
 
+  @override
+  State<WatchlistCard> createState() => _WatchlistCardState();
+}
+
+class _WatchlistCardState extends State<WatchlistCard> {
+  late StocksTradingController controller;
   void openBottomSheet(BuildContext context, TransactionType type) {
     FocusScope.of(context).unfocus();
+
+    TradingInstrument tradingInstrument = TradingInstrument(
+      exchange: widget.equityInstrumentDetail.exchange,
+      tradingsymbol: widget.equityInstrumentDetail.symbol,
+      exchangeToken: widget.equityInstrumentDetail.exchangeInstrumentToken,
+      instrumentToken: widget.equityInstrumentDetail.instrumentToken,
+      name: widget.equityInstrumentDetail.symbol,
+      // instrumentType: widget.tradingWatchlist.instrument,
+      // lastPrice: lastPrice,
+    );
+    print(tradingInstrument.toJson());
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: StockTransactionBottomSheet(
+          type: type,
+          tradingInstrument: tradingInstrument,
+          marginRequired:
+              controller.getMarginRequired(type, tradingInstrument)),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
   }
 
   @override
@@ -34,6 +70,7 @@ class WatchlistCard extends StatelessWidget {
               SlidableAction(
                 onPressed: (context) {
                   openBottomSheet(context, TransactionType.buy);
+                  print('buy');
                 },
                 icon: Icons.shopping_cart,
                 backgroundColor: Colors.green,
@@ -42,6 +79,7 @@ class WatchlistCard extends StatelessWidget {
               SlidableAction(
                 onPressed: (context) {
                   openBottomSheet(context, TransactionType.sell);
+                  print('sell');
                 },
                 icon: Icons.shopping_cart,
                 backgroundColor: Colors.red,
@@ -68,7 +106,7 @@ class WatchlistCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(right: 12.0),
                             child: Image.asset(
-                              imagePath,
+                              widget.imagePath,
                               height: 20,
                               width: 20,
                             ),
@@ -79,7 +117,7 @@ class WatchlistCard extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  title,
+                                  widget.title,
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
@@ -92,14 +130,14 @@ class WatchlistCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                price,
+                                widget.price,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
                               ),
                               SizedBox(height: 2),
                               Text(
-                                percentage,
+                                widget.percentage,
                                 style: TextStyle(
                                   color: Colors.green,
                                 ),
@@ -136,7 +174,8 @@ class WatchlistCard extends StatelessWidget {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  // Handle delete action
+                  controller.removeInstrument(
+                      widget.equityInstrumentDetail.instrumentToken);
                 },
                 icon: Icons.delete,
                 backgroundColor: Colors.red,

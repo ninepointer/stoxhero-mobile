@@ -245,7 +245,7 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                   Row(
                     children: [
                       Text(
-                        'Payout:',
+                        'Reward:',
                         style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
                       SizedBox(

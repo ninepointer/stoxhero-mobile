@@ -120,14 +120,25 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
                   return ListView.builder(
                     itemCount: controller.equityInstrumentDetailList.length,
                     itemBuilder: (context, index) {
+                      //  var stock = controller.tradingInstruments[index];
                       EquityInstrumentDetail data =
                           controller.equityInstrumentDetailList[index];
 
                       return WatchlistCard(
                         imagePath: 'assets/images/10Xlogo.jpg',
                         title: data.symbol ?? '-',
-                        price: "5",
-                        percentage: "7%",
+                        price: controller
+                            .getInstrumentLastPrice(
+                              data.instrumentToken ?? 0,
+                              data.exchangeInstrumentToken ?? 0,
+                            )
+                            .toString(),
+                        percentage: controller.getInstrumentChanges(
+                          data.instrumentToken ?? 0,
+                          data.exchangeInstrumentToken ?? 0,
+                        ),
+                        equityInstrumentDetail:
+                            controller.equityInstrumentDetailList[index],
                       );
                     },
                   );

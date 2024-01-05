@@ -12,6 +12,7 @@ class CommonCard extends StatelessWidget {
   final bool isSpecialCard;
   final Color? isSpecialCardColor;
   final double? width;
+  final double? borderRadius;
   const CommonCard({
     super.key,
     required this.children,
@@ -23,6 +24,7 @@ class CommonCard extends StatelessWidget {
     this.isSpecialCard = false,
     this.isSpecialCardColor,
     this.width,
+    this.borderRadius
   });
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class CommonCard extends StatelessWidget {
                   color: AppColors.grey.withOpacity(.25),
                   // color: isSpecialCard ? isSpecialCardColor as Color : AppColors.grey.withOpacity(.25),
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(borderRadius??8),
               )
             : null,
         child: Container(

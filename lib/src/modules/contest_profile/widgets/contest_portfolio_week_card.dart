@@ -65,7 +65,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                       style: AppStyles.tsSecondarySemiBold14,
                     ),
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: 6),
                   Text(
                     '${performer?.firstName ?? ''}'.capitalize ?? '',
                     style: Theme.of(context).textTheme.tsMedium14,

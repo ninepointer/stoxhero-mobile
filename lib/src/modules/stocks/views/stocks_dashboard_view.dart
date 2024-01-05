@@ -94,76 +94,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                             ],
                           ),
                         ),
-                    ]
-                        //  for (var item in controller.stockIndexDetailsList) ...[
-                        //   topIndexCard(
-                        //     label: controller
-                        //         .getStockIndexName(item.instrumentToken ?? 0),
-                        //     stockPrice: FormatHelper.formatNumbers(
-                        //       item.lastPrice,
-                        //     ),
-                        //     stockColor: controller.getValueColor(
-                        //       item.lastPrice! - (item.ohlc?.close ?? 0),
-                        //     ),
-                        //     stockLTP: FormatHelper.formatNumbers(
-                        //       item.lastPrice! - (item.ohlc?.close ?? 0),
-                        //     ),
-                        //     stockChange:
-                        //         '(${item.change?.toStringAsFixed(2)}%)',
-                        //     stockLTPColor: controller.getValueColor(
-                        //       item.lastPrice! - (item.ohlc?.close ?? 0),
-                        //     ),
-                        //   ),
-                        //   if (item != controller.stockIndexDetailsList.last)
-                        //     SizedBox(width: 4),
-                        // ]
-
-                        // Container(
-                        //   margin: EdgeInsets.all(10),
-                        //   width: 140,
-                        //   height: 60,
-                        //   padding: EdgeInsets.all(20),
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.white,
-                        //     borderRadius: BorderRadius.circular(10),
-                        //   ),
-                        //   child: Center(child: Text("NIFTY")),
-                        // ),
-                        // Container(
-                        //   margin: EdgeInsets.all(10),
-                        //   width: 140,
-                        //   height: 60,
-                        //   padding: EdgeInsets.all(20),
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.white,
-                        //     borderRadius: BorderRadius.circular(10),
-                        //   ),
-                        //   child: Center(child: Text("BANKNIFTY")),
-                        // ),
-                        // Container(
-                        //   margin: EdgeInsets.all(10),
-                        //   width: 140,
-                        //   height: 60,
-                        //   padding: EdgeInsets.all(20),
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.white,
-                        //     borderRadius: BorderRadius.circular(10),
-                        //   ),
-                        //   child: Center(child: Text("FINNIFTY")),
-                        // ),
-                        // Container(
-                        //   margin: EdgeInsets.all(10),
-                        //   width: 140,
-                        //   height: 60,
-                        //   padding: EdgeInsets.all(20),
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.white,
-                        //     borderRadius: BorderRadius.circular(10),
-                        //   ),
-                        //   child: Center(child: Text("SENSEX")),
-                        // ),
-                        // ],
-                        ),
+                    ]),
                   ),
                   Container(
                     child: CustomExpansionTile(

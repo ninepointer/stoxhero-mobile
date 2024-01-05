@@ -26,11 +26,12 @@ class AppImages {
   static const String rank3 = '$imagesDir/rank3.png';
   static const String xlogo = '$imagesDir/XXlogo.png';
   static const String tenxBackground = '$imagesDir/backgroundTenX.jpg';
-  static const String tenxLogo = '$imagesDir/10x_lightlight.png';
+  static const String tenxLogo = '$imagesDir/10x_lightMode.png';
   static const String stock = '$imagesDir/stockImage.png';
   static const String testZoneShareBackground =
       '$imagesDir/Black Bull Logo.png';
   static const String tenxSymbolDarkMode = '$imagesDir/tenxSymbolDarkmode.png';
   static const String tenxSymbolLightMode =
-      '$imagesDir/tenxSymbolLightMode.png';
+      '$imagesDir/tenxSymbolLightMode.png';    
+  static const String santa = '$imagesDir/santa2.png';    
 }

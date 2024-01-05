@@ -4,15 +4,16 @@ import 'package:stoxhero/src/modules/contest/views/resultView.dart';
 import '../../../app/app.dart';
 
 class ContestTradingView extends GetView<ContestController> {
-  const ContestTradingView({Key? key}) : super(key: key);
+  final bool isLiveContest;
+  const ContestTradingView({Key? key, this.isLiveContest = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
           title: Text(
-        '${controller.liveFeatured.value.contestName ?? controller.liveContest.value.contestName ?? 'TestZone'}',
+        '${isLiveContest ? controller.liveContest.value.contestName : controller.liveFeatured.value.contestName}',
         style: Theme.of(context).textTheme.tsRegular16,
         textAlign: TextAlign.center,
       )),

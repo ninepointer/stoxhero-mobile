@@ -3,23 +3,73 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class HoldingsCard extends StatelessWidget {
+import '../../../app/app.dart';
+import '../controllers/stocks_controller.dart';
+
+class HoldingsCard extends StatefulWidget {
   const HoldingsCard({
     Key? key,
-    required this.title,
-    required this.percentage,
-    required this.shares,
-    required this.currentvalue,
-    required this.invested,
+    // required this.title,
+    // required this.percentage,
+    // required this.shares,
+    // required this.currentvalue,
+    // required this.invested,
+    required this.holding,
     required this.imagePath,
   }) : super(key: key);
 
-  final String title;
-  final String percentage;
-  final String shares;
-  final String currentvalue;
-  final String invested;
+  // final String title;
+  // final String percentage;
+  // final String shares;
+  // final String currentvalue;
+  // final String invested;
+  final StockTradingHolding holding;
   final String imagePath;
+
+  @override
+  State<HoldingsCard> createState() => _HoldingsCardState();
+}
+
+class _HoldingsCardState extends State<HoldingsCard> {
+  late StocksTradingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.getStockHoldingsList();
+  }
+
+  void openBottomSheet(BuildContext context, TransactionType type) {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      widget.holding.iId!.instrumentToken!,
+      widget.holding.iId!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value =
+        widget.holding.lots?.toString() ?? "0";
+    //   controller.generateLotsList(type: position.id?.symbol);
+    //   // controller.generateLotsListFoStopLoss(type: position.id?.symbol);
+    //   // controller.generateLotsListForStopProfit(type: position.id?.symbol);
+
+    //   TradingInstrument tradingInstrument = TradingInstrument(
+    //     name: position.id?.symbol,
+    //     exchange: position.id?.exchange,
+    //     tradingsymbol: position.id?.symbol,
+    //     exchangeToken: position.id?.exchangeInstrumentToken,
+    //     instrumentToken: position.id?.instrumentToken,
+    //     lastPrice: lastPrice,
+    //     lotSize: position.lots,
+    //   );
+    //   BottomSheetHelper.openBottomSheet(
+    //     context: context,
+    //     child: VirtualTransactionBottomSheet(
+    //       type: type,
+    //       tradingInstrument: tradingInstrument,
+    //       marginRequired: controller.getMarginRequired(type, tradingInstrument),
+    //     ),
+    //   );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +85,7 @@ class HoldingsCard extends StatelessWidget {
               },
               icon: Icons.edit,
               backgroundColor: Colors.yellow,
-              label: 'Edit',
+              label: 'Modify',
             ),
           ],
         ),
@@ -47,7 +97,10 @@ class HoldingsCard extends StatelessWidget {
               child: Container(
                 height: 100,
                 width: 400,
-                padding: EdgeInsets.only(left: 9, right: 9,),
+                padding: EdgeInsets.only(
+                  left: 9,
+                  right: 9,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
@@ -64,25 +117,27 @@ class HoldingsCard extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(right: 12.0),
                               child: Image.asset(
-                                imagePath,
+                                widget.imagePath,
                                 height: 30,
                                 width: 30,
                               ),
                             ),
                             Text(
-                              title,
+                              //name of the stock
+                              widget.holding.iId?.symbol ?? "",
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
                             SizedBox(height: 5),
                             Row(
                               children: [
                                 Text(
-                                  shares,
+                                  // quantity dalni hai,
+                                  widget.holding.lots.toString(),
                                   style: TextStyle(
                                     color: Colors.grey,
-                                    fontSize: 14,
+                                    fontSize: 13,
                                   ),
                                 ),
                                 Text(
@@ -109,14 +164,16 @@ class HoldingsCard extends StatelessWidget {
                                   '(Invested Amt.)',
                                   style: TextStyle(
                                     color: Colors.grey,
-                                    fontSize: 12,
+                                    fontSize: 10,
                                   ),
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  invested,
+                                  FormatHelper.formatNumbers(
+                                      widget.holding.amount?.abs().toString(),
+                                      decimal: 2),
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],
@@ -128,14 +185,17 @@ class HoldingsCard extends StatelessWidget {
                                   '(Current Amt.)',
                                   style: TextStyle(
                                     color: Colors.grey,
-                                    fontSize: 12,
+                                    fontSize: 10,
                                   ),
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  currentvalue,
+                                  //current value
+                                  FormatHelper.formatNumbers(
+                                      (widget.holding.lastaverageprice ?? 0) *
+                                          (widget.holding.lots ?? 0)),
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],
@@ -148,14 +208,71 @@ class HoldingsCard extends StatelessWidget {
                                   '(Returns)',
                                   style: TextStyle(
                                     color: Colors.grey,
-                                    fontSize: 12,
+                                    fontSize: 10,
                                   ),
                                 ),
                                 Text(
-                                  percentage,
+                                  //percentage change,
+                                  widget.holding.lots == 0
+                                      ? FormatHelper.formatNumbers(
+                                          widget.holding.amount)
+                                      : FormatHelper.formatNumbers(
+                                          controller.calculateGrossPNL(
+                                            widget.holding.amount ?? 0,
+                                            widget.holding.lots!.toInt(),
+                                            controller.getInstrumentLastPrice(
+                                              widget.holding.iId!
+                                                  .instrumentToken!,
+                                              widget.holding.iId!
+                                                  .exchangeInstrumentToken!,
+                                            ),
+                                          ),
+                                        ),
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.green,
+                                    fontSize: 13,
+                                    color: controller.getValueColor(
+                                      widget.holding.lots == 0
+                                          ? widget.holding.amount
+                                          : controller.calculateGrossPNL(
+                                              widget.holding.amount ?? 0,
+                                              widget.holding.lots!.toInt(),
+                                              controller.getInstrumentLastPrice(
+                                                widget.holding.iId!
+                                                    .instrumentToken!,
+                                                widget.holding.iId!
+                                                    .exchangeInstrumentToken!,
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  //percentage change,
+                                  '(${FormatHelper.formatNumbers(controller.calculateGrossROI(
+                                        widget.holding.amount ?? 0,
+                                        widget.holding.lots!.toInt(),
+                                        controller.getInstrumentLastPrice(
+                                          widget.holding.iId!.instrumentToken!,
+                                          widget.holding.iId!
+                                              .exchangeInstrumentToken!,
+                                        ),
+                                      ), decimal: 2)})',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: controller.getValueColor(
+                                      widget.holding.lots == 0
+                                          ? widget.holding.amount
+                                          : controller.calculateGrossPNL(
+                                              widget.holding.amount ?? 0,
+                                              widget.holding.lots!.toInt(),
+                                              controller.getInstrumentLastPrice(
+                                                widget.holding.iId!
+                                                    .instrumentToken!,
+                                                widget.holding.iId!
+                                                    .exchangeInstrumentToken!,
+                                              ),
+                                            ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -196,7 +313,7 @@ class HoldingsCard extends StatelessWidget {
               },
               icon: Icons.delete,
               backgroundColor: Colors.red,
-              label: 'DELETE',
+              label: 'Exit',
             ),
           ],
         ),

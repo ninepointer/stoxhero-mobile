@@ -138,6 +138,13 @@ class CollegeContestController
   final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
   final stopLossPendingOrder = StopLossPendingOrdersList().obs;
   final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+
+  final selectedContestStopLossQuantity = 0.obs;
+  final selectedContestStopProfitQuantity = 0.obs;
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
+  final contestStoplossQuantityList = <ContestStoplossQuantityData>[].obs;
+
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
   final selectedContestId = ''.obs;
@@ -212,7 +219,8 @@ class CollegeContestController
     await getContestPortfolio();
     await getDayWiseContestPnl();
     await getReadSetting();
-    socketConnection();
+    await socketConnection();
+    await liveIndexDetails();
     socketIndexConnection();
     socketLeaderboardConnection();
     socketSendConnection();
@@ -363,7 +371,6 @@ class CollegeContestController
 
   List<int> generateLotsList({String? type}) {
     List<int> result = [];
-
     if (type?.contains('BANK') ?? false) {
       for (int i = 15; i <= 900; i += 15) result.add(i);
     } else if (type?.contains('FIN') ?? false) {
@@ -371,9 +378,84 @@ class CollegeContestController
     } else {
       for (int i = 50; i <= 1800; i += 50) result.add(i);
     }
-
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
+    return result;
+  }
+
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = contestStoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedContestStopLossQuantity.value =
+        newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
+
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = contestStoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedContestStopProfitQuantity.value =
+        newList.isNotEmpty ? newList.first : 0;
+    print(
+        "selectedStopProfitQuantity${selectedContestStopProfitQuantity.value}");
+    lotsValueForStopProfit.assignAll(newList);
     return result;
   }
 
@@ -647,10 +729,23 @@ class CollegeContestController
   num calculateMargin() {
     num lots = 0;
     num margin = 0;
+    num amount = 0;
+    num limitMargin = 0;
+    num subtractAmount = 0;
     for (var position in contestPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
         margin += position.margin ?? 0;
+      }
+      if (position.id?.isLimit == true) {
+        limitMargin += position.margin ?? 0;
+      } else {
+        if (position.lots! < 0) {
+          limitMargin += position.margin ?? 0;
+          subtractAmount +=
+              ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
+        }
+        amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
     num openingBalance = 0;
@@ -664,7 +759,8 @@ class CollegeContestController
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - margin))
+            : (openingBalance -
+                ((amount - subtractAmount).abs() + limitMargin)))
         : (openingBalance - margin);
 
     return availableMargin;
@@ -824,7 +920,7 @@ class CollegeContestController
           tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
-      return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
   }
 
@@ -900,7 +996,15 @@ class CollegeContestController
 
   Future placeContestOrder(TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -961,6 +1065,7 @@ class CollegeContestController
         await getStopLossPendingOrder();
         await getContestTodaysOrderList();
         await getContestPortfolio();
+        selectedStringQuantity("");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -972,6 +1077,25 @@ class CollegeContestController
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isTradingOrderSheetLoading(false);
+  }
+
+  Future getContestPendingStoplossOrderData(String id) async {
+    try {
+      final RepoResponse<ContestStopLossPendingOrderResponse> response =
+          await repository.getContestStopLossPendingOrder(
+              liveCollegeContest.value.id ?? '');
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          contestStoplossQuantityList(response.data?.quantity ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future searchInstruments(String? value, {bool showShimmer = true}) async {
@@ -1118,6 +1242,30 @@ class CollegeContestController
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future socketIndexConnection() async {
@@ -1421,7 +1569,7 @@ class CollegeContestController
     isLoading(true);
     try {
       await repository.getNotified(upComingCollegeContest.value.id);
-      getUpComingCollegeContestList();
+      // getUpComingCollegeContestList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1620,7 +1768,7 @@ class CollegeContestController
       await getStopLossPendingOrder();
       await getContestPortfolio();
       await getStopLossExecutedOrder();
-      loadData();
+      await getContestPositions();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1649,13 +1797,15 @@ class CollegeContestController
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedContestStopLossQuantity.value,
+      stopProfitQuantity: selectedContestStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: featuredCollegeContest.value.id ?? liveCollegeContest.value.id,
