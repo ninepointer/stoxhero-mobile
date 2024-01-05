@@ -2,8 +2,9 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:stoxhero/src/base/base.dart';
-
+import 'package:intl/intl.dart';
 import '../../../core/core.dart';
+import 'package:flutter/material.dart';
 import '../../../data/data.dart';
 
 class OrdersBinding implements Bindings {
@@ -12,8 +13,17 @@ class OrdersBinding implements Bindings {
 }
 
 class OrdersController extends BaseController<OrdersRepository> {
+  final ScrollController _scrollController = ScrollController();
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
+
+  // final startDateTextController = TextEditingController();
+  // final endDateTextController = TextEditingController();
+
+  final currentPage = 0.obs;
+  final totalItems = 0.obs;
+  final itemsPerPage = 0.obs;
+  final isLoadingMore = false.obs;
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
@@ -51,12 +61,33 @@ class OrdersController extends BaseController<OrdersRepository> {
     await getTenXSubscriptionList();
     await getVirtualTradeTodaysOrdersList();
     await getVirtualTradeAllOrdersList();
+
+    _scrollController.addListener(loadMoreOrders);
+    // itemsPerPage.value = 20;
+    // totalItems.value = virtualTradeAllOrdersList.length;
+  }
+
+  void loadMoreOrders() {
+    if (!isLoadingMore.value) {
+      isLoadingMore.value = true;
+      currentPage.value++;
+
+      final lastPage = (totalItems.value / itemsPerPage.value).ceil();
+      print("lastpage ${lastPage} ${totalItems.value} ${itemsPerPage.value}");
+      if (currentPage.value < lastPage) {
+        isLoadingMore.value = false;
+      } else {
+        getVirtualTradeAllOrdersList();
+      }
+    }
   }
 
   void updateTenxSubDateList() {
     selectedTenxSubDatesList.clear();
-    selectedTenxSubDatesList.addAll(selectedTenXSub.value.userPurchaseDetail?.toList() ?? []);
-    if (selectedTenxSubDatesList.isNotEmpty) selectedTenxSubDate(selectedTenxSubDatesList.first);
+    selectedTenxSubDatesList
+        .addAll(selectedTenXSub.value.userPurchaseDetail?.toList() ?? []);
+    if (selectedTenxSubDatesList.isNotEmpty)
+      selectedTenxSubDate(selectedTenxSubDatesList.first);
   }
 
   List<String> populateDropdownItems(List<TenXSubscription> tenXSub) {
@@ -71,7 +102,8 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getTenxTradeTodaysOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeTodaysOrdersList(
+      final RepoResponse<TenxTradeOrdersListResponse> response =
+          await repository.getTenxTradeTodaysOrdersList(
         selectedTenXSub.value.subscriptionId,
       );
       if (response.data != null) {
@@ -95,7 +127,8 @@ class OrdersController extends BaseController<OrdersRepository> {
     print(selectedTenXSub.toJson());
     isLoading(true);
     try {
-      final RepoResponse<TenxTradeOrdersListResponse> response = await repository.getTenxTradeAllOrdersList(
+      final RepoResponse<TenxTradeOrdersListResponse> response =
+          await repository.getTenxTradeAllOrdersList(
         selectedTenXSub.value.subscriptionId,
         selectedTenXSub.value.userPurchaseDetail?[0].subscribedOn,
         selectedTenXSub.value.userPurchaseDetail?[0].expiredOn,
@@ -117,7 +150,8 @@ class OrdersController extends BaseController<OrdersRepository> {
   Future getVirtualTradeTodaysOrdersList() async {
     isLoading(true);
     try {
-      final RepoResponse<VirtualTradeOrdersListResponse> response = await repository.getVirtualTradeTodaysOrdersList();
+      final RepoResponse<VirtualTradeOrdersListResponse> response =
+          await repository.getVirtualTradeTodaysOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           virtualTradeTodaysOrdersList(response.data?.data ?? []);
@@ -133,12 +167,24 @@ class OrdersController extends BaseController<OrdersRepository> {
   }
 
   Future getVirtualTradeAllOrdersList() async {
-    isLoading(true);
     try {
-      final RepoResponse<VirtualTradeOrdersListResponse> response = await repository.getVirtualTradeAllOrdersList();
+      isLoadingMore.value = true;
+      int skip = currentPage.value * itemsPerPage.value;
+      print("skipskip ${skip} ${itemsPerPage.value} ${currentPage.value}");
+      Map<String, dynamic> query = {
+        "skip": skip,
+        "limit": itemsPerPage.value,
+      };
+      final RepoResponse<VirtualTradeOrdersListResponse> response =
+          await repository.getVirtualTradeAllOrdersList(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           virtualTradeAllOrdersList(response.data?.data ?? []);
+          itemsPerPage(20);
+          totalItems(virtualTradeAllOrdersList.length);
+
+          print(
+              "virtualTradeAllOrdersList ${virtualTradeAllOrdersList.toJson()}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -146,18 +192,21 @@ class OrdersController extends BaseController<OrdersRepository> {
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isLoadingMore.value = false;
     }
-    isLoading(false);
   }
 
   Future getTenXSubscriptionList() async {
     isLoading(true);
     try {
-      final RepoResponse<TenXSubscriptionResponse> response = await repository.getTenXSubscriptionList();
+      final RepoResponse<TenXSubscriptionResponse> response =
+          await repository.getTenXSubscriptionList();
       if (response.data != null) {
         tenXSubscription.clear();
         tenXSubscription(response.data?.data ?? []);
-        if (tenXSubscription.isNotEmpty) selectedTenXSub(tenXSubscription.first);
+        if (tenXSubscription.isNotEmpty)
+          selectedTenXSub(tenXSubscription.first);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
