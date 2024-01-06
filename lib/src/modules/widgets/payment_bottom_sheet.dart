@@ -561,7 +561,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                       ((controller.couponCodeSuccessText.isNotEmpty ||
                                   controller.isHeroCashAdded.value)
                               ? controller.subscriptionAmount.value
-                              : widget.buyItemPrice) >=
+                              : widget.buyItemPrice) >
                           walletBalance!)
                     Column(
                       children: [
@@ -596,7 +596,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                                                     .isHeroCashAdded.value)
                                             ? controller
                                                 .subscriptionAmount.value
-                                            : widget.buyItemPrice) >=
+                                            : widget.buyItemPrice) >
                                         walletBalance!
                                 ? () {
                                     SnackbarHelper.showSnackbar(
