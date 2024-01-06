@@ -143,169 +143,35 @@ class StockStoplossModifyPriceBottomSheet
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    controller: controller.quanitityTextController,
-                    // controller.selectedQuantity = controller.quanitityTextController.value,
+                    controller: controller.stopLossQuantityTextController,
                     onChanged: (String? value) {
-                      controller.selectedStopLossQuantity.value =
-                          int.parse(controller.quanitityTextController.text);
-
-                      // if (value != null && value.isNotEmpty) {
-                      //   int parsedValue = int.parse(value);
-                      //   controller.selectedQuantity(parsedValue.abs());
-                      //   controller.selectedStringQuantity(
-                      //       parsedValue.abs().toString());
-                      //   controller.getMarginRequired(type, tradingInstrument);
-                      // }
+                      // Update the controller value only if the input is valid
+                      if (value != null && value.isNotEmpty) {
+                        controller.selectedStopLossQuantity.value =
+                            int.parse(value);
+                      }
                     },
                   ),
 
-                  // DropdownButtonFormField2<int>(
-                  //   value: controller.selectedStopLossQuantity.value,
-                  //   onChanged: (value) =>
-                  //       controller.selectedStopLossQuantity(value),
-                  //   isDense: true,
-                  //   items: controller.lotsValueForStopLoss.map((int number) {
-                  //     return DropdownMenuItem<int>(
-                  //       value: number,
-                  //       child: Text(number >= 0
-                  //           ? number.toString()
-                  //           : number.toString()),
-                  //     );
-                  //   }).toList(),
-                  //   dropdownStyleData: DropdownStyleData(
-                  //     maxHeight: 250,
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //   ),
-                  //   menuItemStyleData: MenuItemStyleData(
-                  //     padding: EdgeInsets.symmetric(horizontal: 16),
-                  //   ),
-                  //   decoration: InputDecoration(
-                  //     contentPadding: EdgeInsets.all(16).copyWith(left: 0),
-                  //     filled: true,
-                  //     fillColor: AppColors.grey.withOpacity(.1),
-                  //     hintText: 'Quantity',
-                  //     hintStyle: AppStyles.tsGreyRegular14,
-                  //     errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                  //       color: AppColors.danger.shade700,
-                  //     ),
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //       ),
-                  //     ),
-                  //     enabledBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide.none,
-                  //     ),
-                  //     focusedBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //         color: AppColors.lightGreen,
-                  //       ),
-                  //     ),
-                  //     errorBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //         color: AppColors.danger,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
                   SizedBox(height: 8),
+
                   CommonTextField(
                     isDisabled: false,
                     hintText: 'Stop Profit Quantity',
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    controller: controller.quanitityTextController,
-                    // controller.selectedQuantity = controller.quanitityTextController.value,
+                    controller: controller.stopProfitQuantityTextController,
                     onChanged: (String? value) {
-                      controller.selectedStopProfitQuantity.value =
-                          int.parse(controller.quanitityTextController.text);
-
-                      // if (value != null && value.isNotEmpty) {
-                      //   int parsedValue = int.parse(value);
-                      //   controller.selectedQuantity(parsedValue.abs());
-                      //   controller.selectedStringQuantity(
-                      //       parsedValue.abs().toString());
-                      //   controller.getMarginRequired(type, tradingInstrument);
-                      // }
+                      // Update the controller value only if the input is valid
+                      if (value != null && value.isNotEmpty) {
+                        controller.selectedStopProfitQuantity.value =
+                            int.parse(value);
+                      }
                     },
                   ),
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       "Stop Profit Quantity",
-                  //       style: AppStyles.tsGreyMedium14,
-                  //     ),
-                  //   ],
-                  // ),
-                  SizedBox(height: 4),
 
-                  // DropdownButtonFormField2<int>(
-                  //   value: controller.selectedStopProfitQuantity.value,
-                  //   onChanged: (value) =>
-                  //       controller.selectedStopProfitQuantity(value),
-                  //   isDense: true,
-                  //   items: controller.lotsValueForStopProfit.map((int number) {
-                  //     return DropdownMenuItem<int>(
-                  //       value: number,
-                  //       child: Text(number >= 0
-                  //           ? number.toString()
-                  //           : number.toString()),
-                  //     );
-                  //   }).toList(),
-                  //   dropdownStyleData: DropdownStyleData(
-                  //     maxHeight: 250,
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //   ),
-                  //   menuItemStyleData: MenuItemStyleData(
-                  //     padding: EdgeInsets.symmetric(horizontal: 16),
-                  //   ),
-                  //   decoration: InputDecoration(
-                  //     contentPadding: EdgeInsets.all(16).copyWith(left: 0),
-                  //     filled: true,
-                  //     fillColor: AppColors.grey.withOpacity(.1),
-                  //     hintText: 'Quantity',
-                  //     hintStyle: AppStyles.tsGreyRegular14,
-                  //     errorStyle: AppStyles.tsGreyRegular12.copyWith(
-                  //       color: AppColors.danger.shade700,
-                  //     ),
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //       ),
-                  //     ),
-                  //     enabledBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide.none,
-                  //     ),
-                  //     focusedBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //         color: AppColors.lightGreen,
-                  //       ),
-                  //     ),
-                  //     errorBorder: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       borderSide: BorderSide(
-                  //         width: 2,
-                  //         color: AppColors.danger,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                  SizedBox(height: 4),
 
                   SizedBox(
                     height: 8,
@@ -423,7 +289,7 @@ class StockStoplossModifyPriceBottomSheet
                             'Please Select StopLoss or StopProfit Quantity');
                       } else if (controller.stopLossFormKey.currentState!
                           .validate()) {
-                      //  controller.pendingOrderModify(type, stopLoss);
+                        controller.pendingOrderModify(type, stopLoss);
                       }
                       controller.stopLossPriceTextController.clear();
                       controller.stopProfitPriceTextController.clear();

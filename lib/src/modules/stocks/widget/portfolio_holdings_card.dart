@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../../app/app.dart';
 import '../controllers/stocks_controller.dart';
+import 'stock_stoploss_modifyprice_bottomsheet.dart';
 
 class HoldingsCard extends StatefulWidget {
   const HoldingsCard({
@@ -52,23 +53,55 @@ class _HoldingsCardState extends State<HoldingsCard> {
     //   // controller.generateLotsListFoStopLoss(type: position.id?.symbol);
     //   // controller.generateLotsListForStopProfit(type: position.id?.symbol);
 
-    //   TradingInstrument tradingInstrument = TradingInstrument(
-    //     name: position.id?.symbol,
-    //     exchange: position.id?.exchange,
-    //     tradingsymbol: position.id?.symbol,
-    //     exchangeToken: position.id?.exchangeInstrumentToken,
-    //     instrumentToken: position.id?.instrumentToken,
-    //     lastPrice: lastPrice,
-    //     lotSize: position.lots,
-    //   );
-    //   BottomSheetHelper.openBottomSheet(
-    //     context: context,
-    //     child: VirtualTransactionBottomSheet(
-    //       type: type,
-    //       tradingInstrument: tradingInstrument,
-    //       marginRequired: controller.getMarginRequired(type, tradingInstrument),
-    //     ),
-    //   );
+    TradingInstrument tradingInstrument = TradingInstrument(
+      name: widget.holding.iId?.symbol,
+      exchange: widget.holding.iId?.exchange,
+      tradingsymbol: widget.holding.iId?.symbol,
+      exchangeToken: widget.holding.iId?.exchangeInstrumentToken,
+      instrumentToken: widget.holding.iId?.instrumentToken,
+      lastPrice: lastPrice,
+      lotSize: widget.holding.lots,
+    );
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: VirtualTransactionBottomSheet(
+        type: type,
+        tradingInstrument: tradingInstrument,
+        marginRequired: controller.getMarginRequired(type, tradingInstrument),
+      ),
+    );
+  }
+
+  void openModifyBottomSheet(BuildContext context, TransactionType type) async {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      widget.holding.iId!.instrumentToken!,
+      widget.holding.iId!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value =
+        widget.holding.lots?.toString() ?? "0";
+    //  await controller
+    //     .getVirtualPendingStoplossOrderData(widget.position.iId?.product ?? '');
+    // controller.generateLotsList(type: widget.position.iId?.symbol);
+    // controller.generateLotsListFoStopLoss(
+    //     type: widget.position.iId?.symbol, openLots: widget.position.lots);
+    // controller.generateLotsListForStopProfit(
+    //     type: widget.position.iId?.symbol, openLots: widget.position.lots);
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: StockStoplossModifyPriceBottomSheet(
+        type: type,
+        stopLoss: TradingInstrument(
+          name: widget.holding.iId?.symbol,
+          exchange: widget.holding.iId?.exchange,
+          tradingsymbol: widget.holding.iId?.symbol,
+          exchangeToken: widget.holding.iId?.exchangeInstrumentToken,
+          instrumentToken: widget.holding.iId?.instrumentToken,
+          lastPrice: lastPrice,
+          lotSize: widget.holding.lots,
+        ),
+      ),
+    );
   }
 
   @override
@@ -81,6 +114,16 @@ class _HoldingsCardState extends State<HoldingsCard> {
           children: [
             SlidableAction(
               onPressed: (context) {
+                if (widget.holding.lots!.toInt() == 0) {
+                  SnackbarHelper.showSnackbar(
+                      "You don't have any open position for this symbol.");
+                } else if (controller.selectedQuantity.value
+                    .toString()
+                    .contains('-')) {
+                  openModifyBottomSheet(context, TransactionType.sell);
+                } else {
+                  openModifyBottomSheet(context, TransactionType.buy);
+                }
                 // Handle edit action
               },
               icon: Icons.edit,

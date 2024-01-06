@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/modules/stocks/views/tabs/subtabs/all_orders.dart';
+import 'package:stoxhero/src/modules/stocks/views/tabs/subtabs/today_orders.dart';
 import 'package:stoxhero/src/modules/stocks/views/tabs/subtabs/executed_orders.dart';
 import 'package:stoxhero/src/modules/stocks/views/tabs/subtabs/pending_orders.dart';
 

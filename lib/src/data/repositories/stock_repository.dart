@@ -137,7 +137,15 @@ class StocksTradingRepository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: StocksFundsMarginResponse.fromJson(response));
   }
-
+  
+   Future<RepoResponse<GenericResponse>> pendingOrderModify(
+      Map<String, dynamic> data) async {
+    String apiURL = AppUrls.pendingOrderModify;
+    var response = await service.postAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
 
 
 }

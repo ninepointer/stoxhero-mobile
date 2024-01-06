@@ -18,6 +18,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
 
   @override
   Widget build(BuildContext context) {
+
     controller.selectedGroupValue.value = 2;
     controller.selectedType.value = 'MARKET';
     return Obx(
@@ -130,11 +131,11 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    controller: controller.quanitityTextController,
+                    controller: controller.quantityTextController,
                     // controller.selectedQuantity = controller.quanitityTextController.value,
                     onChanged: (String? value) {
                       controller.selectedQuantity.value =
-                          int.parse(controller.quanitityTextController.text);
+                          int.parse(controller.quantityTextController.text);
 
                       // if (value != null && value.isNotEmpty) {
                       //   int parsedValue = int.parse(value);

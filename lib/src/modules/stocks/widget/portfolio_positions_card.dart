@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:stoxhero/src/modules/stocks/widget/stock_transaction_bottom_sheet.dart';
 import '../../../app/app.dart';
 import '../controllers/stocks_controller.dart';
 import 'stock_stoploss_modifyprice_bottomsheet.dart';
@@ -78,8 +79,8 @@ class _PositionsCardState extends State<PositionsCard> {
     );
     controller.selectedStringQuantity.value =
         widget.position.lots?.toString() ?? "0";
-    await controller
-        .getVirtualPendingStoplossOrderData(widget.position.iId?.product ?? '');
+    //  await controller
+    //     .getVirtualPendingStoplossOrderData(widget.position.iId?.product ?? '');
     // controller.generateLotsList(type: widget.position.iId?.symbol);
     // controller.generateLotsListFoStopLoss(
     //     type: widget.position.iId?.symbol, openLots: widget.position.lots);
@@ -135,6 +136,7 @@ class _PositionsCardState extends State<PositionsCard> {
         child: LayoutBuilder(
           builder: (contextFromLayoutBuilder, constraints) {
             bool isSlidableOpen = false; // Add this variable
+
             return GestureDetector(
               child: Container(
                 height: 100,
@@ -182,7 +184,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                   ),
                                 ),
                                 Text(
-                                  ' Quantity',
+                                  ' Shares ',
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 14,
@@ -351,6 +353,61 @@ class _PositionsCardState extends State<PositionsCard> {
             SlidableAction(
               onPressed: (context) {
                 // Handle delete action
+
+                FocusScope.of(context).unfocus();
+                int? lots = widget.position.lots;
+                // generateLotsList(
+                //     type: widget.position.iId?.symbol);
+                int exitLots = widget.position.lots!.toInt();
+
+                if (exitLots == 0) {
+                  SnackbarHelper.showSnackbar(
+                      "You don't have any open position for this symbol.");
+                } else {
+                  if (exitLots.toString().contains('-')) {
+                    if (exitLots < 0) {
+                      exitLots = -exitLots;
+                    }
+
+                    // if (!lots.contains(exitLots)) {
+                    //   lots.add(exitLots);
+                    //   lots.sort();
+                    // }
+                    controller.selectedQuantity.value = exitLots;
+                  }
+
+                  // if (exitLots > maxLots) {
+                  //   controller.selectedQuantity.value = maxLots;
+                  // } else {
+                  //   controller.selectedQuantity.value = exitLots;
+                  // }
+
+                  // controller.lotsValueList.assignAll(lots);
+                  controller.selectedStringQuantity.value =
+                      widget.position.lots?.toString() ?? "0";
+
+                  TradingInstrument trading = TradingInstrument(
+                    name: widget.position.iId?.symbol,
+                    exchange: widget.position.iId?.exchange,
+                    tradingsymbol: widget.position.iId?.symbol,
+                    exchangeToken: widget.position.iId?.exchangeInstrumentToken,
+                    instrumentToken: widget.position.iId?.instrumentToken,
+                    lotSize: widget.position.lots,
+                    lastPrice: controller.getInstrumentLastPrice(
+                      widget.position.iId!.instrumentToken!,
+                      widget.position.iId!.exchangeInstrumentToken!,
+                    ),
+                  );
+                  BottomSheetHelper.openBottomSheet(
+                    context: context,
+                    child: StockTransactionBottomSheet(
+                      type: TransactionType.exit,
+                      tradingInstrument: trading,
+                      marginRequired: controller.getMarginRequired(
+                          TransactionType.exit, trading),
+                    ),
+                  );
+                }
               },
               icon: Icons.delete,
               backgroundColor: Colors.red,

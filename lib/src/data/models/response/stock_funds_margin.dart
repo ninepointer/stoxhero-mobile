@@ -1,12 +1,12 @@
 class StocksFundsMarginResponse {
   String? message;
-  FundsMargin? data;
+  StockFundsMargin? data;
 
   StocksFundsMarginResponse({this.message, this.data});
 
   StocksFundsMarginResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    data = json['data'] != null ? new FundsMargin.fromJson(json['data']) : null;
+    data = json['data'] != null ? new StockFundsMargin.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -19,21 +19,21 @@ class StocksFundsMarginResponse {
   }
 }
 
-class FundsMargin {
+class StockFundsMargin {
   String? portfolioId;
   String? portfolioName;
   num? totalFund;
   num? npnl;
   num? openingBalance;
 
-  FundsMargin(
+  StockFundsMargin(
       {this.portfolioId,
       this.portfolioName,
       this.totalFund,
       this.npnl,
       this.openingBalance});
 
-  FundsMargin.fromJson(Map<String, dynamic> json) {
+  StockFundsMargin.fromJson(Map<String, dynamic> json) {
     portfolioId = json['portfolioId'];
     portfolioName = json['portfolioName'];
     totalFund = json['totalFund'];

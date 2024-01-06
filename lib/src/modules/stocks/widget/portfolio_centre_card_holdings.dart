@@ -4,21 +4,23 @@ import '../../../core/core.dart';
 class CentreCardHoldings extends StatelessWidget {
   const CentreCardHoldings({
     Key? key,
-    required this.netpl,
-    required this.plInHoldings, 
     required this.roiHoldings,
+    required this.pnlInHoldings,
+    required this.invested,
+    required this.currentvalue,
   }) : super(key: key);
 
-  final String netpl;
-  final String plInHoldings;
+  final String invested;
+  final String currentvalue;
   final String roiHoldings;
+  final String pnlInHoldings;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
-        margin: EdgeInsets.only( left: 40, right: 40),
+        margin: EdgeInsets.only(left: 40, right: 40),
         padding: EdgeInsets.symmetric(horizontal: 20),
         height: 70,
         decoration: BoxDecoration(
@@ -34,9 +36,8 @@ class CentreCardHoldings extends StatelessWidget {
           ],
         ),
         child: Container(
-
           child: Padding(
-            padding: const EdgeInsets.only(top:5),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -46,15 +47,15 @@ class CentreCardHoldings extends StatelessWidget {
                   children: [
                     Text(
                       'Invested',
-                      style: AppStyles.tsBlackMedium14,
+                      style: AppStyles.tsBlackMedium12,
                     ),
                     Text(
                       'Current Value',
-                      style: AppStyles.tsBlackMedium14,
+                      style: AppStyles.tsBlackMedium12,
                     ),
-                     Text(
+                    Text(
                       'ROI',
-                      style: AppStyles.tsBlackMedium14,
+                      style: AppStyles.tsBlackMedium12,
                     ),
                   ],
                 ),
@@ -63,22 +64,40 @@ class CentreCardHoldings extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                     "₹$netpl",
-                     style: AppStyles.tsBlackMedium14.copyWith(
-                      color:  Colors.green ,
-                    ),
+                      invested,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: Colors.green,
+                      ),
                     ),
                     Text(
-                      "₹$plInHoldings",
-                     style: AppStyles.tsBlackMedium14.copyWith(
-                      color:  Colors.green ,
+                      currentvalue,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: Colors.green,
+                      ),
                     ),
-                    ),
-                     Text(
-                      roiHoldings,
-                     style: AppStyles.tsBlackMedium14.copyWith(
-                     color:  Colors.green ,
-                    ),
+                    Row(
+                      children: [
+                        Text(
+                          pnlInHoldings,
+                          style: AppStyles.tsBlackMedium12.copyWith(
+                            color: pnlInHoldings != null
+                                ? pnlInHoldings.startsWith('-')
+                                    ? AppColors.danger
+                                    : AppColors.success
+                                : AppColors.success,
+                          ),
+                        ),
+                        Text(
+                          '($roiHoldings%)',
+                          style: AppStyles.tsBlackMedium12.copyWith(
+                            color: roiHoldings != null
+                                ? roiHoldings.startsWith('-')
+                                    ? AppColors.danger
+                                    : AppColors.success
+                                : AppColors.success,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

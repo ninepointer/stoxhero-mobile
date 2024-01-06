@@ -41,9 +41,21 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
         ),
 
         CentreCardHoldings(
-            netpl: controller.tenxTotalPositionDetails.value.net.toString(),
-            plInHoldings: '400,00,000',
-            roiHoldings: '+0.345(3.01%)'),
+          invested: FormatHelper.formatNumbers(
+              controller.stockTotalHoldingDetails.value.net.toString(),
+              decimal: 2),
+          currentvalue: FormatHelper.formatNumbers(
+              controller.stockTotalHoldingDetails.value.currentvalue.toString(),
+              decimal: 2),
+          roiHoldings: FormatHelper.formatNumbers(
+            controller.stockTotalHoldingDetails.value.roi.toString(),
+            decimal: 2,
+            showSymbol: false,
+          ),
+          pnlInHoldings: FormatHelper.formatNumbers(
+              controller.stockTotalHoldingDetails.value.pnl.toString(),
+              decimal: 2),
+        ),
         // cards ka UI
 
         Positioned(

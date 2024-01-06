@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
-import 'package:stoxhero/src/modules/stocks/widget/portfolio_centre_card_positions.dart';
+import 'package:stoxhero/src/modules/stocks/widget/portfolio_centre_card_Positions.dart';
 import 'package:stoxhero/src/modules/stocks/widget/portfolio_positions_card.dart';
+
+import '../../../../../app/app.dart';
 
 class PortfolioPosition extends StatefulWidget {
   const PortfolioPosition({Key? key}) : super(key: key);
@@ -39,10 +41,22 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           ),
         ),
 
-        CentreCardPositions(
-          netpl: '3',
-          plInPosition: '4',
-          roiPositions: '+0.345(3.01%)',
+        CentreCardinPositions(
+          invested: FormatHelper.formatNumbers(
+              controller.stockTotalPositionDetails.value.net.toString(),
+              decimal: 2),
+          currentvalue: FormatHelper.formatNumbers(
+              controller.stockTotalPositionDetails.value.currentvalue
+                  .toString(),
+              decimal: 2),
+          roiPositions: FormatHelper.formatNumbers(
+              controller.stockTotalPositionDetails.value.roi.toString(),
+              decimal: 2,
+              showSymbol: false),
+          pnlInPosition: FormatHelper.formatNumbers(
+            controller.stockTotalPositionDetails.value.pnl.toString(),
+            decimal: 2,
+          ),
         ),
 
         Positioned(
@@ -73,11 +87,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
               );
             },
           ),
-
-          
         ),
-
-
       ],
     );
   }

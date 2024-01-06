@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:stoxhero/src/modules/stocks/widget/stock_total_holding_details.dart';
+import 'package:stoxhero/src/modules/stocks/widget/stock_total_position_details.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
 
@@ -13,6 +15,9 @@ class StocksTradingBinding implements Bindings {
 class StocksTradingController extends BaseController<StocksTradingRepository> {
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
+
+  final isPendingOrderStateLoading = false.obs;
+  bool get isPendingOrderStateLoadingStatus => isPendingOrderStateLoading.value;
 
   final isOrderStateLoading = false.obs;
   bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
@@ -44,6 +49,10 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final selectedStopLossQuantity = 0.obs;
   final stoplossQuantityList = <StoplossQuantityData>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
+
+  final stockTotalPositionDetails = StockTotalPositionDetails().obs;
+  final stockTotalHoldingDetails = StockTotalHoldingDetails().obs;
+
   final marginRequired = StockMarginRequiredResponse().obs;
   final stocksPortfolio = StocksTradingPortfolio().obs;
 
@@ -67,7 +76,9 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final selectedType = "".obs;
   final productType = "".obs;
   final selectedQuantity = 0.obs;
-  final quanitityTextController = TextEditingController();
+  final stopLossQuantityTextController = TextEditingController();
+  final quantityTextController = TextEditingController();
+  final stopProfitQuantityTextController = TextEditingController();
   final selectedWatchlistIndex = RxInt(-1);
   final tradingInstruments = <StockWatchlistSearchData>[].obs;
   final searchTextController = TextEditingController();
@@ -80,6 +91,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
   final equityInstrumentDetailList = <EquityInstrumentDetail>[].obs;
   final stockTradeTodaysOrdersList = <StockTodayTradeOrder>[].obs;
+  final stockfundsmargin = StockFundsMargin().obs;
 
   Future loadData() async {
     loadUserDetails();
@@ -138,7 +150,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
               }
             },
           );
-          print("hello${tradingInstrumentTradeDetailsList}");
+          // print("hello${tradingInstrumentTradeDetailsList}");
         },
       );
     } on Exception catch (e) {
@@ -456,7 +468,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         SnackbarHelper.showSnackbar('Trade Successful');
         await getStockPositionsList();
         // await getStopLossPendingOrder();
-        // await getVirtualTodayOrderList();
+        await getStockTodayOrderList();
         await getStocksTradingPortfolio();
         selectedStringQuantity("");
         stopLossPriceTextController.text = '';
@@ -671,22 +683,40 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     num totalBrokerage = 0;
     num totalGross = 0;
     num totalNet = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
     for (var position in stockPositionsList) {
       if (position.iId?.isLimit ?? false) {
       } else {
         totalLots += position.lots ?? 0;
         totalBrokerage += position.brokerage ?? 0;
         totalGross += position.lastaverageprice ?? 0;
-        totalNet += position.amount ?? 0;
+        totalNet += position.amount?.abs() ?? 0;
+        totalCurrentValue += (position.lastaverageprice?.abs() ?? 0) *
+            (position.lots?.abs() ?? 0);
+        totalRoi = ((totalNet - totalCurrentValue) * 100) / totalNet;
+        totalPnl = (totalNet - totalCurrentValue);
+        // totalRoi += calculateGrossROI(
+        //   position.amount ?? 0,
+        //   position.lots!.toInt(),
+        //   getInstrumentLastPrice(
+        //     position.iId!.instrumentToken!,
+        //     position.iId!.exchangeInstrumentToken!,
+        //   ),
+        // );
       }
     }
 
-    tenxTotalPositionDetails(
-      TenxTotalPositionDetails(
+    stockTotalPositionDetails(
+      StockTotalPositionDetails(
         lots: totalLots,
         brokerage: totalBrokerage,
         gross: totalGross,
         net: totalNet,
+        currentvalue: totalCurrentValue,
+        roi: totalRoi,
+        pnl: totalPnl,
       ),
     );
   }
@@ -718,24 +748,44 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     num totalBrokerage = 0;
     num totalGross = 0;
     num totalNet = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
     for (var holding in stockHoldingsList) {
       if (holding.iId?.isLimit ?? false) {
       } else {
         totalLots += holding.lots ?? 0;
         totalBrokerage += holding.brokerage ?? 0;
-        totalGross += holding.lastaverageprice ?? 0;
-        totalNet += holding.amount ?? 0;
+        totalGross += holding.lastaverageprice?.abs() ?? 0;
+        totalNet += holding.amount?.abs() ?? 0;
+        totalCurrentValue +=
+            (holding.lastaverageprice?.abs() ?? 0) * (holding.lots?.abs() ?? 0);
+        totalRoi = ((totalNet - totalCurrentValue) * 100) / totalNet;
+        totalPnl = (totalNet - totalCurrentValue);
+        // totalRoi += calculateGrossROI(
+        //   holding.amount ?? 0,
+        //   holding.lots!.toInt(),
+        //   getInstrumentLastPrice(
+        //     holding.iId!.instrumentToken!,
+        //     holding.iId!.exchangeInstrumentToken!,
+        //   ),
+        // );
       }
     }
-    tenxTotalPositionDetails(
-      TenxTotalPositionDetails(
+
+    print('totalCurrentValue${totalRoi}');
+    stockTotalHoldingDetails(
+      StockTotalHoldingDetails(
         lots: totalLots,
         brokerage: totalBrokerage,
         gross: totalGross,
         net: totalNet,
+        currentvalue: totalCurrentValue,
+        roi: totalRoi,
+        pnl: totalPnl,
       ),
     );
-   // print("kind${tenxTotalPositionDetails.value.toJson()}");
   }
 
   Future getVirtualPendingStoplossOrderData(String id) async {
@@ -794,5 +844,85 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     num roi = (pnl / avg.abs()) * 100;
 
     return roi;
+  }
+
+  List<int> generateLotsList({String? type}) {
+    List<int> result = [];
+
+    selectedQuantity.value = result[0];
+    lotsValueList.assignAll(result);
+    return result;
+  }
+
+  Future pendingOrderModify(
+      TransactionType type, TradingInstrument inst) async {
+    isPendingOrderStateLoading(true);
+    if (type == TransactionType.exit) {
+      if (selectedStringQuantity.value.contains('-')) {
+        type = TransactionType.buy;
+      } else {
+        type = TransactionType.sell;
+      }
+    } else {
+      if (selectedStringQuantity.value.contains('-')) {
+        if (type == TransactionType.buy) {
+          type = TransactionType.sell;
+        } else {
+          type = TransactionType.buy;
+        }
+      }
+    }
+    StockPendingOrderModifyRequest data = StockPendingOrderModifyRequest(
+      exchange: inst.exchange,
+      buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
+      // quantity: selectedQuantity.value,
+      product: "NRML",
+      orderType: "SL/SP-M",
+      exchangeInstrumentToken: inst.exchangeToken,
+      instrumentToken: inst.instrumentToken,
+      stopLossPrice: stopLossPriceTextController.text,
+      stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
+      symbol: inst.tradingsymbol,
+      validity: "DAY",
+
+      id: stockfundsmargin.value.portfolioId, //  id: virtualPortfolio.value.portfolioId(in virtual)
+      lastPrice: inst.lastPrice.toString(),
+      variety: "regular",
+      stock: "paperTrade",
+      deviceDetails: DeviceDetails(
+        deviceType: 'Mobile',
+        platformType: Platform.isAndroid ? 'Android' : 'iOS',
+      ),
+    );
+    print('PendingOrderModifyRequest : ${data.toJson()}');
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.pendingOrderModify(
+        data.toJson(),
+      );
+      Get.back();
+      print("type in991 ${response.data.toString()}");
+
+      if (response.data?.status == "Success") {
+        SnackbarHelper.showSnackbar(response.data?.message);
+        // await getStopLossPendingOrder();
+        // await getVirtualTodayOrderList();
+        selectedStringQuantity("");
+
+        print(
+            "typein1001 ${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
+      } else if (response.data?.status == "Failed") {
+        print(response.error!.message!.toString());
+        SnackbarHelper.showSnackbar(response.error?.message);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
   }
 }

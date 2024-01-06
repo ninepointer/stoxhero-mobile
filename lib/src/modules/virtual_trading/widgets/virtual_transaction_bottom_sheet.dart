@@ -16,6 +16,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
 
   @override
   Widget build(BuildContext context) {
+
     controller.selectedGroupValue.value = 2;
     controller.selectedType.value = 'MARKET';
     return Obx(

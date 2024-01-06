@@ -56,46 +56,43 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(children: [
-                      if (controller.stockIndexDetailsList.isNotEmpty &&
-                          controller.stockIndexInstrumentList.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              for (var item
-                                  in controller.stockIndexDetailsList) ...[
-                                IndexCard(
-                                  label: controller.getStockIndexName(
-                                      item.instrumentToken ?? 0),
-                                  stockPrice: FormatHelper.formatNumbers(
-                                    item.lastPrice,
-                                  ),
-                                  stockColor: controller.getValueColor(
-                                    item.lastPrice! - (item.ohlc?.close ?? 0),
-                                  ),
-                                  stockLTP: FormatHelper.formatNumbers(
-                                    item.lastPrice! - (item.ohlc?.close ?? 0),
-                                  ),
-                                  stockChange:
-                                      '(${item.change?.toStringAsFixed(2)}%)',
-                                  stockLTPColor: controller.getValueColor(
-                                    item.lastPrice! - (item.ohlc?.close ?? 0),
-                                  ),
+                  Row(children: [
+                    if (controller.stockIndexDetailsList.isNotEmpty &&
+                        controller.stockIndexInstrumentList.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            for (var item
+                                in controller.stockIndexDetailsList) ...[
+                              IndexCard(
+                                label: controller.getStockIndexName(
+                                    item.instrumentToken ?? 0),
+                                stockPrice: FormatHelper.formatNumbers(
+                                  item.lastPrice,
                                 ),
-                                if (item !=
-                                    controller.stockIndexDetailsList.last)
-                                  SizedBox(width: 4),
-                              ]
-                            ],
-                          ),
+                                stockColor: controller.getValueColor(
+                                  item.lastPrice! - (item.ohlc?.close ?? 0),
+                                ),
+                                stockLTP: FormatHelper.formatNumbers(
+                                  item.lastPrice! - (item.ohlc?.close ?? 0),
+                                ),
+                                stockChange:
+                                    '(${item.change?.toStringAsFixed(2)}%)',
+                                stockLTPColor: controller.getValueColor(
+                                  item.lastPrice! - (item.ohlc?.close ?? 0),
+                                ),
+                              ),
+                              if (item !=
+                                  controller.stockIndexDetailsList.last)
+                                SizedBox(width: 4),
+                            ]
+                          ],
                         ),
-                    ]),
-                  ),
+                      ),
+                  ]),
                   Container(
                     child: CustomExpansionTile(
                       invested: '929360',
@@ -128,6 +125,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                               borderRadius: BorderRadius.circular(25),
                             ),
                             controller: _tabController,
+                         
                             tabs: [
                               Tab(
                                 text:

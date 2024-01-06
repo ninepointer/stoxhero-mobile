@@ -115,7 +115,7 @@ class OrdersCard extends StatelessWidget {
                       ),
                       Text(
                         " Quantity",
-                        style: AppStyles.tsBlackMedium12,
+                        style: AppStyles.tsGreyRegular12,
                       ),
                     ],
                   ),
@@ -138,7 +138,7 @@ class OrdersCard extends StatelessWidget {
                   ),
                   Text(
                     //timestamp,
-                    FormatHelper.formatDateTime(order.tradeTime),
+                    FormatHelper.formatDateTimeToIST(order.tradeTime),
                     style: AppStyles.tsBlackMedium14,
                   ),
                 ],

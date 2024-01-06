@@ -61,6 +61,7 @@ class VirtualTradingController
   final stopProfitPriceTextController = TextEditingController();
   final quanitityTextController = TextEditingController();
   final limitPriceTextController = TextEditingController();
+  
   final virtualPortfolio = VirtualTradingPortfolio().obs;
 
   final tradingInstrumentTradeDetailsList =

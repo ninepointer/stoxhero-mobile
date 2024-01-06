@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import '../../../core/core.dart';
 
-class CentreCardPositions extends StatelessWidget {
-  const CentreCardPositions({
+class CentreCardinPositions extends StatelessWidget {
+  const CentreCardinPositions({
     Key? key,
-    required this.netpl,
-    required this.plInPosition,
+    required this.invested,
+    required this.currentvalue,
     required this.roiPositions,
+    required this.pnlInPosition,
   }) : super(key: key);
 
-  final String netpl;
-  final String plInPosition;
+  final String invested;
+  final String currentvalue;
   final String roiPositions;
+  final String pnlInPosition;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
-        margin: EdgeInsets.only(left: 40, right: 40),
+        margin: EdgeInsets.only(left: 30, right: 30),
         padding: EdgeInsets.symmetric(horizontal: 20),
         height: 70,
         decoration: BoxDecoration(
@@ -45,15 +47,15 @@ class CentreCardPositions extends StatelessWidget {
                   children: [
                     Text(
                       'Invested',
-                      style: AppStyles.tsBlackMedium14,
+                      style: AppStyles.tsBlackRegular12,
                     ),
                     Text(
                       'Current Value',
-                      style: AppStyles.tsBlackMedium14,
+                      style: AppStyles.tsBlackRegular12,
                     ),
                     Text(
                       'ROI',
-                      style: AppStyles.tsBlackMedium14,
+                      style: AppStyles.tsBlackRegular12,
                     ),
                   ],
                 ),
@@ -62,22 +64,41 @@ class CentreCardPositions extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "₹$netpl",
-                      style: AppStyles.tsBlackMedium14.copyWith(
+                      invested,
+                      style: AppStyles.tsBlackRegular12.copyWith(
                         color: Colors.green,
                       ),
                     ),
                     Text(
-                      "₹$plInPosition",
-                      style: AppStyles.tsBlackMedium14.copyWith(
+                      currentvalue,
+                      style: AppStyles.tsBlackRegular12.copyWith(
                         color: Colors.green,
                       ),
                     ),
-                    Text(
-                      roiPositions,
-                      style: AppStyles.tsBlackMedium14.copyWith(
-                        color: Colors.green,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          pnlInPosition,
+                          style: AppStyles.tsBlackRegular12.copyWith(
+                            color: pnlInPosition != null
+                                ? pnlInPosition.startsWith('-')
+                                    ? AppColors.danger
+                                    : AppColors.success
+                                : AppColors
+                                    .success, // Replace AppColors.defaultColor with your desired default color
+                          ),
+                        ),
+                        Text(
+                          '($roiPositions%)',
+                          style: AppStyles.tsBlackRegular12.copyWith(
+                            color: roiPositions != null
+                                ? roiPositions.startsWith('-')
+                                    ? AppColors.danger
+                                    : AppColors.success
+                                : AppColors.success,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
