@@ -25,11 +25,17 @@ class OrdersController extends BaseController<OrdersRepository> {
   final itemsPerPage = 0.obs;
   final isLoadingMore = false.obs;
 
+  final stockCurrentPage = 0.obs;
+  final stockTotalItems = 0.obs;
+  final stockItemsPerPage = 0.obs;
+  final isStockLoadingMore = false.obs;
+
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
   final selectedTabBarIndex = 0.obs;
   final selectedSecondTabBarIndex = 0.obs;
   final segmentedControlValue = 0.obs;
+  final equitySegmentedControlValue = 0.obs;
   final selectedItem1 = ''.obs;
   final selectedItem2 = ''.obs;
   final dropdownItems1 = <String>[].obs;
@@ -40,6 +46,8 @@ class OrdersController extends BaseController<OrdersRepository> {
   final tenxTrade = TenxTradeOrder().obs;
   final virtualTradeTodaysOrdersList = <VirtualTradeOrder>[].obs;
   final virtualTradeAllOrdersList = <VirtualTradeOrder>[].obs;
+  final stocksTradeAllOrdersList = <StocksAllOrderData>[].obs;
+  final stocksTradeTodayOrdersList = <StocksAllOrderData>[].obs;
   final tenXSubscription = <TenXSubscription>[].obs;
   final selectedTenXSub = TenXSubscription().obs;
   final selectedTenxSubDate = UserPurchaseDetail().obs;
@@ -52,6 +60,9 @@ class OrdersController extends BaseController<OrdersRepository> {
   void changeSegment(int val) => segmentedControlValue.value = val;
   void handleSegmentChange(int val) => changeSegment(val);
 
+  void equityChangeSegment(int val) => equitySegmentedControlValue.value = val;
+  void equityHandleSegmentChange(int val) => equityChangeSegment(val);
+
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
   void loadData() async {
@@ -61,23 +72,42 @@ class OrdersController extends BaseController<OrdersRepository> {
     await getTenXSubscriptionList();
     await getVirtualTradeTodaysOrdersList();
     await getVirtualTradeAllOrdersList();
-
-    _scrollController.addListener(loadMoreOrders);
-    // itemsPerPage.value = 20;
-    // totalItems.value = virtualTradeAllOrdersList.length;
+    await getStocksTradeAllOrdersList();
+    await getStocksTradeTodaysOrdersList();
   }
 
   void loadMoreOrders() {
     if (!isLoadingMore.value) {
       isLoadingMore.value = true;
       currentPage.value++;
-
+      if (itemsPerPage.value == 0) {
+        isLoadingMore.value = false;
+        return;
+      }
       final lastPage = (totalItems.value / itemsPerPage.value).ceil();
       print("lastpage ${lastPage} ${totalItems.value} ${itemsPerPage.value}");
-      if (currentPage.value < lastPage) {
-        isLoadingMore.value = false;
+      if (currentPage.value >= lastPage) {
+        isLoadingMore.value = true;
       } else {
         getVirtualTradeAllOrdersList();
+      }
+    }
+  }
+
+  void stocksLoadMoreOrders() {
+    if (!isStockLoadingMore.value) {
+      isStockLoadingMore.value = true;
+      stockCurrentPage.value++;
+      if (stockItemsPerPage.value == 0) {
+        isStockLoadingMore.value = false;
+        return;
+      }
+
+      final lastPage = (stockTotalItems.value / stockItemsPerPage.value).ceil();
+      if (stockCurrentPage.value < lastPage) {
+        getStocksTradeAllOrdersList();
+      } else {
+        isStockLoadingMore.value = false;
       }
     }
   }
@@ -179,10 +209,16 @@ class OrdersController extends BaseController<OrdersRepository> {
           await repository.getVirtualTradeAllOrdersList(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          virtualTradeAllOrdersList(response.data?.data ?? []);
+          virtualTradeAllOrdersList.addAll(response.data?.data ?? []);
+          totalItems(response.data?.count);
           itemsPerPage(20);
-          totalItems(virtualTradeAllOrdersList.length);
-
+          int remainingItem =
+              (response.data?.count ?? 0) - (virtualTradeAllOrdersList.length);
+          if (remainingItem < itemsPerPage.value) {
+            itemsPerPage(remainingItem);
+          }
+          print(
+              "tottalitems ${totalItems.value} ${virtualTradeAllOrdersList.length}");
           print(
               "virtualTradeAllOrdersList ${virtualTradeAllOrdersList.toJson()}");
         }
@@ -196,6 +232,64 @@ class OrdersController extends BaseController<OrdersRepository> {
       isLoadingMore.value = false;
     }
   }
+
+//gdrsgdr
+//rhtrh
+  Future getStocksTradeTodaysOrdersList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<StocksAllOrderResponse> response =
+          await repository.getStocksTradeTodaysOrdersList();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          stocksTradeTodayOrdersList(response.data?.data ?? []);
+          print("stocksTradeOrdersList ${stocksTradeTodayOrdersList.toJson()}");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future getStocksTradeAllOrdersList() async {
+    try {
+      isStockLoadingMore.value = true;
+      int skip = stockCurrentPage.value * stockItemsPerPage.value;
+      Map<String, dynamic> query = {
+        "skip": skip,
+        "limit": stockItemsPerPage.value,
+      };
+      final RepoResponse<StocksAllOrderResponse> response =
+          await repository.getStocksTradeAllOrdersList(query);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          stocksTradeAllOrdersList.addAll(response.data?.data ?? []);
+
+          stockTotalItems(response.data?.count);
+          stockItemsPerPage(10);
+          int remainingItem =
+              (response.data?.count ?? 0) - (stocksTradeAllOrdersList.length);
+          if (remainingItem < stockItemsPerPage.value) {
+            stockItemsPerPage(remainingItem);
+            isStockLoadingMore.value = false;
+          }
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isStockLoadingMore.value = false;
+    }
+  }
+//rhrreh
+//rhrhbg
 
   Future getTenXSubscriptionList() async {
     isLoading(true);

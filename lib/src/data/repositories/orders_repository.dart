@@ -62,6 +62,25 @@ class OrdersRepository extends BaseRepository {
         : RepoResponse(data: VirtualTradeOrdersListResponse.fromJson(response));
   }
 
+  Future<RepoResponse<StocksAllOrderResponse>> getStocksTradeAllOrdersList(
+    Map<String, dynamic> query,
+  ) async {
+    String apiURL = AppUrls.stocksAllOrder;
+    var response = await service.getAuth(path: apiURL, query: query);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StocksAllOrderResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StocksAllOrderResponse>>
+      getStocksTradeTodaysOrdersList() async {
+    String apiURL = AppUrls.stocksTodayOrder;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StocksAllOrderResponse.fromJson(response));
+  }
+
   Future<RepoResponse<TenXSubscriptionResponse>>
       getTenXSubscriptionList() async {
     String apiURL = AppUrls.tenxSubscription;
