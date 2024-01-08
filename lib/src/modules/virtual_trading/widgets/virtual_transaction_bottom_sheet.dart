@@ -179,6 +179,8 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                       ),
                     ),
                   ),
+
+                  
                   if (controller.selectedGroupValue.value == 1) ...[
                     SizedBox(height: 8),
                     CommonTextField(

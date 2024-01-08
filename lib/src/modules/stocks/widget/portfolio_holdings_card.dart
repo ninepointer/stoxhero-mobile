@@ -17,7 +17,7 @@ class HoldingsCard extends StatefulWidget {
     // required this.currentvalue,
     // required this.invested,
     required this.holding,
-  //  required this.imagePath,
+    //  required this.imagePath,
   }) : super(key: key);
 
   // final String title;
@@ -26,7 +26,7 @@ class HoldingsCard extends StatefulWidget {
   // final String currentvalue;
   // final String invested;
   final StockTradingHolding holding;
- // final String imagePath;
+  // final String imagePath;
 
   @override
   State<HoldingsCard> createState() => _HoldingsCardState();
@@ -221,9 +221,14 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  FormatHelper.formatNumbers(
-                                      widget.holding.amount?.abs().toString(),
-                                      decimal: 2),
+                                  (widget.holding.lots == 0)
+                                      ? '₹0.00'
+                                      : FormatHelper.formatNumbers(
+                                          widget.holding.amount
+                                              ?.abs()
+                                              .toString(),
+                                          decimal: 2,
+                                        ),
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -278,7 +283,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 ),
                                 Text(
                                   //percentage change ROI,
-                                  '(${FormatHelper.formatNumbers(controller.calculateGrossROI(
+                                  '(${(((widget.holding.lastaverageprice ?? 0) * (widget.holding.lots?.abs() ?? 0)) == 0) ? '0.00' : FormatHelper.formatNumbers(controller.calculateGrossROI(
                                         widget.holding.amount ?? 0,
                                         widget.holding.lots!.toInt(),
                                         controller.getInstrumentLastPrice(
@@ -462,6 +467,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                       widget.holding.iId!.exchangeInstrumentToken!,
                     ),
                   );
+                  controller.selectedOrderGroupValue.value = 1;
+                  //for the same value of lots in exit text field
+                  controller.quantityTextController.text =
+                      widget.holding.lots.toString();
                   BottomSheetHelper.openBottomSheet(
                     context: context,
                     child: StockTransactionBottomSheet(

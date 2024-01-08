@@ -88,10 +88,3 @@ class _PortfolioState extends State<holding>
   }
 }
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: holding(),
-    ),
-  );
-}

@@ -59,7 +59,7 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
         // cards ka UI
 
         Positioned(
-          top: 80, // Adjust the top position as needed
+          top: 90, // Adjust the top position as needed
           left: 0,
           right: 0,
           bottom: 0,
@@ -79,7 +79,7 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
                     // percentage: position.percentage,
                     // quantity: position.quantity.toString(),
                     // ltp: "₹${position.ltp}",
-                   // imagePath: 'assets/images/10Xlogo.jpg',
+                    // imagePath: 'assets/images/10Xlogo.jpg',
                   );
                   // Add more cards as needed
                 },

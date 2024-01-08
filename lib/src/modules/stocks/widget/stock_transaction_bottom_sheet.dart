@@ -18,8 +18,11 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
 
   @override
   Widget build(BuildContext context) {
+    // controller.selectedOrderGroupValue.value = 2;
+
     controller.selectedGroupValue.value = 2;
     controller.selectedType.value = 'MARKET';
+    
     return Obx(
       () => Wrap(
         children: [
@@ -464,10 +467,10 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                                   //   decimal: 2,
                                   // ),
                                   FormatHelper.formatNumbers(
-                                  controller
-                                      .calculateMargin()
-                                      .round()
-                                      .toString(),
+                                    controller
+                                        .calculateMargin()
+                                        .round()
+                                        .toString(),
                                   ),
                                   style: Theme.of(context).textTheme.tsMedium14,
                                 ),

@@ -22,7 +22,7 @@ class CentreCardinPositions extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(left: 30, right: 30),
         padding: EdgeInsets.symmetric(horizontal: 20),
-        height: 70,
+        height: 80,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
@@ -37,7 +37,7 @@ class CentreCardinPositions extends StatelessWidget {
         ),
         child: Container(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -46,15 +46,19 @@ class CentreCardinPositions extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
+                      'Holding P&L',
+                      style: AppStyles.tsBlackMedium12,
+                    ),
+                    Text(
+                      'ROI',
+                      style: AppStyles.tsBlackMedium12,
+                    ),
+                    Text(
                       'Invested',
                       style: AppStyles.tsBlackMedium12,
                     ),
                     Text(
                       'Current Value',
-                      style: AppStyles.tsBlackMedium12,
-                    ),
-                    Text(
-                      'ROI',
                       style: AppStyles.tsBlackMedium12,
                     ),
                   ],
@@ -63,6 +67,27 @@ class CentreCardinPositions extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    Text(
+                      pnlInPosition,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: pnlInPosition != null
+                            ? pnlInPosition.startsWith('-')
+                                ? AppColors.danger
+                                : AppColors.success
+                            : AppColors
+                                .success, // Replace AppColors.defaultColor with your desired default color
+                      ),
+                    ),
+                    Text(
+                      '${(invested == 0 || roiPositions == null) ? '0.00' : roiPositions}%',
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: roiPositions != null
+                            ? roiPositions.startsWith('-')
+                                ? AppColors.danger
+                                : AppColors.success
+                            : AppColors.success,
+                      ),
+                    ),
                     Text(
                       invested,
                       style: AppStyles.tsBlackMedium12.copyWith(
@@ -74,31 +99,6 @@ class CentreCardinPositions extends StatelessWidget {
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: Colors.green,
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          pnlInPosition,
-                          style: AppStyles.tsBlackMedium12.copyWith(
-                            color: pnlInPosition != null
-                                ? pnlInPosition.startsWith('-')
-                                    ? AppColors.danger
-                                    : AppColors.success
-                                : AppColors
-                                    .success, // Replace AppColors.defaultColor with your desired default color
-                          ),
-                        ),
-                        Text(
-                          '($roiPositions%)',
-                          style: AppStyles.tsBlackMedium12.copyWith(
-                            color: roiPositions != null
-                                ? roiPositions.startsWith('-')
-                                    ? AppColors.danger
-                                    : AppColors.success
-                                : AppColors.success,
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),

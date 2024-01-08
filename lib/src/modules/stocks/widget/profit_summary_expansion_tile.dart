@@ -13,7 +13,7 @@ class CustomExpansionTile extends StatefulWidget {
     //  required this.percentage,
     // required this.currentvalue,
     // required this.availablemargin,
-    required this.marginmoney,
+    //required this.marginmoney,
     //  required this.marginused,
     // required this.openpositions,
   }) : super(key: key);
@@ -23,7 +23,7 @@ class CustomExpansionTile extends StatefulWidget {
   // final String percentage;
   // final String currentvalue;
   // final String availablemargin;
-  final String marginmoney;
+  // final String marginmoney;
   // final String marginused;
   // final String openpositions;
 
@@ -55,12 +55,22 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
     // num TotalOpenPositions = (controller.getOpenPositionCount()) +
     //     (controller.getOpenHoldingCount());
 
-    num finalpnl = CurrentValue - InvestedValue;
+    // num finalpnl = CurrentValue - InvestedValue;
 
-    num finalROI = (finalpnl * 100) / InvestedValue;
+    // num finalROI = (finalpnl * 100) / InvestedValue;
 
     num MarginUsed = controller.stockfundsmargin.value.totalFund! -
         controller.calculateMargin().round();
+
+    num OPenPositions =
+        controller.getOpenPositionCount() + controller.getOpenHoldingCount();
+
+    num PnL = ((controller.stockTotalHoldingDetails.value.pnl ?? 0) +
+        (controller.stockTotalPositionDetails.value.pnl ?? 0));
+
+    num brokerage =
+        ((controller.stockTotalHoldingDetails.value.brokerage ?? 0) +
+            (controller.stockTotalPositionDetails.value.brokerage ?? 0));
 
     return Column(
       children: [
@@ -199,13 +209,14 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                       //                 .net ??
                                       //             0)))),
 
-                                      FormatHelper.formatNumbers(finalpnl,
+                                      FormatHelper.formatNumbers(
+                                          (PnL - brokerage),
                                           decimal: 2),
                                       style: AppStyles.tsBlackMedium16),
-                                  Text(
-                                    '(${FormatHelper.formatNumbers(finalROI, decimal: 2, showSymbol: false)}%)',
-                                    style: AppStyles.tsBlackMedium14,
-                                  ),
+                                  // Text(
+                                  //   '(${FormatHelper.formatNumbers(finalROI, decimal: 2, showSymbol: false)}%)',
+                                  //   style: AppStyles.tsBlackMedium14,
+                                  // ),
                                 ],
                               ),
                               SizedBox(height: 5),
@@ -251,12 +262,13 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                               ),
                               Text(
                                 // TotalOpenPositions.toString(),
-                                ((controller
-                                        .getOpenPositionCount()
-                                        .toString()) +
-                                    (controller
-                                        .getOpenHoldingCount()
-                                        .toString())),
+                                OPenPositions.toString(),
+                                // ((controller
+                                //         .getOpenPositionCount()
+                                //         .toString()) +
+                                //     (controller
+                                //         .getOpenHoldingCount()
+                                //         .toString())),
                                 style: AppStyles.tsBlackMedium14,
                               ),
                             ],

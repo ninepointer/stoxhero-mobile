@@ -20,9 +20,9 @@ class CentreCardHoldings extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
-        margin: EdgeInsets.only(left: 40, right: 40),
+        margin: EdgeInsets.only(left: 30, right: 30),
         padding: EdgeInsets.symmetric(horizontal: 20),
-        height: 70,
+        height: 80,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
@@ -37,7 +37,7 @@ class CentreCardHoldings extends StatelessWidget {
         ),
         child: Container(
           child: Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -46,15 +46,19 @@ class CentreCardHoldings extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
+                      'Holding P&L',
+                      style: AppStyles.tsBlackMedium12,
+                    ),
+                    Text(
+                      'ROI',
+                      style: AppStyles.tsBlackMedium12,
+                    ),
+                    Text(
                       'Invested',
                       style: AppStyles.tsBlackMedium12,
                     ),
                     Text(
                       'Current Value',
-                      style: AppStyles.tsBlackMedium12,
-                    ),
-                    Text(
-                      'ROI',
                       style: AppStyles.tsBlackMedium12,
                     ),
                   ],
@@ -63,6 +67,32 @@ class CentreCardHoldings extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    Text(
+                      pnlInHoldings,
+                      //  (invested == 0)
+                      //     ? '₹0.00'
+                      //     : FormatHelper.formatNumbers(
+                      //         pnlInHoldings,
+                      //         decimal: 2,
+                      //       ),
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: pnlInHoldings != null
+                            ? pnlInHoldings.startsWith('-')
+                                ? AppColors.danger
+                                : AppColors.success
+                            : AppColors.success,
+                      ),
+                    ),
+                    Text(
+                      '${(invested == 0 || roiHoldings == null) ? '0.00' : roiHoldings}%',
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: roiHoldings != null
+                            ? roiHoldings.startsWith('-')
+                                ? AppColors.danger
+                                : AppColors.success
+                            : AppColors.success,
+                      ),
+                    ),
                     Text(
                       invested,
                       style: AppStyles.tsBlackMedium12.copyWith(
@@ -74,30 +104,6 @@ class CentreCardHoldings extends StatelessWidget {
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: Colors.green,
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          pnlInHoldings,
-                          style: AppStyles.tsBlackMedium12.copyWith(
-                            color: pnlInHoldings != null
-                                ? pnlInHoldings.startsWith('-')
-                                    ? AppColors.danger
-                                    : AppColors.success
-                                : AppColors.success,
-                          ),
-                        ),
-                        Text(
-                          '($roiHoldings%)',
-                          style: AppStyles.tsBlackMedium12.copyWith(
-                            color: roiHoldings != null
-                                ? roiHoldings.startsWith('-')
-                                    ? AppColors.danger
-                                    : AppColors.success
-                                : AppColors.success,
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),

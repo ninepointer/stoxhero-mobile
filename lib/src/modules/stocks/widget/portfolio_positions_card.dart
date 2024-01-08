@@ -9,7 +9,7 @@ class PositionsCard extends StatefulWidget {
   const PositionsCard({
     Key? key,
 
-    required this.imagePath,
+    // required this.imagePath,
     required this.position,
   }) : super(key: key);
 
@@ -19,7 +19,7 @@ class PositionsCard extends StatefulWidget {
   // final String ltp;
   // final String averageprice;
   final StockTradingPosition position;
-  final String imagePath;
+  // final String imagePath;
 
   @override
   State<PositionsCard> createState() => _PositionsCardState();
@@ -217,9 +217,14 @@ class _PositionsCardState extends State<PositionsCard> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  FormatHelper.formatNumbers(
-                                      widget.position.amount?.abs().toString(),
-                                      decimal: 2),
+                                  (widget.position.lots == 0)
+                                      ? '₹0.00'
+                                      : FormatHelper.formatNumbers(
+                                          widget.position.amount
+                                              ?.abs()
+                                              .toString(),
+                                          decimal: 2,
+                                        ),
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -239,6 +244,7 @@ class _PositionsCardState extends State<PositionsCard> {
                             Row(
                               children: [
                                 Text(
+                                  //pnl in positions
                                   widget.position.lots == 0
                                       ? FormatHelper.formatNumbers(
                                           widget.position.amount)
@@ -274,7 +280,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                 ),
                                 Text(
                                   //percentage change ROI,
-                                  '(${FormatHelper.formatNumbers(controller.calculateGrossROI(
+                                  '(${(((widget.position.lastaverageprice ?? 0) * (widget.position.lots?.abs() ?? 0)) == 0) ? '0.00' : FormatHelper.formatNumbers(controller.calculateGrossROI(
                                         widget.position.amount ?? 0,
                                         widget.position.lots!.toInt(),
                                         controller.getInstrumentLastPrice(
@@ -460,6 +466,11 @@ class _PositionsCardState extends State<PositionsCard> {
                       widget.position.iId!.exchangeInstrumentToken!,
                     ),
                   );
+                  
+                  controller.selectedOrderGroupValue.value = 2;
+                  //for the same value of lots in exit text field
+                  controller.quantityTextController.text =
+                      widget.position.lots.toString();
                   BottomSheetHelper.openBottomSheet(
                     context: context,
                     child: StockTransactionBottomSheet(

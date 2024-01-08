@@ -1,27 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class Funds extends StatelessWidget {
+import '../../../../core/core.dart';
+import '../../controllers/stocks_controller.dart';
+
+class Funds extends StatefulWidget {
   const Funds({
     Key? key,
-    required this.marginavailable,
-    required this.usedmargin,
-    required this.allocatedmargin,
-    required this.investmentamount,
-    required this.returns,
-    required this.unrealisedPL,
-    required this.returnpercentage,
+    // required this.marginavailable,
+    // required this.usedmargin,
+    // required this.allocatedmargin,
+    // required this.investmentamount,
+    // required this.returns,
+    // required this.unrealisedPL,
+   // required this.returnpercentage,
   }) : super(key: key);
 
-  final String marginavailable;
-  final String usedmargin;
-  final String allocatedmargin;
-  final String investmentamount;
-  final String returns;
-  final String unrealisedPL;
-  final String returnpercentage;
+  // final String marginavailable;
+  // final String usedmargin;
+  // final String allocatedmargin;
+  // final String investmentamount;
+  // final String returns;
+  // final String unrealisedPL;
+  //final String returnpercentage;
+
+  @override
+  State<Funds> createState() => _FundsState();
+}
+
+class _FundsState extends State<Funds> {
+  late StocksTradingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.getStockHoldingsList();
+    controller.getStockPositionsList();
+  }
 
   @override
   Widget build(BuildContext context) {
+    num CurrentValue =
+        (controller.stockTotalHoldingDetails.value.currentvalue ?? 0) +
+            (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
+
+    num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
+        (controller.stockTotalPositionDetails.value.net ?? 0);
+
+    // num TotalOpenPositions = (controller.getOpenPositionCount()) +
+    //     (controller.getOpenHoldingCount());
+
+    // num finalpnl = CurrentValue - InvestedValue;
+
+    // num finalROI = (finalpnl * 100) / InvestedValue;
+
+    num MarginUsed = controller.stockfundsmargin.value.totalFund! -
+        controller.calculateMargin().round();
+
+    num OPenPositions =
+        controller.getOpenPositionCount() + controller.getOpenHoldingCount();
+
+    num PnL = ((controller.stockTotalHoldingDetails.value.pnl ?? 0) +
+        (controller.stockTotalPositionDetails.value.pnl ?? 0));
+
+    num brokerage =
+        ((controller.stockTotalHoldingDetails.value.brokerage ?? 0) +
+            (controller.stockTotalPositionDetails.value.brokerage ?? 0));
+
+    num investmentamount =
+        (controller.stockTotalHoldingDetails.value.net ?? 0) +
+            (controller.stockTotalPositionDetails.value.net ?? 0);
+
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Container(
@@ -44,24 +94,38 @@ class Funds extends StatelessWidget {
           children: [
             FundsCard(
                 cardname: "Margin available",
-                cardvalue: marginavailable,
+                cardvalue: FormatHelper.formatNumbers(
+                  controller.calculateMargin().round().toString(),
+                  decimal: 2,
+                ),
                 index: 0),
-            FundsCard(cardname: "Used margin", cardvalue: usedmargin, index: 1),
             FundsCard(
-                cardname: "Allocated margin",
-                cardvalue: allocatedmargin,
+                cardname: "Margin Used",
+                cardvalue: FormatHelper.formatNumbers(MarginUsed, decimal: 2),
+                index: 1),
+            FundsCard(
+                cardname: "Allocated Margin",
+                cardvalue: FormatHelper.formatNumbers(
+                    controller.stockfundsmargin.value.totalFund.toString()),
                 index: 2),
             FundsCard(
-                cardname: "investmentamount",
-                cardvalue: investmentamount,
+                cardname: "Investment Amount",
+                cardvalue:
+                    FormatHelper.formatNumbers(investmentamount, decimal: 2),
                 index: 3),
-            FundsCard(cardname: "returns", cardvalue: returns, index: 4),
             FundsCard(
-                cardname: "unrealisedPL", cardvalue: unrealisedPL, index: 5),
+                cardname: "Returns",
+                cardvalue:
+                    FormatHelper.formatNumbers(PnL - brokerage, decimal: 2),
+                index: 4),
             FundsCard(
-                cardname: "Return Percentage",
-                cardvalue: returnpercentage,
-                index: 6),
+                cardname: "Unrealised P&L",
+                cardvalue: FormatHelper.formatNumbers(PnL, decimal: 2),
+                index: 5),
+            // FundsCard(
+            //     cardname: "Return Percentage",
+            //     cardvalue: widget.returnpercentage,
+            //     index: 6),
             // Add more FundsCard widgets as needed
           ],
         ),
@@ -97,7 +161,7 @@ class FundsCard extends StatelessWidget {
               children: [
                 Text(
                   cardname,
-                  // style: AppStyles.tsBlackRegular16, // Uncomment if needed
+                  style: AppStyles.tsBlackMedium16, // Uncomment if needed
                 ),
               ],
             ),

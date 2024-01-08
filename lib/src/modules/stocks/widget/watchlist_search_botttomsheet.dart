@@ -52,7 +52,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 25, left: 25, right: 25),
+              margin: EdgeInsets.only(top: 35, left: 25, right: 25),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 height: 60,
@@ -132,11 +132,12 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                 itemBuilder: (context, index) {
                   var stock = controller.tradingInstruments[index];
 
-                 // var data = controller.equityInstrumentDetailList[index];
+                  // var data = controller.equityInstrumentDetailList[index];
                   // bool isInWatchlist =
                   //     (data.instrumentToken == stock.instrumentToken);
 
-                  bool isInWatchlist = controller.equityInstrumentDetailList.value
+                  bool isInWatchlist = controller
+                      .equityInstrumentDetailList.value
                       .contains((element) =>
                           element.instrumentToken == stock.instrumentToken);
 
@@ -313,8 +314,6 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                                         controller
                                             .selectedWatchlistStock(stock);
                                         controller.addStocktoWatchlist();
-                                        print(
-                                            "Add button tapped for: ${stock.tradingsymbol}");
                                       }
                                     },
                                   )

@@ -50,17 +50,17 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
                   .toString(),
               decimal: 2),
           roiPositions: FormatHelper.formatNumbers(
-              controller.stockTotalPositionDetails.value.roi.toString(),
-              decimal: 2,
-              showSymbol: false),
-          pnlInPosition: FormatHelper.formatNumbers(
-            controller.stockTotalPositionDetails.value.pnl.toString(),
+            controller.stockTotalPositionDetails.value.roi.toString(),
             decimal: 2,
+            showSymbol: false,
           ),
+          pnlInPosition: FormatHelper.formatNumbers(
+              controller.stockTotalPositionDetails.value.pnl.toString(),
+              decimal: 2),
         ),
 
         Positioned(
-          top: 80, // Adjust the top position as needed
+          top: 90, // Adjust the top position as needed
           left: 0,
           right: 0,
           bottom: 0,
@@ -80,7 +80,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
                     // percentage: position.percentage,
                     // quantity: position.quantity.toString(),
                     // ltp: "₹${position.ltp}",
-                    imagePath: 'assets/images/10Xlogo.jpg',
+                    // imagePath: 'assets/images/10Xlogo.jpg',
                   );
                   // Add more cards as needed
                 },

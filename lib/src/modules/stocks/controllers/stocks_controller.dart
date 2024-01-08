@@ -604,25 +604,30 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   //Open Positions For Holdings and Possitions
 
   int getOpenPositionCount() {
-    int positionsopenCount = 0;
-    for (var position in stockPositionsList) {
-      if (position.iId?.isLimit ?? false) {
-      } else if (position.lots != 0) {
-        positionsopenCount++;
-      }
-    }
-    return positionsopenCount;
+    int positionsOpenCount = stockPositionsList.length;
+    //print('total Position${positionsOpenCount}');
+    // int positionsopenCount = 0;
+
+    // for (var position in stockPositionsList) {
+    //   if (position.iId?.isLimit ?? false) {
+    //   } else if (position.lots != 0) {
+    //     positionsopenCount++;
+    //   }
+    // }
+    return positionsOpenCount;
   }
 
   int getOpenHoldingCount() {
-    int holdingopenCount = 0;
-    for (var holding in stockHoldingsList) {
-      if (holding.iId?.isLimit ?? false) {
-      } else if (holding.lots != 0) {
-        holdingopenCount++;
-      }
-    }
-    return holdingopenCount;
+    int holdingOpenCount = stockHoldingsList.length;
+    //  print('total Holding ${holdingOpenCount}');
+    // int holdingopenCount = 0;
+    // for (var holding in stockHoldingsList) {
+    //   if (holding.iId?.isLimit ?? false) {
+    //   } else if (holding.lots != 0) {
+    //     holdingopenCount++;
+    //   }
+    // }
+    return holdingOpenCount;
   }
 
   num calculateHoldingTotalNetPNL() {
@@ -767,23 +772,48 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   void calculateTotalPositionValues() {
     int totalLots = 0;
-    num totalBrokerage = 0;
+    num totalPositionBrokerage = 0;
     num totalGross = 0;
-    num totalNet = 0;
+    num totalPositionInvested = 0;
     num totalCurrentValue = 0;
+
     num totalRoi = 0;
     num totalPnl = 0;
+    //num totalInvestedValue =0;
+
     for (var position in stockPositionsList) {
       if (position.iId?.isLimit ?? false) {
       } else {
         totalLots += position.lots ?? 0;
-        totalBrokerage += position.brokerage ?? 0;
-        totalGross += position.lastaverageprice ?? 0;
-        totalNet += position.amount?.abs() ?? 0;
+        totalPositionBrokerage += position.brokerage ?? 0;
+        totalGross += position.lastaverageprice?.abs() ?? 0;
+        // totalNet += position.amount?.abs() ?? 0;
         totalCurrentValue += (position.lastaverageprice?.abs() ?? 0) *
             (position.lots?.abs() ?? 0);
-        totalRoi = ((totalCurrentValue - totalNet) * 100) / totalNet;
-        totalPnl = (totalCurrentValue - totalNet);
+
+        // totalRoi = ((totalCurrentValue - totalNet) * 100) / totalNet;
+        // totalPnl = (totalCurrentValue - totalNet);
+        totalPnl += calculateGrossPNL(
+          position.amount ?? 0,
+          position.lots!.toInt(),
+          getInstrumentLastPrice(
+            position.iId!.instrumentToken!,
+            position.iId!.exchangeInstrumentToken!,
+          ),
+        );
+
+        if (position.lots != 0) {
+          totalPositionInvested += position.amount?.abs() ?? 0;
+        } else {
+          totalPositionInvested = 0;
+        }
+        // print('final${totalHoldingInvested}');
+
+        if (position.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalPositionInvested);
+        } else {
+          totalRoi = 0;
+        }
         // totalRoi += calculateGrossROI(
         //   position.amount ?? 0,
         //   position.lots!.toInt(),
@@ -798,9 +828,9 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     stockTotalPositionDetails(
       StockTotalPositionDetails(
         lots: totalLots,
-        brokerage: totalBrokerage,
+        brokerage: totalPositionBrokerage,
         gross: totalGross,
-        net: totalNet,
+        net: totalPositionInvested,
         currentvalue: totalCurrentValue,
         roi: totalRoi,
         pnl: totalPnl,
@@ -832,24 +862,48 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   void calculateTotalHoldingValues() {
     int totalLots = 0;
-    num totalBrokerage = 0;
+    num totalHoldingBrokerage = 0;
     num totalGross = 0;
-    num totalNet = 0;
+    num totalHoldingInvested = 0;
     num totalCurrentValue = 0;
     num totalRoi = 0;
     num totalPnl = 0;
+   
+    //num totalInvestedValue =0;
 
     for (var holding in stockHoldingsList) {
       if (holding.iId?.isLimit ?? false) {
       } else {
         totalLots += holding.lots ?? 0;
-        totalBrokerage += holding.brokerage ?? 0;
+        totalHoldingBrokerage += holding.brokerage ?? 0;
         totalGross += holding.lastaverageprice?.abs() ?? 0;
-        totalNet += holding.amount?.abs() ?? 0;
+        // totalHoldingInvested += holding.amount?.abs() ?? 0;
         totalCurrentValue +=
             (holding.lastaverageprice?.abs() ?? 0) * (holding.lots?.abs() ?? 0);
-        totalRoi = ((totalCurrentValue - totalNet) * 100) / totalNet;
-        totalPnl = (totalCurrentValue - totalNet);
+
+        // totalPnl = (totalCurrentValue - totalNet);
+        totalPnl += calculateGrossPNL(
+          holding.amount ?? 0,
+          holding.lots!.toInt(),
+          getInstrumentLastPrice(
+            holding.iId!.instrumentToken!,
+            holding.iId!.exchangeInstrumentToken!,
+          ),
+        );
+
+        if (holding.lots != 0) {
+          totalHoldingInvested += holding.amount?.abs() ?? 0;
+        } else {
+          totalHoldingInvested = 0;
+        }
+        // print('final${totalHoldingInvested}');
+
+        if (holding.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalHoldingInvested);
+        } else {
+          totalRoi = 0;
+        }
+
         // totalRoi += calculateGrossROI(
         //   holding.amount ?? 0,
         //   holding.lots!.toInt(),
@@ -864,9 +918,9 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     stockTotalHoldingDetails(
       StockTotalHoldingDetails(
         lots: totalLots,
-        brokerage: totalBrokerage,
+        brokerage: totalHoldingBrokerage,
         gross: totalGross,
-        net: totalNet,
+        net: totalHoldingInvested,
         currentvalue: totalCurrentValue,
         roi: totalRoi,
         pnl: totalPnl,
