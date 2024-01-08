@@ -37,7 +37,7 @@ class CentreCardinPositions extends StatelessWidget {
         ),
         child: Container(
           child: Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -47,15 +47,15 @@ class CentreCardinPositions extends StatelessWidget {
                   children: [
                     Text(
                       'Invested',
-                      style: AppStyles.tsBlackRegular12,
+                      style: AppStyles.tsBlackMedium12,
                     ),
                     Text(
                       'Current Value',
-                      style: AppStyles.tsBlackRegular12,
+                      style: AppStyles.tsBlackMedium12,
                     ),
                     Text(
                       'ROI',
-                      style: AppStyles.tsBlackRegular12,
+                      style: AppStyles.tsBlackMedium12,
                     ),
                   ],
                 ),
@@ -65,13 +65,13 @@ class CentreCardinPositions extends StatelessWidget {
                   children: [
                     Text(
                       invested,
-                      style: AppStyles.tsBlackRegular12.copyWith(
+                      style: AppStyles.tsBlackMedium12.copyWith(
                         color: Colors.green,
                       ),
                     ),
                     Text(
                       currentvalue,
-                      style: AppStyles.tsBlackRegular12.copyWith(
+                      style: AppStyles.tsBlackMedium12.copyWith(
                         color: Colors.green,
                       ),
                     ),
@@ -79,7 +79,7 @@ class CentreCardinPositions extends StatelessWidget {
                       children: [
                         Text(
                           pnlInPosition,
-                          style: AppStyles.tsBlackRegular12.copyWith(
+                          style: AppStyles.tsBlackMedium12.copyWith(
                             color: pnlInPosition != null
                                 ? pnlInPosition.startsWith('-')
                                     ? AppColors.danger
@@ -90,7 +90,7 @@ class CentreCardinPositions extends StatelessWidget {
                         ),
                         Text(
                           '($roiPositions%)',
-                          style: AppStyles.tsBlackRegular12.copyWith(
+                          style: AppStyles.tsBlackMedium12.copyWith(
                             color: roiPositions != null
                                 ? roiPositions.startsWith('-')
                                     ? AppColors.danger

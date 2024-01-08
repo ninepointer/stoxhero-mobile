@@ -85,8 +85,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                                   item.lastPrice! - (item.ohlc?.close ?? 0),
                                 ),
                               ),
-                              if (item !=
-                                  controller.stockIndexDetailsList.last)
+                              if (item != controller.stockIndexDetailsList.last)
                                 SizedBox(width: 4),
                             ]
                           ],
@@ -95,14 +94,14 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                   ]),
                   Container(
                     child: CustomExpansionTile(
-                      invested: '929360',
-                      profitloss: '-2720.00',
-                      percentage: '(0.29%)',
-                      currentvalue: '926640',
-                      availablemargin: '50000',
+                      //  invested: '929360',
+                      // profitloss: '-2720.00',
+                      // percentage: '(0.29%)',
+                      //  currentvalue: '926640',
+                      //  availablemargin: '50000',
                       marginmoney: '678888',
-                      marginused: '678',
-                      openpositions: '4',
+                      //  marginused: '678',
+                      //  openpositions: '4',
                     ),
                   ),
                   Container(
@@ -125,7 +124,6 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                               borderRadius: BorderRadius.circular(25),
                             ),
                             controller: _tabController,
-                         
                             tabs: [
                               Tab(
                                 text:

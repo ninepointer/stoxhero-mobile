@@ -1,37 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
 import '../../../core/core.dart';
 
 class CustomExpansionTile extends StatefulWidget {
   const CustomExpansionTile({
     Key? key,
-    required this.invested,
-    required this.profitloss,
-    required this.percentage,
-    required this.currentvalue,
-    required this.availablemargin,
+    //required this.invested,
+    //  required this.profitloss,
+    //  required this.percentage,
+    // required this.currentvalue,
+    // required this.availablemargin,
     required this.marginmoney,
-    required this.marginused,
-    required this.openpositions,
+    //  required this.marginused,
+    // required this.openpositions,
   }) : super(key: key);
 
-  final String invested;
-  final String profitloss;
-  final String percentage;
-  final String currentvalue;
-  final String availablemargin;
+  // final String invested;
+  // final String profitloss;
+  // final String percentage;
+  // final String currentvalue;
+  // final String availablemargin;
   final String marginmoney;
-  final String marginused;
-  final String openpositions;
+  // final String marginused;
+  // final String openpositions;
 
   @override
   State<CustomExpansionTile> createState() => _CustomExpansionTileState();
 }
 
 class _CustomExpansionTileState extends State<CustomExpansionTile> {
+  late StocksTradingController controller;
   final bool _customIcon = false;
 
   @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.getStockHoldingsList();
+    controller.getStockPositionsList();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    num CurrentValue =
+        (controller.stockTotalHoldingDetails.value.currentvalue ?? 0) +
+            (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
+
+    num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
+        (controller.stockTotalPositionDetails.value.net ?? 0);
+
+    // num TotalOpenPositions = (controller.getOpenPositionCount()) +
+    //     (controller.getOpenHoldingCount());
+
+    num finalpnl = CurrentValue - InvestedValue;
+
+    num finalROI = (finalpnl * 100) / InvestedValue;
+
+    num MarginUsed = controller.stockfundsmargin.value.totalFund! -
+        controller.calculateMargin().round();
+
     return Column(
       children: [
         Padding(
@@ -85,7 +115,26 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 style: AppStyles.tsGreyRegular12,
                               ),
                               Text(
-                                widget.invested,
+                                FormatHelper.formatNumbers(InvestedValue,
+                                    decimal: 2),
+                                // FormatHelper.formatNumbers(((controller
+                                //             .stockTotalHoldingDetails
+                                //             .value
+                                //             .net ??
+                                //         0) +
+                                //     (controller.stockTotalPositionDetails.value
+                                //             .net ??
+                                //         0))),
+                                // invested value
+                                // FormatHelper.formatNumbers(
+                                //   (double.parse(controller
+                                //           .stockTotalHoldingDetails.value.net
+                                //           .toString()) +
+                                //       double.parse(controller
+                                //           .stockTotalPositionDetails.value.net
+                                //           .toString())),
+                                // ),
+                                // 'hii',
                                 style: AppStyles.tsBlackMedium14,
                               ),
                               SizedBox(height: 5),
@@ -94,7 +143,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 style: AppStyles.tsGreyRegular12,
                               ),
                               Text(
-                                widget.marginmoney,
+                                // total virtual margin money,
+                                FormatHelper.formatNumbers(controller
+                                    .stockfundsmargin.value.totalFund
+                                    .toString()),
                                 style: AppStyles.tsBlackMedium14,
                               ),
                               SizedBox(height: 5),
@@ -103,7 +155,18 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 style: AppStyles.tsGreyRegular12,
                               ),
                               Text(
-                                widget.marginused,
+                                FormatHelper.formatNumbers(MarginUsed,
+                                    decimal: 2),
+                                // (controller.stockfundsmargin.value.totalFund! -
+                                //         double.parse(FormatHelper.formatNumbers(
+                                //           (controller
+                                //               .calculateMargin()
+                                //               .round()
+                                //               .toString()),
+                                //           decimal: 2,
+                                //         )))
+                                //     .toString(),
+                                //'yo',
                                 style: AppStyles.tsBlackMedium14,
                               ),
                             ],
@@ -116,11 +179,31 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                               Row(
                                 children: [
                                   Text(
-                                    widget.profitloss,
-                                    style: AppStyles.tsBlackMedium16,
-                                  ),
+                                      //currentvalue - invested value
+                                      // FormatHelper.formatNumbers((((controller
+                                      //                 .stockTotalHoldingDetails
+                                      //                 .value
+                                      //                 .currentvalue ??
+                                      //             0) +
+                                      //         (controller
+                                      //                 .stockTotalPositionDetails
+                                      //                 .value
+                                      //                 .currentvalue ??
+                                      //             0))) -
+                                      //     (((controller.stockTotalHoldingDetails
+                                      //                 .value.net ??
+                                      //             0) +
+                                      //         (controller
+                                      //                 .stockTotalPositionDetails
+                                      //                 .value
+                                      //                 .net ??
+                                      //             0)))),
+
+                                      FormatHelper.formatNumbers(finalpnl,
+                                          decimal: 2),
+                                      style: AppStyles.tsBlackMedium16),
                                   Text(
-                                    widget.percentage,
+                                    '(${FormatHelper.formatNumbers(finalROI, decimal: 2, showSymbol: false)}%)',
                                     style: AppStyles.tsBlackMedium14,
                                   ),
                                 ],
@@ -131,7 +214,18 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 style: AppStyles.tsGreyRegular12,
                               ),
                               Text(
-                                widget.currentvalue,
+                                FormatHelper.formatNumbers(CurrentValue,
+                                    decimal: 2),
+                                // FormatHelper.formatNumbers(((controller
+                                //             .stockTotalHoldingDetails
+                                //             .value
+                                //             .currentvalue ??
+                                //         0) +
+                                //     (controller.stockTotalPositionDetails.value
+                                //             .currentvalue ??
+                                //         0))),
+
+                                //'how',
                                 style: AppStyles.tsBlackMedium14,
                               ),
                               SizedBox(height: 5),
@@ -140,7 +234,14 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 style: AppStyles.tsGreyRegular12,
                               ),
                               Text(
-                                widget.availablemargin,
+                                // widget.availablemargin,
+                                FormatHelper.formatNumbers(
+                                  controller
+                                      .calculateMargin()
+                                      .round()
+                                      .toString(),
+                                  decimal: 2,
+                                ),
                                 style: AppStyles.tsBlackMedium14,
                               ),
                               SizedBox(height: 5),
@@ -149,7 +250,13 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 style: AppStyles.tsGreyRegular12,
                               ),
                               Text(
-                                widget.openpositions,
+                                // TotalOpenPositions.toString(),
+                                ((controller
+                                        .getOpenPositionCount()
+                                        .toString()) +
+                                    (controller
+                                        .getOpenHoldingCount()
+                                        .toString())),
                                 style: AppStyles.tsBlackMedium14,
                               ),
                             ],

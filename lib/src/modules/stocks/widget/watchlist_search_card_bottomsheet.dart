@@ -56,9 +56,9 @@ class _StockInstrumentSearchCardState extends State<StockInstrumentSearchCard> {
                     ),
                     Row(
                       children: [
-                        Text("₹"),
                         Text(
-                          widget.lastPrice,
+                          FormatHelper.formatNumbers(widget.lastPrice,
+                              decimal: 2),
                         ),
                         SizedBox(width: 5),
                         Text(

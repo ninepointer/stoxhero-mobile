@@ -132,6 +132,14 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                 itemBuilder: (context, index) {
                   var stock = controller.tradingInstruments[index];
 
+                 // var data = controller.equityInstrumentDetailList[index];
+                  // bool isInWatchlist =
+                  //     (data.instrumentToken == stock.instrumentToken);
+
+                  bool isInWatchlist = controller.equityInstrumentDetailList.value
+                      .contains((element) =>
+                          element.instrumentToken == stock.instrumentToken);
+
                   // return StockInstrumentSearchCard(
                   //   // isAdded: controller.tradingWatchlistIds.contains(
                   //   //   stock.instrumentToken ?? stock.exchangeToken,
@@ -190,28 +198,126 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                                         '(${controller.getInstrumentChanges(
                                           stock.instrumentToken ?? 0,
                                           stock.exchangeToken ?? 0,
-                                        )}%)',
+                                        )})',
                                         style: TextStyle(color: Colors.green),
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
+
+                              //controller.equityInstrumentDetailList[index];
+                              // trailing: Row(
+                              //   mainAxisSize: MainAxisSize.min,
+                              //   children: [
+                              //     IconButton(
+                              //       icon: Icon(Icons.add),
+                              //       onPressed: () {
+                              //         controller.addInstrument(
+                              //             controller.tradingInstruments[index]);
+
+                              //         controller.selectedWatchlistStock(stock);
+                              //         controller.addStocktoWatchlist();
+                              //         print(
+                              //             "Add button tapped for: ${stock.tradingsymbol}");
+                              //       },
+                              //     ),
+                              //   ],
+                              // ),
+
+                              //Real
+                              // trailing: Row(
+                              //   mainAxisSize: MainAxisSize.min,
+                              //   children: [
+                              //     IconButton(
+                              //       icon: Icon(Icons.add),
+                              //       onPressed: () {
+                              //         controller.addInstrument(
+                              //             controller.tradingInstruments[index]);
+
+                              //         controller.selectedWatchlistStock(stock);
+                              //         controller.addStocktoWatchlist();
+                              //         print(
+                              //             "Add button tapped for: ${stock.tradingsymbol}");
+                              //       },
+                              //     ),
+                              //   ],
+                              // ),
+
+                              //controller.equityInstrumentDetailList[index];
+                              // trailing: Row(
+                              //   mainAxisSize: MainAxisSize.min,
+                              //   children: [
+                              //     IconButton(
+                              //       icon: Icon(Icons.add),
+                              //       onPressed: () {
+                              //         controller.addInstrument(
+                              //             controller.tradingInstruments[index]);
+
+                              //         controller.selectedWatchlistStock(stock);
+                              //         controller.addStocktoWatchlist();
+                              //         print(
+                              //             "Add button tapped for: ${stock.tradingsymbol}");
+                              //       },
+                              //     ),
+                              //   ],
+                              // ),
+
+                              //v2
+                              // trailing: Row(
+                              //   mainAxisSize: MainAxisSize.min,
+                              //   children: [
+                              //     if (data.instrumentToken ==
+                              //         stock.instrumentToken)
+                              //       IconButton(
+                              //         icon: Icon(Icons.check),
+                              //         onPressed: () {
+                              //           controller.removeInstrument(controller
+                              //               .equityInstrumentDetailList[index]
+                              //               .instrumentToken);
+                              //         },
+                              //       )
+                              //     else
+                              //       IconButton(
+                              //         icon: Icon(Icons.add),
+                              //         onPressed: () {
+                              //           controller.addInstrument(controller
+                              //               .tradingInstruments[index]);
+                              //           controller
+                              //               .selectedWatchlistStock(stock);
+                              //           controller.addStocktoWatchlist();
+                              //           print(
+                              //               "Add button tapped for: ${stock.tradingsymbol}");
+                              //         },
+                              //       ),
+                              //   ],
+                              // ),
+
+                              //v3
+
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.add),
+                                    icon: Icon(
+                                      isInWatchlist ? Icons.check : Icons.add,
+                                    ),
                                     onPressed: () {
-                                      controller.addInstrument(
-                                          controller.tradingInstruments[index]);
-
-                                      controller.selectedWatchlistStock(stock);
-                                      controller.addStocktoWatchlist();
-                                      print(
-                                          "Add button tapped for: ${stock.tradingsymbol}");
+                                      if (isInWatchlist) {
+                                        controller.removeInstrument(controller
+                                            .equityInstrumentDetailList[index]
+                                            .instrumentToken);
+                                      } else {
+                                        controller.addInstrument(controller
+                                            .tradingInstruments[index]);
+                                        controller
+                                            .selectedWatchlistStock(stock);
+                                        controller.addStocktoWatchlist();
+                                        print(
+                                            "Add button tapped for: ${stock.tradingsymbol}");
+                                      }
                                     },
-                                  ),
+                                  )
                                 ],
                               ),
                             ),

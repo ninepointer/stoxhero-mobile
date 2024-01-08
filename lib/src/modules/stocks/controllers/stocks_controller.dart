@@ -45,6 +45,9 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final isHoldingStateLoading = false.obs;
   bool get isHoldingStateLoadingStatus => isHoldingStateLoading.value;
 
+  final isFundsStateLoading = false.obs;
+  bool get isFundsStateLoadingStatus => isFundsStateLoading.value;
+
   final selectedStopProfitQuantity = 0.obs;
   final selectedStopLossQuantity = 0.obs;
   final stoplossQuantityList = <StoplossQuantityData>[].obs;
@@ -102,6 +105,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     getStockIndexInstrumentsList();
     getStocksTradingPortfolio();
     getStockPositionsList();
+    getStocksFundsMargin();
     //  await getStocksTradingInstruments();
   }
 
@@ -595,8 +599,54 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     isPortfolioStateLoading(false);
   }
 
-  num calculateTotalNetPNL() {
-    num totalNetPNL = 0;
+// All Portfolio Summary Calculation
+
+  //Open Positions For Holdings and Possitions
+
+  int getOpenPositionCount() {
+    int positionsopenCount = 0;
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+      } else if (position.lots != 0) {
+        positionsopenCount++;
+      }
+    }
+    return positionsopenCount;
+  }
+
+  int getOpenHoldingCount() {
+    int holdingopenCount = 0;
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit ?? false) {
+      } else if (holding.lots != 0) {
+        holdingopenCount++;
+      }
+    }
+    return holdingopenCount;
+  }
+
+  num calculateHoldingTotalNetPNL() {
+    num totalHoldingNetPNL = 0;
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit != true) {
+        num avg = holding.amount ?? 0;
+        int lots = holding.lots?.toInt() ?? 0;
+        num ltp = getInstrumentLastPrice(
+          holding.iId?.instrumentToken ?? 0,
+          holding.iId?.exchangeInstrumentToken ?? 0,
+        );
+        if (ltp == 0) return 0;
+        num value = (avg + (lots) * ltp);
+        num brokerage = holding.brokerage ?? 0;
+        num broker = value - brokerage;
+        totalHoldingNetPNL += broker;
+      }
+    }
+    return totalHoldingNetPNL.round();
+  }
+
+  num calculatePositionTotalNetPNL() {
+    num totalPositionNetPNL = 0;
     for (var position in stockPositionsList) {
       if (position.iId?.isLimit != true) {
         num avg = position.amount ?? 0;
@@ -609,36 +659,65 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         num value = (avg + (lots) * ltp);
         num brokerage = position.brokerage ?? 0;
         num broker = value - brokerage;
-        totalNetPNL += broker;
+        totalPositionNetPNL += broker;
       }
     }
-    return totalNetPNL.round();
+    return totalPositionNetPNL.round();
   }
 
   num calculateMargin() {
-    num lots = 0;
-    num margin = 0;
-    num amount = 0;
-    num limitMargin = 0;
-    num subtractAmount = 0;
+    num positionlots = 0;
+    num holdinglots = 0;
+
+    num positionmargin = 0;
+    num holdingmargin = 0;
+
+    num amountholding = 0;
+    num amountposition = 0;
+
+    num holdinglimitMargin = 0;
+    num positionlimitMargin = 0;
+
+    num positionsubtractAmount = 0;
+    num holdingsubtractAmount = 0;
+
     for (var position in stockPositionsList) {
       if (position.lots != 0) {
-        lots += position.lots ?? 0;
-        margin += position.margin ?? 0;
+        positionlots += position.lots ?? 0;
+        positionmargin += position.margin ?? 0;
       }
       if (position.iId?.isLimit == true) {
-        limitMargin += position.margin ?? 0;
+        positionlimitMargin += position.margin ?? 0;
       } else {
         if (position.lots! < 0) {
-          limitMargin += position.margin ?? 0;
-          subtractAmount +=
+          positionlimitMargin += position.margin ?? 0;
+          positionsubtractAmount +=
               ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
         }
-        amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
+        amountposition += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
-    num openingBalance = 0;
+
+    for (var holding in stockHoldingsList) {
+      if (holding.lots != 0) {
+        holdinglots += holding.lots ?? 0;
+        holdingmargin += holding.margin ?? 0;
+      }
+      if (holding.iId?.isLimit == true) {
+        holdinglimitMargin += holding.margin ?? 0;
+      } else {
+        if (holding.lots! < 0) {
+          holdinglimitMargin += holding.margin ?? 0;
+          holdingsubtractAmount +=
+              ((holding.lots!) * (holding.lastaverageprice ?? 0)).abs();
+        }
+        amountholding += ((holding.amount ?? 0) - (holding.brokerage ?? 0));
+      }
+    }
+
     //  print("hiii${stocksPortfolio.toJson()}");
+
+    num openingBalance = 0;
     num totalFund = stocksPortfolio.value.totalFund ?? 0;
 
     if (stocksPortfolio.value.openingBalance != null) {
@@ -647,16 +726,24 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       openingBalance = totalFund;
     }
 
-    num availableMargin = (calculateTotalNetPNL() < 0)
-        ? (lots == 0
-            ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance -
-                ((amount - subtractAmount).abs() + limitMargin)))
-        : (openingBalance - margin);
+    //available
+    num availableMargin =
+        ((calculatePositionTotalNetPNL() + calculateHoldingTotalNetPNL()) < 0)
+            ? ((positionlots + holdinglots) == 0
+                ? (openingBalance -
+                    (holdingmargin + positionmargin) +
+                    (calculatePositionTotalNetPNL() +
+                        calculateHoldingTotalNetPNL()))
+                : (openingBalance -
+                    (((amountposition + amountholding) -
+                                (positionsubtractAmount +
+                                    holdingsubtractAmount))
+                            .abs() +
+                        (holdinglimitMargin + positionlimitMargin))))
+            : (openingBalance - (holdingmargin + positionmargin));
 
     return availableMargin;
   }
-  //positions ka pura scene
 
   Future getStockPositionsList() async {
     isPositionStateLoading(true);
@@ -695,8 +782,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         totalNet += position.amount?.abs() ?? 0;
         totalCurrentValue += (position.lastaverageprice?.abs() ?? 0) *
             (position.lots?.abs() ?? 0);
-        totalRoi = ((totalNet - totalCurrentValue) * 100) / totalNet;
-        totalPnl = (totalNet - totalCurrentValue);
+        totalRoi = ((totalCurrentValue - totalNet) * 100) / totalNet;
+        totalPnl = (totalCurrentValue - totalNet);
         // totalRoi += calculateGrossROI(
         //   position.amount ?? 0,
         //   position.lots!.toInt(),
@@ -761,8 +848,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         totalNet += holding.amount?.abs() ?? 0;
         totalCurrentValue +=
             (holding.lastaverageprice?.abs() ?? 0) * (holding.lots?.abs() ?? 0);
-        totalRoi = ((totalNet - totalCurrentValue) * 100) / totalNet;
-        totalPnl = (totalNet - totalCurrentValue);
+        totalRoi = ((totalCurrentValue - totalNet) * 100) / totalNet;
+        totalPnl = (totalCurrentValue - totalNet);
         // totalRoi += calculateGrossROI(
         //   holding.amount ?? 0,
         //   holding.lots!.toInt(),
@@ -774,7 +861,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       }
     }
 
-    print('totalCurrentValue${totalRoi}');
     stockTotalHoldingDetails(
       StockTotalHoldingDetails(
         lots: totalLots,
@@ -829,8 +915,9 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   num calculateGrossPNL(num avg, int lots, num ltp) {
     if (ltp == 0) return 0;
+
     num pnl = 0;
-    num value = (avg + (lots) * ltp);
+    num value = (((lots) * ltp) - avg.abs());
     pnl += value;
     return pnl;
   }
@@ -838,7 +925,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   num calculateGrossROI(num avg, int lots, num ltp) {
     if (ltp == 0) return 0;
     num pnl = 0;
-    num value = (avg + (lots) * ltp);
+    num value = (lots * ltp) - avg.abs();
+
     pnl += value;
 
     num roi = (pnl / avg.abs()) * 100;
@@ -887,7 +975,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       symbol: inst.tradingsymbol,
       validity: "DAY",
 
-      id: stockfundsmargin.value.portfolioId, //  id: virtualPortfolio.value.portfolioId(in virtual)
+      id: stockfundsmargin.value
+          .portfolioId, //  id: virtualPortfolio.value.portfolioId(in virtual)
       lastPrice: inst.lastPrice.toString(),
       variety: "regular",
       stock: "paperTrade",
@@ -924,5 +1013,22 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isPendingOrderStateLoading(false);
+  }
+
+  Future getStocksFundsMargin() async {
+    isFundsStateLoading(true);
+    try {
+      final RepoResponse<StocksFundsMarginResponse> response =
+          await repository.getStockFundsMargin();
+      if (response.data != null) {
+        stockfundsmargin(response.data?.data);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log("port ${e.toString()}");
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isFundsStateLoading(false);
   }
 }

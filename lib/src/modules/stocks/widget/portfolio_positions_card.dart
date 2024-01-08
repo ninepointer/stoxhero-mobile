@@ -8,11 +8,6 @@ import 'stock_stoploss_modifyprice_bottomsheet.dart';
 class PositionsCard extends StatefulWidget {
   const PositionsCard({
     Key? key,
-    // required this.title,
-    // required this.percentage,
-    // required this.quantity,
-    // required this.ltp,
-    // required this.averageprice,
 
     required this.imagePath,
     required this.position,
@@ -139,7 +134,7 @@ class _PositionsCardState extends State<PositionsCard> {
 
             return GestureDetector(
               child: Container(
-                height: 100,
+                height: 85,
                 width: 400,
                 padding: EdgeInsets.only(
                   left: 9,
@@ -158,40 +153,81 @@ class _PositionsCardState extends State<PositionsCard> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 12.0),
-                              child: Image.asset(
-                                widget.imagePath,
-                                height: 30,
-                                width: 30,
-                              ),
-                            ),
                             Text(
                               widget.position.iId?.symbol ?? "",
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
+                              style: AppStyles.tsBlackMedium14,
                             ),
-                            SizedBox(height: 5),
+                            SizedBox(
+                              height: 4,
+                            ),
                             Row(
                               children: [
+                                Text(
+                                  'Qty ',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
                                 Text(
                                   // quantity dalni hai,
                                   widget.position.lots.toString(),
                                   style: TextStyle(
                                     color: Colors.grey,
-                                    fontSize: 13,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  radius: 3.0, // Adjust the radius as needed
+                                ),
+                                Text(
+                                  '  Avg. ',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
                                   ),
                                 ),
                                 Text(
-                                  ' Shares ',
+                                  // averageprice,
+                                  FormatHelper.formatNumbers(
+                                      widget.position.lastaverageprice),
                                   style: TextStyle(
                                     color: Colors.grey,
-                                    fontSize: 14,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ],
                             ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Invested',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  FormatHelper.formatNumbers(
+                                      widget.position.amount?.abs().toString(),
+                                      decimal: 2),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 6),
                           ],
                         ),
 
@@ -200,53 +236,6 @@ class _PositionsCardState extends State<PositionsCard> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  '(Average Price)',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  // averageprice,
-                                  FormatHelper.formatNumbers(
-                                      widget.position.lastaverageprice),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  '(LTP)',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  FormatHelper.formatNumbers(
-                                    controller.getInstrumentLastPrice(
-                                      widget.position.iId!.instrumentToken!,
-                                      widget.position.iId!
-                                          .exchangeInstrumentToken!,
-                                    ),
-                                  ),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 2),
                             Row(
                               children: [
                                 Text(
@@ -265,14 +254,8 @@ class _PositionsCardState extends State<PositionsCard> {
                                             ),
                                           ),
                                         ),
-                                  //percentage change,
-                                  // controller.getInstrumentChanges(
-                                  //   widget.position.iId?.instrumentToken ?? 0,
-                                  //   widget.position.iId?.exchangeInstrumentToken ??
-                                  //       0,
-                                  // ),
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 14,
                                     color: controller.getValueColor(
                                       widget.position.lots == 0
                                           ? widget.position.amount
@@ -290,7 +273,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                   ),
                                 ),
                                 Text(
-                                  //percentage change,
+                                  //percentage change ROI,
                                   '(${FormatHelper.formatNumbers(controller.calculateGrossROI(
                                         widget.position.amount ?? 0,
                                         widget.position.lots!.toInt(),
@@ -299,9 +282,9 @@ class _PositionsCardState extends State<PositionsCard> {
                                           widget.position.iId!
                                               .exchangeInstrumentToken!,
                                         ),
-                                      ), decimal: 2)})',
+                                      ), decimal: 2, showSymbol: false)}%)',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 14,
                                     color: controller.getValueColor(
                                       widget.position.lots == 0
                                           ? widget.position.amount
@@ -320,6 +303,85 @@ class _PositionsCardState extends State<PositionsCard> {
                                 ),
                               ],
                             ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'LTP',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  FormatHelper.formatNumbers(
+                                    controller.getInstrumentLastPrice(
+                                      widget.position.iId!.instrumentToken!,
+                                      widget.position.iId!
+                                          .exchangeInstrumentToken!,
+                                    ),
+                                    decimal: 2,
+                                    // showSymbol: false,
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  '(${controller.getInstrumentChanges(
+                                    widget.position.iId!.instrumentToken!,
+                                    widget
+                                        .position.iId!.exchangeInstrumentToken!,
+                                  )}%)',
+                                  style: TextStyle(
+                                    color: controller.getValueColor(
+                                        controller.getInstrumentChanges(
+                                      widget.position.iId!.instrumentToken!,
+
+                                      ///green color hai nhi check krna hai
+                                      widget.position.iId!
+                                          .exchangeInstrumentToken!,
+                                    )),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Current Value',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  //current value
+                                  FormatHelper.formatNumbers(
+                                      (widget.position.lastaverageprice ?? 0) *
+                                          (widget.position.lots?.abs() ?? 0)),
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 6),
                           ],
                         ),
                       ],

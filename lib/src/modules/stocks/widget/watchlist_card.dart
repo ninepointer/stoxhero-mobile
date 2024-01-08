@@ -103,14 +103,14 @@ class _WatchlistCardState extends State<WatchlistCard> {
                     children: [
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 12.0),
-                            child: Image.asset(
-                              widget.imagePath,
-                              height: 20,
-                              width: 20,
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(right: 12.0),
+                          //   child: Image.asset(
+                          //     widget.imagePath,
+                          //     height: 20,
+                          //     width: 20,
+                          //   ),
+                          // ),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,9 +118,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
                               children: [
                                 Text(
                                   widget.title,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                  style: AppStyles.tsBlackMedium16,
                                 ),
                               ],
                             ),
@@ -130,14 +128,14 @@ class _WatchlistCardState extends State<WatchlistCard> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                widget.price,
+                                '₹${widget.price}',
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
                               ),
                               SizedBox(height: 2),
                               Text(
-                                widget.percentage,
+                                '${widget.percentage}%',
                                 style: TextStyle(
                                   color: Colors.green,
                                 ),

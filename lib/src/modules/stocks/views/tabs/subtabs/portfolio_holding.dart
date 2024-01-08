@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/modules/stocks/widget/portfolio_centre_card_holdings.dart';
 import 'package:stoxhero/src/modules/stocks/widget/portfolio_holdings_card.dart';
-
+import 'package:get/get.dart';
 import '../../../../../app/app.dart';
 import '../../../controllers/stocks_controller.dart';
 
@@ -79,7 +79,7 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
                     // percentage: position.percentage,
                     // quantity: position.quantity.toString(),
                     // ltp: "₹${position.ltp}",
-                    imagePath: 'assets/images/10Xlogo.jpg',
+                   // imagePath: 'assets/images/10Xlogo.jpg',
                   );
                   // Add more cards as needed
                 },
