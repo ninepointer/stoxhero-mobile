@@ -16,8 +16,8 @@ class FormatHelper {
               ? value.abs()
               : value
           : isNegative
-              ? num.parse(value).abs()
-              : num.parse(value);
+              ? num.parse(value ?? '').abs()
+              : num.parse(value ?? "");
       final currencyFormat = NumberFormat.currency(
         locale: 'en_IN',
         symbol: showSymbol ? '₹' : '',

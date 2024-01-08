@@ -327,7 +327,7 @@ class AppUrls {
   static const String stockTradePosition = "$apiURL/stock/pnlposition";
   static const String stockTradeHolding = "$apiURL/stock/pnlholding";
   static const String stockTradeTodaysOrders = "$apiURL/stock/my/todayorders";
-   static const String stockFundsMargin = "$apiURL/stock/margin";
+  static const String stockFundsMargin = "$apiURL/stock/margin";
   // static String stockTradeExececutedOrders(String? id) =>
   //     "$apiURL/pendingorder/my/todaysProcessed/$id/Stock";
 
@@ -339,4 +339,11 @@ class AppUrls {
       "$apiURL/affiliate/myaffiliaterafferals";
   static String getMyAffiliateTransactionList =
       "$apiURL/affiliate/mytransactions";
+  static String stocksExcuatedOrder(String? id) =>
+      "$apiURL/pendingorder/my/todaysProcessed/$id/Stock";
+
+  static String stocksPendingOrder(String? id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/Stock";
+
+  //pendingorder/my/todaysPending/6433e2e5500dc2f2d20d686d/Stock
 }

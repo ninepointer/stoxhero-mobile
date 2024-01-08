@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:stoxhero/src/app/app.dart';
-import 'package:stoxhero/src/modules/stocks/widget/stock_transaction_bottom_sheet.dart';
 
 import '../../../core/core.dart';
-import '../controllers/stocks_controller.dart';
 
 class WatchlistCard extends StatefulWidget {
   const WatchlistCard({

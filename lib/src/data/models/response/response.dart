@@ -103,3 +103,5 @@ export 'stocks_pnl_position_response.dart';
 export 'stocks_pnl_Holdings_response.dart';
 export 'stock_today_orders_list_response.dart';
 export 'stock_funds_margin.dart';
+export "stocks_excuated_order_response.dart";
+export "stocks_pending_order_response.dart";

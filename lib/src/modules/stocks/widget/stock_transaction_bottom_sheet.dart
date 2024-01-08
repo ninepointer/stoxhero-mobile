@@ -1,8 +1,5 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
 import '../../../app/app.dart';
 
 class StockTransactionBottomSheet extends GetView<StocksTradingController> {
@@ -210,7 +207,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                   //   ),
                   // ),
 
-                  if (controller.selectedGroupValue.value == 1) ...[
+                  if (controller.selectedOrderGroupValue.value == 1) ...[
                     SizedBox(height: 8),
                     CommonTextField(
                       padding: EdgeInsets.zero,
@@ -249,7 +246,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                       },
                     ),
                   ],
-                  if (controller.selectedGroupValue.value == 3) ...[
+                  if (controller.selectedOrderGroupValue.value == 3) ...[
                     SizedBox(height: 8),
                     if (type != TransactionType.exit)
                       Row(
@@ -262,7 +259,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                                     tradingInstrument.lotSize ?? 0,
                                     controller.selectedQuantity.value,
                                   ) ||
-                                  controller.selectedGroupValue.value == 2,
+                                  controller.selectedOrderGroupValue.value == 2,
                               hintText: 'StopLoss Price',
                               keyboardType: TextInputType.number,
                               inputFormatters: [
@@ -306,7 +303,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                                     tradingInstrument.lotSize ?? 0,
                                     controller.selectedQuantity.value,
                                   ) ||
-                                  controller.selectedGroupValue.value == 2,
+                                  controller.selectedOrderGroupValue.value == 2,
                               hintText: 'StopProfit Price',
                               keyboardType: TextInputType.number,
                               inputFormatters: [
@@ -351,7 +348,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                       Expanded(
                         child: CommonRadioButtonTile(
                           value: 2,
-                          groupValue: controller.selectedGroupValue.value,
+                          groupValue: controller.selectedOrderGroupValue.value,
                           label: 'MARKET',
                           onChanged: (int value) {
                             controller.handleRadioValueChanged(value, "MARKET");
@@ -368,7 +365,8 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                         Expanded(
                           child: CommonRadioButtonTile(
                             value: 1,
-                            groupValue: controller.selectedGroupValue.value,
+                            groupValue:
+                                controller.selectedOrderGroupValue.value,
                             label: 'LIMIT',
                             onChanged: (int value) {
                               controller.handleRadioValueChanged(
@@ -385,7 +383,8 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                         Expanded(
                           child: CommonRadioButtonTile(
                             value: 3,
-                            groupValue: controller.selectedGroupValue.value,
+                            groupValue:
+                                controller.selectedOrderGroupValue.value,
                             label: 'SL/SP-M',
                             onChanged: (int value) {
                               controller.handleRadioValueChanged(
@@ -464,10 +463,10 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                                   //   decimal: 2,
                                   // ),
                                   FormatHelper.formatNumbers(
-                                  controller
-                                      .calculateMargin()
-                                      .round()
-                                      .toString(),
+                                    controller
+                                        .calculateMargin()
+                                        .round()
+                                        .toString(),
                                   ),
                                   style: Theme.of(context).textTheme.tsMedium14,
                                 ),
@@ -546,13 +545,14 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                     onPressed: () {
                       // if (!controller.isBuyButtonDisabled.value) {
                       //   controller.isBuyButtonDisabled.value = true;
-                      if (controller.selectedGroupValue.value == 3 &&
+                      if (controller.selectedOrderGroupValue.value == 3 &&
                           controller.stopLossPriceTextController.text.isEmpty &&
                           controller
                               .stopProfitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar(
                             'Please Enter StopLoss or StopProfit Price');
-                      } else if (controller.selectedGroupValue.value == 1 &&
+                      } else if (controller.selectedOrderGroupValue.value ==
+                              1 &&
                           controller.limitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar('Please Enter Price');
                       } else if (controller.stopLossFormKey.currentState!

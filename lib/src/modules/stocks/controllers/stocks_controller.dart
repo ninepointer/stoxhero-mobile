@@ -48,6 +48,10 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final isFundsStateLoading = false.obs;
   bool get isFundsStateLoadingStatus => isFundsStateLoading.value;
 
+  final isExecutedOrderStateLoading = false.obs;
+  bool get isExecutedOrderStateLoadingStatus =>
+      isExecutedOrderStateLoading.value;
+
   final selectedStopProfitQuantity = 0.obs;
   final selectedStopLossQuantity = 0.obs;
   final stoplossQuantityList = <StoplossQuantityData>[].obs;
@@ -77,6 +81,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final limitPriceTextController = TextEditingController();
   final stopLossPriceTextController = TextEditingController();
   final selectedType = "".obs;
+
   final productType = "".obs;
   final selectedQuantity = 0.obs;
   final stopLossQuantityTextController = TextEditingController();
@@ -95,17 +100,21 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final equityInstrumentDetailList = <EquityInstrumentDetail>[].obs;
   final stockTradeTodaysOrdersList = <StockTodayTradeOrder>[].obs;
   final stockfundsmargin = StockFundsMargin().obs;
+  final stocksStopLossExecutedOrdersList = <StocksExcuatedOrderData>[].obs;
+  final stopLossPendingOrderList = <StocksPendingOrderData>[].obs;
+  final stopLossPendingOrder = StocksPendingOrderData().obs;
 
   Future loadData() async {
     loadUserDetails();
     socketConnection();
     socketIndexConnection();
-
-    getEquityInstrumentDetails();
-    getStockIndexInstrumentsList();
-    getStocksTradingPortfolio();
-    getStockPositionsList();
-    getStocksFundsMargin();
+    await getStocksStopLossExecutedOrder();
+    await getStocksStopLossPendingOrder();
+    await getEquityInstrumentDetails();
+    await getStockIndexInstrumentsList();
+    await getStocksTradingPortfolio();
+    await getStockPositionsList();
+    await getStocksFundsMargin();
     //  await getStocksTradingInstruments();
   }
 
@@ -381,7 +390,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   }
 
   Future removeInstrument(int? instToken) async {
-    isWatchlistStateLoading(true);
     try {
       await repository.removeInstrument(instToken ?? 0);
       selectedWatchlistIndex(-1);
@@ -389,12 +397,12 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       // await searchInstruments(searchTextController.text, showShimmer: false);
       SnackbarHelper.showSnackbar('Stock Remove');
       getEquityInstrumentDetails();
+      await getStockTradingWatchlist();
       // }
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isWatchlistStateLoading(false);
   }
 
   Future placeStocksTradingOrder(
@@ -440,6 +448,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       price: double.tryParse(limitPriceTextController.text) ?? 0,
       stopLoss: "",
       stopLossPrice: stopLossPriceTextController.text,
+      stopProfitPrice: stopProfitPriceTextController.text,
 
       symbol: inst.tradingsymbol,
       validity: "DAY",
@@ -474,6 +483,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         // await getStopLossPendingOrder();
         await getStockTodayOrderList();
         await getStocksTradingPortfolio();
+        await getStocksStopLossExecutedOrder();
+        await getStocksStopLossPendingOrder();
         selectedStringQuantity("");
         stopLossPriceTextController.text = '';
         stopProfitPriceTextController.text = '';
@@ -555,7 +566,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   void handleRadioProductChanged(int newValue, String labelText) {
     selectedOrderGroupValue.value = newValue;
-    productType.value = labelText;
+    //productType.value = labelText;
   }
 
   bool handleTextField(
@@ -942,6 +953,48 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     return result;
   }
 
+  Future getStocksStopLossExecutedOrder() async {
+    isExecutedOrderStateLoading(true);
+    try {
+      final RepoResponse<StocksExcuatedOrderResponse> response =
+          await repository.getStocksStopLossExcuatedOrder(
+        stockfundsmargin.value.portfolioId.toString(),
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        stocksStopLossExecutedOrdersList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isExecutedOrderStateLoading(false);
+  }
+
+  Future getStocksStopLossPendingOrder() async {
+    isPendingOrderStateLoading(true);
+    try {
+      final RepoResponse<StocksPendingOrderResponse> response =
+          await repository.getStocksStopLossPendingOrder(
+        stockfundsmargin.value.portfolioId.toString(),
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        List<StocksPendingOrderData>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
   Future pendingOrderModify(
       TransactionType type, TradingInstrument inst) async {
     isPendingOrderStateLoading(true);
@@ -979,7 +1032,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           .portfolioId, //  id: virtualPortfolio.value.portfolioId(in virtual)
       lastPrice: inst.lastPrice.toString(),
       variety: "regular",
-      stock: "paperTrade",
+      stock: "Stock",
       deviceDetails: DeviceDetails(
         deviceType: 'Mobile',
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
@@ -996,8 +1049,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
       if (response.data?.status == "Success") {
         SnackbarHelper.showSnackbar(response.data?.message);
-        // await getStopLossPendingOrder();
-        // await getVirtualTodayOrderList();
+        await getStocksStopLossPendingOrder();
+        await getStockTodayOrderList();
         selectedStringQuantity("");
 
         print(

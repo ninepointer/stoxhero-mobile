@@ -79,7 +79,7 @@ class _ordersState extends State<orders> with SingleTickerProviderStateMixin {
                   physics: NeverScrollableScrollPhysics(),
                   controller: tabController,
                   children: [
-                   StockTodayOrders(),
+                    StockTodayOrders(),
                     ExecutedOrders(),
                     PendingOrders(),
                   ],
