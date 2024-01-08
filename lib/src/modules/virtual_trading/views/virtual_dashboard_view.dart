@@ -164,26 +164,26 @@ class FutureAndOptionDashBoard extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (isComingSoonCard)
-                  Positioned(
-                    top: -10,
-                    left: 40,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: AppColors.brandYellow,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        "Coming Soon",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                // if (isComingSoonCard)
+                //   Positioned(
+                //     top: -10,
+                //     left: 40,
+                //     child: Container(
+                //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                //       decoration: BoxDecoration(
+                //         color: AppColors.brandYellow,
+                //         borderRadius: BorderRadius.circular(4),
+                //       ),
+                //       child: Text(
+                //         "Coming Soon",
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize: 12,
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
               ],
             ),
           ],

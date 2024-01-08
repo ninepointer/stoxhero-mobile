@@ -59,8 +59,8 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
 
     // num finalROI = (finalpnl * 100) / InvestedValue;
 
-    num MarginUsed = controller.stockfundsmargin.value.totalFund! -
-        controller.calculateMargin().round();
+    num MarginUsed = (controller.stockfundsmargin.value.totalFund ?? 0) -
+        (controller.calculateMargin().round());
 
     num OPenPositions =
         controller.getOpenPositionCount() + controller.getOpenHoldingCount();

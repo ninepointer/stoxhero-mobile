@@ -131,15 +131,9 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                 itemCount: controller.tradingInstruments.length,
                 itemBuilder: (context, index) {
                   var stock = controller.tradingInstruments[index];
-
                   // var data = controller.equityInstrumentDetailList[index];
                   // bool isInWatchlist =
                   //     (data.instrumentToken == stock.instrumentToken);
-
-                  bool isInWatchlist = controller
-                      .equityInstrumentDetailList.value
-                      .contains((element) =>
-                          element.instrumentToken == stock.instrumentToken);
 
                   // return StockInstrumentSearchCard(
                   //   // isAdded: controller.tradingWatchlistIds.contains(
@@ -296,28 +290,32 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
 
                               //v3
 
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      isInWatchlist ? Icons.check : Icons.add,
-                                    ),
-                                    onPressed: () {
-                                      if (isInWatchlist) {
-                                        controller.removeInstrument(controller
-                                            .equityInstrumentDetailList[index]
-                                            .instrumentToken);
-                                      } else {
-                                        controller.addInstrument(controller
-                                            .tradingInstruments[index]);
-                                        controller
-                                            .selectedWatchlistStock(stock);
-                                        controller.addStocktoWatchlist();
-                                      }
-                                    },
-                                  )
-                                ],
+                              trailing: Obx(
+                                () => Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        controller.watchlistEquityInstrumentSymbolList.contains(
+                                          stock.tradingsymbol,
+                                        )
+                                            ? Icons.check
+                                            : Icons.add,
+                                      ),
+                                      onPressed: () {
+                                        if (controller.watchlistEquityInstrumentSymbolList.contains(
+                                          stock.tradingsymbol,
+                                        )) {
+                                          controller.removeInstrument(stock.instrumentToken);
+                                        } else {
+                                          controller.addInstrument(stock);
+                                          controller.selectedWatchlistStock(stock);
+                                          print("Add button tapped for: ${stock.tradingsymbol}");
+                                        }
+                                      },
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
