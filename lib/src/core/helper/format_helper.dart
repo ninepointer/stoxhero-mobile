@@ -9,7 +9,8 @@ class FormatHelper {
     bool showDecimal = true,
     int decimal = 2,
   }) {
-    if (value == null || value.toString().isEmpty) return '₹0';
+    if (value == null || value == "null" || value.toString().isEmpty)
+      return '₹0';
     if (value != null) {
       num number = value is int || value is double
           ? isNegative
@@ -17,7 +18,7 @@ class FormatHelper {
               : value
           : isNegative
               ? num.parse(value ?? '').abs()
-              : num.parse(value ?? "");
+              : num.parse(value ?? '');
       final currencyFormat = NumberFormat.currency(
         locale: 'en_IN',
         symbol: showSymbol ? '₹' : '',

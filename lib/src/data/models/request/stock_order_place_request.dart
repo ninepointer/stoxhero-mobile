@@ -15,23 +15,23 @@ class StockPlaceOrderRequest {
   String? validity;
   String? variety;
 
-  StockPlaceOrderRequest(
-      {this.product,
-      this.quantity,
-      this.triggerPrice,
-      this.buyOrSell,
-      this.exchange,
-      this.exchangeInstrumentToken,
-      this.instrumentToken,
-      this.orderType,
-      this.price,
-      this.stopLoss,
-      this.stopLossPrice,
-      this.symbol,
-      this.validity,
-      this.variety,
-      this.stopProfitPrice,
-      });
+  StockPlaceOrderRequest({
+    this.product,
+    this.quantity,
+    this.triggerPrice,
+    this.buyOrSell,
+    this.exchange,
+    this.exchangeInstrumentToken,
+    this.instrumentToken,
+    this.orderType,
+    this.price,
+    this.stopLoss,
+    this.stopLossPrice,
+    this.stopProfitPrice,
+    this.symbol,
+    this.validity,
+    this.variety,
+  });
 
   StockPlaceOrderRequest.fromJson(Map<String, dynamic> json) {
     product = json['Product'];
@@ -45,6 +45,7 @@ class StockPlaceOrderRequest {
     price = json['price'];
     stopLoss = json['stopLoss'];
     stopLossPrice = json['stopLossPrice'];
+    stopProfitPrice = json['stopProfitPrice'];
     symbol = json['symbol'];
     validity = json['validity'];
     variety = json['variety'];
@@ -63,6 +64,7 @@ class StockPlaceOrderRequest {
     data['price'] = this.price;
     data['stopLoss'] = this.stopLoss;
     data['stopLossPrice'] = this.stopLossPrice;
+    data['stopProfitPrice'] = this.stopProfitPrice;
     data['symbol'] = this.symbol;
     data['validity'] = this.validity;
     data['variety'] = this.variety;
