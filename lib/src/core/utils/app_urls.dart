@@ -3,6 +3,8 @@ import 'package:stoxhero/src/modules/stocks/views/stocks_dashboard_view.dart';
 import '../../../main.dart';
 
 class AppUrls {
+  static const String stock = 'Stock';
+
   static const String baseURL =
       isProd ? 'https://stoxhero.com' : 'http://43.204.7.180';
   static const String apiURL = '$baseURL/api/v1';
@@ -322,7 +324,8 @@ class AppUrls {
   static String RemoveStockCard(int instrumentToken) =>
       "$apiURL/removestock/$instrumentToken";
   static const String stockOrderPlace = "$apiURL/stockorderplace";
-  static const String stockMarginRequired = "$apiURL/marginrequired?from=Stock";
+  static const String stockMarginRequired =
+      "$apiURL/marginrequired?from=$stock";
   static const String stocksTradingPortfolio = "$apiURL/stock/margin";
   static const String stockTradePosition = "$apiURL/stock/pnlposition";
   static const String stockTradeHolding = "$apiURL/stock/pnlholding";

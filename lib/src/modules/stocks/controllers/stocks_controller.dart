@@ -514,7 +514,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
     isMarginStateLoading(true);
-
+    print('hii inst${inst.lastPrice}');
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -543,6 +543,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           marginRequired(response.data);
+
+          print('hii${data.toJson()}');
         } else {
           SnackbarHelper.showSnackbar(response.error?.message);
         }
@@ -623,7 +625,17 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   //Open Positions For Holdings and Possitions
 
   int getOpenPositionCount() {
-    int positionsOpenCount = stockPositionsList.length;
+    int positionsOpenCount = 0;
+
+    for (var position in stockPositionsList) {
+      if (position.lots != null && position.lots != 0) {
+        positionsOpenCount++;
+      }
+    }
+    print('count position${positionsOpenCount}');
+    return positionsOpenCount;
+    // int positionsOpenCount = stockPositionsList.length;
+
     //print('total Position${positionsOpenCount}');
     // int positionsopenCount = 0;
 
@@ -633,11 +645,20 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     //     positionsopenCount++;
     //   }
     // }
-    return positionsOpenCount;
+    // return positionsOpenCount;
   }
 
   int getOpenHoldingCount() {
-    int holdingOpenCount = stockHoldingsList.length;
+    int holdingOpenCount = 0;
+
+    for (var holding in stockHoldingsList) {
+      if (holding.lots != null && holding.lots != 0) {
+        holdingOpenCount++;
+      }
+    }
+    print('count holding${holdingOpenCount}');
+    return holdingOpenCount;
+    // int holdingOpenCount = stockHoldingsList.length;
     //  print('total Holding ${holdingOpenCount}');
     // int holdingopenCount = 0;
     // for (var holding in stockHoldingsList) {
@@ -646,7 +667,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     //     holdingopenCount++;
     //   }
     // }
-    return holdingOpenCount;
+    // return holdingOpenCount;
   }
 
   num calculateHoldingTotalNetPNL() {
@@ -788,6 +809,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     }
     isPositionStateLoading(false);
   }
+  //position ka calc
 
   void calculateTotalPositionValues() {
     int totalLots = 0;
@@ -800,94 +822,40 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
     //num totalInvestedValue =0;
 
-    for (var position in stockPositionsList) {
-      if (position.iId?.isLimit ?? false) {
+    for (var Position in stockPositionsList) {
+      if (Position.iId?.isLimit ?? false) {
       } else {
-        totalLots += position.lots ?? 0;
-        totalPositionBrokerage += position.brokerage ?? 0;
-        totalGross += position.lastaverageprice?.abs() ?? 0;
+        totalLots += Position.lots ?? 0;
+        totalPositionBrokerage += Position.brokerage ?? 0;
+        totalGross += Position.lastaverageprice?.abs() ?? 0;
         // totalHoldingInvested += holding.amount?.abs() ?? 0;
-        totalCurrentValue += (position.lastaverageprice?.abs() ?? 0) *
-            (position.lots?.abs() ?? 0);
+        totalCurrentValue += (Position.lastaverageprice?.abs() ?? 0) *
+            (Position.lots?.abs() ?? 0);
 
         // totalPnl = (totalCurrentValue - totalNet);
         totalPnl += calculateGrossPNL(
-          position.amount ?? 0,
-          position.lots!.toInt(),
+          Position.amount ?? 0,
+          Position.lots!.toInt(),
           getInstrumentLastPrice(
-            position.iId!.instrumentToken!,
-            position.iId!.exchangeInstrumentToken!,
+            Position.iId!.instrumentToken!,
+            Position.iId!.exchangeInstrumentToken!,
           ),
         );
 
-        if (position.lots != 0) {
-          totalPositionInvested += position.amount?.abs() ?? 0;
+        if (Position.lots != 0) {
+          totalPositionInvested += Position.amount?.abs() ?? 0;
         } else {
           totalPositionInvested = 0;
         }
         // print('final${totalHoldingInvested}');
 
-        if (position.lots != 0) {
+        if (Position.lots != 0) {
           totalRoi = ((totalPnl * 100) / totalPositionInvested);
         } else {
           totalRoi = 0;
         }
       }
     }
-    // int totalLots = 0;
-    // num totalPositionBrokerage = 0;
-    // num totalGross = 0;
-    // num totalPositionInvested = 0;
-    // num totalCurrentValue = 0;
-
-    // num totalRoi = 0;
-    // num totalPnl = 0;
-    // //num totalInvestedValue =0;
-
-    // for (var position in stockPositionsList) {
-    //   if (position.iId?.isLimit ?? false) {
-    //   } else {
-    //     totalLots += position.lots ?? 0;
-    //     totalPositionBrokerage += position.brokerage ?? 0;
-    //     totalGross += position.lastaverageprice?.abs() ?? 0;
-    //     // totalNet += position.amount?.abs() ?? 0;
-    //     totalCurrentValue += (position.lastaverageprice?.abs() ?? 0) *
-    //         (position.lots?.abs() ?? 0);
-
-    //     // totalRoi = ((totalCurrentValue - totalNet) * 100) / totalNet;
-    //     // totalPnl = (totalCurrentValue - totalNet);
-    //     totalPnl += calculateGrossPNL(
-    //       position.amount ?? 0,
-    //       position.lots!.toInt(),
-    //       getInstrumentLastPrice(
-    //         position.iId!.instrumentToken!,
-    //         position.iId!.exchangeInstrumentToken!,
-    //       ),
-    //     );
-
-    //     if (position.lots != 0) {
-    //       totalPositionInvested += position.amount?.abs() ?? 0;
-    //     } else {
-    //       totalPositionInvested = 0;
-    //     }
-    //     // print('final${totalHoldingInvested}');
-
-    //     if (position.lots != 0) {
-    //       totalRoi = ((totalPnl * 100) / totalPositionInvested);
-    //     } else {
-    //       totalRoi = 0;
-    //     }
-    //     // totalRoi += calculateGrossROI(
-    //     //   position.amount ?? 0,
-    //     //   position.lots!.toInt(),
-    //     //   getInstrumentLastPrice(
-    //     //     position.iId!.instrumentToken!,
-    //     //     position.iId!.exchangeInstrumentToken!,
-    //     //   ),
-    //     // );
-    //     print('money Position${totalPositionInvested}');
-    //   }
-    // }
 
     stockTotalPositionDetails(
       StockTotalPositionDetails(

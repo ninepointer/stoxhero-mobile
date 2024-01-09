@@ -38,7 +38,9 @@ class _WatchlistCardState extends State<WatchlistCard> {
       // instrumentType: widget.tradingWatchlist.instrument,
       // lastPrice: lastPrice,
     );
-    print(tradingInstrument.toJson());
+    controller.selectedOrderGroupValue.value = 2;
+    controller.selectedProductGroupValue.value = 2;
+    // print(tradingInstrument.toJson());
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: StockTransactionBottomSheet(
@@ -133,7 +135,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
                               ),
                               SizedBox(height: 2),
                               Text(
-                                '${widget.percentage}%',
+                                widget.percentage,
                                 style: TextStyle(
                                   color: Colors.green,
                                 ),

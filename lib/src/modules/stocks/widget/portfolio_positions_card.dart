@@ -346,7 +346,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                     widget.position.iId!.instrumentToken!,
                                     widget
                                         .position.iId!.exchangeInstrumentToken!,
-                                  )}%)',
+                                  )})',
                                   style: TextStyle(
                                     color: controller.getValueColor(
                                         controller.getInstrumentChanges(
@@ -466,7 +466,7 @@ class _PositionsCardState extends State<PositionsCard> {
                       widget.position.iId!.exchangeInstrumentToken!,
                     ),
                   );
-                  
+
                   controller.selectedOrderGroupValue.value = 2;
                   //for the same value of lots in exit text field
                   controller.quantityTextController.text =
