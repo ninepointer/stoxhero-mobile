@@ -4,7 +4,7 @@ class StockTotalPositionDetails {
   num? lots;
   num? brokerage;
   num? gross;
-  num? net;
+  num? holdingnet;
   num? currentvalue;
   num? roi;
   num? pnl;
@@ -12,7 +12,7 @@ class StockTotalPositionDetails {
     this.lots,
     this.brokerage,
     this.gross,
-    this.net,
+    this.holdingnet,
     this.currentvalue,
     this.roi,
     this.pnl,
@@ -24,7 +24,7 @@ class StockTotalPositionDetails {
       lots: lots ?? this.lots,
       brokerage: brokerage ?? this.brokerage,
       gross: gross ?? this.gross,
-      net: net ?? this.net,
+      holdingnet: net ?? this.holdingnet,
       currentvalue: currentvalue ?? this.currentvalue,
       roi: roi ?? this.roi,
       pnl: pnl ?? this.pnl,
@@ -36,7 +36,7 @@ class StockTotalPositionDetails {
       'lots': lots,
       'brokerage': brokerage,
       'gross': gross,
-      'net': net,
+      'holdingnet': holdingnet,
       'currentvalue': currentvalue,
       'roi': roi,
       'pnl': pnl,
@@ -48,7 +48,7 @@ class StockTotalPositionDetails {
       lots: map['lots'] != null ? map['lots'] as num : null,
       brokerage: map['brokerage'] != null ? map['brokerage'] as num : null,
       gross: map['gross'] != null ? map['gross'] as num : null,
-      net: map['net'] != null ? map['net'] as num : null,
+      holdingnet: map['holdingnet'] != null ? map['holdingnet'] as num : null,
       currentvalue:
           map['currentvalue'] != null ? map['currentvalue'] as num : null,
       roi: map['roi'] != null ? map['roi'] as num : null,

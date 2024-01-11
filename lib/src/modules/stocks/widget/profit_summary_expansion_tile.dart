@@ -50,7 +50,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
             (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
 
     num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
-        (controller.stockTotalPositionDetails.value.net ?? 0);
+        (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
 
     // num TotalOpenPositions = (controller.getOpenPositionCount()) +
     //     (controller.getOpenHoldingCount());

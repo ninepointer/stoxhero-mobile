@@ -13,7 +13,7 @@ class Funds extends StatefulWidget {
     // required this.investmentamount,
     // required this.returns,
     // required this.unrealisedPL,
-   // required this.returnpercentage,
+    // required this.returnpercentage,
   }) : super(key: key);
 
   // final String marginavailable;
@@ -46,7 +46,7 @@ class _FundsState extends State<Funds> {
             (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
 
     num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
-        (controller.stockTotalPositionDetails.value.net ?? 0);
+        (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
 
     // num TotalOpenPositions = (controller.getOpenPositionCount()) +
     //     (controller.getOpenHoldingCount());
@@ -70,7 +70,7 @@ class _FundsState extends State<Funds> {
 
     num investmentamount =
         (controller.stockTotalHoldingDetails.value.net ?? 0) +
-            (controller.stockTotalPositionDetails.value.net ?? 0);
+            (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
 
     return Padding(
       padding: const EdgeInsets.only(top: 8),

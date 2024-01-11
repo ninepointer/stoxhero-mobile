@@ -21,6 +21,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
     super.initState();
     controller = Get.find<StocksTradingController>();
     controller.getStockPositionsList();
+    controller.getStockHoldingsList();
   }
 
   @override
@@ -43,7 +44,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
 
         CentreCardinPositions(
           invested: FormatHelper.formatNumbers(
-              controller.stockTotalPositionDetails.value.net.toString(),
+              controller.stockTotalPositionDetails.value.holdingnet.toString(),
               decimal: 2),
           currentvalue: FormatHelper.formatNumbers(
               controller.stockTotalPositionDetails.value.currentvalue

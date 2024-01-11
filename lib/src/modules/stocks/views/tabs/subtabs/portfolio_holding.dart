@@ -20,6 +20,7 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
     super.initState();
     controller = Get.find<StocksTradingController>();
     controller.getStockHoldingsList();
+    controller.getStockPositionsList();
   }
 
   @override
