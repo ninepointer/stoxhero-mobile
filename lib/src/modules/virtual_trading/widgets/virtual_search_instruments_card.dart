@@ -122,13 +122,17 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
             Expanded(
               child: GestureDetector(
                 onTap: isAdded
-                    ? () => Get.find<VirtualTradingController>().removeInstrument(tradingInstrument.instrumentToken)
-                    : () => Get.find<VirtualTradingController>().addInstrument(tradingInstrument),
+                    ? () => Get.find<VirtualTradingController>()
+                        .removeInstrument(tradingInstrument.instrumentToken)
+                    : () => Get.find<VirtualTradingController>()
+                        .addInstrument(tradingInstrument),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: isAdded ? AppColors.info.withOpacity(.25) : AppColors.secondary.withOpacity(.25),
+                    color: isAdded
+                        ? AppColors.info.withOpacity(.25)
+                        : AppColors.secondary.withOpacity(.25),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(8),
                     ),
@@ -136,7 +140,9 @@ class VirtualSearchInstrumentsCard extends GetView<VirtualTradingController> {
                   child: Text(
                     isAdded ? 'REMOVE' : 'ADD',
                     style: AppStyles.tsWhiteMedium12.copyWith(
-                      color: isAdded ? AppColors.info : AppColors.secondary.shade600,
+                      color: isAdded
+                          ? AppColors.info
+                          : AppColors.secondary.shade600,
                     ),
                   ),
                 ),

@@ -42,10 +42,13 @@ class TradingStockCard extends StatelessWidget {
                         ),
                         Text(
                           stockPrice ?? '-',
-                          style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                                color:
-                                    stockColor ?? (stockPrice!.startsWith('-') ? AppColors.danger : AppColors.success),
-                              ),
+                          style:
+                              Theme.of(context).textTheme.tsMedium12.copyWith(
+                                    color: stockColor ??
+                                        (stockPrice!.startsWith('-')
+                                            ? AppColors.danger
+                                            : AppColors.success),
+                                  ),
                         ),
                       ],
                     ),
@@ -57,9 +60,10 @@ class TradingStockCard extends StatelessWidget {
                     children: [
                       Text(
                         stockLTP ?? '',
-                        style: Theme.of(context).textTheme.tsGreyMedium10.copyWith(
-                              color: stockLTPColor,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.tsGreyMedium10.copyWith(
+                                  color: stockLTPColor,
+                                ),
                       ),
                       SizedBox(width: 4),
                       Text(

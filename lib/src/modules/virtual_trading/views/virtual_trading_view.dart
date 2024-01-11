@@ -157,6 +157,9 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                           ],
                         ),
                       ),
+
+
+                      
                     CommonTile(
                       isLoading: controller.isPositionStateLoadingStatus,
                       label: 'My Position',
@@ -187,6 +190,10 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               }
                             },
                           ),
+
+
+
+
                     CommonTile(
                       isLoading: controller.isPendingOrderStateLoadingStatus,
                       label: 'My Pending Orders',
