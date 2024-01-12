@@ -4,7 +4,6 @@ import '../../../main.dart';
 
 class AppUrls {
   static const String stock = 'Stock';
-
   static const String baseURL =
       isProd ? 'https://stoxhero.com' : 'http://43.204.7.180';
   static const String apiURL = '$baseURL/api/v1';
@@ -315,7 +314,6 @@ class AppUrls {
       "$apiURL/dailycontest/weeklytopperformerfulllist";
   static const String weeklyTopPerformersFullListCarouseal =
       "$apiURL/toptestzoneportfolios";
-
   static String StocksDashboardView_watchlist(String? searchQuery) =>
       "$apiURL/equityInstrument?search=$searchQuery";
   static const String addStock = "$apiURL/addstock";
@@ -333,7 +331,6 @@ class AppUrls {
   static const String stockFundsMargin = "$apiURL/stock/margin";
   // static String stockTradeExececutedOrders(String? id) =>
   //     "$apiURL/pendingorder/my/todaysProcessed/$id/Stock";
-
   static String contestResultPage(String? id) =>
       "$apiURL/dailycontest/trade/$id/result";
 
@@ -349,4 +346,6 @@ class AppUrls {
       "$apiURL/pendingorder/my/todaysPending/$id/Stock";
 
   //pendingorder/my/todaysPending/6433e2e5500dc2f2d20d686d/Stock
+  static String stocksAllOrder = "$apiURL/stock/my/historyorders";
+  static String stocksTodayOrder = "$apiURL/stock/my/todayorders";
 }

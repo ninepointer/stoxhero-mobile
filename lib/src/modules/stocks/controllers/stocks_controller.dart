@@ -514,7 +514,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
     isMarginStateLoading(true);
-    print('hii inst${inst.lastPrice}');
+    print('hii inst${inst.toJson()}');
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -533,6 +533,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       variety: "regular",
       price: limitPriceTextController.text,
       lastPrice: inst.lastPrice.toString(),
+    
     );
 
     try {
@@ -544,7 +545,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         if (response.data?.status?.toLowerCase() == "success") {
           marginRequired(response.data);
 
-          print('hii${data.toJson()}');
+          //     print('hii${data.toJson()}');
         } else {
           SnackbarHelper.showSnackbar(response.error?.message);
         }

@@ -2,7 +2,7 @@ class AppConstants {
   static const String appName = 'StoxHero';
 
   static const String token =
-     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4OGYzOTkxZmM0YmY2MjlkZTZkZjAiLCJpYXQiOjE2OTc4MTA1NDJ9.lpBZfpq_KSamwjowT59KnuZbAxTnqOCPWnMC3GGpfuY"; // Vijay
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4OGYzOTkxZmM0YmY2MjlkZTZkZjAiLCJpYXQiOjE2OTc4MTA1NDJ9.lpBZfpq_KSamwjowT59KnuZbAxTnqOCPWnMC3GGpfuY"; // Vijay
   // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk4N2MzNDIyM2MzZmMwNzQ2ODNmMzciLCJpYXQiOjE2OTc1NTYzNzJ9.IzG3E44jZV7jrszfBuDz7xFGz0HD6A396rK4F9uhA1E"; // Manish
   // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk4N2MzNDIyM2MzZmMwNzQ2ODNmMzciLCJpYXQiOjE2OTc3ODQ3MzR9.BoFbGTf28VYDIBDJTU54BmD5sbOVo1WaCnXL0o4aKBQ"; // Prod Mainsh
   // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk3MWVlYzJjYTVjZTViNTJmOTAwYjciLCJpYXQiOjE2OTc3ODQ3ODl9.pkqOXuQMHp2tRDrtFlEp3wQX39OwoJi5q2g6sEF2P1A"; // Prod Prateek
