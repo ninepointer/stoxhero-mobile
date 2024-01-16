@@ -41,12 +41,13 @@ class _FundsState extends State<Funds> {
 
   @override
   Widget build(BuildContext context) {
-    num CurrentValue =
-        (controller.stockTotalHoldingDetails.value.currentvalue ?? 0) +
-            (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
+    // num CurrentValue =
 
-    num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
-        (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
+    //     (controller.stockTotalHoldingDetails.value.currentvalue ?? 0) +
+    //         (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
+
+    // num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
+    //     (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
 
     // num TotalOpenPositions = (controller.getOpenPositionCount()) +
     //     (controller.getOpenHoldingCount());
@@ -55,11 +56,16 @@ class _FundsState extends State<Funds> {
 
     // num finalROI = (finalpnl * 100) / InvestedValue;
 
-    num MarginUsed = controller.stockfundsmargin.value.totalFund! -
-        controller.calculateMargin().round();
+    // num MarginUsed = controller.stockfundsmargin.value.totalFund! -
+    //     controller.calculateMargin().round();
 
-    num OPenPositions =
-        controller.getOpenPositionCount() + controller.getOpenHoldingCount();
+    num? totalFund = controller.stockfundsmargin.value.totalFund;
+    num MarginUsed = totalFund != null
+        ? totalFund - controller.calculateMargin().round()
+        : 0;
+
+    // num OPenPositions =
+    //     controller.getOpenPositionCount() + controller.getOpenHoldingCount();
 
     num PnL = ((controller.stockTotalHoldingDetails.value.pnl ?? 0) +
         (controller.stockTotalPositionDetails.value.pnl ?? 0));

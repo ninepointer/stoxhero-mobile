@@ -134,7 +134,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                     // controller.selectedQuantity = controller.quanitityTextController.value,
                     onChanged: (String? value) {
                       controller.selectedQuantity.value =
-                          int.parse(controller.quantityTextController.text);
+                          (controller.quantityTextController.text) as int;
                     },
                   ),
 

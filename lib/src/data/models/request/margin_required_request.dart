@@ -20,7 +20,8 @@ class MarginRequiredRequest {
       this.validity,
       this.variety,
       this.price,
-      this.lastPrice});
+      this.lastPrice
+      });
 
   MarginRequiredRequest.fromJson(Map<String, dynamic> json) {
     exchange = json['exchange'];

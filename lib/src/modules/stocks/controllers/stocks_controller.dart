@@ -533,7 +533,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       variety: "regular",
       price: limitPriceTextController.text,
       lastPrice: inst.lastPrice.toString(),
-    
     );
 
     try {
@@ -573,7 +572,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   void handleRadioValueChanged(int newValue, String labelText) {
     selectedProductGroupValue.value = newValue;
     selectedType.value = labelText;
-    print("handleRadioValueChanged : $labelText");
+    // print("handleRadioValueChanged : $labelText");
   }
 
   void handleRadioProductChanged(int newValue, String labelText) {
@@ -633,7 +632,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         positionsOpenCount++;
       }
     }
-    print('count position${positionsOpenCount}');
+    // print('count position${positionsOpenCount}');
     return positionsOpenCount;
   }
 
@@ -645,7 +644,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         holdingOpenCount++;
       }
     }
-    print('count holding${holdingOpenCount}');
+    // print('count holding${holdingOpenCount}');
     return holdingOpenCount;
   }
 
@@ -910,12 +909,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         if (holding.lots != 0) {
           totalHoldingInvested += holding.amount?.abs() ?? 0;
         }
-        // else {
-        //   totalHoldingInvested = 0;
-        // }
-
-        // print('final${totalHoldingInvested}');
-
         if (holding.lots != 0) {
           totalRoi = ((totalPnl * 100) / totalHoldingInvested);
         } else {
@@ -1017,6 +1010,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
+      print('hiii${stockfundsmargin.toJson()}');
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1125,6 +1119,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     try {
       final RepoResponse<StocksFundsMarginResponse> response =
           await repository.getStockFundsMargin();
+
       if (response.data != null) {
         stockfundsmargin(response.data?.data);
       } else {
