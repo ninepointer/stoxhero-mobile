@@ -46,7 +46,7 @@ class CentreCardinPositions extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Holding P&L',
+                      'Positions P&L',
                       style: AppStyles.tsBlackMedium12,
                     ),
                     Text(

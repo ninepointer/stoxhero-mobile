@@ -72,7 +72,7 @@ class _PortfolioState extends State<holding>
                     .size
                     .height, // Adjust the height as needed
                 child: TabBarView(
-                   physics: NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   controller: tabController,
                   children: [
                     PortfolioPosition(),
@@ -87,4 +87,3 @@ class _PortfolioState extends State<holding>
     );
   }
 }
-
