@@ -90,7 +90,8 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
               shape: const ContinuousRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25)),
               ),
-              backgroundColor: Colors.white,
+              backgroundColor:
+                  Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               collapsedIconColor: Colors.black,
               //     tilePadding: EdgeInsets.symmetric( horizontal: 10), // Adjust the padding here
               title: const Text("Portfolio Summary"),
@@ -117,7 +118,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                             children: [
                               Text(
                                 "Net P&L",
-                                style: AppStyles.tsBlackMedium16,
+                                style: AppStyles.tsBlackMedium16.copyWith(
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                               SizedBox(height: 5),
                               Text(
@@ -145,7 +149,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 //           .toString())),
                                 // ),
                                 // 'hii',
-                                style: AppStyles.tsBlackMedium14,
+                                style: AppStyles.tsBlackMedium14.copyWith(
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                               SizedBox(height: 5),
                               Text(
@@ -157,7 +164,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 FormatHelper.formatNumbers(controller
                                     .stockfundsmargin.value.totalFund
                                     .toString()),
-                                style: AppStyles.tsBlackMedium14,
+                                style: AppStyles.tsBlackMedium14.copyWith(
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                               SizedBox(height: 5),
                               Text(
@@ -177,7 +187,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 //         )))
                                 //     .toString(),
                                 //'yo',
-                                style: AppStyles.tsBlackMedium14,
+                                style: AppStyles.tsBlackMedium14.copyWith(
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                             ],
                           ),
@@ -212,7 +225,18 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                       FormatHelper.formatNumbers(
                                           (PnL - brokerage),
                                           decimal: 2),
-                                      style: AppStyles.tsBlackMedium16),
+                                      style: TextStyle(
+                                        color: (double.tryParse(
+                                                        (PnL - brokerage)
+                                                            .toString()) ??
+                                                    0) <
+                                                0
+                                            ? AppColors.danger
+                                            : AppColors.success,
+                                        fontFamily: AppTheme.fontFamily,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                      )),
                                   // Text(
                                   //   '(${FormatHelper.formatNumbers(finalROI, decimal: 2, showSymbol: false)}%)',
                                   //   style: AppStyles.tsBlackMedium14,
@@ -237,7 +261,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 //         0))),
 
                                 //'how',
-                                style: AppStyles.tsBlackMedium14,
+                                style: AppStyles.tsBlackMedium14.copyWith(
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                               SizedBox(height: 5),
                               Text(
@@ -253,7 +280,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                       .toString(),
                                   decimal: 2,
                                 ),
-                                style: AppStyles.tsBlackMedium14,
+                                style: AppStyles.tsBlackMedium14.copyWith(
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                               SizedBox(height: 5),
                               Text(
@@ -269,7 +299,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 //     (controller
                                 //         .getOpenHoldingCount()
                                 //         .toString())),
-                                style: AppStyles.tsBlackMedium14,
+                                style: AppStyles.tsBlackMedium14.copyWith(
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
                               ),
                             ],
                           ),

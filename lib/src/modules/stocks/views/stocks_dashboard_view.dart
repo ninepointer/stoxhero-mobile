@@ -103,7 +103,8 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                     margin: EdgeInsets.all(10),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: Colors.white54,
+                      color:
+                          Get.isDarkMode ? Color(0xFF1B2937) : Colors.white54,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Column(
@@ -123,8 +124,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                           controller: _tabController,
                           tabs: [
                             Tab(
-                              text:
-                                  'Watchlist', 
+                              text: 'Watchlist',
                             ),
                             Tab(
                               text: 'Portfolio',
@@ -161,8 +161,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                             child: orders(),
                           ),
                           Container(
-                            child: Funds(
-                                ),
+                            child: Funds(),
                           ),
                         ],
                       ),

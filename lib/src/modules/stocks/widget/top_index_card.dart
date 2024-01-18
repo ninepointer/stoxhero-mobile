@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 
 import '../../../core/core.dart';
 
@@ -22,16 +24,16 @@ class IndexCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
+        borderRadius: BorderRadius.circular(25),
+      ),
       width: 117,
       child: CommonCard(
         margin: EdgeInsets.zero,
         padding: EdgeInsets.zero,
         children: [
           Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-            ),
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

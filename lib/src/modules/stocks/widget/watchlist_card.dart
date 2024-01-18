@@ -128,7 +128,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              widget.percentage,
+                              '${widget.percentage}%',
                               style: TextStyle(
                                   color: (double.tryParse(widget.percentage) ??
                                               0) <
