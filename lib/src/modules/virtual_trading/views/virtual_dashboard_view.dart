@@ -158,7 +158,7 @@ class FutureAndOptionDashBoard extends StatelessWidget {
                     bottom: 0,
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.grey, width: 1.0),
+                        // border: Border.all(color: AppColors.grey, width: 1.0),
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
