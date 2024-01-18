@@ -8,6 +8,7 @@ import 'package:stoxhero/src/modules/stocks/views/tabs/orders_tab.dart';
 import 'package:stoxhero/src/modules/stocks/views/tabs/watchlist_tab.dart';
 import 'package:stoxhero/src/modules/stocks/widget/profit_summary_expansion_tile.dart';
 import 'package:stoxhero/src/modules/stocks/widget/top_index_card.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 class StocksDashboardView extends StatefulWidget {
   const StocksDashboardView({Key? key}) : super(key: key);
@@ -42,7 +43,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
     //  print("hii${controller.stockIndexInstrumentList}");
     //  print("yo${controller.stockIndexDetailsList.map((element) => element.lastPrice)}");
 
-    print('endtime ${controller.readSetting.value.appEndTime}');
+   // print('endtime ${controller.readSetting.value.appEndTime}');
     return Scaffold(
       appBar: AppBar(title: Text('Stocks Trading')),
       body: Obx(
@@ -96,16 +97,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                     height: 5,
                   ),
                   Container(
-                    child: CustomExpansionTile(
-                        //  invested: '929360',
-                        // profitloss: '-2720.00',
-                        // percentage: '(0.29%)',
-                        //  currentvalue: '926640',
-                        //  availablemargin: '50000',
-                        // marginmoney: '678888',
-                        //  marginused: '678',
-                        //  openpositions: '4',
-                        ),
+                    child: CustomExpansionTile(),
                   ),
                   Container(
                     margin: EdgeInsets.all(10),
@@ -120,10 +112,15 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                           padding: EdgeInsets.only(left: 0, right: 0),
                           child: TabBar(
                             isScrollable: true,
-                            labelColor: Colors.green[600],
-                            unselectedLabelColor: Colors.grey,
+                            labelColor: Get.isDarkMode
+                                ? Colors.white
+                                : Colors.green[600],
+                            unselectedLabelColor:
+                                Get.isDarkMode ? Colors.grey[300] : Colors.grey,
                             indicator: BoxDecoration(
-                              color: Colors.green[200],
+                              color: Get.isDarkMode
+                                  ? Colors.blue
+                                  : Colors.green[200],
                               borderRadius: BorderRadius.circular(25),
                             ),
                             controller: _tabController,

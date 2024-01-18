@@ -819,12 +819,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
             position.iId!.exchangeInstrumentToken!,
           ),
         );
-
-        // if (position.lots != 0) {
-        //   totalPositionInvested =position.amount?.abs() ?? 0;
-        // } else {
-        //   totalPositionInvested = 0;
-        // }
         if (position.lots != 0) {
           totalPositionInvested += position.amount?.abs() ?? 0;
         }
@@ -838,7 +832,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         }
       }
     }
-
+    
     stockTotalPositionDetails(
       StockTotalPositionDetails(
         lots: totalLots,
