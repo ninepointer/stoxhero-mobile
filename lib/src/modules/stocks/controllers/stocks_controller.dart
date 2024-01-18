@@ -514,7 +514,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
     isMarginStateLoading(true);
-    print('hii inst${inst.lastPrice}');
+    print('hii inst${inst.toJson()}');
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -544,7 +544,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         if (response.data?.status?.toLowerCase() == "success") {
           marginRequired(response.data);
 
-          print('hii${data.toJson()}');
+          //     print('hii${data.toJson()}');
         } else {
           SnackbarHelper.showSnackbar(response.error?.message);
         }
@@ -572,7 +572,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   void handleRadioValueChanged(int newValue, String labelText) {
     selectedProductGroupValue.value = newValue;
     selectedType.value = labelText;
-    print("handleRadioValueChanged : $labelText");
+    // print("handleRadioValueChanged : $labelText");
   }
 
   void handleRadioProductChanged(int newValue, String labelText) {
@@ -632,20 +632,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         positionsOpenCount++;
       }
     }
-    print('count position${positionsOpenCount}');
+    // print('count position${positionsOpenCount}');
     return positionsOpenCount;
-    // int positionsOpenCount = stockPositionsList.length;
-
-    //print('total Position${positionsOpenCount}');
-    // int positionsopenCount = 0;
-
-    // for (var position in stockPositionsList) {
-    //   if (position.iId?.isLimit ?? false) {
-    //   } else if (position.lots != 0) {
-    //     positionsopenCount++;
-    //   }
-    // }
-    // return positionsOpenCount;
   }
 
   int getOpenHoldingCount() {
@@ -656,18 +644,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         holdingOpenCount++;
       }
     }
-    print('count holding${holdingOpenCount}');
+    // print('count holding${holdingOpenCount}');
     return holdingOpenCount;
-    // int holdingOpenCount = stockHoldingsList.length;
-    //  print('total Holding ${holdingOpenCount}');
-    // int holdingopenCount = 0;
-    // for (var holding in stockHoldingsList) {
-    //   if (holding.iId?.isLimit ?? false) {
-    //   } else if (holding.lots != 0) {
-    //     holdingopenCount++;
-    //   }
-    // }
-    // return holdingOpenCount;
   }
 
   num calculateHoldingTotalNetPNL() {
@@ -822,58 +800,57 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
     //num totalInvestedValue =0;
 
-    for (var Position in stockPositionsList) {
-      if (Position.iId?.isLimit ?? false) {
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
       } else {
-        totalLots += Position.lots ?? 0;
-        totalPositionBrokerage += Position.brokerage ?? 0;
-        totalGross += Position.lastaverageprice?.abs() ?? 0;
+        totalLots += position.lots ?? 0;
+        totalPositionBrokerage += position.brokerage ?? 0;
+        totalGross += position.lastaverageprice?.abs() ?? 0;
         // totalHoldingInvested += holding.amount?.abs() ?? 0;
-        totalCurrentValue += (Position.lastaverageprice?.abs() ?? 0) *
-            (Position.lots?.abs() ?? 0);
+        totalCurrentValue += (position.lastaverageprice?.abs() ?? 0) *
+            (position.lots?.abs() ?? 0);
 
         // totalPnl = (totalCurrentValue - totalNet);
         totalPnl += calculateGrossPNL(
-          Position.amount ?? 0,
-          Position.lots!.toInt(),
+          position.amount ?? 0,
+          position.lots!.toInt(),
           getInstrumentLastPrice(
-            Position.iId!.instrumentToken!,
-            Position.iId!.exchangeInstrumentToken!,
+            position.iId!.instrumentToken!,
+            position.iId!.exchangeInstrumentToken!,
           ),
         );
-
-        if (Position.lots != 0) {
-          totalPositionInvested += Position.amount?.abs() ?? 0;
-        } else {
-          totalPositionInvested = 0;
+        if (position.lots != 0) {
+          totalPositionInvested += position.amount?.abs() ?? 0;
         }
+
         // print('final${totalHoldingInvested}');
 
-        if (Position.lots != 0) {
+        if (position.lots != 0) {
           totalRoi = ((totalPnl * 100) / totalPositionInvested);
         } else {
           totalRoi = 0;
         }
       }
     }
-
+    
     stockTotalPositionDetails(
       StockTotalPositionDetails(
         lots: totalLots,
         brokerage: totalPositionBrokerage,
         gross: totalGross,
-        net: totalPositionInvested,
+        holdingnet: totalPositionInvested,
         currentvalue: totalCurrentValue,
         roi: totalRoi,
         pnl: totalPnl,
       ),
     );
+    // print('positiontotal ${totalPositionInvested}');
   }
 
 //Holdings ka pura scene
 
   Future getStockHoldingsList() async {
-    isPositionStateLoading(true);
+    isHoldingStateLoading(true);
     try {
       final RepoResponse<StocksHoldingsListResponse> response =
           await repository.getstocksHoldings();
@@ -925,11 +902,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
         if (holding.lots != 0) {
           totalHoldingInvested += holding.amount?.abs() ?? 0;
-        } else {
-          totalHoldingInvested = 0;
         }
-        // print('final${totalHoldingInvested}');
-
         if (holding.lots != 0) {
           totalRoi = ((totalPnl * 100) / totalHoldingInvested);
         } else {
@@ -937,7 +910,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         }
       }
     }
-
+    //print('holdingtotal${totalHoldingInvested}');
     stockTotalHoldingDetails(
       StockTotalHoldingDetails(
         lots: totalLots,
@@ -1031,6 +1004,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
+      print('hiii${stockfundsmargin.toJson()}');
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1139,6 +1113,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     try {
       final RepoResponse<StocksFundsMarginResponse> response =
           await repository.getStockFundsMargin();
+
       if (response.data != null) {
         stockfundsmargin(response.data?.data);
       } else {

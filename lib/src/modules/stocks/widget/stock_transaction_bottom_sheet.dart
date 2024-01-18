@@ -133,8 +133,21 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                     controller: controller.quantityTextController,
                     // controller.selectedQuantity = controller.quanitityTextController.value,
                     onChanged: (String? value) {
-                      controller.selectedQuantity.value =
-                          int.parse(controller.quantityTextController.text);
+                      try {
+                        // Attempt to convert the string to an integer
+                        controller.selectedQuantity.value =
+                            int.parse(controller.quantityTextController.text);
+
+                        // If successful, the value is a valid integer
+                      } catch (e) {
+                        // If conversion fails, handle the error
+                        print("Error: ${e.toString()}");
+                        // You can provide feedback or set a default value here if needed
+                        // For example: controller.selectedQuantity.value = defaultValue;
+                      }
+
+                      // controller.selectedQuantity.value =
+                      //     (controller.quantityTextController.text) as int;
                     },
                   ),
 
