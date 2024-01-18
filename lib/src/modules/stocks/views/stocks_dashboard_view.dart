@@ -129,9 +129,9 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                             Tab(
                               text: 'Portfolio',
                             ),
-                            Tab(
-                              text: 'BestStocks',
-                            ),
+                            // Tab(
+                            //   text: 'BestStocks',
+                            // ),
                             Tab(
                               text: '  Orders  ',
                             ),
@@ -154,9 +154,9 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                           Container(
                             child: holding(),
                           ),
-                          Container(
-                            child: BestStocks(),
-                          ),
+                          // Container(
+                          //   child: BestStocks(),
+                          // ),
                           Container(
                             child: orders(),
                           ),

@@ -25,7 +25,7 @@ class _ExecutedOrdersState extends State<ExecutedOrders> {
     return Scaffold(
       body: controller.stocksStopLossExecutedOrdersList.isEmpty
           ? NoDataFound(
-              label: AppStrings.noDataFoundPendingOrders,
+              label: AppStrings.noDataFoundExecutedOrders,
             )
           : ListView.builder(
               itemCount: controller.stocksStopLossExecutedOrdersList
