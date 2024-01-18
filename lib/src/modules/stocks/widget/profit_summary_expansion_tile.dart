@@ -152,7 +152,8 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 style: AppStyles.tsBlackMedium14.copyWith(
                                     color: Get.isDarkMode
                                         ? Colors.white
-                                        : Colors.black),
+                                        : Colors.black
+                                        ),
                               ),
                               SizedBox(height: 5),
                               Text(

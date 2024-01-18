@@ -176,11 +176,3 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
     );
   }
 }
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: StocksDashboardView(),
-    ),
-  );
-}

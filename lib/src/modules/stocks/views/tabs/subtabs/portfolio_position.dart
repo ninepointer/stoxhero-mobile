@@ -33,7 +33,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           padding: const EdgeInsets.only(top: 40),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
