@@ -166,7 +166,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
 
                   return Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+                   
                     ),
                     elevation: 0,
                     child: Padding(

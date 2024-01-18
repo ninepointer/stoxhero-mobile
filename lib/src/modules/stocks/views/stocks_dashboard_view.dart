@@ -43,7 +43,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
     //  print("hii${controller.stockIndexInstrumentList}");
     //  print("yo${controller.stockIndexDetailsList.map((element) => element.lastPrice)}");
 
-   // print('endtime ${controller.readSetting.value.appEndTime}');
+    // print('endtime ${controller.readSetting.value.appEndTime}');
     return Scaffold(
       appBar: AppBar(title: Text('Stocks Trading')),
       body: Obx(
@@ -108,41 +108,37 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                     ),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 0, right: 0),
-                          child: TabBar(
-                            isScrollable: true,
-                            labelColor: Get.isDarkMode
-                                ? Colors.white
-                                : Colors.green[600],
-                            unselectedLabelColor:
-                                Get.isDarkMode ? Colors.grey[300] : Colors.grey,
-                            indicator: BoxDecoration(
-                              color: Get.isDarkMode
-                                  ? Colors.blue
-                                  : Colors.green[200],
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            controller: _tabController,
-                            tabs: [
-                              Tab(
-                                text:
-                                    'Watchlist', // Change 'Holdings' to 'Watchlist'
-                              ),
-                              Tab(
-                                text: 'Portfolio',
-                              ),
-                              Tab(
-                                text: 'BestStocks',
-                              ),
-                              Tab(
-                                text: '  Orders  ',
-                              ),
-                              Tab(
-                                text: '  Funds  ',
-                              ),
-                            ],
+                        TabBar(
+                          isScrollable: true,
+                          labelColor:
+                              Get.isDarkMode ? Colors.white : Colors.green[600],
+                          unselectedLabelColor:
+                              Get.isDarkMode ? Colors.grey[300] : Colors.grey,
+                          indicator: BoxDecoration(
+                            color: Get.isDarkMode
+                                ? Colors.blue
+                                : Colors.green[200],
+                            borderRadius: BorderRadius.circular(25),
                           ),
+                          controller: _tabController,
+                          tabs: [
+                            Tab(
+                              text:
+                                  'Watchlist', 
+                            ),
+                            Tab(
+                              text: 'Portfolio',
+                            ),
+                            Tab(
+                              text: 'BestStocks',
+                            ),
+                            Tab(
+                              text: '  Orders  ',
+                            ),
+                            Tab(
+                              text: '  Funds  ',
+                            ),
+                          ],
                         )
                       ],
                     ),
@@ -166,13 +162,6 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                           ),
                           Container(
                             child: Funds(
-                                // marginavailable: '1',
-                                // usedmargin: '2',
-                                // allocatedmargin: '3',
-                                // investmentamount: '4',
-                                // returns: '5',
-                                // unrealisedPL: '6',
-                                // returnpercentage: '7'
                                 ),
                           ),
                         ],

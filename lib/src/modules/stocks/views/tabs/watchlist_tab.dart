@@ -48,7 +48,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
           padding: const EdgeInsets.only(top: 25),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
@@ -74,11 +74,13 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Get.isDarkMode
+                      ? Color(0xFF151F2B).withOpacity(0.8)
+                      : Colors.grey.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 4,
                   offset: Offset(0, 2),
