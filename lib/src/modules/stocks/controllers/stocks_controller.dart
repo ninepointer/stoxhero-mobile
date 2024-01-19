@@ -109,13 +109,14 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     loadUserDetails();
     socketConnection();
     socketIndexConnection();
-    await getStocksStopLossExecutedOrder();
-    await getStocksStopLossPendingOrder();
+
     await getEquityInstrumentDetails();
     await getStockIndexInstrumentsList();
     await getStocksTradingPortfolio();
     await getStockPositionsList();
     await getStocksFundsMargin();
+    await getStocksStopLossExecutedOrder();
+    await getStocksStopLossPendingOrder();
     //  await getStocksTradingInstruments();
   }
 
@@ -832,7 +833,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         }
       }
     }
-    
+
     stockTotalPositionDetails(
       StockTotalPositionDetails(
         lots: totalLots,
@@ -1019,6 +1020,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           await repository.getStocksStopLossPendingOrder(
         stockfundsmargin.value.portfolioId.toString(),
       );
+      print('harshit${stockfundsmargin.value.portfolioId}');
       if (response.data?.status?.toLowerCase() == "success") {
         List<StocksPendingOrderData>? tempList = [];
         tempList = response.data?.data
