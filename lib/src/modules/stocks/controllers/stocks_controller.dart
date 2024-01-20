@@ -968,7 +968,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     if (ltp == 0) return 0;
 
     num pnl = 0;
-    num value = (((lots) * ltp) - avg.abs());
+    num value = (((lots.abs()) * ltp.abs()) - avg.abs());
     pnl += value;
     return pnl;
   }

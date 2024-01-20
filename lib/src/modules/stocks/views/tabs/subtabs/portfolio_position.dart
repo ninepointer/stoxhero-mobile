@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
@@ -73,11 +75,18 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
                 itemBuilder: (context, index) {
                   // Access data from the controller's positions list
                   var position = controller.stockPositionsList[index];
-                  if (position != null && position.iId?.isLimit != true) {
+                  //print('position${position.toJson()}');
+                  if (position != null && position.iId?.isLimit == null) {
                     return PositionsCard(
                       position: position,
                     );
+                  } else {
+                    return SizedBox();
                   }
+
+                  // return PositionsCard(
+                  //   position: position,
+                  // );
 
                   // Add more cards as needed
                 },
