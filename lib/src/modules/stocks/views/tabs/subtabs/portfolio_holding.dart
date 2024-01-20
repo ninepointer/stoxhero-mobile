@@ -72,16 +72,14 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
                 itemBuilder: (context, index) {
                   // Access data from the controller's positions list
                   var holding = controller.stockHoldingsList[index];
+                  if (holding != null && holding.iId?.isLimit == null) {
+                    return HoldingsCard(
+                      holding: holding,
+                    );
+                  } else {
+                    return SizedBox();
+                  }
 
-                  return HoldingsCard(
-                    holding: holding,
-                    // title: position.title,
-                    // averageprice: "₹${position.averagePrice}",
-                    // percentage: position.percentage,
-                    // quantity: position.quantity.toString(),
-                    // ltp: "₹${position.ltp}",
-                    // imagePath: 'assets/images/10Xlogo.jpg',
-                  );
                   // Add more cards as needed
                 },
               );

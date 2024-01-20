@@ -92,6 +92,7 @@ class IdHoldings {
     exchange = json['exchange'];
     validity = json['validity'];
     variety = json['variety'];
+    isLimit = json['isLimit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +104,7 @@ class IdHoldings {
     data['exchange'] = this.exchange;
     data['validity'] = this.validity;
     data['variety'] = this.variety;
+    data['isLimit'] = this.isLimit;
     return data;
   }
 }
