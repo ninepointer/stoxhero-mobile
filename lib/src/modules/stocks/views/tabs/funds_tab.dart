@@ -85,11 +85,13 @@ class _FundsState extends State<Funds> {
         width: double.infinity,
         padding: EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
           borderRadius: BorderRadius.circular(25.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Get.isDarkMode
+                  ? Color(0xFF151F2B).withOpacity(0.8)
+                  : Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
               offset: Offset(0, 2),
@@ -105,29 +107,45 @@ class _FundsState extends State<Funds> {
                   decimal: 2,
                 ),
                 index: 0),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
                 cardname: "Margin Used",
                 cardvalue: FormatHelper.formatNumbers(MarginUsed, decimal: 2),
                 index: 1),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
                 cardname: "Allocated Margin",
                 cardvalue: FormatHelper.formatNumbers(
                     controller.stockfundsmargin.value.totalFund.toString()),
                 index: 2),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
                 cardname: "Investment Amount",
                 cardvalue:
                     FormatHelper.formatNumbers(investmentamount, decimal: 2),
                 index: 3),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
                 cardname: "Returns",
                 cardvalue:
                     FormatHelper.formatNumbers(PnL - brokerage, decimal: 2),
                 index: 4),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
                 cardname: "Unrealised P&L",
                 cardvalue: FormatHelper.formatNumbers(PnL, decimal: 2),
                 index: 5),
+
             // FundsCard(
             //     cardname: "Return Percentage",
             //     cardvalue: widget.returnpercentage,
@@ -155,7 +173,9 @@ class FundsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: index % 2 == 0 ? Colors.white : Colors.grey[200],
+      color: Get.isDarkMode
+          ? Color(0xFF151F2B)
+          : (index % 2 == 0 ? Colors.white : Colors.grey[200]),
       elevation: 0,
       child: Padding(
         padding: EdgeInsets.all(16.0),
@@ -167,7 +187,10 @@ class FundsCard extends StatelessWidget {
               children: [
                 Text(
                   cardname,
-                  style: AppStyles.tsBlackMedium16, // Uncomment if needed
+                  style: AppStyles.tsBlackMedium16.copyWith(
+                      color: Get.isDarkMode
+                          ? Colors.white
+                          : Colors.black), // Uncomment if needed
                 ),
               ],
             ),

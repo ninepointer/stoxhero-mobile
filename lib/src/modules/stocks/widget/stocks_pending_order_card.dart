@@ -18,12 +18,14 @@ class StocksPendingOrderCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
           borderRadius:
               BorderRadius.circular(25.0), // Adjust the radius as needed
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Get.isDarkMode
+                  ? Color(0xFF151F2B).withOpacity(0.8)
+                  : Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
               offset: Offset(0, 2),
@@ -51,7 +53,8 @@ class StocksPendingOrderCard extends StatelessWidget {
                   SizedBox(height: 5),
                   Text(
                     stopLoss.symbol ?? '',
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                   SizedBox(height: 5),
                   Text(
@@ -63,7 +66,8 @@ class StocksPendingOrderCard extends StatelessWidget {
                     FormatHelper.formatNumbers(
                       stopLoss.price,
                     ),
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                   SizedBox(height: 5),
                   Text(
@@ -73,7 +77,8 @@ class StocksPendingOrderCard extends StatelessWidget {
                   Text(
                     //timestamp,
                     FormatHelper.formatDateTimeToIST(stopLoss.executionTime),
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                 ],
               ),
@@ -95,7 +100,9 @@ class StocksPendingOrderCard extends StatelessWidget {
                     children: [
                       Text(
                         stopLoss.quantity.toString(),
-                        style: AppStyles.tsBlackMedium12,
+                        style: AppStyles.tsBlackMedium12.copyWith(
+                            color:
+                                Get.isDarkMode ? Colors.white : Colors.black),
                       ),
                       Text(
                         " Quantity",
@@ -113,7 +120,8 @@ class StocksPendingOrderCard extends StatelessWidget {
                     FormatHelper.formatNumbers(
                       stopLoss.amount,
                     ),
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                 ],
               ),

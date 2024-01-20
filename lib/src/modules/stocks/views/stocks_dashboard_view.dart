@@ -24,7 +24,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -129,9 +129,9 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                             Tab(
                               text: 'Portfolio',
                             ),
-                            Tab(
-                              text: 'BestStocks',
-                            ),
+                            // Tab(
+                            //   text: 'BestStocks',
+                            // ),
                             Tab(
                               text: '  Orders  ',
                             ),
@@ -154,9 +154,9 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                           Container(
                             child: holding(),
                           ),
-                          Container(
-                            child: BestStocks(),
-                          ),
+                          // Container(
+                          //   child: BestStocks(),
+                          // ),
                           Container(
                             child: orders(),
                           ),
@@ -175,12 +175,4 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
       ),
     );
   }
-}
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: StocksDashboardView(),
-    ),
-  );
 }

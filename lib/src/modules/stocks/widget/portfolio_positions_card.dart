@@ -102,7 +102,7 @@ class _PositionsCardState extends State<PositionsCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
       child: Slidable(
         startActionPane: ActionPane(
           motion: StretchMotion(),
@@ -134,14 +134,15 @@ class _PositionsCardState extends State<PositionsCard> {
 
             return GestureDetector(
               child: Container(
-                height: 85,
+                height: 90,
                 width: 400,
                 padding: EdgeInsets.only(
+                  top: 6,
                   left: 9,
                   right: 9,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Get.isDarkMode ? Color(0xFF151F2B) : Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Column(
@@ -155,7 +156,10 @@ class _PositionsCardState extends State<PositionsCard> {
                           children: [
                             Text(
                               widget.position.iId?.symbol ?? "",
-                              style: AppStyles.tsBlackMedium14,
+                              style: AppStyles.tsBlackMedium14.copyWith(
+                                  color: Get.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black),
                             ),
                             SizedBox(
                               height: 4,
@@ -232,7 +236,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 6),
+                            // SizedBox(height: 6),
                           ],
                         ),
 
@@ -393,9 +397,10 @@ class _PositionsCardState extends State<PositionsCard> {
                       ],
                     ),
                     Divider(
-                      // Add a Divider widget at the bottom
-                      color: Colors.grey[200],
-                      thickness: 1.0,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.grey[200]
+                          : Colors.transparent,
+                      thickness: 1,
                     ),
                   ],
                 ),

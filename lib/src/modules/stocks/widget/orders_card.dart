@@ -35,12 +35,14 @@ class OrdersCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
           borderRadius:
               BorderRadius.circular(25.0), // Adjust the radius as needed
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Get.isDarkMode
+                  ? Color(0xFF151F2B).withOpacity(0.8)
+                  : Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
               offset: Offset(0, 2),
@@ -68,7 +70,9 @@ class OrdersCard extends StatelessWidget {
                   SizedBox(height: 5),
                   Text(
                     order.symbol ?? '',
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black
+                        ),
                   ),
                   SizedBox(height: 5),
                   Text(
@@ -80,7 +84,8 @@ class OrdersCard extends StatelessWidget {
                     FormatHelper.formatNumbers(
                       order.averagePrice,
                     ),
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                   SizedBox(height: 5),
                   Text(
@@ -89,7 +94,8 @@ class OrdersCard extends StatelessWidget {
                   ),
                   Text(
                     order.orderId ?? '',
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   )
                 ],
               ),
@@ -111,7 +117,9 @@ class OrdersCard extends StatelessWidget {
                     children: [
                       Text(
                         order.quantity.toString(),
-                        style: AppStyles.tsBlackMedium12,
+                        style: AppStyles.tsBlackMedium12.copyWith(
+                            color:
+                                Get.isDarkMode ? Colors.white : Colors.black),
                       ),
                       Text(
                         " Quantity",
@@ -129,7 +137,8 @@ class OrdersCard extends StatelessWidget {
                     FormatHelper.formatNumbers(
                       order.amount,
                     ),
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                   SizedBox(height: 5),
                   Text(
@@ -139,7 +148,8 @@ class OrdersCard extends StatelessWidget {
                   Text(
                     //timestamp,
                     FormatHelper.formatDateTimeToIST(order.tradeTime),
-                    style: AppStyles.tsBlackMedium14,
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                 ],
               ),

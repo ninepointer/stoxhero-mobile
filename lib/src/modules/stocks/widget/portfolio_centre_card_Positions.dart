@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../app/app.dart';
 import '../../../core/core.dart';
 
 class CentreCardinPositions extends StatelessWidget {
@@ -24,11 +25,13 @@ class CentreCardinPositions extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20),
         height: 80,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Get.isDarkMode
+                  ? Color(0xFF151F2B).withOpacity(0.8)
+                  : Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
               offset: Offset(0, 2),
@@ -47,19 +50,23 @@ class CentreCardinPositions extends StatelessWidget {
                   children: [
                     Text(
                       'Positions P&L',
-                      style: AppStyles.tsBlackMedium12,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                          color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                     Text(
                       'ROI',
-                      style: AppStyles.tsBlackMedium12,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                          color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                     Text(
                       'Invested',
-                      style: AppStyles.tsBlackMedium12,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                          color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                     Text(
                       'Current Value',
-                      style: AppStyles.tsBlackMedium12,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                          color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                   ],
                 ),

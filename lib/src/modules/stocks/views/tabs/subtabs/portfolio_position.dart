@@ -33,7 +33,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           padding: const EdgeInsets.only(top: 40),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
@@ -73,16 +73,12 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
                 itemBuilder: (context, index) {
                   // Access data from the controller's positions list
                   var position = controller.stockPositionsList[index];
+                  if (position != null && position.iId?.isLimit != true) {
+                    return PositionsCard(
+                      position: position,
+                    );
+                  }
 
-                  return PositionsCard(
-                    position: position,
-                    // title: position.title,
-                    // averageprice: "₹${position.averagePrice}",
-                    // percentage: position.percentage,
-                    // quantity: position.quantity.toString(),
-                    // ltp: "₹${position.ltp}",
-                    // imagePath: 'assets/images/10Xlogo.jpg',
-                  );
                   // Add more cards as needed
                 },
               );
