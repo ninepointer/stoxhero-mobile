@@ -103,13 +103,13 @@ class CentreCardHoldings extends StatelessWidget {
                     Text(
                       invested,
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: Colors.green,
+                        color: AppColors.success,
                       ),
                     ),
                     Text(
                       currentvalue,
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: Colors.green,
+                        color: AppColors.success,
                       ),
                     ),
                   ],

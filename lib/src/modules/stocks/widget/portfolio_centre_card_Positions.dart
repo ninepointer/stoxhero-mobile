@@ -97,15 +97,13 @@ class CentreCardinPositions extends StatelessWidget {
                     ),
                     Text(
                       invested,
-                      style: AppStyles.tsBlackMedium12.copyWith(
-                        color: Colors.green,
-                      ),
+                      style: AppStyles.tsBlackMedium12
+                          .copyWith(color: AppColors.success),
                     ),
                     Text(
                       currentvalue,
-                      style: AppStyles.tsBlackMedium12.copyWith(
-                        color: Colors.green,
-                      ),
+                      style: AppStyles.tsBlackMedium12
+                          .copyWith(color: AppColors.success),
                     ),
                   ],
                 ),

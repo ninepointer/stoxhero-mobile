@@ -59,10 +59,15 @@ class _FundsState extends State<Funds> {
     // num MarginUsed = controller.stockfundsmargin.value.totalFund! -
     //     controller.calculateMargin().round();
 
-    num? totalFund = controller.stockfundsmargin.value.totalFund;
-    num MarginUsed = totalFund != null
-        ? totalFund - controller.calculateMargin().round()
-        : 0;
+    // num? totalFund = controller.stockfundsmargin.value.totalFund;
+    num totalFund = controller.stockfundsmargin.value.totalFund ?? 0;
+
+    // num MarginUsed = totalFund != null
+    //     ? (totalFund - controller.calculateMargin().round())
+    //     : 0;
+    num MarginUsed = ((controller.stockfundsmargin.value.totalFund ?? 0) -
+            (controller.calculateMargin().round()))
+        .abs();
 
     // num OPenPositions =
     //     controller.getOpenPositionCount() + controller.getOpenHoldingCount();
@@ -101,6 +106,8 @@ class _FundsState extends State<Funds> {
         child: ListView(
           children: [
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin available",
                 cardvalue: FormatHelper.formatNumbers(
                   controller.calculateMargin().round().toString(),
@@ -111,13 +118,18 @@ class _FundsState extends State<Funds> {
               height: 5,
             ),
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin Used",
-                cardvalue: FormatHelper.formatNumbers(MarginUsed, decimal: 2),
+                cardvalue:
+                    FormatHelper.formatNumbers(MarginUsed.abs(), decimal: 2),
                 index: 1),
             SizedBox(
               height: 5,
             ),
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Allocated Margin",
                 cardvalue: FormatHelper.formatNumbers(
                     controller.stockfundsmargin.value.totalFund.toString()),
@@ -126,9 +138,11 @@ class _FundsState extends State<Funds> {
               height: 5,
             ),
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Investment Amount",
-                cardvalue:
-                    FormatHelper.formatNumbers(investmentamount, decimal: 2),
+                cardvalue: FormatHelper.formatNumbers(investmentamount.abs(),
+                    decimal: 2),
                 index: 3),
             SizedBox(
               height: 5,
@@ -137,14 +151,32 @@ class _FundsState extends State<Funds> {
                 cardname: "Returns",
                 cardvalue:
                     FormatHelper.formatNumbers(PnL - brokerage, decimal: 2),
+                style: TextStyle(
+                  color:
+                      (double.tryParse((PnL - brokerage).toString()) ?? 0) < 0
+                          ? AppColors.danger
+                          : AppColors.success,
+                  fontFamily: AppTheme.fontFamily,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
                 index: 4),
             SizedBox(
               height: 5,
             ),
             FundsCard(
-                cardname: "Unrealised P&L",
-                cardvalue: FormatHelper.formatNumbers(PnL, decimal: 2),
-                index: 5),
+              cardname: "Unrealised P&L",
+              cardvalue: FormatHelper.formatNumbers(PnL, decimal: 2),
+              style: TextStyle(
+                color: (double.tryParse((PnL).toString()) ?? 0) < 0
+                    ? AppColors.danger
+                    : AppColors.success,
+                fontFamily: AppTheme.fontFamily,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+              index: 5,
+            ),
 
             // FundsCard(
             //     cardname: "Return Percentage",
@@ -164,11 +196,13 @@ class FundsCard extends StatelessWidget {
     required this.cardname,
     required this.cardvalue,
     required this.index,
+    required this.style,
   }) : super(key: key);
 
   final String cardname;
   final String cardvalue;
   final int index;
+  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +233,7 @@ class FundsCard extends StatelessWidget {
               children: [
                 Text(
                   cardvalue,
-                  style: TextStyle(),
+                  style: style,
                 ),
               ],
             ),

@@ -44,22 +44,25 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           ),
         ),
 
-        CentreCardinPositions(
-          invested: FormatHelper.formatNumbers(
-              controller.stockTotalPositionDetails.value.holdingnet.toString(),
-              decimal: 2),
-          currentvalue: FormatHelper.formatNumbers(
-              controller.stockTotalPositionDetails.value.currentvalue
-                  .toString(),
-              decimal: 2),
-          roiPositions: FormatHelper.formatNumbers(
-            controller.stockTotalPositionDetails.value.roi.toString(),
-            decimal: 2,
-            showSymbol: false,
+        Obx(
+          () => CentreCardinPositions(
+            invested: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.holdingnet
+                    .toString(),
+                decimal: 2),
+            currentvalue: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.currentvalue
+                    .toString(),
+                decimal: 2),
+            roiPositions: FormatHelper.formatNumbers(
+              controller.stockTotalPositionDetails.value.roi.toString(),
+              decimal: 2,
+              showSymbol: false,
+            ),
+            pnlInPosition: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.pnl.toString(),
+                decimal: 2),
           ),
-          pnlInPosition: FormatHelper.formatNumbers(
-              controller.stockTotalPositionDetails.value.pnl.toString(),
-              decimal: 2),
         ),
 
         Positioned(

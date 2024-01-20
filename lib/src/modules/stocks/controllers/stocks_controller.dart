@@ -124,6 +124,14 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     userDetails.value = AppStorage.getUserDetails();
   }
 
+  void socketConnectEquityWatchlist() {
+    socketService.socket.emit('equity-watchlist');
+  }
+
+  void socketDisconnectEquityWatchlist() {
+    socketService.socket.emit('leave-equity-watchlist');
+  }
+
   Future getStocksTradingInstruments(String searchStock) async {
     try {
       final RepoResponse<StockWatchlistSearchDataResponse> response =
@@ -489,6 +497,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successful');
         await getStockPositionsList();
+        await getStockHoldingsList();
         // await getStopLossPendingOrder();
         await getStockTodayOrderList();
         await getStocksTradingPortfolio();

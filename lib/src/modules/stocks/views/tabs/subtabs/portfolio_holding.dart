@@ -41,21 +41,24 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
           ),
         ),
 
-        CentreCardHoldings(
-          invested: FormatHelper.formatNumbers(
-              controller.stockTotalHoldingDetails.value.net.toString(),
-              decimal: 2),
-          currentvalue: FormatHelper.formatNumbers(
-              controller.stockTotalHoldingDetails.value.currentvalue.toString(),
-              decimal: 2),
-          roiHoldings: FormatHelper.formatNumbers(
-            controller.stockTotalHoldingDetails.value.roi.toString(),
-            decimal: 2,
-            showSymbol: false,
+        Obx(
+          () => CentreCardHoldings(
+            invested: FormatHelper.formatNumbers(
+                controller.stockTotalHoldingDetails.value.net.toString(),
+                decimal: 2),
+            currentvalue: FormatHelper.formatNumbers(
+                controller.stockTotalHoldingDetails.value.currentvalue
+                    .toString(),
+                decimal: 2),
+            roiHoldings: FormatHelper.formatNumbers(
+              controller.stockTotalHoldingDetails.value.roi.toString(),
+              decimal: 2,
+              showSymbol: false,
+            ),
+            pnlInHoldings: FormatHelper.formatNumbers(
+                controller.stockTotalHoldingDetails.value.pnl.toString(),
+                decimal: 2),
           ),
-          pnlInHoldings: FormatHelper.formatNumbers(
-              controller.stockTotalHoldingDetails.value.pnl.toString(),
-              decimal: 2),
         ),
         // cards ka UI
 

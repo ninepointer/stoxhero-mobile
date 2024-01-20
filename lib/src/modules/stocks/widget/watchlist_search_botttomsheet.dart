@@ -79,6 +79,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                     IconButton(
                       icon: Icon(Icons.arrow_back),
                       onPressed: () {
+                        controller.socketDisconnectEquityWatchlist();
                         Navigator.pop(context);
                       },
                     ),
@@ -165,9 +166,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                   // );
 
                   return Card(
-                    shape: RoundedRectangleBorder(
-                   
-                    ),
+                    shape: RoundedRectangleBorder(),
                     elevation: 0,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
