@@ -107,8 +107,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future loadData() async {
     loadUserDetails();
-    socketConnection();
-    socketIndexConnection();
 
     await getEquityInstrumentDetails();
     await getStockIndexInstrumentsList();
@@ -117,6 +115,10 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     await getStocksFundsMargin();
     await getStocksStopLossExecutedOrder();
     await getStocksStopLossPendingOrder();
+    
+    socketConnection();
+    socketIndexConnection();
+    socketSendConnection();
     //  await getStocksTradingInstruments();
   }
 
@@ -256,6 +258,30 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     } on Exception catch (e) {
       log(e.toString());
     }
+  }
+
+  Future socketSendConnection() async {
+    isPendingOrderStateLoading(true);
+    try {
+      socketService.socket.off('sendOrderResponse${userDetails.value.sId}');
+      socketService.socket.on(
+        'sendOrderResponse${userDetails.value.sId}',
+        (data) {
+          log('sendOrderResponse${userDetails.value.sId} $data');
+          if (data.containsKey("message")) {
+            String message = data["message"];
+            SnackbarHelper.showSnackbar(message);
+          }
+          getStockPositionsList();
+          getStocksStopLossPendingOrder();
+          getStocksStopLossExecutedOrder();
+          getStockTodayOrderList();
+        },
+      );
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+    isPendingOrderStateLoading(false);
   }
 
   Future getStockIndexInstrumentsList() async {
@@ -758,7 +784,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     } else {
       openingBalance = totalFund;
     }
-
     //available
     num availableMargin =
         ((calculatePositionTotalNetPNL() + calculateHoldingTotalNetPNL()) < 0)
@@ -777,6 +802,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
     return availableMargin;
   }
+
+
 
   Future getStockPositionsList() async {
     isPositionStateLoading(true);

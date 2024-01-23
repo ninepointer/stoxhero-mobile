@@ -20,10 +20,15 @@ class StocksDashboardView extends StatefulWidget {
 class _StocksDashboardViewState extends State<StocksDashboardView>
     with TickerProviderStateMixin {
   late TabController _tabController;
+  late StocksTradingController controller;
 
   @override
   void initState() {
     super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.loadData();
+    controller.socketConnectEquityWatchlist();
+
     _tabController = TabController(length: 4, vsync: this);
   }
 

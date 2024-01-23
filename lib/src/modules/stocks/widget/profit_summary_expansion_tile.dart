@@ -179,7 +179,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 Text(
                                   ((PnL - brokerage) < 0)
                                       ? FormatHelper.formatNumbers(
-                                          (PnL - brokerage),
+                                          (PnL - brokerage).abs(),
                                           decimal: 2)
                                       : "₹00.00",
                                   // FormatHelper.formatNumbers(MarginUsed,

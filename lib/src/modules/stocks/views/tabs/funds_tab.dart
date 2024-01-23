@@ -166,11 +166,10 @@ class _FundsState extends State<Funds> {
             ),
             FundsCard(
               cardname: "Unrealised P&L",
-              cardvalue: FormatHelper.formatNumbers(PnL, decimal: 2),
+              cardvalue:
+                  FormatHelper.formatNumbers(PnL < 0 ? 0 : PnL, decimal: 2),
               style: TextStyle(
-                color: (double.tryParse((PnL).toString()) ?? 0) < 0
-                    ? AppColors.danger
-                    : AppColors.success,
+                color: AppColors.success,
                 fontFamily: AppTheme.fontFamily,
                 fontWeight: FontWeight.w500,
                 fontSize: 16,

@@ -71,8 +71,7 @@ class OrdersCard extends StatelessWidget {
                   Text(
                     order.symbol ?? '',
                     style: AppStyles.tsBlackMedium14.copyWith(
-                        color: Get.isDarkMode ? Colors.white : Colors.black
-                        ),
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                   SizedBox(height: 5),
                   Text(
@@ -135,7 +134,7 @@ class OrdersCard extends StatelessWidget {
                   Text(
                     // "₹$totalamount",
                     FormatHelper.formatNumbers(
-                      order.amount,
+                      order.amount?.abs(),
                     ),
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
@@ -147,7 +146,7 @@ class OrdersCard extends StatelessWidget {
                   ),
                   Text(
                     //timestamp,
-                    FormatHelper.formatDateTimeToIST(order.tradeTime),
+                    FormatHelper.formatDateTime(order.tradeTime),
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),

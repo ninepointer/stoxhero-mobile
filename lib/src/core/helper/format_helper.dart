@@ -114,7 +114,7 @@ class FormatHelper {
     if (value != null) {
       DateTime dateTime = DateTime.parse(value);
       String formattedString =
-          DateFormat('d MMMM yyyy hh:mm a').format(dateTime);
+          DateFormat('d MMM yyyy hh:mm a').format(dateTime);
       return formattedString;
     } else {
       return '-';
