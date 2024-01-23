@@ -371,7 +371,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                     widget.holding.iId!.instrumentToken!,
                                     widget
                                         .holding.iId!.exchangeInstrumentToken!,
-                                  )})',
+                                  )})%',
                                   style: TextStyle(
                                     color: controller.getValueColor(
                                         controller.getInstrumentChanges(

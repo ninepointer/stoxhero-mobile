@@ -73,6 +73,9 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
         ((controller.stockTotalHoldingDetails.value.brokerage ?? 0) +
             (controller.stockTotalPositionDetails.value.brokerage ?? 0));
 
+    num availablemarginat0 = ((PnL - brokerage) +
+        (controller.stockfundsmargin.value.totalFund ?? 0));
+
     return Obx(
       () => Column(
         children: [
@@ -280,14 +283,29 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                   style: AppStyles.tsGreyRegular12,
                                 ),
                                 Text(
+                                  (OPenPositions > 0)
+                                      ? (FormatHelper.formatNumbers(
+                                          controller
+                                              .calculateMargin()
+                                              .round()
+                                              .toString(),
+                                          decimal: 2,
+                                        ))
+                                      : FormatHelper.formatNumbers(
+                                          availablemarginat0,
+                                          decimal: 2),
+
+//                                   if(OPenPositions>0){
+
+//                                   }
+//                                   else{
+//                                      FormatHelper.formatNumbers(((PnL - brokerage)+controller
+//                                       .stockfundsmargin.value.totalFund),
+//                                       decimal: 2),
+
+//                                   }
                                   // widget.availablemargin,
-                                  FormatHelper.formatNumbers(
-                                    controller
-                                        .calculateMargin()
-                                        .round()
-                                        .toString(),
-                                    decimal: 2,
-                                  ),
+
                                   style: AppStyles.tsBlackMedium14.copyWith(
                                       color: Get.isDarkMode
                                           ? Colors.white

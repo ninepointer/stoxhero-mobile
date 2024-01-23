@@ -346,7 +346,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
-      return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
   }
 
@@ -1105,7 +1105,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
-
+      
       id: stockfundsmargin.value
           .portfolioId, //  id: virtualPortfolio.value.portfolioId(in virtual)
       lastPrice: inst.lastPrice.toString(),

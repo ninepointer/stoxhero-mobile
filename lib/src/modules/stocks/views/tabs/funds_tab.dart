@@ -69,8 +69,8 @@ class _FundsState extends State<Funds> {
             (controller.calculateMargin().round()))
         .abs();
 
-    // num OPenPositions =
-    //     controller.getOpenPositionCount() + controller.getOpenHoldingCount();
+    num OPenPositions =
+        controller.getOpenPositionCount() + controller.getOpenHoldingCount();
 
     num PnL = ((controller.stockTotalHoldingDetails.value.pnl ?? 0) +
         (controller.stockTotalPositionDetails.value.pnl ?? 0));
@@ -82,6 +82,9 @@ class _FundsState extends State<Funds> {
     num investmentamount =
         (controller.stockTotalHoldingDetails.value.net ?? 0) +
             (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
+
+    num availablemarginat0 = ((PnL - brokerage) +
+        (controller.stockfundsmargin.value.totalFund ?? 0));
 
     return Padding(
       padding: const EdgeInsets.only(top: 8),
@@ -109,10 +112,17 @@ class _FundsState extends State<Funds> {
                 style: AppStyles.tsBlackMedium14.copyWith(
                     color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin available",
-                cardvalue: FormatHelper.formatNumbers(
-                  controller.calculateMargin().round().toString(),
-                  decimal: 2,
-                ),
+                cardvalue: (OPenPositions > 0)
+                    ? (FormatHelper.formatNumbers(
+                        controller.calculateMargin().round().toString(),
+                        decimal: 2,
+                      ))
+                    : FormatHelper.formatNumbers(availablemarginat0,
+                        decimal: 2),
+                // FormatHelper.formatNumbers(
+                //   controller.calculateMargin().round().toString(),
+                //   decimal: 2,
+                // ),
                 index: 0),
             SizedBox(
               height: 5,
@@ -121,8 +131,11 @@ class _FundsState extends State<Funds> {
                 style: AppStyles.tsBlackMedium14.copyWith(
                     color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin Used",
-                cardvalue:
-                    FormatHelper.formatNumbers(MarginUsed.abs(), decimal: 2),
+                cardvalue: ((PnL - brokerage) < 0)
+                    ? FormatHelper.formatNumbers((PnL - brokerage).abs(),
+                        decimal: 2)
+                    : "₹00.00",
+                //  FormatHelper.formatNumbers(MarginUsed.abs(), decimal: 2),
                 index: 1),
             SizedBox(
               height: 5,

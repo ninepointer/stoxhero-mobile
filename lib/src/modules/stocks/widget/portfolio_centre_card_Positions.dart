@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 import '../../../core/core.dart';
 
-class CentreCardinPositions extends StatelessWidget {
+class CentreCardinPositions extends StatefulWidget {
   const CentreCardinPositions({
     Key? key,
     required this.invested,
@@ -15,6 +15,22 @@ class CentreCardinPositions extends StatelessWidget {
   final String currentvalue;
   final String roiPositions;
   final String pnlInPosition;
+
+  @override
+  State<CentreCardinPositions> createState() => _CentreCardinPositionsState();
+}
+
+class _CentreCardinPositionsState extends State<CentreCardinPositions> {
+  late StocksTradingController controller;
+
+ @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.getStockPositionsList();
+    controller.getStockHoldingsList();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +91,10 @@ class CentreCardinPositions extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      pnlInPosition,
+                      widget.pnlInPosition,
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: pnlInPosition != null
-                            ? pnlInPosition.startsWith('-')
+                        color: widget.pnlInPosition != null
+                            ? widget.pnlInPosition.startsWith('-')
                                 ? AppColors.danger
                                 : AppColors.success
                             : AppColors
@@ -86,22 +102,22 @@ class CentreCardinPositions extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${(invested == 0 || roiPositions == null) ? '0.00' : roiPositions}%',
+                      '${(widget.invested == 0 || widget.roiPositions == null) ? '0.00' : widget.roiPositions}%',
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: roiPositions != null
-                            ? roiPositions.startsWith('-')
+                        color: widget.roiPositions != null
+                            ? widget.roiPositions.startsWith('-')
                                 ? AppColors.danger
                                 : AppColors.success
                             : AppColors.success,
                       ),
                     ),
                     Text(
-                      invested,
+                      widget.invested,
                       style: AppStyles.tsBlackMedium12
                           .copyWith(color: AppColors.success),
                     ),
                     Text(
-                      currentvalue,
+                      widget.currentvalue,
                       style: AppStyles.tsBlackMedium12
                           .copyWith(color: AppColors.success),
                     ),
