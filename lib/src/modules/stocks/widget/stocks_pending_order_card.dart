@@ -123,6 +123,18 @@ class StocksPendingOrderCard extends StatelessWidget {
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
+                  SizedBox(height: 5),
+                  Text(
+                    "Type",
+                    style: AppStyles.tsGreyRegular12,
+                  ),
+                  Text(
+                    // "₹$totalamount",
+
+                    stopLoss.type.toString(),
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
+                  ),
                 ],
               ),
             ],

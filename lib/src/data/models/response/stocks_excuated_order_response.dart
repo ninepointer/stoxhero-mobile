@@ -31,13 +31,13 @@ class StocksExcuatedOrderData {
   String? sId;
   String? type;
   String? status;
-  int? executionPrice;
-  int? price;
+  num? executionPrice;
+  num? price;
   int? quantity;
   String? buyOrSell;
   String? symbol;
   String? executionTime;
-  int? amount;
+  num? amount;
   String? time;
 
   StocksExcuatedOrderData(
