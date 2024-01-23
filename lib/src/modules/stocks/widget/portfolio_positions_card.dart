@@ -35,6 +35,24 @@ class _PositionsCardState extends State<PositionsCard> {
     controller.getStockPositionsList();
   }
 
+  num currentValue() {
+    num currentValue = 0;
+    currentValue = (widget.position.lastaverageprice ?? 0) *
+            (widget.position.lots?.abs() ?? 0) +
+        (widget.position.lots == 0
+            ? widget.position.amount!.toDouble()
+            : controller.calculateGrossPNL(
+                widget.position.amount ?? 0,
+                widget.position.lots!.toInt(),
+                controller.getInstrumentLastPrice(
+                  widget.position.iId!.instrumentToken!,
+                  widget.position.iId!.exchangeInstrumentToken!,
+                ),
+              ));
+
+    return currentValue;
+  }
+
   void openBottomSheet(BuildContext context, TransactionType type) {
     FocusScope.of(context).unfocus();
     num lastPrice = controller.getInstrumentLastPrice(
@@ -350,7 +368,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                     widget.position.iId!.instrumentToken!,
                                     widget
                                         .position.iId!.exchangeInstrumentToken!,
-                                  )})',
+                                  )})%',
                                   style: TextStyle(
                                     color: controller.getValueColor(
                                         controller.getInstrumentChanges(
@@ -381,9 +399,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                 SizedBox(width: 5),
                                 Text(
                                   //current value
-                                  FormatHelper.formatNumbers(
-                                      (widget.position.lastaverageprice ?? 0) *
-                                          (widget.position.lots?.abs() ?? 0)),
+                                  FormatHelper.formatNumbers(currentValue()),
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,

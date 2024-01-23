@@ -207,22 +207,22 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                          '(${controller.getInstrumentChanges(
-                                            stock.instrumentToken ?? 0,
-                                            stock.exchangeToken ?? 0,
-                                          )})',
-                                          // style: TextStyle(color: Colors.green),
-                                          style: TextStyle(
-                                            color: double.parse(controller
-                                                        .getInstrumentChanges(
-                                                      stock.instrumentToken ??
-                                                          0,
-                                                      stock.exchangeToken ?? 0,
-                                                    )) >
-                                                    0
-                                                ? AppColors.success
-                                                : AppColors.danger,
-                                          )),
+                                        '(${controller.getInstrumentChanges(
+                                          stock.instrumentToken ?? 0,
+                                          stock.exchangeToken ?? 0,
+                                        )})%',
+                                        // style: TextStyle(color: Colors.green),
+                                        style: TextStyle(
+                                          color: double.parse(controller
+                                                      .getInstrumentChanges(
+                                                    stock.instrumentToken ?? 0,
+                                                    stock.exchangeToken ?? 0,
+                                                  )) >=
+                                                  0
+                                              ? AppColors.success
+                                              : AppColors.danger,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
