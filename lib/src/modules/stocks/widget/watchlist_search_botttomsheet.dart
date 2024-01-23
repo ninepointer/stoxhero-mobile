@@ -42,26 +42,32 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
       () => Scaffold(
         body: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
+            Padding(
+              padding: const EdgeInsets.only(top: 65),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
                 ),
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 25, left: 25, right: 25),
+              margin: EdgeInsets.only(top: 35, left: 25, right: 25),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 height: 60,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
+                  // color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Get.isDarkMode
+                          ? Color(0xFF151F2B).withOpacity(0.8)
+                          : Colors.grey.withOpacity(0.2),
                       spreadRadius: 2,
                       blurRadius: 4,
                       offset: Offset(0, 2),
@@ -73,6 +79,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                     IconButton(
                       icon: Icon(Icons.arrow_back),
                       onPressed: () {
+                        controller.socketDisconnectEquityWatchlist();
                         Navigator.pop(context);
                       },
                     ),
@@ -123,7 +130,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
               ),
             ),
             Positioned(
-              top: 100,
+              top: 110,
               left: 0,
               right: 0,
               bottom: 0,
@@ -159,17 +166,27 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                   // );
 
                   return Card(
+                    shape: RoundedRectangleBorder(),
                     elevation: 0,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
+                      padding: const EdgeInsets.only(left: 8, right: 8),
                       child: Column(
                         children: [
                           Container(
-                            color: Colors.white,
+                            color: Get.isDarkMode
+                                ? Color(0xFF151F2B)
+                                : Colors.white,
                             child: ListTile(
                               title: Text(
                                 stock.tradingsymbol.toString(),
-                                style: AppStyles.tsBlackRegular16,
+                                //Regular16.copywith(color:aab yha pr condition laga lo )
+                                style: AppStyles.tsBlackRegular16.copyWith(
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
+                                selectionColor: Get.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,117 +217,34 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                                   ),
                                 ],
                               ),
-
-                              //controller.equityInstrumentDetailList[index];
-                              // trailing: Row(
-                              //   mainAxisSize: MainAxisSize.min,
-                              //   children: [
-                              //     IconButton(
-                              //       icon: Icon(Icons.add),
-                              //       onPressed: () {
-                              //         controller.addInstrument(
-                              //             controller.tradingInstruments[index]);
-
-                              //         controller.selectedWatchlistStock(stock);
-                              //         controller.addStocktoWatchlist();
-                              //         print(
-                              //             "Add button tapped for: ${stock.tradingsymbol}");
-                              //       },
-                              //     ),
-                              //   ],
-                              // ),
-
-                              //Real
-                              // trailing: Row(
-                              //   mainAxisSize: MainAxisSize.min,
-                              //   children: [
-                              //     IconButton(
-                              //       icon: Icon(Icons.add),
-                              //       onPressed: () {
-                              //         controller.addInstrument(
-                              //             controller.tradingInstruments[index]);
-
-                              //         controller.selectedWatchlistStock(stock);
-                              //         controller.addStocktoWatchlist();
-                              //         print(
-                              //             "Add button tapped for: ${stock.tradingsymbol}");
-                              //       },
-                              //     ),
-                              //   ],
-                              // ),
-
-                              //controller.equityInstrumentDetailList[index];
-                              // trailing: Row(
-                              //   mainAxisSize: MainAxisSize.min,
-                              //   children: [
-                              //     IconButton(
-                              //       icon: Icon(Icons.add),
-                              //       onPressed: () {
-                              //         controller.addInstrument(
-                              //             controller.tradingInstruments[index]);
-
-                              //         controller.selectedWatchlistStock(stock);
-                              //         controller.addStocktoWatchlist();
-                              //         print(
-                              //             "Add button tapped for: ${stock.tradingsymbol}");
-                              //       },
-                              //     ),
-                              //   ],
-                              // ),
-
-                              //v2
-                              // trailing: Row(
-                              //   mainAxisSize: MainAxisSize.min,
-                              //   children: [
-                              //     if (data.instrumentToken ==
-                              //         stock.instrumentToken)
-                              //       IconButton(
-                              //         icon: Icon(Icons.check),
-                              //         onPressed: () {
-                              //           controller.removeInstrument(controller
-                              //               .equityInstrumentDetailList[index]
-                              //               .instrumentToken);
-                              //         },
-                              //       )
-                              //     else
-                              //       IconButton(
-                              //         icon: Icon(Icons.add),
-                              //         onPressed: () {
-                              //           controller.addInstrument(controller
-                              //               .tradingInstruments[index]);
-                              //           controller
-                              //               .selectedWatchlistStock(stock);
-                              //           controller.addStocktoWatchlist();
-                              //           print(
-                              //               "Add button tapped for: ${stock.tradingsymbol}");
-                              //         },
-                              //       ),
-                              //   ],
-                              // ),
-
-                              //v3
-
                               trailing: Obx(
                                 () => Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
                                       icon: Icon(
-                                        controller.watchlistEquityInstrumentSymbolList.contains(
+                                        controller
+                                                .watchlistEquityInstrumentSymbolList
+                                                .contains(
                                           stock.tradingsymbol,
                                         )
                                             ? Icons.check
                                             : Icons.add,
                                       ),
                                       onPressed: () {
-                                        if (controller.watchlistEquityInstrumentSymbolList.contains(
+                                        if (controller
+                                            .watchlistEquityInstrumentSymbolList
+                                            .contains(
                                           stock.tradingsymbol,
                                         )) {
-                                          controller.removeInstrument(stock.instrumentToken);
+                                          controller.removeInstrument(
+                                              stock.instrumentToken);
                                         } else {
                                           controller.addInstrument(stock);
-                                          controller.selectedWatchlistStock(stock);
-                                          print("Add button tapped for: ${stock.tradingsymbol}");
+                                          controller
+                                              .selectedWatchlistStock(stock);
+                                          print(
+                                              "Add button tapped for: ${stock.tradingsymbol}");
                                         }
                                       },
                                     )
@@ -320,11 +254,20 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                             ),
                           ),
                           Divider(
-                            color: Colors.grey[200],
+                            color:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.grey[200]
+                                    : Colors.transparent,
                             thickness: 1,
                             indent: 15,
                             endIndent: 15,
-                          ),
+                          )
+                          // Divider(
+                          //   color: Colors.grey[200],
+                          //   thickness: 1,
+                          //   indent: 15,
+                          //   endIndent: 15,
+                          // ),
                         ],
                       ),
                     ),

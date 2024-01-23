@@ -22,7 +22,8 @@ class _PendingOrdersState extends State<PendingOrders> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      body: controller.stopLossPendingOrderList.isEmpty
+      body
+      : controller.stopLossPendingOrderList.isEmpty
           ? NoDataFound(
               label: AppStrings.noDataFoundPendingOrders,
             )

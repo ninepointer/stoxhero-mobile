@@ -1,16 +1,16 @@
-class VirtualTradeOrdersListResponse {
+class StocksAllOrderResponse {
   String? status;
-  List<VirtualTradeOrder>? data;
+  List<StocksAllOrderData>? data;
   int? count;
 
-  VirtualTradeOrdersListResponse({this.status, this.data, this.count});
+  StocksAllOrderResponse({this.status, this.data, this.count});
 
-  VirtualTradeOrdersListResponse.fromJson(Map<String, dynamic> json) {
+  StocksAllOrderResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <VirtualTradeOrder>[];
+      data = <StocksAllOrderData>[];
       json['data'].forEach((v) {
-        data!.add(new VirtualTradeOrder.fromJson(v));
+        data!.add(new StocksAllOrderData.fromJson(v));
       });
     }
     count = json['count'];
@@ -27,32 +27,31 @@ class VirtualTradeOrdersListResponse {
   }
 }
 
-class VirtualTradeOrder {
+class StocksAllOrderData {
   String? sId;
   String? orderId;
   String? status;
   num? averagePrice;
-  num? quantity;
+  int? quantity;
   String? product;
   String? buyOrSell;
   String? symbol;
   num? amount;
   String? tradeTime;
 
-  VirtualTradeOrder({
-    this.sId,
-    this.orderId,
-    this.status,
-    this.averagePrice,
-    this.quantity,
-    this.product,
-    this.buyOrSell,
-    this.symbol,
-    this.amount,
-    this.tradeTime,
-  });
+  StocksAllOrderData(
+      {this.sId,
+      this.orderId,
+      this.status,
+      this.averagePrice,
+      this.quantity,
+      this.product,
+      this.buyOrSell,
+      this.symbol,
+      this.amount,
+      this.tradeTime});
 
-  VirtualTradeOrder.fromJson(Map<String, dynamic> json) {
+  StocksAllOrderData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     orderId = json['order_id'];
     status = json['status'];

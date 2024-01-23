@@ -20,6 +20,7 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
     super.initState();
     controller = Get.find<StocksTradingController>();
     controller.getStockHoldingsList();
+    controller.getStockPositionsList();
   }
 
   @override
@@ -31,7 +32,7 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
           padding: const EdgeInsets.only(top: 40),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
@@ -40,26 +41,29 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
           ),
         ),
 
-        CentreCardHoldings(
-          invested: FormatHelper.formatNumbers(
-              controller.stockTotalHoldingDetails.value.net.toString(),
-              decimal: 2),
-          currentvalue: FormatHelper.formatNumbers(
-              controller.stockTotalHoldingDetails.value.currentvalue.toString(),
-              decimal: 2),
-          roiHoldings: FormatHelper.formatNumbers(
-            controller.stockTotalHoldingDetails.value.roi.toString(),
-            decimal: 2,
-            showSymbol: false,
+        Obx(
+          () => CentreCardHoldings(
+            invested: FormatHelper.formatNumbers(
+                controller.stockTotalHoldingDetails.value.net.toString(),
+                decimal: 2),
+            currentvalue: FormatHelper.formatNumbers(
+                controller.stockTotalHoldingDetails.value.currentvalue
+                    .toString(),
+                decimal: 2),
+            roiHoldings: FormatHelper.formatNumbers(
+              controller.stockTotalHoldingDetails.value.roi.toString(),
+              decimal: 2,
+              showSymbol: false,
+            ),
+            pnlInHoldings: FormatHelper.formatNumbers(
+                controller.stockTotalHoldingDetails.value.pnl.toString(),
+                decimal: 2),
           ),
-          pnlInHoldings: FormatHelper.formatNumbers(
-              controller.stockTotalHoldingDetails.value.pnl.toString(),
-              decimal: 2),
         ),
         // cards ka UI
 
         Positioned(
-          top: 80, // Adjust the top position as needed
+          top: 90, // Adjust the top position as needed
           left: 0,
           right: 0,
           bottom: 0,
@@ -71,16 +75,14 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
                 itemBuilder: (context, index) {
                   // Access data from the controller's positions list
                   var holding = controller.stockHoldingsList[index];
+                  if (holding != null && holding.iId?.isLimit == null) {
+                    return HoldingsCard(
+                      holding: holding,
+                    );
+                  } else {
+                    return SizedBox();
+                  }
 
-                  return HoldingsCard(
-                    holding: holding,
-                    // title: position.title,
-                    // averageprice: "₹${position.averagePrice}",
-                    // percentage: position.percentage,
-                    // quantity: position.quantity.toString(),
-                    // ltp: "₹${position.ltp}",
-                   // imagePath: 'assets/images/10Xlogo.jpg',
-                  );
                   // Add more cards as needed
                 },
               );

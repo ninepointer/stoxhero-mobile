@@ -17,7 +17,7 @@ class HoldingsCard extends StatefulWidget {
     // required this.currentvalue,
     // required this.invested,
     required this.holding,
-  //  required this.imagePath,
+    //  required this.imagePath,
   }) : super(key: key);
 
   // final String title;
@@ -26,7 +26,7 @@ class HoldingsCard extends StatefulWidget {
   // final String currentvalue;
   // final String invested;
   final StockTradingHolding holding;
- // final String imagePath;
+  // final String imagePath;
 
   @override
   State<HoldingsCard> createState() => _HoldingsCardState();
@@ -108,7 +108,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
       child: Slidable(
         startActionPane: ActionPane(
           motion: StretchMotion(),
@@ -139,14 +139,15 @@ class _HoldingsCardState extends State<HoldingsCard> {
 
             return GestureDetector(
               child: Container(
-                height: 100,
+                height: 90,
                 width: 400,
                 padding: EdgeInsets.only(
+                  top: 6,
                   left: 9,
                   right: 9,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Get.isDarkMode ? Color(0xFF151F2B) : Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Column(
@@ -161,7 +162,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                             Text(
                               //name of the stock
                               widget.holding.iId?.symbol ?? "",
-                              style: AppStyles.tsBlackMedium14,
+                              style: AppStyles.tsBlackMedium14.copyWith(
+                                  color: Get.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black),
                             ),
                             SizedBox(height: 4),
                             Row(
@@ -221,9 +225,14 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  FormatHelper.formatNumbers(
-                                      widget.holding.amount?.abs().toString(),
-                                      decimal: 2),
+                                  (widget.holding.lots == 0)
+                                      ? '₹0.00'
+                                      : FormatHelper.formatNumbers(
+                                          widget.holding.amount
+                                              ?.abs()
+                                              .toString(),
+                                          decimal: 2,
+                                        ),
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -231,7 +240,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 6),
+                            // SizedBox(height: 6),
                           ],
                         ),
 
@@ -278,7 +287,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 ),
                                 Text(
                                   //percentage change ROI,
-                                  '(${FormatHelper.formatNumbers(controller.calculateGrossROI(
+                                  '(${(((widget.holding.lastaverageprice ?? 0) * (widget.holding.lots?.abs() ?? 0)) == 0) ? '0.00' : FormatHelper.formatNumbers(controller.calculateGrossROI(
                                         widget.holding.amount ?? 0,
                                         widget.holding.lots!.toInt(),
                                         controller.getInstrumentLastPrice(
@@ -344,7 +353,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                     widget.holding.iId!.instrumentToken!,
                                     widget
                                         .holding.iId!.exchangeInstrumentToken!,
-                                  )}%)',
+                                  )})',
                                   style: TextStyle(
                                     color: controller.getValueColor(
                                         controller.getInstrumentChanges(
@@ -389,9 +398,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                       ],
                     ),
                     Divider(
-                      // Add a Divider widget at the bottom
-                      color: Colors.grey[200],
-                      thickness: 1.0,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.grey[200]
+                          : Colors.transparent,
+                      thickness: 1,
                     ),
                   ],
                 ),
@@ -462,6 +472,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                       widget.holding.iId!.exchangeInstrumentToken!,
                     ),
                   );
+                  controller.selectedOrderGroupValue.value = 1;
+                  //for the same value of lots in exit text field
+                  controller.quantityTextController.text =
+                      widget.holding.lots.toString();
                   BottomSheetHelper.openBottomSheet(
                     context: context,
                     child: StockTransactionBottomSheet(

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
@@ -21,6 +23,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
     super.initState();
     controller = Get.find<StocksTradingController>();
     controller.getStockPositionsList();
+    controller.getStockHoldingsList();
   }
 
   @override
@@ -32,7 +35,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           padding: const EdgeInsets.only(top: 40),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
@@ -41,26 +44,29 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           ),
         ),
 
-        CentreCardinPositions(
-          invested: FormatHelper.formatNumbers(
-              controller.stockTotalPositionDetails.value.net.toString(),
-              decimal: 2),
-          currentvalue: FormatHelper.formatNumbers(
-              controller.stockTotalPositionDetails.value.currentvalue
-                  .toString(),
-              decimal: 2),
-          roiPositions: FormatHelper.formatNumbers(
+        Obx(
+          () => CentreCardinPositions(
+            invested: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.holdingnet
+                    .toString(),
+                decimal: 2),
+            currentvalue: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.currentvalue
+                    .toString(),
+                decimal: 2),
+            roiPositions: FormatHelper.formatNumbers(
               controller.stockTotalPositionDetails.value.roi.toString(),
               decimal: 2,
-              showSymbol: false),
-          pnlInPosition: FormatHelper.formatNumbers(
-            controller.stockTotalPositionDetails.value.pnl.toString(),
-            decimal: 2,
+              showSymbol: false,
+            ),
+            pnlInPosition: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.pnl.toString(),
+                decimal: 2),
           ),
         ),
 
         Positioned(
-          top: 80, // Adjust the top position as needed
+          top: 90, // Adjust the top position as needed
           left: 0,
           right: 0,
           bottom: 0,
@@ -72,16 +78,19 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
                 itemBuilder: (context, index) {
                   // Access data from the controller's positions list
                   var position = controller.stockPositionsList[index];
+                  //print('position${position.toJson()}');
+                  if (position != null && position.iId?.isLimit == null) {
+                    return PositionsCard(
+                      position: position,
+                    );
+                  } else {
+                    return SizedBox();
+                  }
 
-                  return PositionsCard(
-                    position: position,
-                    // title: position.title,
-                    // averageprice: "₹${position.averagePrice}",
-                    // percentage: position.percentage,
-                    // quantity: position.quantity.toString(),
-                    // ltp: "₹${position.ltp}",
-                    imagePath: 'assets/images/10Xlogo.jpg',
-                  );
+                  // return PositionsCard(
+                  //   position: position,
+                  // );
+
                   // Add more cards as needed
                 },
               );
