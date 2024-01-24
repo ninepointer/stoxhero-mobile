@@ -115,7 +115,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     await getStocksFundsMargin();
     await getStocksStopLossExecutedOrder();
     await getStocksStopLossPendingOrder();
-    
+
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
@@ -803,8 +803,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     return availableMargin;
   }
 
-
-
   Future getStockPositionsList() async {
     isPositionStateLoading(true);
     try {
@@ -842,9 +840,22 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         totalLots += position.lots ?? 0;
         totalPositionBrokerage += position.brokerage ?? 0;
-        totalGross += position.lastaverageprice?.abs() ?? 0;
+
+        totalGross += getInstrumentLastPrice(
+              position.iId!.instrumentToken!,
+              position.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        // totalGross += getInstrumentLastPrice(position.iId.instrumentToken,
+        //             position.iId.exchangeInstrumentToken)
+        //         ?.abs() ??
+        //     0;
         // totalHoldingInvested += holding.amount?.abs() ?? 0;
-        totalCurrentValue += (position.lastaverageprice?.abs() ?? 0) *
+        totalCurrentValue += (getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
             (position.lots?.abs() ?? 0);
 
         // totalPnl = (totalCurrentValue - totalNet);
@@ -922,10 +933,18 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         totalLots += holding.lots ?? 0;
         totalHoldingBrokerage += holding.brokerage ?? 0;
-        totalGross += holding.lastaverageprice?.abs() ?? 0;
+        totalGross += getInstrumentLastPrice(
+              holding.iId!.instrumentToken!,
+              holding.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
         // totalHoldingInvested += holding.amount?.abs() ?? 0;
-        totalCurrentValue +=
-            (holding.lastaverageprice?.abs() ?? 0) * (holding.lots?.abs() ?? 0);
+        totalCurrentValue += (getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (holding.lots?.abs() ?? 0);
 
         // totalPnl = (totalCurrentValue - totalNet);
         totalPnl += calculateGrossPNL(
@@ -1105,7 +1124,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
-      
+
       id: stockfundsmargin.value
           .portfolioId, //  id: virtualPortfolio.value.portfolioId(in virtual)
       lastPrice: inst.lastPrice.toString(),

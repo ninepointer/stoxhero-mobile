@@ -7,8 +7,8 @@ class StocksPendingOrderCard extends StatefulWidget {
   const StocksPendingOrderCard({
     Key? key,
     required this.stopLoss,
-     required this.holding,
-      required this.position,
+    required this.holding,
+    required this.position,
   }) : super(key: key);
   final StockTradingHolding holding;
   final StockTradingPosition position;
@@ -18,16 +18,15 @@ class StocksPendingOrderCard extends StatefulWidget {
 }
 
 class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
-   late StocksTradingController controller;
+  late StocksTradingController controller;
 
- @override
+  @override
   void initState() {
     super.initState();
     controller = Get.find<StocksTradingController>();
     controller.getStockHoldingsList();
-     controller.getStockPositionsList();
+    controller.getStockPositionsList();
   }
-
 
   //posiiton
 
@@ -37,7 +36,7 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
       padding: const EdgeInsets.only(top: 8),
       child: Container(
         height: 195,
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.only(left: 9, right: 9),
         decoration: BoxDecoration(
           color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
@@ -98,34 +97,24 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                   ),
                   Text(
                     //timestamp,
-                    FormatHelper.formatDateTimeToIST(widget.stopLoss.executionTime),
+                    FormatHelper.formatDateTimeToIST(
+                        widget.stopLoss.executionTime),
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                   SizedBox(height: 7),
                   InkWell(
-
-
-
-                    
                     onTap: () {
                       // Your onTap logic goes here
                       // For example, you can show a dialog or navigate to another screen
                       print('InkWell tapped!');
-                    }
-
-
-
-
-
-
-                    ,
+                    },
                     child: Container(
                       width: 163.35,
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.danger.withOpacity(.6),
+                        color: AppColors.danger.withOpacity(.7),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(15),
                         ),
@@ -205,7 +194,7 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Colors.yellow.withOpacity(.6),
+                        color: Colors.yellow[600],
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(15),
                         ),
