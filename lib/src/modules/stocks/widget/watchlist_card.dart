@@ -95,7 +95,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
               child: Container(
                 height: 75,
                 width: 400,
-                padding: EdgeInsets.only(left: 14, right: 14, top: 10),
+                padding: EdgeInsets.only(left: 14, right: 14, top: 12),
                 color: Get.isDarkMode ? Color(0xFF151F2B) : Colors.white,
                 child: Column(
                   children: [
@@ -160,8 +160,6 @@ class _WatchlistCardState extends State<WatchlistCard> {
                           ? Colors.grey[200]
                           : Colors.transparent,
                       thickness: 1,
-                      indent: 15,
-                      endIndent: 15,
                     )
                   ],
                 ),

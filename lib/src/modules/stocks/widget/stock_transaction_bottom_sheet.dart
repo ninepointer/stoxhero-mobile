@@ -19,7 +19,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
 
     controller.selectedGroupValue.value = 2;
     controller.selectedType.value = 'MARKET';
-    controller.selectedQuantity.value = 0;
+    //controller.selectedQuantity.value = 0;
     controller.marginRequired.value.margin = 0.toString();
 
     return Obx(
@@ -549,6 +549,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                         controller.stopLossPriceTextController.clear();
                         controller.stopProfitPriceTextController.clear();
                         controller.limitPriceTextController.clear();
+
                         //   controller.isBuyButtonDisabled.value = false;
                         // }
                       }

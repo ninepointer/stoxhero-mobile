@@ -491,7 +491,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
                   controller.selectedOrderGroupValue.value = 1;
                   //for the same value of lots in exit text field
                   controller.quantityTextController.text =
-                      widget.holding.lots.toString();
+                      widget.holding.lots!.abs().toString();
                   BottomSheetHelper.openBottomSheet(
                     context: context,
                     child: StockTransactionBottomSheet(
