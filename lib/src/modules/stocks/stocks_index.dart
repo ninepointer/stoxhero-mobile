@@ -23,3 +23,4 @@ export 'widget/top_index_card.dart';
 export 'widget/watchlist_card.dart';
 export 'widget/watchlist_search_botttomsheet.dart';
 export 'widget/watchlist_search_card_bottomsheet.dart';
+export 'widget/stocks_pending_order_Edit_price.dart';

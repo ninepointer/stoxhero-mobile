@@ -122,7 +122,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '₹${widget.price}',
+                              '${FormatHelper.formatNumbers(widget.price, decimal: 2)}',
                               style: TextStyle(
                                 fontSize: 16,
                               ),

@@ -2,34 +2,36 @@ import 'package:flutter/material.dart';
 import '../../../app/app.dart';
 import '../../../core/core.dart';
 
-class StocksPendingOrderCard extends StatefulWidget {
+class StocksPendingOrderCard extends GetView<StocksTradingController> {
   final StocksPendingOrderData stopLoss;
+  final StockTradingHolding holding;
   const StocksPendingOrderCard({
     Key? key,
     required this.stopLoss,
-     required this.holding,
-      required this.position,
+    required this.holding,
   }) : super(key: key);
-  final StockTradingHolding holding;
-  final StockTradingPosition position;
+  // final StockTradingPosition position;
 
-  @override
-  State<StocksPendingOrderCard> createState() => _StocksPendingOrderCardState();
-}
+  void openBottomSheet(BuildContext context) {
+    FocusScope.of(context).unfocus();
 
-class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
-   late StocksTradingController controller;
-
- @override
-  void initState() {
-    super.initState();
-    controller = Get.find<StocksTradingController>();
-    controller.getStockHoldingsList();
-     controller.getStockPositionsList();
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: StocksStoplossEditPriceBottomSheet(
+        stopLoss: StocksPendingOrderData(
+          sId: stopLoss.sId,
+          type: stopLoss.type,
+          symbol: stopLoss.symbol,
+          quantity: stopLoss.quantity,
+          buyOrSell: stopLoss.buyOrSell,
+          instrumentToken: stopLoss.instrumentToken,
+          exchangeInstrumentToken: stopLoss.exchangeInstrumentToken,
+          price: stopLoss.price,
+        ),
+      ),
+    );
+    print("stoplosss${stopLoss.toJson()}");
   }
-
-
-  //posiiton
 
   @override
   Widget build(BuildContext context) {
@@ -65,16 +67,16 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                 children: [
                   Text(
                     //status,
-                    widget.stopLoss.status ?? '',
+                    stopLoss.status ?? '',
                     style: AppStyles.tsBlackSemiBold16.copyWith(
-                      color: widget.stopLoss.status == "COMPLETE"
+                      color: stopLoss.status == "COMPLETE"
                           ? AppColors.success
                           : AppColors.danger,
                     ),
                   ),
                   SizedBox(height: 5),
                   Text(
-                    widget.stopLoss.symbol ?? '',
+                    stopLoss.symbol ?? '',
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
@@ -86,7 +88,7 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                   Text(
                     //  "₹$price",
                     FormatHelper.formatNumbers(
-                      widget.stopLoss.price,
+                      stopLoss.price,
                     ),
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
@@ -98,28 +100,15 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                   ),
                   Text(
                     //timestamp,
-                    FormatHelper.formatDateTimeToIST(widget.stopLoss.executionTime),
+                    FormatHelper.formatDateTimeToIST(stopLoss.executionTime),
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                   SizedBox(height: 7),
                   InkWell(
-
-
-
-                    
                     onTap: () {
-                      // Your onTap logic goes here
-                      // For example, you can show a dialog or navigate to another screen
-                      print('InkWell tapped!');
-                    }
-
-
-
-
-
-
-                    ,
+                      controller.getStopLossPendingCancelOrder(stopLoss.sId);
+                    },
                     child: Container(
                       width: 163.35,
                       alignment: Alignment.center,
@@ -147,9 +136,9 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                 children: [
                   Text(
                       //type,
-                      widget.stopLoss.buyOrSell ?? '',
+                      stopLoss.buyOrSell ?? '',
                       style: AppStyles.tsBlackSemiBold16.copyWith(
-                        color: widget.stopLoss.buyOrSell == "SELL"
+                        color: stopLoss.buyOrSell == "SELL"
                             ? AppColors.danger
                             : AppColors.success,
                       )),
@@ -157,7 +146,7 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                   Row(
                     children: [
                       Text(
-                        widget.stopLoss.quantity.toString(),
+                        stopLoss.quantity.toString(),
                         style: AppStyles.tsBlackMedium12.copyWith(
                             color:
                                 Get.isDarkMode ? Colors.white : Colors.black),
@@ -170,14 +159,18 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "Amount",
+                    "LTP",
                     style: AppStyles.tsGreyRegular12,
                   ),
                   Text(
                     // "₹$totalamount",
+
                     FormatHelper.formatNumbers(
-                      widget.stopLoss.amount,
-                    ),
+                        controller.getInstrumentLastPrice(
+                      stopLoss.instrumentToken!,
+                      stopLoss.exchangeInstrumentToken!,
+                    )),
+
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
@@ -189,17 +182,16 @@ class _StocksPendingOrderCardState extends State<StocksPendingOrderCard> {
                   Text(
                     // "₹$totalamount",
 
-                    widget.stopLoss.type.toString(),
+                    stopLoss.type.toString(),
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
                   SizedBox(height: 7),
                   InkWell(
-                    onTap: () {
-                      // Your onTap logic goes here
-                      // For example, you can show a dialog or navigate to another screen
-                      print('InkWell tapped!');
-                    },
+                    onTap: () => openBottomSheet(context),
+                    // Your onTap logic goes here
+                    // For example, you can show a dialog or navigate to another screen
+
                     child: Container(
                       width: 163.35,
                       alignment: Alignment.center,

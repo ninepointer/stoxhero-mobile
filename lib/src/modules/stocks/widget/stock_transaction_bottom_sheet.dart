@@ -12,13 +12,15 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
     required this.tradingInstrument,
     required this.marginRequired,
   });
-
+  @override
   @override
   Widget build(BuildContext context) {
     // controller.selectedOrderGroupValue.value = 2;
 
     controller.selectedGroupValue.value = 2;
     controller.selectedType.value = 'MARKET';
+    controller.selectedQuantity.value = 0;
+    controller.marginRequired.value.margin = 0.toString();
 
     return Obx(
       () => Wrap(
@@ -137,6 +139,7 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                         // Attempt to convert the string to an integer
                         controller.selectedQuantity.value =
                             int.parse(controller.quantityTextController.text);
+                        controller.getMarginRequired(type, tradingInstrument);
 
                         // If successful, the value is a valid integer
                       } catch (e) {
