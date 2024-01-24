@@ -10,7 +10,6 @@ class PendingOrders extends StatefulWidget {
 }
 
 class _PendingOrdersState extends State<PendingOrders> {
-  @override
   late StocksTradingController controller;
 
   @override
