@@ -21,22 +21,25 @@ class _PendingOrdersState extends State<PendingOrders> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: controller.stopLossPendingOrderList.isEmpty
-          ? NoDataFound(
-              label: AppStrings.noDataFoundPendingOrders,
-            )
-          : ListView.builder(
-              itemCount: controller.stopLossPendingOrderList
-                  .length, // Specify the number of items you want to display
-              itemBuilder: (context, index) {
-                //  var position = controller.stockPositionsList[index];
-                var holding = controller.stockHoldingsList[index];
-                return StocksPendingOrderCard(
-                    holding: holding,
-                    //  position: position,
-                    stopLoss: controller.stopLossPendingOrderList[index]);
-              }),
+    return Obx(
+      () => Scaffold(
+        body: controller.stopLossPendingOrderList.isEmpty
+            ? NoDataFound(
+                label: AppStrings.noDataFoundPendingOrders,
+              )
+            : ListView.builder(
+                itemCount: controller.stopLossPendingOrderList
+                    .length, // Specify the number of items you want to display
+                itemBuilder: (context, index) {
+                  //  print('yoo${StopLossPendingOrdersList.fromJson}');
+                  //  var position = controller.stockPositionsList[index];
+                  // var holding = controller.stockHoldingsList[index];
+                  return StocksPendingOrderCard(
+                      // holding: holding,
+                      //  position: position,
+                      stopLoss: controller.stopLossPendingOrderList[index]);
+                }),
+      ),
     );
   }
 }

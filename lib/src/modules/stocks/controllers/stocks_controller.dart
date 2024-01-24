@@ -454,7 +454,9 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     isPendingOrderStateLoading(true);
     try {
       await repository.getStopLossPendingCancelOrder(id ?? '');
+      stopLossPendingOrderList([]);
       await getStocksStopLossPendingOrder();
+      SnackbarHelper.showSnackbar('Order Cancelled');
       await getStocksStopLossExecutedOrder();
       await getStocksTradingPortfolio();
       await getStockPositionsList();
@@ -1128,7 +1130,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           await repository.getStocksStopLossPendingOrder(
         stockfundsmargin.value.portfolioId.toString(),
       );
-      print('harshit${stockfundsmargin.value.portfolioId}');
+      // print('harshit${stockfundsmargin.value.portfolioId}');
       if (response.data?.status?.toLowerCase() == "success") {
         List<StocksPendingOrderData>? tempList = [];
         tempList = response.data?.data
