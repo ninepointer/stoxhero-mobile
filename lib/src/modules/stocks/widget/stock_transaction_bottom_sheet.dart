@@ -242,11 +242,12 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
                             child: CommonTextField(
                               padding: EdgeInsets.zero,
                               isDisabled: controller.handleTextField(
-                                    type,
-                                    tradingInstrument.lotSize ?? 0,
-                                    controller.selectedQuantity.value,
-                                  ) ||
-                                  controller.selectedOrderGroupValue.value == 2,
+                                type,
+                                tradingInstrument.lotSize ?? 0,
+                                controller.selectedQuantity.value,
+                              ),
+                              // ||
+                              // controller.selectedOrderGroupValue.value == 2,
                               hintText: 'StopProfit Price',
                               keyboardType: TextInputType.number,
                               inputFormatters: [
