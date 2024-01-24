@@ -283,6 +283,9 @@ class AppUrls {
   static String virtualStopLossPendingCancelOrder(String? id) =>
       "$apiURL/pendingorder/$id/paperTrade";
 
+  static String stocksStopLossPendingCancelOrder(String? id) =>
+      "$apiURL/pendingorder/$id/Stock";
+
   static String contestStopLossExecutedOrder(String? id) =>
       "$pendingOrder/todaysProcessed/$id/Daily%20Contest";
   static String contestStopLossPendingOrder(String? id) =>
@@ -348,4 +351,7 @@ class AppUrls {
   //pendingorder/my/todaysPending/6433e2e5500dc2f2d20d686d/Stock
   static String stocksAllOrder = "$apiURL/stock/my/historyorders";
   static String stocksTodayOrder = "$apiURL/stock/my/todayorders";
+
+  static String stocksstopLossEditOrder(String? id) =>
+      "$apiURL/pendingorder/editprice/$id";
 }

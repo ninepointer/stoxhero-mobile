@@ -827,7 +827,6 @@ class VirtualTradingController
 
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
     isMarginStateLoading(true);
-    
 
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,

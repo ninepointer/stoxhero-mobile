@@ -59,13 +59,18 @@ class _FundsState extends State<Funds> {
     // num MarginUsed = controller.stockfundsmargin.value.totalFund! -
     //     controller.calculateMargin().round();
 
-    num? totalFund = controller.stockfundsmargin.value.totalFund;
-    num MarginUsed = totalFund != null
-        ? totalFund - controller.calculateMargin().round()
-        : 0;
+    // num? totalFund = controller.stockfundsmargin.value.totalFund;
+    num totalFund = controller.stockfundsmargin.value.totalFund ?? 0;
 
-    // num OPenPositions =
-    //     controller.getOpenPositionCount() + controller.getOpenHoldingCount();
+    // num MarginUsed = totalFund != null
+    //     ? (totalFund - controller.calculateMargin().round())
+    //     : 0;
+    num MarginUsed = ((controller.stockfundsmargin.value.totalFund ?? 0) -
+            (controller.calculateMargin().round()))
+        .abs();
+
+    num OPenPositions =
+        controller.getOpenPositionCount() + controller.getOpenHoldingCount();
 
     num PnL = ((controller.stockTotalHoldingDetails.value.pnl ?? 0) +
         (controller.stockTotalPositionDetails.value.pnl ?? 0));
@@ -77,6 +82,9 @@ class _FundsState extends State<Funds> {
     num investmentamount =
         (controller.stockTotalHoldingDetails.value.net ?? 0) +
             (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
+
+    num availablemarginat0 = ((PnL - brokerage) +
+        (controller.stockfundsmargin.value.totalFund ?? 0));
 
     return Padding(
       padding: const EdgeInsets.only(top: 8),
@@ -101,23 +109,40 @@ class _FundsState extends State<Funds> {
         child: ListView(
           children: [
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin available",
-                cardvalue: FormatHelper.formatNumbers(
-                  controller.calculateMargin().round().toString(),
-                  decimal: 2,
-                ),
+                cardvalue: (OPenPositions > 0)
+                    ? (FormatHelper.formatNumbers(
+                        controller.calculateMargin().round().toString(),
+                        decimal: 2,
+                      ))
+                    : FormatHelper.formatNumbers(availablemarginat0,
+                        decimal: 2),
+                // FormatHelper.formatNumbers(
+                //   controller.calculateMargin().round().toString(),
+                //   decimal: 2,
+                // ),
                 index: 0),
             SizedBox(
               height: 5,
             ),
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin Used",
-                cardvalue: FormatHelper.formatNumbers(MarginUsed, decimal: 2),
+                cardvalue: ((PnL - brokerage) < 0)
+                    ? FormatHelper.formatNumbers((PnL - brokerage).abs(),
+                        decimal: 2)
+                    : "₹00.00",
+                //  FormatHelper.formatNumbers(MarginUsed.abs(), decimal: 2),
                 index: 1),
             SizedBox(
               height: 5,
             ),
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Allocated Margin",
                 cardvalue: FormatHelper.formatNumbers(
                     controller.stockfundsmargin.value.totalFund.toString()),
@@ -126,9 +151,11 @@ class _FundsState extends State<Funds> {
               height: 5,
             ),
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Investment Amount",
-                cardvalue:
-                    FormatHelper.formatNumbers(investmentamount, decimal: 2),
+                cardvalue: FormatHelper.formatNumbers(investmentamount.abs(),
+                    decimal: 2),
                 index: 3),
             SizedBox(
               height: 5,
@@ -137,14 +164,31 @@ class _FundsState extends State<Funds> {
                 cardname: "Returns",
                 cardvalue:
                     FormatHelper.formatNumbers(PnL - brokerage, decimal: 2),
+                style: TextStyle(
+                  color:
+                      (double.tryParse((PnL - brokerage).toString()) ?? 0) < 0
+                          ? AppColors.danger
+                          : AppColors.success,
+                  fontFamily: AppTheme.fontFamily,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
                 index: 4),
             SizedBox(
               height: 5,
             ),
             FundsCard(
-                cardname: "Unrealised P&L",
-                cardvalue: FormatHelper.formatNumbers(PnL, decimal: 2),
-                index: 5),
+              cardname: "Unrealised P&L",
+              cardvalue:
+                  FormatHelper.formatNumbers(PnL < 0 ? 0 : PnL, decimal: 2),
+              style: TextStyle(
+                color: AppColors.success,
+                fontFamily: AppTheme.fontFamily,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+              index: 5,
+            ),
 
             // FundsCard(
             //     cardname: "Return Percentage",
@@ -164,11 +208,13 @@ class FundsCard extends StatelessWidget {
     required this.cardname,
     required this.cardvalue,
     required this.index,
+    required this.style,
   }) : super(key: key);
 
   final String cardname;
   final String cardvalue;
   final int index;
+  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +245,7 @@ class FundsCard extends StatelessWidget {
               children: [
                 Text(
                   cardvalue,
-                  style: TextStyle(),
+                  style: style,
                 ),
               ],
             ),

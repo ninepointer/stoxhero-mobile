@@ -117,10 +117,10 @@ class StockStoplossModifyPriceBottomSheet
                             style: AppStyles.tsGreyMedium12,
                           ),
                           Text(
-                            controller.getInstrumentChanges(
+                            "${controller.getInstrumentChanges(
                               stopLoss.instrumentToken!,
                               stopLoss.exchangeToken!,
-                            ),
+                            )}%",
                             style: AppStyles.tsSecondaryMedium14,
                           ),
                         ],

@@ -104,11 +104,10 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final stocksStopLossExecutedOrdersList = <StocksExcuatedOrderData>[].obs;
   final stopLossPendingOrderList = <StocksPendingOrderData>[].obs;
   final stopLossPendingOrder = StocksPendingOrderData().obs;
+  final stockslastTradePrice = TextEditingController();
 
   Future loadData() async {
     loadUserDetails();
-    socketConnection();
-    socketIndexConnection();
 
     await getEquityInstrumentDetails();
     await getStockIndexInstrumentsList();
@@ -117,11 +116,23 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     await getStocksFundsMargin();
     await getStocksStopLossExecutedOrder();
     await getStocksStopLossPendingOrder();
+
+    socketConnection();
+    socketIndexConnection();
+    socketSendConnection();
     //  await getStocksTradingInstruments();
   }
 
   Future loadUserDetails() async {
     userDetails.value = AppStorage.getUserDetails();
+  }
+
+  void socketConnectEquityWatchlist() {
+    socketService.socket.emit('equity-watchlist');
+  }
+
+  void socketDisconnectEquityWatchlist() {
+    socketService.socket.emit('leave-equity-watchlist');
   }
 
   Future getStocksTradingInstruments(String searchStock) async {
@@ -250,6 +261,30 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     }
   }
 
+  Future socketSendConnection() async {
+    isPendingOrderStateLoading(true);
+    try {
+      socketService.socket.off('sendOrderResponse${userDetails.value.sId}');
+      socketService.socket.on(
+        'sendOrderResponse${userDetails.value.sId}',
+        (data) {
+          log('sendOrderResponse${userDetails.value.sId} $data');
+          if (data.containsKey("message")) {
+            String message = data["message"];
+            SnackbarHelper.showSnackbar(message);
+          }
+          getStockPositionsList();
+          getStocksStopLossPendingOrder();
+          getStocksStopLossExecutedOrder();
+          getStockTodayOrderList();
+        },
+      );
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+    isPendingOrderStateLoading(false);
+  }
+
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
@@ -312,7 +347,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
-      return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
   }
 
@@ -415,6 +450,57 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     }
   }
 
+  Future getStopLossPendingCancelOrder(String? id) async {
+    isPendingOrderStateLoading(true);
+    try {
+      await repository.getStopLossPendingCancelOrder(id ?? '');
+      stopLossPendingOrderList([]);
+      await getStocksStopLossPendingOrder();
+      SnackbarHelper.showSnackbar('Order Cancelled');
+      await getStocksStopLossExecutedOrder();
+      await getStocksTradingPortfolio();
+      await getStockPositionsList();
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future getStopLossEditOrder(String? id, String? type) async {
+    print("typess${type}");
+    isPendingOrderStateLoading(true);
+    PendingEditOrderRequest data = PendingEditOrderRequest(
+      executionPrice: type == "StopLoss"
+          ? stopLossPriceTextController.text
+          : (type == "StopProfit"
+              ? stopProfitPriceTextController.text
+              : (type == "Limit" ? limitPriceTextController.text : '0')),
+    );
+    // PendingEditOrderRequest data = PendingEditOrderRequest(
+    //   executionPrice: limitPriceTextController.text,
+    // );
+    print("typein1012${data.toJson()}");
+    try {
+      final response = await repository.getStopLossEditOrder(
+        id,
+        data.toJson(),
+      );
+      Get.back();
+      getStocksStopLossPendingOrder();
+      if (response.data?.status?.toLowerCase() == "Success") {
+        getStocksStopLossPendingOrder();
+        stopLossPriceTextController.text = '';
+        stopProfitPriceTextController.text = '';
+        limitPriceTextController.text = '';
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
   Future placeStocksTradingOrder(
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
@@ -489,6 +575,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data?.status == "Complete") {
         SnackbarHelper.showSnackbar('Trade Successful');
         await getStockPositionsList();
+        await getStockHoldingsList();
         // await getStopLossPendingOrder();
         await getStockTodayOrderList();
         await getStocksTradingPortfolio();
@@ -515,7 +602,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
     isMarginStateLoading(true);
-    print('hii inst${inst.toJson()}');
+
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -533,7 +620,10 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       validity: "DAY",
       variety: "regular",
       price: limitPriceTextController.text,
-      lastPrice: inst.lastPrice.toString(),
+      lastPrice: getInstrumentLastPrice(
+        inst.instrumentToken!,
+        inst.exchangeToken!,
+      ).toString(),
     );
 
     try {
@@ -749,7 +839,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     } else {
       openingBalance = totalFund;
     }
-
     //available
     num availableMargin =
         ((calculatePositionTotalNetPNL() + calculateHoldingTotalNetPNL()) < 0)
@@ -806,9 +895,22 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         totalLots += position.lots ?? 0;
         totalPositionBrokerage += position.brokerage ?? 0;
-        totalGross += position.lastaverageprice?.abs() ?? 0;
+
+        totalGross += getInstrumentLastPrice(
+              position.iId!.instrumentToken!,
+              position.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        // totalGross += getInstrumentLastPrice(position.iId.instrumentToken,
+        //             position.iId.exchangeInstrumentToken)
+        //         ?.abs() ??
+        //     0;
         // totalHoldingInvested += holding.amount?.abs() ?? 0;
-        totalCurrentValue += (position.lastaverageprice?.abs() ?? 0) *
+        totalCurrentValue += (getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
             (position.lots?.abs() ?? 0);
 
         // totalPnl = (totalCurrentValue - totalNet);
@@ -886,10 +988,18 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         totalLots += holding.lots ?? 0;
         totalHoldingBrokerage += holding.brokerage ?? 0;
-        totalGross += holding.lastaverageprice?.abs() ?? 0;
+        totalGross += getInstrumentLastPrice(
+              holding.iId!.instrumentToken!,
+              holding.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
         // totalHoldingInvested += holding.amount?.abs() ?? 0;
-        totalCurrentValue +=
-            (holding.lastaverageprice?.abs() ?? 0) * (holding.lots?.abs() ?? 0);
+        totalCurrentValue += (getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (holding.lots?.abs() ?? 0);
 
         // totalPnl = (totalCurrentValue - totalNet);
         totalPnl += calculateGrossPNL(
@@ -968,7 +1078,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     if (ltp == 0) return 0;
 
     num pnl = 0;
-    num value = (((lots) * ltp) - avg.abs());
+    num value = (((lots.abs()) * ltp.abs()) - avg.abs());
     pnl += value;
     return pnl;
   }
@@ -1020,7 +1130,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           await repository.getStocksStopLossPendingOrder(
         stockfundsmargin.value.portfolioId.toString(),
       );
-      print('harshit${stockfundsmargin.value.portfolioId}');
+      // print('harshit${stockfundsmargin.value.portfolioId}');
       if (response.data?.status?.toLowerCase() == "success") {
         List<StocksPendingOrderData>? tempList = [];
         tempList = response.data?.data
@@ -1059,8 +1169,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
       // quantity: selectedQuantity.value,
-      product: "NRML",
-      orderType: "SL/SP-M",
+      product: selectedOrderGroupValue.value == 1 ? "CNC" : "MIS",
+      orderType: selectedType.value,
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,

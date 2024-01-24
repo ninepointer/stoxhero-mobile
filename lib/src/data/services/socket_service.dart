@@ -24,7 +24,7 @@ class SocketService extends GetxController {
         print('Socket : Connected : $userId');
         socket.emit('userId', userId);
         socket.emit('user-ticks', userId);
-        socket.emit('equity-watchlist', userId);
+        // socket.emit('equity-watchlist', userId);
       });
 
       socket.onAny((event, data) {

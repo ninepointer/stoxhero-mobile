@@ -38,6 +38,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
       // instrumentType: widget.tradingWatchlist.instrument,
       // lastPrice: lastPrice,
     );
+    controller.quantityTextController.clear();
     controller.selectedOrderGroupValue.value = 2;
     controller.selectedProductGroupValue.value = 2;
     // print(tradingInstrument.toJson());
@@ -121,7 +122,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '₹${widget.price}',
+                              '${FormatHelper.formatNumbers(widget.price, decimal: 2)}',
                               style: TextStyle(
                                 fontSize: 16,
                               ),

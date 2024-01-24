@@ -105,6 +105,24 @@ class _HoldingsCardState extends State<HoldingsCard> {
     );
   }
 
+  num currentValue() {
+    num currentValue = 0;
+    currentValue = (widget.holding.lastaverageprice ?? 0) *
+            (widget.holding.lots?.abs() ?? 0) +
+        (widget.holding.lots == 0
+            ? widget.holding.amount!.toDouble()
+            : controller.calculateGrossPNL(
+                widget.holding.amount ?? 0,
+                widget.holding.lots!.toInt(),
+                controller.getInstrumentLastPrice(
+                  widget.holding.iId!.instrumentToken!,
+                  widget.holding.iId!.exchangeInstrumentToken!,
+                ),
+              ));
+
+    return currentValue;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -353,7 +371,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                     widget.holding.iId!.instrumentToken!,
                                     widget
                                         .holding.iId!.exchangeInstrumentToken!,
-                                  )})',
+                                  )})%',
                                   style: TextStyle(
                                     color: controller.getValueColor(
                                         controller.getInstrumentChanges(
@@ -382,9 +400,7 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 SizedBox(width: 5),
                                 Text(
                                   //current value
-                                  FormatHelper.formatNumbers(
-                                      (widget.holding.lastaverageprice ?? 0) *
-                                          (widget.holding.lots?.abs() ?? 0)),
+                                  FormatHelper.formatNumbers(currentValue()),
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,

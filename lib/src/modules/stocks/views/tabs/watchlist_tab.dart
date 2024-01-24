@@ -61,6 +61,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
         InkWell(
           onTap: () {
             // Open the SearchBottomSheet when the container is tapped
+            controller.socketConnectEquityWatchlist();
             showModalBottomSheet(
               isScrollControlled: true,
               context: context,

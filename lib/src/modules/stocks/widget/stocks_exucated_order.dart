@@ -15,7 +15,7 @@ class StocksExcuatedOrderCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8),
       child: Container(
         height: 170,
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(9),
         decoration: BoxDecoration(
           color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
@@ -45,7 +45,7 @@ class StocksExcuatedOrderCard extends StatelessWidget {
                     //status,
                     stopLoss.status ?? '',
                     style: AppStyles.tsBlackSemiBold16.copyWith(
-                      color: stopLoss.status == "COMPLETE"
+                      color: stopLoss.status == "Executed"
                           ? AppColors.success
                           : AppColors.danger,
                     ),
@@ -120,6 +120,19 @@ class StocksExcuatedOrderCard extends StatelessWidget {
                     FormatHelper.formatNumbers(
                       stopLoss.amount,
                     ),
+                    style: AppStyles.tsBlackMedium14.copyWith(
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    "Type",
+                    style: AppStyles.tsGreyRegular12,
+                  ),
+                  Text(
+                    // "₹$totalamount",
+
+                    stopLoss.type.toString(),
+
                     style: AppStyles.tsBlackMedium14.copyWith(
                         color: Get.isDarkMode ? Colors.white : Colors.black),
                   ),
