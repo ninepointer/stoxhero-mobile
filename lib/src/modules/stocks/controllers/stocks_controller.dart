@@ -104,6 +104,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final stocksStopLossExecutedOrdersList = <StocksExcuatedOrderData>[].obs;
   final stopLossPendingOrderList = <StocksPendingOrderData>[].obs;
   final stopLossPendingOrder = StocksPendingOrderData().obs;
+  final stockslastTradePrice = TextEditingController();
 
   Future loadData() async {
     loadUserDetails();
@@ -449,6 +450,55 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     }
   }
 
+  Future getStopLossPendingCancelOrder(String? id) async {
+    isPendingOrderStateLoading(true);
+    try {
+      await repository.getStopLossPendingCancelOrder(id ?? '');
+      await getStocksStopLossPendingOrder();
+      await getStocksStopLossExecutedOrder();
+      await getStocksTradingPortfolio();
+      await getStockPositionsList();
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
+  Future getStopLossEditOrder(String? id, String? type) async {
+    print("typess${type}");
+    isPendingOrderStateLoading(true);
+    PendingEditOrderRequest data = PendingEditOrderRequest(
+      executionPrice: type == "StopLoss"
+          ? stopLossPriceTextController.text
+          : (type == "StopProfit"
+              ? stopProfitPriceTextController.text
+              : (type == "Limit" ? limitPriceTextController.text : '0')),
+    );
+    // PendingEditOrderRequest data = PendingEditOrderRequest(
+    //   executionPrice: limitPriceTextController.text,
+    // );
+    print("typein1012${data.toJson()}");
+    try {
+      final response = await repository.getStopLossEditOrder(
+        id,
+        data.toJson(),
+      );
+      Get.back();
+      getStocksStopLossPendingOrder();
+      if (response.data?.status?.toLowerCase() == "Success") {
+        getStocksStopLossPendingOrder();
+        stopLossPriceTextController.text = '';
+        stopProfitPriceTextController.text = '';
+        limitPriceTextController.text = '';
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isPendingOrderStateLoading(false);
+  }
+
   Future placeStocksTradingOrder(
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
@@ -550,7 +600,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
     isMarginStateLoading(true);
-    print('hii inst${inst.toJson()}');
+
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -568,7 +618,10 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       validity: "DAY",
       variety: "regular",
       price: limitPriceTextController.text,
-      lastPrice: inst.lastPrice.toString(),
+      lastPrice: getInstrumentLastPrice(
+        inst.instrumentToken!,
+        inst.exchangeToken!,
+      ).toString(),
     );
 
     try {

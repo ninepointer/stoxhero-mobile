@@ -84,6 +84,24 @@ class StocksTradingRepository extends BaseRepository {
         : RepoResponse(data: StockMarginRequiredResponse.fromJson(response));
   }
 
+  Future<RepoResponse<GenericResponse>> getStopLossPendingCancelOrder(
+      String id) async {
+    String apiURL = AppUrls.stocksStopLossPendingCancelOrder(id);
+    var response = await service.patchAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> getStopLossEditOrder(
+      String? id, Map<String, dynamic> data) async {
+    String apiURL = AppUrls.stopLossEditOrder(id);
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
   Future<RepoResponse<StocksTradingPortfolioResponse>>
       getStocksTradingPortfolio() async {
     String apiURL = AppUrls.stocksTradingPortfolio;
