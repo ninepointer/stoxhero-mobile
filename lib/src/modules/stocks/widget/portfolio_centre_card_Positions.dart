@@ -23,14 +23,14 @@ class CentreCardinPositions extends StatefulWidget {
 class _CentreCardinPositionsState extends State<CentreCardinPositions> {
   late StocksTradingController controller;
 
- @override
+  @override
   void initState() {
     super.initState();
     controller = Get.find<StocksTradingController>();
     controller.getStockPositionsList();
     controller.getStockHoldingsList();
+    //controller.calculateTotalPositionValues();
   }
-
 
   @override
   Widget build(BuildContext context) {

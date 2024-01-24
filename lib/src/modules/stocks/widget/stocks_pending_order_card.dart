@@ -39,7 +39,7 @@ class StocksPendingOrderCard extends GetView<StocksTradingController> {
       padding: const EdgeInsets.only(top: 8),
       child: Container(
         height: 195,
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.only(left: 9, right: 9),
         decoration: BoxDecoration(
           color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
@@ -114,7 +114,7 @@ class StocksPendingOrderCard extends GetView<StocksTradingController> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: AppColors.danger.withOpacity(.6),
+                        color: AppColors.danger.withOpacity(.7),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(15),
                         ),
@@ -197,7 +197,7 @@ class StocksPendingOrderCard extends GetView<StocksTradingController> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Colors.yellow.withOpacity(.6),
+                        color: Colors.yellow[600],
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(15),
                         ),

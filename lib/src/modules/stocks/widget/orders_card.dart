@@ -32,7 +32,7 @@ class OrdersCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8),
       child: Container(
         height: 170,
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(9),
         decoration: BoxDecoration(
           color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
