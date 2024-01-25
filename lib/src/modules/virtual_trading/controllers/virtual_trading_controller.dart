@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
@@ -50,12 +51,17 @@ class VirtualTradingController
   final isOrderStateLoading = false.obs;
   bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
 
+  final isBuyButtonDisabled = false.obs;
+  final apiDataLoaded = false.obs;
+  // final isBuyButtonDisabled = false.obs;
+
   final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();
   final stopLossPriceTextController = TextEditingController();
   final stopProfitPriceTextController = TextEditingController();
   final quanitityTextController = TextEditingController();
   final limitPriceTextController = TextEditingController();
+
   final virtualPortfolio = VirtualTradingPortfolio().obs;
 
   final tradingInstrumentTradeDetailsList =
@@ -72,10 +78,14 @@ class VirtualTradingController
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
+  final selectedStopLossQuantity = 0.obs;
+  final selectedStopProfitQuantity = 0.obs;
   final selectedStringQuantity = "0".obs;
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
   final lotsValueList = <int>[0].obs;
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
 
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
 
@@ -87,18 +97,20 @@ class VirtualTradingController
   final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
   final stopLossPendingOrder = StopLossPendingOrdersList().obs;
   final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final stoplossQuantityList = <StoplossQuantityData>[].obs;
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
+    await getReadSetting();
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
     await getVirtualTradingPortfolio();
     await getStopLossPendingOrder();
     await getStopLossExecutedOrder();
     await getVirtualTodayOrderList();
-    await getReadSetting();
+    await liveIndexDetails();
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
@@ -174,6 +186,79 @@ class VirtualTradingController
 
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
+    return result;
+  }
+
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedStopLossQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
+
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopProfit.assignAll(newList);
     return result;
   }
 
@@ -281,6 +366,7 @@ class VirtualTradingController
     num margin = 0;
     num amount = 0;
     num limitMargin = 0;
+    num subtractAmount = 0;
     for (var position in virtualPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
@@ -289,6 +375,11 @@ class VirtualTradingController
       if (position.id?.isLimit == true) {
         limitMargin += position.margin ?? 0;
       } else {
+        if (position.lots! < 0) {
+          limitMargin += position.margin ?? 0;
+          subtractAmount +=
+              ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
+        }
         amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
@@ -300,11 +391,14 @@ class VirtualTradingController
     } else {
       openingBalance = totalFund;
     }
+
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - (amount.abs() + limitMargin)))
+            : (openingBalance -
+                ((amount - subtractAmount).abs() + limitMargin)))
         : (openingBalance - margin);
+
     return availableMargin;
   }
 
@@ -353,7 +447,7 @@ class VirtualTradingController
           tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
-      return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
   }
 
@@ -374,6 +468,26 @@ class VirtualTradingController
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getVirtualPendingStoplossOrderData(String id) async {
+    try {
+      final RepoResponse<VirtualStopLossPendingOrderResponse> response =
+          await repository
+              .getVirtualStopLossPendingOrder("6433e2e5500dc2f2d20d686d");
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          stoplossQuantityList(response.data?.quantity ?? []);
+          print("stoplossQuantityList${stoplossQuantityList.length}");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      print("stoplossQuantityList${e}");
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future addInstrument(TradingInstrument inst) async {
@@ -466,8 +580,16 @@ class VirtualTradingController
   Future placeVirtualTradingOrder(
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
-
+    print("typein584${type} ${selectedStringQuantity.value}");
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -482,7 +604,9 @@ class VirtualTradingController
         }
       }
     }
-
+    print("typein600${type} ${selectedStringQuantity.value}");
+    print(
+        "typein601${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
     VirtualTradingPlaceOrderRequest data = VirtualTradingPlaceOrderRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -510,7 +634,7 @@ class VirtualTradingController
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
       ),
     );
-    log('placeVirtualTradingOrder : ${data.toJson()}');
+    log('typein628 : ${data.toJson()} ${type}');
     try {
       final RepoResponse<GenericResponse> response =
           await repository.paperPlaceOrder(
@@ -523,6 +647,12 @@ class VirtualTradingController
         await getStopLossPendingOrder();
         await getVirtualTodayOrderList();
         await getVirtualTradingPortfolio();
+        selectedStringQuantity("");
+        stopLossPriceTextController.text = '';
+        stopProfitPriceTextController.text = '';
+        limitPriceTextController.text = '';
+        print(
+            "typein652${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -637,27 +767,47 @@ class VirtualTradingController
     isLoading(false);
   }
 
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      socketService.socket.on(
-        'index-tick',
-        (data) {
-          stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
-          for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList
-                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
-              int index = stockIndexDetailsList.indexWhere(
-                (stock) => stock.instrumentToken == element.instrumentToken,
-              );
-              stockIndexDetailsList.removeAt(index);
-              stockIndexDetailsList.insert(index, element);
-            } else {
-              stockIndexDetailsList.add(element);
-            }
+      socketService.socket.on('index-tick', (data) {
+        stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
+        for (var element in stockTemp ?? []) {
+          if (stockIndexDetailsList
+              .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            int index = stockIndexDetailsList.indexWhere(
+              (stock) => stock.instrumentToken == element.instrumentToken,
+            );
+            stockIndexDetailsList.removeAt(index);
+            stockIndexDetailsList.insert(index, element);
+          } else {
+            stockIndexDetailsList.add(element);
           }
-        },
-      );
+        }
+      });
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -706,6 +856,7 @@ class VirtualTradingController
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           marginRequired(response.data);
+          print('hii virtual${data.toJson()}');
         } else {
           SnackbarHelper.showSnackbar(response.error?.message);
         }
@@ -764,7 +915,11 @@ class VirtualTradingController
         virtualPortfolio.value.portfolioId,
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        stopLossPendingOrderList(response.data?.data ?? []);
+        List<StopLossPendingOrdersList>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -782,7 +937,7 @@ class VirtualTradingController
       await getStopLossPendingOrder();
       await getStopLossExecutedOrder();
       await getVirtualTradingPortfolio();
-      loadData();
+      await getVirtualPositionsList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -811,13 +966,15 @@ class VirtualTradingController
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: virtualPortfolio.value.portfolioId,
@@ -836,11 +993,16 @@ class VirtualTradingController
         data.toJson(),
       );
       Get.back();
-      print(response.data.toString());
+      print("type in991 ${response.data.toString()}");
+
       if (response.data?.status == "Success") {
         SnackbarHelper.showSnackbar(response.data?.message);
         await getStopLossPendingOrder();
         await getVirtualTodayOrderList();
+        selectedStringQuantity("");
+
+        print(
+            "typein1001 ${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -855,6 +1017,7 @@ class VirtualTradingController
   }
 
   Future getStopLossEditOrder(String? id, String? type) async {
+    print("typess${type}");
     isPendingOrderStateLoading(true);
     PendingEditOrderRequest data = PendingEditOrderRequest(
       executionPrice: type == "StopLoss"
@@ -863,6 +1026,10 @@ class VirtualTradingController
               ? stopProfitPriceTextController.text
               : (type == "Limit" ? limitPriceTextController.text : '0')),
     );
+    // PendingEditOrderRequest data = PendingEditOrderRequest(
+    //   executionPrice: limitPriceTextController.text,
+    // );
+    print("typein1012${data.toJson()}");
     try {
       final response = await repository.getStopLossEditOrder(
         id,
@@ -872,6 +1039,9 @@ class VirtualTradingController
       getStopLossPendingOrder();
       if (response.data?.status?.toLowerCase() == "Success") {
         getStopLossPendingOrder();
+        stopLossPriceTextController.text = '';
+        stopProfitPriceTextController.text = '';
+        limitPriceTextController.text = '';
       }
     } catch (e) {
       print(e.toString());

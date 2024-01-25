@@ -77,7 +77,9 @@ class RewardTableBottomSheet extends GetView<ContestController> {
                   thickness: 1,
                 ),
                 SizedBox(height: 16),
-                if (liveContest != null || upcomingContest != null || completedContest != null)
+                if (liveContest != null ||
+                    upcomingContest != null ||
+                    completedContest != null)
                   Table(
                     border: TableBorder.all(
                       color: AppColors.grey.shade50,
@@ -92,7 +94,9 @@ class RewardTableBottomSheet extends GetView<ContestController> {
                               alignment: Alignment.center,
                               child: Text(
                                 'Rank',
-                                style: Theme.of(context).textTheme.tsPrimaryMedium14,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsPrimaryMedium14,
                               ),
                             ),
                           ),
@@ -103,19 +107,24 @@ class RewardTableBottomSheet extends GetView<ContestController> {
                               alignment: Alignment.center,
                               child: Text(
                                 'Prize',
-                                style: Theme.of(context).textTheme.tsPrimaryMedium14,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsPrimaryMedium14,
                               ),
                             ),
                           ),
                         ],
                       ),
                       if (liveContest != null)
-                        for (Rewards reward in liveContest?.rewards ?? []) _buildRewardTableRow(context, reward),
+                        for (Rewards reward in liveContest?.rewards ?? [])
+                          _buildRewardTableRow(context, reward),
                       if (upcomingContest != null)
-                        for (UpcomingRewards reward in upcomingContest?.rewards ?? [])
+                        for (UpcomingRewards reward
+                            in upcomingContest?.rewards ?? [])
                           _buildRewardTableRow(context, reward),
                       if (completedContest != null)
-                        for (CompletedRewards reward in completedContest?.rewards ?? [])
+                        for (CompletedRewards reward
+                            in completedContest?.rewards ?? [])
                           _buildRewardTableRow(context, reward),
                     ],
                   ),
@@ -135,7 +144,9 @@ class RewardTableBottomSheet extends GetView<ContestController> {
             padding: EdgeInsets.symmetric(vertical: 12),
             alignment: Alignment.center,
             child: Text(
-              reward.rankStart == reward.rankEnd ? '${reward.rankStart}' : '${reward.rankStart}-${reward.rankEnd}',
+              reward.rankStart == reward.rankEnd
+                  ? '${reward.rankStart}'
+                  : '${reward.rankStart}-${reward.rankEnd}',
               style: Theme.of(context).textTheme.tsMedium12,
             ),
           ),

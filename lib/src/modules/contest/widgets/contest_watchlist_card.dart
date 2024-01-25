@@ -47,6 +47,7 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
       lastPrice: lastPrice,
     );
     controller.generateLotsList(type: widget.tradingWatchlist.symbol);
+    controller.isBuyButtonDisabled.value = false;
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: ContestTransactionBottomSheet(
@@ -69,7 +70,8 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
             onTap: _updateWatchlistIndex,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -134,7 +136,8 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => openBottomSheet(context, TransactionType.buy),
+                      onTap: () =>
+                          openBottomSheet(context, TransactionType.buy),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),
@@ -155,7 +158,8 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => openBottomSheet(context, TransactionType.sell),
+                      onTap: () =>
+                          openBottomSheet(context, TransactionType.sell),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),
@@ -173,7 +177,8 @@ class _ContestWatchlistCardState extends State<ContestWatchlistCard> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                      onTap: () => controller.removeInstrument(
+                          widget.tradingWatchlist.instrumentToken),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),

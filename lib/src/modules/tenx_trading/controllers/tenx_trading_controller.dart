@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../app/app.dart';
-import '../../../data/models/response/tenX_subscription_pnl_response.dart';
 
 class TenxTradingBinding implements Bindings {
   @override
@@ -65,6 +64,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
 
   final selectedTabBarIndex = 0.obs;
+  final isBuyButtonDisabled = false.obs;
 
   final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();
@@ -79,6 +79,12 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final selectedSubscription = TenxActivePlan().obs;
   final walletBalance = RxNum(0);
   final selectedWatchlistIndex = RxInt(-1);
+
+  final selectedStopLossQuantity = 0.obs;
+  final selectedStopProfitQuantity = 0.obs;
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
+  final stoplossQuantityList = <StoplossQuantityData>[].obs;
 
   final tradingInstrumentTradeDetailsList =
       <TradingInstrumentTradeDetails>[].obs;
@@ -124,7 +130,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   final tenxAvailablePlans = <TenxActivePlan>[].obs;
   final tenxAvailablePlansUnFiltered = <TenxActivePlan>[].obs;
 
-  final tenxSubscribedPlansPNLData = <TenxSubscribedPlanPnl>[].obs;
+  final tenxSubscribedPlansPNLData = TenxSubscribedPlanPnl().obs;
   final tenxSubscribedPlans = <TenxSubscribedPlan>[].obs;
   final tenxSubscribedPlansUnFiltered = <TenxSubscribedPlan>[].obs;
   final tenxSubscribedPlanSelected = TenxSubscribedPlan().obs;
@@ -173,6 +179,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     await getStopLossExecutedOrder();
     await getTenxTodayOrdersList();
     await getTenxTradingPortfolioDetails();
+    await liveIndexDetails();
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
@@ -330,6 +337,82 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     return result;
   }
 
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+    print("stoplossQuantityPrev${totalQuantity}");
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+    print("newList${newList}");
+    print("genrateStopLoss${cutoff}");
+    selectedStopLossQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
+
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    // int cutoff = math.max(openLots ?? 0, totalQuantity) -
+    //     math.min(openLots ?? 0, totalQuantity);
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
+    print("selectedStopProfitQuantity${selectedStopProfitQuantity.value}");
+    lotsValueForStopProfit.assignAll(newList);
+    return result;
+  }
+
   void calculateTotalPositionValues() {
     int totalLots = 0;
     num totalBrokerage = 0;
@@ -446,6 +529,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num margin = 0;
     num amount = 0;
     num limitMargin = 0;
+    num subtractAmount = 0;
     for (var position in tenxPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
@@ -455,6 +539,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       if (position.id?.isLimit == true) {
         limitMargin += position.margin ?? 0;
       } else {
+        if (position.lots! < 0) {
+          limitMargin += position.margin ?? 0;
+          subtractAmount +=
+              ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
+        }
         amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
@@ -469,7 +558,8 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - (amount.abs() + limitMargin)))
+            : (openingBalance -
+                ((amount - subtractAmount).abs() + limitMargin)))
         : (openingBalance - margin);
     // print('availableMargin $availableMargin');
     // print('calculateTotalNetPNL ${calculateTotalNetPNL()}');
@@ -551,7 +641,26 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
           tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
-      return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
+    }
+  }
+
+  Future getTenXPendingStoplossOrderData(String id) async {
+    try {
+      final RepoResponse<VirtualStopLossPendingOrderResponse> response =
+          await repository.getTenXStopLossPendingOrder(
+              tenxSubscribedPlanSelected.value.sId ?? '');
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          stoplossQuantityList(response.data?.quantity ?? []);
+          print("stoplossQuantityList${stoplossQuantityList.length}");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
 
@@ -783,7 +892,15 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
   Future placeTenxTradingOrder(
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -843,6 +960,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         await getStopLossPendingOrder();
         await getTenxTodayOrdersList();
         await getTenxTradingPortfolioDetails();
+        selectedStringQuantity("");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -946,6 +1064,31 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isInstrumentListLoading(false);
+  }
+
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+      print("liveIndexDetails${stockIndexDetailsList.length}");
+    } catch (e) {
+      log(e.toString());
+
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future socketIndexConnection() async {
@@ -1223,14 +1366,14 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     try {
       final RepoResponse<TenxSubscribedPlanPNLResponse> response =
           await repository.getTenxMyActiveSubscribedPNL(id, subscribeOn);
-      print("aaaa${response.data}");
+
       if (response.data != null) {
-        // Update the RxList using assignAll
-        tenxSubscribedPlansPNLData(response.data?.data ?? []);
+        tenxSubscribedPlansPNLData(response.data?.data?[0]);
       }
     } catch (e) {
+      tenxSubscribedPlansPNLData(TenxSubscribedPlanPnl());
       log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     } finally {
       isLoading(false);
     }
@@ -1285,7 +1428,11 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         selectedSubscriptionId.value,
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        stopLossPendingOrderList(response.data?.data ?? []);
+        List<StopLossPendingOrdersList>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -1303,7 +1450,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
       await getStopLossPendingOrder();
       await getTenxTradingPortfolioDetails();
       await getStopLossExecutedOrder();
-      loadData();
+      await getTenxPositionList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1332,13 +1479,15 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: selectedSubscriptionId.value,

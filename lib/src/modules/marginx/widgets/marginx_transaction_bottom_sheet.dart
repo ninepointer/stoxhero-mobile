@@ -118,7 +118,9 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                   DropdownButtonFormField2<int>(
                     value: controller.selectedQuantity.value,
                     onChanged: (value) {
-                      controller.selectedQuantity(value);
+                      controller.selectedQuantity(value?.abs());
+                      controller
+                          .selectedStringQuantity(value?.abs().toString());
                       controller.getMarginRequired(type, tradingInstrument);
                     },
                     isDense: true,
@@ -505,6 +507,8 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                                 ? 'BUY'
                                 : 'SELL',
                     onPressed: () {
+                      // if (!controller.isBuyButtonDisabled.value) {
+                      //   controller.isBuyButtonDisabled.value = true;
                       if (controller.selectedGroupValue.value == 3 &&
                           controller.stopLossPriceTextController.text.isEmpty &&
                           controller
@@ -524,6 +528,8 @@ class MarginXTransactionBottomSheet extends GetView<MarginXController> {
                         controller.stopLossPriceTextController.clear();
                         controller.stopProfitPriceTextController.clear();
                         controller.limitPriceTextController.clear();
+                        // controller.isBuyButtonDisabled.value = false;
+                        //}
                       }
                     },
                   ),

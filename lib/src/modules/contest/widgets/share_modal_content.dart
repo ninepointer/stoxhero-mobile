@@ -34,17 +34,8 @@ class ShareModalContent extends GetView<ContestController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers(completedContestPnl?.payoutAmount)} in ${controller.completedContest.value.contestName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nDownload the App:\nhttps://play.google.com/store/apps/details?id=com.stoxhero.app&pli=1";
+    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers(completedContestPnl?.payoutAmount)} in ${controller.completedContest.value.contestName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nSignUp now and get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet \n\nhttps://stoxhero.page.link/ctz";
   }
-
-  // num calculateReward(fee) {
-  //   num capvalue = (fee * (contest?.payoutCapPercentage ?? 0)) / 100;
-  //   num netpnl = completedContestPnl?.npnl ?? 0;
-  //   num tempReward = netpnl * (contest?.payoutPercentage ?? 0) / 100;
-  //   num reward = tempReward > capvalue ? capvalue : tempReward;
-  //   return reward > 0 ? reward : 0;
-
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -204,16 +195,15 @@ class ShareModalContent extends GetView<ContestController> {
                                       margin: EdgeInsets.only(left: 12),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "Net P&L",
+                                            "  Net P&L",
                                             style: AppStyles
                                                 .tsSecondaryRegular14
                                                 .copyWith(
                                               color: AppColors.white,
                                             ),
-                                            textAlign: TextAlign.center,
                                           ),
                                           SizedBox(
                                             height: 2,

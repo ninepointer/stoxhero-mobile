@@ -1,32 +1,52 @@
 import 'package:flutter/material.dart';
+import '../../../app/app.dart';
 import '../../../core/core.dart';
 
-class CentreCardHoldings extends StatelessWidget {
+class CentreCardHoldings extends StatefulWidget {
   const CentreCardHoldings({
     Key? key,
-    required this.netpl,
-    required this.plInHoldings, 
     required this.roiHoldings,
+    required this.pnlInHoldings,
+    required this.invested,
+    required this.currentvalue,
   }) : super(key: key);
 
-  final String netpl;
-  final String plInHoldings;
+  final String invested;
+  final String currentvalue;
   final String roiHoldings;
+  final String pnlInHoldings;
+
+  @override
+  State<CentreCardHoldings> createState() => _CentreCardHoldingsState();
+}
+
+class _CentreCardHoldingsState extends State<CentreCardHoldings> {
+  late StocksTradingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.getStockPositionsList();
+    controller.getStockHoldingsList();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Container(
-        margin: EdgeInsets.only( left: 40, right: 40),
+        margin: EdgeInsets.only(left: 30, right: 30),
         padding: EdgeInsets.symmetric(horizontal: 20),
-        height: 70,
+        height: 80,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Get.isDarkMode
+                  ? Color(0xFF151F2B).withOpacity(0.8)
+                  : Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
               offset: Offset(0, 2),
@@ -34,9 +54,8 @@ class CentreCardHoldings extends StatelessWidget {
           ],
         ),
         child: Container(
-
           child: Padding(
-            padding: const EdgeInsets.only(top:5),
+            padding: const EdgeInsets.only(top: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -45,16 +64,24 @@ class CentreCardHoldings extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
+                      'Holding P&L',
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                          color: Get.isDarkMode ? Colors.white : Colors.black),
+                    ),
+                    Text(
+                      'ROI',
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                          color: Get.isDarkMode ? Colors.white : Colors.black),
+                    ),
+                    Text(
                       'Invested',
-                      style: AppStyles.tsBlackMedium14,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                          color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                     Text(
                       'Current Value',
-                      style: AppStyles.tsBlackMedium14,
-                    ),
-                     Text(
-                      'ROI',
-                      style: AppStyles.tsBlackMedium14,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                          color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                   ],
                 ),
@@ -63,22 +90,42 @@ class CentreCardHoldings extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                     "₹$netpl",
-                     style: AppStyles.tsBlackMedium14.copyWith(
-                      color:  Colors.green ,
-                    ),
+                      widget.pnlInHoldings,
+                      //  (invested == 0)
+                      //     ? '₹0.00'
+                      //     : FormatHelper.formatNumbers(
+                      //         pnlInHoldings,
+                      //         decimal: 2,
+                      //       ),
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: widget.pnlInHoldings != null
+                            ? widget.pnlInHoldings.startsWith('-')
+                                ? AppColors.danger
+                                : AppColors.success
+                            : AppColors.success,
+                      ),
                     ),
                     Text(
-                      "₹$plInHoldings",
-                     style: AppStyles.tsBlackMedium14.copyWith(
-                      color:  Colors.green ,
+                      '${(widget.invested == 0 || widget.roiHoldings == null) ? '0.00' : widget.roiHoldings}%',
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: widget.roiHoldings != null
+                            ? widget.roiHoldings.startsWith('-')
+                                ? AppColors.danger
+                                : AppColors.success
+                            : AppColors.success,
+                      ),
                     ),
+                    Text(
+                      widget.invested,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: AppColors.success,
+                      ),
                     ),
-                     Text(
-                      roiHoldings,
-                     style: AppStyles.tsBlackMedium14.copyWith(
-                     color:  Colors.green ,
-                    ),
+                    Text(
+                      widget.currentvalue,
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: AppColors.success,
+                      ),
                     ),
                   ],
                 ),

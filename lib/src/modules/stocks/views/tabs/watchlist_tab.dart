@@ -48,7 +48,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
           padding: const EdgeInsets.only(top: 25),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
@@ -61,6 +61,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
         InkWell(
           onTap: () {
             // Open the SearchBottomSheet when the container is tapped
+            controller.socketConnectEquityWatchlist();
             showModalBottomSheet(
               isScrollControlled: true,
               context: context,
@@ -74,11 +75,13 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Get.isDarkMode
+                      ? Color(0xFF151F2B).withOpacity(0.8)
+                      : Colors.grey.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 4,
                   offset: Offset(0, 2),
@@ -120,14 +123,25 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
                   return ListView.builder(
                     itemCount: controller.equityInstrumentDetailList.length,
                     itemBuilder: (context, index) {
+                      //  var stock = controller.tradingInstruments[index];
                       EquityInstrumentDetail data =
                           controller.equityInstrumentDetailList[index];
 
                       return WatchlistCard(
                         imagePath: 'assets/images/10Xlogo.jpg',
                         title: data.symbol ?? '-',
-                        price: "5",
-                        percentage: "7%",
+                        price: controller
+                            .getInstrumentLastPrice(
+                              data.instrumentToken ?? 0,
+                              data.exchangeInstrumentToken ?? 0,
+                            )
+                            .toString(),
+                        percentage: controller.getInstrumentChanges(
+                          data.instrumentToken ?? 0,
+                          data.exchangeInstrumentToken ?? 0,
+                        ),
+                        equityInstrumentDetail:
+                            controller.equityInstrumentDetailList[index],
                       );
                     },
                   );

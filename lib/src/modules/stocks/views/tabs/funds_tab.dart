@@ -1,27 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class Funds extends StatelessWidget {
+import '../../../../core/core.dart';
+import '../../controllers/stocks_controller.dart';
+
+class Funds extends StatefulWidget {
   const Funds({
     Key? key,
-    required this.marginavailable,
-    required this.usedmargin,
-    required this.allocatedmargin,
-    required this.investmentamount,
-    required this.returns,
-    required this.unrealisedPL,
-    required this.returnpercentage,
+    // required this.marginavailable,
+    // required this.usedmargin,
+    // required this.allocatedmargin,
+    // required this.investmentamount,
+    // required this.returns,
+    // required this.unrealisedPL,
+    // required this.returnpercentage,
   }) : super(key: key);
 
-  final String marginavailable;
-  final String usedmargin;
-  final String allocatedmargin;
-  final String investmentamount;
-  final String returns;
-  final String unrealisedPL;
-  final String returnpercentage;
+  // final String marginavailable;
+  // final String usedmargin;
+  // final String allocatedmargin;
+  // final String investmentamount;
+  // final String returns;
+  // final String unrealisedPL;
+  //final String returnpercentage;
+
+  @override
+  State<Funds> createState() => _FundsState();
+}
+
+class _FundsState extends State<Funds> {
+  late StocksTradingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.getStockHoldingsList();
+    controller.getStockPositionsList();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // num CurrentValue =
+
+    //     (controller.stockTotalHoldingDetails.value.currentvalue ?? 0) +
+    //         (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
+
+    // num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
+    //     (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
+
+    // num TotalOpenPositions = (controller.getOpenPositionCount()) +
+    //     (controller.getOpenHoldingCount());
+
+    // num finalpnl = CurrentValue - InvestedValue;
+
+    // num finalROI = (finalpnl * 100) / InvestedValue;
+
+    // num MarginUsed = controller.stockfundsmargin.value.totalFund! -
+    //     controller.calculateMargin().round();
+
+    // num? totalFund = controller.stockfundsmargin.value.totalFund;
+    num totalFund = controller.stockfundsmargin.value.totalFund ?? 0;
+
+    // num MarginUsed = totalFund != null
+    //     ? (totalFund - controller.calculateMargin().round())
+    //     : 0;
+    num MarginUsed = ((controller.stockfundsmargin.value.totalFund ?? 0) -
+            (controller.calculateMargin().round()))
+        .abs();
+
+    num OPenPositions =
+        controller.getOpenPositionCount() + controller.getOpenHoldingCount();
+
+    num PnL = ((controller.stockTotalHoldingDetails.value.pnl ?? 0) +
+        (controller.stockTotalPositionDetails.value.pnl ?? 0));
+
+    num brokerage =
+        ((controller.stockTotalHoldingDetails.value.brokerage ?? 0) +
+            (controller.stockTotalPositionDetails.value.brokerage ?? 0));
+
+    num investmentamount =
+        (controller.stockTotalHoldingDetails.value.net ?? 0) +
+            (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
+
+    num availablemarginat0 = ((PnL - brokerage) +
+        (controller.stockfundsmargin.value.totalFund ?? 0));
+
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Container(
@@ -29,11 +93,13 @@ class Funds extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
           borderRadius: BorderRadius.circular(25.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: Get.isDarkMode
+                  ? Color(0xFF151F2B).withOpacity(0.8)
+                  : Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
               offset: Offset(0, 2),
@@ -43,25 +109,91 @@ class Funds extends StatelessWidget {
         child: ListView(
           children: [
             FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin available",
-                cardvalue: marginavailable,
+                cardvalue: (OPenPositions > 0)
+                    ? (FormatHelper.formatNumbers(
+                        controller.calculateMargin().round().toString(),
+                        decimal: 2,
+                      ))
+                    : FormatHelper.formatNumbers(availablemarginat0,
+                        decimal: 2),
+                // FormatHelper.formatNumbers(
+                //   controller.calculateMargin().round().toString(),
+                //   decimal: 2,
+                // ),
                 index: 0),
-            FundsCard(cardname: "Used margin", cardvalue: usedmargin, index: 1),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
-                cardname: "Allocated margin",
-                cardvalue: allocatedmargin,
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
+                cardname: "Margin Used",
+                cardvalue: ((PnL - brokerage) < 0)
+                    ? FormatHelper.formatNumbers((PnL - brokerage).abs(),
+                        decimal: 2)
+                    : "₹00.00",
+                //  FormatHelper.formatNumbers(MarginUsed.abs(), decimal: 2),
+                index: 1),
+            SizedBox(
+              height: 5,
+            ),
+            FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
+                cardname: "Allocated Margin",
+                cardvalue: FormatHelper.formatNumbers(
+                    controller.stockfundsmargin.value.totalFund.toString()),
                 index: 2),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
-                cardname: "investmentamount",
-                cardvalue: investmentamount,
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
+                cardname: "Investment Amount",
+                cardvalue: FormatHelper.formatNumbers(investmentamount.abs(),
+                    decimal: 2),
                 index: 3),
-            FundsCard(cardname: "returns", cardvalue: returns, index: 4),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
-                cardname: "unrealisedPL", cardvalue: unrealisedPL, index: 5),
+                cardname: "Returns",
+                cardvalue:
+                    FormatHelper.formatNumbers(PnL - brokerage, decimal: 2),
+                style: TextStyle(
+                  color:
+                      (double.tryParse((PnL - brokerage).toString()) ?? 0) < 0
+                          ? AppColors.danger
+                          : AppColors.success,
+                  fontFamily: AppTheme.fontFamily,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+                index: 4),
+            SizedBox(
+              height: 5,
+            ),
             FundsCard(
-                cardname: "Return Percentage",
-                cardvalue: returnpercentage,
-                index: 6),
+              cardname: "Unrealised P&L",
+              cardvalue:
+                  FormatHelper.formatNumbers(PnL < 0 ? 0 : PnL, decimal: 2),
+              style: TextStyle(
+                color: AppColors.success,
+                fontFamily: AppTheme.fontFamily,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+              index: 5,
+            ),
+
+            // FundsCard(
+            //     cardname: "Return Percentage",
+            //     cardvalue: widget.returnpercentage,
+            //     index: 6),
             // Add more FundsCard widgets as needed
           ],
         ),
@@ -76,16 +208,20 @@ class FundsCard extends StatelessWidget {
     required this.cardname,
     required this.cardvalue,
     required this.index,
+    required this.style,
   }) : super(key: key);
 
   final String cardname;
   final String cardvalue;
   final int index;
+  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: index % 2 == 0 ? Colors.white : Colors.grey[200],
+      color: Get.isDarkMode
+          ? Color(0xFF151F2B)
+          : (index % 2 == 0 ? Colors.white : Colors.grey[200]),
       elevation: 0,
       child: Padding(
         padding: EdgeInsets.all(16.0),
@@ -97,7 +233,10 @@ class FundsCard extends StatelessWidget {
               children: [
                 Text(
                   cardname,
-                  // style: AppStyles.tsBlackRegular16, // Uncomment if needed
+                  style: AppStyles.tsBlackMedium16.copyWith(
+                      color: Get.isDarkMode
+                          ? Colors.white
+                          : Colors.black), // Uncomment if needed
                 ),
               ],
             ),
@@ -106,7 +245,7 @@ class FundsCard extends StatelessWidget {
               children: [
                 Text(
                   cardvalue,
-                  style: TextStyle(),
+                  style: style,
                 ),
               ],
             ),

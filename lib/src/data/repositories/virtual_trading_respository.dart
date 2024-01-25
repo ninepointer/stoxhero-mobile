@@ -13,6 +13,24 @@ class VirtualTradingRepository extends BaseRepository {
             data: InstrumentLivePriceListResponse.fromJson(response));
   }
 
+  Future<RepoResponse<IndexLivePriceListResponse>> getIndexLivePrices() async {
+    String apiURL = AppUrls.getIndexLivePrice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<VirtualStopLossPendingOrderResponse>>
+      getVirtualStopLossPendingOrder(String id) async {
+    String apiURL = AppUrls.virtualPendingStopLoss(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(
+            data: VirtualStopLossPendingOrderResponse.fromJson(response));
+  }
+
   Future<RepoResponse<VirtualTradingPortfolioResponse>>
       getVirtualTradingPortfolio() async {
     String apiURL = AppUrls.virtualTradingPortfolio;

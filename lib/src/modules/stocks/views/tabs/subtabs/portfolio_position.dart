@@ -1,6 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/modules/stocks/widget/portfolio_centre_card_positions.dart';
+import 'package:get/get.dart';
+import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
+import 'package:stoxhero/src/modules/stocks/widget/portfolio_centre_card_Positions.dart';
 import 'package:stoxhero/src/modules/stocks/widget/portfolio_positions_card.dart';
+
+import '../../../../../app/app.dart';
 
 class PortfolioPosition extends StatefulWidget {
   const PortfolioPosition({Key? key}) : super(key: key);
@@ -10,6 +16,16 @@ class PortfolioPosition extends StatefulWidget {
 }
 
 class _PortfolioPositionState extends State<PortfolioPosition> {
+  late StocksTradingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.getStockPositionsList();
+    controller.getStockHoldingsList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -19,7 +35,7 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           padding: const EdgeInsets.only(top: 40),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),
@@ -28,58 +44,59 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           ),
         ),
 
-         CentreCardPositions(netpl: '3', plInPosition: '4',roiPositions: '+0.345(3.01%)',),
-
-        
-        Positioned(
-            top: 80, // Adjust the top position as needed
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: ListView(
-              children: [
-                Column(
-                  children: [
-                   PositionsCard(
-                            title: "Reliance Power",
-                            averageprice: "₹61.8",
-                            percentage: "+0.70 (3.01%)",
-                            quantity: "35",
-                            ltp: "₹59.20",
-                            imagePath: 'assets/images/10Xlogo.jpg',
-                          ),
-                           PositionsCard(
-                            title: "Reliance Power",
-                            averageprice: "₹61.8",
-                            percentage: "+0.70 (3.01%)",
-                            quantity: "35",
-                            ltp: "₹59.20",
-                            imagePath: 'assets/images/10Xlogo.jpg',
-                          ),
-                           PositionsCard(
-                            title: "Reliance Power",
-                            averageprice: "₹61.8",
-                            percentage: "+0.70 (3.01%)",
-                            quantity: "35",
-                            ltp: "₹59.20",
-                            imagePath: 'assets/images/10Xlogo.jpg',
-                          ),
-                           PositionsCard(
-                            title: "Reliance Power",
-                            averageprice: "₹61.8",
-                            percentage: "+0.70 (3.01%)",
-                            quantity: "35",
-                            ltp: "₹59.20",
-                            imagePath: 'assets/images/10Xlogo.jpg',
-                          ),
-                
-                    // Add more cards as needed
-                  ],
-                ),
-              ],
+        Obx(
+          () => CentreCardinPositions(
+            invested: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.holdingnet
+                    .toString(),
+                decimal: 2),
+            currentvalue: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.currentvalue
+                    .toString(),
+                decimal: 2),
+            roiPositions: FormatHelper.formatNumbers(
+              controller.stockTotalPositionDetails.value.roi.toString(),
+              decimal: 2,
+              showSymbol: false,
             ),
+            pnlInPosition: FormatHelper.formatNumbers(
+                controller.stockTotalPositionDetails.value.pnl.toString(),
+                decimal: 2),
           ),
-        
+        ),
+
+        Positioned(
+          top: 90, // Adjust the top position as needed
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: GetBuilder<StocksTradingController>(
+            builder: (controller) {
+              return ListView.builder(
+                itemCount: controller
+                    .stockPositionsList.length, // Adjust based on your data
+                itemBuilder: (context, index) {
+                  // Access data from the controller's positions list
+                  var position = controller.stockPositionsList[index];
+                  //print('position${position.toJson()}');
+                  if (position != null && position.iId?.isLimit == null) {
+                    return PositionsCard(
+                      position: position,
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+
+                  // return PositionsCard(
+                  //   position: position,
+                  // );
+
+                  // Add more cards as needed
+                },
+              );
+            },
+          ),
+        ),
       ],
     );
   }

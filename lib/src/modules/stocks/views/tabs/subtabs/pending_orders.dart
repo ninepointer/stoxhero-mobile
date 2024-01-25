@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../widget/orders_card.dart';
+import '../../../../../app/app.dart';
+import 'package:get/get.dart';
 
 class PendingOrders extends StatefulWidget {
   const PendingOrders({super.key});
@@ -9,27 +10,35 @@ class PendingOrders extends StatefulWidget {
 }
 
 class _PendingOrdersState extends State<PendingOrders> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Column(
-          children: [
-            OrdersCard(
-              status: "PENDING",
-              type: "BUY",
-              symbol: "Adani Power",
-              quantity: "35",
-              price: "5.30",
-              totalamount: "9,540.00",
-              orderid: "231219669591731",
-              timestamp: "19 Dec 2023 05:22 PM",
-            ),
+  late StocksTradingController controller;
 
-            // Add more cards as needed
-          ],
-        ),
-      ],
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<StocksTradingController>();
+    controller.getStocksStopLossPendingOrder();
+  }
+
+  Widget build(BuildContext context) {
+    return Obx(
+      () => Scaffold(
+        body: controller.stopLossPendingOrderList.isEmpty
+            ? NoDataFound(
+                label: AppStrings.noDataFoundPendingOrders,
+              )
+            : ListView.builder(
+                itemCount: controller.stopLossPendingOrderList
+                    .length, // Specify the number of items you want to display
+                itemBuilder: (context, index) {
+                  //  print('yoo${StopLossPendingOrdersList.fromJson}');
+                  //  var position = controller.stockPositionsList[index];
+                  // var holding = controller.stockHoldingsList[index];
+                  return StocksPendingOrderCard(
+                      // holding: holding,
+                      //  position: position,
+                      stopLoss: controller.stopLossPendingOrderList[index]);
+                }),
+      ),
     );
   }
 }

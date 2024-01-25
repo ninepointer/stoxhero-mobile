@@ -24,43 +24,114 @@ class ContestRules extends GetView<ContestController> {
 
   @override
   Widget build(BuildContext context) {
-    print('tdsaa ${controller.readSetting.value.tdsPercentage}');
     return Column(
       children: [
-        Text(
-          'TestZone Details: TestZone begins on ${FormatHelper.formatDateTimeToIST(startTime)} and ends on ${FormatHelper.formatDateTimeToIST(endTime)}. The entry fee is ${entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(entryFee)}.',
-          style: Theme.of(context).textTheme.tsMedium14,
-        ),
+        RichText(
+            text: TextSpan(children: [
+          TextSpan(
+            text: "TestZone Details:",
+            style: Get.isDarkMode
+                ? Theme.of(context).textTheme.tsWhiteMedium14
+                : Theme.of(context).textTheme.tsBlackMedium14,
+          ),
+          TextSpan(
+            text:
+                ' TestZone begins on ${FormatHelper.formatDateTimeToIST(startTime)} and ends on ${FormatHelper.formatDateTimeToIST(endTime)}. The entry fee is ${entryFee == 0 ? 'Free' : FormatHelper.formatNumbers(entryFee)}.',
+            style: Get.isDarkMode
+                ? Theme.of(context).textTheme.tsWhiteRegular14
+                : Theme.of(context).textTheme.tsBlackRegular14,
+          ),
+        ])),
         SizedBox(height: 8),
-        Text(
-          'Payout Criteria: Payouts are based on individual performance (Net P&L).',
-          style: Theme.of(context).textTheme.tsMedium14,
+        RichText(
+          text: TextSpan(children: [
+            TextSpan(
+              text: 'Payout Criteria:',
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteMedium14
+                  : Theme.of(context).textTheme.tsBlackMedium14,
+            ),
+            TextSpan(
+              text: ' Payouts are based on individual performance (Net P&L).',
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteRegular14
+                  : Theme.of(context).textTheme.tsBlackRegular14,
+            ),
+          ]),
         ),
         if (payoutType != 'Reward') ...[
           SizedBox(height: 8),
-          Text(
-            'Payout Limit: Receive $payoutPercentage% of your Net P&L(Only positive net P&Ls), up to a maximum of ${controller.getPaidCapAmount(
-              entryFee == 0 ? portfolio ?? 0 : entryFee ?? 0,
-              payoutCapPercentage ?? 0,
-            )}.',
-            style: Theme.of(context).textTheme.tsMedium14,
-          ),
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+              text: "Payout Limit:",
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteMedium14
+                  : Theme.of(context).textTheme.tsBlackMedium14,
+            ),
+            TextSpan(
+              text:
+                  ' Receive $payoutPercentage% of your Net P&L(Only positive net P&Ls), up to a maximum of ${controller.getPaidCapAmount(
+                entryFee == 0 ? portfolio ?? 0 : entryFee ?? 0,
+                payoutCapPercentage ?? 0,
+              )}.',
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteRegular14
+                  : Theme.of(context).textTheme.tsBlackRegular14,
+            ),
+          ]))
         ],
         SizedBox(height: 8),
-        Text(
-          'Tax Deduction: A ${controller.readSetting.value.tdsPercentage}% TDS will be applied to your final winning amount.',
-          style: Theme.of(context).textTheme.tsMedium14,
-        ),
+        RichText(
+            text: TextSpan(children: [
+          TextSpan(
+            text: "Tax Deduction:",
+            style: Get.isDarkMode
+                ? Theme.of(context).textTheme.tsWhiteMedium14
+                : Theme.of(context).textTheme.tsBlackMedium14,
+          ),
+          TextSpan(
+            text:
+                ' A ${controller.readSetting.value.tdsPercentage}% TDS will be applied to your final winning amount.',
+            style: Get.isDarkMode
+                ? Theme.of(context).textTheme.tsWhiteRegular14
+                : Theme.of(context).textTheme.tsBlackRegular14,
+          ),
+        ])),
         SizedBox(height: 8),
-        Text(
-          'Payout Processing: Payouts are calculated and processed after the TestZone ends on ${FormatHelper.formatDateTimeToIST(endTime)}, (based on cumulative Net P&L) / (daily based on daily P&L) post 03:20.',
-          style: Theme.of(context).textTheme.tsMedium14,
-        ),
+        RichText(
+            text: TextSpan(children: [
+          TextSpan(
+            text: "Payout Processing:",
+            style: Get.isDarkMode
+                ? Theme.of(context).textTheme.tsWhiteMedium14
+                : Theme.of(context).textTheme.tsBlackMedium14,
+          ),
+          TextSpan(
+            text:
+                ' Payouts are calculated and processed after the TestZone ends on ${FormatHelper.formatDateTimeToIST(endTime)}, (based on cumulative Net P&L) / (daily based on daily P&L) post 03:20.',
+            style: Get.isDarkMode
+                ? Theme.of(context).textTheme.tsWhiteRegular14
+                : Theme.of(context).textTheme.tsBlackRegular14,
+          ),
+        ])),
         SizedBox(height: 8),
-        Text(
-          'Daily Participation: For TestZones spanning multiple days, daily trading is required for payout eligibility.',
-          style: Theme.of(context).textTheme.tsMedium14,
-        ),
+        RichText(
+            text: TextSpan(children: [
+          TextSpan(
+            text: "Daily Participation: ",
+            style: Get.isDarkMode
+                ? Theme.of(context).textTheme.tsWhiteMedium14
+                : Theme.of(context).textTheme.tsBlackMedium14,
+          ),
+          TextSpan(
+            text:
+                'For TestZones spanning multiple days, daily trading is required for payout eligibility.',
+            style: Get.isDarkMode
+                ? Theme.of(context).textTheme.tsWhiteRegular14
+                : Theme.of(context).textTheme.tsBlackRegular14,
+          ),
+        ])),
         SizedBox(height: 12),
       ],
     );

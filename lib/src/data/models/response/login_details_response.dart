@@ -58,6 +58,7 @@ class LoginDetailsResponse {
   List<Subscription>? subscription;
   List<InternshipBatchList>? internshipBatch;
   String? bankState;
+  bool? isAffiliate;
   LoginDetailsResponse({
     this.aadhaarCardFrontImage,
     this.aadhaarCardBackImage,
@@ -118,6 +119,7 @@ class LoginDetailsResponse {
     this.subscription,
     this.internshipBatch,
     this.bankState,
+    this.isAffiliate,
   });
 
   LoginDetailsResponse.fromJson(Map<String, dynamic> json) {
@@ -146,7 +148,9 @@ class LoginDetailsResponse {
             json['addressProofDocument'],
           )
         : null;
-    profilePhoto = json['profilePhoto'] != null ? new UserImageDetails.fromJson(json['profilePhoto']) : null;
+    profilePhoto = json['profilePhoto'] != null
+        ? new UserImageDetails.fromJson(json['profilePhoto'])
+        : null;
     sId = json['_id'];
     kYCStatus = json['KYCStatus'];
     iV = json['__v'];
@@ -192,6 +196,7 @@ class LoginDetailsResponse {
     phonePeNumber = json['phonePe_number'];
     upiId = json['upiId'];
     mobileOtp = json['mobile_otp'];
+    isAffiliate = json['isAffiliate'];
     isAlgoTrader = json['isAlgoTrader'];
     watchlistInstruments = json['watchlistInstruments'].cast<String>();
     contests = json['contests'].cast<String>();
@@ -289,7 +294,9 @@ class LoginDetailsResponse {
     data['mobile_otp'] = this.mobileOtp;
     data['isAlgoTrader'] = this.isAlgoTrader;
     data['watchlistInstruments'] = this.watchlistInstruments;
+
     data['contests'] = this.contests;
+
     if (this.portfolio != null) {
       data['portfolio'] = this.portfolio!.map((v) => v.toJson()).toList();
     }
@@ -300,9 +307,11 @@ class LoginDetailsResponse {
       data['subscription'] = this.subscription!.map((v) => v.toJson()).toList();
     }
     if (this.internshipBatch != null) {
-      data['internshipBatch'] = this.internshipBatch!.map((v) => v.toJson()).toList();
+      data['internshipBatch'] =
+          this.internshipBatch!.map((v) => v.toJson()).toList();
     }
     data['bankState'] = this.bankState;
+    data['isAffiliate'] = this.isAffiliate;
     return data;
   }
 
@@ -365,9 +374,11 @@ class LoginDetailsResponse {
     List<Referrals>? referrals,
     List<InternshipBatchList>? internshipBatch,
     String? bankState,
+    bool? isAffiliate,
   }) {
     return LoginDetailsResponse(
-      aadhaarCardFrontImage: aadhaarCardFrontImage ?? this.aadhaarCardFrontImage,
+      aadhaarCardFrontImage:
+          aadhaarCardFrontImage ?? this.aadhaarCardFrontImage,
       aadhaarCardBackImage: aadhaarCardBackImage ?? this.aadhaarCardBackImage,
       panCardFrontImage: panCardFrontImage ?? this.panCardFrontImage,
       passportPhoto: passportPhoto ?? this.passportPhoto,
@@ -425,6 +436,7 @@ class LoginDetailsResponse {
       referrals: referrals ?? this.referrals,
       internshipBatch: internshipBatch ?? this.internshipBatch,
       bankState: bankState ?? this.bankState,
+      isAffiliate: isAffiliate ?? this.isAffiliate,
     );
   }
 }
@@ -498,8 +510,12 @@ class InternshipBatchList {
     batchName = json['batchName'];
     batchStartDate = json['batchStartDate'];
     batchEndDate = json['batchEndDate'];
-    career = json['career'] != null ? new InternshipCareer.fromJson(json['career']) : null;
-    portfolio = json['portfolio'] != null ? new PortfolioId.fromJson(json['portfolio']) : null;
+    career = json['career'] != null
+        ? new InternshipCareer.fromJson(json['career'])
+        : null;
+    portfolio = json['portfolio'] != null
+        ? new PortfolioId.fromJson(json['portfolio'])
+        : null;
     if (json['participants'] != null) {
       participants = <InternshipParticipants>[];
       json['participants'].forEach((v) {
@@ -593,7 +609,8 @@ class InternshipParticipants {
 
   InternshipParticipants.fromJson(Map<String, dynamic> json) {
     user = json['user'];
-    college = json['college'] != null ? new College.fromJson(json['college']) : null;
+    college =
+        json['college'] != null ? new College.fromJson(json['college']) : null;
     joiningDate = json['joiningDate'];
     sId = json['_id'];
     attendance = json['attendance'];
@@ -793,7 +810,9 @@ class SubscriptionId {
 
   SubscriptionId.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
-    portfolio = json['portfolio'] != null ? new PortfolioDetails.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null
+        ? new PortfolioDetails.fromJson(json['portfolio'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {

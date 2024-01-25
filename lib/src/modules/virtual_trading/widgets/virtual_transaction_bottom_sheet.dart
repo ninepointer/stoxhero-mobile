@@ -118,8 +118,12 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                   DropdownButtonFormField2<int>(
                     value: controller.selectedQuantity.value,
                     onChanged: (value) {
-                      controller.selectedQuantity(value);
+                      controller.selectedQuantity(value?.abs());
+                      controller
+                          .selectedStringQuantity(value?.abs().toString());
                       controller.getMarginRequired(type, tradingInstrument);
+                      print(
+                          "typein${controller.selectedQuantity(value?.abs())}");
                     },
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
@@ -174,6 +178,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                       ),
                     ),
                   ),
+
                   if (controller.selectedGroupValue.value == 1) ...[
                     SizedBox(height: 8),
                     CommonTextField(
@@ -214,7 +219,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                     ),
                   ],
                   if (controller.selectedGroupValue.value == 3) ...[
-                    SizedBox(height: 8),
+                    // SizedBox(height: 8),
                     if (type != TransactionType.exit)
                       Row(
                         children: [
@@ -501,6 +506,8 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                                 ? 'BUY'
                                 : 'SELL',
                     onPressed: () {
+                      // if (!controller.isBuyButtonDisabled.value) {
+                      //   controller.isBuyButtonDisabled.value = true;
                       if (controller.selectedGroupValue.value == 3 &&
                           controller.stopLossPriceTextController.text.isEmpty &&
                           controller
@@ -520,6 +527,8 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                         controller.stopLossPriceTextController.clear();
                         controller.stopProfitPriceTextController.clear();
                         controller.limitPriceTextController.clear();
+                        //   controller.isBuyButtonDisabled.value = false;
+                        // }
                       }
                     },
                   ),

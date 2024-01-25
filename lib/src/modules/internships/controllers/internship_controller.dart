@@ -42,6 +42,10 @@ class InternshipController extends BaseController<InternshipRespository> {
   final isPortfolioStateLoading = false.obs;
   bool get isPortfolioStateLoadingStatus => isPortfolioStateLoading.value;
 
+  final isInternShipLeaderBoardLoading = false.obs;
+  bool get isInternShipLeaderBoardLoadingStatus =>
+      isInternShipLeaderBoardLoading.value;
+
   final isInstrumentListLoading = false.obs;
   bool get isInstrumentListLoadingStatus => isInstrumentListLoading.value;
 
@@ -71,6 +75,7 @@ class InternshipController extends BaseController<InternshipRespository> {
   final internshipMonthlyPnlList = <AnalyticsMonthlyPnLOverviewDetails>[].obs;
   final internshipBatchDetails = InternshipBatch().obs;
   final internshipBatchPortfolio = InternshipBatchPortfolio().obs;
+  final internshipBatchLeaderboard = <InternshipLeaderBoard>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final internshipPositionList = <TradingPosition>[].obs;
   final tradingInstrumentTradeDetailsList =
@@ -102,6 +107,12 @@ class InternshipController extends BaseController<InternshipRespository> {
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
 
+  final selectedStopLossQuantity = 0.obs;
+  final selectedStopProfitQuantity = 0.obs;
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
+  final stoplossQuantityList = <StoplossQuantityData>[].obs;
+
   final rangeGrossAmount = 0.0.obs;
   final rangeNetAmount = 0.0.obs;
   final rangeBrokerageAmount = 0.0.obs;
@@ -113,6 +124,7 @@ class InternshipController extends BaseController<InternshipRespository> {
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
+
     await getInternshipBatchDetails();
     await getInternshipCertificate();
     if (isParticipated()) {
@@ -120,6 +132,7 @@ class InternshipController extends BaseController<InternshipRespository> {
     } else {
       await Get.find<CareerController>().getCareerList('Job');
     }
+    await getInternshipBatchLeaderBoard();
   }
 
   Future loadInternshipAnalyticsData() async {
@@ -141,7 +154,9 @@ class InternshipController extends BaseController<InternshipRespository> {
     await getStopLossExecutedOrder();
     await getInternshipTodayOrdersList();
     await getInternshipBatchPortfolioDetails();
+
     await getInternshipWatchlist();
+    await liveIndexDetails();
     socketIndexConnection();
     socketConnection();
     socketSendConnection();
@@ -492,6 +507,82 @@ class InternshipController extends BaseController<InternshipRespository> {
     return result;
   }
 
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+    print("stoplossQuantityPrev${totalQuantity}");
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+    print("newList${newList}");
+    print("genrateStopLoss${cutoff}");
+    selectedStopLossQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
+
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    // int cutoff = math.max(openLots ?? 0, totalQuantity) -
+    //     math.min(openLots ?? 0, totalQuantity);
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
+    print("selectedStopProfitQuantity${selectedStopProfitQuantity.value}");
+    lotsValueForStopProfit.assignAll(newList);
+    return result;
+  }
+
   void calculateTotalPositionValues() {
     int totalLots = 0;
     num totalBrokerage = 0;
@@ -574,6 +665,7 @@ class InternshipController extends BaseController<InternshipRespository> {
     num margin = 0;
     num amount = 0;
     num limitMargin = 0;
+    num subtractAmount = 0;
     for (var position in internshipPositionList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
@@ -582,6 +674,11 @@ class InternshipController extends BaseController<InternshipRespository> {
       if (position.id?.isLimit == true) {
         limitMargin += position.margin ?? 0;
       } else {
+        if (position.lots! < 0) {
+          limitMargin += position.margin ?? 0;
+          subtractAmount +=
+              ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
+        }
         amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
@@ -598,7 +695,8 @@ class InternshipController extends BaseController<InternshipRespository> {
     num availableMargin = (calculateTotalNetPNL() < 0)
         ? (lots == 0
             ? (openingBalance - margin + calculateTotalNetPNL())
-            : (openingBalance - (amount.abs() + limitMargin)))
+            : (openingBalance -
+                ((amount - subtractAmount).abs() + limitMargin)))
         : (openingBalance - margin);
     return availableMargin;
   }
@@ -670,7 +768,7 @@ class InternshipController extends BaseController<InternshipRespository> {
           tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
-      return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
   }
 
@@ -691,6 +789,25 @@ class InternshipController extends BaseController<InternshipRespository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getInternshipPendingStoplossOrderData(String id) async {
+    try {
+      final RepoResponse<VirtualStopLossPendingOrderResponse> response =
+          await repository.getInternshipStopLossPendingOrder(
+              internshipBatchDetails.value.id ?? '');
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          stoplossQuantityList(response.data?.quantity ?? []);
+          print("stoplossQuantityList${stoplossQuantityList.length}");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future getStockIndexInstrumentsList() async {
@@ -842,6 +959,30 @@ class InternshipController extends BaseController<InternshipRespository> {
     isPositionStateLoading(false);
   }
 
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+      print("liveIndexDetails${stockIndexDetailsList.length}");
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
@@ -894,7 +1035,15 @@ class InternshipController extends BaseController<InternshipRespository> {
   Future placeInternshipOrder(
       TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -954,6 +1103,7 @@ class InternshipController extends BaseController<InternshipRespository> {
         await getStopLossPendingOrder();
         await getInternshipTodayOrdersList();
         await getInternshipBatchPortfolioDetails();
+        selectedStringQuantity("");
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1001,6 +1151,26 @@ class InternshipController extends BaseController<InternshipRespository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isPortfolioStateLoading(false);
+  }
+
+  Future getInternshipBatchLeaderBoard() async {
+    isInternShipLeaderBoardLoading(true);
+    try {
+      final RepoResponse<InternshipLeaderBoardResponse> response =
+          await repository.getInternshipBatchLeaderBoard(
+        internshipBatchDetails.value.id,
+      );
+
+      if (response.data?.data != null) {
+        internshipBatchLeaderboard(response.data?.data);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      print(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isInternShipLeaderBoardLoading(false);
   }
 
   Future getInternshipAnalyticsOverview() async {
@@ -1205,7 +1375,7 @@ class InternshipController extends BaseController<InternshipRespository> {
       await getStopLossPendingOrder();
       await getInternshipBatchPortfolioDetails();
       await getStopLossExecutedOrder();
-      loadTradingData();
+      await getInternshipPositions();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -1234,13 +1404,15 @@ class InternshipController extends BaseController<InternshipRespository> {
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: internshipBatchDetails.value.id,

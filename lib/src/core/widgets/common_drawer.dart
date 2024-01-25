@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:stoxhero/src/modules/profile/widgets/profile_list_tile.dart';
 
 import '../../modules/modules.dart';
@@ -35,24 +36,28 @@ class _CommonDrawerState extends State<CommonDrawer> {
         Get.find<AnalyticsController>().loadData();
         break;
       case 1:
+        Get.toNamed(AppRoutes.affiliate);
+        Get.find<AffiliateController>().loadData();
+        break;
+      case 2:
         Get.toNamed(AppRoutes.portfolio);
         Get.find<PortfolioController>().loadData();
         break;
-      case 2:
+      case 3:
         Get.toNamed(AppRoutes.orders);
         Get.find<OrdersController>().loadData();
         break;
-      case 3:
+      case 4:
         Get.toNamed(AppRoutes.careers);
         break;
-      case 4:
+      case 5:
         Get.toNamed(AppRoutes.Internship);
         Get.find<InternshipController>().loadData();
         break;
-      case 5:
+      case 6:
         ThemeService().switchTheme();
         break;
-      case 6:
+      case 7:
         AppStorage.clearStorage();
         Get.offAllNamed(AppRoutes.signin);
         // AppStorage.clearLoginDetails();
@@ -145,34 +150,40 @@ class _CommonDrawerState extends State<CommonDrawer> {
                 label: 'MarketGuru',
                 onTap: () => selectedItem(context, 0),
               ),
+              if (controller.userDetails.value.isAffiliate ?? false)
+                ProfileListTile(
+                  icon: Icons.school,
+                  label: 'Affiliate Dashboard',
+                  onTap: () => selectedItem(context, 1),
+                ),
               ProfileListTile(
                 icon: Icons.person,
                 label: 'Portfolio',
-                onTap: () => selectedItem(context, 1),
-              ),
-              ProfileListTile(
-                label: 'Order Book',
                 onTap: () => selectedItem(context, 2),
               ),
               ProfileListTile(
-                icon: Icons.school,
-                label: 'Careers',
+                label: 'Order Book',
                 onTap: () => selectedItem(context, 3),
               ),
               ProfileListTile(
                 icon: Icons.school,
-                label: 'Internship/Workshop',
+                label: 'Careers',
                 onTap: () => selectedItem(context, 4),
+              ),
+              ProfileListTile(
+                icon: Icons.school,
+                label: 'Internship/Workshop',
+                onTap: () => selectedItem(context, 5),
               ),
               ProfileListTile(
                 icon: ThemeService().theme == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
                 label: ThemeService().theme == ThemeMode.dark ? 'Light Mode' : 'Dark Mode',
-                onTap: () => selectedItem(context, 5),
+                onTap: () => selectedItem(context, 6),
               ),
               ProfileListTile(
                 icon: Icons.logout,
                 label: 'Logout',
-                onTap: () => selectedItem(context, 6),
+                onTap: () => selectedItem(context, 7),
               ),
             ],
           ),

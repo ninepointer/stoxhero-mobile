@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/modules/stocks/views/tabs/subtabs/all_orders.dart';
+import 'package:stoxhero/src/modules/stocks/views/tabs/subtabs/today_orders.dart';
 import 'package:stoxhero/src/modules/stocks/views/tabs/subtabs/executed_orders.dart';
 import 'package:stoxhero/src/modules/stocks/views/tabs/subtabs/pending_orders.dart';
+
+import '../../../../app/app.dart';
 
 class orders extends StatefulWidget {
   const orders({Key? key}) : super(key: key);
@@ -38,7 +40,7 @@ class _ordersState extends State<orders> with SingleTickerProviderStateMixin {
                 //height: 50,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Colors.white54,
+                  color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white54,
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Column(
@@ -46,18 +48,20 @@ class _ordersState extends State<orders> with SingleTickerProviderStateMixin {
                     Padding(
                       padding: EdgeInsets.only(top: 0),
                       child: TabBar(
-                        labelColor: Colors.green[600],
-                        isScrollable: true,
-                        unselectedLabelColor: Colors.grey,
+                        labelColor:
+                            Get.isDarkMode ? Colors.white : Colors.green[600],
+                        unselectedLabelColor:
+                            Get.isDarkMode ? Colors.grey[300] : Colors.grey,
                         indicator: BoxDecoration(
-                          color: Colors.green[200],
+                          color:
+                              Get.isDarkMode ? Colors.blue : Colors.green[200],
                           borderRadius: BorderRadius.circular(25),
                         ),
                         controller: tabController,
                         tabs: [
                           Tab(
                             text:
-                                'All Orders', // Change 'Holdings' to 'holdings'
+                                'Today Orders', // Change 'Holdings' to 'holdings'
                           ),
                           Tab(
                             text: 'Executed Orders',
@@ -79,7 +83,7 @@ class _ordersState extends State<orders> with SingleTickerProviderStateMixin {
                   physics: NeverScrollableScrollPhysics(),
                   controller: tabController,
                   children: [
-                    AllOrders(),
+                    StockTodayOrders(),
                     ExecutedOrders(),
                     PendingOrders(),
                   ],
@@ -91,12 +95,4 @@ class _ordersState extends State<orders> with SingleTickerProviderStateMixin {
       ),
     );
   }
-}
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: orders(),
-    ),
-  );
 }

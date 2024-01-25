@@ -27,11 +27,16 @@ class _UpComingCollegeContestCardState
   late CollegeContestController controller;
   late Timer timer;
   bool isVisible = true;
+  bool isUserInterestedId = false;
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<CollegeContestController>();
+    isUserInterestedId = controller.isUserInterested(
+      widget.contest,
+      controller.userDetails.value.sId,
+    );
   }
 
   @override
@@ -67,6 +72,10 @@ class _UpComingCollegeContestCardState
               remainingTime = startTimeDateTime.isAfter(DateTime.now())
                   ? startTimeDateTime.difference(DateTime.now())
                   : Duration.zero;
+              if (remainingTime == Duration.zero) {
+                controller.getUpComingCollegeContestList();
+                controller.getLiveCollegeContestList();
+              }
             },
           );
         }
@@ -76,10 +85,6 @@ class _UpComingCollegeContestCardState
 
   @override
   Widget build(BuildContext context) {
-    bool isUserInterestedId = controller.isUserInterested(
-      widget.contest,
-      controller.userDetails.value.sId,
-    );
     return Visibility(
       visible: !isVisible,
       replacement: SizedBox(),
@@ -332,6 +337,7 @@ class _UpComingCollegeContestCardState
                       onTap: () {
                         controller.upComingCollegeContest(widget.contest);
                         controller.getNotified();
+                        isUserInterestedId = true;
                         SnackbarHelper.showSnackbar(
                             'Thanks for showing interest in ${widget.contest?.contestName} You will be notified once the contest starts');
                       },
