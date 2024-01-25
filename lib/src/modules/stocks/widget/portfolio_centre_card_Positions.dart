@@ -91,7 +91,7 @@ class _CentreCardinPositionsState extends State<CentreCardinPositions> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      widget.pnlInPosition,
+                      controller.calculateTotalPositionPnl().toString(),
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: widget.pnlInPosition != null
                             ? widget.pnlInPosition.startsWith('-')

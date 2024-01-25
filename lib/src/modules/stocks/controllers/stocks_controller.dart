@@ -950,6 +950,80 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     // print('positiontotal ${totalPositionInvested}');
   }
 
+
+  num calculateTotalPositionPnl() {
+   num totalGross = 0;
+   int totalLots = 0;
+    num totalPositionBrokerage = 0;
+    num totalPositionInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+      } else {
+        totalLots += position.lots ?? 0;
+        totalPositionBrokerage += position.brokerage ?? 0;
+
+        totalGross += getInstrumentLastPrice(
+              position.iId!.instrumentToken!,
+              position.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        // totalGross += getInstrumentLastPrice(position.iId.instrumentToken,
+        //             position.iId.exchangeInstrumentToken)
+        //         ?.abs() ??
+        //     0;
+        // totalHoldingInvested += holding.amount?.abs() ?? 0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (position.lots?.abs() ?? 0);
+
+        // totalPnl = (totalCurrentValue - totalNet);
+        totalPnl += calculateGrossPNL(
+          position.amount ?? 0,
+          position.lots!.toInt(),
+          getInstrumentLastPrice(
+            position.iId!.instrumentToken!,
+            position.iId!.exchangeInstrumentToken!,
+          ),
+        );
+        if (position.lots != 0) {
+          totalPositionInvested += position.amount?.abs() ?? 0;
+        }
+
+        // print('final${totalHoldingInvested}');
+
+        if (position.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalPositionInvested);
+        } else {
+          totalRoi = 0;
+        }
+      }
+    }
+   
+    return totalPnl.round();
+    // for (var position in virtualPositionsList) {
+    //   if (position.id?.isLimit != true) {
+    //     num avg = position.amount ?? 0;
+    //     int lots = position.lots?.toInt() ?? 0;
+    //     num ltp = getInstrumentLastPrice(
+    //       position.id?.instrumentToken ?? 0,
+    //       position.id?.exchangeInstrumentToken ?? 0,
+    //     );
+    //     if (ltp == 0) return 0;
+    //     num value = (avg + (lots) * ltp);
+    //     num brokerage = position.brokerage ?? 0;
+    //     num broker = value - brokerage;
+    //     totalNetPNL += broker;
+    //   }
+    // }
+    // return totalNetPNL.round();
+  }
+
 //Holdings ka pura scene
 
   Future getStockHoldingsList() async {
