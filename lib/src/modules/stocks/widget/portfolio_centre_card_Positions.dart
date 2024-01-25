@@ -102,22 +102,24 @@ class _CentreCardinPositionsState extends State<CentreCardinPositions> {
                       ),
                     ),
                     Text(
-                      '${(widget.invested == 0 || widget.roiPositions == null) ? '0.00' : widget.roiPositions}%',
+                      '${(controller.calculateTotalPositionInvested() == 0 || controller.calculateTotalPositionroi() == null) ? '0.00' : widget.roiPositions}%',
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: widget.roiPositions != null
-                            ? widget.roiPositions.startsWith('-')
+                        color: controller.calculateTotalPositionroi() != null
+                            ? controller
+                                    .calculateTotalPositionroi()
+                                    .startsWith('-')
                                 ? AppColors.danger
                                 : AppColors.success
                             : AppColors.success,
                       ),
                     ),
                     Text(
-                      widget.invested,
+                      controller.calculateTotalPositionInvested(),
                       style: AppStyles.tsBlackMedium12
                           .copyWith(color: AppColors.success),
                     ),
                     Text(
-                      widget.currentvalue,
+                      controller.calculateTotalPositionCurrentValue(),
                       style: AppStyles.tsBlackMedium12
                           .copyWith(color: AppColors.success),
                     ),

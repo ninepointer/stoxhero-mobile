@@ -90,7 +90,7 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      widget.pnlInHoldings,
+                      controller.calculateTotalHoldingPnl().toString(),
                       //  (invested == 0)
                       //     ? '₹0.00'
                       //     : FormatHelper.formatNumbers(
@@ -106,23 +106,25 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                       ),
                     ),
                     Text(
-                      '${(widget.invested == 0 || widget.roiHoldings == null) ? '0.00' : widget.roiHoldings}%',
+                      '${(controller.calculateTotalHoldingInvested() == 0 || controller.calculateTotalHoldingroi() == null) ? '0.00' : widget.roiHoldings}%',
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: widget.roiHoldings != null
-                            ? widget.roiHoldings.startsWith('-')
+                        color: controller.calculateTotalHoldingroi() != null
+                            ? controller
+                                    .calculateTotalHoldingroi()
+                                    .startsWith('-')
                                 ? AppColors.danger
                                 : AppColors.success
                             : AppColors.success,
                       ),
                     ),
                     Text(
-                      widget.invested,
+                      controller.calculateTotalHoldingInvested(),
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: AppColors.success,
                       ),
                     ),
                     Text(
-                      widget.currentvalue,
+                      controller.calculateTotalHoldingCurrentValue(),
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: AppColors.success,
                       ),
