@@ -16,7 +16,8 @@ class StockTransactionBottomSheet extends GetView<StocksTradingController> {
   @override
   Widget build(BuildContext context) {
     // controller.selectedOrderGroupValue.value = 2;
-
+    controller.stopLossPriceTextController.clear();
+    controller.stopProfitPriceTextController.clear();
     controller.selectedGroupValue.value = 2;
     controller.selectedType.value = 'MARKET';
     //controller.selectedQuantity.value = 0;
