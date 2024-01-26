@@ -202,5 +202,10 @@ class AppPages {
       page: () => StoryView(),
       // binding: AffiliateBinding(),
     ),
+    GetPage(
+      name: AppRoutes.kycRadioButtonSeclection,
+      page: () => KYCViewSelector(),
+      // binding: AffiliateBinding(),
+    ),
   ];
 }

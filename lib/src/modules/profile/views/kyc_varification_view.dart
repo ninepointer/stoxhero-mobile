@@ -29,9 +29,9 @@ class _KycVarificationViewState extends State<KycVarificationView> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        appBar: AppBar(
-          title: Text('KYC Verification'),
-        ),
+        // appBar: AppBar(
+        //   title: Text('KYC Verification'),
+        // ),
         body: Visibility(
           visible: controller.isverifyKycLoadingStatus,
           child: ListViewShimmer(

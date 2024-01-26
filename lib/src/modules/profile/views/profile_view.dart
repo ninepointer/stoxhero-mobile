@@ -112,21 +112,21 @@ class ProfileView extends GetView<ProfileController> {
                 controller.loadData();
               },
             ),
-            ProfileListTile(
-              icon: Icons.account_balance,
-              label: 'KYC Details',
-              onTap: () async {
-                controller.loadBankDetails();
-                await Get.toNamed(AppRoutes.kycDetails);
-                controller.loadData();
-              },
-            ),
+            // ProfileListTile(
+            //   icon: Icons.account_balance,
+            //   label: 'KYC Details',
+            //   onTap: () async {
+            //     controller.loadBankDetails();
+            //     await Get.toNamed(AppRoutes.kycDetails);
+            //     controller.loadData();
+            //   },
+            // ),
             ProfileListTile(
               icon: Icons.account_balance,
               label: 'KYC Verification',
               onTap: () async {
                 controller.loadBankDetails();
-                await Get.toNamed(AppRoutes.kycVarification);
+                await Get.toNamed(AppRoutes.kycRadioButtonSeclection);
                 controller.loadData();
               },
             ),

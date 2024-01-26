@@ -23,7 +23,8 @@ class _KycDetailsViewState extends State<KycDetailsView> {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          title: Text('KYC Details'),
+          // title: Text('KYC Details'),
+          automaticallyImplyLeading: false,
           actions: [
             IconButton(
               splashRadius: 24,
