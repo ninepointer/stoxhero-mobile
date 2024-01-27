@@ -46,22 +46,17 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
 
         Obx(
           () => CentreCardinPositions(
-            invested: FormatHelper.formatNumbers(
-                controller.stockTotalPositionDetails.value.holdingnet
-                    .toString(),
+            invested: FormatHelper.formatNumbers(controller.stockTotalPositionDetails.value.holdingnet.toString(),
                 decimal: 2),
-            currentvalue: FormatHelper.formatNumbers(
-                controller.stockTotalPositionDetails.value.currentvalue
-                    .toString(),
+            currentvalue: FormatHelper.formatNumbers(controller.stockTotalPositionDetails.value.currentvalue.toString(),
                 decimal: 2),
             roiPositions: FormatHelper.formatNumbers(
               controller.stockTotalPositionDetails.value.roi.toString(),
               decimal: 2,
               showSymbol: false,
             ),
-            pnlInPosition: FormatHelper.formatNumbers(
-                controller.stockTotalPositionDetails.value.pnl.toString(),
-                decimal: 2),
+            pnlInPosition:
+                FormatHelper.formatNumbers(controller.stockTotalPositionDetails.value.pnl.toString(), decimal: 2),
           ),
         ),
 
@@ -70,31 +65,22 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
           left: 0,
           right: 0,
           bottom: 0,
-          child: GetBuilder<StocksTradingController>(
-            builder: (controller) {
-              return ListView.builder(
-                itemCount: controller
-                    .stockPositionsList.length, // Adjust based on your data
-                itemBuilder: (context, index) {
-                  // Access data from the controller's positions list
-                  var position = controller.stockPositionsList[index];
-                  //print('position${position.toJson()}');
-                  if (position != null && position.iId?.isLimit == null) {
-                    return PositionsCard(
-                      position: position,
-                    );
-                  } else {
-                    return SizedBox();
-                  }
-
-                  // return PositionsCard(
-                  //   position: position,
-                  // );
-
-                  // Add more cards as needed
-                },
-              );
-            },
+          child: Obx(
+            () => ListView.builder(
+              itemCount: controller.stockPositionsList.length, // Adjust based on your data
+              itemBuilder: (context, index) {
+                // Access data from the controller's positions list
+                var position = controller.stockPositionsList[index];
+                //print('position${position.toJson()}');
+                if (position != null && position.iId?.isLimit == null) {
+                  return PositionsCard(
+                    position: position,
+                  );
+                } else {
+                  return SizedBox();
+                }
+              },
+            ),
           ),
         ),
       ],

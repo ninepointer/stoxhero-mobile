@@ -49,8 +49,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   bool get isFundsStateLoadingStatus => isFundsStateLoading.value;
 
   final isExecutedOrderStateLoading = false.obs;
-  bool get isExecutedOrderStateLoadingStatus =>
-      isExecutedOrderStateLoading.value;
+  bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
 
   final selectedStopProfitQuantity = 0.obs;
   final selectedStopLossQuantity = 0.obs;
@@ -92,8 +91,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   final searchTextController = TextEditingController();
   final selectedWatchlistStock = StockWatchlistSearchData().obs;
   final isSearchCleared = false.obs;
-  final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[]
-      .obs; //Stores the data items from socket event equity ticks
+  final tradingInstrumentTradeDetailsList =
+      <TradingInstrumentTradeDetails>[].obs; //Stores the data items from socket event equity ticks
   final stockIndexInstrumentList = <StockIndexInstrument>[].obs;
   final stockIndexDetailsList = <StockIndexDetails>[].obs;
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
@@ -116,12 +115,11 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     await getStocksFundsMargin();
     await getStocksStopLossExecutedOrder();
     await getStocksStopLossPendingOrder();
-    // await liveStockDetails();
 
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
-    //  await getStocksTradingInstruments();
+    await liveIndexDetails();
   }
 
   Future loadUserDetails() async {
@@ -138,8 +136,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future getStocksTradingInstruments(String searchStock) async {
     try {
-      final RepoResponse<StockWatchlistSearchDataResponse> response =
-          await repository.getStockWatchlist(searchStock);
+      final RepoResponse<StockWatchlistSearchDataResponse> response = await repository.getStockWatchlist(searchStock);
       if (response.data?.data != null) {
         tradingInstruments(response.data?.data ?? []);
       } else {
@@ -160,13 +157,10 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         'equity-ticks',
         (data) {
           //  print("equity-ticks${data}");
-          tempList =
-              TradingInstrumentTradeDetailsListResponse.fromJson(data).data ??
-                  [];
+          tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
           tempList?.forEach(
             (element) {
-              if (tradingInstrumentTradeDetailsList.any(
-                  (obj) => obj.instrumentToken == element.instrumentToken)) {
+              if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
                 int index = tradingInstrumentTradeDetailsList.indexWhere(
                   (stock) => stock.instrumentToken == element.instrumentToken,
                 );
@@ -198,8 +192,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     isLoading(true);
 
     try {
-      final RepoResponse<ReadSettingResponse> response =
-          await repository.readSetting();
+      final RepoResponse<ReadSettingResponse> response = await repository.readSetting();
       readSetting(response.data);
     } catch (e) {
       log(e.toString());
@@ -231,33 +224,32 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   }
 
   String getStockIndexName(int instId) {
-    int index = stockIndexInstrumentList
-        .indexWhere((element) => element.instrumentToken == instId);
+    int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
+    // if (index == -1) return '-';
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
-  // Future liveStockDetails() async {
-  //   try {
-  //     final RepoResponse<IndexLivePriceListResponse> response =
-  //         await repository.getStockLivePrices();
-  //     if (response.data != null && response.data!.data != null) {
-  //       stockIndexDetailsList.clear();
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response = await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
 
-  //       stockIndexDetailsList.assignAll(
-  //         response.data!.data!.map((item) {
-  //           return StockIndexDetails.fromJson(item.toJson());
-  //         }).toList(),
-  //       );
-  //     } else {
-  //       if (stockIndexDetailsList.isEmpty) {
-  //         stockIndexDetailsList.assignAll(stockIndexDetailsList);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     log(e.toString());
-  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-  //   }
-  // }
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
 
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
@@ -267,8 +259,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         (data) {
           stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
           for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList
-                .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
               int index = stockIndexDetailsList.indexWhere(
                 (stock) => stock.instrumentToken == element.instrumentToken,
               );
@@ -312,8 +303,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response =
-          await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -333,17 +323,14 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
-        (stock) =>
-            stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       //  print(
       //   "hii${index} ${tradingInstrumentTradeDetailsList[index].lastPrice}");
       if (index == -1) {
         //  print("hii index nhi mila");
         int index = instrumentLivePriceList.indexWhere(
-          (stock) =>
-              stock.instrumentToken == instID ||
-              stock.instrumentToken == exchID,
+          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
         );
         if (index == -1) {
           priceValue = 0;
@@ -363,12 +350,10 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   String getInstrumentChanges(int instID, int exchID) {
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
-        (stock) =>
-            stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price =
-          tradingInstrumentTradeDetailsList[index].change?.toString();
+      String? price = tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
@@ -378,16 +363,13 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStockTradingWatchlist() async {
     isWatchlistStateLoading(true);
     try {
-      final RepoResponse<EquityInstrumentDetailsResponse> response =
-          await repository.getEquityInstrumentDetails({});
+      final RepoResponse<EquityInstrumentDetailsResponse> response = await repository.getEquityInstrumentDetails({});
       if (response.data != null) {
         if (response.data?.data! != null) {
           tradingWatchlistIds.clear();
           //  tradingWatchlist(response.data?.data ?? []);
           for (var element in tradingWatchlist) {
-            tradingWatchlistIds.add(element.instrumentToken ??
-                element.exchangeInstrumentToken ??
-                0);
+            tradingWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
           }
         }
       } else {
@@ -434,8 +416,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getEquityInstrumentDetails() async {
     // equityInstrumentDetailList.clear();
     try {
-      final RepoResponse<EquityInstrumentDetailsResponse> response =
-          await repository.getEquityInstrumentDetails({});
+      final RepoResponse<EquityInstrumentDetailsResponse> response = await repository.getEquityInstrumentDetails({});
       if (response.data?.data != null) {
         equityInstrumentDetailList(response.data?.data ?? []);
         watchlistEquityInstrumentSymbolList.clear();
@@ -445,8 +426,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
               data.symbol ?? "",
             );
         }
-        print(
-            'equityInstrumentDetailList : ${equityInstrumentDetailList.length}');
+        print('equityInstrumentDetailList : ${equityInstrumentDetailList.length}');
         update();
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -525,8 +505,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     isPendingOrderStateLoading(false);
   }
 
-  Future placeStocksTradingOrder(
-      TransactionType type, TradingInstrument inst) async {
+  Future placeStocksTradingOrder(TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
     print("typein584${type} ${selectedStringQuantity.value}");
     if (selectedType.value == "MARKET") {
@@ -589,8 +568,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     );
     log('typein628 : ${data.toJson()} ${type}');
     try {
-      final RepoResponse<GenericResponse> response =
-          await repository.stockPlaceOrder(
+      final RepoResponse<GenericResponse> response = await repository.stockPlaceOrder(
         data.toJson(),
       );
       print("harsh${response.data}");
@@ -637,8 +615,11 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           : type == TransactionType.buy
               ? 'BUY'
               : 'SELL',
-      quantity:
-          calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
+      quantity: calculateQuantity(
+        type,
+        inst.lotSize ?? 0,
+        selectedQuantity.value,
+      ),
       product: "NRML",
       orderType: selectedType.value,
       validity: "DAY",
@@ -651,8 +632,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     );
 
     try {
-      final RepoResponse<StockMarginRequiredResponse> response =
-          await repository.getMarginRequired(
+      final RepoResponse<StockMarginRequiredResponse> response = await repository.getMarginRequired(
         data.toJson(),
       );
       if (response.data != null) {
@@ -674,8 +654,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   int calculateQuantity(type, int tradingLots, int selectQuantity) {
     if (type == TransactionType.sell || type == TransactionType.exit) {
-      if (tradingLots == selectQuantity ||
-          tradingLots.abs() >= selectQuantity) {
+      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
         return 0;
       } else if (tradingLots.abs() <= selectQuantity) {
         return selectQuantity - tradingLots.abs();
@@ -694,8 +673,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     selectedOrderGroupValue.value = newValue;
   }
 
-  bool handleTextField(
-      TransactionType type, int transactionLotSize, int positionLots) {
+  bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
     bool isDisabled = false;
 
     if (type == TransactionType.buy) {
@@ -721,8 +699,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStocksTradingPortfolio() async {
     isPortfolioStateLoading(true);
     try {
-      final RepoResponse<StocksTradingPortfolioResponse> response =
-          await repository.getStocksTradingPortfolio();
+      final RepoResponse<StocksTradingPortfolioResponse> response = await repository.getStocksTradingPortfolio();
       if (response.data != null) {
         stocksPortfolio(response.data?.data);
       } else {
@@ -829,8 +806,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         if (position.lots! < 0) {
           positionlimitMargin += position.margin ?? 0;
-          positionsubtractAmount +=
-              ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
+          positionsubtractAmount += ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
         }
         amountposition += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
@@ -846,8 +822,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         if (holding.lots! < 0) {
           holdinglimitMargin += holding.margin ?? 0;
-          holdingsubtractAmount +=
-              ((holding.lots!) * (holding.lastaverageprice ?? 0)).abs();
+          holdingsubtractAmount += ((holding.lots!) * (holding.lastaverageprice ?? 0)).abs();
         }
         amountholding += ((holding.amount ?? 0) - (holding.brokerage ?? 0));
       }
@@ -864,20 +839,15 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       openingBalance = totalFund;
     }
     //available
-    num availableMargin =
-        ((calculatePositionTotalNetPNL() + calculateHoldingTotalNetPNL()) < 0)
-            ? ((positionlots + holdinglots) == 0
-                ? (openingBalance -
-                    (holdingmargin + positionmargin) +
-                    (calculatePositionTotalNetPNL() +
-                        calculateHoldingTotalNetPNL()))
-                : (openingBalance -
-                    (((amountposition + amountholding) -
-                                (positionsubtractAmount +
-                                    holdingsubtractAmount))
-                            .abs() +
-                        (holdinglimitMargin + positionlimitMargin))))
-            : (openingBalance - (holdingmargin + positionmargin));
+    num availableMargin = ((calculatePositionTotalNetPNL() + calculateHoldingTotalNetPNL()) < 0)
+        ? ((positionlots + holdinglots) == 0
+            ? (openingBalance -
+                (holdingmargin + positionmargin) +
+                (calculatePositionTotalNetPNL() + calculateHoldingTotalNetPNL()))
+            : (openingBalance -
+                (((amountposition + amountholding) - (positionsubtractAmount + holdingsubtractAmount)).abs() +
+                    (holdinglimitMargin + positionlimitMargin))))
+        : (openingBalance - (holdingmargin + positionmargin));
 
     return availableMargin;
   }
@@ -885,11 +855,11 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStockPositionsList() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<StocksPositionsListResponse> response =
-          await repository.getstocksPositions();
+      final RepoResponse<StocksPositionsListResponse> response = await repository.getstocksPositions();
       if (response.data != null) {
         if (response.data?.data! != null) {
           stockPositionsList(response.data?.data ?? []);
+          stockPositionsList.refresh();
           calculateTotalPositionValues();
         }
       } else {
@@ -1300,12 +1270,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         }
       }
     }
-    //print('holdingtotal${totalHoldingInvested}');
+    print('calculateTotalHoldingPnl : ${totalPnl}');
     num finalTotalPnl = totalPnl;
-    // String finalTotalPnl = FormatHelper.formatNumbers(
-    //   totalPnl.toString(),
-    //   decimal: 2,
-    // );
     return finalTotalPnl;
   }
 
@@ -1533,8 +1499,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStockHoldingsList() async {
     isHoldingStateLoading(true);
     try {
-      final RepoResponse<StocksHoldingsListResponse> response =
-          await repository.getstocksHoldings();
+      final RepoResponse<StocksHoldingsListResponse> response = await repository.getstocksHoldings();
       if (response.data != null) {
         if (response.data?.data! != null) {
           stockHoldingsList(response.data?.data ?? []);
@@ -1616,8 +1581,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getVirtualPendingStoplossOrderData(String id) async {
     try {
       final RepoResponse<VirtualStopLossPendingOrderResponse> response =
-          await repository
-              .getVirtualStopLossPendingOrder("6433e2e5500dc2f2d20d686d");
+          await repository.getVirtualStopLossPendingOrder("6433e2e5500dc2f2d20d686d");
       if (response.data != null) {
         if (response.data?.data! != null) {
           stoplossQuantityList(response.data?.quantity ?? []);
@@ -1636,8 +1600,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStockTodayOrderList() async {
     isOrderStateLoading(true);
     try {
-      final RepoResponse<StocksTodayOrderResponse> response =
-          await repository.getStockTradeTodaysOrdersList();
+      final RepoResponse<StocksTodayOrderResponse> response = await repository.getStockTradeTodaysOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           stockTradeTodaysOrdersList(response.data?.data ?? []);
@@ -1684,8 +1647,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStocksStopLossExecutedOrder() async {
     isExecutedOrderStateLoading(true);
     try {
-      final RepoResponse<StocksExcuatedOrderResponse> response =
-          await repository.getStocksStopLossExcuatedOrder(
+      final RepoResponse<StocksExcuatedOrderResponse> response = await repository.getStocksStopLossExcuatedOrder(
         stockfundsmargin.value.portfolioId.toString(),
       );
       if (response.data?.status?.toLowerCase() == "success") {
@@ -1704,16 +1666,13 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStocksStopLossPendingOrder() async {
     isPendingOrderStateLoading(true);
     try {
-      final RepoResponse<StocksPendingOrderResponse> response =
-          await repository.getStocksStopLossPendingOrder(
+      final RepoResponse<StocksPendingOrderResponse> response = await repository.getStocksStopLossPendingOrder(
         stockfundsmargin.value.portfolioId.toString(),
       );
       // print('harshit${stockfundsmargin.value.portfolioId}');
       if (response.data?.status?.toLowerCase() == "success") {
         List<StocksPendingOrderData>? tempList = [];
-        tempList = response.data?.data
-            ?.where((order) => (order.quantity != null && order.quantity! > 0))
-            .toList();
+        tempList = response.data?.data?.where((order) => (order.quantity != null && order.quantity! > 0)).toList();
         stopLossPendingOrderList(tempList);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1725,8 +1684,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     isPendingOrderStateLoading(false);
   }
 
-  Future pendingOrderModify(
-      TransactionType type, TradingInstrument inst) async {
+  Future pendingOrderModify(TransactionType type, TradingInstrument inst) async {
     isPendingOrderStateLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
@@ -1758,8 +1716,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       symbol: inst.tradingsymbol,
       validity: "DAY",
 
-      id: stockfundsmargin.value
-          .portfolioId, //  id: virtualPortfolio.value.portfolioId(in virtual)
+      id: stockfundsmargin.value.portfolioId, //  id: virtualPortfolio.value.portfolioId(in virtual)
       lastPrice: inst.lastPrice.toString(),
       variety: "regular",
       stock: "Stock",
@@ -1770,8 +1727,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     );
     print('PendingOrderModifyRequest : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response =
-          await repository.pendingOrderModify(
+      final RepoResponse<GenericResponse> response = await repository.pendingOrderModify(
         data.toJson(),
       );
       Get.back();
@@ -1801,8 +1757,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   Future getStocksFundsMargin() async {
     isFundsStateLoading(true);
     try {
-      final RepoResponse<StocksFundsMarginResponse> response =
-          await repository.getStockFundsMargin();
+      final RepoResponse<StocksFundsMarginResponse> response = await repository.getStockFundsMargin();
 
       if (response.data != null) {
         stockfundsmargin(response.data?.data);

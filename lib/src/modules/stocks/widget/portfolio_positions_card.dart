@@ -37,8 +37,7 @@ class _PositionsCardState extends State<PositionsCard> {
 
   num currentValue() {
     num currentValue = 0;
-    currentValue = (widget.position.lastaverageprice ?? 0) *
-            (widget.position.lots?.abs() ?? 0) +
+    currentValue = (widget.position.lastaverageprice ?? 0) * (widget.position.lots?.abs() ?? 0) +
         (widget.position.lots == 0
             ? widget.position.amount!.toDouble()
             : controller.calculateGrossPNL(
@@ -59,8 +58,7 @@ class _PositionsCardState extends State<PositionsCard> {
       widget.position.iId!.instrumentToken!,
       widget.position.iId!.exchangeInstrumentToken!,
     );
-    controller.selectedStringQuantity.value =
-        widget.position.lots?.toString() ?? "0";
+    controller.selectedStringQuantity.value = widget.position.lots?.toString() ?? "0";
     // controller.generateLotsList(type: stockTradingPosition.iId?.symbol);
     // controller.generateLotsListFoStopLoss(type: position.id?.symbol);
     // controller.generateLotsListForStopProfit(type: position.id?.symbol);
@@ -90,8 +88,7 @@ class _PositionsCardState extends State<PositionsCard> {
       widget.position.iId!.instrumentToken!,
       widget.position.iId!.exchangeInstrumentToken!,
     );
-    controller.selectedStringQuantity.value =
-        widget.position.lots?.toString() ?? "0";
+    controller.selectedStringQuantity.value = widget.position.lots?.toString() ?? "0";
     //  await controller
     //     .getVirtualPendingStoplossOrderData(widget.position.iId?.product ?? '');
     // controller.generateLotsList(type: widget.position.iId?.symbol);
@@ -130,11 +127,8 @@ class _PositionsCardState extends State<PositionsCard> {
                 // Handle edit action
 
                 if (widget.position.lots!.toInt() == 0) {
-                  SnackbarHelper.showSnackbar(
-                      "You don't have any open position for this symbol.");
-                } else if (controller.selectedQuantity.value
-                    .toString()
-                    .contains('-')) {
+                  SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                } else if (controller.selectedQuantity.value.toString().contains('-')) {
                   openModifyBottomSheet(context, TransactionType.sell);
                 } else {
                   openModifyBottomSheet(context, TransactionType.buy);
@@ -174,10 +168,8 @@ class _PositionsCardState extends State<PositionsCard> {
                           children: [
                             Text(
                               widget.position.iId?.symbol ?? "",
-                              style: AppStyles.tsBlackMedium14.copyWith(
-                                  color: Get.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black),
+                              style: AppStyles.tsBlackMedium14
+                                  .copyWith(color: Get.isDarkMode ? Colors.white : Colors.black),
                             ),
                             SizedBox(
                               height: 4,
@@ -215,8 +207,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                 ),
                                 Text(
                                   // averageprice,
-                                  FormatHelper.formatNumbers(
-                                      widget.position.lastaverageprice),
+                                  FormatHelper.formatNumbers(widget.position.lastaverageprice),
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -242,9 +233,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                   (widget.position.lots == 0)
                                       ? '₹0.00'
                                       : FormatHelper.formatNumbers(
-                                          widget.position.amount
-                                              ?.abs()
-                                              .toString(),
+                                          widget.position.amount?.abs().toString(),
                                           decimal: 2,
                                         ),
                                   style: TextStyle(
@@ -268,17 +257,14 @@ class _PositionsCardState extends State<PositionsCard> {
                                 Text(
                                   //pnl in positions
                                   widget.position.lots == 0
-                                      ? FormatHelper.formatNumbers(
-                                          widget.position.amount)
+                                      ? FormatHelper.formatNumbers(widget.position.amount)
                                       : FormatHelper.formatNumbers(
                                           controller.calculateGrossPNL(
                                             widget.position.amount ?? 0,
                                             widget.position.lots!.toInt(),
                                             controller.getInstrumentLastPrice(
-                                              widget.position.iId!
-                                                  .instrumentToken!,
-                                              widget.position.iId!
-                                                  .exchangeInstrumentToken!,
+                                              widget.position.iId!.instrumentToken!,
+                                              widget.position.iId!.exchangeInstrumentToken!,
                                             ),
                                           ),
                                         ),
@@ -291,10 +277,8 @@ class _PositionsCardState extends State<PositionsCard> {
                                               widget.position.amount ?? 0,
                                               widget.position.lots!.toInt(),
                                               controller.getInstrumentLastPrice(
-                                                widget.position.iId!
-                                                    .instrumentToken!,
-                                                widget.position.iId!
-                                                    .exchangeInstrumentToken!,
+                                                widget.position.iId!.instrumentToken!,
+                                                widget.position.iId!.exchangeInstrumentToken!,
                                               ),
                                             ),
                                     ),
@@ -307,8 +291,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                         widget.position.lots!.toInt(),
                                         controller.getInstrumentLastPrice(
                                           widget.position.iId!.instrumentToken!,
-                                          widget.position.iId!
-                                              .exchangeInstrumentToken!,
+                                          widget.position.iId!.exchangeInstrumentToken!,
                                         ),
                                       ), decimal: 2, showSymbol: false)}%)',
                                   style: TextStyle(
@@ -320,10 +303,8 @@ class _PositionsCardState extends State<PositionsCard> {
                                               widget.position.amount ?? 0,
                                               widget.position.lots!.toInt(),
                                               controller.getInstrumentLastPrice(
-                                                widget.position.iId!
-                                                    .instrumentToken!,
-                                                widget.position.iId!
-                                                    .exchangeInstrumentToken!,
+                                                widget.position.iId!.instrumentToken!,
+                                                widget.position.iId!.exchangeInstrumentToken!,
                                               ),
                                             ),
                                     ),
@@ -349,8 +330,7 @@ class _PositionsCardState extends State<PositionsCard> {
                                   FormatHelper.formatNumbers(
                                     controller.getInstrumentLastPrice(
                                       widget.position.iId!.instrumentToken!,
-                                      widget.position.iId!
-                                          .exchangeInstrumentToken!,
+                                      widget.position.iId!.exchangeInstrumentToken!,
                                     ),
                                     decimal: 2,
                                     // showSymbol: false,
@@ -366,17 +346,14 @@ class _PositionsCardState extends State<PositionsCard> {
                                 Text(
                                   '(${controller.getInstrumentChanges(
                                     widget.position.iId!.instrumentToken!,
-                                    widget
-                                        .position.iId!.exchangeInstrumentToken!,
+                                    widget.position.iId!.exchangeInstrumentToken!,
                                   )})%',
                                   style: TextStyle(
-                                    color: controller.getValueColor(
-                                        controller.getInstrumentChanges(
+                                    color: controller.getValueColor(controller.getInstrumentChanges(
                                       widget.position.iId!.instrumentToken!,
 
                                       ///green color hai nhi check krna hai
-                                      widget.position.iId!
-                                          .exchangeInstrumentToken!,
+                                      widget.position.iId!.exchangeInstrumentToken!,
                                     )),
                                     fontSize: 12,
                                   ),
@@ -413,9 +390,7 @@ class _PositionsCardState extends State<PositionsCard> {
                       ],
                     ),
                     Divider(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.grey[200]
-                          : Colors.transparent,
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.grey[200] : Colors.transparent,
                       thickness: 1,
                     ),
                   ],
@@ -450,8 +425,7 @@ class _PositionsCardState extends State<PositionsCard> {
                 int exitLots = widget.position.lots!.toInt();
 
                 if (exitLots == 0) {
-                  SnackbarHelper.showSnackbar(
-                      "You don't have any open position for this symbol.");
+                  SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
                 } else {
                   if (exitLots.toString().contains('-')) {
                     if (exitLots < 0) {
@@ -472,8 +446,7 @@ class _PositionsCardState extends State<PositionsCard> {
                   // }
 
                   // controller.lotsValueList.assignAll(lots);
-                  controller.selectedStringQuantity.value =
-                      widget.position.lots?.toString() ?? "0";
+                  controller.selectedStringQuantity.value = widget.position.lots?.toString() ?? "0";
 
                   TradingInstrument trading = TradingInstrument(
                     name: widget.position.iId?.symbol,
@@ -490,15 +463,14 @@ class _PositionsCardState extends State<PositionsCard> {
 
                   controller.selectedOrderGroupValue.value = 2;
                   //for the same value of lots in exit text field
-                  controller.quantityTextController.text =
-                      widget.position.lots!.abs().toString();
+                  controller.quantityTextController.text = widget.position.lots!.abs().toString();
+                  controller.selectedQuantity.value = widget.position.lots!.abs();
                   BottomSheetHelper.openBottomSheet(
                     context: context,
                     child: StockTransactionBottomSheet(
                       type: TransactionType.exit,
                       tradingInstrument: trading,
-                      marginRequired: controller.getMarginRequired(
-                          TransactionType.exit, trading),
+                      marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
                     ),
                   );
                 }
