@@ -45,10 +45,6 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
-    num CurrentValue =
-        (controller.stockTotalHoldingDetails.value.currentvalue ?? 0) +
-            (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
-
     num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
         (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
 
@@ -75,6 +71,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
 
     num availablemarginat0 = ((PnL - brokerage) +
         (controller.stockfundsmargin.value.totalFund ?? 0));
+    // num CurrentValue =
+    //     (controller.stockTotalHoldingDetails.value.currentvalue ?? 0) +
+    //         (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
+    num CurrentValue = (PnL - brokerage) + InvestedValue;
 
     return Obx(
       () => Column(
@@ -234,7 +234,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                         //             0)))),
 
                                         FormatHelper.formatNumbers(
-                                            (PnL - brokerage),
+                                            (controller.calculateTotalPortfolioPnl() - brokerage),
                                             decimal: 2),
                                         style: TextStyle(
                                           color: (double.tryParse(
@@ -273,9 +273,9 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
 
                                   //'how',
                                   style: AppStyles.tsBlackMedium14.copyWith(
-                                      color: Get.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black),
+                                      color: (CurrentValue < InvestedValue)
+                                          ? AppColors.danger
+                                          : AppColors.success),
                                 ),
                                 SizedBox(height: 5),
                                 Text(

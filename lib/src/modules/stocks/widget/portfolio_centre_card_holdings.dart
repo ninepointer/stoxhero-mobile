@@ -44,9 +44,7 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
           borderRadius: BorderRadius.circular(20.0),
           boxShadow: [
             BoxShadow(
-              color: Get.isDarkMode
-                  ? Color(0xFF151F2B).withOpacity(0.8)
-                  : Colors.grey.withOpacity(0.2),
+              color: Get.isDarkMode ? Color(0xFF151F2B).withOpacity(0.8) : Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 4,
               offset: Offset(0, 2),
@@ -65,23 +63,19 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                   children: [
                     Text(
                       'Holding P&L',
-                      style: AppStyles.tsBlackMedium12.copyWith(
-                          color: Get.isDarkMode ? Colors.white : Colors.black),
+                      style: AppStyles.tsBlackMedium12.copyWith(color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                     Text(
                       'ROI',
-                      style: AppStyles.tsBlackMedium12.copyWith(
-                          color: Get.isDarkMode ? Colors.white : Colors.black),
+                      style: AppStyles.tsBlackMedium12.copyWith(color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                     Text(
                       'Invested',
-                      style: AppStyles.tsBlackMedium12.copyWith(
-                          color: Get.isDarkMode ? Colors.white : Colors.black),
+                      style: AppStyles.tsBlackMedium12.copyWith(color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                     Text(
                       'Current Value',
-                      style: AppStyles.tsBlackMedium12.copyWith(
-                          color: Get.isDarkMode ? Colors.white : Colors.black),
+                      style: AppStyles.tsBlackMedium12.copyWith(color: Get.isDarkMode ? Colors.white : Colors.black),
                     ),
                   ],
                 ),
@@ -90,7 +84,11 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      controller.calculateTotalHoldingPnl().toString(),
+                      // FormatHelper.formatNumbers(
+                      //     controller.calculateTotalHoldingPnl() as double,
+                      //     decimal: 2,
+                      //     isNegative: true),
+                      controller.calculateTotalHoldingPnl().toStringAsFixed(4),
                       //  (invested == 0)
                       //     ? '₹0.00'
                       //     : FormatHelper.formatNumbers(
@@ -109,9 +107,7 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                       '${(controller.calculateTotalHoldingInvested() == 0 || controller.calculateTotalHoldingroi() == null) ? '0.00' : widget.roiHoldings}%',
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: controller.calculateTotalHoldingroi() != null
-                            ? controller
-                                    .calculateTotalHoldingroi()
-                                    .startsWith('-')
+                            ? controller.calculateTotalHoldingroi().startsWith('-')
                                 ? AppColors.danger
                                 : AppColors.success
                             : AppColors.success,
