@@ -65,6 +65,14 @@ class _KycVarificationViewState extends State<KycVarificationView> {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  if (controller.userDetails.value.kYCStatus == "Approved")
+                    Text(
+                      "Your KYC is verified. To change KYC details and re-verify, contact support at team@stoxhero.com",
+                      style: AppStyles.tsGreyRegular12,
+                    ),
                   SizedBox(height: 8),
                   Text(
                     'Aadhaar Card Number',
