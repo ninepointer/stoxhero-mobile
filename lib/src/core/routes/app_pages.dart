@@ -187,6 +187,12 @@ class AppPages {
       binding: ContestProfileBinding(),
     ),
     GetPage(
+      name: AppRoutes.stocks,
+      page: () => StocksDashboardView(),
+      binding: ContestProfileBinding(),
+      
+    ),
+    GetPage(
       name: AppRoutes.affiliate,
       page: () => AffiliateView(),
       binding: AffiliateBinding(),

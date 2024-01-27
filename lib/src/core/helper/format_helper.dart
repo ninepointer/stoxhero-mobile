@@ -9,15 +9,16 @@ class FormatHelper {
     bool showDecimal = true,
     int decimal = 2,
   }) {
-    if (value == null || value.toString().isEmpty) return '₹0';
+    if (value == null || value == "null" || value.toString().isEmpty)
+      return '₹0';
     if (value != null) {
       num number = value is int || value is double
           ? isNegative
               ? value.abs()
               : value
           : isNegative
-              ? num.parse(value).abs()
-              : num.parse(value);
+              ? num.parse(value ?? '').abs()
+              : num.parse(value ?? '');
       final currencyFormat = NumberFormat.currency(
         locale: 'en_IN',
         symbol: showSymbol ? '₹' : '',
@@ -113,7 +114,7 @@ class FormatHelper {
     if (value != null) {
       DateTime dateTime = DateTime.parse(value);
       String formattedString =
-          DateFormat('d MMMM yyyy hh:mm a').format(dateTime);
+          DateFormat('d MMM yyyy hh:mm a').format(dateTime);
       return formattedString;
     } else {
       return '-';

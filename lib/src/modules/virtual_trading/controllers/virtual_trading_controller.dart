@@ -61,6 +61,7 @@ class VirtualTradingController
   final stopProfitPriceTextController = TextEditingController();
   final quanitityTextController = TextEditingController();
   final limitPriceTextController = TextEditingController();
+
   final virtualPortfolio = VirtualTradingPortfolio().obs;
 
   final tradingInstrumentTradeDetailsList =
@@ -855,6 +856,7 @@ class VirtualTradingController
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           marginRequired(response.data);
+          print('hii virtual${data.toJson()}');
         } else {
           SnackbarHelper.showSnackbar(response.error?.message);
         }

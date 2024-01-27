@@ -59,6 +59,9 @@ class VirtualSearchSymbolView extends GetView<VirtualTradingController> {
                       itemCount: controller.tradingInstruments.length,
                       padding: EdgeInsets.only(bottom: 100),
                       itemBuilder: (context, index) {
+
+
+                        
                         var data = controller.tradingInstruments[index];
                         void openBottomSheet(
                             BuildContext context, TransactionType type) {

@@ -178,6 +178,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                       ),
                     ),
                   ),
+
                   if (controller.selectedGroupValue.value == 1) ...[
                     SizedBox(height: 8),
                     CommonTextField(
@@ -218,7 +219,7 @@ class VirtualTransactionBottomSheet extends GetView<VirtualTradingController> {
                     ),
                   ],
                   if (controller.selectedGroupValue.value == 3) ...[
-                    SizedBox(height: 8),
+                    // SizedBox(height: 8),
                     if (type != TransactionType.exit)
                       Row(
                         children: [

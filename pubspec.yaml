@@ -1,7 +1,7 @@
 name: stoxhero
 description: A new Flutter project.
 # version: 1.0.0+80 # Dev
-version: 1.0.0+51 # Prod
+version: 1.0.0+53 # Prod
 publish_to: "none"
 
 environment:
@@ -57,6 +57,8 @@ dependencies:
 dev_dependencies:
   flutter_launcher_icons: any
   change_app_package_name: ^1.1.0
+  flutter_slidable: ^3.0.1
+ 
 
 flutter_launcher_icons:
   ios: true

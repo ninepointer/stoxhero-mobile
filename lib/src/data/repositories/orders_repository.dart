@@ -4,23 +4,28 @@ import '../../base/base.dart';
 import '../../core/core.dart';
 
 class OrdersRepository extends BaseRepository {
-  Future<RepoResponse<InfinityTradeOrdersListResponse>> getInfinityTradeTodaysOrdersList() async {
+  Future<RepoResponse<InfinityTradeOrdersListResponse>>
+      getInfinityTradeTodaysOrdersList() async {
     String apiURL = AppUrls.infinityTradeTodaysOrders;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: InfinityTradeOrdersListResponse.fromJson(response));
+        : RepoResponse(
+            data: InfinityTradeOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<InfinityTradeOrdersListResponse>> getInfinityTradeAllOrdersList() async {
+  Future<RepoResponse<InfinityTradeOrdersListResponse>>
+      getInfinityTradeAllOrdersList() async {
     String apiURL = AppUrls.infinityTradeAllOrders;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: InfinityTradeOrdersListResponse.fromJson(response));
+        : RepoResponse(
+            data: InfinityTradeOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenxTradeOrdersListResponse>> getTenxTradeTodaysOrdersList(String? subscriptionId) async {
+  Future<RepoResponse<TenxTradeOrdersListResponse>>
+      getTenxTradeTodaysOrdersList(String? subscriptionId) async {
     String apiURL = AppUrls.tenxTradeTodaysOrders(subscriptionId);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -37,7 +42,8 @@ class OrdersRepository extends BaseRepository {
         : RepoResponse(data: TenxTradeOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<VirtualTradeOrdersListResponse>> getVirtualTradeTodaysOrdersList() async {
+  Future<RepoResponse<VirtualTradeOrdersListResponse>>
+      getVirtualTradeTodaysOrdersList() async {
     String apiURL = AppUrls.paperTradeTodaysOrders;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -45,15 +51,38 @@ class OrdersRepository extends BaseRepository {
         : RepoResponse(data: VirtualTradeOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<VirtualTradeOrdersListResponse>> getVirtualTradeAllOrdersList() async {
+  Future<RepoResponse<VirtualTradeOrdersListResponse>>
+      getVirtualTradeAllOrdersList(
+    Map<String, dynamic> query,
+  ) async {
     String apiURL = AppUrls.paperTradeAllOrders;
-    var response = await service.getAuth(path: apiURL);
+    var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: VirtualTradeOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TenXSubscriptionResponse>> getTenXSubscriptionList() async {
+  Future<RepoResponse<StocksAllOrderResponse>> getStocksTradeAllOrdersList(
+    Map<String, dynamic> query,
+  ) async {
+    String apiURL = AppUrls.stocksAllOrder;
+    var response = await service.getAuth(path: apiURL, query: query);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StocksAllOrderResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<StocksAllOrderResponse>>
+      getStocksTradeTodaysOrdersList() async {
+    String apiURL = AppUrls.stocksTodayOrder;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: StocksAllOrderResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<TenXSubscriptionResponse>>
+      getTenXSubscriptionList() async {
     String apiURL = AppUrls.tenxSubscription;
     var response = await service.getAuth(path: apiURL);
     return response is APIException

@@ -227,6 +227,26 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                     ],
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Spots Left',
+                        style: AppStyles.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        //  "${(widget.upcomingFeatured?.maxParticipants ?? 0) - (widget.upcomingFeatured?.participants ?? 0)}",
+                        '${controller.calculateSeatsLeft(
+                              widget.upcomingFeatured?.maxParticipants ?? 0,
+                              widget.upcomingFeatured?.participants?.length ??
+                                  0,
+                            ).toString()}',
+
+                        style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
+                  ),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(

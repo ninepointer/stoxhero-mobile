@@ -42,7 +42,7 @@ class OrdersView extends GetView<OrdersController> {
                 TenxTradeOrdersTabView(
                   tenxSub: controller.tenxTrade.value.sId,
                 ),
-                VirtualTradeOrdersTabView(),
+                MarketOrdersView(),
               ],
             ),
           ),

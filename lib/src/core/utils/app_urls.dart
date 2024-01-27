@@ -1,6 +1,9 @@
+import 'package:stoxhero/src/modules/stocks/views/stocks_dashboard_view.dart';
+
 import '../../../main.dart';
 
 class AppUrls {
+  static const String stock = 'Stock';
   static const String baseURL =
       isProd ? 'https://stoxhero.com' : 'http://43.204.7.180';
   static const String apiURL = '$baseURL/api/v1';
@@ -303,6 +306,9 @@ class AppUrls {
   static String marginXTodayOrders(String? id) =>
       "$apiURL/marginxtrade/$id/my/todayorders";
 
+  static String stocksStopLossPendingCancelOrder(String? id) =>
+      "$apiURL/pendingorder/$id/Stock";
+
   static String dayWiseContestPnl(String? id) =>
       "$apiURL/dailycontest/trade/$id/mydaywisepnl";
   static String contestProfile(String? id) =>
@@ -311,6 +317,23 @@ class AppUrls {
       "$apiURL/dailycontest/weeklytopperformerfulllist";
   static const String weeklyTopPerformersFullListCarouseal =
       "$apiURL/toptestzoneportfolios";
+  static String StocksDashboardView_watchlist(String? searchQuery) =>
+      "$apiURL/equityInstrument?search=$searchQuery";
+  static const String addStock = "$apiURL/addstock";
+  static const String getEquityInstrumentDetails =
+      "$apiURL/equityinstrumentDetails";
+  static String RemoveStockCard(int instrumentToken) =>
+      "$apiURL/removestock/$instrumentToken";
+  static const String stockOrderPlace = "$apiURL/stockorderplace";
+  static const String stockMarginRequired =
+      "$apiURL/marginrequired?from=$stock";
+  static const String stocksTradingPortfolio = "$apiURL/stock/margin";
+  static const String stockTradePosition = "$apiURL/stock/pnlposition";
+  static const String stockTradeHolding = "$apiURL/stock/pnlholding";
+  static const String stockTradeTodaysOrders = "$apiURL/stock/my/todayorders";
+  static const String stockFundsMargin = "$apiURL/stock/margin";
+  // static String stockTradeExececutedOrders(String? id) =>
+  //     "$apiURL/pendingorder/my/todaysProcessed/$id/Stock";
   static String contestResultPage(String? id) =>
       "$apiURL/dailycontest/trade/$id/result";
 
@@ -324,4 +347,16 @@ class AppUrls {
 
   static String kycVerificationGenrateOtp = "$apiURL/KYC/generateotp";
   static String kycVerificationVerifyOtp = "$apiURL/KYC/verifyotp";
+  static String stocksExcuatedOrder(String? id) =>
+      "$apiURL/pendingorder/my/todaysProcessed/$id/Stock";
+
+  static String stocksPendingOrder(String? id) =>
+      "$apiURL/pendingorder/my/todaysPending/$id/Stock";
+
+  //pendingorder/my/todaysPending/6433e2e5500dc2f2d20d686d/Stock
+  static String stocksAllOrder = "$apiURL/stock/my/historyorders";
+  static String stocksTodayOrder = "$apiURL/stock/my/todayorders";
+
+  static String stocksstopLossEditOrder(String? id) =>
+      "$apiURL/pendingorder/editprice/$id";
 }

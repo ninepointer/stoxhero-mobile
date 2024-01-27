@@ -119,6 +119,8 @@ class AppStrings {
   static const String noDataFoundExecutedOrders =
       "Your Executed Stop Loss, Stop Profit\nand Limit Orders will show up here!";
 
+  static const String noDataFoundTodayOrders =
+      "Your Today's Orders will show up here!";
   static const String noDataFoundPendingOrders =
       "Your Pending Orders will show up here!";
   static const String noDataFoundPositions =
