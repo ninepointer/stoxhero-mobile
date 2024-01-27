@@ -379,6 +379,16 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (index == -1) return FormatHelper.formatNumbers('00');
       String? price = tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
+    } else if (instrumentLivePriceList.isNotEmpty) {
+      int index = instrumentLivePriceList.indexWhere(
+        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+      );
+      if (index == -1) {
+        return FormatHelper.formatNumbers('00', showSymbol: false);
+      } else {
+        String? price = instrumentLivePriceList[index].change?.toString();
+        return FormatHelper.formatNumbers(price, showSymbol: false);
+      }
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
