@@ -13,6 +13,14 @@ class _KYCViewSelectorState extends State<KYCViewSelector> {
   @override
   void initState() {
     controller = Get.find<ProfileController>();
+    VerifyKYCGenrateOTPData emptyData = VerifyKYCGenrateOTPData();
+    controller.verifyKYCGenrateOtpDataList(emptyData);
+    controller.reset();
+    controller.isVerifyButtonVisible.value = false;
+    controller.otpTextController.clear();
+    controller.isOTPGenerated(false);
+    controller.saveVerifyUserKYCDetailsthroughAPI();
+
     super.initState();
   }
 
@@ -46,7 +54,7 @@ class _KYCViewSelectorState extends State<KYCViewSelector> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      "Select KYC Option",
+                      "Select KYC Verifaction Method",
                       style: AppStyles.tsBlackMedium16,
                     ),
                   ],
@@ -68,7 +76,7 @@ class _KYCViewSelectorState extends State<KYCViewSelector> {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      'KYC Automation Verification',
+                      'Automatic Instant KYC',
                       style: Theme.of(context).textTheme.tsRegular14,
                     ),
                   ],
@@ -87,7 +95,7 @@ class _KYCViewSelectorState extends State<KYCViewSelector> {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      'KYC Manually Verification',
+                      'Admin Approved KYC',
                       style: Theme.of(context).textTheme.tsRegular14,
                     ),
                   ],

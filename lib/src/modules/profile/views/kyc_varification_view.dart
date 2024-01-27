@@ -17,7 +17,7 @@ class _KycVarificationViewState extends State<KycVarificationView> {
     controller = Get.find<ProfileController>();
     VerifyKYCGenrateOTPData emptyData = VerifyKYCGenrateOTPData();
     controller.verifyKYCGenrateOtpDataList(emptyData);
-
+    controller.reset();
     controller.isVerifyButtonVisible.value = false;
     controller.otpTextController.clear();
     controller.isOTPGenerated(false);
@@ -46,6 +46,20 @@ class _KycVarificationViewState extends State<KycVarificationView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (controller.userDetails.value.kYCStatus != "Approved")
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "Introducing seamless instant KYC Verification. Enter your Aadhaar, PAN and Bank Account Number and get your KYC Verified instantly.",
+                            style: AppStyles.tsBlackRegular12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  SizedBox(
+                    height: 12,
+                  ),
                   Row(
                     children: [
                       Text(
@@ -154,9 +168,12 @@ class _KycVarificationViewState extends State<KycVarificationView> {
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.green),
+                                  AppColors.lightScaffoldBackgroundColor),
                             ),
-                            child: Text("Reset"),
+                            child: Text(
+                              "Reset",
+                              style: AppStyles.tsBlackMedium12,
+                            ),
                           ),
                         ),
                         SizedBox(
