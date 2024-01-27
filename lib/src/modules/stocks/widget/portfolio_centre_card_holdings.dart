@@ -90,6 +90,10 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
+                      // FormatHelper.formatNumbers(
+                      //     controller.calculateTotalHoldingPnl() as double,
+                      //     decimal: 2,
+                      //     isNegative: true),
                       controller.calculateTotalHoldingPnl().toString(),
                       //  (invested == 0)
                       //     ? '₹0.00'

@@ -13,6 +13,14 @@ class StocksTradingRepository extends BaseRepository {
             data: StockWatchlistSearchDataResponse.fromJson(response));
   }
 
+  Future<RepoResponse<IndexLivePriceListResponse>> getStockLivePrices() async {
+    String apiURL = AppUrls.getStockLivePrice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
+  }
+
   Future<RepoResponse<ReadSettingResponse>> readSetting() async {
     String apiURL = AppUrls.readSetting;
     var response = await service.getAuth(path: apiURL);

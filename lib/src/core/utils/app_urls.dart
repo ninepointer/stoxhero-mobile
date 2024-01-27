@@ -319,9 +319,11 @@ class AppUrls {
       "$apiURL/toptestzoneportfolios";
   static String StocksDashboardView_watchlist(String? searchQuery) =>
       "$apiURL/equityInstrument?search=$searchQuery";
+
   static const String addStock = "$apiURL/addstock";
   static const String getEquityInstrumentDetails =
       "$apiURL/equityinstrumentDetails";
+  static const String getStockLivePrice = "$apiURL/getstockliveprice";
   static String RemoveStockCard(int instrumentToken) =>
       "$apiURL/removestock/$instrumentToken";
   static const String stockOrderPlace = "$apiURL/stockorderplace";

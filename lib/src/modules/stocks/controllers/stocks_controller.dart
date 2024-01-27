@@ -116,6 +116,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     await getStocksFundsMargin();
     await getStocksStopLossExecutedOrder();
     await getStocksStopLossPendingOrder();
+    // await liveStockDetails();
 
     socketConnection();
     socketIndexConnection();
@@ -234,6 +235,29 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         .indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
+
+  // Future liveStockDetails() async {
+  //   try {
+  //     final RepoResponse<IndexLivePriceListResponse> response =
+  //         await repository.getStockLivePrices();
+  //     if (response.data != null && response.data!.data != null) {
+  //       stockIndexDetailsList.clear();
+
+  //       stockIndexDetailsList.assignAll(
+  //         response.data!.data!.map((item) {
+  //           return StockIndexDetails.fromJson(item.toJson());
+  //         }).toList(),
+  //       );
+  //     } else {
+  //       if (stockIndexDetailsList.isEmpty) {
+  //         stockIndexDetailsList.assignAll(stockIndexDetailsList);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //   }
+  // }
 
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
@@ -1028,7 +1052,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   //   // return totalNetPNL.round();
   // }
 
-  String calculateTotalPositionPnl() {
+  num calculateTotalPositionPnl() {
     num totalGross = 0;
     int totalLots = 0;
     num totalPositionBrokerage = 0;
@@ -1069,10 +1093,11 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       }
     }
 
-    String finalTotalPnl = FormatHelper.formatNumbers(
-      totalPnl.toString(),
-      decimal: 2,
-    );
+    num finalTotalPnl = totalPnl;
+    // String finalTotalPnl = FormatHelper.formatNumbers(
+    //   totalPnl.toString(),
+    //   decimal: 2,
+    // );
 
     return finalTotalPnl;
   }
@@ -1226,7 +1251,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
 //live price for holdings ka
 
-  String calculateTotalHoldingPnl() {
+  num calculateTotalHoldingPnl() {
     int totalLots = 0;
     num totalHoldingBrokerage = 0;
     num totalGross = 0;
@@ -1276,10 +1301,11 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       }
     }
     //print('holdingtotal${totalHoldingInvested}');
-    String finalTotalPnl = FormatHelper.formatNumbers(
-      totalPnl.toString(),
-      decimal: 2,
-    );
+    num finalTotalPnl = totalPnl;
+    // String finalTotalPnl = FormatHelper.formatNumbers(
+    //   totalPnl.toString(),
+    //   decimal: 2,
+    // );
     return finalTotalPnl;
   }
 
@@ -1400,9 +1426,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   }
 
   String calculateTotalHoldingCurrentValue() {
-    int totalLots = 0;
     num totalHoldingBrokerage = 0;
-    num totalGross = 0;
     num totalHoldingInvested = 0;
     num totalCurrentValue = 0;
     num totalRoi = 0;
@@ -1413,13 +1437,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     for (var holding in stockHoldingsList) {
       if (holding.iId?.isLimit ?? false) {
       } else {
-        totalLots += holding.lots ?? 0;
         totalHoldingBrokerage += holding.brokerage ?? 0;
-        totalGross += getInstrumentLastPrice(
-              holding.iId!.instrumentToken!,
-              holding.iId!.exchangeInstrumentToken!,
-            ).abs() ??
-            0;
         // totalHoldingInvested += holding.amount?.abs() ?? 0;
         totalCurrentValue += (getInstrumentLastPrice(
                   holding.iId!.instrumentToken!,
@@ -1455,6 +1473,59 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     );
 
     return finalTotalCurrentValueHoldings;
+  }
+
+  //final portfolio summary pnl
+
+  num calculateTotalPortfolioPnl() {
+    num totalPnlholding = 0;
+    num totalPnlPosition = 0;
+
+    //holding net
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+      } else {
+        totalPnlholding += calculateGrossPNL(
+          position.amount ?? 0,
+          position.lots!.toInt(),
+          getInstrumentLastPrice(
+            position.iId!.instrumentToken!,
+            position.iId!.exchangeInstrumentToken!,
+          ),
+        );
+
+        if (position.lots != 0) {}
+        if (position.lots != 0) {
+        } else {}
+      }
+    }
+
+    //holding net
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit ?? false) {
+      } else {
+        totalPnlPosition += calculateGrossPNL(
+          holding.amount ?? 0,
+          holding.lots!.toInt(),
+          getInstrumentLastPrice(
+            holding.iId!.instrumentToken!,
+            holding.iId!.exchangeInstrumentToken!,
+          ),
+        );
+
+        if (holding.lots != 0) {}
+        if (holding.lots != 0) {
+        } else {}
+      }
+    }
+
+    num finalPortfolioPnl = (totalPnlPosition + totalPnlholding);
+
+    // String finalPortfolioPnl = FormatHelper.formatNumbers(
+    //   (totalPnlPosition+totalPnlholding),
+    //   decimal: 2,
+    // );
+    return finalPortfolioPnl;
   }
 
 //Holdings ka pura scene
