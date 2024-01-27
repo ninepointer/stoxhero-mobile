@@ -116,7 +116,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     await getStocksFundsMargin();
     await getStocksStopLossExecutedOrder();
     await getStocksStopLossPendingOrder();
-    // await liveStockDetails();
+   // await liveStockDetails();
 
     socketConnection();
     socketIndexConnection();
