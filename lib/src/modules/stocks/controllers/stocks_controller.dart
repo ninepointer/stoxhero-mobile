@@ -822,6 +822,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     num positionsubtractAmount = 0;
     num holdingsubtractAmount = 0;
 
+    num amountbrokerage = 0;
+
     for (var position in stockPositionsList) {
       if (position.lots != 0) {
         positionlots += position.lots ?? 0;
@@ -836,9 +838,12 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
               ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
         }
         amountposition += ((position.amount ?? 0) - (position.brokerage ?? 0));
+        amountbrokerage = position.brokerage ?? 0;
       }
     }
 
+    // print('a21brokerage ${amountbrokerage}');
+    // print('a21b ${amountposition}');
     for (var holding in stockHoldingsList) {
       if (holding.lots != 0) {
         holdinglots += holding.lots ?? 0;
@@ -867,7 +872,25 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       openingBalance = totalFund;
     }
     //available
-    
+    print('a21d ${openingBalance}');
+    print('a21d_positionpnl ${calculatePositionTotalNetPNL()}');
+    print('a21dHpnl ${calculateHoldingTotalNetPNL()}');
+
+    print('a21cPosition_lots ${positionlots}');
+    print('a21c_holding_lots ${holdinglots}');
+
+    print('a21cPosition_margin ${holdingmargin}');
+    print('a21c_holding_margin ${positionmargin}');
+
+    print('a21c_h_amount ${amountholding}');
+    print('a21c_p_amount ${amountposition}');
+
+    print('a21c_h__substractamount ${positionsubtractAmount}');
+    print('a21c_p_substractamount ${holdingsubtractAmount}');
+
+    print('a21c_h_Limitmargin ${holdinglimitMargin}');
+    print('a21c_p_LimitMargin ${positionlimitMargin}');
+
     num availableMargin =
         ((calculatePositionTotalNetPNL() + calculateHoldingTotalNetPNL()) < 0)
             ? ((positionlots + holdinglots) == 0
@@ -882,7 +905,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
                             .abs() +
                         (holdinglimitMargin + positionlimitMargin))))
             : (openingBalance - (holdingmargin + positionmargin));
-
+    print('a21e ${availableMargin}');
     return availableMargin;
   }
 
