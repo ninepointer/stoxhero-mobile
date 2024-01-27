@@ -110,6 +110,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
     await getEquityInstrumentDetails();
     await getStockIndexInstrumentsList();
+    await getStockLivePriceList();
     await getStocksTradingPortfolio();
     await getStockPositionsList();
     await getStocksFundsMargin();
@@ -148,7 +149,24 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     }
   }
 
-  void clearTradingInstruments() {}
+  Future getStockLivePriceList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getStockLivePrices();
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          instrumentLivePriceList(response.data?.data ?? []);
+          print('getStockLivePriceList : ${instrumentLivePriceList.length}');
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
 
   Future socketConnection() async {
     List<TradingInstrumentTradeDetails>? tempList = [];
@@ -156,7 +174,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       socketService.socket.on(
         'equity-ticks',
         (data) {
-          //  print("equity-ticks${data}");
+          print("equity-ticks${data}");
           tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
           tempList?.forEach(
             (element) {
@@ -319,16 +337,13 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   //socket things for LTP in search sheet
   num getInstrumentLastPrice(int instID, int exchID) {
     num priceValue = 0;
-    // print("hii start${tradingInstrumentTradeDetailsList}");
 
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      //  print(
-      //   "hii${index} ${tradingInstrumentTradeDetailsList[index].lastPrice}");
+
       if (index == -1) {
-        //  print("hii index nhi mila");
         int index = instrumentLivePriceList.indexWhere(
           (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
         );
@@ -338,12 +353,21 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           priceValue = instrumentLivePriceList[index].lastPrice ?? 0;
         }
       } else {
-        //  print(
-        //  "hii final ${tradingInstrumentTradeDetailsList[index].lastPrice}");
         priceValue = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
       }
+    } else {
+      if (instrumentLivePriceList.isNotEmpty) {
+        int index = instrumentLivePriceList.indexWhere(
+          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        );
+        if (index == -1) {
+          priceValue = 0;
+          return priceValue;
+        } else {
+          priceValue = instrumentLivePriceList[index].lastPrice ?? 0;
+        }
+      }
     }
-    // print("yoyoyo${tradingInstrumentTradeDetailsList}");
     return priceValue;
   }
 
@@ -604,6 +628,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
     isMarginStateLoading(true);
+    print('selectedQuantity : ${selectedQuantity.value}');
 
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,

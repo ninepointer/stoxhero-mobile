@@ -19,12 +19,12 @@ class StocksTradingRepository extends BaseRepository {
         : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<IndexLivePriceListResponse>> getStockLivePrices() async {
+  Future<RepoResponse<InstrumentLivePriceListResponse>> getStockLivePrices() async {
     String apiURL = AppUrls.getStockLivePrice;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
+        : RepoResponse(data: InstrumentLivePriceListResponse.fromJson(response));
   }
 
   Future<RepoResponse<ReadSettingResponse>> readSetting() async {
