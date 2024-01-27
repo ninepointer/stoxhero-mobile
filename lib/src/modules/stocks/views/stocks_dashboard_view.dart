@@ -17,7 +17,8 @@ class StocksDashboardView extends StatefulWidget {
   State<StocksDashboardView> createState() => _StocksDashboardViewState();
 }
 
-class _StocksDashboardViewState extends State<StocksDashboardView> with TickerProviderStateMixin {
+class _StocksDashboardViewState extends State<StocksDashboardView>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   late StocksTradingController controller;
 
@@ -39,7 +40,8 @@ class _StocksDashboardViewState extends State<StocksDashboardView> with TickerPr
 
   @override
   Widget build(BuildContext context) {
-    final StocksTradingController controller = Get.find<StocksTradingController>();
+    final StocksTradingController controller =
+        Get.find<StocksTradingController>();
 
     controller.getReadSetting();
 
@@ -61,15 +63,19 @@ class _StocksDashboardViewState extends State<StocksDashboardView> with TickerPr
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
-                    if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
+                    if (controller.stockIndexDetailsList.isNotEmpty &&
+                        controller.stockIndexInstrumentList.isNotEmpty)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            for (var item in controller.stockIndexDetailsList) ...[
+                            for (var item
+                                in controller.stockIndexDetailsList) ...[
                               IndexCard(
-                                label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                                label: controller.getStockIndexName(
+                                    item.instrumentToken ?? 0),
                                 stockPrice: FormatHelper.formatNumbers(
                                   item.lastPrice,
                                 ),
@@ -79,12 +85,14 @@ class _StocksDashboardViewState extends State<StocksDashboardView> with TickerPr
                                 stockLTP: FormatHelper.formatNumbers(
                                   item.lastPrice! - (item.ohlc?.close ?? 0),
                                 ),
-                                stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                                stockChange:
+                                    '(${item.change?.toStringAsFixed(2)}%)',
                                 stockLTPColor: controller.getValueColor(
                                   item.lastPrice! - (item.ohlc?.close ?? 0),
                                 ),
                               ),
-                              if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                              if (item != controller.stockIndexDetailsList.last)
+                                SizedBox(width: 4),
                             ]
                           ],
                         ),
@@ -100,17 +108,22 @@ class _StocksDashboardViewState extends State<StocksDashboardView> with TickerPr
                     margin: EdgeInsets.all(10),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white54,
+                      color:
+                          Get.isDarkMode ? Color(0xFF1B2937) : Colors.white54,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Column(
                       children: [
                         TabBar(
                           isScrollable: true,
-                          labelColor: Get.isDarkMode ? Colors.white : Colors.green[600],
-                          unselectedLabelColor: Get.isDarkMode ? Colors.grey[300] : Colors.grey,
+                          labelColor:
+                              Get.isDarkMode ? Colors.white : Colors.green[600],
+                          unselectedLabelColor:
+                              Get.isDarkMode ? Colors.grey[300] : Colors.grey,
                           indicator: BoxDecoration(
-                            color: Get.isDarkMode ? Colors.blue : Colors.green[200],
+                            color: Get.isDarkMode
+                                ? Colors.blue
+                                : Colors.green[200],
                             borderRadius: BorderRadius.circular(25),
                           ),
                           controller: _tabController,

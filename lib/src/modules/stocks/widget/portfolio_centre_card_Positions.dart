@@ -91,8 +91,11 @@ class _CentreCardinPositionsState extends State<CentreCardinPositions> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      // controller.calculateTotalPositionPnl().toString(),
-                      widget.pnlInPosition,
+                      FormatHelper.formatNumbers(
+                          controller.calculateTotalPositionpnl(),
+                          decimal: 2),
+
+                      // widget.pnlInPosition,
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: widget.pnlInPosition != null
                             ? widget.pnlInPosition.startsWith('-')
@@ -103,24 +106,26 @@ class _CentreCardinPositionsState extends State<CentreCardinPositions> {
                       ),
                     ),
                     Text(
-                      '${(controller.calculateTotalPositionInvested() == 0 || controller.calculateTotalPositionroi() == null) ? '0.00' : widget.roiPositions}%',
+                      '${(controller.calculateTotalPositionInvested() == 0 || controller.calculateTotalPositionroi() == null) ? '0.00' : FormatHelper.formatNumbers(controller.calculateTotalPositionroi(), decimal: 2)}%',
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: controller.calculateTotalPositionroi() != null
-                            ? controller
-                                    .calculateTotalPositionroi()
-                                    .startsWith('-')
+                            ? controller.calculateTotalPositionroi() < 0
                                 ? AppColors.danger
                                 : AppColors.success
                             : AppColors.success,
                       ),
                     ),
                     Text(
-                      controller.calculateTotalPositionInvested(),
+                      FormatHelper.formatNumbers(
+                          controller.calculateTotalPositionInvested(),
+                          decimal: 2),
                       style: AppStyles.tsBlackMedium12
                           .copyWith(color: AppColors.success),
                     ),
                     Text(
-                      controller.calculateTotalPositionCurrentValue(),
+                      FormatHelper.formatNumbers(
+                          controller.calculateTotalPositionCurrentValue(),
+                          decimal: 2),
                       style: AppStyles.tsBlackMedium12
                           .copyWith(color: AppColors.success),
                     ),

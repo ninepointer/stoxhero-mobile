@@ -113,25 +113,29 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                       ),
                     ),
                     Text(
-                      '${(controller.calculateTotalHoldingInvested() == 0 || controller.calculateTotalHoldingroi() == null) ? '0.00' : widget.roiHoldings}%',
+                      '${(controller.calculateTotalHoldingInvested() == 0 || controller.calculateTotalHoldingroi() == null) ? '0.00' : FormatHelper.formatNumbers(controller.calculateTotalHoldingroi(), decimal: 2)}%',
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: controller.calculateTotalHoldingroi() != null
-                            ? controller
-                                    .calculateTotalHoldingroi()
-                                    .startsWith('-')
+                            ? (controller.calculateTotalHoldingroi() < 0
                                 ? AppColors.danger
-                                : AppColors.success
+                                : AppColors.success)
                             : AppColors.success,
                       ),
                     ),
                     Text(
-                      controller.calculateTotalHoldingInvested(),
+                      FormatHelper.formatNumbers(
+                        controller.calculateTotalHoldingInvested(),
+                        decimal: 2,
+                      ),
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: AppColors.success,
                       ),
                     ),
                     Text(
-                      controller.calculateTotalHoldingCurrentValue(),
+                      FormatHelper.formatNumbers(
+                        controller.calculateTotalHoldingCurrentValue(),
+                        decimal: 2,
+                      ),
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: AppColors.success,
                       ),

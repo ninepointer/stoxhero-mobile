@@ -217,10 +217,10 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
                                                       .getInstrumentChanges(
                                                     stock.instrumentToken ?? 0,
                                                     stock.exchangeToken ?? 0,
-                                                  )) >=
+                                                  )) <
                                                   0
-                                              ? AppColors.success
-                                              : AppColors.danger,
+                                              ? AppColors.danger
+                                              : AppColors.success,
                                         ),
                                       ),
                                     ],
