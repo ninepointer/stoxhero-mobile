@@ -1503,6 +1503,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data != null) {
         if (response.data?.data! != null) {
           stockHoldingsList(response.data?.data ?? []);
+          stockHoldingsList.refresh();
           calculateTotalHoldingValues();
         }
       } else {
