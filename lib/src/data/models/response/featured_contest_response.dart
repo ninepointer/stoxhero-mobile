@@ -233,7 +233,7 @@ class FeaturedPortfolio {
 class FeaturedRewards {
   int? rankStart;
   int? rankEnd;
-  dynamic prize;
+  num? prize;
   String? id;
 
   FeaturedRewards({
