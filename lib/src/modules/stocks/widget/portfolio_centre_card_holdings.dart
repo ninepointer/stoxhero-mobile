@@ -95,15 +95,6 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                         controller.calculateTotalHoldingPnl(),
                         decimal: 2,
                       ),
-
-                      // controller.calculateTotalHoldingPnl().toString(),
-
-                      //  (invested == 0)
-                      //     ? '₹0.00'
-                      //     : FormatHelper.formatNumbers(
-                      //         pnlInHoldings,
-                      //         decimal: 2,
-                      //       ),
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: widget.pnlInHoldings != null
                             ? widget.pnlInHoldings.startsWith('-')
