@@ -45,8 +45,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
 
   @override
   Widget build(BuildContext context) {
-    num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
-        (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
+    num InvestedValue = controller.calculateTotalHoldingInvested() +
+        controller.calculateTotalPositionInvested();
+    // num InvestedValue = (controller.stockTotalHoldingDetails.value.net ?? 0) +
+    //     (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
 
     // num TotalOpenPositions = (controller.getOpenPositionCount()) +
     //     (controller.getOpenHoldingCount());
@@ -68,14 +70,19 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
     num brokerage =
         ((controller.stockTotalHoldingDetails.value.brokerage ?? 0) +
             (controller.stockTotalPositionDetails.value.brokerage ?? 0));
+    // (controller
+    //                                           .calculateTotalPositionBrokerage() +
+    //                                       controller
+    //                                           .calculateTotalHoldingBrokerage())
 
     num availablemarginat0 = ((PnL - brokerage) +
         (controller.stockfundsmargin.value.totalFund ?? 0));
     // num CurrentValue =
     //     (controller.stockTotalHoldingDetails.value.currentvalue ?? 0) +
     //         (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
-    num CurrentValue = (PnL - brokerage) + InvestedValue;
-
+    // num CurrentValue =
+    //     (controller.calculateTotalPortfolioPnl() - brokerage) + InvestedValue;
+    print('paisa brokerage inside ${brokerage}');
     return Obx(
       () => Column(
         children: [
@@ -134,7 +141,11 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                   style: AppStyles.tsGreyRegular12,
                                 ),
                                 Text(
-                                  FormatHelper.formatNumbers(InvestedValue,
+                                  FormatHelper.formatNumbers(
+                                      controller
+                                              .calculateTotalHoldingInvested() +
+                                          controller
+                                              .calculateTotalPositionInvested(),
                                       decimal: 2),
                                   // FormatHelper.formatNumbers(((controller
                                   //             .stockTotalHoldingDetails
@@ -180,9 +191,19 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                   style: AppStyles.tsGreyRegular12,
                                 ),
                                 Text(
-                                  ((PnL - brokerage) < 0)
+                                  ((controller.calculateTotalPortfolioPnl() -
+                                              (controller
+                                                      .calculateTotalPositionBrokerage() +
+                                                  controller
+                                                      .calculateTotalHoldingBrokerage())) <
+                                          0)
                                       ? FormatHelper.formatNumbers(
-                                          (PnL - brokerage).abs(),
+                                          (controller.calculateTotalPortfolioPnl() -
+                                                  (controller
+                                                          .calculateTotalPositionBrokerage() +
+                                                      controller
+                                                          .calculateTotalHoldingBrokerage()))
+                                              .abs(),
                                           decimal: 2)
                                       : "₹00.00",
                                   // FormatHelper.formatNumbers(MarginUsed,
@@ -234,12 +255,21 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                         //             0)))),
 
                                         FormatHelper.formatNumbers(
-                                            (controller.calculateTotalPortfolioPnl() - brokerage),
+                                            (controller
+                                                    .calculateTotalPortfolioPnl() -
+                                                ((controller
+                                                        .calculateTotalPositionBrokerage() +
+                                                    controller
+                                                        .calculateTotalHoldingBrokerage()))),
                                             decimal: 2),
                                         style: TextStyle(
-                                          color: (double.tryParse(
-                                                          (PnL - brokerage)
-                                                              .toString()) ??
+                                          color: (double.tryParse((controller
+                                                                  .calculateTotalPortfolioPnl() -
+                                                              ((controller
+                                                                      .calculateTotalPositionBrokerage() +
+                                                                  controller
+                                                                      .calculateTotalHoldingBrokerage())))
+                                                          .toString()) ??
                                                       0) <
                                                   0
                                               ? AppColors.danger
@@ -260,8 +290,14 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                   style: AppStyles.tsGreyRegular12,
                                 ),
                                 Text(
-                                  FormatHelper.formatNumbers(CurrentValue,
-                                      decimal: 2),
+                                  (InvestedValue == 0)
+                                      ? "₹00.00"
+                                      : FormatHelper.formatNumbers(
+                                          (controller
+                                                  .calculateTotalHoldingCurrentValue() +
+                                              controller
+                                                  .calculateTotalPositionCurrentValue()),
+                                          decimal: 2),
                                   // FormatHelper.formatNumbers(((controller
                                   //             .stockTotalHoldingDetails
                                   //             .value
@@ -273,7 +309,11 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
 
                                   //'how',
                                   style: AppStyles.tsBlackMedium14.copyWith(
-                                      color: (CurrentValue < InvestedValue)
+                                      color: ((controller
+                                                      .calculateTotalHoldingCurrentValue() +
+                                                  controller
+                                                      .calculateTotalPositionCurrentValue()) <
+                                              InvestedValue)
                                           ? AppColors.danger
                                           : AppColors.success),
                                 ),
@@ -318,7 +358,9 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                 ),
                                 Text(
                                   // TotalOpenPositions.toString(),
-                                  OPenPositions.toString(),
+                                  (controller.getOpenPositionCount() +
+                                          controller.getOpenHoldingCount())
+                                      .toString(),
                                   // ((controller
                                   //         .getOpenPositionCount()
                                   //         .toString()) +

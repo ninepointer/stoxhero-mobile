@@ -41,13 +41,16 @@ class FeaturedContestResponse {
     data['status'] = this.status;
     data['message'] = this.message;
     if (this.liveFeatured != null) {
-      data['stoxheroLiveFeatured'] = this.liveFeatured!.map((v) => v.toJson()).toList();
+      data['stoxheroLiveFeatured'] =
+          this.liveFeatured!.map((v) => v.toJson()).toList();
     }
     if (this.upcomingFeatured != null) {
-      data['stoxheroUpcomingFeatured'] = this.upcomingFeatured!.map((v) => v.toJson()).toList();
+      data['stoxheroUpcomingFeatured'] =
+          this.upcomingFeatured!.map((v) => v.toJson()).toList();
     }
     if (this.collegeContest != null) {
-      data['collegeContests'] = this.collegeContest!.map((v) => v.toJson()).toList();
+      data['collegeContests'] =
+          this.collegeContest!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -130,7 +133,9 @@ class LiveFeatured {
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
-    portfolio = json['portfolio'] != null ? new FeaturedPortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null
+        ? new FeaturedPortfolio.fromJson(json['portfolio'])
+        : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -228,7 +233,7 @@ class FeaturedPortfolio {
 class FeaturedRewards {
   int? rankStart;
   int? rankEnd;
-  num? prize;
+  dynamic prize;
   String? id;
 
   FeaturedRewards({
@@ -273,7 +278,9 @@ class FeaturedParticipants {
   });
 
   FeaturedParticipants.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new FeaturedUserId.fromJson(json['userId']) : null;
+    userId = json['userId'] != null
+        ? new FeaturedUserId.fromJson(json['userId'])
+        : null;
     fee = json['fee'];
     actualPrice = json['actualPrice'];
     participatedOn = json['participatedOn'];
@@ -408,7 +415,9 @@ class UpcomingFeatured {
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     payoutType = json['payoutType'];
-    portfolio = json['portfolio'] != null ? new FeaturedPortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null
+        ? new FeaturedPortfolio.fromJson(json['portfolio'])
+        : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -467,7 +476,8 @@ class UpcomingFeatured {
       data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
     }
     if (this.interestedUsers != null) {
-      data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
+      data['interestedUsers'] =
+          this.interestedUsers!.map((v) => v.toJson()).toList();
     }
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
@@ -485,10 +495,13 @@ class FeaturedInterestedUsers {
   String? status;
   String? sId;
 
-  FeaturedInterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
+  FeaturedInterestedUsers(
+      {this.userId, this.registeredOn, this.status, this.sId});
 
   FeaturedInterestedUsers.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new FeaturedUserId.fromJson(json['userId']) : null;
+    userId = json['userId'] != null
+        ? new FeaturedUserId.fromJson(json['userId'])
+        : null;
     registeredOn = json['registeredOn'];
     status = json['status'];
     sId = json['_id'];
@@ -584,7 +597,9 @@ class FeaturedCollegeContest {
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     payoutType = json['payoutType'];
-    portfolio = json['portfolio'] != null ? new FeaturedPortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null
+        ? new FeaturedPortfolio.fromJson(json['portfolio'])
+        : null;
     college = json['college'];
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];

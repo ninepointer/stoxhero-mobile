@@ -43,21 +43,16 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
 
         Obx(
           () => CentreCardHoldings(
-            invested: FormatHelper.formatNumbers(
-                controller.stockTotalHoldingDetails.value.net.toString(),
-                decimal: 2),
-            currentvalue: FormatHelper.formatNumbers(
-                controller.stockTotalHoldingDetails.value.currentvalue
-                    .toString(),
+            invested: FormatHelper.formatNumbers(controller.stockTotalHoldingDetails.value.net.toString(), decimal: 2),
+            currentvalue: FormatHelper.formatNumbers(controller.stockTotalHoldingDetails.value.currentvalue.toString(),
                 decimal: 2),
             roiHoldings: FormatHelper.formatNumbers(
               controller.stockTotalHoldingDetails.value.roi.toString(),
               decimal: 2,
               showSymbol: false,
             ),
-            pnlInHoldings: FormatHelper.formatNumbers(
-                controller.stockTotalHoldingDetails.value.pnl.toString(),
-                decimal: 2),
+            pnlInHoldings:
+                FormatHelper.formatNumbers(controller.stockTotalHoldingDetails.value.pnl.toString(), decimal: 2),
           ),
         ),
         // cards ka UI
@@ -67,26 +62,23 @@ class _PortfolioHoldingState extends State<PortfolioHolding> {
           left: 0,
           right: 0,
           bottom: 0,
-          child: GetBuilder<StocksTradingController>(
-            builder: (controller) {
-              return ListView.builder(
-                itemCount: controller
-                    .stockHoldingsList.length, // Adjust based on your data
-                itemBuilder: (context, index) {
-                  // Access data from the controller's positions list
-                  var holding = controller.stockHoldingsList[index];
-                  if (holding != null && holding.iId?.isLimit == null) {
-                    return HoldingsCard(
-                      holding: holding,
-                    );
-                  } else {
-                    return SizedBox();
-                  }
+          child: Obx(
+            () => ListView.builder(
+              itemCount: controller.stockHoldingsList.length, // Adjust based on your data
+              itemBuilder: (context, index) {
+                // Access data from the controller's positions list
+                var holding = controller.stockHoldingsList[index];
+                if (holding != null && holding.iId?.isLimit == null) {
+                  return HoldingsCard(
+                    holding: holding,
+                  );
+                } else {
+                  return SizedBox();
+                }
 
-                  // Add more cards as needed
-                },
-              );
-            },
+                // Add more cards as needed
+              },
+            ),
           ),
         ),
       ],

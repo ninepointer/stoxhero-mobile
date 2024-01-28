@@ -72,19 +72,18 @@ class _FundsState extends State<Funds> {
     num OPenPositions =
         controller.getOpenPositionCount() + controller.getOpenHoldingCount();
 
-    num PnL = ((controller.stockTotalHoldingDetails.value.pnl ?? 0) +
-        (controller.stockTotalPositionDetails.value.pnl ?? 0));
+    // num PnL = ((controller.stockTotalHoldingDetails.value.pnl ?? 0) +
+    //     (controller.stockTotalPositionDetails.value.pnl ?? 0));
 
-    num brokerage =
-        ((controller.stockTotalHoldingDetails.value.brokerage ?? 0) +
-            (controller.stockTotalPositionDetails.value.brokerage ?? 0));
+    num brokerage = (controller.calculateTotalPositionBrokerage() +
+        controller.calculateTotalHoldingBrokerage());
 
-    num investmentamount =
-        (controller.stockTotalHoldingDetails.value.net ?? 0) +
-            (controller.stockTotalPositionDetails.value.holdingnet ?? 0);
+    num InvestedValue = controller.calculateTotalHoldingInvested() +
+        controller.calculateTotalPositionInvested();
 
-    num availablemarginat0 = ((PnL - brokerage) +
-        (controller.stockfundsmargin.value.totalFund ?? 0));
+    num availablemarginat0 =
+        ((controller.calculateTotalPortfolioPnl() - brokerage) +
+            (controller.stockfundsmargin.value.totalFund ?? 0));
 
     return Padding(
       padding: const EdgeInsets.only(top: 8),
@@ -109,6 +108,72 @@ class _FundsState extends State<Funds> {
         child: ListView(
           children: [
             FundsCard(
+                cardname: "Profit & Loss",
+                cardvalue: FormatHelper.formatNumbers(
+                    controller.calculateTotalPortfolioPnl() -
+                        (controller.calculateTotalPositionBrokerage() +
+                            controller.calculateTotalHoldingBrokerage()),
+                    decimal: 2),
+                style: TextStyle(
+                  color: (double.tryParse((controller
+                                          .calculateTotalPortfolioPnl() -
+                                      (controller
+                                              .calculateTotalPositionBrokerage() +
+                                          controller
+                                              .calculateTotalHoldingBrokerage()))
+                                  .toString()) ??
+                              0) <
+                          0
+                      ? AppColors.danger
+                      : AppColors.success,
+                  fontFamily: AppTheme.fontFamily,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+                index: 1),
+            SizedBox(
+              height: 5,
+            ),
+            FundsCard(
+              cardname: "Unrealised P&L",
+              cardvalue: FormatHelper.formatNumbers(
+                  controller.calculateTotalPortfolioPnl() < 0
+                      ? 0
+                      : controller.calculateTotalPortfolioPnl(),
+                  decimal: 2),
+              style: TextStyle(
+                color: AppColors.success,
+                fontFamily: AppTheme.fontFamily,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+              index: 2,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            FundsCard(
+                style: AppStyles.tsBlackMedium14.copyWith(
+                    color: Get.isDarkMode ? Colors.white : Colors.black),
+                cardname: "Margin Used",
+                cardvalue: ((controller.calculateTotalPortfolioPnl() -
+                            (controller.calculateTotalPositionBrokerage() +
+                                controller.calculateTotalHoldingBrokerage())) <
+                        0)
+                    ? FormatHelper.formatNumbers(
+                        (controller.calculateTotalPortfolioPnl() -
+                                (controller.calculateTotalPositionBrokerage() +
+                                    controller
+                                        .calculateTotalHoldingBrokerage()))
+                            .abs(),
+                        decimal: 2)
+                    : "₹00.00",
+                //  FormatHelper.formatNumbers(MarginUsed.abs(), decimal: 2),
+                index: 3),
+            SizedBox(
+              height: 5,
+            ),
+            FundsCard(
                 style: AppStyles.tsBlackMedium14.copyWith(
                     color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin available",
@@ -123,30 +188,18 @@ class _FundsState extends State<Funds> {
                 //   controller.calculateMargin().round().toString(),
                 //   decimal: 2,
                 // ),
-                index: 0),
+                index: 4),
             SizedBox(
               height: 5,
             ),
-            FundsCard(
-                style: AppStyles.tsBlackMedium14.copyWith(
-                    color: Get.isDarkMode ? Colors.white : Colors.black),
-                cardname: "Margin Used",
-                cardvalue: ((PnL - brokerage) < 0)
-                    ? FormatHelper.formatNumbers((PnL - brokerage).abs(),
-                        decimal: 2)
-                    : "₹00.00",
-                //  FormatHelper.formatNumbers(MarginUsed.abs(), decimal: 2),
-                index: 1),
-            SizedBox(
-              height: 5,
-            ),
+
             FundsCard(
                 style: AppStyles.tsBlackMedium14.copyWith(
                     color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Allocated Margin",
                 cardvalue: FormatHelper.formatNumbers(
                     controller.stockfundsmargin.value.totalFund.toString()),
-                index: 2),
+                index: 5),
             SizedBox(
               height: 5,
             ),
@@ -154,40 +207,19 @@ class _FundsState extends State<Funds> {
                 style: AppStyles.tsBlackMedium14.copyWith(
                     color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Investment Amount",
-                cardvalue: FormatHelper.formatNumbers(investmentamount.abs(),
-                    decimal: 2),
-                index: 3),
-            SizedBox(
-              height: 5,
-            ),
-            FundsCard(
-                cardname: "Returns",
                 cardvalue:
-                    FormatHelper.formatNumbers(PnL - brokerage, decimal: 2),
-                style: TextStyle(
-                  color:
-                      (double.tryParse((PnL - brokerage).toString()) ?? 0) < 0
-                          ? AppColors.danger
-                          : AppColors.success,
-                  fontFamily: AppTheme.fontFamily,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                ),
-                index: 4),
+                    FormatHelper.formatNumbers(InvestedValue.abs(), decimal: 2),
+                index: 6),
             SizedBox(
               height: 5,
             ),
+
             FundsCard(
-              cardname: "Unrealised P&L",
-              cardvalue:
-                  FormatHelper.formatNumbers(PnL < 0 ? 0 : PnL, decimal: 2),
-              style: TextStyle(
-                color: AppColors.success,
-                fontFamily: AppTheme.fontFamily,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-              ),
-              index: 5,
+              cardname: "Brokerage",
+              cardvalue: FormatHelper.formatNumbers(brokerage),
+              style: AppStyles.tsBlackMedium14.copyWith(
+                  color: Get.isDarkMode ? Colors.white : Colors.black),
+              index: 7,
             ),
 
             // FundsCard(
