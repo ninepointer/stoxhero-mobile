@@ -145,7 +145,7 @@ class StocksStoplossEditPriceBottomSheet
                                       controller
                                           .stopLossPriceTextController.text);
                                   if (stopLossPrice != null) {
-                                    if (stopLossPrice >=
+                                    if (stopLossPrice >
                                         controller.getInstrumentLastPrice(
                                           stopLoss.instrumentToken!,
                                           stopLoss.exchangeInstrumentToken!,
@@ -171,7 +171,7 @@ class StocksStoplossEditPriceBottomSheet
                                       controller
                                           .stopProfitPriceTextController.text);
                                   if (stopProfitPrice != null) {
-                                    if (stopProfitPrice <=
+                                    if (stopProfitPrice <
                                         controller.getInstrumentLastPrice(
                                           stopLoss.instrumentToken!,
                                           stopLoss.exchangeInstrumentToken!,
@@ -195,7 +195,7 @@ class StocksStoplossEditPriceBottomSheet
                                   final limitPrice = double.tryParse(
                                       controller.limitPriceTextController.text);
                                   if (limitPrice != null) {
-                                    if (limitPrice <=
+                                    if (limitPrice <
                                         controller.getInstrumentLastPrice(
                                           stopLoss.instrumentToken!,
                                           stopLoss.exchangeInstrumentToken!,
@@ -223,7 +223,7 @@ class StocksStoplossEditPriceBottomSheet
                                       controller
                                           .stopLossPriceTextController.text);
                                   if (stopLossPrice != null) {
-                                    if (stopLossPrice <=
+                                    if (stopLossPrice <
                                         controller.getInstrumentLastPrice(
                                           stopLoss.instrumentToken!,
                                           stopLoss.exchangeInstrumentToken!,

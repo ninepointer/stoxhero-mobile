@@ -484,8 +484,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
               data.symbol ?? "",
             );
         }
-        print(
-            'equityInstrumentDetailList : ${equityInstrumentDetailList.length}');
+        // print(
+        //     'equityInstrumentDetailList : ${equityInstrumentDetailList.length}');
         update();
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -632,7 +632,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           await repository.stockPlaceOrder(
         data.toJson(),
       );
-      print("harsh${response.data}");
+      // print("harsh${response.data}");
       Get.back();
 
       if (response.data?.status == "Complete") {
@@ -945,7 +945,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
                             .abs() +
                         (holdinglimitMargin + positionlimitMargin))))
             : (openingBalance - (holdingmargin + positionmargin));
-    print('a21e ${availableMargin}');
+    // print('a21e ${availableMargin}');
     return availableMargin;
   }
 
@@ -1350,7 +1350,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         } else {}
       }
     }
-    print('paisa holding ${totalPnlholding}');
+    // print('paisa holding ${totalPnlholding}');
     num finalPortfolioPnl = (totalPnlholding);
     return finalPortfolioPnl;
   }
@@ -1602,11 +1602,11 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         } else {}
       }
     }
-    print('paisa holding inside ${totalPnlholding}');
-    print('paisa position inside ${totalPnlPosition}');
+    // print('paisa holding inside ${totalPnlholding}');
+    // print('paisa position inside ${totalPnlPosition}');
 
     num finalPortfolioPnl = (totalPnlPosition + totalPnlholding);
-    print('paisa total inside ${finalPortfolioPnl}');
+   // print('paisa total inside ${finalPortfolioPnl}');
     // String finalPortfolioPnl = FormatHelper.formatNumbers(
     //   (totalPnlPosition+totalPnlholding),
     //   decimal: 2,
@@ -1708,7 +1708,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data != null) {
         if (response.data?.data! != null) {
           stoplossQuantityList(response.data?.quantity ?? []);
-          print("stoplossQuantityList${stoplossQuantityList.length}");
+        //  print("stoplossQuantityList${stoplossQuantityList.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1780,7 +1780,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
-      print('hiii${stockfundsmargin.toJson()}');
+     // print('hiii${stockfundsmargin.toJson()}');
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

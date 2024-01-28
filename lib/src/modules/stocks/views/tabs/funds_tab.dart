@@ -177,7 +177,8 @@ class _FundsState extends State<Funds> {
                 style: AppStyles.tsBlackMedium14.copyWith(
                     color: Get.isDarkMode ? Colors.white : Colors.black),
                 cardname: "Margin available",
-                cardvalue: (OPenPositions > 0)
+                cardvalue: ( (controller.getOpenPositionCount() + controller.getOpenHoldingCount())//open Positions
+                > 0)
                     ? (FormatHelper.formatNumbers(
                         controller.calculateMargin().round().toString(),
                         decimal: 2,
