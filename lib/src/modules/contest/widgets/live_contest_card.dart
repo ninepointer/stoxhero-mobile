@@ -156,11 +156,18 @@ class LiveContestCard extends GetView<ContestController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (contest?.payoutType == 'Reward') ...[
-                    Text(
-                      'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
-                      style: Theme.of(context).textTheme.tsGreyRegular12,
-                      textAlign: TextAlign.center,
-                    )
+                    if (contest?.rewardType == "Goodies")
+                      Text(
+                        "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        textAlign: TextAlign.center,
+                      )
+                    else
+                      Text(
+                        'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        textAlign: TextAlign.center,
+                      )
                   ],
                   if (contest?.payoutType != 'Reward') ...[
                     if (contest?.payoutCapPercentage != null &&

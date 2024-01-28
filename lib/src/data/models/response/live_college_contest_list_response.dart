@@ -108,7 +108,9 @@ class LiveCollegeContest {
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     payoutType = json['payoutType'];
-    portfolio = json['portfolio'] != null ? new CollegePortfolio.fromJson(json['portfolio']) : null;
+    portfolio = json['portfolio'] != null
+        ? new CollegePortfolio.fromJson(json['portfolio'])
+        : null;
     college = json['college'];
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
@@ -182,27 +184,63 @@ class LiveCollegeContest {
   }
 }
 
+// class LiveCollegeRewards {
+//   int? rankStart;
+//   int? rankEnd;
+//   num? prize;
+//   String? id;
+
+//   LiveCollegeRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+
+//   LiveCollegeRewards.fromJson(Map<String, dynamic> json) {
+//     rankStart = json['rankStart'];
+//     rankEnd = json['rankEnd'];
+//     prize = json['prize'];
+//     id = json['_id'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['rankStart'] = this.rankStart;
+//     data['rankEnd'] = this.rankEnd;
+//     data['prize'] = this.prize;
+//     data['_id'] = this.id;
+//     return data;
+//   }
+// }
 class LiveCollegeRewards {
   int? rankStart;
   int? rankEnd;
-  num? prize;
-  String? id;
+  String? sId;
+  dynamic prize; // Change the type to dynamic
 
-  LiveCollegeRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+  LiveCollegeRewards({this.rankStart, this.rankEnd, this.sId, this.prize});
 
-  LiveCollegeRewards.fromJson(Map<String, dynamic> json) {
-    rankStart = json['rankStart'];
-    rankEnd = json['rankEnd'];
-    prize = json['prize'];
-    id = json['_id'];
+  // Factory method to create a Rewards instance from JSON
+  factory LiveCollegeRewards.fromJson(Map<String, dynamic> json) {
+    return LiveCollegeRewards(
+      rankStart: json['rankStart'],
+      rankEnd: json['rankEnd'],
+      sId: json['_id'],
+      prize: json['prize'],
+    );
   }
 
+  // Convert the instance to a JSON representation
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['rankStart'] = this.rankStart;
-    data['rankEnd'] = this.rankEnd;
-    data['prize'] = this.prize;
-    data['_id'] = this.id;
+    final Map<String, dynamic> data = {
+      'rankStart': rankStart,
+      'rankEnd': rankEnd,
+      '_id': sId,
+    };
+
+    // Check the type of prize and add it to the JSON
+    if (prize is String) {
+      data['prize'] = prize;
+    } else if (prize is num) {
+      data['prize'] = prize;
+    }
+
     return data;
   }
 }
@@ -237,10 +275,18 @@ class CollegeParticipants {
   num? actualPrice;
   bool? isLive;
 
-  CollegeParticipants({this.userId, this.participatedOn, this.sId, this.fee, this.actualPrice, this.isLive});
+  CollegeParticipants(
+      {this.userId,
+      this.participatedOn,
+      this.sId,
+      this.fee,
+      this.actualPrice,
+      this.isLive});
 
   CollegeParticipants.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new CollegeUserId.fromJson(json['userId']) : null;
+    userId = json['userId'] != null
+        ? new CollegeUserId.fromJson(json['userId'])
+        : null;
     participatedOn = json['participatedOn'];
     sId = json['_id'];
     fee = json['fee'];
@@ -270,7 +316,13 @@ class CollegeUserId {
   String? lastName;
   String? mobile;
 
-  CollegeUserId({this.sId, this.creationProcess, this.email, this.firstName, this.lastName, this.mobile});
+  CollegeUserId(
+      {this.sId,
+      this.creationProcess,
+      this.email,
+      this.firstName,
+      this.lastName,
+      this.mobile});
 
   CollegeUserId.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

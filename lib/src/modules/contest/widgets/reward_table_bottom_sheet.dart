@@ -156,7 +156,9 @@ class RewardTableBottomSheet extends GetView<ContestController> {
             padding: EdgeInsets.symmetric(vertical: 12),
             alignment: Alignment.center,
             child: Text(
-              FormatHelper.formatNumbers(reward.prize, decimal: 0),
+              reward.prize is num
+                  ? FormatHelper.formatNumbers(reward.prize, decimal: 0)
+                  : "${reward.prize}",
               style: Theme.of(context).textTheme.tsMedium12,
             ),
           ),

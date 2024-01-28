@@ -65,12 +65,22 @@ class LiveFeaturedCard extends GetView<ContestController> {
                             child: Row(
                               children: [
                                 if (liveFeatured?.payoutType == 'Reward') ...[
-                                  Text(
-                                    'Rewards worth ${controller.calculateTotalReward(liveFeatured?.rewards)},Click to know more.',
-                                    style:
-                                        Theme.of(context).textTheme.tsMedium12,
-                                    textAlign: TextAlign.center,
-                                  )
+                                  if (liveFeatured?.rewardType == "Goodies")
+                                    Text(
+                                      "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}!, Click to know more",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsGreyRegular12,
+                                      textAlign: TextAlign.center,
+                                    )
+                                  else
+                                    Text(
+                                      'Rewards worth ${controller.calculateTotalReward(liveFeatured?.rewards)}, Click to know more',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsGreyRegular12,
+                                      textAlign: TextAlign.center,
+                                    )
                                 ],
                                 if (liveFeatured?.payoutType != 'Reward') ...[
                                   Text(

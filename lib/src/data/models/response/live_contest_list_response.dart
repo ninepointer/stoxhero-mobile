@@ -52,6 +52,7 @@ class LiveContest {
   String? product;
   num? payoutCapPercentage;
   List<Rewards>? rewards;
+  String? rewardType;
   List<LiveInterestedUsers>? interestedUsers;
   List<Participants>? participants;
   String? createdOn;
@@ -73,6 +74,7 @@ class LiveContest {
       this.payoutPercentage,
       this.featured,
       this.portfolio,
+      this.rewardType,
       this.maxParticipants,
       this.contestStatus,
       this.createdBy,
@@ -103,6 +105,7 @@ class LiveContest {
     currentLiveStatus = json['currentLiveStatus'];
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
+    rewardType = json["rewardType"];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     portfolio = json['portfolio'] != null
@@ -155,6 +158,7 @@ class LiveContest {
     data['currentLiveStatus'] = this.currentLiveStatus;
     data['contestFor'] = this.contestFor;
     data['entryFee'] = this.entryFee;
+    data['rewardType'] = this.rewardType;
     data['payoutPercentage'] = this.payoutPercentage;
     data['featured'] = this.featured;
     if (this.portfolio != null) {
@@ -212,27 +216,63 @@ class LiveContestPortfolio {
   }
 }
 
+// class Rewards {
+//   int? rankStart;
+//   int? rankEnd;
+//   num? prize;
+//   String? sId;
+
+//   Rewards({this.rankStart, this.rankEnd, this.prize, this.sId});
+
+//   Rewards.fromJson(Map<String, dynamic> json) {
+//     rankStart = json['rankStart'];
+//     rankEnd = json['rankEnd'];
+//     prize = json['prize'];
+//     sId = json['_id'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['rankStart'] = this.rankStart;
+//     data['rankEnd'] = this.rankEnd;
+//     data['prize'] = this.prize;
+//     data['_id'] = this.sId;
+//     return data;
+//   }
+// }
 class Rewards {
   int? rankStart;
   int? rankEnd;
-  num? prize;
   String? sId;
+  dynamic prize; // Change the type to dynamic
 
-  Rewards({this.rankStart, this.rankEnd, this.prize, this.sId});
+  Rewards({this.rankStart, this.rankEnd, this.sId, this.prize});
 
-  Rewards.fromJson(Map<String, dynamic> json) {
-    rankStart = json['rankStart'];
-    rankEnd = json['rankEnd'];
-    prize = json['prize'];
-    sId = json['_id'];
+  // Factory method to create a Rewards instance from JSON
+  factory Rewards.fromJson(Map<String, dynamic> json) {
+    return Rewards(
+      rankStart: json['rankStart'],
+      rankEnd: json['rankEnd'],
+      sId: json['_id'],
+      prize: json['prize'],
+    );
   }
 
+  // Convert the instance to a JSON representation
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['rankStart'] = this.rankStart;
-    data['rankEnd'] = this.rankEnd;
-    data['prize'] = this.prize;
-    data['_id'] = this.sId;
+    final Map<String, dynamic> data = {
+      'rankStart': rankStart,
+      'rankEnd': rankEnd,
+      '_id': sId,
+    };
+
+    // Check the type of prize and add it to the JSON
+    if (prize is String) {
+      data['prize'] = prize;
+    } else if (prize is num) {
+      data['prize'] = prize;
+    }
+
     return data;
   }
 }

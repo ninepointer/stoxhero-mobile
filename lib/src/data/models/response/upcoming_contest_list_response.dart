@@ -61,6 +61,7 @@ class UpComingContest {
   int? iV;
   String? payoutType;
   String? payoutPercentageType;
+  String? rewardType;
 
   UpComingContest({
     this.id,
@@ -94,6 +95,7 @@ class UpComingContest {
     this.iV,
     this.payoutType,
     this.payoutPercentageType,
+    this.rewardType,
   });
 
   UpComingContest.fromJson(Map<String, dynamic> json) {
@@ -108,7 +110,10 @@ class UpComingContest {
     entryFee = json['entryFee'];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
-    portfolio = json['portfolio'] != null ? new ContestPortfolio.fromJson(json['portfolio']) : null;
+    rewardType = json['rewardType'];
+    portfolio = json['portfolio'] != null
+        ? new ContestPortfolio.fromJson(json['portfolio'])
+        : null;
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -156,6 +161,7 @@ class UpComingContest {
     data['currentLiveStatus'] = this.currentLiveStatus;
     data['contestFor'] = this.contestFor;
     data['entryFee'] = this.entryFee;
+    data['rewardType'] = this.rewardType;
     data['payoutPercentage'] = this.payoutPercentage;
     data['featured'] = this.featured;
     if (this.portfolio != null) {
@@ -176,7 +182,8 @@ class UpComingContest {
       data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
     }
     if (this.interestedUsers != null) {
-      data['interestedUsers'] = this.interestedUsers!.map((v) => v.toJson()).toList();
+      data['interestedUsers'] =
+          this.interestedUsers!.map((v) => v.toJson()).toList();
     }
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
@@ -212,27 +219,63 @@ class ContestPortfolio {
   }
 }
 
+// class UpcomingRewards {
+//   int? rankStart;
+//   int? rankEnd;
+//   num? prize;
+//   String? id;
+
+//   UpcomingRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+
+//   UpcomingRewards.fromJson(Map<String, dynamic> json) {
+//     rankStart = json['rankStart'];
+//     rankEnd = json['rankEnd'];
+//     prize = json['prize'];
+//     id = json['_id'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['rankStart'] = this.rankStart;
+//     data['rankEnd'] = this.rankEnd;
+//     data['prize'] = this.prize;
+//     data['_id'] = this.id;
+//     return data;
+//   }
+// }
 class UpcomingRewards {
   int? rankStart;
   int? rankEnd;
-  num? prize;
-  String? id;
+  String? sId;
+  dynamic prize; // Change the type to dynamic
 
-  UpcomingRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+  UpcomingRewards({this.rankStart, this.rankEnd, this.sId, this.prize});
 
-  UpcomingRewards.fromJson(Map<String, dynamic> json) {
-    rankStart = json['rankStart'];
-    rankEnd = json['rankEnd'];
-    prize = json['prize'];
-    id = json['_id'];
+  // Factory method to create a Rewards instance from JSON
+  factory UpcomingRewards.fromJson(Map<String, dynamic> json) {
+    return UpcomingRewards(
+      rankStart: json['rankStart'],
+      rankEnd: json['rankEnd'],
+      sId: json['_id'],
+      prize: json['prize'],
+    );
   }
 
+  // Convert the instance to a JSON representation
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['rankStart'] = this.rankStart;
-    data['rankEnd'] = this.rankEnd;
-    data['prize'] = this.prize;
-    data['_id'] = this.id;
+    final Map<String, dynamic> data = {
+      'rankStart': rankStart,
+      'rankEnd': rankEnd,
+      '_id': sId,
+    };
+
+    // Check the type of prize and add it to the JSON
+    if (prize is String) {
+      data['prize'] = prize;
+    } else if (prize is num) {
+      data['prize'] = prize;
+    }
+
     return data;
   }
 }
@@ -246,7 +289,9 @@ class InterestedUsers {
   InterestedUsers({this.userId, this.registeredOn, this.status, this.sId});
 
   InterestedUsers.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'] != null ? new ContestUserId.fromJson(json['userId']) : null;
+    userId = json['userId'] != null
+        ? new ContestUserId.fromJson(json['userId'])
+        : null;
     registeredOn = json['registeredOn'];
     status = json['status'];
     sId = json['_id'];
@@ -271,7 +316,8 @@ class ContestUserId {
   String? lastName;
   String? mobile;
 
-  ContestUserId({this.id, this.email, this.firstName, this.lastName, this.mobile});
+  ContestUserId(
+      {this.id, this.email, this.firstName, this.lastName, this.mobile});
 
   ContestUserId.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
