@@ -48,7 +48,12 @@ class _HoldingsCardState extends State<HoldingsCard> {
       widget.holding.iId!.instrumentToken!,
       widget.holding.iId!.exchangeInstrumentToken!,
     );
-    controller.selectedStringQuantity.value = widget.holding.lots?.toString() ?? "0";
+    controller.selectedStringQuantity.value =
+        widget.holding.lots?.toString() ?? "0";
+    //for the same value of lots in exit text field
+    //for the same value of lots in exit text field
+    controller.selectedProductGroupValue.value =
+        2; //to select market when coming from limit order thing
     //   controller.generateLotsList(type: position.id?.symbol);
     //   // controller.generateLotsListFoStopLoss(type: position.id?.symbol);
     //   // controller.generateLotsListForStopProfit(type: position.id?.symbol);
@@ -78,7 +83,8 @@ class _HoldingsCardState extends State<HoldingsCard> {
       widget.holding.iId!.instrumentToken!,
       widget.holding.iId!.exchangeInstrumentToken!,
     );
-    controller.selectedStringQuantity.value = widget.holding.lots?.toString() ?? "0";
+    controller.selectedStringQuantity.value =
+        widget.holding.lots?.toString() ?? "0";
     //  await controller
     //     .getVirtualPendingStoplossOrderData(widget.position.iId?.product ?? '');
     // controller.generateLotsList(type: widget.position.iId?.symbol);
@@ -105,7 +111,8 @@ class _HoldingsCardState extends State<HoldingsCard> {
 
   num currentValue() {
     num currentValue = 0;
-    currentValue = (widget.holding.lastaverageprice ?? 0) * (widget.holding.lots?.abs() ?? 0) +
+    currentValue = (widget.holding.lastaverageprice ?? 0) *
+            (widget.holding.lots?.abs() ?? 0) +
         (widget.holding.lots == 0
             ? widget.holding.amount!.toDouble()
             : controller.calculateGrossPNL(
@@ -131,8 +138,11 @@ class _HoldingsCardState extends State<HoldingsCard> {
             SlidableAction(
               onPressed: (context) {
                 if (widget.holding.lots!.toInt() == 0) {
-                  SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
-                } else if (controller.selectedQuantity.value.toString().contains('-')) {
+                  SnackbarHelper.showSnackbar(
+                      "You don't have any open position for this symbol.");
+                } else if (controller.selectedQuantity.value
+                    .toString()
+                    .contains('-')) {
                   openModifyBottomSheet(context, TransactionType.sell);
                 } else {
                   openModifyBottomSheet(context, TransactionType.buy);
@@ -174,8 +184,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                             Text(
                               //name of the stock
                               widget.holding.iId?.symbol ?? "",
-                              style: AppStyles.tsBlackMedium14
-                                  .copyWith(color: Get.isDarkMode ? Colors.white : Colors.black),
+                              style: AppStyles.tsBlackMedium14.copyWith(
+                                  color: Get.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black),
                             ),
                             SizedBox(height: 4),
                             Row(
@@ -211,7 +223,8 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 ),
                                 Text(
                                   // averageprice,
-                                  FormatHelper.formatNumbers(widget.holding.lastaverageprice),
+                                  FormatHelper.formatNumbers(
+                                      widget.holding.lastaverageprice),
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -237,7 +250,9 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                   (widget.holding.lots == 0)
                                       ? '₹0.00'
                                       : FormatHelper.formatNumbers(
-                                          widget.holding.amount?.abs().toString(),
+                                          widget.holding.amount
+                                              ?.abs()
+                                              .toString(),
                                           decimal: 2,
                                         ),
                                   style: TextStyle(
@@ -260,14 +275,17 @@ class _HoldingsCardState extends State<HoldingsCard> {
                               children: [
                                 Text(
                                   widget.holding.lots == 0
-                                      ? FormatHelper.formatNumbers(widget.holding.amount)
+                                      ? FormatHelper.formatNumbers(
+                                          widget.holding.amount)
                                       : FormatHelper.formatNumbers(
                                           controller.calculateGrossPNL(
                                             widget.holding.amount ?? 0,
                                             widget.holding.lots!.toInt(),
                                             controller.getInstrumentLastPrice(
-                                              widget.holding.iId!.instrumentToken!,
-                                              widget.holding.iId!.exchangeInstrumentToken!,
+                                              widget.holding.iId!
+                                                  .instrumentToken!,
+                                              widget.holding.iId!
+                                                  .exchangeInstrumentToken!,
                                             ),
                                           ),
                                         ),
@@ -280,8 +298,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                               widget.holding.amount ?? 0,
                                               widget.holding.lots!.toInt(),
                                               controller.getInstrumentLastPrice(
-                                                widget.holding.iId!.instrumentToken!,
-                                                widget.holding.iId!.exchangeInstrumentToken!,
+                                                widget.holding.iId!
+                                                    .instrumentToken!,
+                                                widget.holding.iId!
+                                                    .exchangeInstrumentToken!,
                                               ),
                                             ),
                                     ),
@@ -294,7 +314,8 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                         widget.holding.lots!.toInt(),
                                         controller.getInstrumentLastPrice(
                                           widget.holding.iId!.instrumentToken!,
-                                          widget.holding.iId!.exchangeInstrumentToken!,
+                                          widget.holding.iId!
+                                              .exchangeInstrumentToken!,
                                         ),
                                       ), decimal: 2, showSymbol: false)}%)',
                                   style: TextStyle(
@@ -306,8 +327,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                               widget.holding.amount ?? 0,
                                               widget.holding.lots!.toInt(),
                                               controller.getInstrumentLastPrice(
-                                                widget.holding.iId!.instrumentToken!,
-                                                widget.holding.iId!.exchangeInstrumentToken!,
+                                                widget.holding.iId!
+                                                    .instrumentToken!,
+                                                widget.holding.iId!
+                                                    .exchangeInstrumentToken!,
                                               ),
                                             ),
                                     ),
@@ -333,7 +356,8 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                   FormatHelper.formatNumbers(
                                     controller.getInstrumentLastPrice(
                                       widget.holding.iId!.instrumentToken!,
-                                      widget.holding.iId!.exchangeInstrumentToken!,
+                                      widget.holding.iId!
+                                          .exchangeInstrumentToken!,
                                     ),
                                     decimal: 2,
                                     // showSymbol: false,
@@ -349,14 +373,17 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 Text(
                                   '(${controller.getInstrumentChanges(
                                     widget.holding.iId!.instrumentToken!,
-                                    widget.holding.iId!.exchangeInstrumentToken!,
+                                    widget
+                                        .holding.iId!.exchangeInstrumentToken!,
                                   )})%',
                                   style: TextStyle(
-                                    color: controller.getValueColor(controller.getInstrumentChanges(
+                                    color: controller.getValueColor(
+                                        controller.getInstrumentChanges(
                                       widget.holding.iId!.instrumentToken!,
 
                                       ///green color hai nhi check krna hai
-                                      widget.holding.iId!.exchangeInstrumentToken!,
+                                      widget.holding.iId!
+                                          .exchangeInstrumentToken!,
                                     )),
                                     fontSize: 12,
                                   ),
@@ -391,7 +418,9 @@ class _HoldingsCardState extends State<HoldingsCard> {
                       ],
                     ),
                     Divider(
-                      color: Theme.of(context).brightness == Brightness.light ? Colors.grey[200] : Colors.transparent,
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.grey[200]
+                          : Colors.transparent,
                       thickness: 1,
                     ),
                   ],
@@ -426,7 +455,8 @@ class _HoldingsCardState extends State<HoldingsCard> {
                 int exitLots = widget.holding.lots!.toInt();
 
                 if (exitLots == 0) {
-                  SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                  SnackbarHelper.showSnackbar(
+                      "You don't have any open position for this symbol.");
                 } else {
                   if (exitLots.toString().contains('-')) {
                     if (exitLots < 0) {
@@ -447,7 +477,8 @@ class _HoldingsCardState extends State<HoldingsCard> {
                   // }
 
                   // controller.lotsValueList.assignAll(lots);
-                  controller.selectedStringQuantity.value = widget.holding.lots?.toString() ?? "0";
+                  controller.selectedStringQuantity.value =
+                      widget.holding.lots?.toString() ?? "0";
 
                   TradingInstrument trading = TradingInstrument(
                     name: widget.holding.iId?.symbol,
@@ -461,17 +492,21 @@ class _HoldingsCardState extends State<HoldingsCard> {
                       widget.holding.iId!.exchangeInstrumentToken!,
                     ),
                   );
+                  controller.selectedProductGroupValue.value = 2;
                   controller.selectedOrderGroupValue.value = 1;
-                  //for the same value of lots in exit text field
-                  controller.quantityTextController.text = widget.holding.lots!.abs().toString();
-                  controller.selectedQuantity.value = widget.holding.lots!.abs();
-                //  print('selectedQuantity : ${controller.selectedQuantity.value}');
+                  //to select the market when we come from limit order
+                  controller.quantityTextController.text =
+                      widget.holding.lots!.abs().toString();
+                  controller.selectedQuantity.value =
+                      widget.holding.lots!.abs();
+                  //  print('selectedQuantity : ${controller.selectedQuantity.value}');
                   BottomSheetHelper.openBottomSheet(
                     context: context,
                     child: StockTransactionBottomSheet(
                       type: TransactionType.exit,
                       tradingInstrument: trading,
-                      marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
+                      marginRequired: controller.getMarginRequired(
+                          TransactionType.exit, trading),
                     ),
                   );
                 }
