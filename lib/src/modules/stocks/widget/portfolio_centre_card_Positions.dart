@@ -7,13 +7,13 @@ class CentreCardinPositions extends StatefulWidget {
     Key? key,
     required this.invested,
     required this.currentvalue,
-    required this.roiPositions,
+    // required this.roiPositions,
     required this.pnlInPosition,
   }) : super(key: key);
 
   final String invested;
   final String currentvalue;
-  final String roiPositions;
+  // final String roiPositions;
   final String pnlInPosition;
 
   @override
@@ -97,16 +97,15 @@ class _CentreCardinPositionsState extends State<CentreCardinPositions> {
 
                       // widget.pnlInPosition,
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: widget.pnlInPosition != null
-                            ? widget.pnlInPosition.startsWith('-')
+                        color: controller.calculateTotalPositionpnl() != null
+                            ? controller.calculateTotalPositionpnl() < 0
                                 ? AppColors.danger
                                 : AppColors.success
-                            : AppColors
-                                .success, // Replace AppColors.defaultColor with your desired default color
+                            : AppColors.success,
                       ),
                     ),
                     Text(
-                      '${(controller.calculateTotalPositionInvested() == 0 || controller.calculateTotalPositionroi() == null) ? '0.00' : FormatHelper.formatNumbers(controller.calculateTotalPositionroi(), decimal: 2)}%',
+                      '${(controller.calculateTotalPositionInvested() == 0 || controller.calculateTotalPositionroi() == null) ? '0.00' : FormatHelper.formatNumbers((controller.calculateTotalPositionpnl() * 100) / (controller.calculateTotalPositionInvested()), decimal: 2, showSymbol: false)}%',
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: controller.calculateTotalPositionroi() != null
                             ? controller.calculateTotalPositionroi() < 0

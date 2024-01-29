@@ -96,15 +96,15 @@ class _CentreCardHoldingsState extends State<CentreCardHoldings> {
                         decimal: 2,
                       ),
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: widget.pnlInHoldings != null
-                            ? widget.pnlInHoldings.startsWith('-')
+                        color: controller.calculateTotalHoldingPnl() != null
+                            ? controller.calculateTotalHoldingPnl() < 0
                                 ? AppColors.danger
                                 : AppColors.success
                             : AppColors.success,
                       ),
                     ),
                     Text(
-                      '${(controller.calculateTotalHoldingInvested() == 0 || controller.calculateTotalHoldingroi() == null) ? '0.00' : FormatHelper.formatNumbers(controller.calculateTotalHoldingroi(), decimal: 2)}%',
+                      '${(controller.calculateTotalHoldingInvested() == 0 || controller.calculateTotalHoldingroi() == null) ? '0.00' : FormatHelper.formatNumbers(controller.calculateTotalHoldingroi(), decimal: 2,showSymbol: false)}%',
                       style: AppStyles.tsBlackMedium12.copyWith(
                         color: controller.calculateTotalHoldingroi() != null
                             ? (controller.calculateTotalHoldingroi() < 0
