@@ -18,9 +18,18 @@ class _SignupViewState extends State<SignupView> {
 
   @override
   void initState() {
+    super.initState();
     controller = Get.find<AuthController>();
     formKey = GlobalKey<FormState>();
-    super.initState();
+    print('AuthController Code : ${controller.campaignCode.value}');
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (controller.campaignCode.value.isNotEmpty) {
+      controller.hasCampaignCode(true);
+      controller.referralTextController.text = controller.campaignCode.value;
+    }
   }
 
   @override
@@ -156,12 +165,14 @@ class _SignupViewState extends State<SignupView> {
                               ),
                               CommonTextField(
                                 controller: controller.referralTextController,
+                                isDisabled: controller.hasCampaignCode.value,
                                 hintText: 'Enter Referral/Invite code',
                                 prefixIcon: Icon(
                                   Icons.redeem_rounded,
                                   color: AppColors.grey,
                                 ),
                               ),
+                              if(!controller.hasCampaignCode.value)
                               if (controller.inviteCode.value.campaignCode != null &&
                                   controller.inviteCode.value.campaignCode!.isNotEmpty) ...[
                                 Text(

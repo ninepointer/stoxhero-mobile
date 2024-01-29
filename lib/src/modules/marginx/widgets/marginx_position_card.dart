@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-
 import '../../../app/app.dart';
 
 class MarginXPositionCard extends GetView<MarginXController> {
   final TradingPosition position;
-
   const MarginXPositionCard({super.key, required this.position});
 
   void openBottomSheet(BuildContext context, TransactionType type) {
@@ -16,7 +12,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
       position.id!.exchangeInstrumentToken!,
     );
     controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
-    controller.generateLotsList(type: position.id?.symbol);
+
     TradingInstrument trading = TradingInstrument(
       name: position.id?.symbol,
       exchange: position.id?.exchange,
@@ -32,6 +28,38 @@ class MarginXPositionCard extends GetView<MarginXController> {
         type: type,
         tradingInstrument: trading,
         marginRequired: controller.getMarginRequired(type, trading),
+      ),
+    );
+  }
+
+  void openModifyBottomSheet(BuildContext context, TransactionType type) async {
+    FocusScope.of(context).unfocus();
+    num lastPrice = controller.getInstrumentLastPrice(
+      position.id!.instrumentToken!,
+      position.id!.exchangeInstrumentToken!,
+    );
+    controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
+    await controller
+        .getMarginXPendingStoplossOrderData(position.id?.product ?? '');
+
+    controller.generateLotsList(type: position.id?.symbol);
+    controller.generateLotsListFoStopLoss(
+        type: position.id?.symbol, openLots: position.lots);
+    controller.generateLotsListForStopProfit(
+        type: position.id?.symbol, openLots: position.lots);
+    BottomSheetHelper.openBottomSheet(
+      context: context,
+      child: MarginXStoplossModifyPriceBottomSheet(
+        type: type,
+        stopLoss: TradingInstrument(
+          name: position.id?.symbol,
+          exchange: position.id?.exchange,
+          tradingsymbol: position.id?.symbol,
+          exchangeToken: position.id?.exchangeInstrumentToken,
+          instrumentToken: position.id?.instrumentToken,
+          lastPrice: lastPrice,
+          lotSize: position.lots,
+        ),
       ),
     );
   }
@@ -61,14 +89,16 @@ class MarginXPositionCard extends GetView<MarginXController> {
                         isRightAlign: true,
                         label: 'Gross P&L (Profit & Loss)',
                         valueColor: controller.getValueColor(
-                          controller.calculateGrossPNL(
-                            position.amount ?? 0,
-                            position.lots!.toInt(),
-                            controller.getInstrumentLastPrice(
-                              position.id!.instrumentToken!,
-                              position.id!.exchangeInstrumentToken!,
-                            ),
-                          ),
+                          position.lots == 0
+                              ? position.amount
+                              : controller.calculateGrossPNL(
+                                  position.amount ?? 0,
+                                  position.lots!.toInt(),
+                                  controller.getInstrumentLastPrice(
+                                    position.id!.instrumentToken!,
+                                    position.id!.exchangeInstrumentToken!,
+                                  ),
+                                ),
                         ),
                         value: position.lots == 0
                             ? FormatHelper.formatNumbers(position.amount)
@@ -90,13 +120,25 @@ class MarginXPositionCard extends GetView<MarginXController> {
                     children: [
                       TradeCardTile(
                         label: 'Average Price',
-                        value: FormatHelper.formatNumbers(position.lastaverageprice),
+                        value: FormatHelper.formatNumbers(
+                          position.lastaverageprice,
+                        ),
                       ),
                       TradeCardTile(
                         isRightAlign: true,
                         label: 'LTP (Last Traded Price)',
-                        valueColor: controller.getValueColor(position.lastaverageprice),
-                        value: FormatHelper.formatNumbers(position.lastaverageprice),
+                        value: FormatHelper.formatNumbers(
+                          controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        ),
+                        valueColor: controller.getValueColor(
+                          controller.getInstrumentLastPrice(
+                            position.id!.instrumentToken!,
+                            position.id!.exchangeInstrumentToken!,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -111,15 +153,15 @@ class MarginXPositionCard extends GetView<MarginXController> {
                       TradeCardTile(
                         hasBottomMargin: false,
                         isRightAlign: true,
-                        label: 'Changes(%)',
+                        label: 'Changes (%)',
                         value: controller.getInstrumentChanges(
-                          position.id!.instrumentToken!,
-                          position.id!.exchangeInstrumentToken!,
+                          position.id?.instrumentToken ?? 0,
+                          position.id?.exchangeInstrumentToken ?? 0,
                         ),
                         valueColor: controller.getValueColor(
                           controller.getInstrumentChanges(
-                            position.id!.instrumentToken!,
-                            position.id!.exchangeInstrumentToken!,
+                            position.id?.instrumentToken ?? 0,
+                            position.id?.exchangeInstrumentToken ?? 0,
                           ),
                         ),
                       ),
@@ -144,7 +186,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
                       ),
                       child: Text(
                         position.lots == 0 ? 'BUY' : 'ADD MORE',
-                        style: AppStyles.tsWhiteMedium12.copyWith(
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.success,
                         ),
                       ),
@@ -162,7 +204,7 @@ class MarginXPositionCard extends GetView<MarginXController> {
                       ),
                       child: Text(
                         position.lots == 0 ? 'SELL' : 'EXIT SOME',
-                        style: AppStyles.tsWhiteMedium12.copyWith(
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
                           color: AppColors.danger,
                         ),
                       ),
@@ -173,15 +215,14 @@ class MarginXPositionCard extends GetView<MarginXController> {
                   child: GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
-                      List<int> lots = controller.generateLotsList(type: position.id?.symbol);
+                      List<int> lots = controller.generateLotsList(
+                          type: position.id?.symbol);
                       int exitLots = position.lots!.toInt();
                       int maxLots = lots.last;
-
                       if (exitLots == 0) {
-                        SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                        SnackbarHelper.showSnackbar(
+                            "You don't have any open position for this symbol.");
                       } else {
-                        log(exitLots.toString());
-                        log(maxLots.toString());
                         if (exitLots.toString().contains('-')) {
                           if (exitLots < 0) {
                             exitLots = -exitLots;
@@ -199,8 +240,9 @@ class MarginXPositionCard extends GetView<MarginXController> {
                         } else {
                           controller.selectedQuantity.value = exitLots;
                         }
-                        controller.selectedStringQuantity.value = position.lots?.toString() ?? "0";
                         controller.lotsValueList.assignAll(lots);
+                        controller.selectedStringQuantity.value =
+                            position.lots?.toString() ?? "0";
                         TradingInstrument trading = TradingInstrument(
                           name: position.id?.symbol,
                           exchange: position.id?.exchange,
@@ -218,7 +260,8 @@ class MarginXPositionCard extends GetView<MarginXController> {
                           child: MarginXTransactionBottomSheet(
                             type: TransactionType.exit,
                             tradingInstrument: trading,
-                            marginRequired: controller.getMarginRequired(TransactionType.exit, trading),
+                            marginRequired: controller.getMarginRequired(
+                                TransactionType.exit, trading),
                           ),
                         );
                       }
@@ -228,14 +271,42 @@ class MarginXPositionCard extends GetView<MarginXController> {
                       padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: AppColors.secondary.withOpacity(.25),
+                      ),
+                      child: Text(
+                        'EXIT ALL',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
+                          color: AppColors.secondary.shade600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (position.lots!.toInt() == 0) {
+                        // SnackbarHelper.showSnackbar("You don't have any open position for this symbol.");
+                      } else if (controller.selectedQuantity.value
+                          .toString()
+                          .contains('-')) {
+                        openModifyBottomSheet(context, TransactionType.sell);
+                      } else {
+                        openModifyBottomSheet(context, TransactionType.buy);
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.info.withOpacity(.25),
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(8),
                         ),
                       ),
                       child: Text(
-                        'EXIT ALL',
-                        style: AppStyles.tsWhiteMedium12.copyWith(
-                          color: AppColors.secondary.shade600,
+                        'MODIFY',
+                        style: AppStyles.tsPrimaryMedium12.copyWith(
+                          color: AppColors.info,
                         ),
                       ),
                     ),

@@ -6,7 +6,9 @@ class DashboardTradeSummaryResponse {
 
   DashboardTradeSummaryResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    data = json['data'] != null ? new DashboardTradeSummary.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new DashboardTradeSummary.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -36,7 +38,7 @@ class DashboardTradeSummary {
   int? maxLossStreak;
   num? averageProfit;
   num? averageLoss;
-  int? portfolio;
+  num? portfolio;
   num? maxProfitDayProfitPercent;
   num? maxLossDayLossPercent;
   int? totalContests;

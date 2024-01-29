@@ -1,7 +1,7 @@
 name: stoxhero
 description: A new Flutter project.
-version: 1.0.0+38 # Dev
-# version: 1.0.0+17 # Prod
+# version: 1.0.0+80 # Dev
+version: 1.0.0+53 # Prod
 publish_to: "none"
 
 environment:
@@ -36,6 +36,7 @@ dependencies:
   crypto: ^3.0.3
   http: ^0.13.6
   firebase_core: ^2.17.0
+  firebase_messaging: ^14.7.4
   firebase_analytics: ^10.5.1
   in_app_update: ^4.2.2
   url_launcher: ^6.1.14
@@ -44,10 +45,19 @@ dependencies:
   logger: ^2.0.2+1
   path_provider: ^2.1.1
   open_filex: ^4.3.4
+  flutter_local_notifications: ^16.1.0
+  device_info_plus: ^9.1.1
+  firebase_dynamic_links: ^5.4.6
+  percent_indicator: ^4.2.3
+  flutter_animate: ^4.3.0
+  animated_text_kit: ^4.2.1
+  audioplayers: ^5.2.1
 
 dev_dependencies:
   flutter_launcher_icons: any
   change_app_package_name: ^1.1.0
+  flutter_slidable: ^3.0.1
+ 
 
 flutter_launcher_icons:
   ios: true
@@ -63,6 +73,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/audio/
 
   fonts:
     - family: Rubik

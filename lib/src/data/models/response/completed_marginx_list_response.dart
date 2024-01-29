@@ -38,6 +38,7 @@ class CompletedMarginX {
   String? marginxExpiry;
   int? maxParticipants;
   num? earning;
+  num? tds;
 
   CompletedMarginX({
     this.marginxId,
@@ -53,6 +54,7 @@ class CompletedMarginX {
     this.marginxExpiry,
     this.maxParticipants,
     this.earning,
+    this.tds,
   });
 
   CompletedMarginX.fromJson(Map<String, dynamic> json) {
@@ -69,6 +71,7 @@ class CompletedMarginX {
     marginxExpiry = json['marginxExpiry'];
     maxParticipants = json['maxParticipants'];
     earning = json['return'];
+    tds = json['tds'];
   }
 
   Map<String, dynamic> toJson() {
@@ -86,6 +89,7 @@ class CompletedMarginX {
     data['marginxExpiry'] = this.marginxExpiry;
     data['maxParticipants'] = this.maxParticipants;
     data['return'] = this.earning;
+    data['tds'] = this.tds;
     return data;
   }
 }

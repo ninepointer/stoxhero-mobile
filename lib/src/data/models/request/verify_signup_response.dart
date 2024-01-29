@@ -5,6 +5,7 @@ class VerifySignupRequest {
   String? mobile;
   String? mobileOtp;
   String? referrerCode;
+  String? campaignCode;
   String? dob;
 
   VerifySignupRequest({
@@ -14,6 +15,7 @@ class VerifySignupRequest {
     this.mobile,
     this.mobileOtp,
     this.referrerCode,
+    this.campaignCode,
     this.dob,
   });
 
@@ -24,6 +26,7 @@ class VerifySignupRequest {
     mobile = json['mobile'];
     mobileOtp = json['mobile_otp'];
     referrerCode = json['referrerCode'];
+    campaignCode = json['campaignCode'];
     dob = json['dob'];
   }
 
@@ -35,6 +38,7 @@ class VerifySignupRequest {
     data['mobile'] = this.mobile;
     data['mobile_otp'] = this.mobileOtp;
     data['referrerCode'] = this.referrerCode;
+    data['campaignCode'] = this.campaignCode;
     data['dob'] = this.dob;
     return data;
   }

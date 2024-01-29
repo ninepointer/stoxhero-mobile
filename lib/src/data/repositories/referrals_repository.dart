@@ -11,6 +11,14 @@ class ReferralsRepository extends BaseRepository {
         : RepoResponse(data: EarningsResponse.fromJson(response));
   }
 
+  Future<RepoResponse<ReferralsProductResponse>> getMyReferralsProduct() async {
+    String apiURL = AppUrls.myRefferdProduct;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: ReferralsProductResponse.fromJson(response));
+  }
+
   Future<RepoResponse<ActiveReferralResponse>> getActiveReferrals() async {
     String apiURL = AppUrls.referralsActive;
     var response = await service.getAuth(path: apiURL);
@@ -19,7 +27,8 @@ class ReferralsRepository extends BaseRepository {
         : RepoResponse(data: ActiveReferralResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ReferralsLeaderboardResponse>> getReferralsLeaderboard() async {
+  Future<RepoResponse<ReferralsLeaderboardResponse>>
+      getReferralsLeaderboard() async {
     String apiURL = AppUrls.referralsLeaderboard;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -27,7 +36,8 @@ class ReferralsRepository extends BaseRepository {
         : RepoResponse(data: ReferralsLeaderboardResponse.fromJson(response));
   }
 
-  Future<RepoResponse<MyReferralsResponse>> getMyReferrals(String userId) async {
+  Future<RepoResponse<MyReferralsResponse>> getMyReferrals(
+      String userId) async {
     String apiURL = '${AppUrls.myReferrals}/$userId';
     var response = await service.getAuth(path: apiURL);
     return response is APIException

@@ -14,6 +14,7 @@ import 'package:stoxhero/src/base/base.dart';
 import 'package:stoxhero/src/data/data.dart';
 
 import '../../../core/core.dart';
+import '../../modules.dart';
 
 enum KycDocumentType {
   aadhaarCardFront,
@@ -49,6 +50,7 @@ class ProfileController extends BaseController<ProfileRepository> {
 
   String? genderValue;
   List<String> dropdownItems = ['Male', 'Female', 'Other'];
+  final selectedStates = ''.obs;
 
   final userNameTextController = TextEditingController();
   final positionTextController = TextEditingController();
@@ -80,15 +82,54 @@ class ProfileController extends BaseController<ProfileRepository> {
   final drivingLicenseNumberTextController = TextEditingController();
   final passportCardNumberTextController = TextEditingController();
 
-  final Rx<PlatformFile?> aadhaarCardFrontFile = PlatformFile(name: '', size: 0).obs;
-  final Rx<PlatformFile?> aadhaarCardBackFile = PlatformFile(name: '', size: 0).obs;
+  final Rx<PlatformFile?> aadhaarCardFrontFile =
+      PlatformFile(name: '', size: 0).obs;
+  final Rx<PlatformFile?> aadhaarCardBackFile =
+      PlatformFile(name: '', size: 0).obs;
   final Rx<PlatformFile?> panCardFile = PlatformFile(name: '', size: 0).obs;
-  final Rx<PlatformFile?> passportSizePhotoFile = PlatformFile(name: '', size: 0).obs;
-  final Rx<PlatformFile?> addressProofFile = PlatformFile(name: '', size: 0).obs;
-  final Rx<PlatformFile?> profilePhotoFile = PlatformFile(name: '', size: 0).obs;
+  final Rx<PlatformFile?> passportSizePhotoFile =
+      PlatformFile(name: '', size: 0).obs;
+  final Rx<PlatformFile?> addressProofFile =
+      PlatformFile(name: '', size: 0).obs;
+  final Rx<PlatformFile?> profilePhotoFile =
+      PlatformFile(name: '', size: 0).obs;
+
+  List<String> states = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Delhi",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jammu & Kashmir",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+  ];
 
   void loadData() {
     loadProfileDetails();
+    loadBankDetails();
     isEditEnabled(false);
   }
 
@@ -99,7 +140,8 @@ class ProfileController extends BaseController<ProfileRepository> {
     return fullName.capitalize!;
   }
 
-  void showDateRangePicker(BuildContext context, {bool isStartDate = true}) async {
+  void showDateRangePicker(BuildContext context,
+      {bool isStartDate = true}) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -135,14 +177,16 @@ class ProfileController extends BaseController<ProfileRepository> {
     emailTextController.text = userDetails.value.email ?? '';
     mobileTextController.text = userDetails.value.mobile ?? '';
     whatsAppTextController.text = userDetails.value.whatsAppNumber ?? '';
-    dobTextController.text = FormatHelper.formatDateOfBirthToIST(userDetails.value.dob);
+    dobTextController.text =
+        FormatHelper.formatDateOfBirthToIST(userDetails.value.dob);
     genderValue = userDetails.value.gender ?? '';
     addressTextController.text = userDetails.value.address ?? '';
     cityTextController.text = userDetails.value.city ?? '';
     pincodeTextController.text = userDetails.value.pincode ?? '';
     stateTextController.text = userDetails.value.state ?? '';
     countryTextController.text = userDetails.value.country ?? '';
-    profilePhotoFile(await downloadFileAsPlatformFile(userDetails.value.profilePhoto));
+    profilePhotoFile(
+        await downloadFileAsPlatformFile(userDetails.value.profilePhoto));
     isProfileLoading(false);
   }
 
@@ -150,22 +194,35 @@ class ProfileController extends BaseController<ProfileRepository> {
     isBankLoading(true);
     userDetails(AppStorage.getUserDetails());
     upiIdTextController.text = userDetails.value.upiId ?? '';
-    googlePayNumberTextController.text = userDetails.value.googlePayNumber ?? '';
+    googlePayNumberTextController.text =
+        userDetails.value.googlePayNumber ?? '';
     phonePeNumberTextController.text = userDetails.value.phonePeNumber ?? '';
     paytmNumberTextController.text = userDetails.value.payTMNumber ?? '';
-    nameAsPerBankAccountTextController.text = userDetails.value.nameAsPerBankAccount ?? '';
+    nameAsPerBankAccountTextController.text =
+        userDetails.value.nameAsPerBankAccount ?? '';
     bankNameTextController.text = userDetails.value.bankName ?? '';
     accountNumberTextController.text = userDetails.value.accountNumber ?? '';
     ifscCodeTextController.text = userDetails.value.ifscCode ?? '';
-    aadhaarCardNumberTextController.text = userDetails.value.aadhaarNumber ?? '';
+    aadhaarCardNumberTextController.text =
+        userDetails.value.aadhaarNumber ?? '';
     panCardNumberTextController.text = userDetails.value.panNumber ?? '';
-    passportCardNumberTextController.text = userDetails.value.passportNumber ?? '';
-    drivingLicenseNumberTextController.text = userDetails.value.drivingLicenseNumber ?? '';
-    aadhaarCardFrontFile(await downloadFileAsPlatformFile(userDetails.value.aadhaarCardFrontImage));
-    aadhaarCardBackFile(await downloadFileAsPlatformFile(userDetails.value.aadhaarCardBackImage));
-    panCardFile(await downloadFileAsPlatformFile(userDetails.value.panCardFrontImage));
-    passportSizePhotoFile(await downloadFileAsPlatformFile(userDetails.value.passportPhoto));
-    addressProofFile(await downloadFileAsPlatformFile(userDetails.value.addressProofDocument));
+    passportCardNumberTextController.text =
+        userDetails.value.passportNumber ?? '';
+    drivingLicenseNumberTextController.text =
+        userDetails.value.drivingLicenseNumber ?? '';
+    aadhaarCardFrontFile(await downloadFileAsPlatformFile(
+        userDetails.value.aadhaarCardFrontImage));
+    aadhaarCardBackFile(await downloadFileAsPlatformFile(
+        userDetails.value.aadhaarCardBackImage));
+    panCardFile(
+        await downloadFileAsPlatformFile(userDetails.value.panCardFrontImage));
+    passportSizePhotoFile(
+        await downloadFileAsPlatformFile(userDetails.value.passportPhoto));
+    addressProofFile(await downloadFileAsPlatformFile(
+        userDetails.value.addressProofDocument));
+    dobTextController.text =
+        FormatHelper.formatDateOfBirthToIST(userDetails.value.dob);
+    selectedStates.value = userDetails.value.bankState ?? '';
     isBankLoading(false);
   }
 
@@ -177,7 +234,8 @@ class ProfileController extends BaseController<ProfileRepository> {
     return file;
   }
 
-  Future<PlatformFile?> downloadFileAsPlatformFile(UserImageDetails? doc) async {
+  Future<PlatformFile?> downloadFileAsPlatformFile(
+      UserImageDetails? doc) async {
     try {
       final dio = Dio();
       final response = await dio.get(
@@ -186,7 +244,8 @@ class ProfileController extends BaseController<ProfileRepository> {
       );
 
       if (response.statusCode == 200) {
-        final tempDir = await Directory.systemTemp.createTemp('downloaded_files');
+        final tempDir =
+            await Directory.systemTemp.createTemp('downloaded_files');
         final tempFile = File('${tempDir.path}/${doc?.name}');
 
         await tempFile.writeAsBytes(response.data);
@@ -206,7 +265,8 @@ class ProfileController extends BaseController<ProfileRepository> {
     }
   }
 
-  Future<MultipartFile?> convertPlatformFileToMultipartFile(PlatformFile? platformFile) async {
+  Future<MultipartFile?> convertPlatformFileToMultipartFile(
+      PlatformFile? platformFile) async {
     if (platformFile?.path == null) {
       return null;
     } else {
@@ -281,7 +341,8 @@ class ProfileController extends BaseController<ProfileRepository> {
   }
 
   Future saveUserProfileDetails() async {
-    if (profilePhotoFile.value?.path == null || profilePhotoFile.value!.name.isEmpty) {
+    if (profilePhotoFile.value?.path == null ||
+        profilePhotoFile.value!.name.isEmpty) {
       isEditEnabled(false);
       SnackbarHelper.showSnackbar('Select profile picture to continue!');
       return;
@@ -301,16 +362,19 @@ class ProfileController extends BaseController<ProfileRepository> {
       "pincode": pincodeTextController.text,
       "state": stateTextController.text,
       "country": countryTextController.text,
-      'profilePhoto': await convertPlatformFileToMultipartFile(profilePhotoFile.value),
+      'profilePhoto':
+          await convertPlatformFileToMultipartFile(profilePhotoFile.value),
       'employeeid': userNameTextController.text,
       'whatsApp_number': whatsAppTextController.text,
     };
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
+      final RepoResponse<GenericResponse> response =
+          await repository.updateUserDetails(data);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          final loginDetailsResponse = await Get.find<AuthRepository>().loginDetails();
+          final loginDetailsResponse =
+              await Get.find<AuthRepository>().loginDetails();
           if (loginDetailsResponse.data != null) {
             await AppStorage.setUserDetails(loginDetailsResponse.data!);
           }
@@ -321,7 +385,7 @@ class ProfileController extends BaseController<ProfileRepository> {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('Save: ${e.toString()}');
+      log('Save KYC: ${e.toString()}');
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isProfileLoading(false);
@@ -338,21 +402,25 @@ class ProfileController extends BaseController<ProfileRepository> {
       'nameAsPerBankAccount': nameAsPerBankAccountTextController.text,
       'accountNumber': accountNumberTextController.text,
       'ifscCode': ifscCodeTextController.text,
+      'bankState': selectedStates.value,
     };
+    print(data);
     try {
-      final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
+      final RepoResponse<GenericResponse> response =
+          await repository.updateUserDetails(data);
       if (response.data != null) {
-        await AppStorage.setUserDetails(
-          LoginDetailsResponse.fromJson(response.data?.data),
-        );
+        await Get.find<AuthController>().getUserDetails(navigate: false);
+        loadData();
+        // await AppStorage.setUserDetails(
+        //   LoginDetailsResponse.fromJson(response.data?.data),
+        // );
         log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
         SnackbarHelper.showSnackbar(response.data?.message);
       } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
+        // SnackbarHelper.showSnackbar(response.error?.message);
       }
     } catch (e) {
-      log('Save: ${e.toString()}');
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isBankLoading(false);
   }
@@ -362,25 +430,38 @@ class ProfileController extends BaseController<ProfileRepository> {
         aadhaarCardBackFile.value?.path == null ||
         panCardFile.value?.path == null) {
       return SnackbarHelper.showSnackbar('Upload Required Document');
+    } else if (dobTextController.text.isEmpty) {
+      return SnackbarHelper.showSnackbar('Please enter your DOB');
     } else {
       isBankLoading(true);
+      DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
       Map<String, dynamic> data = {
         'aadhaarNumber': aadhaarCardNumberTextController.text,
         'panNumber': panCardNumberTextController.text,
         'passportNumber': passportCardNumberTextController.text,
         'drivingLicenseNumber': drivingLicenseNumberTextController.text,
-        'aadhaarCardFrontImage': await convertPlatformFileToMultipartFile(aadhaarCardFrontFile.value),
-        'aadhaarCardBackImage': await convertPlatformFileToMultipartFile(aadhaarCardBackFile.value),
-        'panCardFrontImage': await convertPlatformFileToMultipartFile(panCardFile.value),
-        'passportPhoto': await convertPlatformFileToMultipartFile(passportSizePhotoFile.value),
-        'addressProofDocument': await convertPlatformFileToMultipartFile(addressProofFile.value),
+        'aadhaarCardFrontImage': await convertPlatformFileToMultipartFile(
+            aadhaarCardFrontFile.value),
+        'aadhaarCardBackImage':
+            await convertPlatformFileToMultipartFile(aadhaarCardBackFile.value),
+        'panCardFrontImage':
+            await convertPlatformFileToMultipartFile(panCardFile.value),
+        'passportPhoto': await convertPlatformFileToMultipartFile(
+            passportSizePhotoFile.value),
+        'addressProofDocument':
+            await convertPlatformFileToMultipartFile(addressProofFile.value),
+        "dob": DateFormat('yyyy-MM-dd').format(date),
+        "KYCStatus": "Pending Approval"
       };
       try {
-        final RepoResponse<GenericResponse> response = await repository.updateUserDetails(data);
+        final RepoResponse<GenericResponse> response =
+            await repository.updateUserDetails(data);
         if (response.data != null) {
-          await AppStorage.setUserDetails(
-            LoginDetailsResponse.fromJson(response.data?.data),
-          );
+          await Get.find<AuthController>().getUserDetails(navigate: false);
+          loadData();
+          // await AppStorage.setUserDetails(
+          //   LoginDetailsResponse.fromJson(response.data?.data),
+          // );
           log('AppStorage.getUserDetails : ${AppStorage.getUserDetails().toJson()}');
           SnackbarHelper.showSnackbar(response.data?.message);
         } else {

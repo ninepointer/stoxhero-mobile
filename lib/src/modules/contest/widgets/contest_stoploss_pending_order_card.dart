@@ -94,7 +94,9 @@ class ContestStoplossPendingOrderCard extends GetView<ContestController> {
                       hasBottomMargin: false,
                       label: 'Transaction Type',
                       value: stopLoss.buyOrSell,
-                      valueColor: stopLoss.buyOrSell == "SELL" ? AppColors.danger : AppColors.success,
+                      valueColor: stopLoss.buyOrSell == "SELL"
+                          ? AppColors.danger
+                          : AppColors.success,
                     ),
                   ],
                 ),
@@ -104,7 +106,9 @@ class ContestStoplossPendingOrderCard extends GetView<ContestController> {
                     TradeCardTile(
                       label: 'Status',
                       value: stopLoss.status,
-                      valueColor: stopLoss.status == "Executed" ? AppColors.success : AppColors.danger,
+                      valueColor: stopLoss.status == "Executed"
+                          ? AppColors.success
+                          : AppColors.danger,
                       hasBottomMargin: false,
                     ),
                     TradeCardTile(

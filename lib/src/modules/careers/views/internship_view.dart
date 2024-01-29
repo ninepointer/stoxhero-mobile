@@ -40,11 +40,14 @@ class _InternshipViewState extends State<InternshipView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'What is stoxHero Internship Program ?',
-                          style: Theme.of(context).textTheme.tsSecondaryMedium16,
+                          'What is StoxHero Internship Program ?',
+                          style:
+                              Theme.of(context).textTheme.tsSecondaryMedium16,
                         ),
                         Icon(
-                          isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                          isExpanded
+                              ? Icons.expand_less_rounded
+                              : Icons.expand_more_rounded,
                           color: AppColors.grey,
                         ),
                       ],

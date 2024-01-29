@@ -39,7 +39,7 @@ class CollegeContestCodeBottomsheet extends GetView<CollegeContestController> {
               ),
               SizedBox(height: 16),
               Text(
-                'Enter your College Code shared by your college POC to participate in the contest.',
+                'Enter your College Code shared by your college POC to participate in the TestZone.',
                 textAlign: TextAlign.center,
                 style: AppStyles.tsGreyRegular14,
               ),
@@ -50,6 +50,8 @@ class CollegeContestCodeBottomsheet extends GetView<CollegeContestController> {
                 controller: controller.collegeCodeTextController,
               ),
               CommonFilledButton(
+                backgroundColor:
+                    Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                 height: 40,
                 label: 'Submit',
                 onPressed: onSubmit,

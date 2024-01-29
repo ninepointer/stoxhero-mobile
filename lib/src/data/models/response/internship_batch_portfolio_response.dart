@@ -6,7 +6,9 @@ class InternshipBatchPortfolioResponse {
 
   InternshipBatchPortfolioResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    data = json['data'] != null ? new InternshipBatchPortfolio.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new InternshipBatchPortfolio.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -25,7 +27,8 @@ class InternshipBatchPortfolio {
   num? npnl;
   num? openingBalance;
 
-  InternshipBatchPortfolio({this.batch, this.totalFund, this.npnl, this.openingBalance});
+  InternshipBatchPortfolio(
+      {this.batch, this.totalFund, this.npnl, this.openingBalance});
 
   InternshipBatchPortfolio.fromJson(Map<String, dynamic> json) {
     batch = json['batch'];

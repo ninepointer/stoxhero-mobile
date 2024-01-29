@@ -47,6 +47,7 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
       lastPrice: lastPrice,
     );
     controller.generateLotsList(type: widget.tradingWatchlist.symbol);
+    // controller.isBuyButtonDisabled.value = false;
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: MarginXTransactionBottomSheet(
@@ -69,7 +70,8 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
             onTap: _updateWatchlistIndex,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -134,7 +136,8 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => openBottomSheet(context, TransactionType.buy),
+                      onTap: () =>
+                          openBottomSheet(context, TransactionType.buy),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),
@@ -146,14 +149,16 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                         ),
                         child: Text(
                           'BUY',
-                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.success),
+                          style: AppStyles.tsWhiteMedium12
+                              .copyWith(color: AppColors.success),
                         ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => openBottomSheet(context, TransactionType.sell),
+                      onTap: () =>
+                          openBottomSheet(context, TransactionType.sell),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),
@@ -162,14 +167,16 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                         ),
                         child: Text(
                           'SELL',
-                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.danger),
+                          style: AppStyles.tsWhiteMedium12
+                              .copyWith(color: AppColors.danger),
                         ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => controller.removeInstrument(widget.tradingWatchlist.instrumentToken),
+                      onTap: () => controller.removeInstrument(
+                          widget.tradingWatchlist.instrumentToken),
                       child: Container(
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(6),
@@ -181,7 +188,8 @@ class _MarginXWatchlistCardState extends State<MarginXWatchlistCard> {
                         ),
                         child: Text(
                           'REMOVE',
-                          style: AppStyles.tsWhiteMedium12.copyWith(color: AppColors.info),
+                          style: AppStyles.tsWhiteMedium12
+                              .copyWith(color: AppColors.info),
                         ),
                       ),
                     ),

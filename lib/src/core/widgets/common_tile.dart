@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 import '../core.dart';
 
@@ -13,6 +14,8 @@ class CommonTile extends StatelessWidget {
   final String? seeAllLabel;
   final Color? sellAllColor;
   final bool isLoading;
+  final String? value;
+  final bool isValue;
   const CommonTile({
     Key? key,
     this.label = 'Label',
@@ -25,6 +28,8 @@ class CommonTile extends StatelessWidget {
     this.seeAllLabel,
     this.sellAllColor,
     this.isLoading = false,
+    this.isValue = false,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -32,9 +37,9 @@ class CommonTile extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        margin: margin ?? EdgeInsets.symmetric(vertical: 8),
-        padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        color: Theme.of(context).cardColor,
+        margin: margin ?? EdgeInsets.symmetric(vertical: 4),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        // color: Theme.of(context).cardColor,
         width: double.infinity,
         child: Column(
           children: [
@@ -43,9 +48,23 @@ class CommonTile extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      label,
-                      style: AppStyles.tsSecondaryMedium14,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsprimarywhiteMedium14
+                              : AppStyles.tsprimaryGrayishBlackMedium14,
+                        ),
+                        if (isValue) ...[
+                          SizedBox(height: 4),
+                          Text(
+                            value ?? '',
+                            style: AppStyles.tsGreyMedium12,
+                          ),
+                        ],
+                      ],
                     ),
                     if (isLoading) ...[
                       SizedBox(width: 8),
@@ -62,9 +81,13 @@ class CommonTile extends StatelessWidget {
                 if (showSeeAllButton)
                   Text(
                     seeAllLabel ?? 'See All',
-                    style: AppStyles.tsSecondaryMedium14.copyWith(
-                      color: sellAllColor,
-                    ),
+                    style: Get.isDarkMode
+                        ? AppStyles.tsprimarywhiteMedium14.copyWith(
+                            color: AppColors.darkGreen,
+                          )
+                        : AppStyles.tsprimaryGrayishBlackMedium14.copyWith(
+                            color: AppColors.lightGreen,
+                          ),
                   )
                 else if (showIconButton)
                   Icon(icon),

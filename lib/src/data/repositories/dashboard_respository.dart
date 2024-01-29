@@ -3,7 +3,8 @@ import '../../core/core.dart';
 import '../data.dart';
 
 class DashboardRepository extends BaseRepository {
-  Future<RepoResponse<DashboardReturnSummaryResponse>> getDashboardReturnSummary() async {
+  Future<RepoResponse<DashboardReturnSummaryResponse>>
+      getDashboardReturnSummary() async {
     String apiURL = AppUrls.returnSummary;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -11,8 +12,26 @@ class DashboardRepository extends BaseRepository {
         : RepoResponse(data: DashboardReturnSummaryResponse.fromJson(response));
   }
 
-  Future<RepoResponse<DashboardTradeSummaryResponse>> getDashboard(String? tradeType, String? timeFame) async {
+  Future<RepoResponse<IndexLivePriceListResponse>> getIndexLivePrices() async {
+    String apiURL = AppUrls.getIndexLivePrice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<DashboardTradeSummaryResponse>> getDashboard(
+      String? tradeType, String? timeFame) async {
     String apiURL = AppUrls.performance(tradeType, timeFame);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: DashboardTradeSummaryResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<DashboardTradeSummaryResponse>> getDashboardVirtual(
+      String? tradeType, String? timeFame) async {
+    String apiURL = AppUrls.virtualperformance(tradeType, timeFame);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
@@ -27,11 +46,13 @@ class DashboardRepository extends BaseRepository {
         : RepoResponse(data: DashboardCarouselResponse.fromJson(response));
   }
 
-  Future<RepoResponse<StockIndexInstrumentListResponse>> getStockIndexInstrumentsList() async {
+  Future<RepoResponse<StockIndexInstrumentListResponse>>
+      getStockIndexInstrumentsList() async {
     String apiURL = AppUrls.stockIndex;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
+        : RepoResponse(
+            data: StockIndexInstrumentListResponse.fromJson(response));
   }
 }

@@ -131,6 +131,7 @@ class _CollegeContestFormViewState extends State<CollegeContestFormView> {
                     ],
                   ),
                 CommonFilledButton(
+                  backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
                   label: 'Submit',
                   onPressed: () {
                     print(controller.isOtpVisible.value);

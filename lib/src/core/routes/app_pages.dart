@@ -1,5 +1,7 @@
 import 'package:get/route_manager.dart';
 import 'package:stoxhero/src/modules/contest/views/contest_search_symbol_view.dart';
+import 'package:stoxhero/src/modules/stocks/views/stocks_dashboard_view.dart';
+import 'package:stoxhero/src/modules/story/view/story_view.dart';
 
 import '../../modules/modules.dart';
 import 'routes.dart';
@@ -170,9 +172,36 @@ class AppPages {
       binding: InternshipBinding(),
     ),
     GetPage(
-      name: AppRoutes.payment,
-      page: () => PaymentView(),
-      binding: WalletBinding(),
+      name: AppRoutes.contestProfile,
+      page: () => ContestProfileView(),
+      // binding: InternshipBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.weeklyTopPerformersFullList,
+      page: () => ContestTopPerformerCard(),
+      binding: ContestProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.stocks,
+      page: () => StocksDashboardView(),
+      binding: ContestProfileBinding(),
+      
+    ),
+    GetPage(
+      name: AppRoutes.affiliate,
+      page: () => AffiliateView(),
+      binding: AffiliateBinding(),
+    ),
+    // GetPage(
+    //   name: AppRoutes.stocks,
+    //   page: () => StocksDashboardView(),
+    //    binding: ContestProfileBinding(),
+
+    // ),
+    GetPage(
+      name: AppRoutes.newyearstory,
+      page: () => StoryView(),
+      // binding: AffiliateBinding(),
     ),
   ];
 }

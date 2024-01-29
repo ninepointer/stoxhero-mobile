@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../app/app.dart';
 
-class CollegeContestTransactionBottomSheet extends GetView<CollegeContestController> {
+class CollegeContestTransactionBottomSheet
+    extends GetView<CollegeContestController> {
   final TradingInstrument tradingInstrument;
   final TransactionType type;
   final dynamic marginRequired;
@@ -94,7 +95,7 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                       Expanded(
                         child: CommonRadioButtonTile(
                           value: 2,
-                          groupValue: 1,
+                          groupValue: 2,
                           label: 'Interaday (MIS)',
                         ),
                       ),
@@ -102,7 +103,7 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                       Expanded(
                         child: CommonRadioButtonTile(
                           value: 1,
-                          groupValue: 1,
+                          groupValue: 2,
                           label: 'Overnight (NRML)',
                         ),
                       ),
@@ -112,14 +113,19 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                   DropdownButtonFormField2<int>(
                     value: controller.selectedQuantity.value,
                     onChanged: (value) {
-                      controller.selectedQuantity(value);
+                      controller.selectedQuantity(value?.abs());
+                      controller
+                          .selectedStringQuantity(value?.abs().toString());
+
                       controller.getMarginRequired(type, tradingInstrument);
                     },
                     isDense: true,
                     items: controller.lotsValueList.map((int number) {
                       return DropdownMenuItem<int>(
                         value: number,
-                        child: Text(number >= 0 ? number.toString() : number.toString()),
+                        child: Text(number >= 0
+                            ? number.toString()
+                            : number.toString()),
                       );
                     }).toList(),
                     dropdownStyleData: DropdownStyleData(
@@ -173,12 +179,15 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                       hintText: 'Limit Price',
                       keyboardType: TextInputType.number,
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+\.?\d*')),
                       ],
                       controller: controller.limitPriceTextController,
-                      onChanged: (value) => controller.getMarginRequired(type, tradingInstrument),
+                      onChanged: (value) =>
+                          controller.getMarginRequired(type, tradingInstrument),
                       validator: (value) {
-                        final limitPrice = double.tryParse(controller.limitPriceTextController.text);
+                        final limitPrice = double.tryParse(
+                            controller.limitPriceTextController.text);
                         if (limitPrice != null) {
                           if (type == TransactionType.buy) {
                             if (limitPrice >=
@@ -219,11 +228,14 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                               hintText: 'StopLoss Price',
                               keyboardType: TextInputType.number,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d*')),
                               ],
-                              controller: controller.stopLossPriceTextController,
+                              controller:
+                                  controller.stopLossPriceTextController,
                               validator: (value) {
-                                final stopLossPrice = double.tryParse(controller.stopLossPriceTextController.text);
+                                final stopLossPrice = double.tryParse(controller
+                                    .stopLossPriceTextController.text);
                                 if (stopLossPrice != null) {
                                   if (type == TransactionType.buy) {
                                     if (stopLossPrice >=
@@ -260,11 +272,15 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                               hintText: 'StopProfit Price',
                               keyboardType: TextInputType.number,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d*')),
                               ],
-                              controller: controller.stopProfitPriceTextController,
+                              controller:
+                                  controller.stopProfitPriceTextController,
                               validator: (value) {
-                                final stopProfitPrice = double.tryParse(controller.stopProfitPriceTextController.text);
+                                final stopProfitPrice = double.tryParse(
+                                    controller
+                                        .stopProfitPriceTextController.text);
                                 if (stopProfitPrice != null) {
                                   if (type == TransactionType.buy) {
                                     if (stopProfitPrice <=
@@ -301,39 +317,45 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                           label: 'MARKET',
                           onChanged: (int value) {
                             controller.handleRadioValueChanged(value, "MARKET");
-                            controller.getMarginRequired(type, tradingInstrument);
+                            controller.getMarginRequired(
+                                type, tradingInstrument);
                             controller.stopLossPriceTextController.clear();
                             controller.stopProfitPriceTextController.clear();
                             controller.limitPriceTextController.clear();
                           },
                         ),
                       ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: CommonRadioButtonTile(
-                          value: 1,
-                          groupValue: controller.selectedGroupValue.value,
-                          label: 'LIMIT',
-                          onChanged: (int value) {
-                            controller.handleRadioValueChanged(value, "LIMIT");
-                            controller.getMarginRequired(type, tradingInstrument);
-                            controller.stopLossPriceTextController.clear();
-                            controller.stopProfitPriceTextController.clear();
-                            controller.limitPriceTextController.clear();
-                          },
+                      if (type != TransactionType.exit) ...[
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CommonRadioButtonTile(
+                            value: 1,
+                            groupValue: controller.selectedGroupValue.value,
+                            label: 'LIMIT',
+                            onChanged: (int value) {
+                              controller.handleRadioValueChanged(
+                                  value, "LIMIT");
+                              controller.getMarginRequired(
+                                  type, tradingInstrument);
+                              controller.stopLossPriceTextController.clear();
+                              controller.stopProfitPriceTextController.clear();
+                              controller.limitPriceTextController.clear();
+                            },
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: CommonRadioButtonTile(
-                          value: 3,
-                          groupValue: controller.selectedGroupValue.value,
-                          label: 'SL/SP-M',
-                          onChanged: (int value) {
-                            controller.handleRadioValueChanged(value, "SL/SP-M");
-                          },
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: CommonRadioButtonTile(
+                            value: 3,
+                            groupValue: controller.selectedGroupValue.value,
+                            label: 'SL/SP-M',
+                            onChanged: (int value) {
+                              controller.handleRadioValueChanged(
+                                  value, "SL/SP-M");
+                            },
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                   SizedBox(height: 8),
@@ -365,6 +387,57 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                     ],
                   ),
                   SizedBox(height: 8),
+                  //svdkg\
+                  //dsbdssdfb
+                  //dsbdb
+                  CommonCard(
+                    margin: EdgeInsets.only(),
+                    padding: EdgeInsets.zero.copyWith(left: 12, right: 12),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Available Margin',
+                            style: Theme.of(context).textTheme.tsMedium14,
+                          ),
+                          Visibility(
+                            visible: controller.isMarginStateLoadingStatus,
+                            child: Padding(
+                              padding: EdgeInsets.all(12),
+                              child: SizedBox(
+                                child: CommonLoader(),
+                                height: 24,
+                                width: 24,
+                              ),
+                            ),
+                            replacement: Row(
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 12,
+                                        right: 12,
+                                        top: 24,
+                                        bottom: 24)),
+                                Text(
+                                  FormatHelper.formatNumbers(
+                                    controller
+                                        .calculateMargin()
+                                        .round()
+                                        .toString(),
+                                  ),
+                                  style: Theme.of(context).textTheme.tsMedium14,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  //sddhgvd
+                  //egdsgoihg
+                  SizedBox(height: 8),
                   CommonCard(
                     margin: EdgeInsets.only(),
                     padding: EdgeInsets.zero.copyWith(left: 12),
@@ -373,7 +446,7 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Margin Required',
+                            'Virtual Margin Required',
                             style: Theme.of(context).textTheme.tsMedium14,
                           ),
                           Visibility(
@@ -389,11 +462,13 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                             replacement: Row(
                               children: [
                                 Text(
-                                  FormatHelper.formatNumbers(controller.marginRequired.value.margin),
+                                  FormatHelper.formatNumbers(
+                                      controller.marginRequired.value.margin),
                                   style: Theme.of(context).textTheme.tsMedium14,
                                 ),
                                 IconButton(
-                                  onPressed: () => controller.getMarginRequired(type, tradingInstrument),
+                                  onPressed: () => controller.getMarginRequired(
+                                      type, tradingInstrument),
                                   icon: Icon(Icons.refresh, size: 18),
                                   splashRadius: 18,
                                 ),
@@ -428,12 +503,15 @@ class CollegeContestTransactionBottomSheet extends GetView<CollegeContestControl
                     onPressed: () {
                       if (controller.selectedGroupValue.value == 3 &&
                           controller.stopLossPriceTextController.text.isEmpty &&
-                          controller.stopProfitPriceTextController.text.isEmpty) {
-                        SnackbarHelper.showSnackbar('Please Enter StopLoss or StopProfit Price');
+                          controller
+                              .stopProfitPriceTextController.text.isEmpty) {
+                        SnackbarHelper.showSnackbar(
+                            'Please Enter StopLoss or StopProfit Price');
                       } else if (controller.selectedGroupValue.value == 1 &&
                           controller.limitPriceTextController.text.isEmpty) {
                         SnackbarHelper.showSnackbar('Please Enter Price');
-                      } else if (controller.stopLossFormKey.currentState!.validate()) {
+                      } else if (controller.stopLossFormKey.currentState!
+                          .validate()) {
                         controller.placeContestOrder(
                           type,
                           tradingInstrument,

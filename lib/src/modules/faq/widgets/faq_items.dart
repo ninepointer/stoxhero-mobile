@@ -10,10 +10,6 @@ final List<FaqItem> faqItems = [
     'About StoxHero',
     '''What is StoxHero?
 StoxHero is India's fastest growing options trading learning platform aimed at helping genZ master the art of 'Trading'. On StoxHero, Traders learn how to pick the right contracts using virtual money by participating in experiential learning programs.
-
-Can I Join A Battle On StoxHero Without A Trading Account?
-Yes, a trading account is not needed to get started. At registration, each user is awarded virtual currency of INR 10,00,000 in three different portfolios named Trading, Battle Mania, and Battle Fever. While the Trading Portfolio is for virtual intra-day trading, Battle Mania and Battle Fever are used only to participate in StoxHero Battles. Users can start adding contracts to these portfolios with the virtual cash.
-
 Do I Trade Contracts With Real Money?
 No, you trade with virtual money. This money can be used to build a portfolio consisting of virtual contracts.
 ''',
@@ -71,56 +67,56 @@ What Is Virtual Margin Money? How Is It Different From Opening Balance?
 • Opening balance reflects cash available before taking any trade for that day.
 ''',
   ),
-  FaqItem(
-    'StoxHero Battles',
-    '''
-What Is A Battle?
-A battle is where different StoxHero users compete against each other using their portfolios to win rewards. After joining the battle and adding stocks/contract to the linked portfolio, users are assigned ranks based on the portfolio's performance. Depending on your rank category, you may or may not win a reward. Such battles run on all business days for varying time periods (daily, weekly, monthly, etc.)
+//   FaqItem(
+//     'StoxHero Battles',
+//     '''
+// What Is A Battle?
+// A battle is where different StoxHero users compete against each other using their portfolios to win rewards. After joining the battle and adding stocks/contract to the linked portfolio, users are assigned ranks based on the portfolio's performance. Depending on your rank category, you may or may not win a reward. Such battles run on all business days for varying time periods (daily, weekly, monthly, etc.)
 
-Can I Create My Own League?
-Currently, only StoxHero can create battles. Please contact us if you are interested in creating custom Battles @ team@stoxhero.com.
+// Can I Create My Own League?
+// Currently, only StoxHero can create battles. Please contact us if you are interested in creating custom Battles @ team@stoxhero.com.
 
-What is 'Upcoming Battles' tab?
-Upcoming Battles tab has all those battles which are yet to start. You can register for these battles subject to availability of seats.
+// What is 'Upcoming Battles' tab?
+// Upcoming Battles tab has all those battles which are yet to start. You can register for these battles subject to availability of seats.
 
-What is 'My Battle' tab?
-My Battles tab has all those battles which you've enrolled in and are yet to end.
+// What is 'My Battle' tab?
+// My Battles tab has all those battles which you've enrolled in and are yet to end.
 
-What is 'History' tab?
-History tab has all those battles in which you've participated.
+// What is 'History' tab?
+// History tab has all those battles in which you've participated.
 
-Can I Join Battle Every Day And At Any Time?
-Battles run during regular market hours. Each Battle has specific timings associated with it, which can be viewed by clicking on the Battle in the 'Upcoming Battle' section under 'Battle Ground' tab.
+// Can I Join Battle Every Day And At Any Time?
+// Battles run during regular market hours. Each Battle has specific timings associated with it, which can be viewed by clicking on the Battle in the 'Upcoming Battle' section under 'Battle Ground' tab.
 
-How Can I Join Leagues?
-• To join Battle, tap on 'Battle Ground'
-• All upcoming battles will be listed here
-• Find a Battle of your choice which has seats 'Left'
-• On the next screen, battle rules and rewards table are displayed.
-• Accept the League 'Terms & Conditions' and click 'Register'
-• Accept the League 'Terms & Conditions' and click 'Register'
-• Next, Link one of the available battle Portfolios and click on 'Join'
-• Now you can go to 'My Battles' tab to see the battle in which you have registered
+// How Can I Join Leagues?
+// • To join Battle, tap on 'Battle Ground'
+// • All upcoming battles will be listed here
+// • Find a Battle of your choice which has seats 'Left'
+// • On the next screen, battle rules and rewards table are displayed.
+// • Accept the League 'Terms & Conditions' and click 'Register'
+// • Accept the League 'Terms & Conditions' and click 'Register'
+// • Next, Link one of the available battle Portfolios and click on 'Join'
+// • Now you can go to 'My Battles' tab to see the battle in which you have registered
 
-What Are The Rules Of A Battle?
-• Every user who joins a Battle needs to link an unlinked league portfolio to it
-• Note that a portfolio can be linked to one Battle only and one Battle will only support one portfolio
-• Once the portfolio is linked, the user can come to the battle and after the battle starts can buy and sell contracts
-• To find more rules specific to the Battle, check out the battle rules inside Battle Info section
+// What Are The Rules Of A Battle?
+// • Every user who joins a Battle needs to link an unlinked league portfolio to it
+// • Note that a portfolio can be linked to one Battle only and one Battle will only support one portfolio
+// • Once the portfolio is linked, the user can come to the battle and after the battle starts can buy and sell contracts
+// • To find more rules specific to the Battle, check out the battle rules inside Battle Info section
 
-Can I Exit The Battle Before It Starts?
-Yes, a battle can be exited before it starts.
+// Can I Exit The Battle Before It Starts?
+// Yes, a battle can be exited before it starts.
 
-Where Can I See The Battle I Joined In The Past?
-You can visit 'History' tab under Battle Ground tab to see the battles which you joined in the past.
+// Where Can I See The Battle I Joined In The Past?
+// You can visit 'History' tab under Battle Ground tab to see the battles which you joined in the past.
 
-What Is 'Transaction Fee'?
-Each time a trade is executed on the StoxHero App, a transaction fee of 20 Rupees/Order + standard NSE/BSE, STT/CTT, STAMP Duty, GST charges on the total traded value is charged on the buy as well as sell side side. This is deducted from INR 10,00,000 virtual cash in your portfolio.
+// What Is 'Transaction Fee'?
+// Each time a trade is executed on the StoxHero App, a transaction fee of 20 Rupees/Order + standard NSE/BSE, STT/CTT, STAMP Duty, GST charges on the total traded value is charged on the buy as well as sell side side. This is deducted from INR 10,00,000 virtual cash in your portfolio.
 
-When Does Trading Start On The StoxHero App?
-In the Trading Portfolio, you can start trading at 9:15 AM when the market opens. However, in the case of battles, please check the Battle Ground section as each battle has a different starting time. Do note - all battles start after 9:30 AM and end before 3:25 PM.
-''',
-  ),
+// When Does Trading Start On The StoxHero App?
+// In the Trading Portfolio, you can start trading at 9:15 AM when the market opens. However, in the case of battles, please check the Battle Ground section as each battle has a different starting time. Do note - all battles start after 9:30 AM and end before 3:25 PM.
+// ''',
+//   ),
   FaqItem(
     'Points & Ranking System',
     '''

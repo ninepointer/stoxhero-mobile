@@ -79,16 +79,14 @@ class SplashController extends GetxController {
         await Future.delayed(Duration(seconds: 1));
         if (useTestToken) {
           await Get.find<AuthController>().getUserDetails();
-          log('Test: ${AppStorage.getUserDetails().toJson()}');
-          log('Get: ${AppStorage.getToken()}');
-          FirebaseAnalytics.instance.logEvent(name: 'user_login', parameters: {
-            'id': AppStorage.getUserDetails().sId,
-            'email': AppStorage.getUserDetails().email,
-          });
         } else {
           if (token == null || token.isEmpty) {
             Get.offAllNamed(AppRoutes.signin);
           } else {
+            FirebaseAnalytics.instance.logEvent(name: 'user_login', parameters: {
+              'id': AppStorage.getUserDetails().sId,
+              'email': AppStorage.getUserDetails().email,
+            });
             await Get.find<AuthController>().getUserDetails();
           }
         }

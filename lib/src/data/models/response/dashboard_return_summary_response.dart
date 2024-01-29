@@ -20,24 +20,19 @@ class DashboardReturnSummaryResponse {
 }
 
 class DashboardReturnSummary {
-  int? totalTenXPortfolioValue;
+  num? totalTenXPortfolioValue;
   TenxData? tenxData;
   VirtualData? virtualData;
   num? contestReturn;
   num? tenxReturn;
 
   DashboardReturnSummary(
-      {this.totalTenXPortfolioValue,
-      this.tenxData,
-      this.virtualData,
-      this.contestReturn,
-      this.tenxReturn});
+      {this.totalTenXPortfolioValue, this.tenxData, this.virtualData, this.contestReturn, this.tenxReturn});
 
   DashboardReturnSummary.fromJson(Map<String, dynamic> json) {
     totalTenXPortfolioValue = json['totalTenXPortfolioValue'];
     tenxData = json['tenxData'] != null ? new TenxData.fromJson(json['tenxData']) : null;
-    virtualData =
-        json['virtualData'] != null ? new VirtualData.fromJson(json['virtualData']) : null;
+    virtualData = json['virtualData'] != null ? new VirtualData.fromJson(json['virtualData']) : null;
     contestReturn = json['contestReturn'];
     tenxReturn = json['tenxReturn'];
   }
@@ -61,7 +56,7 @@ class TenxData {
   TId? iId;
   String? date;
   num? npnl;
-  int? portfolio;
+  num? portfolio;
 
   TenxData({this.iId, this.date, this.npnl, this.portfolio});
 
@@ -111,13 +106,7 @@ class VirtualData {
   String? portfolio;
   num? npnl;
 
-  VirtualData(
-      {this.nId,
-      this.totalGpnl,
-      this.totalBrokerage,
-      this.numberOfTrades,
-      this.portfolio,
-      this.npnl});
+  VirtualData({this.nId, this.totalGpnl, this.totalBrokerage, this.numberOfTrades, this.portfolio, this.npnl});
 
   VirtualData.fromJson(Map<String, dynamic> json) {
     nId = json['_id'];

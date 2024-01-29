@@ -6,11 +6,17 @@ class TradingPositionListResponse {
 
   TradingPositionListResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
+    // print('message $message');
     if (json['data'] != null) {
       data = <TradingPosition>[];
-      json['data'].forEach((v) {
+      // print('pnldata $data');
+      var instdata = json['data'];
+      instdata.forEach((v) {
+        print('jsondataV $v');
         data!.add(new TradingPosition.fromJson(v));
       });
+
+      print('pnl $data');
     }
   }
 
@@ -32,7 +38,13 @@ class TradingPosition {
   num? lastaverageprice;
   num? margin;
 
-  TradingPosition({this.id, this.amount, this.brokerage, this.lots, this.lastaverageprice, this.margin});
+  TradingPosition(
+      {this.id,
+      this.amount,
+      this.brokerage,
+      this.lots,
+      this.lastaverageprice,
+      this.margin});
 
   TradingPosition.fromJson(Map<String, dynamic> json) {
     id = json['_id'] != null ? new IdDetails.fromJson(json['_id']) : null;

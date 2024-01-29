@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/modules/modules.dart';
-
-import '../../../core/core.dart';
+import '../../../app/app.dart';
 
 class ContestSearchSymbolView extends GetView<ContestController> {
   const ContestSearchSymbolView({Key? key}) : super(key: key);
@@ -60,16 +57,52 @@ class ContestSearchSymbolView extends GetView<ContestController> {
                       itemCount: controller.tradingInstruments.length,
                       itemBuilder: (context, index) {
                         var data = controller.tradingInstruments[index];
-                        return ContestSearchInstrumentsCard(
+                        void openBottomSheet(
+                            BuildContext context, TransactionType type) {
+                          controller.addInstrument(data);
+                          FocusScope.of(context).unfocus();
+                          num lastPrice = controller.getInstrumentLastPrice(
+                            data.instrumentToken ?? 0,
+                            data.exchangeToken ?? 0,
+                          );
+                          controller.generateLotsList(type: data.name);
+                          var tradingIntrument = TradingInstrument(
+                            name: data.tradingsymbol,
+                            instrumentType: data.instrumentType,
+                            exchange: data.exchange,
+                            tradingsymbol: data.tradingsymbol,
+                            exchangeToken: data.exchangeToken,
+                            instrumentToken: data.instrumentToken,
+                            lastPrice: lastPrice,
+                          );
+                          BottomSheetHelper.openBottomSheet(
+                            context: context,
+                            child: ContestTransactionBottomSheet(
+                              type: type,
+                              tradingInstrument: tradingIntrument,
+                              marginRequired: controller.getMarginRequired(
+                                  type, tradingIntrument),
+                            ),
+                          );
+                        }
+
+                        return TradingInstrumentSearchCard(
                           tradingInstrument: data,
                           isAdded: controller.tradingWatchlistIds.contains(
                             data.instrumentToken ?? data.exchangeToken,
                           ),
+                          buyOnTap: () =>
+                              openBottomSheet(context, TransactionType.buy),
+                          sellOnTap: () =>
+                              openBottomSheet(context, TransactionType.sell),
+                          removeOnTap: () =>
+                              controller.removeInstrument(data.instrumentToken),
+                          addOnTap: () => controller.addInstrument(data),
                         );
                       },
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

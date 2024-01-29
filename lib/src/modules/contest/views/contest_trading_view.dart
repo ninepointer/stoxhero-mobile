@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/modules/contest/widgets/contest_stoploss_pending_order_card.dart';
+import 'package:stoxhero/src/modules/contest/views/resultView.dart';
+// import 'package:get_storage/get_storage.dart';
 import '../../../app/app.dart';
 
 class ContestTradingView extends GetView<ContestController> {
-  const ContestTradingView({Key? key}) : super(key: key);
+  final bool isLiveContest;
+  const ContestTradingView({Key? key, this.isLiveContest = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '${controller.liveContest.value.contestName ?? 'Contest'}',
-          style: Theme.of(context).textTheme.tsRegular16,
-          textAlign: TextAlign.center,
-        ),
-      ),
+          title: Text(
+        '${isLiveContest ? controller.liveContest.value.contestName : controller.liveFeatured.value.contestName}',
+        style: Theme.of(context).textTheme.tsRegular16,
+        textAlign: TextAlign.center,
+      )),
       body: Obx(
         () => Visibility(
           visible: !controller.isLoadingStatus,
@@ -24,30 +26,39 @@ class ContestTradingView extends GetView<ContestController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty &&
+                      controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          for (var item in controller.stockIndexDetailsList) ...[
+                          for (var item
+                              in controller.stockIndexDetailsList) ...[
                             TradingStockCard(
-                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              label: controller
+                                  .getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
                               stockColor: controller.getValueColor(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                               stockLTP: FormatHelper.formatNumbers(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
-                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockChange:
+                                  '(${item.change?.toStringAsFixed(2)}%)',
                               stockLTPColor: controller.getValueColor(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                             ),
-                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                            if (item != controller.stockIndexDetailsList.last)
+                              SizedBox(width: 4),
                           ]
                         ],
                       ),
@@ -82,11 +93,12 @@ class ContestTradingView extends GetView<ContestController> {
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here! \nClick on + icon to add instruments',
+                          label: AppStrings.noDataFoundWatchlist,
                         )
                       : SizedBox(
-                          height:
-                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
+                          height: controller.tradingWatchlist.length >= 3
+                              ? 260
+                              : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -94,7 +106,8 @@ class ContestTradingView extends GetView<ContestController> {
                             itemBuilder: (context, index) {
                               return ContestWatchlistCard(
                                 index: index,
-                                tradingWatchlist: controller.tradingWatchlist[index],
+                                tradingWatchlist:
+                                    controller.tradingWatchlist[index],
                               );
                             },
                           ),
@@ -103,15 +116,22 @@ class ContestTradingView extends GetView<ContestController> {
                     label: 'My Rank',
                     showSeeAllButton: true,
                     seeAllLabel: 'Leaderboard',
-                    onPressed: () => Get.toNamed(AppRoutes.contestLiveLeaderboard),
+                    onPressed: () =>
+                        Get.toNamed(AppRoutes.contestLiveLeaderboard),
                   ),
                   CommonRankCard(
                     rank: controller.myRank.toString(),
-                    name: '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
+                    name:
+                        '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
                     netPnL: controller.calculateTotalNetPNL().toString(),
-                    reward: controller.calculatePayout().toString(),
+                    reward: controller.liveContest.value.payoutType == 'Reward'
+                        ? controller
+                            .calculateUserReward(controller.myRank.toString())
+                            .toString()
+                        : controller.calculatePayout().toString(),
                   ),
-                  if (controller.contestPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
+                  if (controller.contestPositionsList.isNotEmpty)
+                    CommonTile(label: 'My Position Summary'),
                   if (controller.contestPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -122,12 +142,14 @@ class ContestTradingView extends GetView<ContestController> {
                               PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
-                                value: controller.tenxTotalPositionDetails.value.lots,
+                                value: controller
+                                    .tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
                               PositionDetailCardTile(
                                 label: 'Brokerage',
-                                value: controller.tenxTotalPositionDetails.value.brokerage,
+                                value: controller
+                                    .tenxTotalPositionDetails.value.brokerage,
                               ),
                             ],
                           ),
@@ -155,10 +177,46 @@ class ContestTradingView extends GetView<ContestController> {
                           Row(
                             children: [
                               PositionDetailCardTile(
-                                label: 'Payout',
-                                value: controller.calculatePayout().round(),
+                                  label: 'Reward',
+                                  // valueColor: AppColors.success,
+                                  value: controller.getRewardCapAmount(
+                                      (controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) == 0
+                                          ? controller.liveFeatured.value
+                                                  .portfolio?.portfolioValue ??
+                                              controller.liveContest.value
+                                                  .portfolio?.portfolioValue ??
+                                              0
+                                          : (controller.liveFeatured.value.entryFee ??
+                                                  controller.liveContest.value
+                                                      .entryFee) ??
+                                              0,
+                                      controller.liveFeatured.value.payoutCapPercentage ??
+                                          controller.liveContest.value
+                                              .payoutCapPercentage ??
+                                          0,
+                                      controller.liveFeatured.value.payoutPercentage ??
+                                          controller.liveContest.value
+                                              .payoutPercentage ??
+                                          0),
+                                  valueColor: controller.getValueColor(controller.getRewardCapAmount((controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) == 0 ? controller.liveFeatured.value.portfolio?.portfolioValue ?? controller.liveContest.value.portfolio?.portfolioValue ?? 0 : (controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) ?? 0, controller.liveFeatured.value.payoutCapPercentage ?? controller.liveContest.value.payoutCapPercentage ?? 0, controller.liveFeatured.value.payoutPercentage ?? controller.liveContest.value.payoutPercentage ?? 0))),
+                              SizedBox(width: 8),
+                              PositionDetailCardTile(
+                                label: 'TDS',
+                                value: controller.calculateTDS().round(),
                                 valueColor: controller.getValueColor(
-                                  controller.calculatePayout(),
+                                  controller.calculateTDS(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              PositionDetailCardTile(
+                                label: 'Payout',
+                                value: controller.calculatefinalPayout(),
+                                valueColor: controller.getValueColor(
+                                  controller.calculatefinalPayout(),
                                 ),
                               ),
                             ],
@@ -176,14 +234,17 @@ class ContestTradingView extends GetView<ContestController> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.contestPositionsList.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: AppStrings.noDataFoundPositions,
+                        )
                       : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.contestPositionsList.length,
                           itemBuilder: (context, index) {
-                            final position = controller.contestPositionsList[index];
+                            final position =
+                                controller.contestPositionsList[index];
                             if (position.id?.isLimit != true) {
                               return ContestPositionCard(
                                 position: position,
@@ -200,7 +261,7 @@ class ContestTradingView extends GetView<ContestController> {
                   ),
                   controller.stopLossPendingOrderList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundPendingOrders,
                         )
                       : ListView.builder(
                           shrinkWrap: true,
@@ -209,7 +270,8 @@ class ContestTradingView extends GetView<ContestController> {
                           itemCount: controller.stopLossPendingOrderList.length,
                           itemBuilder: (context, index) {
                             return ContestStoplossPendingOrderCard(
-                              stopLoss: controller.stopLossPendingOrderList[index],
+                              stopLoss:
+                                  controller.stopLossPendingOrderList[index],
                             );
                           },
                         ),
@@ -220,19 +282,24 @@ class ContestTradingView extends GetView<ContestController> {
                   ),
                   controller.stopLossExecutedOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundExecutedOrders,
                         )
                       : SizedBox(
-                          height: controller.stopLossExecutedOrdersList.length >= 3
-                              ? 180
-                              : controller.stopLossExecutedOrdersList.length * 130,
+                          height:
+                              controller.stopLossExecutedOrdersList.length >= 3
+                                  ? 180
+                                  : controller
+                                          .stopLossExecutedOrdersList.length *
+                                      130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemCount:
+                                controller.stopLossExecutedOrdersList.length,
                             itemBuilder: (context, index) {
                               return StoplossExecutedOrderCard(
-                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                                stopLoss: controller
+                                    .stopLossExecutedOrdersList[index],
                               );
                             },
                           ),
@@ -244,7 +311,7 @@ class ContestTradingView extends GetView<ContestController> {
                   ),
                   controller.contestOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundCompletedRejectedOrders,
                         )
                       : SizedBox(
                           height: controller.contestOrdersList.length >= 3
@@ -263,7 +330,7 @@ class ContestTradingView extends GetView<ContestController> {
                         ),
                   CommonTile(
                     isLoading: controller.isPortfolioStateLoadingStatus,
-                    label: 'Portfolio Details',
+                    label: 'Virtual Margin Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   PortfolioDetailCardTile(
@@ -279,8 +346,11 @@ class ContestTradingView extends GetView<ContestController> {
                   PortfolioDetailCardTile(
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
-                    value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
-                    valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                    value: controller.calculateTotalNetPNL() > 0
+                        ? 0
+                        : controller.calculateTotalNetPNL().abs(),
+                    valueColor: controller
+                        .getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   PortfolioDetailCardTile(
                     label: 'Unrealised Profit & Loss',

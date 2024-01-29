@@ -1,9 +1,12 @@
+import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
+
 import 'app.dart';
 
 class AppBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(NetworkService(), permanent: true);
+    Get.put(NotificationServices(), permanent: true);
     Get.put(AuthRepository(), permanent: true);
     Get.put(ProfileRepository(), permanent: true);
     Get.put(PortfolioRepository(), permanent: true);
@@ -20,13 +23,15 @@ class AppBinding extends Bindings {
     Get.put(TutorialRepository(), permanent: true);
     Get.put(InternshipRespository(), permanent: true);
     Get.put(CollegeContestRepository(), permanent: true);
+    Get.put(ContestProfileRepository(), permanent: true);
+    Get.put(StocksTradingRepository(), permanent: true);
+    Get.put(AffiliateRespository(), permanent: true);
 
     Get.put(AppController(), permanent: true);
     Get.put(AuthController(), permanent: true);
     Get.put(HomeController(), permanent: true);
     Get.put(TenxTradingController(), permanent: true);
     Get.put(ProfileController(), permanent: true);
-    // Get.put(BankController(), permanent: true);
 
     Get.put(PortfolioController(), permanent: true);
     Get.put(ReferralsController(), permanent: true);
@@ -40,5 +45,8 @@ class AppBinding extends Bindings {
     Get.put(VirtualTradingController(), permanent: true);
     Get.put(CollegeContestController(), permanent: true);
     Get.put(InternshipController(), permanent: true);
+    Get.put(ContestProfileController(), permanent: true);
+    Get.put(StocksTradingController(), permanent: true);
+    Get.put(AffiliateController(), permanent: true);
   }
 }

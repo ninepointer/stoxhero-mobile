@@ -20,14 +20,14 @@ class SplashView extends GetView<SplashController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AppLogoWidget(),
-                SizedBox(height: 16),
+                SizedBox(height: 8),
                 Container(
-                  width: 100,
+                  width: 150,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(50),
                     child: LinearProgressIndicator(
                       backgroundColor: AppColors.grey.withOpacity(.25),
-                      color: AppColors.primary,
+                      color: AppColors.lightGreen,
                     ),
                   ),
                 ),
@@ -43,7 +43,10 @@ class SplashView extends GetView<SplashController> {
                     if (!isProd)
                       Text(
                         'DEV',
-                        style: AppStyles.tsPrimaryMedium12,
+                        style: Get.isDarkMode
+                            ? AppStyles.tsGreyRegular14
+                            : AppStyles.tsPrimaryMedium12
+                                .copyWith(color: AppColors.lightGreen),
                       ),
                     Text(
                       controller.appVersion,

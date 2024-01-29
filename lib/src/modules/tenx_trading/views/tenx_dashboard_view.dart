@@ -23,30 +23,39 @@ class TenxDashboardView extends GetView<TenxTradingController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (controller.stockIndexDetailsList.isNotEmpty && controller.stockIndexInstrumentList.isNotEmpty)
+                  if (controller.stockIndexDetailsList.isNotEmpty &&
+                      controller.stockIndexInstrumentList.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          for (var item in controller.stockIndexDetailsList) ...[
+                          for (var item
+                              in controller.stockIndexDetailsList) ...[
                             TradingStockCard(
-                              label: controller.getStockIndexName(item.instrumentToken ?? 0),
+                              label: controller
+                                  .getStockIndexName(item.instrumentToken ?? 0),
                               stockPrice: FormatHelper.formatNumbers(
                                 item.lastPrice,
                               ),
                               stockColor: controller.getValueColor(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                               stockLTP: FormatHelper.formatNumbers(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
-                              stockChange: '(${item.change?.toStringAsFixed(2)}%)',
+                              stockChange:
+                                  '(${item.change?.toStringAsFixed(2)}%)',
                               stockLTPColor: controller.getValueColor(
-                                item.lastPrice! - (item.ohlc?.close ?? 0),
+                                // item.lastPrice! - (item.ohlc?.close ?? 0),
+                                (item.lastPrice! * item.change!) / 100,
                               ),
                             ),
-                            if (item != controller.stockIndexDetailsList.last) SizedBox(width: 4),
+                            if (item != controller.stockIndexDetailsList.last)
+                              SizedBox(width: 4),
                           ]
                         ],
                       ),
@@ -129,11 +138,12 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   ),
                   controller.tradingWatchlist.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here! \nClick on + icon to add instruments',
+                          label: AppStrings.noDataFoundWatchlist,
                         )
                       : SizedBox(
-                          height:
-                              controller.tradingWatchlist.length >= 3 ? 260 : controller.tradingWatchlist.length * 130,
+                          height: controller.tradingWatchlist.length >= 3
+                              ? 260
+                              : controller.tradingWatchlist.length * 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -141,12 +151,14 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                             itemBuilder: (context, index) {
                               return TenxWatchlistCard(
                                 index: index,
-                                tradingWatchlist: controller.tradingWatchlist[index],
+                                tradingWatchlist:
+                                    controller.tradingWatchlist[index],
                               );
                             },
                           ),
                         ),
-                  if (controller.tenxPositionsList.isNotEmpty) CommonTile(label: 'My Position Summary'),
+                  if (controller.tenxPositionsList.isNotEmpty)
+                    CommonTile(label: 'My Position Summary'),
                   if (controller.tenxPositionsList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -157,12 +169,14 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                               PositionDetailCardTile(
                                 isNum: true,
                                 label: 'Running Lots',
-                                value: controller.tenxTotalPositionDetails.value.lots,
+                                value: controller
+                                    .tenxTotalPositionDetails.value.lots,
                               ),
                               SizedBox(width: 8),
                               PositionDetailCardTile(
                                 label: 'Brokerage',
-                                value: controller.tenxTotalPositionDetails.value.brokerage,
+                                value: controller
+                                    .tenxTotalPositionDetails.value.brokerage,
                               ),
                             ],
                           ),
@@ -172,13 +186,15 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                               PositionDetailCardTile(
                                 label: 'Gross P&L',
                                 value: controller.calculateTotalGrossPNL(),
-                                valueColor: controller.getValueColor(controller.calculateTotalGrossPNL()),
+                                valueColor: controller.getValueColor(
+                                    controller.calculateTotalGrossPNL()),
                               ),
                               SizedBox(width: 8),
                               PositionDetailCardTile(
                                 label: 'Net P&L',
                                 value: controller.calculateTotalNetPNL(),
-                                valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                                valueColor: controller.getValueColor(
+                                    controller.calculateTotalNetPNL()),
                               ),
                             ],
                           ),
@@ -195,14 +211,17 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   controller.tenxPositionsList.isEmpty
-                      ? NoDataFound()
+                      ? NoDataFound(
+                          label: AppStrings.noDataFoundPositions,
+                        )
                       : ListView.builder(
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: controller.tenxPositionsList.length,
                           itemBuilder: (context, index) {
-                            final position = controller.tenxPositionsList[index];
+                            final position =
+                                controller.tenxPositionsList[index];
                             if (position.id?.isLimit != true) {
                               return TenxPositionCard(
                                 position: position,
@@ -219,7 +238,7 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   ),
                   controller.stopLossPendingOrderList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundPendingOrders,
                         )
                       : ListView.builder(
                           shrinkWrap: true,
@@ -228,7 +247,8 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                           itemCount: controller.stopLossPendingOrderList.length,
                           itemBuilder: (context, index) {
                             return StoplossPendingOrderCard(
-                              stopLoss: controller.stopLossPendingOrderList[index],
+                              stopLoss:
+                                  controller.stopLossPendingOrderList[index],
                             );
                           },
                         ),
@@ -239,19 +259,24 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   ),
                   controller.stopLossExecutedOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundExecutedOrders,
                         )
                       : SizedBox(
-                          height: controller.stopLossExecutedOrdersList.length >= 3
-                              ? 180
-                              : controller.stopLossExecutedOrdersList.length * 130,
+                          height:
+                              controller.stopLossExecutedOrdersList.length >= 3
+                                  ? 180
+                                  : controller
+                                          .stopLossExecutedOrdersList.length *
+                                      130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.stopLossExecutedOrdersList.length,
+                            itemCount:
+                                controller.stopLossExecutedOrdersList.length,
                             itemBuilder: (context, index) {
                               return StoplossExecutedOrderCard(
-                                stopLoss: controller.stopLossExecutedOrdersList[index],
+                                stopLoss: controller
+                                    .stopLossExecutedOrdersList[index],
                               );
                             },
                           ),
@@ -263,26 +288,30 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   ),
                   controller.tenxTradeTodaysOrdersList.isEmpty
                       ? NoDataFound(
-                          label: 'Nothing here!\n Please Take Trade',
+                          label: AppStrings.noDataFoundCompletedRejectedOrders,
                         )
                       : SizedBox(
-                          height: controller.tenxTradeTodaysOrdersList.length >= 3
+                          height: controller.tenxTradeTodaysOrdersList.length >=
+                                  3
                               ? 180
-                              : controller.tenxTradeTodaysOrdersList.length * 130,
+                              : controller.tenxTradeTodaysOrdersList.length *
+                                  130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            itemCount: controller.tenxTradeTodaysOrdersList.length,
+                            itemCount:
+                                controller.tenxTradeTodaysOrdersList.length,
                             itemBuilder: (context, index) {
                               return TenxTodayOrderCard(
-                                order: controller.tenxTradeTodaysOrdersList[index],
+                                order:
+                                    controller.tenxTradeTodaysOrdersList[index],
                               );
                             },
                           ),
                         ),
                   CommonTile(
                     isLoading: controller.isPortfolioStateLoadingStatus,
-                    label: 'Portfolio Details',
+                    label: 'Virtual Margin Details',
                     margin: EdgeInsets.only(bottom: 0, top: 8),
                   ),
                   PortfolioDetailCardTile(
@@ -298,13 +327,19 @@ class TenxDashboardView extends GetView<TenxTradingController> {
                   PortfolioDetailCardTile(
                     label: 'Used Margin Money',
                     info: 'Net funds utilized for your executed trades',
-                    value: controller.calculateTotalNetPNL() > 0 ? 0 : controller.calculateTotalNetPNL().abs(),
-                    valueColor: controller.getValueColor(controller.calculateTotalNetPNL()),
+                    value: controller.calculateTotalNetPNL() > 0
+                        ? 0
+                        : controller.calculateTotalNetPNL().abs(),
+                    valueColor: controller
+                        .getValueColor(controller.calculateTotalNetPNL()),
                   ),
                   PortfolioDetailCardTile(
                     label: 'Opening Balance',
                     info: 'Cash available at the beginning of the day',
-                    value: (controller.tenxPortfolioDetails.value.openingBalance ?? 0) > 0
+                    value: (controller.tenxPortfolioDetails.value
+                                    .openingBalance ??
+                                0) >
+                            0
                         ? controller.tenxPortfolioDetails.value.openingBalance
                         : controller.tenxPortfolioDetails.value.totalFund,
                   ),

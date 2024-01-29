@@ -27,9 +27,9 @@ class ContestView extends StatelessWidget {
           // SizedBox(height: 12),
           customCard(
             context: context,
-            title: 'Contests',
+            title: 'TestZone',
             image: AppImages.contest,
-            buttonLabel: 'Join Contest!',
+            buttonLabel: 'Join TestZone!',
             onPressed: () {
               Get.find<ContestController>().loadData();
               Get.find<ContestController>().selectedTabBarIndex(0);
@@ -39,9 +39,9 @@ class ContestView extends StatelessWidget {
           SizedBox(height: 12),
           customCard(
             context: context,
-            title: 'College Contests',
+            title: 'College TestZone',
             image: AppImages.collegeContest,
-            buttonLabel: 'Join College Contest!',
+            buttonLabel: 'Join College TestZone!',
             onPressed: () {
               Get.find<CollegeContestController>().loadData();
               Get.find<CollegeContestController>().selectedTabBarIndex(0);
@@ -51,12 +51,13 @@ class ContestView extends StatelessWidget {
           SizedBox(height: 12),
           customCard(
             context: context,
-            title: 'Contests Leaderboard',
+            title: 'TestZone Leaderboard',
             image: AppImages.contestLeaderboard,
-            buttonLabel: 'See Contest Leaderboard!',
+            buttonLabel: 'See TestZone Leaderboard!',
             onPressed: () {
               final contestController = Get.find<ContestController>();
-              final collegeContestController = Get.find<CollegeContestController>();
+              final collegeContestController =
+                  Get.find<CollegeContestController>();
               contestController.getContestLeaderboardList();
               collegeContestController.getCollegeContestLeaderboardList();
               Get.find<ContestController>().selectedTabBarIndex(0);
@@ -107,7 +108,7 @@ class ContestView extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "Start trading, join our virtual Futures & Options contest, and win real cash prizes based on your portfolio's value",
+                    "Start trading, join our virtual Futures & Options TestZone, and win real cash prizes based on your margin money",
                     style: Theme.of(context).textTheme.tsGreyRegular14,
                   ),
                 ],
@@ -117,6 +118,8 @@ class ContestView extends StatelessWidget {
                 label: buttonLabel,
                 height: 42,
                 onPressed: onPressed,
+                backgroundColor:
+                    Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
               ),
             ],
           ),

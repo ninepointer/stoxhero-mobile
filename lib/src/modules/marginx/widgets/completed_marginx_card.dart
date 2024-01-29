@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/data/data.dart';
 import 'package:stoxhero/src/modules/marginx/marginx_index.dart';
+import 'completed_marginx_share_sheet.dart';
 
 import '../../../core/core.dart';
 
@@ -19,7 +20,8 @@ class CompletedMarginxCard extends GetView<MarginXController> {
       padding: EdgeInsets.zero,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          // padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: EdgeInsets.only(left: 12, right: 12, top: 8),
           child: Row(
             children: [
               Expanded(
@@ -32,20 +34,16 @@ class CompletedMarginxCard extends GetView<MarginXController> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
               Visibility(
                 visible: marginx?.isNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.success,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
                   child: Text(
                     'Nifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
@@ -54,13 +52,9 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                 visible: marginx?.isBankNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
                   child: Text(
                     'Bank Nifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
@@ -69,92 +63,87 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                 visible: marginx?.isFinNifty == true,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.info,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
                   child: Text(
                     'Finnifty',
-                    style: AppStyles.tsWhiteMedium12,
+                    style: AppStyles.tsGreyMedium12,
                   ),
                 ),
               ),
               SizedBox(width: 4),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.danger,
-                  borderRadius: BorderRadius.circular(100),
-                ),
                 child: Text(
                   marginx?.marginxExpiry ?? '',
-                  style: AppStyles.tsWhiteMedium12,
+                  style: AppStyles.tsGreyMedium12,
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 8),
-        Divider(thickness: 1, height: 0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              AppImages.contestTrophy,
+              width: 30,
+              height: 20,
+            ),
+            SizedBox(height: 2),
+            Text(
+              '% of your Investment',
+              style: Theme.of(context).textTheme.tsMedium12,
+            ),
+          ],
+        ),
         SizedBox(height: 8),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Started On',
-                      style: AppStyles.tsGreyMedium12,
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      FormatHelper.formatDateTimeToIST(marginx?.startTime),
-                      style: Theme.of(context).textTheme.tsMedium12,
-                    ),
-                  ],
-                ),
-              ),
-              Column(
+              Row(
                 children: [
-                  Image.asset(
-                    AppImages.contestTrophy,
-                    width: 40,
-                  ),
-                  SizedBox(height: 2),
                   Text(
-                    'Reward',
-                    style: AppStyles.tsGreyMedium12,
+                    'Started:',
+                    style: Theme.of(context).textTheme.tsGreyMedium12,
+                  ),
+                  SizedBox(
+                    width: 2,
                   ),
                   Text(
-                    '% of your Investment',
-                    style: Theme.of(context).textTheme.tsMedium12,
+                    FormatHelper.formatDateTimeWithoutYearToIST(
+                        marginx?.startTime),
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Rubik'),
                   ),
                 ],
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Ended On',
-                      style: AppStyles.tsGreyMedium12,
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      FormatHelper.formatDateTimeToIST(marginx?.endTime),
-                      style: Theme.of(context).textTheme.tsMedium12,
-                      textAlign: TextAlign.end,
-                    ),
-                  ],
-                ),
+              Row(
+                children: [
+                  Text(
+                    'Ended:',
+                    style: Theme.of(context).textTheme.tsGreyMedium12,
+                  ),
+                  SizedBox(
+                    width: 2,
+                  ),
+                  Text(
+                    FormatHelper.formatDateTimeWithoutYearToIST(
+                        marginx?.endTime),
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Rubik'),
+                  ),
+                ],
               ),
             ],
           ),
+        ),
+        SizedBox(
+          height: 4,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -167,13 +156,27 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Investment',
+                        'Virtual Margin',
                         style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(marginx?.entryFee, decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.portfolioValue,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Completed',
+                        // style: Theme.of(context).textTheme.tsMedium12,
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -181,12 +184,13 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Virtual Margin Money',
+                        'Entry Fee',
                         style: AppStyles.tsGreyMedium12,
                       ),
                       SizedBox(height: 2),
                       Text(
-                        FormatHelper.formatNumbers(marginx?.portfolioValue, decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.entryFee,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],
@@ -197,34 +201,63 @@ class CompletedMarginxCard extends GetView<MarginXController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
                       Text(
-                        'Net P&L (Profit & Loss)',
+                        'Net P&L: ',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(
+                        width: 2,
+                      ),
                       Text(
-                        FormatHelper.formatNumbers(marginx?.npnl ?? 0, decimal: 0),
+                        (marginx?.npnl ?? 0) > 0
+                            ? '+${FormatHelper.formatNumbers(marginx?.npnl ?? 0, decimal: 0)}'
+                            : '${FormatHelper.formatNumbers(marginx?.npnl ?? 0, decimal: 0)}',
                         style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                              color: (marginx?.npnl ?? 0) >= 0 ? AppColors.success : AppColors.danger,
+                              color: (marginx?.npnl ?? 0) >= 0
+                                  ? AppColors.success
+                                  : AppColors.danger,
                             ),
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                  Row(
                     children: [
                       Text(
-                        'Net Earnings',
-                        style: AppStyles.tsGreyMedium12,
+                        'TDS:',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(
+                        width: 2,
+                      ),
                       Text(
-                        FormatHelper.formatNumbers(marginx?.earning ?? 0, decimal: 0),
+                        FormatHelper.formatNumbers(marginx?.tds ?? 0,
+                            decimal: 0),
                         style: Theme.of(context).textTheme.tsMedium12.copyWith(
-                              color: (marginx?.earning ?? 0) >= 0 ? AppColors.success : AppColors.danger,
+                              color: (marginx?.earning ?? 0) >= 0
+                                  ? AppColors.success
+                                  : AppColors.danger,
+                            ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Reward:',
+                        style: Theme.of(context).textTheme.tsGreyMedium12,
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        FormatHelper.formatNumbers(marginx?.earning ?? 0,
+                            decimal: 0),
+                        style: Theme.of(context).textTheme.tsMedium12.copyWith(
+                              color: (marginx?.earning ?? 0) >= 0
+                                  ? AppColors.success
+                                  : AppColors.danger,
                             ),
                       )
                     ],
@@ -285,10 +318,20 @@ class CompletedMarginxCard extends GetView<MarginXController> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  String url = 'https://stoxhero.com/marginxs';
-                  Clipboard.setData(ClipboardData(text: url));
-                  SnackbarHelper.showSnackbar('Link Copied, Share with your friends.');
+                onTap: () async {
+                  controller.completedMarginX(marginx);
+
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Center(
+                        child: ShareMarginXModalContent(
+                          marginx: marginx,
+                        ),
+                      );
+                    },
+                  );
+                  // }
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -300,7 +343,7 @@ class CompletedMarginxCard extends GetView<MarginXController> {
                     ),
                   ),
                   child: Text(
-                    'Share P&L',
+                    'Share',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.secondary.shade600,
                     ),

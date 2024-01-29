@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../app/app.dart';
+import 'tenx_Analitical_Bottom_sheet.dart';
+import 'expired_tenx_share_sheet.dart';
 
 class TenxExpiredCard extends GetView<TenxTradingController> {
   final TenxExpiredPlan subscription;
@@ -36,69 +38,6 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
         SizedBox(height: 12),
         Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 12),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Subscription Price',
-                            style: AppStyles.tsSecondaryMedium12,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '₹${subscription.fee}',
-                            style: AppStyles.tsSecondaryMedium14.copyWith(
-                              color: AppColors.success,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 4),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 12),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Net Payout',
-                            style: AppStyles.tsSecondaryMedium12,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '₹0',
-                            // '₹${subscription.fee}',
-                            style: AppStyles.tsSecondaryMedium14,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
             SizedBox(height: 4),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 12),
@@ -148,7 +87,14 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                   backgroundColor: AppColors.secondary.withOpacity(.25),
                   height: 32,
                   label: 'Analytics',
-                  onPressed: () => SnackbarHelper.showSnackbar('Coming Soon'),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return TenXAnaliticalBottomSheet(
+                              subscription: subscription);
+                        });
+                  },
                 ),
               ),
               Expanded(
@@ -159,8 +105,36 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
                   labelColor: AppColors.info,
                   backgroundColor: AppColors.info.withOpacity(.25),
                   height: 32,
-                  onPressed: () => Get.toNamed(AppRoutes.orders),
+                  onPressed: () {
+                    Get.find<OrdersController>().loadData();
+                    Get.toNamed(AppRoutes.orders);
+                  },
                   label: 'Order Book',
+                ),
+              ),
+              Expanded(
+                child: CommonFilledButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  labelColor: AppColors.secondary,
+                  backgroundColor: AppColors.secondary.withOpacity(.25),
+                  height: 32,
+                  label: 'Share',
+                  onPressed: () async {
+                    controller.tenxExpiredPlans();
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: ShareTenXModalContent(
+                            subscription: subscription,
+                          ),
+                        );
+                      },
+                    );
+                    // }
+                  },
                 ),
               ),
             ],

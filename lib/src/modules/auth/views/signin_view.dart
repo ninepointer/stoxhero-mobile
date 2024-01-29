@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
-import '../../../core/core.dart';
-import '../../modules.dart';
+import '../../../app/app.dart';
 
 class SigninView extends StatefulWidget {
   const SigninView({super.key});
@@ -18,9 +16,14 @@ class _SigninViewState extends State<SigninView> {
 
   @override
   void initState() {
+    super.initState();
     controller = Get.find<AuthController>();
     formKey = GlobalKey<FormState>();
-    super.initState();
+    _initializeDynamicLink();
+  }
+
+  Future _initializeDynamicLink() async {
+    await DynamicLinkServices.initializeDynamicLink();
   }
 
   @override

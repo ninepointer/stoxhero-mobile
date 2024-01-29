@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../../base/base.dart';
@@ -30,6 +31,9 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   final referralsLeaderboardList = <LeaderboardUserDetails>[].obs;
   final earnings = EarningData().obs;
   final myReferralsList = <MyReferralData>[].obs;
+  // final summeryList = <Summery>[].obs;
+  // final transactionList = <Transaction>[].obs;
+  // final myReferralsProductList = <ReferralsProduct>[].obs;
 
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => AppStorage.getUserDetails();
@@ -40,11 +44,13 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     getActiveReferrals();
     getMyReferrals();
     getReferralsLeaderboard();
+    // getMyReferralsProduct();
   }
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
 
-  void changeReferralTabBarIndex(int val) => selectedReferralTabBarIndex.value = val;
+  void changeReferralTabBarIndex(int val) =>
+      selectedReferralTabBarIndex.value = val;
 
   String getReferralMessage() {
     return '''AB INDIA SIKHEGA OPTIONS TRADING AUR BANEGA ATMANIRBHAR 
@@ -72,7 +78,8 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   Future getMyEarnings() async {
     isLoading(true);
     try {
-      final RepoResponse<EarningsResponse> response = await repository.getMyEarnings();
+      final RepoResponse<EarningsResponse> response =
+          await repository.getMyEarnings();
       if (response.data != null) {
         earnings(response.data?.data ?? EarningData());
       } else {
@@ -88,7 +95,8 @@ class ReferralsController extends BaseController<ReferralsRepository> {
   Future getActiveReferrals() async {
     isLoading(true);
     try {
-      final RepoResponse<ActiveReferralResponse> response = await repository.getActiveReferrals();
+      final RepoResponse<ActiveReferralResponse> response =
+          await repository.getActiveReferrals();
       if (response.data != null) {
         activeReferrals((response.data?.data?[0] ?? []) as ActiveReferral?);
       } else {
@@ -105,7 +113,8 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     isLoading(true);
     try {
       var userDetails = AppStorage.getUserDetails();
-      final RepoResponse<MyReferralsResponse> response = await repository.getMyReferrals(userDetails.sId ?? '');
+      final RepoResponse<MyReferralsResponse> response =
+          await repository.getMyReferrals(userDetails.sId ?? '');
       if (response.data != null) {
         myReferralsList(response.data?.data ?? []);
       } else {
@@ -118,10 +127,34 @@ class ReferralsController extends BaseController<ReferralsRepository> {
     isLoading(false);
   }
 
+  // Future getMyReferralsProduct() async {
+  //   isLoading(true);
+  //   try {
+  //     final RepoResponse<ReferralsProductResponse> response =
+  //         await repository.getMyReferralsProduct();
+  //     if (response.data != null) {
+  //       myReferralsProductList(response.data?.data ?? []);
+  //       for (ReferralsProduct referralsProduct in myReferralsProductList) {
+  //         summeryList(referralsProduct.summery ?? []);
+  //         transactionList(referralsProduct.transaction ?? []);
+  //         print("aatrans${transactionList.toJson()}");
+  //       }
+  //     } else {
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //     print("myReferralsProductList${e}");
+  //   }
+  //   isLoading(false);
+  // }
+
   Future getReferralsLeaderboard() async {
     isReferralLoading(true);
     try {
-      final RepoResponse<ReferralsLeaderboardResponse> response = await repository.getReferralsLeaderboard();
+      final RepoResponse<ReferralsLeaderboardResponse> response =
+          await repository.getReferralsLeaderboard();
       if (response.data != null) {
         referralsLeaderboardList(response.data?.data ?? []);
       } else {

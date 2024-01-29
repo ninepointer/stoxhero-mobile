@@ -25,7 +25,7 @@ class ContestPlaceOrderRequest {
   int? instrumentToken;
   String? trader;
   bool? paperTrade;
-  String? price;
+  num? price;
   DeviceDetails? deviceDetails;
 
   ContestPlaceOrderRequest({

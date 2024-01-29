@@ -16,13 +16,16 @@ class AppColors {
   static final MaterialColor black = Color(0xFF2B2F32).toMaterialColor();
   static final MaterialColor grey = Color(0xFF8091A7).toMaterialColor();
   static final MaterialColor white = Color(0xFFFFFFFF).toMaterialColor();
+  static final MaterialColor blackGrayish = Color(0xFF333333).toMaterialColor();
 
   static final MaterialColor info = Color(0xFF0052CC).toMaterialColor();
   static final MaterialColor success = Color(0xFF36B37E).toMaterialColor();
   static final MaterialColor warning = Color(0xFFF5C405).toMaterialColor();
+  static final MaterialColor brandYellow = Color(0xFFFFC42A).toMaterialColor();
   static final MaterialColor danger = Color(0xFFFF5630).toMaterialColor();
   static final MaterialColor cyan = Color(0xFF68F5E3).toMaterialColor();
-  static final MaterialColor lightGreen = Color(0xFF65BA0D).toMaterialColor();
+  // static final MaterialColor lightGreen = Color(0xFF65BA0D).toMaterialColor();
+  static final MaterialColor lightGreen = Color(0xFF01B255).toMaterialColor();
   static final MaterialColor darkGreen = Color(0xFF315c45).toMaterialColor();
 
   static final Color lightScaffoldBackgroundColor = Color(0xFFF5F6FA);
@@ -30,4 +33,5 @@ class AppColors {
 
   static final Color lightCardBackgroundColor = Color(0xFFFFFFFF);
   static final Color darkCardBackgroundColor = Color(0xFF1E2936);
+  // static final Color brandYellow = Color(0xFFFFC42A);
 }

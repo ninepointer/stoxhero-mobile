@@ -14,3 +14,6 @@ export 'tutorial_respository.dart';
 export 'virtual_trading_respository.dart';
 export 'wallet_repository.dart';
 export 'college_contest_respository.dart';
+export 'contest_profile_repository.dart';
+export 'stock_repository.dart';
+export "affiliate_respository.dart";

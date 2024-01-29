@@ -6,7 +6,9 @@ class InternshipBatchResponse {
 
   InternshipBatchResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    data = json['data'] != null ? new InternshipBatch.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new InternshipBatch.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -26,32 +28,46 @@ class InternshipBatch {
   String? batchEndDate;
   num? payoutPercentage;
   num? attendancePercentage;
+  String? myAttendance;
+  num? myReferrals;
   int? referralCount;
+  int? tradingDays;
+  int? marketDays;
   Career? career;
   InternPortfolio? portfolio;
 
-  InternshipBatch({
-    this.id,
-    this.batchName,
-    this.batchStartDate,
-    this.batchEndDate,
-    this.payoutPercentage,
-    this.attendancePercentage,
-    this.referralCount,
-    this.career,
-    this.portfolio,
-  });
+  InternshipBatch(
+      {this.id,
+      this.batchName,
+      this.batchStartDate,
+      this.batchEndDate,
+      this.payoutPercentage,
+      this.attendancePercentage,
+      this.referralCount,
+      this.myReferrals,
+      this.tradingDays,
+      this.marketDays,
+      this.career,
+      this.portfolio,
+      this.myAttendance});
 
   InternshipBatch.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     batchName = json['batchName'];
     batchStartDate = json['batchStartDate'];
     batchEndDate = json['batchEndDate'];
+    myAttendance = json['myAttendance'];
+    myReferrals = json['myReferrals'];
     payoutPercentage = json['payoutPercentage'];
     attendancePercentage = json['attendancePercentage'];
     referralCount = json['referralCount'];
-    career = json['career'] != null ? new Career.fromJson(json['career']) : null;
-    portfolio = json['portfolio'] != null ? new InternPortfolio.fromJson(json['portfolio']) : null;
+    tradingDays = json['tradingdays'];
+    marketDays = json['workingDays'];
+    career =
+        json['career'] != null ? new Career.fromJson(json['career']) : null;
+    portfolio = json['portfolio'] != null
+        ? new InternPortfolio.fromJson(json['portfolio'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -62,7 +78,11 @@ class InternshipBatch {
     data['batchEndDate'] = this.batchEndDate;
     data['payoutPercentage'] = this.payoutPercentage;
     data['attendancePercentage'] = this.attendancePercentage;
+    data['myAttendance'] = this.myAttendance;
+    data['myReferrals'] = this.myReferrals;
     data['referralCount'] = this.referralCount;
+    data['tradingdays'] = this.tradingDays;
+    data['workingDays'] = this.marketDays;
     if (this.career != null) {
       data['career'] = this.career!.toJson();
     }

@@ -26,7 +26,7 @@ class _ContestLeaderboardViewState extends State<ContestLeaderboardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contests Leaderboard'),
+        title: Text('TestZone Leaderboard'),
       ),
       body: Obx(
         () => CommonTabBar(
@@ -56,13 +56,15 @@ class _ContestLeaderboardViewState extends State<ContestLeaderboardView> {
                       ),
                       replacement: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: contestController.contestLeaderboardList.length,
+                        itemCount:
+                            contestController.contestLeaderboardList.length,
                         padding: EdgeInsets.zero,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return ContestLeaderboardCard(
                             index: index + 1,
-                            contestLeaderboard: contestController.contestLeaderboardList[index],
+                            contestLeaderboard:
+                                contestController.contestLeaderboardList[index],
                           );
                         },
                       )),
@@ -70,7 +72,8 @@ class _ContestLeaderboardViewState extends State<ContestLeaderboardView> {
               ),
             ),
             RefreshIndicator(
-              onRefresh: collegeContestController.getCollegeContestLeaderboardList,
+              onRefresh:
+                  collegeContestController.getCollegeContestLeaderboardList,
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.only(bottom: 100),
@@ -81,20 +84,23 @@ class _ContestLeaderboardViewState extends State<ContestLeaderboardView> {
                     shimmerCard: MediumCardShimmer(),
                   ),
                   replacement: Visibility(
-                    visible: collegeContestController.collegeContestLeaderboardList.isEmpty,
+                    visible: collegeContestController
+                        .collegeContestLeaderboardList.isEmpty,
                     child: NoDataFound(
                       imagePath: AppImages.contestTrophy,
                       label: AppStrings.noDataFoundCollegeContestLeaderboard,
                     ),
                     replacement: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: collegeContestController.collegeContestLeaderboardList.length,
+                      itemCount: collegeContestController
+                          .collegeContestLeaderboardList.length,
                       padding: EdgeInsets.zero,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return CollegeContestLeaderboardCard(
                           index: index + 1,
-                          contestLeaderboard: collegeContestController.collegeContestLeaderboardList[index],
+                          contestLeaderboard: collegeContestController
+                              .collegeContestLeaderboardList[index],
                         );
                       },
                     ),

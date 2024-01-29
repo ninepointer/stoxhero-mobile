@@ -47,14 +47,18 @@ class _CommonTabBarState extends State<CommonTabBar> {
                 controller: widget.controller,
                 isScrollable: widget.isScrollable,
                 labelColor: AppColors.white,
-                unselectedLabelColor: Theme.of(context).textTheme.bodyLarge!.color,
+                unselectedLabelColor:
+                    Theme.of(context).textTheme.bodyLarge!.color,
                 splashBorderRadius: BorderRadius.circular(50),
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: AppColors.primary,
+                  color: Get.isDarkMode
+                      ? AppColors.darkGreen
+                      : AppColors.lightGreen,
                 ),
                 labelStyle: Theme.of(context).textTheme.tsFontFamily,
-                tabs: widget.tabsTitle.map((label) => Tab(text: label)).toList(),
+                tabs:
+                    widget.tabsTitle.map((label) => Tab(text: label)).toList(),
                 onTap: widget.onTap,
               ),
             ),
@@ -62,7 +66,9 @@ class _CommonTabBarState extends State<CommonTabBar> {
           Expanded(
             child: TabBarView(
               physics: NeverScrollableScrollPhysics(),
-              children: widget.tabs == null ? [] : widget.tabs!.map((child) => child).toList(),
+              children: widget.tabs == null
+                  ? []
+                  : widget.tabs!.map((child) => child).toList(),
             ),
           )
         ],

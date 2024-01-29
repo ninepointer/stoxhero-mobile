@@ -88,6 +88,7 @@ class InfoCard extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16),
           child: CommonFilledButton(
+            backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
             label: 'Click here to Apply!',
             height: 42,
             onPressed: () {

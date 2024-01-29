@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:stoxhero/main.dart';
 
@@ -69,6 +70,16 @@ class NetworkService {
 
   _printLog(Object object) => log(object.toString());
 
+  Future<Uint8List> getImageBytes(String imageUrl) async {
+    var response = await Dio().get<Uint8List>(
+      imageUrl,
+      options: Options(
+        responseType: ResponseType.bytes,
+      ),
+    );
+    return response.data!;
+  }
+
   Future<dynamic> getAuth({
     required String path,
     Map<String, dynamic>? query,
@@ -93,7 +104,8 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+        'Authorization':
+            'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.get(
@@ -137,7 +149,8 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+        'Authorization':
+            'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.post(
@@ -181,7 +194,8 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+        'Authorization':
+            'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.patch(
@@ -225,7 +239,8 @@ class NetworkService {
       );
 
       final headers = {
-        'Authorization': 'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
+        'Authorization':
+            'Bearer ${useTestToken ? AppConstants.token : AppStorage.getToken()}',
       };
 
       final response = await authDio.put(
@@ -376,7 +391,9 @@ class NetworkService {
     Dio _authFormDio = Dio();
 
     final headers = {
-      'Cookie': useTestToken ? 'jwtoken=${AppConstants.token}' : 'jwtoken=${AppStorage.getToken()}',
+      'Cookie': useTestToken
+          ? 'jwtoken=${AppConstants.token}'
+          : 'jwtoken=${AppStorage.getToken()}',
     };
 
     BaseOptions dioOptions = BaseOptions(
@@ -457,7 +474,9 @@ class NetworkService {
   }) async {
     try {
       final headers = {
-        'Cookie': useTestToken ? 'jwtoken=${AppConstants.token}' : 'jwtoken=${AppStorage.getToken()}',
+        'Cookie': useTestToken
+            ? 'jwtoken=${AppConstants.token}'
+            : 'jwtoken=${AppStorage.getToken()}',
       };
       final response = await _dio.download(
         path,

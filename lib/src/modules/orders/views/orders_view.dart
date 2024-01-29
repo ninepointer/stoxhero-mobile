@@ -12,9 +12,9 @@ class OrdersView extends GetView<OrdersController> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Orders'),
+          title: const Text('Order Book'),
           bottom: TabBar(
-            indicatorColor: AppColors.primary,
+            indicatorColor: AppColors.lightGreen,
             tabs: [
               Tab(
                 child: Text(
@@ -25,8 +25,8 @@ class OrdersView extends GetView<OrdersController> {
               ),
               Tab(
                 child: Text(
-                  'Virtual Trade\nOrders',
-                  style: Theme.of(context).textTheme.tsRegular12,
+                  'Market',
+                  style: Theme.of(context).textTheme.tsRegular16,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -42,7 +42,7 @@ class OrdersView extends GetView<OrdersController> {
                 TenxTradeOrdersTabView(
                   tenxSub: controller.tenxTrade.value.sId,
                 ),
-                VirtualTradeOrdersTabView(),
+                MarketOrdersView(),
               ],
             ),
           ),

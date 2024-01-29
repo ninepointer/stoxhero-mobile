@@ -1,13 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stoxhero/src/base/base.dart';
-import 'package:stoxhero/src/data/data.dart';
-import 'package:stoxhero/src/data/models/request/withdrawal_request.dart';
-
-import '../../../core/core.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 class WalletBinding implements Bindings {
   @override
@@ -34,7 +29,9 @@ class WalletController extends BaseController<WalletRepository> {
   final totalCashAmount = RxNum(0);
   final walletTransactionsList = <WalletTransaction>[].obs;
   final withdrawalTransactionsList = <MyWithdrawalsList>[].obs;
+  final walletDetails = WalletDetails().obs;
   final amountTextController = TextEditingController();
+  final readSetting = ReadSettingResponse().obs;
   final amount = 0.obs;
 
   final selectedTabBarIndex = 0.obs;
@@ -47,12 +44,16 @@ class WalletController extends BaseController<WalletRepository> {
   final couponCodeSuccessText = "".obs;
   final actualSubscriptionAmount = 0.0.obs;
   final subscriptionAmount = 0.0.obs;
+  final heroCashAmount = 0.0.obs;
+  final amountAfterCouponAdded = 0.0.obs;
 
   final paymentGroupValue = 'wallet'.obs;
   final selectedPaymentValue = 'wallet'.obs;
+  final isHeroCashAdded = false.obs;
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
-  void changeSecondTabBarIndex(int val) => selectedSecondTabBarIndex.value = val;
+  void changeSecondTabBarIndex(int val) =>
+      selectedSecondTabBarIndex.value = val;
 
   void onConfirm() {
     if (amountTextController.text.isEmpty) {
@@ -60,14 +61,38 @@ class WalletController extends BaseController<WalletRepository> {
     } else {
       withdrawals();
       Get.back();
+      amountTextController.clear();
     }
   }
 
-  void onCancel() => Get.back();
+  void onCancel() {
+    Get.back();
+    amountTextController.clear();
+  }
 
   Future loadData() async {
     getWalletTransactionsList();
     getMyWithdrawalsTransactionsList();
+    getReadSetting();
+  }
+
+  String getUserFullName() {
+    String firstName = walletDetails.value.userId?.firstName ?? '';
+    String lastName = walletDetails.value.userId?.lastName ?? '';
+    String fullName = '$firstName $lastName';
+    return fullName.capitalize!;
+  }
+
+  num calculateBonus(List<WalletTransaction> transactions) {
+    num bonus = 0;
+
+    for (var transaction in transactions) {
+      if (transaction.transactionType == 'Bonus') {
+        bonus += transaction.amount ?? 0;
+      }
+    }
+
+    return bonus;
   }
 
   String getPaymentProductType(ProductType type) {
@@ -90,11 +115,41 @@ class WalletController extends BaseController<WalletRepository> {
     return productType;
   }
 
-  void removeCouponCode() {
+  void removeCouponCode(num herocash) {
     couponCodeSuccessText("");
     isCouponCodeAdded(false);
-    subscriptionAmount(actualSubscriptionAmount.value);
+    subscriptionAmount(isHeroCashAdded.value
+        ? actualSubscriptionAmount.value - calculateHeroCash
+        : actualSubscriptionAmount.value);
     couponCodeTextController.clear();
+  }
+
+  void addHeroCash(num heroCash) {
+    if (isCouponCodeAdded.value) {
+      subscriptionAmount(amountAfterCouponAdded.value - heroCash);
+    } else {
+      subscriptionAmount(subscriptionAmount.value - heroCash);
+    }
+  }
+
+  void removeHeroCash(num herocash) {
+    heroCashAmount(0.0);
+    subscriptionAmount(subscriptionAmount.value + herocash);
+  }
+
+  num get calculateHeroCash {
+    return isCouponCodeAdded.value
+        ? math.min(
+            (amountAfterCouponAdded.value) *
+                ((readSetting.value.maxBonusRedemptionPercentage ?? 0) / 100),
+            (calculateBonus(walletTransactionsList) /
+                (readSetting.value.bonusToUnitCashRatio ?? 1)),
+          )
+        : math.min(
+            (actualSubscriptionAmount.value) *
+                ((readSetting.value.maxBonusRedemptionPercentage ?? 0) / 100),
+            (calculateBonus(walletTransactionsList) /
+                (readSetting.value.bonusToUnitCashRatio ?? 1)));
   }
 
   void calculateDiscount({
@@ -104,43 +159,68 @@ class WalletController extends BaseController<WalletRepository> {
     num? discount,
     num? maxDiscount = 1000,
     num? planAmount,
+    num? heroCashAmount,
   }) {
     if (rewardType == 'Discount') {
       if (discountType == 'Flat') {
-        subscriptionAmount((planAmount! - discount!).toDouble());
+        subscriptionAmount(
+            (planAmount! - discount! - heroCashAmount!).toDouble());
       } else if (discountType == 'Percentage') {
         double maxDiscountAmount = (planAmount! * (discount! / 100)).toDouble();
         if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
-          subscriptionAmount((planAmount - maxDiscount).toDouble());
+          subscriptionAmount(
+              (planAmount - maxDiscount - heroCashAmount!).toDouble());
         } else {
-          subscriptionAmount(planAmount - (planAmount * (discount / 100))).clamp(0, maxDiscount).toDouble();
+          subscriptionAmount(planAmount -
+                  (planAmount * (discount / 100)) -
+                  heroCashAmount!)
+              .clamp(0, maxDiscount)
+              .toDouble();
         }
       }
     } else {
       if (discountType == 'Flat') {
-        subscriptionAmount((planAmount! - discount!).toDouble());
+        subscriptionAmount(
+            (planAmount! - discount! - heroCashAmount!).toDouble());
       } else if (discountType == 'Percentage') {
         double maxDiscountAmount = (planAmount! * (discount! / 100)).toDouble();
         if (maxDiscountAmount.isGreaterThan(maxDiscount!)) {
-          subscriptionAmount((planAmount - maxDiscount).toDouble());
+          subscriptionAmount(
+              (planAmount - maxDiscount - heroCashAmount!).toDouble());
         } else {
-          subscriptionAmount(planAmount - (planAmount * (discount / 100))).clamp(0, maxDiscount).toDouble();
+          subscriptionAmount(planAmount -
+                  (planAmount * (discount / 100)) -
+                  heroCashAmount!)
+              .clamp(0, maxDiscount)
+              .toDouble();
         }
       }
     }
-    couponCodeSuccessText("Applied $couponCode - (₹$discount% off upto ₹$maxDiscount)");
+
+    if (rewardType == 'Discount') {
+      couponCodeSuccessText(
+          "Applied $couponCode - ($discount% off upto ${FormatHelper.formatNumbers(maxDiscount, decimal: 0)})");
+    } else {
+      couponCodeSuccessText(
+          "Applied $couponCode - ($discount% cashback  upto ${FormatHelper.formatNumbers(maxDiscount, decimal: 0)})");
+    }
+    amountAfterCouponAdded(subscriptionAmount.value);
   }
 
   Future getWalletTransactionsList() async {
     isRecentLoading(true);
     try {
-      final RepoResponse<WalletTransactionsListResponse> response = await repository.getWalletTransactionsList();
+      final RepoResponse<WalletTransactionsListResponse> response =
+          await repository.getWalletTransactionsList();
       if (response.data != null) {
         totalCashAmount(0);
         walletTransactionsList((response.data?.data?.transactions ?? []));
         walletTransactionsList.forEach((element) {
-          totalCashAmount.value += element.amount ?? 0;
+          if (element.transactionType == 'Cash') {
+            totalCashAmount.value += element.amount ?? 0;
+          }
         });
+        walletDetails(response.data?.data);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -154,7 +234,8 @@ class WalletController extends BaseController<WalletRepository> {
   Future getMyWithdrawalsTransactionsList() async {
     isSuccessLoading(true);
     try {
-      final RepoResponse<MyWithdrawalsListResponse> response = await repository.getMyWithdrawalsTransactionsList();
+      final RepoResponse<MyWithdrawalsListResponse> response =
+          await repository.getMyWithdrawalsTransactionsList();
       if (response.data != null) {
         withdrawalTransactionsList((response.data?.data ?? []));
       } else {
@@ -174,7 +255,8 @@ class WalletController extends BaseController<WalletRepository> {
     );
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.withdrawals(
+      final RepoResponse<GenericResponse> response =
+          await repository.withdrawals(
         data.toJson(),
       );
       if (response.data != null) {
@@ -192,8 +274,12 @@ class WalletController extends BaseController<WalletRepository> {
     isLoading(false);
   }
 
-  Future verifyCouponCode(BuildContext context, ProductType productType, num amount) async {
+  Future verifyCouponCode(
+      BuildContext context, ProductType productType, num amount) async {
     isCouponCodeAdded(false);
+    if (amount == 0) {
+      amount = num.parse(addMoneyAmountTextController.text);
+    }
     if (couponCodeTextController.text.isEmpty) {
       SnackbarHelper.showSnackbar('Enter valid coupon code!');
       return;
@@ -209,29 +295,37 @@ class WalletController extends BaseController<WalletRepository> {
       product = '6517d3803aeb2bb27d650de0';
     } else if (productType == ProductType.marginx) {
       product = '6517d40e3aeb2bb27d650de1';
+    } else if (productType == ProductType.wallet) {
+      product = '651bdbc8da68770e8f1b8e09';
     }
 
+    print("productType${product}");
     var data = VerifyCouponCodeRequest(
       code: couponCodeTextController.text.trim(),
       product: product,
       orderValue: amount,
-      paymentMode: 'wallet',
+      paymentMode: selectedPaymentValue == "wallet"
+          ? "wallet"
+          : selectedPaymentValue == "gateway"
+              ? "bank"
+              : "addition",
       platform: Platform.isAndroid ? 'Android' : 'iOS',
     );
 
     try {
-      final RepoResponse<VerifyCouponCodeResponse> response = await repository.verifyCouponCode(data.toJson());
+      final RepoResponse<VerifyCouponCodeResponse> response =
+          await repository.verifyCouponCode(data.toJson());
       if (response.data != null && response.data?.status == 'success') {
         var couponData = response.data?.data;
         isCouponCodeAdded(true);
         calculateDiscount(
-          couponCode: couponCodeTextController.text.trim(),
-          discountType: couponData?.discountType,
-          rewardType: couponData?.rewardType,
-          discount: couponData?.discount,
-          maxDiscount: couponData?.maxDiscount,
-          planAmount: amount,
-        );
+            couponCode: couponCodeTextController.text.trim(),
+            discountType: couponData?.discountType,
+            rewardType: couponData?.rewardType,
+            discount: couponData?.discount,
+            maxDiscount: couponData?.maxDiscount,
+            planAmount: amount,
+            heroCashAmount: isHeroCashAdded.value ? calculateHeroCash : 0);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -244,7 +338,8 @@ class WalletController extends BaseController<WalletRepository> {
 
   Future<bool> initPaymentRequest(PaymentRequest data) async {
     try {
-      final RepoResponse<GenericResponse> response = await repository.makePayment(
+      final RepoResponse<GenericResponse> response =
+          await repository.makePayment(
         data.toJson(),
       );
       if (response.data != null) {
@@ -264,7 +359,8 @@ class WalletController extends BaseController<WalletRepository> {
 
   Future<bool> checkPaymentStatus(String id) async {
     try {
-      final RepoResponse<CheckPaymentStatusResponse> response = await repository.checkPaymentStatus(
+      final RepoResponse<CheckPaymentStatusResponse> response =
+          await repository.checkPaymentStatus(
         id,
       );
       if (response.data != null) {
@@ -282,5 +378,18 @@ class WalletController extends BaseController<WalletRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     return false;
+  }
+
+  Future getReadSetting() async {
+    isRecentLoading(true);
+    try {
+      final RepoResponse<ReadSettingResponse> response =
+          await repository.readSetting();
+      readSetting(response.data);
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isRecentLoading(false);
   }
 }

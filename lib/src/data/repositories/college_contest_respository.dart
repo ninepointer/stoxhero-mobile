@@ -2,23 +2,46 @@ import '../../app/app.dart';
 import '../models/response/upcoming_college_contest_list_response.dart';
 
 class CollegeContestRepository extends BaseRepository {
-  Future<RepoResponse<CollegeContestLeaderboardResponse>> getCollegeContestLeaderboardList() async {
+  Future<RepoResponse<CollegeContestLeaderboardResponse>>
+      getCollegeContestLeaderboardList() async {
     String apiURL = AppUrls.collegeContestLeaderboard;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: CollegeContestLeaderboardResponse.fromJson(response));
+        : RepoResponse(
+            data: CollegeContestLeaderboardResponse.fromJson(response));
   }
 
-  Future<RepoResponse<CompletedContestPnlListResponse>> getCompletedContestPnlList() async {
+  Future<RepoResponse<CompletedContestPnlListResponse>>
+      getCompletedContestPnlList() async {
     String apiURL = AppUrls.allContestPnl;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: CompletedContestPnlListResponse.fromJson(response));
+        : RepoResponse(
+            data: CompletedContestPnlListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestOrderResponse>> getContestOrderList(String? id) async {
+  Future<RepoResponse<IndexLivePriceListResponse>> getIndexLivePrices() async {
+    String apiURL = AppUrls.getIndexLivePrice;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: IndexLivePriceListResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ContestStopLossPendingOrderResponse>>
+      getContestStopLossPendingOrder(String id) async {
+    String apiURL = AppUrls.collegeContestPendingStopLoss(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(
+            data: ContestStopLossPendingOrderResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ContestOrderResponse>> getContestOrderList(
+      String? id) async {
     String apiURL = AppUrls.completedContestOrders(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -26,23 +49,28 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: ContestOrderResponse.fromJson(response));
   }
 
-  Future<RepoResponse<CompletedCollegeContestListResponse>> getCompletedCollegeContestList() async {
+  Future<RepoResponse<CompletedCollegeContestListResponse>>
+      getCompletedCollegeContestList() async {
     String apiURL = AppUrls.completedCollegeContests;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: CompletedCollegeContestListResponse.fromJson(response));
+        : RepoResponse(
+            data: CompletedCollegeContestListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<UpComingCollegeContestListResponse>> getUpComingCollegeContestList() async {
+  Future<RepoResponse<UpComingCollegeContestListResponse>>
+      getUpComingCollegeContestList() async {
     String apiURL = AppUrls.upComingCollegeContests;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: UpComingCollegeContestListResponse.fromJson(response));
+        : RepoResponse(
+            data: UpComingCollegeContestListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<LiveCollegeContestListResponse>> getLiveCollegeContestList() async {
+  Future<RepoResponse<LiveCollegeContestListResponse>>
+      getLiveCollegeContestList() async {
     String apiURL = AppUrls.liveCollegeContests;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -50,7 +78,8 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: LiveCollegeContestListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TradingWatchlistResponse>> getInternshipWatchlist() async {
+  Future<RepoResponse<TradingWatchlistResponse>>
+      getInternshipWatchlist() async {
     String apiURL = AppUrls.tradingInstrumentWatchlist;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -58,7 +87,8 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
-  Future<RepoResponse<ContestPortfolioResponse>> getContestPortfolio(String? id) async {
+  Future<RepoResponse<ContestPortfolioResponse>> getContestPortfolio(
+      String? id) async {
     String apiURL = AppUrls.contestCreditData(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -68,14 +98,16 @@ class CollegeContestRepository extends BaseRepository {
 
   Future<RepoResponse<TradingWatchlistResponse>> getContestWatchList(
       bool? isNifty, bool? isBankNifty, bool? isFinNifty) async {
-    String apiURL = AppUrls.contestInstrumentWatchList(isNifty, isBankNifty, isFinNifty);
+    String apiURL =
+        AppUrls.contestInstrumentWatchList(isNifty, isBankNifty, isFinNifty);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: TradingWatchlistResponse.fromJson(response));
   }
 
-  Future<RepoResponse<TradingPositionListResponse>> getContestPositions(String? id) async {
+  Future<RepoResponse<TradingPositionListResponse>> getContestPositions(
+      String? id) async {
     String apiURL = AppUrls.contestPosition(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
@@ -83,7 +115,8 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: TradingPositionListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> placeContestOrder(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> placeContestOrder(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.contestPlacingOrder;
     var response = await service.postAuth(path: apiURL, data: data);
     return response is APIException
@@ -97,7 +130,8 @@ class CollegeContestRepository extends BaseRepository {
     bool? isBankNifty,
     bool? isFinNifty,
   ) async {
-    String apiURL = AppUrls.contestsTradingInstruments(isNifty, isBankNifty, isFinNifty);
+    String apiURL =
+        AppUrls.contestsTradingInstruments(isNifty, isBankNifty, isFinNifty);
     var query = {'search': value, 'page': 1, 'size': 20};
     var response = await service.getAuth(path: apiURL, query: query);
     return response is APIException
@@ -113,7 +147,8 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> addInstrument(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> addInstrument(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.addInstrument;
     var response = await service.postAuth(path: apiURL, data: data);
     return response is APIException
@@ -121,15 +156,18 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<StockIndexInstrumentListResponse>> getStockIndexInstrumentsList() async {
+  Future<RepoResponse<StockIndexInstrumentListResponse>>
+      getStockIndexInstrumentsList() async {
     String apiURL = AppUrls.stockIndex;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: StockIndexInstrumentListResponse.fromJson(response));
+        : RepoResponse(
+            data: StockIndexInstrumentListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> purchaseContest(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> purchaseContest(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.purchaseContest;
     var response = await service.patchAuth(path: apiURL, data: data);
     return response is APIException
@@ -137,24 +175,32 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<InstrumentLivePriceListResponse>> getInstrumentLivePrices() async {
+  Future<RepoResponse<InstrumentLivePriceListResponse>>
+      getInstrumentLivePrices() async {
     String apiURL = AppUrls.getliveprice;
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: InstrumentLivePriceListResponse.fromJson(response));
+        : RepoResponse(
+            data: InstrumentLivePriceListResponse.fromJson(response));
   }
 
-  Future<RepoResponse> generateCollegeContestOtp(Map<String, dynamic> data) async {
+  Future<RepoResponse> generateCollegeContestOtp(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.generateCollegeContestOtp;
     var response = await service.post(path: apiURL, data: data);
-    return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: response);
   }
 
-  Future<RepoResponse> validateCollegeContestOtp(Map<String, dynamic> data) async {
+  Future<RepoResponse> validateCollegeContestOtp(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.confirmCollegeContestOtp;
     var response = await service.post(path: apiURL, data: data);
-    return response is APIException ? RepoResponse(error: response) : RepoResponse(data: response);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: response);
   }
 
   Future<RepoResponse<GenericResponse>> getShareContest(String? id) async {
@@ -181,7 +227,8 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> verifyAndParticipate(String? id, data) async {
+  Future<RepoResponse<GenericResponse>> verifyAndParticipate(
+      String? id, data) async {
     String apiURL = AppUrls.verifyAndParticipate(id);
     var response = await service.putAuth(path: apiURL, data: data);
     return response is APIException
@@ -189,15 +236,18 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<CompletedContestLeaderboardListResponse>> getCompletedContestLeaderboardList(String? id) async {
+  Future<RepoResponse<CompletedContestLeaderboardListResponse>>
+      getCompletedContestLeaderboardList(String? id) async {
     String apiURL = AppUrls.completedContestLeaderboard(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: CompletedContestLeaderboardListResponse.fromJson(response));
+        : RepoResponse(
+            data: CompletedContestLeaderboardListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<MarginRequiredResponse>> getMarginRequired(Map<String, dynamic> data) async {
+  Future<RepoResponse<MarginRequiredResponse>> getMarginRequired(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.marginRequired;
     var response = await service.patchAuth(path: apiURL, data: data);
     return response is APIException
@@ -205,23 +255,28 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: MarginRequiredResponse.fromJson(response));
   }
 
-  Future<RepoResponse<StopLossExecutedOrdersListResponse>> getStopLossExecutedOrder(String? id) async {
+  Future<RepoResponse<StopLossExecutedOrdersListResponse>>
+      getStopLossExecutedOrder(String? id) async {
     String apiURL = AppUrls.contestStopLossExecutedOrder(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: StopLossExecutedOrdersListResponse.fromJson(response));
+        : RepoResponse(
+            data: StopLossExecutedOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<StopLossPendingOrdersListResponse>> getStopLossPendingOrder(String? id) async {
+  Future<RepoResponse<StopLossPendingOrdersListResponse>>
+      getStopLossPendingOrder(String? id) async {
     String apiURL = AppUrls.contestStopLossPendingOrder(id);
     var response = await service.getAuth(path: apiURL);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: StopLossPendingOrdersListResponse.fromJson(response));
+        : RepoResponse(
+            data: StopLossPendingOrdersListResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> getStopLossPendingCancelOrder(String id) async {
+  Future<RepoResponse<GenericResponse>> getStopLossPendingCancelOrder(
+      String id) async {
     String apiURL = AppUrls.contestStopLossPendingCancelOrder(id);
     var response = await service.patchAuth(path: apiURL);
     return response is APIException
@@ -229,7 +284,8 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> pendingOrderModify(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> pendingOrderModify(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.pendingOrderModify;
     var response = await service.postAuth(path: apiURL, data: data);
     return response is APIException
@@ -237,11 +293,29 @@ class CollegeContestRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> getStopLossEditOrder(String? id, Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> getStopLossEditOrder(
+      String? id, Map<String, dynamic> data) async {
     String apiURL = AppUrls.stopLossEditOrder(id);
     var response = await service.patchAuth(path: apiURL, data: data);
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<DayWiseContestPnlResponse>> getDayWiseContestPnl(
+      String? id) async {
+    String apiURL = AppUrls.dayWiseContestPnl(id);
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: DayWiseContestPnlResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<ReadSettingResponse>> readSetting() async {
+    String apiURL = AppUrls.readSetting;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: ReadSettingResponse.fromJson(response[0]));
   }
 }

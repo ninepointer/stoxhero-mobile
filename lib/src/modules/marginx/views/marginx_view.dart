@@ -11,7 +11,8 @@ class MarginXView extends StatefulWidget {
   State<MarginXView> createState() => _MarginXViewState();
 }
 
-class _MarginXViewState extends State<MarginXView> with TickerProviderStateMixin {
+class _MarginXViewState extends State<MarginXView>
+    with TickerProviderStateMixin {
   late MarginXController controller;
 
   @override

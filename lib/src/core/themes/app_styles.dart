@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
 
 import '../core.dart';
 
@@ -12,11 +13,17 @@ extension CustomStyles on TextTheme {
         fontWeight: FontWeight.w400,
         fontSize: 10,
       );
+  TextStyle get tsRegular11 => TextStyle(
+        fontFamily: AppTheme.fontFamily,
+        fontWeight: FontWeight.w400,
+        fontSize: 11,
+      );
   TextStyle get tsRegular12 => TextStyle(
         fontFamily: AppTheme.fontFamily,
         fontWeight: FontWeight.w400,
         fontSize: 12,
       );
+
   TextStyle get tsRegular14 => TextStyle(
         fontFamily: AppTheme.fontFamily,
         fontWeight: FontWeight.w400,
@@ -132,7 +139,7 @@ extension CustomStyles on TextTheme {
         fontSize: 14,
       );
   TextStyle get tsPrimaryRegular16 => TextStyle(
-        color: AppColors.primary,
+        color: AppColors.lightGreen,
         fontFamily: AppTheme.fontFamily,
         fontWeight: FontWeight.w400,
         fontSize: 16,
@@ -168,7 +175,7 @@ extension CustomStyles on TextTheme {
         fontSize: 12,
       );
   TextStyle get tsPrimaryMedium14 => TextStyle(
-        color: AppColors.primary,
+        color: Get.isDarkMode ? AppColors.lightGreen : AppColors.darkGreen,
         fontFamily: AppTheme.fontFamily,
         fontWeight: FontWeight.w500,
         fontSize: 14,
@@ -760,6 +767,12 @@ extension CustomStyles on TextTheme {
         fontWeight: FontWeight.w600,
         fontSize: 24,
       );
+      TextStyle get tsLightGrey16 => TextStyle(
+        color: AppColors.grey[200],
+        fontFamily: AppTheme.fontFamily,
+        fontWeight: FontWeight.w600,
+        fontSize: 24,
+      );
 }
 
 class AppStyles {
@@ -782,7 +795,7 @@ class AppStyles {
     fontSize: 14,
   );
   static TextStyle tsPrimaryRegular16 = TextStyle(
-    color: AppColors.primary,
+    color: AppColors.lightGreen,
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w400,
     fontSize: 16,
@@ -818,7 +831,7 @@ class AppStyles {
     fontSize: 12,
   );
   static TextStyle tsPrimaryMedium14 = TextStyle(
-    color: AppColors.primary,
+    color: Get.isDarkMode ? AppColors.lightGreen : AppColors.darkGreen,
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w500,
     fontSize: 14,
@@ -946,10 +959,46 @@ class AppStyles {
     fontSize: 12,
   );
   static TextStyle tsSecondaryMedium14 = TextStyle(
-    color: AppColors.secondary,
+    color: AppColors.lightGreen,
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w500,
     fontSize: 14,
+  );
+  static TextStyle tsprimaryGrayishBlackMedium14 = TextStyle(
+    color: AppColors.blackGrayish,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+  );
+  static TextStyle tsprimaryGrayishBlackMedium18 = TextStyle(
+    color: AppColors.blackGrayish,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+  );
+  static TextStyle tsprimaryGrayishBlackMedium20 = TextStyle(
+    color: AppColors.blackGrayish,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+  );
+  static TextStyle tsprimarywhiteMedium14 = TextStyle(
+    color: AppColors.white,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+  );
+  static TextStyle tsprimarywhiteMedium20 = TextStyle(
+    color: AppColors.white,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+  );
+  static TextStyle tsprimarywhiteMedium18 = TextStyle(
+    color: AppColors.white,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
   );
   static TextStyle tsSecondaryMedium16 = TextStyle(
     color: AppColors.secondary,
@@ -1289,6 +1338,7 @@ class AppStyles {
     fontWeight: FontWeight.w400,
     fontSize: 10,
   );
+
   static TextStyle tsGreyRegular12 = TextStyle(
     color: AppColors.grey,
     fontFamily: AppTheme.fontFamily,
@@ -1409,5 +1459,11 @@ class AppStyles {
     fontFamily: AppTheme.fontFamily,
     fontWeight: FontWeight.w600,
     fontSize: 24,
+  );
+  static TextStyle tsDarkGreyRegular14 = TextStyle(
+    color: AppColors.grey.shade900,
+    fontFamily: AppTheme.fontFamily,
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
   );
 }

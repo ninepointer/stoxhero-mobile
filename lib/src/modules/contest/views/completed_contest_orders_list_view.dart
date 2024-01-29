@@ -31,7 +31,8 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                   itemBuilder: (context, index) {
                     var order = controller.contestOrdersList[index];
                     return CommonCard(
-                      margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
+                      margin:
+                          EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
                       children: [
                         OrderCardTile(
                           label: 'Contract',
@@ -43,12 +44,13 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                           children: [
                             OrderCardTile(
                               label: 'Quantity',
-                              value: FormatHelper.formatNumbers(order.quantity),
+                              value: order.quantity?.toString(),
                             ),
                             OrderCardTile(
                               isRightAlign: true,
                               label: 'Price',
-                              value: FormatHelper.formatNumbers(order.averagePrice),
+                              value: FormatHelper.formatNumbers(
+                                  order.averagePrice),
                             ),
                           ],
                         ),
@@ -67,7 +69,9 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                               isRightAlign: true,
                               label: 'Type',
                               value: order.buyOrSell,
-                              valueColor: order.buyOrSell == AppConstants.buy ? AppColors.success : AppColors.danger,
+                              valueColor: order.buyOrSell == AppConstants.buy
+                                  ? AppColors.success
+                                  : AppColors.danger,
                             ),
                           ],
                         ),
@@ -85,7 +89,9 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                               isRightAlign: true,
                               label: 'Status',
                               value: order.status,
-                              valueColor: order.status == AppConstants.complete ? AppColors.success : AppColors.danger,
+                              valueColor: order.status == AppConstants.complete
+                                  ? AppColors.success
+                                  : AppColors.danger,
                             ),
                           ],
                         ),
@@ -95,7 +101,8 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                           children: [
                             OrderCardTile(
                               label: 'Timestamp',
-                              value: FormatHelper.formatDateTime(order.tradeTime),
+                              value:
+                                  FormatHelper.formatDateTime(order.tradeTime),
                             ),
                           ],
                         )

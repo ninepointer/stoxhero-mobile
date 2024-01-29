@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -11,12 +13,15 @@ class VirtualTradingBinding implements Bindings {
   void dependencies() => Get.put(VirtualTradingController());
 }
 
-class VirtualTradingController extends BaseController<VirtualTradingRepository> {
+class VirtualTradingController
+    extends BaseController<VirtualTradingRepository> {
   final userDetails = LoginDetailsResponse().obs;
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
   final isLoading = false.obs;
   bool get isLoadingStatus => isLoading.value;
+
+  final readSetting = ReadSettingResponse().obs;
 
   final isTradingOrderSheetLoading = false.obs;
   bool get isTradingOrderSheetLoadingStatus => isTradingOrderSheetLoading.value;
@@ -37,10 +42,18 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   bool get isMarginStateLoadingStatus => isMarginStateLoading.value;
 
   final isExecutedOrderStateLoading = false.obs;
-  bool get isExecutedOrderStateLoadingStatus => isExecutedOrderStateLoading.value;
+  bool get isExecutedOrderStateLoadingStatus =>
+      isExecutedOrderStateLoading.value;
 
   final isPendingOrderStateLoading = false.obs;
   bool get isPendingOrderStateLoadingStatus => isPendingOrderStateLoading.value;
+
+  final isOrderStateLoading = false.obs;
+  bool get isOrderStateLoadingStatus => isOrderStateLoading.value;
+
+  final isBuyButtonDisabled = false.obs;
+  final apiDataLoaded = false.obs;
+  // final isBuyButtonDisabled = false.obs;
 
   final stopLossFormKey = GlobalKey<FormState>();
   final searchTextController = TextEditingController();
@@ -48,9 +61,11 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final stopProfitPriceTextController = TextEditingController();
   final quanitityTextController = TextEditingController();
   final limitPriceTextController = TextEditingController();
+
   final virtualPortfolio = VirtualTradingPortfolio().obs;
 
-  final tradingInstrumentTradeDetailsList = <TradingInstrumentTradeDetails>[].obs;
+  final tradingInstrumentTradeDetailsList =
+      <TradingInstrumentTradeDetails>[].obs;
   final tradingInstruments = <TradingInstrument>[].obs;
   final tradingWatchlist = <TradingWatchlist>[].obs;
   final tradingWatch = TradingWatchlist().obs;
@@ -58,14 +73,19 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
   final virtualPositionsList = <TradingPosition>[].obs;
   final virtualPosition = TradingPosition().obs;
-  final virtualInstrumentTradeDetails = <VirtualTradingInstrumentTradeDetails>[].obs;
+  final virtualInstrumentTradeDetails =
+      <VirtualTradingInstrumentTradeDetails>[].obs;
   final tenxTotalPositionDetails = TenxTotalPositionDetails().obs;
   final selectedWatchlistIndex = RxInt(-1);
   final selectedQuantity = 0.obs;
+  final selectedStopLossQuantity = 0.obs;
+  final selectedStopProfitQuantity = 0.obs;
   final selectedStringQuantity = "0".obs;
   final selectedType = "".obs;
   final selectedGroupValue = 0.obs;
   final lotsValueList = <int>[0].obs;
+  final lotsValueForStopProfit = <int>[0].obs;
+  final lotsValueForStopLoss = <int>[0].obs;
 
   final instrumentLivePriceList = <InstrumentLivePrice>[].obs;
 
@@ -77,17 +97,20 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   final stopLossPendingOrderList = <StopLossPendingOrdersList>[].obs;
   final stopLossPendingOrder = StopLossPendingOrdersList().obs;
   final stopLossPendingCancelOrder = StopLossPendingCancelOrder().obs;
+  final stoplossQuantityList = <StoplossQuantityData>[].obs;
 
   Future loadData() async {
     userDetails.value = AppStorage.getUserDetails();
     await getInstrumentLivePriceList();
     await getStockIndexInstrumentsList();
-    await getVirtualTradingPortfolio();
+    await getReadSetting();
     await getVirtualTradingWatchlist();
     await getVirtualPositionsList();
+    await getVirtualTradingPortfolio();
     await getStopLossPendingOrder();
     await getStopLossExecutedOrder();
     await getVirtualTodayOrderList();
+    await liveIndexDetails();
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
@@ -120,7 +143,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     selectedType.value = labelText;
   }
 
-  bool handleTextField(TransactionType type, int transactionLotSize, int positionLots) {
+  bool handleTextField(
+      TransactionType type, int transactionLotSize, int positionLots) {
     bool isDisabled = false;
 
     if (type == TransactionType.buy) {
@@ -144,7 +168,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   String getStockIndexName(int instId) {
-    int index = stockIndexInstrumentList.indexWhere((element) => element.instrumentToken == instId);
+    int index = stockIndexInstrumentList
+        .indexWhere((element) => element.instrumentToken == instId);
     return stockIndexInstrumentList[index].displayName ?? '-';
   }
 
@@ -161,6 +186,79 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
     selectedQuantity.value = result[0];
     lotsValueList.assignAll(result);
+    return result;
+  }
+
+  List<int> generateLotsListFoStopLoss({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopLoss" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedStopLossQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopLoss.assignAll(newList);
+    return result;
+  }
+
+  List<int> generateLotsListForStopProfit({String? type, int? openLots}) {
+    List<int> result = [];
+
+    var relevantQuantities = stoplossQuantityList.where(
+      (element) => element.type == "StopProfit" && element.symbol == type,
+    );
+    int totalQuantity = relevantQuantities.fold(
+      0,
+      (sum, element) => sum + (element.quantity ?? 0),
+    );
+
+    int cutoff = (openLots ?? 0).abs() - (totalQuantity ?? 0);
+    int startValue = 0;
+
+    if (type?.contains('BANK') ?? false) {
+      for (int i = 0; i <= 900; i += 15) result.add(i);
+    } else if (type?.contains('FIN') ?? false) {
+      for (int i = 0; i <= 1800; i += 40) result.add(i);
+    } else {
+      for (int i = 0; i <= 1800; i += 50) result.add(i);
+    }
+    startValue = result.first;
+    List<int> newList = [];
+    for (int i = 0; i < result.length; i++) {
+      if (result[i] <= cutoff) {
+        newList.add(result[i]);
+      } else {
+        break;
+      }
+    }
+
+    selectedStopProfitQuantity.value = newList.isNotEmpty ? newList.first : 0;
+
+    lotsValueForStopProfit.assignAll(newList);
     return result;
   }
 
@@ -197,7 +295,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     num totalBrokerage = 0;
     num totalGross = 0;
     num totalNet = 0;
-
     for (var position in virtualPositionsList) {
       if (position.id?.isLimit ?? false) {
       } else {
@@ -206,11 +303,6 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         totalGross += position.lastaverageprice ?? 0;
         totalNet += position.amount ?? 0;
       }
-
-      // totalLots += position.lots ?? 0;
-      // totalBrokerage += position.brokerage ?? 0;
-      // totalGross += position.lastaverageprice ?? 0;
-      // totalNet += position.amount ?? 0;
     }
     tenxTotalPositionDetails(
       TenxTotalPositionDetails(
@@ -272,10 +364,23 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   num calculateMargin() {
     num lots = 0;
     num margin = 0;
+    num amount = 0;
+    num limitMargin = 0;
+    num subtractAmount = 0;
     for (var position in virtualPositionsList) {
       if (position.lots != 0) {
         lots += position.lots ?? 0;
         margin += position.margin ?? 0;
+      }
+      if (position.id?.isLimit == true) {
+        limitMargin += position.margin ?? 0;
+      } else {
+        if (position.lots! < 0) {
+          limitMargin += position.margin ?? 0;
+          subtractAmount +=
+              ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
+        }
+        amount += ((position.amount ?? 0) - (position.brokerage ?? 0));
       }
     }
     num openingBalance = 0;
@@ -288,7 +393,10 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     }
 
     num availableMargin = (calculateTotalNetPNL() < 0)
-        ? (lots == 0 ? (openingBalance - margin + calculateTotalNetPNL()) : (openingBalance - margin))
+        ? (lots == 0
+            ? (openingBalance - margin + calculateTotalNetPNL())
+            : (openingBalance -
+                ((amount - subtractAmount).abs() + limitMargin)))
         : (openingBalance - margin);
 
     return availableMargin;
@@ -307,11 +415,14 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     num priceValue = 0;
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
-        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        (stock) =>
+            stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) {
         int index = instrumentLivePriceList.indexWhere(
-          (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+          (stock) =>
+              stock.instrumentToken == instID ||
+              stock.instrumentToken == exchID,
         );
         if (index == -1) {
           priceValue = 0;
@@ -328,20 +439,23 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   String getInstrumentChanges(int instID, int exchID) {
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
-        (stock) => stock.instrumentToken == instID || stock.instrumentToken == exchID,
+        (stock) =>
+            stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
       if (index == -1) return FormatHelper.formatNumbers('00');
-      String? price = tradingInstrumentTradeDetailsList[index].change?.toString();
+      String? price =
+          tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
     } else {
-      return '${FormatHelper.formatNumbers('00', showSymbol: false)}%';
+      return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
   }
 
   Future getInstrumentLivePriceList() async {
     isLoading(true);
     try {
-      final RepoResponse<InstrumentLivePriceListResponse> response = await repository.getInstrumentLivePrices();
+      final RepoResponse<InstrumentLivePriceListResponse> response =
+          await repository.getInstrumentLivePrices();
       if (response.data != null) {
         if (response.data?.data! != null) {
           instrumentLivePriceList(response.data?.data ?? []);
@@ -354,6 +468,26 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  Future getVirtualPendingStoplossOrderData(String id) async {
+    try {
+      final RepoResponse<VirtualStopLossPendingOrderResponse> response =
+          await repository
+              .getVirtualStopLossPendingOrder("6433e2e5500dc2f2d20d686d");
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          stoplossQuantityList(response.data?.quantity ?? []);
+          print("stoplossQuantityList${stoplossQuantityList.length}");
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      print("stoplossQuantityList${e}");
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future addInstrument(TradingInstrument inst) async {
@@ -377,7 +511,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     log('addInstrument : ${data.toJson()}');
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.addInstrument(
+      final RepoResponse<GenericResponse> response =
+          await repository.addInstrument(
         data.toJson(),
       );
       if (response.data?.message == "Instrument Added") {
@@ -418,10 +553,13 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       socketService.socket.on(
         'tick-room',
         (data) {
-          tempList = TradingInstrumentTradeDetailsListResponse.fromJson(data).data ?? [];
+          tempList =
+              TradingInstrumentTradeDetailsListResponse.fromJson(data).data ??
+                  [];
           tempList?.forEach(
             (element) {
-              if (tradingInstrumentTradeDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
+              if (tradingInstrumentTradeDetailsList.any(
+                  (obj) => obj.instrumentToken == element.instrumentToken)) {
                 int index = tradingInstrumentTradeDetailsList.indexWhere(
                   (stock) => stock.instrumentToken == element.instrumentToken,
                 );
@@ -439,10 +577,19 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     }
   }
 
-  Future placeVirtualTradingOrder(TransactionType type, TradingInstrument inst) async {
+  Future placeVirtualTradingOrder(
+      TransactionType type, TradingInstrument inst) async {
     isTradingOrderSheetLoading(true);
-
+    print("typein584${type} ${selectedStringQuantity.value}");
+    if (selectedType.value == "MARKET") {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
+    }
     if (type == TransactionType.exit) {
+      stopLossPriceTextController.text = '';
+      stopProfitPriceTextController.text = '';
+      limitPriceTextController.text = '';
       if (selectedStringQuantity.value.contains('-')) {
         type = TransactionType.buy;
       } else {
@@ -457,7 +604,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         }
       }
     }
-
+    print("typein600${type} ${selectedStringQuantity.value}");
+    print(
+        "typein601${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
     VirtualTradingPlaceOrderRequest data = VirtualTradingPlaceOrderRequest(
       exchange: inst.exchange,
       symbol: inst.tradingsymbol,
@@ -485,9 +634,10 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         platformType: Platform.isAndroid ? 'Android' : 'iOS',
       ),
     );
-    log('placeVirtualTradingOrder : ${data.toJson()}');
+    log('typein628 : ${data.toJson()} ${type}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.paperPlaceOrder(
+      final RepoResponse<GenericResponse> response =
+          await repository.paperPlaceOrder(
         data.toJson(),
       );
       Get.back();
@@ -497,6 +647,12 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
         await getStopLossPendingOrder();
         await getVirtualTodayOrderList();
         await getVirtualTradingPortfolio();
+        selectedStringQuantity("");
+        stopLossPriceTextController.text = '';
+        stopProfitPriceTextController.text = '';
+        limitPriceTextController.text = '';
+        print(
+            "typein652${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
       } else if (response.data?.status == "Failed") {
         log(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -513,7 +669,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualTradingPortfolio() async {
     isPortfolioStateLoading(true);
     try {
-      final RepoResponse<VirtualTradingPortfolioResponse> response = await repository.getVirtualTradingPortfolio();
+      final RepoResponse<VirtualTradingPortfolioResponse> response =
+          await repository.getVirtualTradingPortfolio();
       if (response.data != null) {
         virtualPortfolio(response.data?.data);
       } else {
@@ -529,13 +686,16 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualTradingWatchlist() async {
     isWatchlistStateLoading(true);
     try {
-      final RepoResponse<TradingWatchlistResponse> response = await repository.getVirtualTradingWatchlist();
+      final RepoResponse<TradingWatchlistResponse> response =
+          await repository.getVirtualTradingWatchlist();
       if (response.data != null) {
         if (response.data?.data! != null) {
           tradingWatchlistIds.clear();
           tradingWatchlist(response.data?.data ?? []);
           for (var element in tradingWatchlist) {
-            tradingWatchlistIds.add(element.instrumentToken ?? element.exchangeInstrumentToken ?? 0);
+            tradingWatchlistIds.add(element.instrumentToken ??
+                element.exchangeInstrumentToken ??
+                0);
           }
         }
       } else {
@@ -551,7 +711,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getVirtualPositionsList() async {
     isPositionStateLoading(true);
     try {
-      final RepoResponse<TradingPositionListResponse> response = await repository.getVirtualPositions();
+      final RepoResponse<TradingPositionListResponse> response =
+          await repository.getVirtualPositions();
       if (response.data != null) {
         if (response.data?.data! != null) {
           virtualPositionsList(response.data?.data ?? []);
@@ -570,7 +731,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future searchInstruments(String? value, {bool showShimmer = true}) async {
     showShimmer ? isInstrumentListLoading(true) : isWatchlistStateLoading(true);
     try {
-      final RepoResponse<TradingInstrumentListResponse> response = await repository.searchInstruments(value);
+      final RepoResponse<TradingInstrumentListResponse> response =
+          await repository.searchInstruments(value);
       if (response.data != null) {
         if (response.data?.data! != null) {
           tradingInstruments.clear();
@@ -583,13 +745,16 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    showShimmer ? isInstrumentListLoading(false) : isWatchlistStateLoading(false);
+    showShimmer
+        ? isInstrumentListLoading(false)
+        : isWatchlistStateLoading(false);
   }
 
   Future getStockIndexInstrumentsList() async {
     isLoading(true);
     try {
-      final RepoResponse<StockIndexInstrumentListResponse> response = await repository.getStockIndexInstrumentsList();
+      final RepoResponse<StockIndexInstrumentListResponse> response =
+          await repository.getStockIndexInstrumentsList();
       if (response.data != null) {
         stockIndexInstrumentList(response.data?.data ?? []);
       } else {
@@ -602,26 +767,47 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     isLoading(false);
   }
 
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future socketIndexConnection() async {
     List<StockIndexDetails>? stockTemp = [];
     try {
-      socketService.socket.on(
-        'index-tick',
-        (data) {
-          stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
-          for (var element in stockTemp ?? []) {
-            if (stockIndexDetailsList.any((obj) => obj.instrumentToken == element.instrumentToken)) {
-              int index = stockIndexDetailsList.indexWhere(
-                (stock) => stock.instrumentToken == element.instrumentToken,
-              );
-              stockIndexDetailsList.removeAt(index);
-              stockIndexDetailsList.insert(index, element);
-            } else {
-              stockIndexDetailsList.add(element);
-            }
+      socketService.socket.on('index-tick', (data) {
+        stockTemp = StockIndexDetailsListResponse.fromJson(data).data ?? [];
+        for (var element in stockTemp ?? []) {
+          if (stockIndexDetailsList
+              .any((obj) => obj.instrumentToken == element.instrumentToken)) {
+            int index = stockIndexDetailsList.indexWhere(
+              (stock) => stock.instrumentToken == element.instrumentToken,
+            );
+            stockIndexDetailsList.removeAt(index);
+            stockIndexDetailsList.insert(index, element);
+          } else {
+            stockIndexDetailsList.add(element);
           }
-        },
-      );
+        }
+      });
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -629,7 +815,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
 
   int calculateQuantity(type, int tradingLots, int selectQuantity) {
     if (type == TransactionType.sell || type == TransactionType.exit) {
-      if (tradingLots == selectQuantity || tradingLots.abs() >= selectQuantity) {
+      if (tradingLots == selectQuantity ||
+          tradingLots.abs() >= selectQuantity) {
         return 0;
       } else if (tradingLots.abs() <= selectQuantity) {
         return selectQuantity - tradingLots.abs();
@@ -651,22 +838,25 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
           : type == TransactionType.buy
               ? 'BUY'
               : 'SELL',
-      quantity: calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
+      quantity:
+          calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
       product: "NRML",
-      orderType: "MARKET",
+      orderType: selectedType.value,
       validity: "DAY",
       variety: "regular",
-      price: "",
+      price: limitPriceTextController.text,
       lastPrice: inst.lastPrice.toString(),
     );
 
     try {
-      final RepoResponse<MarginRequiredResponse> response = await repository.getMarginRequired(
+      final RepoResponse<MarginRequiredResponse> response =
+          await repository.getMarginRequired(
         data.toJson(),
       );
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           marginRequired(response.data);
+          print('hii virtual${data.toJson()}');
         } else {
           SnackbarHelper.showSnackbar(response.error?.message);
         }
@@ -680,9 +870,10 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   Future getVirtualTodayOrderList() async {
-    isLoading(true);
+    isOrderStateLoading(true);
     try {
-      final RepoResponse<VirtualTradeOrdersListResponse> response = await repository.getVirtualTradeTodaysOrdersList();
+      final RepoResponse<VirtualTradeOrdersListResponse> response =
+          await repository.getVirtualTradeTodaysOrdersList();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           virtualTradeTodaysOrdersList(response.data?.data ?? []);
@@ -694,13 +885,14 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
-    isLoading(false);
+    isOrderStateLoading(false);
   }
 
   Future getStopLossExecutedOrder() async {
     isExecutedOrderStateLoading(true);
     try {
-      final RepoResponse<StopLossExecutedOrdersListResponse> response = await repository.getStopLossExecutedOrder(
+      final RepoResponse<StopLossExecutedOrdersListResponse> response =
+          await repository.getStopLossExecutedOrder(
         virtualPortfolio.value.portfolioId,
       );
       if (response.data?.status?.toLowerCase() == "success") {
@@ -718,11 +910,16 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future getStopLossPendingOrder() async {
     isPendingOrderStateLoading(true);
     try {
-      final RepoResponse<StopLossPendingOrdersListResponse> response = await repository.getStopLossPendingOrder(
+      final RepoResponse<StopLossPendingOrdersListResponse> response =
+          await repository.getStopLossPendingOrder(
         virtualPortfolio.value.portfolioId,
       );
       if (response.data?.status?.toLowerCase() == "success") {
-        stopLossPendingOrderList(response.data?.data ?? []);
+        List<StopLossPendingOrdersList>? tempList = [];
+        tempList = response.data?.data
+            ?.where((order) => (order.quantity != null && order.quantity! > 0))
+            .toList();
+        stopLossPendingOrderList(tempList);
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
@@ -740,6 +937,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       await getStopLossPendingOrder();
       await getStopLossExecutedOrder();
       await getVirtualTradingPortfolio();
+      await getVirtualPositionsList();
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
@@ -747,7 +945,8 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     isPendingOrderStateLoading(false);
   }
 
-  Future pendingOrderModify(TransactionType type, TradingInstrument inst) async {
+  Future pendingOrderModify(
+      TransactionType type, TradingInstrument inst) async {
     isPendingOrderStateLoading(true);
     if (type == TransactionType.exit) {
       if (selectedStringQuantity.value.contains('-')) {
@@ -767,13 +966,15 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     PendingOrderModifyRequest data = PendingOrderModifyRequest(
       exchange: inst.exchange,
       buyOrSell: type == TransactionType.buy ? "BUY" : "SELL",
-      quantity: selectedQuantity.value,
+      // quantity: selectedQuantity.value,
       product: "NRML",
       orderType: "SL/SP-M",
       exchangeInstrumentToken: inst.exchangeToken,
       instrumentToken: inst.instrumentToken,
       stopLossPrice: stopLossPriceTextController.text,
       stopProfitPrice: stopProfitPriceTextController.text,
+      stopLossQuantity: selectedStopLossQuantity.value,
+      stopProfitQuantity: selectedStopProfitQuantity.value,
       symbol: inst.tradingsymbol,
       validity: "DAY",
       id: virtualPortfolio.value.portfolioId,
@@ -787,15 +988,21 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
     );
     print('PendingOrderModifyRequest : ${data.toJson()}');
     try {
-      final RepoResponse<GenericResponse> response = await repository.pendingOrderModify(
+      final RepoResponse<GenericResponse> response =
+          await repository.pendingOrderModify(
         data.toJson(),
       );
       Get.back();
-      print(response.data.toString());
+      print("type in991 ${response.data.toString()}");
+
       if (response.data?.status == "Success") {
         SnackbarHelper.showSnackbar(response.data?.message);
         await getStopLossPendingOrder();
         await getVirtualTodayOrderList();
+        selectedStringQuantity("");
+
+        print(
+            "typein1001 ${limitPriceTextController.text} ${stopProfitPriceTextController.text} ${stopLossPriceTextController.text}");
       } else if (response.data?.status == "Failed") {
         print(response.error!.message!.toString());
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -810,6 +1017,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   }
 
   Future getStopLossEditOrder(String? id, String? type) async {
+    print("typess${type}");
     isPendingOrderStateLoading(true);
     PendingEditOrderRequest data = PendingEditOrderRequest(
       executionPrice: type == "StopLoss"
@@ -818,6 +1026,10 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
               ? stopProfitPriceTextController.text
               : (type == "Limit" ? limitPriceTextController.text : '0')),
     );
+    // PendingEditOrderRequest data = PendingEditOrderRequest(
+    //   executionPrice: limitPriceTextController.text,
+    // );
+    print("typein1012${data.toJson()}");
     try {
       final response = await repository.getStopLossEditOrder(
         id,
@@ -827,6 +1039,9 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       getStopLossPendingOrder();
       if (response.data?.status?.toLowerCase() == "Success") {
         getStopLossPendingOrder();
+        stopLossPriceTextController.text = '';
+        stopProfitPriceTextController.text = '';
+        limitPriceTextController.text = '';
       }
     } catch (e) {
       print(e.toString());
@@ -838,6 +1053,7 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
   Future socketSendConnection() async {
     isPendingOrderStateLoading(true);
     try {
+      socketService.socket.off('sendOrderResponse${userDetails.value.sId}');
       socketService.socket.on(
         'sendOrderResponse${userDetails.value.sId}',
         (data) {
@@ -856,5 +1072,19 @@ class VirtualTradingController extends BaseController<VirtualTradingRepository> 
       log(e.toString());
     }
     isPendingOrderStateLoading(false);
+  }
+
+  Future getReadSetting() async {
+    isLoading(true);
+
+    try {
+      final RepoResponse<ReadSettingResponse> response =
+          await repository.readSetting();
+      readSetting(response.data);
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
   }
 }
