@@ -119,16 +119,130 @@ class ContestTradingView extends GetView<ContestController> {
                     onPressed: () =>
                         Get.toNamed(AppRoutes.contestLiveLeaderboard),
                   ),
-                  CommonRankCard(
-                    rank: controller.myRank.toString(),
-                    name:
-                        '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
-                    netPnL: controller.calculateTotalNetPNL().toString(),
-                    reward: controller.liveContest.value.payoutType == 'Reward'
-                        ? controller
-                            .calculateUserReward(controller.myRank.toString())
-                            .toString()
-                        : controller.calculatePayout().toString(),
+                  // CommonRankCard(
+                  //   rank: controller.myRank.toString(),
+                  //   name:
+                  //       '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName} ',
+                  //   netPnL: controller.calculateTotalNetPNL().toString(),
+                  //   reward: controller.liveContest.value.payoutType == 'Reward'
+                  //       ? controller
+                  //           .calculateUserReward(controller.myRank.toString())
+                  //           .toString()
+                  //       : controller.calculatePayout().toString(),
+                  // ),
+                  CommonCard(
+                    hasBorder: false,
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary.withOpacity(.25),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              '#${controller.myRank.toString()}',
+                              style: AppStyles.tsSecondarySemiBold14,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            '${controller.userDetails.value.firstName} ${controller.userDetails.value.lastName}'
+                                    .capitalize ??
+                                '',
+                            style: Theme.of(context).textTheme.tsMedium14,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Net P&L (Profit & Loss)',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .tsGreyMedium12,
+                                ),
+                                Text(
+                                  FormatHelper.formatNumbers(
+                                    controller
+                                        .calculateTotalNetPNL()
+                                        .toString(),
+                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .tsMedium12
+                                      .copyWith(
+                                        color: controller.getValueColor(
+                                            controller
+                                                .calculateTotalNetPNL()
+                                                .toString()),
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          controller.liveFeatured.value.rewardType !=
+                                      "Goodies" &&
+                                  controller.liveContest.value.rewardType !=
+                                      "Goodies"
+                              ? Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Reward',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsGreyMedium12,
+                                      ),
+                                      Text(
+                                        FormatHelper.formatNumbers(
+                                          controller.liveContest.value
+                                                      .payoutType !=
+                                                  "Reward"
+                                              ? controller
+                                                  .calculatePayout()
+                                                  .toString()
+                                              : controller
+                                                  .calculateUserReward(
+                                                      controller.myRank
+                                                          .toString())
+                                                  .toString(),
+                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsMedium12
+                                            .copyWith(
+                                              color: controller.getValueColor(
+                                                controller.liveContest.value
+                                                            .payoutType !=
+                                                        "Reward"
+                                                    ? controller
+                                                        .calculatePayout()
+                                                        .toString()
+                                                    : controller
+                                                        .calculateUserReward(
+                                                            controller.myRank
+                                                                .toString())
+                                                        .toString(),
+                                              ),
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container()
+                        ],
+                      ),
+                    ],
                   ),
                   if (controller.contestPositionsList.isNotEmpty)
                     CommonTile(label: 'My Position Summary'),
@@ -176,51 +290,64 @@ class ContestTradingView extends GetView<ContestController> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              PositionDetailCardTile(
-                                  label: 'Reward',
-                                  // valueColor: AppColors.success,
-                                  value: controller.getRewardCapAmount(
-                                      (controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) == 0
-                                          ? controller.liveFeatured.value
-                                                  .portfolio?.portfolioValue ??
-                                              controller.liveContest.value
-                                                  .portfolio?.portfolioValue ??
-                                              0
-                                          : (controller.liveFeatured.value.entryFee ??
-                                                  controller.liveContest.value
-                                                      .entryFee) ??
-                                              0,
-                                      controller.liveFeatured.value.payoutCapPercentage ??
-                                          controller.liveContest.value
-                                              .payoutCapPercentage ??
-                                          0,
-                                      controller.liveFeatured.value.payoutPercentage ??
-                                          controller.liveContest.value
-                                              .payoutPercentage ??
-                                          0),
-                                  valueColor: controller.getValueColor(controller.getRewardCapAmount((controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) == 0 ? controller.liveFeatured.value.portfolio?.portfolioValue ?? controller.liveContest.value.portfolio?.portfolioValue ?? 0 : (controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) ?? 0, controller.liveFeatured.value.payoutCapPercentage ?? controller.liveContest.value.payoutCapPercentage ?? 0, controller.liveFeatured.value.payoutPercentage ?? controller.liveContest.value.payoutPercentage ?? 0))),
+                              if (controller.liveFeatured.value.rewardType != "Goodies" &&
+                                  controller.liveContest.value.rewardType !=
+                                      "Goodies")
+                                PositionDetailCardTile(
+                                    label: 'Reward',
+                                    // valueColor: AppColors.success,
+                                    value: controller.getRewardCapAmount(
+                                        (controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) == 0
+                                            ? controller.liveFeatured.value.portfolio?.portfolioValue ??
+                                                controller
+                                                    .liveContest
+                                                    .value
+                                                    .portfolio
+                                                    ?.portfolioValue ??
+                                                0
+                                            : (controller.liveFeatured.value.entryFee ??
+                                                    controller.liveContest.value
+                                                        .entryFee) ??
+                                                0,
+                                        controller.liveFeatured.value.payoutCapPercentage ??
+                                            controller.liveContest.value
+                                                .payoutCapPercentage ??
+                                            0,
+                                        controller.liveFeatured.value.payoutPercentage ??
+                                            controller.liveContest.value
+                                                .payoutPercentage ??
+                                            0),
+                                    valueColor: controller.getValueColor(controller.getRewardCapAmount((controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) == 0 ? controller.liveFeatured.value.portfolio?.portfolioValue ?? controller.liveContest.value.portfolio?.portfolioValue ?? 0 : (controller.liveFeatured.value.entryFee ?? controller.liveContest.value.entryFee) ?? 0, controller.liveFeatured.value.payoutCapPercentage ?? controller.liveContest.value.payoutCapPercentage ?? 0, controller.liveFeatured.value.payoutPercentage ?? controller.liveContest.value.payoutPercentage ?? 0))),
                               SizedBox(width: 8),
-                              PositionDetailCardTile(
-                                label: 'TDS',
-                                value: controller.calculateTDS().round(),
-                                valueColor: controller.getValueColor(
-                                  controller.calculateTDS(),
+                              if (controller.liveFeatured.value.rewardType !=
+                                      "Goodies" &&
+                                  controller.liveContest.value.rewardType !=
+                                      "Goodies")
+                                PositionDetailCardTile(
+                                  label: 'TDS',
+                                  value: controller.calculateTDS().round(),
+                                  valueColor: controller.getValueColor(
+                                    controller.calculateTDS(),
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                           SizedBox(height: 8),
-                          Row(
-                            children: [
-                              PositionDetailCardTile(
-                                label: 'Payout',
-                                value: controller.calculatefinalPayout(),
-                                valueColor: controller.getValueColor(
-                                  controller.calculatefinalPayout(),
+                          if (controller.liveFeatured.value.rewardType !=
+                                  "Goodies" &&
+                              controller.liveContest.value.rewardType !=
+                                  "Goodies")
+                            Row(
+                              children: [
+                                PositionDetailCardTile(
+                                  label: 'Payout',
+                                  value: controller.calculatefinalPayout(),
+                                  valueColor: controller.getValueColor(
+                                    controller.calculatefinalPayout(),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
                         ],
                       ),
                     ),

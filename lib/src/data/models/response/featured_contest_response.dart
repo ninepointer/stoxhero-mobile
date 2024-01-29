@@ -235,71 +235,6 @@ class FeaturedPortfolio {
   }
 }
 
-// class FeaturedRewards {
-//   int? rankStart;
-//   int? rankEnd;
-//   dynamic prize;
-//   String? id;
-
-//   FeaturedRewards({
-//     this.rankStart,
-//     this.rankEnd,
-//     this.prize,
-//     this.id,
-//   });
-
-//   FeaturedRewards.fromJson(Map<String, dynamic> json) {
-//     rankStart = json['rankStart'];
-//     rankEnd = json['rankEnd'];
-//     prize = json['prize'];
-//     id = json['_id'];
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['rankStart'] = this.rankStart;
-//     data['rankEnd'] = this.rankEnd;
-//     data['prize'] = this.prize;
-//     data['_id'] = this.id;
-//     return data;
-//   }
-// }
-// class FeaturedRewards {
-//   int? rankStart;
-//   int? rankEnd;
-//   String? sId;
-//   dynamic prize; // Change the type to dynamic
-
-//   FeaturedRewards({this.rankStart, this.rankEnd, this.sId, this.prize});
-
-//   // Factory method to create a Rewards instance from JSON
-//   factory FeaturedRewards.fromJson(Map<String, dynamic> json) {
-//     return FeaturedRewards(
-//       rankStart: json['rankStart'],
-//       rankEnd: json['rankEnd'],
-//       sId: json['_id'],
-//       prize: json['prize'],
-//     );
-//   }
-
-//   // Convert the instance to a JSON representation
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = {
-//       'rankStart': rankStart,
-//       'rankEnd': rankEnd,
-//       '_id': sId,
-//     };
-
-//     // Check the type of prize and add it to the JSON
-//     if (prize is String) {
-//       data['prize'] = prize;
-//     } else if (prize is num) {
-//       data['prize'] = prize;
-//     }
-
-//     return data;
-//   }
-// }
 class FeaturedRewards {
   int? rankStart;
   int? rankEnd;
@@ -441,11 +376,12 @@ class UpcomingFeatured {
   bool? isFinNifty;
   String? product;
   num? payoutCapPercentage;
-  List<FeaturedRewards>? rewards;
+  List<FeaturedUpcomingRewards>? rewards;
   List<FeaturedInterestedUsers>? interestedUsers;
   List<FeaturedParticipants>? participants;
   String? createdOn;
   String? lastModifiedOn;
+  String? rewardType;
   int? iV;
 
   UpcomingFeatured(
@@ -467,6 +403,7 @@ class UpcomingFeatured {
       this.createdBy,
       this.lastModifiedBy,
       this.contestExpiry,
+      this.rewardType,
       this.isNifty,
       this.isBankNifty,
       this.isFinNifty,
@@ -492,6 +429,14 @@ class UpcomingFeatured {
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     payoutType = json['payoutType'];
+    rewardType = json["rewardType"];
+    if (json['rewards'] != null) {
+      rewards = (json['rewards'] as List<dynamic>)
+          .map((v) => FeaturedUpcomingRewards.fromJson(v))
+          .toList();
+    } else {
+      rewards = [];
+    }
     portfolio = json['portfolio'] != null
         ? new FeaturedPortfolio.fromJson(json['portfolio'])
         : null;
@@ -544,6 +489,7 @@ class UpcomingFeatured {
     data['createdBy'] = this.createdBy;
     data['lastModifiedBy'] = this.lastModifiedBy;
     data['contestExpiry'] = this.contestExpiry;
+    data["rewardType"] = this.rewardType;
     data['isNifty'] = this.isNifty;
     data['isBankNifty'] = this.isBankNifty;
     data['isFinNifty'] = this.isFinNifty;
@@ -562,6 +508,43 @@ class UpcomingFeatured {
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['__v'] = this.iV;
+    return data;
+  }
+}
+
+class FeaturedUpcomingRewards {
+  int? rankStart;
+  int? rankEnd;
+  String? sId;
+  dynamic prize; // Change the type to dynamic
+
+  FeaturedUpcomingRewards({this.rankStart, this.rankEnd, this.sId, this.prize});
+
+  // Factory method to create a Rewards instance from JSON
+  factory FeaturedUpcomingRewards.fromJson(Map<String, dynamic> json) {
+    return FeaturedUpcomingRewards(
+      rankStart: json['rankStart'],
+      rankEnd: json['rankEnd'],
+      sId: json['_id'],
+      prize: json['prize'],
+    );
+  }
+
+  // Convert the instance to a JSON representation
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'rankStart': rankStart,
+      'rankEnd': rankEnd,
+      '_id': sId,
+    };
+
+    // Check the type of prize and add it to the JSON
+    if (prize is String) {
+      data['prize'] = prize;
+    } else if (prize is num) {
+      data['prize'] = prize;
+    }
+
     return data;
   }
 }
@@ -627,6 +610,7 @@ class FeaturedCollegeContest {
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
+  String? rewardType;
 
   FeaturedCollegeContest(
       {this.id,
@@ -658,6 +642,7 @@ class FeaturedCollegeContest {
       this.participants,
       this.createdOn,
       this.lastModifiedOn,
+      this.rewardType,
       this.iV});
 
   FeaturedCollegeContest.fromJson(Map<String, dynamic> json) {
@@ -678,6 +663,7 @@ class FeaturedCollegeContest {
         ? new FeaturedPortfolio.fromJson(json['portfolio'])
         : null;
     college = json['college'];
+    rewardType = json["rewardType"];
     maxParticipants = json['maxParticipants'];
     contestStatus = json['contestStatus'];
     createdBy = json['createdBy'];
@@ -719,6 +705,7 @@ class FeaturedCollegeContest {
       data['portfolio'] = this.portfolio!.toJson();
     }
     data['college'] = this.college;
+    data["rewardType"] = this.rewardType;
     data['maxParticipants'] = this.maxParticipants;
     data['contestStatus'] = this.contestStatus;
     data['createdBy'] = this.createdBy;

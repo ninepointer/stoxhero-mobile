@@ -30,8 +30,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
                   child: Row(
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: 35,
+                        height: 35,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: AppColors.secondary.withOpacity(.1),
@@ -39,8 +39,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
                         ),
                         child: Image.asset(
                           AppImages.contestTrophy,
-                          width: 28,
-                          height: 28,
+                          width: 25,
+                          height: 25,
                         ),
                       ),
                       SizedBox(width: 8),
@@ -66,20 +66,31 @@ class LiveFeaturedCard extends GetView<ContestController> {
                               children: [
                                 if (liveFeatured?.payoutType == 'Reward') ...[
                                   if (liveFeatured?.rewardType == "Goodies")
-                                    Text(
-                                      "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}!, Click to know more",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .tsGreyRegular12,
-                                      textAlign: TextAlign.center,
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}!",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          " Click to know more",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12,
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ],
                                     )
                                   else
                                     Text(
-                                      'Rewards worth ${controller.calculateTotalReward(liveFeatured?.rewards)}, Click to know more',
+                                      'Rewards worth ${FormatHelper.formatNumbers(controller.calculateTotalReward(liveFeatured?.rewards), decimal: 0)},Click to know more',
                                       style: Theme.of(context)
                                           .textTheme
                                           .tsGreyRegular12,
-                                      textAlign: TextAlign.center,
+                                      textAlign: TextAlign.left,
                                     )
                                 ],
                                 if (liveFeatured?.payoutType != 'Reward') ...[

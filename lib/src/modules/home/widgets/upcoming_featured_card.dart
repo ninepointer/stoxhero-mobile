@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/modules/home/widgets/featured_reward_table_bottom_sheet.dart';
 
 import '../../../app/app.dart';
 
@@ -93,8 +94,8 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                   child: Row(
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: 35,
+                        height: 35,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: AppColors.secondary.withOpacity(.1),
@@ -102,8 +103,8 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                         ),
                         child: Image.asset(
                           AppImages.contestTrophy,
-                          width: 28,
-                          height: 28,
+                          width: 25,
+                          height: 25,
                         ),
                       ),
                       SizedBox(width: 8),
@@ -115,34 +116,112 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                             style: Theme.of(context).textTheme.tsRegular14,
                           ),
                           SizedBox(height: 2),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${widget.upcomingFeatured?.payoutPercentage != null ? widget.upcomingFeatured?.payoutPercentage : '0'}% of the Net P&L',
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                              if (widget.upcomingFeatured
-                                          ?.payoutCapPercentage !=
-                                      null &&
-                                  widget.upcomingFeatured
-                                          ?.payoutCapPercentage !=
-                                      0)
-                                Text(
-                                  ' (Upto ${controller.getPaidCapAmount(
-                                    widget.upcomingFeatured?.entryFee == 0
-                                        ? widget.upcomingFeatured?.portfolio
-                                                ?.portfolioValue ??
-                                            0
-                                        : widget.upcomingFeatured?.entryFee ??
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Text(
+                          //       '${widget.upcomingFeatured?.payoutPercentage != null ? widget.upcomingFeatured?.payoutPercentage : '0'}% of the Net P&L',
+                          //       style: Theme.of(context).textTheme.tsMedium12,
+                          //     ),
+                          //     if (widget.upcomingFeatured
+                          //                 ?.payoutCapPercentage !=
+                          //             null &&
+                          //         widget.upcomingFeatured
+                          //                 ?.payoutCapPercentage !=
+                          //             0)
+                          //       Text(
+                          //         ' (Upto ${controller.getPaidCapAmount(
+                          //           widget.upcomingFeatured?.entryFee == 0
+                          //               ? widget.upcomingFeatured?.portfolio
+                          //                       ?.portfolioValue ??
+                          //                   0
+                          //               : widget.upcomingFeatured?.entryFee ??
+                          //                   0,
+                          //           widget.upcomingFeatured
+                          //                   ?.payoutCapPercentage ??
+                          //               0,
+                          //         )})',
+                          //         style: Theme.of(context).textTheme.tsMedium10,
+                          //       ),
+                          //   ],
+                          // ),
+                          GestureDetector(
+                            onTap: () {
+                              if (widget.upcomingFeatured?.payoutType ==
+                                  'Reward')
+                                BottomSheetHelper.openBottomSheet(
+                                  context: context,
+                                  child: FeaturedRewardTableBottomSheet(
+                                    upcomingContest: widget.upcomingFeatured,
+                                  ),
+                                );
+                            },
+                            child: Row(
+                              children: [
+                                if (widget.upcomingFeatured?.payoutType ==
+                                    'Reward') ...[
+                                  if (widget.upcomingFeatured?.rewardType ==
+                                      "Goodies")
+                                    Column(
+                                      children: [
+                                        Text(
+                                          "1st rank wins ${controller.calculateTotalReward(widget.upcomingFeatured?.rewards)}!",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          " Click to know more",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12,
+                                          textAlign: TextAlign.center,
+                                        )
+                                      ],
+                                    )
+                                  else
+                                    Text(
+                                      'Rewards worth ${FormatHelper.formatNumbers(controller.calculateTotalReward(widget.upcomingFeatured?.rewards), decimal: 0)},Click to know more',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsGreyRegular12,
+                                      textAlign: TextAlign.left,
+                                    )
+                                ],
+                                if (widget.upcomingFeatured?.payoutType !=
+                                    'Reward') ...[
+                                  Text(
+                                    '${widget.upcomingFeatured?.payoutPercentage != null ? widget.upcomingFeatured?.payoutPercentage : '0'}% of the Net P&L',
+                                    style:
+                                        Theme.of(context).textTheme.tsMedium10,
+                                  ),
+                                  if (widget.upcomingFeatured
+                                              ?.payoutCapPercentage !=
+                                          null &&
+                                      widget.upcomingFeatured
+                                              ?.payoutCapPercentage !=
+                                          0)
+                                    Text(
+                                      ' (Upto ${controller.getPaidCapAmount(
+                                        widget.upcomingFeatured?.entryFee == 0
+                                            ? widget.upcomingFeatured?.portfolio
+                                                    ?.portfolioValue ??
+                                                0
+                                            : widget.upcomingFeatured
+                                                    ?.entryFee ??
+                                                0,
+                                        widget.upcomingFeatured
+                                                ?.payoutCapPercentage ??
                                             0,
-                                    widget.upcomingFeatured
-                                            ?.payoutCapPercentage ??
-                                        0,
-                                  )})',
-                                  style: Theme.of(context).textTheme.tsMedium10,
-                                ),
-                            ],
+                                      )})',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium10,
+                                    ),
+                                ]
+                              ],
+                            ),
                           ),
                         ],
                       )
