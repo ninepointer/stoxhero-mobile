@@ -53,10 +53,10 @@ class _KYCViewSelectorState extends State<KYCViewSelector> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      "Select KYC Verifaction Method",
-                      style: AppStyles.tsBlackMedium16,
-                    ),
+                    Text("Select KYC Verifaction Method",
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium16
+                            : AppStyles.tsBlackMedium16),
                   ],
                 ),
                 SizedBox(

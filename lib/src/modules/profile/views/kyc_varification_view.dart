@@ -52,7 +52,9 @@ class _KycVarificationViewState extends State<KycVarificationView> {
                         Flexible(
                           child: Text(
                             "Introducing seamless instant KYC Verification. Enter your Aadhaar, PAN and Bank Account Number and get your KYC Verified instantly.",
-                            style: AppStyles.tsBlackRegular12,
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteRegular12
+                                : AppStyles.tsBlackRegular12,
                           ),
                         ),
                       ],
