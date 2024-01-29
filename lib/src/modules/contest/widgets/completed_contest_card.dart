@@ -35,6 +35,21 @@ class CompletedContestCard extends GetView<ContestController> {
     return tdsAmount > 0 ? tdsAmount : 0;
   }
 
+  String getContestReward() {
+    String price = "";
+    int userRank = completedContestPnl?.rank ?? 0;
+    print("getContestReward() userRank ${userRank}");
+    print("getContestReward() userRank ${completedContestPnl?.toJson()}");
+    for (CompletedRewards reward in contest?.rewards ?? []) {
+      if (reward.rankStart == userRank) {
+        print("getContestReward() reward ${reward}");
+        return reward.prize;
+      }
+    }
+
+    return price;
+  }
+
   @override
   Widget build(BuildContext context) {
     print('${controller.userDetailsData.sId}');
@@ -160,11 +175,25 @@ class CompletedContestCard extends GetView<ContestController> {
                 );
               },
               child: Row(children: [
+                // if (contest?.payoutType == 'Reward') ...[
+                //   Text(
+                //       'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
+                //       style: Theme.of(context).textTheme.tsMedium12,
+                //       textAlign: TextAlign.center),
+                // ],
                 if (contest?.payoutType == 'Reward') ...[
-                  Text(
+                  if (contest?.rewardType == "Goodies")
+                    Text(
+                      "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
+                      style: Theme.of(context).textTheme.tsGreyRegular12,
+                      textAlign: TextAlign.center,
+                    )
+                  else
+                    Text(
                       'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
-                      style: Theme.of(context).textTheme.tsMedium12,
-                      textAlign: TextAlign.center),
+                      style: Theme.of(context).textTheme.tsGreyRegular12,
+                      textAlign: TextAlign.center,
+                    )
                 ],
                 if (contest?.payoutType != 'Reward') ...[
                   if (contest?.payoutCapPercentage != null &&
@@ -379,51 +408,59 @@ class CompletedContestCard extends GetView<ContestController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Reward:',
-                            style: Theme.of(context).textTheme.tsGreyMedium12,
-                          ),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Text(
-                            FormatHelper.formatNumbers(
-                                calculateReward(
-                                  contest?.entryFee == 0
-                                      ? contest?.portfolio?.portfolioValue ?? 0
-                                      : contest?.entryFee ?? 0,
-                                ).toString(),
-                                decimal: 2),
-                            // Text(
-                            //  (completedContestPnl?.payoutAmount??0)>0?((completedContestPnl?.payoutAmount??0)*30/100):,
-                            style: Theme.of(context)
-                                .textTheme
-                                .tsBlackMedium12
-                                .copyWith(color: AppColors.success),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'HeroCash:',
-                            style: AppStyles.tsGreyMedium12,
-                          ),
-                          // SizedBox(width: 2),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Text(
-                            "${controller.herocashadd(contest, controller.userDetailsData.sId.toString()).toStringAsFixed(1)}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .tsMedium12
-                                .copyWith(color: AppColors.success),
-                          ),
-                        ],
-                      ),
+                      if (contest?.rewardType != "Goodies")
+                        //   Text(
+                        //     'Reward: ${getContestReward()}',
+                        //     style: Theme.of(context).textTheme.tsGreyMedium12,
+                        //   )
+                        // else
+                        Row(
+                          children: [
+                            Text(
+                              'Reward:',
+                              style: Theme.of(context).textTheme.tsGreyMedium12,
+                            ),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Text(
+                              FormatHelper.formatNumbers(
+                                  calculateReward(
+                                    contest?.entryFee == 0
+                                        ? contest?.portfolio?.portfolioValue ??
+                                            0
+                                        : contest?.entryFee ?? 0,
+                                  ).toString(),
+                                  decimal: 2),
+                              // Text(
+                              //  (completedContestPnl?.payoutAmount??0)>0?((completedContestPnl?.payoutAmount??0)*30/100):,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsBlackMedium12
+                                  .copyWith(color: AppColors.success),
+                            )
+                          ],
+                        ),
+                      if (contest?.rewardType != "Goodies")
+                        Row(
+                          children: [
+                            Text(
+                              'HeroCash:',
+                              style: AppStyles.tsGreyMedium12,
+                            ),
+                            // SizedBox(width: 2),
+                            SizedBox(
+                              width: 2,
+                            ),
+                            Text(
+                              "${controller.herocashadd(contest, controller.userDetailsData.sId.toString()).toStringAsFixed(1)}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium12
+                                  .copyWith(color: AppColors.success),
+                            ),
+                          ],
+                        ),
                       Row(
                         children: [
                           Text(

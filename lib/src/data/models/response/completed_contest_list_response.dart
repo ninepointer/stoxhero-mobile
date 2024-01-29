@@ -53,6 +53,7 @@ class CompletedContest {
   bool? isAllIndex;
   String? product;
   num? payoutCapPercentage;
+  String? rewardType;
   List<CompletedRewards>? rewards;
   List<CompletedInterestedUsers>? interestedUsers;
   List<CompletedPurchaseIntent>? purchaseIntent;
@@ -75,6 +76,7 @@ class CompletedContest {
     this.currentLiveStatus,
     this.contestFor,
     this.entryFee,
+    this.rewardType,
     this.payoutPercentage,
     this.featured,
     this.portfolio,
@@ -112,6 +114,7 @@ class CompletedContest {
     currentLiveStatus = json['currentLiveStatus'];
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
+    rewardType = json['rewardType'];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     portfolio = json['portfolio'] != null
@@ -174,6 +177,7 @@ class CompletedContest {
     data['entryFee'] = this.entryFee;
     data['payoutPercentage'] = this.payoutPercentage;
     data['featured'] = this.featured;
+    data['rewardType'] = this.rewardType;
     if (this.portfolio != null) {
       data['portfolio'] = this.portfolio!.toJson();
     }

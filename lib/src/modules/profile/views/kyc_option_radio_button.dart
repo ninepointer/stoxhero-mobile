@@ -55,7 +55,9 @@ class _KYCViewSelectorState extends State<KYCViewSelector> {
                   children: [
                     Text(
                       "Select KYC Verifaction Method",
-                      style: AppStyles.tsBlackMedium16,
+                      style: Get.isDarkMode
+                          ? AppStyles.tsWhiteMedium16
+                          : AppStyles.tsBlackMedium16,
                     ),
                   ],
                 ),

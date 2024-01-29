@@ -46,7 +46,9 @@ class _KycDetailsViewState extends State<KycDetailsView> {
                       Flexible(
                         child: Text(
                           "Submit and upload your KYC details for StoxHero admin review. Your status will be updated afterwards.",
-                          style: AppStyles.tsBlackRegular12,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteRegular12
+                              : AppStyles.tsBlackRegular12,
                         ),
                       ),
                     ],
