@@ -1121,29 +1121,6 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   // }
 
   num calculateTotalPositionpnl() {
-    // num totalPnlPosition = 0;
-
-    // //Position net
-    // for (var position in stockPositionsList) {
-    //   if (position.iId?.isLimit ?? false) {
-    //   } else {
-    //     totalPnlPosition += calculateGrossPNL(
-    //       position.amount ?? 0,
-    //       position.lots!.toInt(),
-    //       getInstrumentLastPrice(
-    //         position.iId!.instrumentToken!,
-    //         position.iId!.exchangeInstrumentToken!,
-    //       ),
-    //     );
-
-    //     // if (position.lots != 0) {}
-    //     // if (position.lots != 0) {
-    //     // } else {}
-    //   }
-    // }
-
-    // num finalPortfolioPnl = (totalPnlPosition);
-    // return finalPortfolioPnl;
 
     num totalGross = 0;
     int totalLots = 0;

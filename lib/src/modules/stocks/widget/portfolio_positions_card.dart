@@ -398,8 +398,12 @@ class _PositionsCardState extends State<PositionsCard> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
+                                  widget.position.lots == 0
+                                      ? '₹0.00'
+                                      : FormatHelper.formatNumbers(
+                                          currentValue()),
                                   //current value
-                                  FormatHelper.formatNumbers(currentValue()),
+
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
