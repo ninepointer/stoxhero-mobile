@@ -125,7 +125,20 @@ class StockStoplossModifyPriceBottomSheet
                               stopLoss.instrumentToken!,
                               stopLoss.exchangeToken!,
                             )}%",
-                            style: AppStyles.tsSecondaryMedium14,
+
+                            style: TextStyle(
+                                color: (double.tryParse(
+                                                controller.getInstrumentChanges(
+                                              // data.instrumentToken ?? 0,
+                                              // data.exchangeInstrumentToken ?? 0,
+                                              stopLoss.instrumentToken!,
+                                              stopLoss.exchangeToken!,
+                                            )) ??
+                                            0) <
+                                        0
+                                    ? AppColors.danger
+                                    : AppColors.success),
+                            //style: AppStyles.tsSecondaryMedium14,
                           ),
                         ],
                       ),

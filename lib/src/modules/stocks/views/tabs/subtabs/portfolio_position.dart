@@ -50,11 +50,11 @@ class _PortfolioPositionState extends State<PortfolioPosition> {
                 decimal: 2),
             currentvalue: FormatHelper.formatNumbers(controller.stockTotalPositionDetails.value.currentvalue.toString(),
                 decimal: 2),
-            roiPositions: FormatHelper.formatNumbers(
-              controller.stockTotalPositionDetails.value.roi.toString(),
-              decimal: 2,
-              showSymbol: false,
-            ),
+            // roiPositions: FormatHelper.formatNumbers(
+            //   controller.stockTotalPositionDetails.value.roi.toString(),
+            //   decimal: 2,
+            //   showSymbol: false,
+            // ),
             pnlInPosition:
                 FormatHelper.formatNumbers(controller.stockTotalPositionDetails.value.pnl.toString(), decimal: 2),
           ),

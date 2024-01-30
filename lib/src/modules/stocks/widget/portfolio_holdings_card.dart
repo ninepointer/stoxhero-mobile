@@ -403,8 +403,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  //current value
-                                  FormatHelper.formatNumbers(currentValue()),
+                                  widget.holding.lots == 0
+                                      ? '₹0.00'
+                                      : FormatHelper.formatNumbers(
+                                          currentValue()),
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,

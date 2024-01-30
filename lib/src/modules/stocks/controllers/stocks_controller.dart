@@ -1121,29 +1121,54 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   // }
 
   num calculateTotalPositionpnl() {
-    num totalPnlPosition = 0;
 
-    //Position net
+    num totalGross = 0;
+    int totalLots = 0;
+    num totalPositionBrokerage = 0;
+    num totalPositionInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
     for (var position in stockPositionsList) {
       if (position.iId?.isLimit ?? false) {
       } else {
-        totalPnlPosition += calculateGrossPNL(
-          position.amount ?? 0,
-          position.lots!.toInt(),
-          getInstrumentLastPrice(
-            position.iId!.instrumentToken!,
-            position.iId!.exchangeInstrumentToken!,
-          ),
-        );
-
-        if (position.lots != 0) {}
+        totalLots += position.lots ?? 0;
+        totalPositionBrokerage += position.brokerage ?? 0;
+        totalGross += getInstrumentLastPrice(
+              position.iId!.instrumentToken!,
+              position.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (position.lots?.abs() ?? 0);
+        totalPnl += (position.lots == 0
+            ? position.amount
+            : calculateGrossPNL(
+                position.amount ?? 0,
+                position.lots!.toInt(),
+                getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
         if (position.lots != 0) {
-        } else {}
+          totalPositionInvested += position.amount?.abs() ?? 0;
+        }
+
+        if (position.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalPositionInvested);
+        } else {
+          totalRoi = 0;
+        }
       }
     }
 
-    num finalPortfolioPnl = (totalPnlPosition);
-    return finalPortfolioPnl;
+    num finalPositionPnl = (totalPnl);
+    return finalPositionPnl;
   }
 
   num calculateTotalPositionroi() {
@@ -1157,33 +1182,40 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
     for (var position in stockPositionsList) {
       if (position.iId?.isLimit ?? false) {
-        continue; // Skip to the next iteration if it is a limit.
-      }
-
-      totalLots += position.lots ?? 0;
-      totalPositionBrokerage += position.brokerage ?? 0;
-
-      num lastPrice = getInstrumentLastPrice(
-            position.iId!.instrumentToken!,
-            position.iId!.exchangeInstrumentToken!,
-          ).abs() ??
-          0;
-
-      totalGross += lastPrice;
-
-      totalCurrentValue += lastPrice * (position.lots?.abs() ?? 0);
-
-      totalPnl += calculateGrossPNL(
-        position.amount ?? 0,
-        position.lots!.toInt(),
-        lastPrice,
-      );
-
-      if (position.lots != 0) {
-        totalPositionInvested += position.amount?.abs() ?? 0;
-        totalRoi = (totalPnl * 100) / totalPositionInvested;
       } else {
-        totalRoi = 0;
+        totalLots += position.lots ?? 0;
+        totalPositionBrokerage += position.brokerage ?? 0;
+        totalGross += getInstrumentLastPrice(
+              position.iId!.instrumentToken!,
+              position.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (position.lots?.abs() ?? 0);
+
+        totalPnl += (position.lots == 0
+            ? position.amount
+            : calculateGrossPNL(
+                position.amount ?? 0,
+                position.lots!.toInt(),
+                getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
+
+        if (position.lots != 0) {
+          totalPositionInvested += position.amount?.abs() ?? 0;
+        }
+        if (position.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalPositionInvested);
+        } else {
+          totalRoi = 0;
+        }
       }
     }
 
@@ -1331,28 +1363,54 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 //live price for holdings ka
 
   num calculateTotalHoldingPnl() {
-    num totalPnlholding = 0;
-    //holding net
+    num totalGross = 0;
+    int totalLots = 0;
+    num totalHoldingBrokerage = 0;
+    num totalHoldingInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
     for (var holding in stockHoldingsList) {
       if (holding.iId?.isLimit ?? false) {
       } else {
-        totalPnlholding += calculateGrossPNL(
-          holding.amount ?? 0,
-          holding.lots!.toInt(),
-          getInstrumentLastPrice(
-            holding.iId!.instrumentToken!,
-            holding.iId!.exchangeInstrumentToken!,
-          ),
-        );
+        totalLots += holding.lots ?? 0;
+        totalHoldingBrokerage += holding.brokerage ?? 0;
+        totalGross += getInstrumentLastPrice(
+              holding.iId!.instrumentToken!,
+              holding.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (holding.lots?.abs() ?? 0);
+        totalPnl += (holding.lots == 0
+            ? holding.amount
+            : calculateGrossPNL(
+                holding.amount ?? 0,
+                holding.lots!.toInt(),
+                getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
 
-        if (holding.lots != 0) {}
         if (holding.lots != 0) {
-        } else {}
+          totalHoldingInvested += holding.amount?.abs() ?? 0;
+        }
+        if (holding.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalHoldingInvested);
+        } else {
+          totalRoi = 0;
+        }
       }
     }
-    // print('paisa holding ${totalPnlholding}');
-    num finalPortfolioPnl = (totalPnlholding);
-    return finalPortfolioPnl;
+    //print('holdingtotal${totalHoldingInvested}');
+    num finalTotalHoldingsPnl = totalPnl;
+
+    return finalTotalHoldingsPnl;
   }
 
   num calculateTotalHoldingroi() {
@@ -1385,14 +1443,16 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
             (holding.lots?.abs() ?? 0);
 
         // totalPnl = (totalCurrentValue - totalNet);
-        totalPnl += calculateGrossPNL(
-          holding.amount ?? 0,
-          holding.lots!.toInt(),
-          getInstrumentLastPrice(
-            holding.iId!.instrumentToken!,
-            holding.iId!.exchangeInstrumentToken!,
-          ),
-        );
+        totalPnl += (holding.lots == 0
+            ? holding.amount
+            : calculateGrossPNL(
+                holding.amount ?? 0,
+                holding.lots!.toInt(),
+                getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
 
         if (holding.lots != 0) {
           totalHoldingInvested += holding.amount?.abs() ?? 0;
@@ -1569,14 +1629,16 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     for (var position in stockPositionsList) {
       if (position.iId?.isLimit ?? false) {
       } else {
-        totalPnlPosition += calculateGrossPNL(
-          position.amount ?? 0,
-          position.lots!.toInt(),
-          getInstrumentLastPrice(
-            position.iId!.instrumentToken!,
-            position.iId!.exchangeInstrumentToken!,
-          ),
-        );
+        totalPnlPosition += (position.lots == 0
+            ? position.amount
+            : calculateGrossPNL(
+                position.amount ?? 0,
+                position.lots!.toInt(),
+                getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
 
         if (position.lots != 0) {}
         if (position.lots != 0) {
@@ -1588,14 +1650,16 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     for (var holding in stockHoldingsList) {
       if (holding.iId?.isLimit ?? false) {
       } else {
-        totalPnlholding += calculateGrossPNL(
-          holding.amount ?? 0,
-          holding.lots!.toInt(),
-          getInstrumentLastPrice(
-            holding.iId!.instrumentToken!,
-            holding.iId!.exchangeInstrumentToken!,
-          ),
-        );
+        totalPnlholding += (holding.lots == 0
+            ? holding.amount
+            : calculateGrossPNL(
+                holding.amount ?? 0,
+                holding.lots!.toInt(),
+                getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
 
         if (holding.lots != 0) {}
         if (holding.lots != 0) {
@@ -1606,7 +1670,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     // print('paisa position inside ${totalPnlPosition}');
 
     num finalPortfolioPnl = (totalPnlPosition + totalPnlholding);
-   // print('paisa total inside ${finalPortfolioPnl}');
+    // print('paisa total inside ${finalPortfolioPnl}');
     // String finalPortfolioPnl = FormatHelper.formatNumbers(
     //   (totalPnlPosition+totalPnlholding),
     //   decimal: 2,
@@ -1708,7 +1772,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data != null) {
         if (response.data?.data! != null) {
           stoplossQuantityList(response.data?.quantity ?? []);
-        //  print("stoplossQuantityList${stoplossQuantityList.length}");
+          //  print("stoplossQuantityList${stoplossQuantityList.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1780,7 +1844,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
-     // print('hiii${stockfundsmargin.toJson()}');
+      // print('hiii${stockfundsmargin.toJson()}');
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

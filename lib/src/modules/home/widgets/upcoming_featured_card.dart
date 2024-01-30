@@ -178,7 +178,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                               .textTheme
                                               .tsGreyRegular12
                                               .copyWith(
-                                                color: AppColors.primary,
+                                                // color: AppColors.primary,
                                                 decoration:
                                                     TextDecoration.underline,
                                               ),

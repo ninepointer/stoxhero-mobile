@@ -82,7 +82,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                               .textTheme
                                               .tsGreyRegular12
                                               .copyWith(
-                                                color: AppColors.primary,
+                                                // color: AppColors.primary,
                                                 decoration:
                                                     TextDecoration.underline,
                                               ),
