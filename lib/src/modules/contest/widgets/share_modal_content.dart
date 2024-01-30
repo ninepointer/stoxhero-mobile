@@ -203,35 +203,19 @@ class ShareModalContent extends GetView<ContestController> {
                                                     color: AppColors.white))
                                       ],
                                     ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: 12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "  Net P&L",
-                                            style: AppStyles
-                                                .tsSecondaryRegular14
-                                                .copyWith(
-                                              color: AppColors.white,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 2,
-                                          ),
-                                          Text(
-                                              FormatHelper.formatNumbers(
-                                                  completedContestPnl?.npnl,
-                                                  decimal: 0),
-                                              style: AppStyles
-                                                  .tsSecondaryMedium16
-                                                  .copyWith(
-                                                      color: AppColors.white))
-                                        ],
+                                    if ((controller.completedContest.value
+                                            .rewardType ==
+                                        "Goodies"))
+                                      SizedBox(
+                                        width: 40,
+                                      )
+                                    else
+                                      SizedBox(
+                                        width: 0,
                                       ),
-                                    ),
                                     Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text("Reward",
                                             style: AppStyles
@@ -260,7 +244,35 @@ class ShareModalContent extends GetView<ContestController> {
                                                         color:
                                                             AppColors.white)),
                                       ],
-                                    )
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 12),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "  Net P&L",
+                                            style: AppStyles
+                                                .tsSecondaryRegular14
+                                                .copyWith(
+                                              color: AppColors.white,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                              FormatHelper.formatNumbers(
+                                                  completedContestPnl?.npnl,
+                                                  decimal: 0),
+                                              style: AppStyles
+                                                  .tsSecondaryMedium16
+                                                  .copyWith(
+                                                      color: AppColors.white))
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),

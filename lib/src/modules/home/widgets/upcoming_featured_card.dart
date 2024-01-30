@@ -162,22 +162,27 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                     'Reward') ...[
                                   if (widget.upcomingFeatured?.rewardType ==
                                       "Goodies")
-                                    Column(
+                                    Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "1st rank wins ${controller.calculateTotalReward(widget.upcomingFeatured?.rewards)}!",
+                                          "1st rank wins ${controller.calculateTotalReward(widget.upcomingFeatured?.rewards)}! ",
                                           style: Theme.of(context)
                                               .textTheme
                                               .tsGreyRegular12,
                                         ),
                                         Text(
-                                          "Click to know more",
+                                          "Know More",
                                           style: Theme.of(context)
                                               .textTheme
-                                              .tsGreyRegular12,
-                                        )
+                                              .tsGreyRegular12
+                                              .copyWith(
+                                                color: AppColors.primary,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                        ),
                                       ],
                                     )
                                   else
