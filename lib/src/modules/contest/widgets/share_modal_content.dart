@@ -37,6 +37,20 @@ class ShareModalContent extends GetView<ContestController> {
     return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers(completedContestPnl?.payoutAmount)} in ${controller.completedContest.value.contestName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nSignUp now and get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet \n\nhttps://stoxhero.page.link/ctz";
   }
 
+  String getContestReward() {
+    String price = "";
+    int userRank = completedContestPnl?.rank ?? 0;
+    for (CompletedRewards reward in contest?.rewards ?? []) {
+      if (reward.rankStart == userRank) {
+        print("getContestReward() reward ${reward}");
+        return reward.prize;
+      } else {
+        return "-";
+      }
+    }
+    return price;
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey cardKey = GlobalKey();
@@ -229,23 +243,19 @@ class ShareModalContent extends GetView<ContestController> {
                                         SizedBox(
                                           height: 2,
                                         ),
-                                        Text(
-                                            FormatHelper.formatNumbers(
-                                                completedContestPnl
-                                                    ?.payoutAmount,
-                                                decimal: 0),
-                                            // FormatHelper.formatNumbers(
-                                            //     calculateReward(
-                                            //       contest?.entryFee == 0
-                                            //           ? contest?.portfolio
-                                            //                   ?.portfolioValue ??
-                                            //               0
-                                            //           : contest?.entryFee ?? 0,
-                                            //     ).toString(),
-                                            //     decimal: 2),
-                                            style: AppStyles.tsSecondaryMedium16
-                                                .copyWith(
-                                                    color: AppColors.white))
+                                        (controller.completedContest.value
+                                                    .rewardType !=
+                                                "Goodies")
+                                            ? Text(
+                                                FormatHelper.formatNumbers(
+                                                    completedContestPnl
+                                                        ?.payoutAmount,
+                                                    decimal: 0),
+                                                style: AppStyles
+                                                    .tsSecondaryMedium16
+                                                    .copyWith(
+                                                        color: AppColors.white))
+                                            : Text(getContestReward()),
                                       ],
                                     )
                                   ],

@@ -116,11 +116,18 @@ class UpComingShareModalContent extends GetView<ContestController> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "& Earn upto ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)}",
-                                    style: AppStyles.tsSecondaryMedium16
-                                        .copyWith(color: AppColors.white),
-                                  )
+                                  controller.upComingContest.value.rewardType !=
+                                          "Goodies"
+                                      ? Text(
+                                          "& Earn upto ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)}",
+                                          style: AppStyles.tsSecondaryMedium16
+                                              .copyWith(color: AppColors.white),
+                                        )
+                                      : Text(
+                                          "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
+                                          style: AppStyles.tsSecondaryMedium16
+                                              .copyWith(color: AppColors.white),
+                                        )
                                 ],
                               ),
                               SizedBox(
@@ -243,13 +250,25 @@ class UpComingShareModalContent extends GetView<ContestController> {
                                           SizedBox(
                                             height: 2,
                                           ),
-                                          Text(
-                                            "${contest?.payoutPercentage}% of Net P&L",
-                                            style: AppStyles.tsSecondaryMedium16
-                                                .copyWith(
-                                                    color: AppColors.white),
-                                            textAlign: TextAlign.end,
-                                          )
+                                          (controller.upComingContest.value
+                                                      .rewardType !=
+                                                  "Goodies")
+                                              ? Text(
+                                                  "${contest?.payoutPercentage}% of Net P&L",
+                                                  style: AppStyles
+                                                      .tsSecondaryMedium16
+                                                      .copyWith(
+                                                          color:
+                                                              AppColors.white),
+                                                  textAlign: TextAlign.end,
+                                                )
+                                              : Text(
+                                                  "${controller.calculateTotalReward(contest?.rewards)}",
+                                                  style: AppStyles
+                                                      .tsSecondaryMedium16
+                                                      .copyWith(
+                                                          color:
+                                                              AppColors.white))
                                         ],
                                       ),
                                     ),

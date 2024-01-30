@@ -4,6 +4,20 @@ import 'package:stoxhero/src/app/app.dart';
 class ContestLiveLeaderboardView extends GetView<ContestController> {
   const ContestLiveLeaderboardView({Key? key}) : super(key: key);
 
+  String getContestReward(int index) {
+    String price = "";
+
+    for (Rewards reward in controller.liveContest.value.rewards ?? []) {
+      if (reward.rankStart == index + 1) {
+        return reward.prize;
+      } else {
+        return "";
+      }
+    }
+
+    return price;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -284,7 +298,25 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                                             ],
                                           ),
                                         )
-                                      : Container()
+                                      : Column(
+                                          children: [
+                                            getContestReward(index) != ""
+                                                ? Text(
+                                                    "Reward",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .tsGreyMedium12,
+                                                  )
+                                                : Container(),
+                                            Text("${getContestReward(index)}",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .tsMedium12
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .lightGreen))
+                                          ],
+                                        )
                                 ],
                               ),
                             ],
