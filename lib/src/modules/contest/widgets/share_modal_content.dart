@@ -39,10 +39,13 @@ class ShareModalContent extends GetView<ContestController> {
 
   String getContestReward() {
     String price = "";
+    print("helllllo");
     int userRank = completedContestPnl?.rank ?? 0;
+    print("hell ${userRank}");
     for (CompletedRewards reward in contest?.rewards ?? []) {
+      print("hellllll");
+      print("hell ${reward.rankStart} h ");
       if (reward.rankStart == userRank) {
-        print("getContestReward() reward ${reward.prize}");
         return reward.prize;
       }
     }

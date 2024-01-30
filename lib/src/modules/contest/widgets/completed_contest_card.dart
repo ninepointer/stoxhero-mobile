@@ -38,11 +38,9 @@ class CompletedContestCard extends GetView<ContestController> {
   String getContestReward() {
     String price = "";
     int userRank = completedContestPnl?.rank ?? 0;
-    print("getContestReward() userRank ${userRank}");
-    print("getContestReward() userRank ${completedContestPnl?.toJson()}");
+
     for (CompletedRewards reward in contest?.rewards ?? []) {
       if (reward.rankStart == userRank) {
-        print("getContestReward() reward ${reward}");
         return reward.prize;
       }
     }

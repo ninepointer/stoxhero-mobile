@@ -140,7 +140,28 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                               ],
                             ),
                           )
-                        : Container()
+                        : Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                getContestReward(controller.myRank.value - 1) !=
+                                        ""
+                                    ? Text(
+                                        'Reward',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsGreyMedium12,
+                                      )
+                                    : Container(),
+                                Text(
+                                    "${getContestReward(controller.myRank.value - 1)}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .tsMedium12
+                                        .copyWith(color: AppColors.lightGreen))
+                              ],
+                            ),
+                          )
                   ],
                 ),
               ],

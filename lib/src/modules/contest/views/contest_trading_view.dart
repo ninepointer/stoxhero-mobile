@@ -8,6 +8,20 @@ class ContestTradingView extends GetView<ContestController> {
   const ContestTradingView({Key? key, this.isLiveContest = true})
       : super(key: key);
 
+  String getContestReward(int index) {
+    String price = "";
+
+    for (Rewards reward in controller.liveContest.value.rewards ?? []) {
+      if (reward.rankStart == index + 1) {
+        return reward.prize;
+      } else {
+        return "";
+      }
+    }
+
+    return price;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,7 +253,30 @@ class ContestTradingView extends GetView<ContestController> {
                                     ],
                                   ),
                                 )
-                              : Container()
+                              : Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      getContestReward(controller.myRank.value -
+                                                  1) !=
+                                              ""
+                                          ? Text(
+                                              'Reward',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .tsGreyMedium12,
+                                            )
+                                          : Container(),
+                                      Text(
+                                          "${getContestReward(controller.myRank.value - 1)}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsMedium12
+                                              .copyWith(
+                                                  color: AppColors.lightGreen))
+                                    ],
+                                  ),
+                                )
                         ],
                       ),
                     ],
