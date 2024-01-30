@@ -15,6 +15,10 @@ class StockStoplossModifyPriceBottomSheet
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    controller.stopLossPriceTextController.clear();
+    controller.stopProfitPriceTextController.clear();
+    controller.stopLossQuantityTextController.clear();
+    controller.stopProfitQuantityTextController.clear();
     return Obx(
       () => Wrap(
         children: [
@@ -34,8 +38,8 @@ class StockStoplossModifyPriceBottomSheet
                   GestureDetector(
                     onTap: () {
                       Get.back();
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -291,8 +295,8 @@ class StockStoplossModifyPriceBottomSheet
                           .validate()) {
                         controller.pendingOrderModify(type, stopLoss);
                       }
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
                     },
                     backgroundColor: AppColors.secondary,
                   ),
