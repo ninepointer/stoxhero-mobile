@@ -616,6 +616,7 @@ class CompletedContestCard extends GetView<ContestController> {
                         return Center(
                           child: ShareModalContent(
                             completedContestPnl: matchingContestPnl,
+                            contest: contest,
                           ),
                         );
                       },

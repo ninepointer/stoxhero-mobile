@@ -542,14 +542,15 @@ class ContestController extends BaseController<ContestRepository> {
             num numberOfRanks =
                 (reward.rankEnd ?? 0) - (reward.rankStart ?? 0) + 1;
             totalReward += numberOfRanks * (reward.prize as num);
-          } else if (reward.prize is String) {
-            // Handle String value (convert or skip based on your logic)
-            // For example, you can convert it to a num using double.parse
-            String parsedPrize = reward.prize as String;
-            // num numberOfRanks =
-            //     (reward.rankEnd ?? 0) - (reward.rankStart ?? 0) + 1;
-            totalReward = parsedPrize;
           }
+        }
+        if (reward.prize is String) {
+          // Handle String value (convert or skip based on your logic)
+          // For example, you can convert it to a num using double.parse
+          String parsedPrize = rankRewards[0].prize as String;
+          // num numberOfRanks =
+          //     (reward.rankEnd ?? 0) - (reward.rankStart ?? 0) + 1;
+          totalReward = parsedPrize;
         }
       }
     }

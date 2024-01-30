@@ -69,19 +69,12 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                     Column(
                                       children: [
                                         Text(
-                                          "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}!",
+                                          "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}! know more",
                                           style: Theme.of(context)
                                               .textTheme
                                               .tsGreyRegular12,
                                           textAlign: TextAlign.center,
                                         ),
-                                        Text(
-                                          " Click to know more",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .tsGreyRegular12,
-                                          textAlign: TextAlign.center,
-                                        )
                                       ],
                                     )
                                   else

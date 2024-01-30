@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 class ShareModalContent extends GetView<ContestController> {
   final CompletedContestPnl? completedContestPnl;
   final CompletedContest? contest;
+
   const ShareModalContent({
     Key? key,
     this.completedContestPnl,
@@ -34,17 +35,13 @@ class ShareModalContent extends GetView<ContestController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers(completedContestPnl?.payoutAmount)} in ${controller.completedContest.value.contestName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nSignUp now and get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet \n\nhttps://stoxhero.page.link/ctz";
+    return "Hey!! \n\nI just won INR ${controller.completedContest.value.rewardType != "Goodies" ? FormatHelper.formatNumbers(completedContestPnl?.payoutAmount) : getContestReward()} in ${controller.completedContest.value.contestName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nSignUp now and get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet \n\nhttps://stoxhero.page.link/ctz";
   }
 
   String getContestReward() {
     String price = "";
-    print("helllllo");
     int userRank = completedContestPnl?.rank ?? 0;
-    print("hell ${userRank}");
     for (CompletedRewards reward in contest?.rewards ?? []) {
-      print("hellllll");
-      print("hell ${reward.rankStart} h ");
       if (reward.rankStart == userRank) {
         return reward.prize;
       }
