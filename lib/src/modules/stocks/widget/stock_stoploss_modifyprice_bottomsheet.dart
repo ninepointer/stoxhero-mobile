@@ -15,6 +15,10 @@ class StockStoplossModifyPriceBottomSheet
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    controller.stopLossPriceTextController.clear();
+    controller.stopProfitPriceTextController.clear();
+    controller.stopLossQuantityTextController.clear();
+    controller.stopProfitQuantityTextController.clear();
     return Obx(
       () => Wrap(
         children: [
@@ -34,8 +38,8 @@ class StockStoplossModifyPriceBottomSheet
                   GestureDetector(
                     onTap: () {
                       Get.back();
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -121,7 +125,20 @@ class StockStoplossModifyPriceBottomSheet
                               stopLoss.instrumentToken!,
                               stopLoss.exchangeToken!,
                             )}%",
-                            style: AppStyles.tsSecondaryMedium14,
+
+                            style: TextStyle(
+                                color: (double.tryParse(
+                                                controller.getInstrumentChanges(
+                                              // data.instrumentToken ?? 0,
+                                              // data.exchangeInstrumentToken ?? 0,
+                                              stopLoss.instrumentToken!,
+                                              stopLoss.exchangeToken!,
+                                            )) ??
+                                            0) <
+                                        0
+                                    ? AppColors.danger
+                                    : AppColors.success),
+                            //style: AppStyles.tsSecondaryMedium14,
                           ),
                         ],
                       ),
@@ -291,8 +308,8 @@ class StockStoplossModifyPriceBottomSheet
                           .validate()) {
                         controller.pendingOrderModify(type, stopLoss);
                       }
-                      controller.stopLossPriceTextController.clear();
-                      controller.stopProfitPriceTextController.clear();
+                      // controller.stopLossPriceTextController.clear();
+                      // controller.stopProfitPriceTextController.clear();
                     },
                     backgroundColor: AppColors.secondary,
                   ),

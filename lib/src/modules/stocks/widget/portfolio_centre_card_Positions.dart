@@ -7,13 +7,13 @@ class CentreCardinPositions extends StatefulWidget {
     Key? key,
     required this.invested,
     required this.currentvalue,
-    required this.roiPositions,
+    // required this.roiPositions,
     required this.pnlInPosition,
   }) : super(key: key);
 
   final String invested;
   final String currentvalue;
-  final String roiPositions;
+  // final String roiPositions;
   final String pnlInPosition;
 
   @override
@@ -91,33 +91,40 @@ class _CentreCardinPositionsState extends State<CentreCardinPositions> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      widget.pnlInPosition,
+                      FormatHelper.formatNumbers(
+                          controller.calculateTotalPositionpnl(),
+                          decimal: 2),
+
+                      // widget.pnlInPosition,
                       style: AppStyles.tsBlackMedium12.copyWith(
-                        color: widget.pnlInPosition != null
-                            ? widget.pnlInPosition.startsWith('-')
-                                ? AppColors.danger
-                                : AppColors.success
-                            : AppColors
-                                .success, // Replace AppColors.defaultColor with your desired default color
-                      ),
-                    ),
-                    Text(
-                      '${(widget.invested == 0 || widget.roiPositions == null) ? '0.00' : widget.roiPositions}%',
-                      style: AppStyles.tsBlackMedium12.copyWith(
-                        color: widget.roiPositions != null
-                            ? widget.roiPositions.startsWith('-')
+                        color: controller.calculateTotalPositionpnl() != null
+                            ? controller.calculateTotalPositionpnl() < 0
                                 ? AppColors.danger
                                 : AppColors.success
                             : AppColors.success,
                       ),
                     ),
                     Text(
-                      widget.invested,
+                      '${(controller.calculateTotalPositionInvested() == 0 || controller.calculateTotalPositionroi() == null) ? '0.00' : FormatHelper.formatNumbers((controller.calculateTotalPositionpnl() * 100) / (controller.calculateTotalPositionInvested()), decimal: 2, showSymbol: false)}%',
+                      style: AppStyles.tsBlackMedium12.copyWith(
+                        color: controller.calculateTotalPositionroi() != null
+                            ? controller.calculateTotalPositionroi() < 0
+                                ? AppColors.danger
+                                : AppColors.success
+                            : AppColors.success,
+                      ),
+                    ),
+                    Text(
+                      FormatHelper.formatNumbers(
+                          controller.calculateTotalPositionInvested(),
+                          decimal: 2),
                       style: AppStyles.tsBlackMedium12
                           .copyWith(color: AppColors.success),
                     ),
                     Text(
-                      widget.currentvalue,
+                      FormatHelper.formatNumbers(
+                          controller.calculateTotalPositionCurrentValue(),
+                          decimal: 2),
                       style: AppStyles.tsBlackMedium12
                           .copyWith(color: AppColors.success),
                     ),

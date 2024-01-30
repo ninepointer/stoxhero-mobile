@@ -111,6 +111,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
     await getEquityInstrumentDetails();
     await getStockIndexInstrumentsList();
+    await getStockLivePriceList();
     await getStocksTradingPortfolio();
     await getStockPositionsList();
     await getStocksFundsMargin();
@@ -120,7 +121,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     socketConnection();
     socketIndexConnection();
     socketSendConnection();
-    //  await getStocksTradingInstruments();
+    await liveIndexDetails();
   }
 
   Future loadUserDetails() async {
@@ -150,7 +151,25 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     }
   }
 
-  void clearTradingInstruments() {}
+  Future getStockLivePriceList() async {
+    isLoading(true);
+    try {
+      final RepoResponse<InstrumentLivePriceListResponse> response =
+          await repository.getStockLivePrices();
+      if (response.data != null) {
+        if (response.data?.data! != null) {
+          instrumentLivePriceList(response.data?.data ?? []);
+          print('getStockLivePriceList : ${instrumentLivePriceList.length}');
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
 
   Future socketConnection() async {
     List<TradingInstrumentTradeDetails>? tempList = [];
@@ -232,7 +251,31 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   String getStockIndexName(int instId) {
     int index = stockIndexInstrumentList
         .indexWhere((element) => element.instrumentToken == instId);
+    // if (index == -1) return '-';
     return stockIndexInstrumentList[index].displayName ?? '-';
+  }
+
+  Future liveIndexDetails() async {
+    try {
+      final RepoResponse<IndexLivePriceListResponse> response =
+          await repository.getIndexLivePrices();
+      if (response.data != null && response.data!.data != null) {
+        stockIndexDetailsList.clear();
+
+        stockIndexDetailsList.assignAll(
+          response.data!.data!.map((item) {
+            return StockIndexDetails.fromJson(item.toJson());
+          }).toList(),
+        );
+      } else {
+        if (stockIndexDetailsList.isEmpty) {
+          stockIndexDetailsList.assignAll(stockIndexDetailsList);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
   }
 
   Future socketIndexConnection() async {
@@ -305,17 +348,14 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
   //socket things for LTP in search sheet
   num getInstrumentLastPrice(int instID, int exchID) {
     num priceValue = 0;
-    // print("hii start${tradingInstrumentTradeDetailsList}");
 
     if (tradingInstrumentTradeDetailsList.isNotEmpty) {
       int index = tradingInstrumentTradeDetailsList.indexWhere(
         (stock) =>
             stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      //  print(
-      //   "hii${index} ${tradingInstrumentTradeDetailsList[index].lastPrice}");
+
       if (index == -1) {
-        //  print("hii index nhi mila");
         int index = instrumentLivePriceList.indexWhere(
           (stock) =>
               stock.instrumentToken == instID ||
@@ -327,12 +367,23 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           priceValue = instrumentLivePriceList[index].lastPrice ?? 0;
         }
       } else {
-        //  print(
-        //  "hii final ${tradingInstrumentTradeDetailsList[index].lastPrice}");
         priceValue = tradingInstrumentTradeDetailsList[index].lastPrice ?? 0;
       }
+    } else {
+      if (instrumentLivePriceList.isNotEmpty) {
+        int index = instrumentLivePriceList.indexWhere(
+          (stock) =>
+              stock.instrumentToken == instID ||
+              stock.instrumentToken == exchID,
+        );
+        if (index == -1) {
+          priceValue = 0;
+          return priceValue;
+        } else {
+          priceValue = instrumentLivePriceList[index].lastPrice ?? 0;
+        }
+      }
     }
-    // print("yoyoyo${tradingInstrumentTradeDetailsList}");
     return priceValue;
   }
 
@@ -342,10 +393,22 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
         (stock) =>
             stock.instrumentToken == instID || stock.instrumentToken == exchID,
       );
-      if (index == -1) return FormatHelper.formatNumbers('00');
+      if (index == -1)
+        return FormatHelper.formatNumbers('00', showSymbol: false);
       String? price =
           tradingInstrumentTradeDetailsList[index].change?.toString();
       return FormatHelper.formatNumbers(price, showSymbol: false);
+    } else if (instrumentLivePriceList.isNotEmpty) {
+      int index = instrumentLivePriceList.indexWhere(
+        (stock) =>
+            stock.instrumentToken == instID || stock.instrumentToken == exchID,
+      );
+      if (index == -1) {
+        return FormatHelper.formatNumbers('00', showSymbol: false);
+      } else {
+        String? price = instrumentLivePriceList[index].change?.toString();
+        return FormatHelper.formatNumbers(price, showSymbol: false);
+      }
     } else {
       return '${FormatHelper.formatNumbers('00', showSymbol: false)}';
     }
@@ -421,8 +484,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
               data.symbol ?? "",
             );
         }
-        print(
-            'equityInstrumentDetailList : ${equityInstrumentDetailList.length}');
+        // print(
+        //     'equityInstrumentDetailList : ${equityInstrumentDetailList.length}');
         update();
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -569,7 +632,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           await repository.stockPlaceOrder(
         data.toJson(),
       );
-      print("harsh${response.data}");
+      // print("harsh${response.data}");
       Get.back();
 
       if (response.data?.status == "Complete") {
@@ -602,6 +665,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   Future getMarginRequired(TransactionType type, TradingInstrument inst) async {
     isMarginStateLoading(true);
+    print('selectedQuantity : ${selectedQuantity.value}');
 
     MarginRequiredRequest data = MarginRequiredRequest(
       exchange: inst.exchange,
@@ -613,8 +677,11 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
           : type == TransactionType.buy
               ? 'BUY'
               : 'SELL',
-      quantity:
-          calculateQuantity(type, inst.lotSize ?? 0, selectedQuantity.value),
+      quantity: calculateQuantity(
+        type,
+        inst.lotSize ?? 0,
+        selectedQuantity.value,
+      ),
       product: "NRML",
       orderType: selectedType.value,
       validity: "DAY",
@@ -715,8 +782,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
 
   //Open Positions For Holdings and Possitions
 
-  int getOpenPositionCount() {
-    int positionsOpenCount = 0;
+  num getOpenPositionCount() {
+    num positionsOpenCount = 0;
 
     for (var position in stockPositionsList) {
       if (position.lots != null && position.lots != 0) {
@@ -727,8 +794,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     return positionsOpenCount;
   }
 
-  int getOpenHoldingCount() {
-    int holdingOpenCount = 0;
+  num getOpenHoldingCount() {
+    num holdingOpenCount = 0;
 
     for (var holding in stockHoldingsList) {
       if (holding.lots != null && holding.lots != 0) {
@@ -795,6 +862,8 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     num positionsubtractAmount = 0;
     num holdingsubtractAmount = 0;
 
+    num amountbrokerage = 0;
+
     for (var position in stockPositionsList) {
       if (position.lots != 0) {
         positionlots += position.lots ?? 0;
@@ -809,9 +878,12 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
               ((position.lots!) * (position.lastaverageprice ?? 0)).abs();
         }
         amountposition += ((position.amount ?? 0) - (position.brokerage ?? 0));
+        amountbrokerage = position.brokerage ?? 0;
       }
     }
 
+    // print('a21brokerage ${amountbrokerage}');
+    // print('a21b ${amountposition}');
     for (var holding in stockHoldingsList) {
       if (holding.lots != 0) {
         holdinglots += holding.lots ?? 0;
@@ -840,6 +912,25 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       openingBalance = totalFund;
     }
     //available
+    // print('a21d ${openingBalance}');
+    // print('a21d_positionpnl ${calculatePositionTotalNetPNL()}');
+    // print('a21dHpnl ${calculateHoldingTotalNetPNL()}');
+
+    // print('a21cPosition_lots ${positionlots}');
+    // print('a21c_holding_lots ${holdinglots}');
+
+    // print('a21cPosition_margin ${holdingmargin}');
+    // print('a21c_holding_margin ${positionmargin}');
+
+    // print('a21c_h_amount ${amountholding}');
+    // print('a21c_p_amount ${amountposition}');
+
+    // print('a21c_h__substractamount ${positionsubtractAmount}');
+    // print('a21c_p_substractamount ${holdingsubtractAmount}');
+
+    // print('a21c_h_Limitmargin ${holdinglimitMargin}');
+    // print('a21c_p_LimitMargin ${positionlimitMargin}');
+
     num availableMargin =
         ((calculatePositionTotalNetPNL() + calculateHoldingTotalNetPNL()) < 0)
             ? ((positionlots + holdinglots) == 0
@@ -854,7 +945,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
                             .abs() +
                         (holdinglimitMargin + positionlimitMargin))))
             : (openingBalance - (holdingmargin + positionmargin));
-
+    // print('a21e ${availableMargin}');
     return availableMargin;
   }
 
@@ -866,6 +957,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data != null) {
         if (response.data?.data! != null) {
           stockPositionsList(response.data?.data ?? []);
+          stockPositionsList.refresh();
           calculateTotalPositionValues();
         }
       } else {
@@ -950,6 +1042,642 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
     // print('positiontotal ${totalPositionInvested}');
   }
 
+  // num calculateTotalPositionPnl() {
+  //  num totalGross = 0;
+  //  int totalLots = 0;
+  //   num totalPositionBrokerage = 0;
+  //   num totalPositionInvested = 0;
+  //   num totalCurrentValue = 0;
+  //   num totalRoi = 0;
+  //   num totalPnl = 0;
+  //   for (var position in stockPositionsList) {
+  //     if (position.iId?.isLimit ?? false) {
+  //     } else {
+  //       totalLots += position.lots ?? 0;
+  //       totalPositionBrokerage += position.brokerage ?? 0;
+
+  //       totalGross += getInstrumentLastPrice(
+  //             position.iId!.instrumentToken!,
+  //             position.iId!.exchangeInstrumentToken!,
+  //           ).abs() ??
+  //           0;
+  //       // totalGross += getInstrumentLastPrice(position.iId.instrumentToken,
+  //       //             position.iId.exchangeInstrumentToken)
+  //       //         ?.abs() ??
+  //       //     0;
+  //       // totalHoldingInvested += holding.amount?.abs() ?? 0;
+  //       totalCurrentValue += (getInstrumentLastPrice(
+  //                 position.iId!.instrumentToken!,
+  //                 position.iId!.exchangeInstrumentToken!,
+  //               ).abs() ??
+  //               0) *
+  //           (position.lots?.abs() ?? 0);
+
+  //       // totalPnl = (totalCurrentValue - totalNet);
+  //       totalPnl += calculateGrossPNL(
+  //         position.amount ?? 0,
+  //         position.lots!.toInt(),
+  //         getInstrumentLastPrice(
+  //           position.iId!.instrumentToken!,
+  //           position.iId!.exchangeInstrumentToken!,
+  //         ),
+  //       );
+  //       if (position.lots != 0) {
+  //         totalPositionInvested += position.amount?.abs() ?? 0;
+  //       }
+
+  //       // print('final${totalHoldingInvested}');
+
+  //       if (position.lots != 0) {
+  //         totalRoi = ((totalPnl * 100) / totalPositionInvested);
+  //       } else {
+  //         totalRoi = 0;
+  //       }
+  //     }
+  //   }
+
+  //  num final = FormatHelper.formatNumbers(
+  //                       totalPnl.round().toString(),
+  //                       decimal: 2,
+  //                     );
+  //  // return totalPnl.round();
+  //  return final;
+  //   // for (var position in virtualPositionsList) {
+  //   //   if (position.id?.isLimit != true) {
+  //   //     num avg = position.amount ?? 0;
+  //   //     int lots = position.lots?.toInt() ?? 0;
+  //   //     num ltp = getInstrumentLastPrice(
+  //   //       position.id?.instrumentToken ?? 0,
+  //   //       position.id?.exchangeInstrumentToken ?? 0,
+  //   //     );
+  //   //     if (ltp == 0) return 0;
+  //   //     num value = (avg + (lots) * ltp);
+  //   //     num brokerage = position.brokerage ?? 0;
+  //   //     num broker = value - brokerage;
+  //   //     totalNetPNL += broker;
+  //   //   }
+  //   // }
+  //   // return totalNetPNL.round();
+  // }
+
+  num calculateTotalPositionpnl() {
+
+    num totalGross = 0;
+    int totalLots = 0;
+    num totalPositionBrokerage = 0;
+    num totalPositionInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+      } else {
+        totalLots += position.lots ?? 0;
+        totalPositionBrokerage += position.brokerage ?? 0;
+        totalGross += getInstrumentLastPrice(
+              position.iId!.instrumentToken!,
+              position.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (position.lots?.abs() ?? 0);
+        totalPnl += (position.lots == 0
+            ? position.amount
+            : calculateGrossPNL(
+                position.amount ?? 0,
+                position.lots!.toInt(),
+                getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
+        if (position.lots != 0) {
+          totalPositionInvested += position.amount?.abs() ?? 0;
+        }
+
+        if (position.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalPositionInvested);
+        } else {
+          totalRoi = 0;
+        }
+      }
+    }
+
+    num finalPositionPnl = (totalPnl);
+    return finalPositionPnl;
+  }
+
+  num calculateTotalPositionroi() {
+    num totalGross = 0;
+    int totalLots = 0;
+    num totalPositionBrokerage = 0;
+    num totalPositionInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+      } else {
+        totalLots += position.lots ?? 0;
+        totalPositionBrokerage += position.brokerage ?? 0;
+        totalGross += getInstrumentLastPrice(
+              position.iId!.instrumentToken!,
+              position.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (position.lots?.abs() ?? 0);
+
+        totalPnl += (position.lots == 0
+            ? position.amount
+            : calculateGrossPNL(
+                position.amount ?? 0,
+                position.lots!.toInt(),
+                getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
+
+        if (position.lots != 0) {
+          totalPositionInvested += position.amount?.abs() ?? 0;
+        }
+        if (position.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalPositionInvested);
+        } else {
+          totalRoi = 0;
+        }
+      }
+    }
+
+    num finalTotalroiPositions = totalRoi;
+
+    return finalTotalroiPositions;
+  }
+
+  num calculateTotalPositionInvested() {
+    num totalGross = 0;
+    int totalLots = 0;
+    num totalPositionBrokerage = 0;
+    num totalPositionInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+        continue; // Skip to the next iteration if it is a limit.
+      }
+
+      totalLots += position.lots ?? 0;
+      totalPositionBrokerage += position.brokerage ?? 0;
+
+      num lastPrice = getInstrumentLastPrice(
+            position.iId!.instrumentToken!,
+            position.iId!.exchangeInstrumentToken!,
+          ).abs() ??
+          0;
+
+      totalGross += lastPrice;
+
+      totalCurrentValue += lastPrice * (position.lots?.abs() ?? 0);
+
+      totalPnl += calculateGrossPNL(
+        position.amount ?? 0,
+        position.lots!.toInt(),
+        lastPrice,
+      );
+
+      if (position.lots != 0) {
+        totalPositionInvested += position.amount?.abs() ?? 0;
+        totalRoi = (totalPnl * 100) / totalPositionInvested;
+      } else {
+        totalRoi = 0;
+      }
+    }
+
+    num finalTotalInvestedPositions = totalPositionInvested;
+
+    return finalTotalInvestedPositions;
+  }
+
+  num calculateTotalPositionCurrentValue() {
+    num totalGross = 0;
+    int totalLots = 0;
+    num totalPositionBrokerage = 0;
+    num totalPositionInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+        continue; // Skip to the next iteration if it is a limit.
+      }
+
+      totalLots += position.lots ?? 0;
+      totalPositionBrokerage += position.brokerage ?? 0;
+
+      num lastPrice = getInstrumentLastPrice(
+            position.iId!.instrumentToken!,
+            position.iId!.exchangeInstrumentToken!,
+          ).abs() ??
+          0;
+
+      totalGross += lastPrice;
+
+      totalCurrentValue += lastPrice * (position.lots?.abs() ?? 0);
+
+      totalPnl += calculateGrossPNL(
+        position.amount ?? 0,
+        position.lots!.toInt(),
+        lastPrice,
+      );
+
+      if (position.lots != 0) {
+        totalPositionInvested += position.amount?.abs() ?? 0;
+        totalRoi = (totalPnl * 100) / totalPositionInvested;
+      } else {
+        totalRoi = 0;
+      }
+    }
+
+    num finalTotalCurrentValuePositions = totalCurrentValue;
+    return finalTotalCurrentValuePositions;
+  }
+
+  num calculateTotalPositionBrokerage() {
+    num totalGross = 0;
+    int totalLots = 0;
+    num totalPositionBrokerage = 0;
+    num totalPositionInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+        continue; // Skip to the next iteration if it is a limit.
+      }
+
+      totalLots += position.lots ?? 0;
+      totalPositionBrokerage += position.brokerage ?? 0;
+
+      num lastPrice = getInstrumentLastPrice(
+            position.iId!.instrumentToken!,
+            position.iId!.exchangeInstrumentToken!,
+          ).abs() ??
+          0;
+
+      totalGross += lastPrice;
+
+      totalCurrentValue += lastPrice * (position.lots?.abs() ?? 0);
+
+      totalPnl += calculateGrossPNL(
+        position.amount ?? 0,
+        position.lots!.toInt(),
+        lastPrice,
+      );
+
+      if (position.lots != 0) {
+        totalPositionInvested += position.amount?.abs() ?? 0;
+        totalRoi = (totalPnl * 100) / totalPositionInvested;
+      } else {
+        totalRoi = 0;
+      }
+    }
+
+    num finalTotalCurrentValueBrokerage = totalPositionBrokerage;
+    return finalTotalCurrentValueBrokerage;
+  }
+
+//live price for holdings ka
+
+  num calculateTotalHoldingPnl() {
+    num totalGross = 0;
+    int totalLots = 0;
+    num totalHoldingBrokerage = 0;
+    num totalHoldingInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit ?? false) {
+      } else {
+        totalLots += holding.lots ?? 0;
+        totalHoldingBrokerage += holding.brokerage ?? 0;
+        totalGross += getInstrumentLastPrice(
+              holding.iId!.instrumentToken!,
+              holding.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (holding.lots?.abs() ?? 0);
+        totalPnl += (holding.lots == 0
+            ? holding.amount
+            : calculateGrossPNL(
+                holding.amount ?? 0,
+                holding.lots!.toInt(),
+                getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
+
+        if (holding.lots != 0) {
+          totalHoldingInvested += holding.amount?.abs() ?? 0;
+        }
+        if (holding.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalHoldingInvested);
+        } else {
+          totalRoi = 0;
+        }
+      }
+    }
+    //print('holdingtotal${totalHoldingInvested}');
+    num finalTotalHoldingsPnl = totalPnl;
+
+    return finalTotalHoldingsPnl;
+  }
+
+  num calculateTotalHoldingroi() {
+    int totalLots = 0;
+    num totalHoldingBrokerage = 0;
+    num totalGross = 0;
+    num totalHoldingInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
+    //num totalInvestedValue =0;
+
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit ?? false) {
+      } else {
+        totalLots += holding.lots ?? 0;
+        totalHoldingBrokerage += holding.brokerage ?? 0;
+        totalGross += getInstrumentLastPrice(
+              holding.iId!.instrumentToken!,
+              holding.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        // totalHoldingInvested += holding.amount?.abs() ?? 0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (holding.lots?.abs() ?? 0);
+
+        // totalPnl = (totalCurrentValue - totalNet);
+        totalPnl += (holding.lots == 0
+            ? holding.amount
+            : calculateGrossPNL(
+                holding.amount ?? 0,
+                holding.lots!.toInt(),
+                getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
+
+        if (holding.lots != 0) {
+          totalHoldingInvested += holding.amount?.abs() ?? 0;
+        }
+        if (holding.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalHoldingInvested);
+        } else {
+          totalRoi = 0;
+        }
+      }
+    }
+    //print('holdingtotal${totalHoldingInvested}');
+    num finalTotalroiHoldings = totalRoi;
+
+    return finalTotalroiHoldings;
+  }
+
+  num calculateTotalHoldingInvested() {
+    int totalLots = 0;
+    num totalHoldingBrokerage = 0;
+    num totalGross = 0;
+    num totalHoldingInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
+    //num totalInvestedValue =0;
+
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit ?? false) {
+      } else {
+        totalLots += holding.lots ?? 0;
+        totalHoldingBrokerage += holding.brokerage ?? 0;
+        totalGross += getInstrumentLastPrice(
+              holding.iId!.instrumentToken!,
+              holding.iId!.exchangeInstrumentToken!,
+            ).abs() ??
+            0;
+        // totalHoldingInvested += holding.amount?.abs() ?? 0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (holding.lots?.abs() ?? 0);
+
+        // totalPnl = (totalCurrentValue - totalNet);
+        totalPnl += calculateGrossPNL(
+          holding.amount ?? 0,
+          holding.lots!.toInt(),
+          getInstrumentLastPrice(
+            holding.iId!.instrumentToken!,
+            holding.iId!.exchangeInstrumentToken!,
+          ),
+        );
+
+        if (holding.lots != 0) {
+          totalHoldingInvested += holding.amount?.abs() ?? 0;
+        }
+        if (holding.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalHoldingInvested);
+        } else {
+          totalRoi = 0;
+        }
+      }
+    }
+    //print('holdingtotal${totalHoldingInvested}');
+    num finalTotalInvestedHoldings = totalHoldingInvested;
+
+    return finalTotalInvestedHoldings;
+  }
+
+  num calculateTotalHoldingCurrentValue() {
+    num totalHoldingBrokerage = 0;
+    num totalHoldingInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
+    //num totalInvestedValue =0;
+
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit ?? false) {
+      } else {
+        totalHoldingBrokerage += holding.brokerage ?? 0;
+        // totalHoldingInvested += holding.amount?.abs() ?? 0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (holding.lots?.abs() ?? 0);
+
+        // totalPnl = (totalCurrentValue - totalNet);
+        totalPnl += calculateGrossPNL(
+          holding.amount ?? 0,
+          holding.lots!.toInt(),
+          getInstrumentLastPrice(
+            holding.iId!.instrumentToken!,
+            holding.iId!.exchangeInstrumentToken!,
+          ),
+        );
+
+        if (holding.lots != 0) {
+          totalHoldingInvested += holding.amount?.abs() ?? 0;
+        }
+        if (holding.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalHoldingInvested);
+        } else {
+          totalRoi = 0;
+        }
+      }
+    }
+    //print('holdingtotal${totalHoldingInvested}');
+    num finalTotalCurrentValueHoldings = totalCurrentValue;
+
+    return finalTotalCurrentValueHoldings;
+  }
+
+  num calculateTotalHoldingBrokerage() {
+    num totalHoldingBrokerage = 0;
+    num totalHoldingInvested = 0;
+    num totalCurrentValue = 0;
+    num totalRoi = 0;
+    num totalPnl = 0;
+
+    //num totalInvestedValue =0;
+
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit ?? false) {
+      } else {
+        totalHoldingBrokerage += holding.brokerage ?? 0;
+        // totalHoldingInvested += holding.amount?.abs() ?? 0;
+        totalCurrentValue += (getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ).abs() ??
+                0) *
+            (holding.lots?.abs() ?? 0);
+
+        // totalPnl = (totalCurrentValue - totalNet);
+        totalPnl += calculateGrossPNL(
+          holding.amount ?? 0,
+          holding.lots!.toInt(),
+          getInstrumentLastPrice(
+            holding.iId!.instrumentToken!,
+            holding.iId!.exchangeInstrumentToken!,
+          ),
+        );
+
+        if (holding.lots != 0) {
+          totalHoldingInvested += holding.amount?.abs() ?? 0;
+        }
+        if (holding.lots != 0) {
+          totalRoi = ((totalPnl * 100) / totalHoldingInvested);
+        } else {
+          totalRoi = 0;
+        }
+      }
+    }
+    //print('holdingtotal${totalHoldingInvested}');
+    num finalTotalHoldingsBrokerage = totalHoldingBrokerage;
+
+    return finalTotalHoldingsBrokerage;
+  }
+
+  //final portfolio summary pnl
+
+  num calculateTotalPortfolioPnl() {
+    num totalPnlholding = 0;
+    num totalPnlPosition = 0;
+
+    //holding net
+    for (var position in stockPositionsList) {
+      if (position.iId?.isLimit ?? false) {
+      } else {
+        totalPnlPosition += (position.lots == 0
+            ? position.amount
+            : calculateGrossPNL(
+                position.amount ?? 0,
+                position.lots!.toInt(),
+                getInstrumentLastPrice(
+                  position.iId!.instrumentToken!,
+                  position.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
+
+        if (position.lots != 0) {}
+        if (position.lots != 0) {
+        } else {}
+      }
+    }
+
+    //holding net
+    for (var holding in stockHoldingsList) {
+      if (holding.iId?.isLimit ?? false) {
+      } else {
+        totalPnlholding += (holding.lots == 0
+            ? holding.amount
+            : calculateGrossPNL(
+                holding.amount ?? 0,
+                holding.lots!.toInt(),
+                getInstrumentLastPrice(
+                  holding.iId!.instrumentToken!,
+                  holding.iId!.exchangeInstrumentToken!,
+                ),
+              ))!;
+
+        if (holding.lots != 0) {}
+        if (holding.lots != 0) {
+        } else {}
+      }
+    }
+    // print('paisa holding inside ${totalPnlholding}');
+    // print('paisa position inside ${totalPnlPosition}');
+
+    num finalPortfolioPnl = (totalPnlPosition + totalPnlholding);
+    // print('paisa total inside ${finalPortfolioPnl}');
+    // String finalPortfolioPnl = FormatHelper.formatNumbers(
+    //   (totalPnlPosition+totalPnlholding),
+    //   decimal: 2,
+    // );
+    return finalPortfolioPnl;
+  }
+
 //Holdings ka pura scene
 
   Future getStockHoldingsList() async {
@@ -960,6 +1688,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data != null) {
         if (response.data?.data! != null) {
           stockHoldingsList(response.data?.data ?? []);
+          stockHoldingsList.refresh();
           calculateTotalHoldingValues();
         }
       } else {
@@ -1043,7 +1772,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       if (response.data != null) {
         if (response.data?.data! != null) {
           stoplossQuantityList(response.data?.quantity ?? []);
-          print("stoplossQuantityList${stoplossQuantityList.length}");
+          //  print("stoplossQuantityList${stoplossQuantityList.length}");
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
@@ -1115,7 +1844,7 @@ class StocksTradingController extends BaseController<StocksTradingRepository> {
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
       }
-      print('hiii${stockfundsmargin.toJson()}');
+      // print('hiii${stockfundsmargin.toJson()}');
     } catch (e) {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);

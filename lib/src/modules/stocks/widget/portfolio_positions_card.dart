@@ -398,8 +398,12 @@ class _PositionsCardState extends State<PositionsCard> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
+                                  widget.position.lots == 0
+                                      ? '₹0.00'
+                                      : FormatHelper.formatNumbers(
+                                          currentValue()),
                                   //current value
-                                  FormatHelper.formatNumbers(currentValue()),
+
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -487,11 +491,14 @@ class _PositionsCardState extends State<PositionsCard> {
                       widget.position.iId!.exchangeInstrumentToken!,
                     ),
                   );
-
+                  controller.selectedProductGroupValue.value = 2;
                   controller.selectedOrderGroupValue.value = 2;
                   //for the same value of lots in exit text field
                   controller.quantityTextController.text =
-                      widget.position.lots.toString();
+                      widget.position.lots!.abs().toString();
+                  controller.selectedQuantity.value =
+                      widget.position.lots!.abs();
+                  controller.getOpenPositionCount();
                   BottomSheetHelper.openBottomSheet(
                     context: context,
                     child: StockTransactionBottomSheet(

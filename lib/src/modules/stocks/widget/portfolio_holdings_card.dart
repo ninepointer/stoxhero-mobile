@@ -50,6 +50,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
     );
     controller.selectedStringQuantity.value =
         widget.holding.lots?.toString() ?? "0";
+    //for the same value of lots in exit text field
+    //for the same value of lots in exit text field
+    controller.selectedProductGroupValue.value =
+        2; //to select market when coming from limit order thing
     //   controller.generateLotsList(type: position.id?.symbol);
     //   // controller.generateLotsListFoStopLoss(type: position.id?.symbol);
     //   // controller.generateLotsListForStopProfit(type: position.id?.symbol);
@@ -399,8 +403,10 @@ class _HoldingsCardState extends State<HoldingsCard> {
                                 ),
                                 SizedBox(width: 5),
                                 Text(
-                                  //current value
-                                  FormatHelper.formatNumbers(currentValue()),
+                                  widget.holding.lots == 0
+                                      ? '₹0.00'
+                                      : FormatHelper.formatNumbers(
+                                          currentValue()),
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -488,10 +494,14 @@ class _HoldingsCardState extends State<HoldingsCard> {
                       widget.holding.iId!.exchangeInstrumentToken!,
                     ),
                   );
+                  controller.selectedProductGroupValue.value = 2;
                   controller.selectedOrderGroupValue.value = 1;
-                  //for the same value of lots in exit text field
+                  //to select the market when we come from limit order
                   controller.quantityTextController.text =
-                      widget.holding.lots.toString();
+                      widget.holding.lots!.abs().toString();
+                  controller.selectedQuantity.value =
+                      widget.holding.lots!.abs();
+                  //  print('selectedQuantity : ${controller.selectedQuantity.value}');
                   BottomSheetHelper.openBottomSheet(
                     context: context,
                     child: StockTransactionBottomSheet(

@@ -38,6 +38,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
       // instrumentType: widget.tradingWatchlist.instrument,
       // lastPrice: lastPrice,
     );
+    controller.selectedQuantity.value = 0;
     controller.quantityTextController.clear();
     controller.selectedOrderGroupValue.value = 2;
     controller.selectedProductGroupValue.value = 2;
@@ -45,10 +46,13 @@ class _WatchlistCardState extends State<WatchlistCard> {
     BottomSheetHelper.openBottomSheet(
       context: context,
       child: StockTransactionBottomSheet(
-          type: type,
-          tradingInstrument: tradingInstrument,
-          marginRequired:
-              controller.getMarginRequired(type, tradingInstrument)),
+        type: type,
+        tradingInstrument: tradingInstrument,
+        marginRequired: controller.getMarginRequired(
+          type,
+          tradingInstrument,
+        ),
+      ),
     );
   }
 
@@ -95,7 +99,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
               child: Container(
                 height: 75,
                 width: 400,
-                padding: EdgeInsets.only(left: 14, right: 14, top: 10),
+                padding: EdgeInsets.only(left: 14, right: 14, top: 12),
                 color: Get.isDarkMode ? Color(0xFF151F2B) : Colors.white,
                 child: Column(
                   children: [
@@ -109,9 +113,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
                               Text(
                                 widget.title,
                                 style: AppStyles.tsBlackMedium16.copyWith(
-                                  color: Get.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
+                                  color: Get.isDarkMode ? Colors.white : Colors.black,
                                 ),
                               ),
                             ],
@@ -131,9 +133,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
                             Text(
                               '${widget.percentage}%',
                               style: TextStyle(
-                                  color: (double.tryParse(widget.percentage) ??
-                                              0) <
-                                          0
+                                  color: (double.tryParse(widget.percentage) ?? 0) < 0
                                       ? AppColors.danger
                                       : AppColors.success
                                   //
@@ -156,12 +156,8 @@ class _WatchlistCardState extends State<WatchlistCard> {
                       ],
                     ),
                     Divider(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.grey[200]
-                          : Colors.transparent,
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.grey[200] : Colors.transparent,
                       thickness: 1,
-                      indent: 15,
-                      endIndent: 15,
                     )
                   ],
                 ),
@@ -186,8 +182,7 @@ class _WatchlistCardState extends State<WatchlistCard> {
           children: [
             SlidableAction(
               onPressed: (context) {
-                controller.removeInstrument(
-                    widget.equityInstrumentDetail.instrumentToken);
+                controller.removeInstrument(widget.equityInstrumentDetail.instrumentToken);
               },
               icon: Icons.delete,
               backgroundColor: Colors.red,
