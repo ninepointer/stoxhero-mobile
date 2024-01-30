@@ -42,10 +42,8 @@ class ShareModalContent extends GetView<ContestController> {
     int userRank = completedContestPnl?.rank ?? 0;
     for (CompletedRewards reward in contest?.rewards ?? []) {
       if (reward.rankStart == userRank) {
-        print("getContestReward() reward ${reward}");
+        print("getContestReward() reward ${reward.prize}");
         return reward.prize;
-      } else {
-        return "-";
       }
     }
     return price;
@@ -255,7 +253,12 @@ class ShareModalContent extends GetView<ContestController> {
                                                     .tsSecondaryMedium16
                                                     .copyWith(
                                                         color: AppColors.white))
-                                            : Text(getContestReward()),
+                                            : Text(getContestReward(),
+                                                style: AppStyles
+                                                    .tsSecondaryMedium16
+                                                    .copyWith(
+                                                        color:
+                                                            AppColors.white)),
                                       ],
                                     )
                                   ],
