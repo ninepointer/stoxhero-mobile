@@ -145,48 +145,51 @@ class LiveContestCard extends GetView<ContestController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(padding: EdgeInsets.only(left: 5)),
             Image.asset(
               AppImages.contestTrophy,
               width: 30,
               height: 20,
             ),
             GestureDetector(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (contest?.payoutType == 'Reward') ...[
-                    if (contest?.rewardType == "Goodies")
-                      Text(
-                        "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
-                        textAlign: TextAlign.center,
-                      )
-                    else
-                      Text(
-                        'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
-                        textAlign: TextAlign.center,
-                      )
+              child: Padding(
+                padding: EdgeInsets.only(right: 5),
+                child: Row(
+                  //  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (contest?.payoutType == 'Reward') ...[
+                      if (contest?.rewardType == "Goodies")
+                        Text(
+                          "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
+                          style: Theme.of(context).textTheme.tsGreyRegular12,
+                          textAlign: TextAlign.center,
+                        )
+                      else
+                        Text(
+                          'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
+                          style: Theme.of(context).textTheme.tsGreyRegular12,
+                          textAlign: TextAlign.center,
+                        )
+                    ],
+                    if (contest?.payoutType != 'Reward') ...[
+                      if (contest?.payoutCapPercentage != null &&
+                          contest?.payoutCapPercentage != 0)
+                        Column(
+                          children: [
+                            Text(
+                              ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
+                                contest?.entryFee == 0
+                                    ? contest?.portfolio?.portfolioValue ?? 0
+                                    : contest?.entryFee ?? 0,
+                                contest?.payoutCapPercentage ?? 0,
+                              )})',
+                              style:
+                                  Theme.of(context).textTheme.tsGreyRegular12,
+                            ),
+                          ],
+                        ),
+                    ]
                   ],
-                  if (contest?.payoutType != 'Reward') ...[
-                    if (contest?.payoutCapPercentage != null &&
-                        contest?.payoutCapPercentage != 0)
-                      Column(
-                        children: [
-                          Text(
-                            ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
-                              contest?.entryFee == 0
-                                  ? contest?.portfolio?.portfolioValue ?? 0
-                                  : contest?.entryFee ?? 0,
-                              contest?.payoutCapPercentage ?? 0,
-                            )})',
-                            style: Theme.of(context).textTheme.tsGreyRegular12,
-                          ),
-                        ],
-                      )
-                  ]
-                ],
+                ),
               ),
             )
           ],

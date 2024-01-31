@@ -70,11 +70,17 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}! ",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .tsGreyRegular12,
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.40,
+                                          child: Text(
+                                            "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}! ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .tsGreyRegular12,
+                                          ),
                                         ),
                                         Text(
                                           "Know More",

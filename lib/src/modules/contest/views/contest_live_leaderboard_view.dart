@@ -10,8 +10,6 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
     for (Rewards reward in controller.liveContest.value.rewards ?? []) {
       if (reward.rankStart == index + 1) {
         return reward.prize;
-      } else {
-        return "";
       }
     }
 
@@ -320,6 +318,8 @@ class ContestLiveLeaderboardView extends GetView<ContestController> {
                                           ),
                                         )
                                       : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: [
                                             getContestReward(index) != ""
                                                 ? Text(
