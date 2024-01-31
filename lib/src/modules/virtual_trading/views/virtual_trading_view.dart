@@ -9,7 +9,16 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Future & Options')),
+      appBar: AppBar(
+        title: Text('Future & Options'),
+        actions: [
+          GestureDetector(
+              onTap: (() {
+                Get.to(() => FlutterWebView());
+              }),
+              child: Icon(Icons.add)),
+        ],
+      ),
       body: Obx(
         () {
           return Visibility(
@@ -158,8 +167,6 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                         ),
                       ),
 
-
-                      
                     CommonTile(
                       isLoading: controller.isPositionStateLoadingStatus,
                       label: 'My Position',
@@ -190,9 +197,6 @@ class VirtualTradingView extends GetView<VirtualTradingController> {
                               }
                             },
                           ),
-
-
-
 
                     CommonTile(
                       isLoading: controller.isPendingOrderStateLoadingStatus,

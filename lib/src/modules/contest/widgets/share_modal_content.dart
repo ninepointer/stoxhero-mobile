@@ -213,46 +213,54 @@ class ShareModalContent extends GetView<ContestController> {
                                       SizedBox(
                                         width: 0,
                                       ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text("Reward",
-                                            style: AppStyles
-                                                .tsSecondaryRegular14
-                                                .copyWith(
-                                                    color: AppColors.white)),
-                                        SizedBox(
-                                          height: 2,
-                                        ),
-                                        (controller.completedContest.value
-                                                    .rewardType !=
-                                                "Goodies")
-                                            ? Text(
-                                                FormatHelper.formatNumbers(
-                                                    completedContestPnl
-                                                        ?.payoutAmount,
-                                                    decimal: 0),
-                                                style: AppStyles
-                                                    .tsSecondaryMedium16
-                                                    .copyWith(
-                                                        color: AppColors.white))
-                                            : Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2.6,
-                                                child: Text(getContestReward(),
-                                                    style: AppStyles
-                                                        .tsSecondaryMedium16
-                                                        .copyWith(
-                                                            color: AppColors
-                                                                .white)),
-                                              ),
-                                      ],
+                                    Container(
+                                      width: MediaQuery.of(context).size.width /
+                                          2.4,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text("Reward",
+                                              style: AppStyles
+                                                  .tsSecondaryRegular14
+                                                  .copyWith(
+                                                      color: AppColors.white)),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          (controller.completedContest.value
+                                                      .rewardType !=
+                                                  "Goodies")
+                                              ? Text(
+                                                  FormatHelper.formatNumbers(
+                                                      completedContestPnl
+                                                          ?.payoutAmount,
+                                                      decimal: 0),
+                                                  style: AppStyles
+                                                      .tsSecondaryMedium16
+                                                      .copyWith(
+                                                          color:
+                                                              AppColors.white))
+                                              : Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.6,
+                                                  child: Text(
+                                                      getContestReward(),
+                                                      style: AppStyles
+                                                          .tsSecondaryMedium16
+                                                          .copyWith(
+                                                              color: AppColors
+                                                                  .white)),
+                                                ),
+                                        ],
+                                      ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(left: 12),
+                                      // margin: EdgeInsets.only(left: 12),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,

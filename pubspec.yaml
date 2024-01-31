@@ -53,6 +53,7 @@ dependencies:
   flutter_animate: ^4.3.0
   animated_text_kit: ^4.2.1
   audioplayers: ^5.2.1
+  webview_flutter: ^4.4.4
 
 dev_dependencies:
   flutter_launcher_icons: any

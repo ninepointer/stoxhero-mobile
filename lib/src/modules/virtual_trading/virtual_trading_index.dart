@@ -9,3 +9,4 @@ export 'widgets/virtual_today_order_card.dart';
 export 'widgets/virtual_stoploss_edit_price_bottom_sheet.dart';
 export 'widgets/virtual_stoploss_modify_price_bottom_sheet.dart';
 export 'widgets/virtual_stoploss_pending_order_card.dart';
+export "views/webView.dart";
