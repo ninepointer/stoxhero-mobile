@@ -87,14 +87,14 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                                         reward.prize,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .tsMedium12,
+                                            .tsMedium10,
                                       )
                                     : Text(
                                         FormatHelper.formatNumbers(reward.prize,
                                             decimal: 0),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .tsMedium12,
+                                            .tsMedium10,
                                       )),
                           ),
                         ],
@@ -124,14 +124,14 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                                       reward.prize,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .tsMedium12,
+                                          .tsMedium10,
                                     )
                                   : Text(
                                       FormatHelper.formatNumbers(reward.prize,
                                           decimal: 0),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .tsMedium12,
+                                          .tsMedium10,
                                     ),
                             ),
                           ),

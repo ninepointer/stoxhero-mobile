@@ -151,7 +151,7 @@ class RewardTableBottomSheet extends GetView<ContestController> {
               reward.rankStart == reward.rankEnd
                   ? '${reward.rankStart}'
                   : '${reward.rankStart}-${reward.rankEnd}',
-              style: Theme.of(context).textTheme.tsMedium12,
+              style: Theme.of(context).textTheme.tsMedium10,
             ),
           ),
         ),
@@ -165,7 +165,7 @@ class RewardTableBottomSheet extends GetView<ContestController> {
                 reward.prize is num
                     ? FormatHelper.formatNumbers(reward.prize, decimal: 0)
                     : "${reward.prize}",
-                style: Theme.of(context).textTheme.tsMedium12,
+                style: Theme.of(context).textTheme.tsMedium10,
               ),
             ),
           ),
