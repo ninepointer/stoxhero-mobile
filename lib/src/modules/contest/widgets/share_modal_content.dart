@@ -237,12 +237,18 @@ class ShareModalContent extends GetView<ContestController> {
                                                     .tsSecondaryMedium16
                                                     .copyWith(
                                                         color: AppColors.white))
-                                            : Text(getContestReward(),
-                                                style: AppStyles
-                                                    .tsSecondaryMedium16
-                                                    .copyWith(
-                                                        color:
-                                                            AppColors.white)),
+                                            : Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2.6,
+                                                child: Text(getContestReward(),
+                                                    style: AppStyles
+                                                        .tsSecondaryMedium16
+                                                        .copyWith(
+                                                            color: AppColors
+                                                                .white)),
+                                              ),
                                       ],
                                     ),
                                     Container(

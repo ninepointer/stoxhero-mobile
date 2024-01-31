@@ -159,11 +159,11 @@ class LiveContestCard extends GetView<ContestController> {
                     if (contest?.payoutType == 'Reward') ...[
                       if (contest?.rewardType == "Goodies")
                         Container(
-                          width: controller.upComingContestList.length == 1
+                          width: controller.liveContestList.length == 1
                               ? MediaQuery.of(context).size.width * 0.6
-                              : MediaQuery.of(context).size.width * 0.7 - 55,
+                              : MediaQuery.of(context).size.width * 0.6 - 55,
                           child: Text(
-                            "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
+                            "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}",
                             style: Theme.of(context).textTheme.tsGreyRegular12,
                             textAlign: TextAlign.center,
                           ),

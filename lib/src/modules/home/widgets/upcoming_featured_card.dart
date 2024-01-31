@@ -193,8 +193,8 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                                   style: TextStyle(
                                                     decoration: TextDecoration
                                                         .underline,
-                                                    color: Colors
-                                                        .blue, // Set the color to blue
+                                                    color: AppColors
+                                                        .grey, // Set the color to blue
                                                   ),
                                                 ),
                                               ],
@@ -464,7 +464,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                             0) ==
                                     0
                                 ? 'TestZone Full'
-                                : 'Join Now',
+                                : 'Book Now',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.success,
                     ),

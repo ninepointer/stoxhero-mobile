@@ -156,7 +156,7 @@ class CompletedContestCard extends GetView<ContestController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(padding: EdgeInsets.only(left: 30)),
+            Padding(padding: EdgeInsets.only(left: 3)),
             Image.asset(
               AppImages.contestTrophy,
               width: 30,
@@ -181,10 +181,13 @@ class CompletedContestCard extends GetView<ContestController> {
                 // ],
                 if (contest?.payoutType == 'Reward') ...[
                   if (contest?.rewardType == "Goodies")
-                    Text(
-                      "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
-                      style: Theme.of(context).textTheme.tsGreyRegular12,
-                      textAlign: TextAlign.center,
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.67,
+                      child: Text(
+                        "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        textAlign: TextAlign.center,
+                      ),
                     )
                   else
                     Text(
@@ -205,9 +208,6 @@ class CompletedContestCard extends GetView<ContestController> {
                       )})',
                       style: Theme.of(context).textTheme.tsGreyRegular12,
                     ),
-                  SizedBox(
-                    width: 20,
-                  ),
                 ]
               ]),
             )

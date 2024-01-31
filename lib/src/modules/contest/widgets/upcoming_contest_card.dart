@@ -232,7 +232,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                               ? MediaQuery.of(context).size.width * 0.6
                               : MediaQuery.of(context).size.width * 0.7 - 55,
                           child: Text(
-                            "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}!",
+                            "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}",
                             style: Theme.of(context).textTheme.tsGreyRegular12,
                             textAlign: TextAlign.center,
                           ),
@@ -479,7 +479,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                                 0) ==
                                         0
                                     ? 'TestZone Full'
-                                    : 'Join Now',
+                                    : 'Book Now',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),

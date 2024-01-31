@@ -94,11 +94,11 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                                 TextSpan(
                                                   text: "Know More",
                                                   style: TextStyle(
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    color: Colors
-                                                        .blue, // Set the color to blue
-                                                  ),
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      color: AppColors
+                                                          .grey // Set the color to blue
+                                                      ),
                                                 ),
                                               ],
                                             ),
