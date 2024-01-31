@@ -145,17 +145,17 @@ class LiveContestCard extends GetView<ContestController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              AppImages.contestTrophy,
-              width: 30,
-              height: 20,
-            ),
             GestureDetector(
               child: Padding(
                 padding: EdgeInsets.only(right: 1),
                 child: Row(
                   //  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Image.asset(
+                      AppImages.contestTrophy,
+                      width: 30,
+                      height: 20,
+                    ),
                     if (contest?.payoutType == 'Reward') ...[
                       if (contest?.rewardType == "Goodies")
                         Container(

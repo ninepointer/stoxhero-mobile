@@ -230,7 +230,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         Container(
                           width: controller.upComingContestList.length == 1
                               ? MediaQuery.of(context).size.width * 0.6
-                              : MediaQuery.of(context).size.width * 0.7 - 55,
+                              : MediaQuery.of(context).size.width * 0.65 - 60,
                           child: Text(
                             "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}",
                             style: Theme.of(context).textTheme.tsGreyRegular12,

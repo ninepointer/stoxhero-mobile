@@ -76,7 +76,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.only(left: 12, right: 12, top: 8),
+      margin: EdgeInsets.only(left: 8, right: 8, top: 8),
       padding: EdgeInsets.only(
         top: 0,
         right: 0,
@@ -179,7 +179,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                                           .size
                                                           .width *
                                                       0.7 -
-                                                  55,
+                                                  60,
                                           child: Text.rich(
                                             TextSpan(
                                               text:
