@@ -30,15 +30,16 @@ class AffiliateController extends BaseController<AffiliateRespository> {
 
   final myAffiliateRefferalsList = <MyAffiliateRefferal>[].obs;
 
-  String selectedTimeFrame = 'today';
+  String selectedTimeFrame = 'Today';
   List<String> timeFrames = [
-    "today",
+    "Today",
     'Yesterday',
-    'this week',
-    "last week",
-    'this month',
-    "last month",
-    'custom'
+    'This Week',
+    "Last Week",
+    'This Month',
+    "Last Month",
+    "Lifetime",
+    'Custom'
   ];
 
   final transctionCurrentPage = 0.obs;
@@ -61,30 +62,30 @@ class AffiliateController extends BaseController<AffiliateRespository> {
     late String startDate;
     late String endDate;
 
-    if (selectedTimeFrame == 'today') {
+    if (selectedTimeFrame == 'Today') {
       startDate = DateFormat("dd-MM-yyyy").format(DateTime.now());
       endDate = startDate;
     } else if (selectedTimeFrame == 'Yesterday') {
       DateTime yesterday = DateTime.now().subtract(Duration(days: 1));
       startDate = DateFormat("dd-MM-yyyy").format(yesterday);
       endDate = startDate;
-    } else if (selectedTimeFrame == 'this week') {
+    } else if (selectedTimeFrame == 'This Week') {
       DateTime startOfWeek =
           DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1));
       startDate = DateFormat("dd-MM-yyyy").format(startOfWeek);
       endDate = DateFormat("dd-MM-yyyy").format(DateTime.now());
-    } else if (selectedTimeFrame == 'this month') {
+    } else if (selectedTimeFrame == 'This Month') {
       DateTime firstDayOfMonth =
           DateTime(DateTime.now().year, DateTime.now().month, 1);
       startDate = DateFormat("dd-MM-yyyy").format(firstDayOfMonth);
       endDate = DateFormat("dd-MM-yyyy").format(DateTime.now());
-    } else if (selectedTimeFrame == 'last week') {
+    } else if (selectedTimeFrame == 'Last Week') {
       DateTime endOfLastWeek =
           DateTime.now().subtract(Duration(days: DateTime.now().weekday));
       DateTime startOfLastWeek = endOfLastWeek.subtract(Duration(days: 6));
       startDate = DateFormat("dd-MM-yyyy").format(startOfLastWeek);
       endDate = DateFormat("dd-MM-yyyy").format(endOfLastWeek);
-    } else if (selectedTimeFrame == 'last month') {
+    } else if (selectedTimeFrame == 'Last Month') {
       DateTime today = DateTime.now();
       DateTime firstDayOfCurrentMonth = DateTime(today.year, today.month, 1);
       DateTime firstDayOfLastMonth =
@@ -93,7 +94,11 @@ class AffiliateController extends BaseController<AffiliateRespository> {
           .subtract(Duration(days: firstDayOfLastMonth.day - 1));
       startDate = DateFormat("dd-MM-yyyy").format(lastDayOfLastMonth);
       endDate = DateFormat("dd-MM-yyyy").format(firstDayOfLastMonth);
-    } else if (selectedTimeFrame == 'custom') {
+    } else if (selectedTimeFrame == 'Lifetime') {
+      DateTime threeYearsAgo = DateTime.now().subtract(Duration(days: 365 * 3));
+      startDate = DateFormat("dd-MM-yyyy").format(threeYearsAgo);
+      endDate = DateFormat("dd-MM-yyyy").format(DateTime.now());
+    } else if (selectedTimeFrame == 'Custom') {
       startDate = DateFormat("01-MM-yyyy").format(DateTime.now());
       endDate = DateFormat("dd-MM-yyyy").format(DateTime.now());
     } else {
@@ -361,7 +366,7 @@ class AffiliateController extends BaseController<AffiliateRespository> {
         "skip": skip,
         "limit": transctionItemsPerPage.value,
       };
-      print("skipdaat${skip} ${transctionItemsPerPage.value}");
+
       final RepoResponse<MyAffiliateTransctionListResponse> response =
           await repository.getMyAffiliateTranscationList(query);
       if (response.data != null) {

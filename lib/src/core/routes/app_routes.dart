@@ -39,8 +39,11 @@ class AppRoutes {
   static const String workshop = '/careers/workshop';
   static const String contestProfile = '/contestprofile';
   static const String weeklyTopPerformersFullList = '/toptestzoneportfolios';
+ static const String stocks = '/stocks'; 
   static const String affiliate = '/affiliate';
   static const String newyearstory = '/newyearstory';
+  static const String kycVarification = '/kycvarification';
+  static const String kycRadioButtonSeclection = '/kycRadioButtonSelection';
 
   // static const String stocks = '/stocks';
 }

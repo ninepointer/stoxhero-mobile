@@ -42,7 +42,8 @@ class MyAffilateDashboardSummary extends GetView<AffiliateController> {
               ),
               SizedBox(height: 8),
               Text(
-                controller.affilateOverviewDetails.value.userName.toString(),
+                (controller.affilateOverviewDetails.value.userName ?? "")
+                    .toString(),
                 style: Theme.of(context).textTheme.tsMedium18,
               ),
               SizedBox(
@@ -202,10 +203,9 @@ Widget signUpCard(
                 alignment: Alignment.center,
                 child: Text(
                   earning,
-                  style: Theme.of(context)
-                      .textTheme
-                      .tsRegular14
-                      .copyWith(color: valueColor),
+                  style: Theme.of(context).textTheme.tsMedium16.copyWith(
+                        color: valueColor,
+                      ),
                 ),
               ),
             ),

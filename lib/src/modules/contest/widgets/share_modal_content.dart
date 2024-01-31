@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 class ShareModalContent extends GetView<ContestController> {
   final CompletedContestPnl? completedContestPnl;
   final CompletedContest? contest;
+
   const ShareModalContent({
     Key? key,
     this.completedContestPnl,
@@ -34,7 +35,18 @@ class ShareModalContent extends GetView<ContestController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\nI just won INR ${FormatHelper.formatNumbers(completedContestPnl?.payoutAmount)} in ${controller.completedContest.value.contestName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nSignUp now and get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet \n\nhttps://stoxhero.page.link/ctz";
+    return "Hey!! \n\nI just won INR ${controller.completedContest.value.rewardType != "Goodies" ? FormatHelper.formatNumbers(completedContestPnl?.payoutAmount) : getContestReward()} in ${controller.completedContest.value.contestName} TestZone on StoxHero app.\n\nThis is a super exciting way to learn Stocks Market Trading and Win Cash rewards !!\n\nSignUp now and get ${FormatHelper.formatNumbers("100")} in your StoxHero wallet \n\nhttps://stoxhero.page.link/ctz";
+  }
+
+  String getContestReward() {
+    String price = "";
+    int userRank = completedContestPnl?.rank ?? 0;
+    for (CompletedRewards reward in contest?.rewards ?? []) {
+      if (reward.rankStart == userRank) {
+        return reward.prize;
+      }
+    }
+    return price;
   }
 
   @override
@@ -191,11 +203,53 @@ class ShareModalContent extends GetView<ContestController> {
                                                     color: AppColors.white))
                                       ],
                                     ),
+                                    if ((controller.completedContest.value
+                                            .rewardType ==
+                                        "Goodies"))
+                                      SizedBox(
+                                        width: 40,
+                                      )
+                                    else
+                                      SizedBox(
+                                        width: 0,
+                                      ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text("Reward",
+                                            style: AppStyles
+                                                .tsSecondaryRegular14
+                                                .copyWith(
+                                                    color: AppColors.white)),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        (controller.completedContest.value
+                                                    .rewardType !=
+                                                "Goodies")
+                                            ? Text(
+                                                FormatHelper.formatNumbers(
+                                                    completedContestPnl
+                                                        ?.payoutAmount,
+                                                    decimal: 0),
+                                                style: AppStyles
+                                                    .tsSecondaryMedium16
+                                                    .copyWith(
+                                                        color: AppColors.white))
+                                            : Text(getContestReward(),
+                                                style: AppStyles
+                                                    .tsSecondaryMedium16
+                                                    .copyWith(
+                                                        color:
+                                                            AppColors.white)),
+                                      ],
+                                    ),
                                     Container(
                                       margin: EdgeInsets.only(left: 12),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Text(
                                             "  Net P&L",
@@ -219,35 +273,6 @@ class ShareModalContent extends GetView<ContestController> {
                                         ],
                                       ),
                                     ),
-                                    Column(
-                                      children: [
-                                        Text("Reward",
-                                            style: AppStyles
-                                                .tsSecondaryRegular14
-                                                .copyWith(
-                                                    color: AppColors.white)),
-                                        SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                            FormatHelper.formatNumbers(
-                                                completedContestPnl
-                                                    ?.payoutAmount,
-                                                decimal: 0),
-                                            // FormatHelper.formatNumbers(
-                                            //     calculateReward(
-                                            //       contest?.entryFee == 0
-                                            //           ? contest?.portfolio
-                                            //                   ?.portfolioValue ??
-                                            //               0
-                                            //           : contest?.entryFee ?? 0,
-                                            //     ).toString(),
-                                            //     decimal: 2),
-                                            style: AppStyles.tsSecondaryMedium16
-                                                .copyWith(
-                                                    color: AppColors.white))
-                                      ],
-                                    )
                                   ],
                                 ),
                               ),

@@ -120,7 +120,15 @@ class ContestStoplossModifyPriceBottomSheet extends GetView<ContestController> {
                               stopLoss.instrumentToken!,
                               stopLoss.exchangeToken!,
                             ),
-                            style: AppStyles.tsSecondaryMedium14,
+                            style: double.parse(controller.getInstrumentChanges(
+                                      stopLoss.instrumentToken!,
+                                      stopLoss.exchangeToken!,
+                                    )) >
+                                    0
+                                ? AppStyles.tsSecondaryMedium14
+                                    .copyWith(color: AppColors.success)
+                                : AppStyles.tsSecondaryMedium14
+                                    .copyWith(color: AppColors.danger),
                           ),
                         ],
                       ),

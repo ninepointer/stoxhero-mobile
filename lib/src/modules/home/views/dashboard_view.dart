@@ -52,12 +52,12 @@ class _DashboardViewState extends State<DashboardView> {
     ];
     selectedValue2 = currentMonth;
 
-    Future.delayed(Duration(seconds: 2), () {
-      if (controller.firstTimeshowStatus) {
-        Get.to(StoryView());
-      }
-      controller.firstTimeshow.value = false;
-    });
+    // Future.delayed(Duration(seconds: 2), () {
+    //   if (controller.firstTimeshowStatus) {
+    //     Get.to(StoryView());
+    //   }
+    //   controller.firstTimeshow.value = false;
+    // });
   }
 
   String getProductMonth(String? label) {
@@ -222,40 +222,40 @@ class _DashboardViewState extends State<DashboardView> {
                   SizedBox(
                     height: 4,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(StoryView());
-                    },
-                    child: CommonCard(
-                      padding: EdgeInsets.zero,
-                      margin: EdgeInsets.only(
-                          left: 10, right: 10, top: 10, bottom: 6),
-                      hasBorder: true,
-                      children: [
-                        Container(
-                          height: 80,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                AppImages.shstory,
-                              ),
-                              fit: BoxFit.fill,
-                              // colorFilter: ColorFilter.mode(
-                              //   Color(0xFFFFF5E1).withOpacity(0.5),
-                              //   BlendMode.srcOver,
-                              // ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Get.to(StoryView());
+                  //   },
+                  //   child: CommonCard(
+                  //     padding: EdgeInsets.zero,
+                  //     margin: EdgeInsets.only(
+                  //         left: 10, right: 10, top: 10, bottom: 6),
+                  //     hasBorder: true,
+                  //     children: [
+                  //       Container(
+                  //         height: 80,
+                  //         width: double.infinity,
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           image: DecorationImage(
+                  //             image: AssetImage(
+                  //               AppImages.shstory,
+                  //             ),
+                  //             fit: BoxFit.fill,
+                  //             // colorFilter: ColorFilter.mode(
+                  //             //   Color(0xFFFFF5E1).withOpacity(0.5),
+                  //             //   BlendMode.srcOver,
+                  //             // ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
-                  SizedBox(
-                    height: 4,
-                  ),
+                  // SizedBox(
+                  //   height: 4,
+                  // ),
                   contestController.liveFeaturedContest.isEmpty &&
                           contestController.upcomingFeaturedContest.isEmpty
                       ? Container()

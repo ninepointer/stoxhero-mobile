@@ -30,8 +30,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
                   child: Row(
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: 35,
+                        height: 35,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: AppColors.secondary.withOpacity(.1),
@@ -39,8 +39,8 @@ class LiveFeaturedCard extends GetView<ContestController> {
                         ),
                         child: Image.asset(
                           AppImages.contestTrophy,
-                          width: 28,
-                          height: 28,
+                          width: 25,
+                          height: 25,
                         ),
                       ),
                       SizedBox(width: 8),
@@ -65,12 +65,38 @@ class LiveFeaturedCard extends GetView<ContestController> {
                             child: Row(
                               children: [
                                 if (liveFeatured?.payoutType == 'Reward') ...[
-                                  Text(
-                                    'Rewards worth ${controller.calculateTotalReward(liveFeatured?.rewards)},Click to know more.',
-                                    style:
-                                        Theme.of(context).textTheme.tsMedium12,
-                                    textAlign: TextAlign.center,
-                                  )
+                                  if (liveFeatured?.rewardType == "Goodies")
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}! ",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12,
+                                        ),
+                                        Text(
+                                          "Know More",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12
+                                              .copyWith(
+                                                // color: AppColors.primary,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    Text(
+                                      'Rewards worth ${FormatHelper.formatNumbers(controller.calculateTotalReward(liveFeatured?.rewards), decimal: 0)},Click to know more',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsGreyRegular12,
+                                      textAlign: TextAlign.left,
+                                    )
                                 ],
                                 if (liveFeatured?.payoutType != 'Reward') ...[
                                   Text(
@@ -176,6 +202,23 @@ class LiveFeaturedCard extends GetView<ContestController> {
                         FormatHelper.formatNumbers(
                             liveFeatured?.portfolio?.portfolioValue,
                             decimal: 0),
+                        style: Theme.of(context).textTheme.tsMedium12,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Spots Left',
+                        style: AppStyles.tsGreyMedium12,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        '${controller.calculateSeatsLeft(
+                              liveFeatured?.maxParticipants ?? 0,
+                              liveFeatured?.participants?.length ?? 0,
+                            ).toString()}',
                         style: Theme.of(context).textTheme.tsMedium12,
                       ),
                     ],

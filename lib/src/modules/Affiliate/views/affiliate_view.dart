@@ -104,13 +104,11 @@ class _AffiliateViewState extends State<AffiliateView> {
                                 value: controller.selectedTimeFrame,
                                 dropdownItems: controller.timeFrames,
                                 onChanged: (String? value) {
-                                  // setState(() {
-
                                   controller.selectedTimeFrame = value ?? '';
-                                  controller.affiliateSignupSummeryDetails();
-                                  controller.affiliateSummaryDetails();
+
+                                  // controller.affiliateSignupSummeryDetails();
+                                  // controller.affiliateSummaryDetails();
                                   controller.loadData();
-                                  // });
                                 },
                               ),
                             ),
@@ -121,7 +119,7 @@ class _AffiliateViewState extends State<AffiliateView> {
                         height: 8,
                       ),
                       Visibility(
-                        visible: controller.selectedTimeFrame == 'custom',
+                        visible: controller.selectedTimeFrame == 'Custom',
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -216,7 +214,7 @@ class _AffiliateViewState extends State<AffiliateView> {
                                     Expanded(
                                       child: customCard(
                                         context,
-                                        label: 'Active \nReferrlas',
+                                        label: 'Active \nReferrals',
                                         earning: (controller
                                                     .affiliateSignupSummeryDetails
                                                     .value

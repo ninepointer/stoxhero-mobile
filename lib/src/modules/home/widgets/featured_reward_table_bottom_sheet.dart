@@ -42,7 +42,8 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                           alignment: Alignment.center,
                           child: Text(
                             'Rank',
-                            style: Theme.of(context).textTheme.tsPrimaryMedium14,
+                            style:
+                                Theme.of(context).textTheme.tsPrimaryMedium14,
                           ),
                         ),
                       ),
@@ -53,7 +54,8 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                           alignment: Alignment.center,
                           child: Text(
                             'Prize',
-                            style: Theme.of(context).textTheme.tsPrimaryMedium14,
+                            style:
+                                Theme.of(context).textTheme.tsPrimaryMedium14,
                           ),
                         ),
                       ),
@@ -77,18 +79,28 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                           ),
                           TableCell(
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              alignment: Alignment.center,
-                              child: Text(
-                                FormatHelper.formatNumbers(reward.prize, decimal: 0),
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
-                            ),
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                alignment: Alignment.center,
+                                child: reward.prize is String
+                                    ? Text(
+                                        reward.prize,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsMedium12,
+                                      )
+                                    : Text(
+                                        FormatHelper.formatNumbers(reward.prize,
+                                            decimal: 0),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsMedium12,
+                                      )),
                           ),
                         ],
                       ),
                   if (upcomingContest != null)
-                    for (FeaturedRewards reward in upcomingContest!.rewards ?? [])
+                    for (FeaturedUpcomingRewards reward
+                        in upcomingContest!.rewards ?? [])
                       TableRow(
                         children: [
                           TableCell(
@@ -105,10 +117,20 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 12),
                               alignment: Alignment.center,
-                              child: Text(
-                                FormatHelper.formatNumbers(reward.prize, decimal: 0),
-                                style: Theme.of(context).textTheme.tsMedium12,
-                              ),
+                              child: reward.prize is String
+                                  ? Text(
+                                      reward.prize,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium12,
+                                    )
+                                  : Text(
+                                      FormatHelper.formatNumbers(reward.prize,
+                                          decimal: 0),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .tsMedium12,
+                                    ),
                             ),
                           ),
                         ],

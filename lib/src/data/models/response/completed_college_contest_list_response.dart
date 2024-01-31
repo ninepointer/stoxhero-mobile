@@ -272,27 +272,64 @@ class PurchaseIntent {
   }
 }
 
+// class CompletedCollegeRewards {
+//   int? rankStart;
+//   int? rankEnd;
+//   num? prize;
+//   String? id;
+
+//   CompletedCollegeRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+
+//   CompletedCollegeRewards.fromJson(Map<String, dynamic> json) {
+//     rankStart = json['rankStart'];
+//     rankEnd = json['rankEnd'];
+//     prize = json['prize'];
+//     id = json['_id'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['rankStart'] = this.rankStart;
+//     data['rankEnd'] = this.rankEnd;
+//     data['prize'] = this.prize;
+//     data['_id'] = this.id;
+//     return data;
+//   }
+// }
+
 class CompletedCollegeRewards {
   int? rankStart;
   int? rankEnd;
-  num? prize;
-  String? id;
+  String? sId;
+  dynamic prize; // Change the type to dynamic
 
-  CompletedCollegeRewards({this.rankStart, this.rankEnd, this.prize, this.id});
+  CompletedCollegeRewards({this.rankStart, this.rankEnd, this.sId, this.prize});
 
-  CompletedCollegeRewards.fromJson(Map<String, dynamic> json) {
-    rankStart = json['rankStart'];
-    rankEnd = json['rankEnd'];
-    prize = json['prize'];
-    id = json['_id'];
+  // Factory method to create a Rewards instance from JSON
+  factory CompletedCollegeRewards.fromJson(Map<String, dynamic> json) {
+    return CompletedCollegeRewards(
+      rankStart: json['rankStart'],
+      rankEnd: json['rankEnd'],
+      sId: json['_id'],
+      prize: json['prize'],
+    );
   }
 
+  // Convert the instance to a JSON representation
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['rankStart'] = this.rankStart;
-    data['rankEnd'] = this.rankEnd;
-    data['prize'] = this.prize;
-    data['_id'] = this.id;
+    final Map<String, dynamic> data = {
+      'rankStart': rankStart,
+      'rankEnd': rankEnd,
+      '_id': sId,
+    };
+
+    // Check the type of prize and add it to the JSON
+    if (prize is String) {
+      data['prize'] = prize;
+    } else if (prize is num) {
+      data['prize'] = prize;
+    }
+
     return data;
   }
 }

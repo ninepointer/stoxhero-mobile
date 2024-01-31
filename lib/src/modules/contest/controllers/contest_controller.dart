@@ -524,12 +524,37 @@ class ContestController extends BaseController<ContestRepository> {
     return 0;
   }
 
-  num calculateTotalReward(rankRewards) {
-    num totalReward = 0;
-    for (var reward in rankRewards) {
-      num numberOfRanks = reward.rankEnd - reward.rankStart + 1;
-      totalReward += numberOfRanks * reward.prize;
+  // num calculateTotalReward(rankRewards) {
+  //   num totalReward = 0;
+  //   for (var reward in rankRewards) {
+  //     num numberOfRanks = reward.rankEnd - reward.rankStart + 1;
+  //     totalReward += numberOfRanks * reward.prize;
+  //   }
+  //   return totalReward;
+  // }
+  dynamic calculateTotalReward(rankRewards) {
+    dynamic totalReward = 0;
+
+    if (rankRewards != null) {
+      for (var reward in rankRewards) {
+        if (reward.prize != null) {
+          if (reward.prize is num) {
+            num numberOfRanks =
+                (reward.rankEnd ?? 0) - (reward.rankStart ?? 0) + 1;
+            totalReward += numberOfRanks * (reward.prize as num);
+          }
+        }
+        if (reward.prize is String) {
+          // Handle String value (convert or skip based on your logic)
+          // For example, you can convert it to a num using double.parse
+          String parsedPrize = rankRewards[0].prize as String;
+          // num numberOfRanks =
+          //     (reward.rankEnd ?? 0) - (reward.rankStart ?? 0) + 1;
+          totalReward = parsedPrize;
+        }
+      }
     }
+
     return totalReward;
   }
 

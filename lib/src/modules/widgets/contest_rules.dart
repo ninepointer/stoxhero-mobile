@@ -82,22 +82,24 @@ class ContestRules extends GetView<ContestController> {
           ]))
         ],
         SizedBox(height: 8),
-        RichText(
-            text: TextSpan(children: [
-          TextSpan(
-            text: "Tax Deduction:",
-            style: Get.isDarkMode
-                ? Theme.of(context).textTheme.tsWhiteMedium14
-                : Theme.of(context).textTheme.tsBlackMedium14,
-          ),
-          TextSpan(
-            text:
-                ' A ${controller.readSetting.value.tdsPercentage}% TDS will be applied to your final winning amount.',
-            style: Get.isDarkMode
-                ? Theme.of(context).textTheme.tsWhiteRegular14
-                : Theme.of(context).textTheme.tsBlackRegular14,
-          ),
-        ])),
+        if (payoutType != 'Reward') ...[
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+              text: "Tax Deduction:",
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteMedium14
+                  : Theme.of(context).textTheme.tsBlackMedium14,
+            ),
+            TextSpan(
+              text:
+                  ' A ${controller.readSetting.value.tdsPercentage}% TDS will be applied to your final winning amount.',
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteRegular14
+                  : Theme.of(context).textTheme.tsBlackRegular14,
+            ),
+          ])),
+        ],
         SizedBox(height: 8),
         RichText(
             text: TextSpan(children: [

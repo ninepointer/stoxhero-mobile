@@ -18,7 +18,7 @@ class HomeController extends BaseController<DashboardRepository> {
   final selectedIndex = 0.obs;
 
   final firstTimeshow = true.obs;
-   bool get firstTimeshowStatus => firstTimeshow.value;
+  bool get firstTimeshowStatus => firstTimeshow.value;
 
   final userDashboard = DashboardTradeSummary().obs;
   final userDashboardReturnSummary = DashboardReturnSummary().obs;
@@ -201,6 +201,11 @@ class HomeController extends BaseController<DashboardRepository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
     isLoading(false);
+  }
+
+  int calculateSeatsLeft(int maxParticipants, int currentParticipants) {
+    int seatsLeft = maxParticipants - currentParticipants;
+    return seatsLeft;
   }
 
   Future liveIndexDetails() async {

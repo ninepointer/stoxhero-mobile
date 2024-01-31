@@ -58,6 +58,11 @@ class AppPages {
       // binding: BankBinding(),
     ),
     GetPage(
+      name: AppRoutes.kycVarification,
+      page: () => KycVarificationView(),
+      // binding: BankBinding(),
+    ),
+    GetPage(
       name: AppRoutes.portfolio,
       page: () => PortfolioView(),
       binding: PortfolioBinding(),
@@ -182,6 +187,12 @@ class AppPages {
       binding: ContestProfileBinding(),
     ),
     GetPage(
+      name: AppRoutes.stocks,
+      page: () => StocksDashboardView(),
+      binding: ContestProfileBinding(),
+      
+    ),
+    GetPage(
       name: AppRoutes.affiliate,
       page: () => AffiliateView(),
       binding: AffiliateBinding(),
@@ -195,6 +206,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.newyearstory,
       page: () => StoryView(),
+      // binding: AffiliateBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.kycRadioButtonSeclection,
+      page: () => KYCViewSelector(),
       // binding: AffiliateBinding(),
     ),
   ];

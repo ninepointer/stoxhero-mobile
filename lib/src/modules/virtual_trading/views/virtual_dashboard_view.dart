@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stoxhero/src/app/app.dart';
 import 'package:stoxhero/src/core/core.dart';
+import 'package:stoxhero/src/modules/stocks/controllers/stocks_controller.dart';
+import 'package:stoxhero/src/modules/stocks/views/stocks_dashboard_view.dart';
 
 class FutureAndOptionDashBoard extends StatelessWidget {
   const FutureAndOptionDashBoard({Key? key}) : super(key: key);
@@ -75,7 +77,9 @@ class FutureAndOptionDashBoard extends StatelessWidget {
             image: AppImages.stock,
             text: "Master essential skills in Stock trading",
             onPressed: () {
-              // Get.to(() => StocksDashboardView());
+              Get.find<StocksTradingController>().loadData();
+              // Get.find<VirtualTradingController>().selectedTabBarIndex(0);
+              Get.to(() => StocksDashboardView());
             },
           ),
         ],
@@ -90,7 +94,7 @@ class FutureAndOptionDashBoard extends StatelessWidget {
     required BuildContext context,
     required String text,
   }) {
-    bool isComingSoonCard = title.toLowerCase() == 'stocks';
+    bool isComingSoonCard = title.toLowerCase() == '';
 
     return GestureDetector(
       onTap: onPressed,
@@ -155,31 +159,32 @@ class FutureAndOptionDashBoard extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
-                            color: AppColors.brandYellow, width: 1.0),
-                        borderRadius: BorderRadius.circular(4),
+                            // color: Colors.grey,
+                            ),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ),
-                if (isComingSoonCard)
-                  Positioned(
-                    top: -10,
-                    left: 40,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: AppColors.brandYellow,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        "Coming Soon",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                // if (isComingSoonCard)
+                //   Positioned(
+                //     top: -10,
+                //     left: 40,
+                //     child: Container(
+                //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                //       decoration: BoxDecoration(
+                //         color: AppColors.brandYellow,
+                //         borderRadius: BorderRadius.circular(4),
+                //       ),
+                //       child: Text(
+                //         "Coming Soon",
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize: 12,
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
               ],
             ),
           ],

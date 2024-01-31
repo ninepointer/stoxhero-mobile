@@ -223,10 +223,18 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               GestureDetector(
                 child: Row(children: [
                   if (widget.contest?.payoutType == 'Reward') ...[
-                    Text(
+                    if (widget.contest?.rewardType == "Goodies")
+                      Text(
+                        "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}!",
+                        style: Theme.of(context).textTheme.tsGreyRegular12,
+                        textAlign: TextAlign.center,
+                      )
+                    else
+                      Text(
                         'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}',
                         style: Theme.of(context).textTheme.tsGreyRegular12,
-                        textAlign: TextAlign.center),
+                        textAlign: TextAlign.center,
+                      )
                   ],
                   if (widget.contest?.payoutType != 'Reward') ...[
                     if (widget.contest?.payoutCapPercentage != null &&
