@@ -43,22 +43,43 @@ class ContestRules extends GetView<ContestController> {
           ),
         ])),
         SizedBox(height: 8),
-        RichText(
-          text: TextSpan(children: [
-            TextSpan(
-              text: 'Payout Criteria:',
-              style: Get.isDarkMode
-                  ? Theme.of(context).textTheme.tsWhiteMedium14
-                  : Theme.of(context).textTheme.tsBlackMedium14,
-            ),
-            TextSpan(
-              text: ' Payouts are based on individual performance (Net P&L).',
-              style: Get.isDarkMode
-                  ? Theme.of(context).textTheme.tsWhiteRegular14
-                  : Theme.of(context).textTheme.tsBlackRegular14,
-            ),
-          ]),
-        ),
+        if (payoutType != 'Reward') ...[
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: 'Payout Criteria:',
+                style: Get.isDarkMode
+                    ? Theme.of(context).textTheme.tsWhiteMedium14
+                    : Theme.of(context).textTheme.tsBlackMedium14,
+              ),
+              TextSpan(
+                text: ' Payouts are based on individual performance (Net P&L).',
+                style: Get.isDarkMode
+                    ? Theme.of(context).textTheme.tsWhiteRegular14
+                    : Theme.of(context).textTheme.tsBlackRegular14,
+              ),
+            ]),
+          ),
+        ],
+        if (payoutType == 'Reward') ...[
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: 'Reward Criteria:',
+                style: Get.isDarkMode
+                    ? Theme.of(context).textTheme.tsWhiteMedium14
+                    : Theme.of(context).textTheme.tsBlackMedium14,
+              ),
+              TextSpan(
+                text:
+                    ' Rewards are based on individual performance & Rank (Net P&L).',
+                style: Get.isDarkMode
+                    ? Theme.of(context).textTheme.tsWhiteRegular14
+                    : Theme.of(context).textTheme.tsBlackRegular14,
+              ),
+            ]),
+          ),
+        ],
         if (payoutType != 'Reward') ...[
           SizedBox(height: 8),
           RichText(
