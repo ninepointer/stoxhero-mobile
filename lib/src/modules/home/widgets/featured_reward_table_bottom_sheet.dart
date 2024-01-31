@@ -79,7 +79,8 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                           ),
                           TableCell(
                             child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 12),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 10),
                                 alignment: Alignment.center,
                                 child: reward.prize is String
                                     ? Text(
@@ -115,7 +116,8 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                           ),
                           TableCell(
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 12),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 10),
                               alignment: Alignment.center,
                               child: reward.prize is String
                                   ? Text(

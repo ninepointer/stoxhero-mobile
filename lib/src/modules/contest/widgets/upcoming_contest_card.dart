@@ -215,7 +215,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(padding: EdgeInsets.only(left: 20)),
+              Padding(padding: EdgeInsets.only(left: 2)),
               Image.asset(
                 AppImages.contestTrophy,
                 width: 30,
@@ -223,14 +223,19 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               ),
               GestureDetector(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 5),
+                  padding: const EdgeInsets.only(right: 1),
                   child: Row(children: [
                     if (widget.contest?.payoutType == 'Reward') ...[
                       if (widget.contest?.rewardType == "Goodies")
-                        Text(
-                          "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}!",
-                          style: Theme.of(context).textTheme.tsGreyRegular12,
-                          textAlign: TextAlign.center,
+                        Container(
+                          width: controller.upComingContestList.length == 1
+                              ? MediaQuery.of(context).size.width * 0.6
+                              : MediaQuery.of(context).size.width * 0.7 - 55,
+                          child: Text(
+                            "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}!",
+                            style: Theme.of(context).textTheme.tsGreyRegular12,
+                            textAlign: TextAlign.center,
+                          ),
                         )
                       else
                         Text(
@@ -251,9 +256,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                               widget.contest?.payoutCapPercentage ?? 0,
                             )})',
                             style: Theme.of(context).textTheme.tsGreyRegular12),
-                      SizedBox(
-                        width: 20,
-                      ),
+                      // SizedBox(
+                      //   width: 20,
+                      // ),
                     ]
                   ]),
                 ),
