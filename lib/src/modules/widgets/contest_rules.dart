@@ -43,22 +43,43 @@ class ContestRules extends GetView<ContestController> {
           ),
         ])),
         SizedBox(height: 8),
-        RichText(
-          text: TextSpan(children: [
-            TextSpan(
-              text: 'Payout Criteria:',
-              style: Get.isDarkMode
-                  ? Theme.of(context).textTheme.tsWhiteMedium14
-                  : Theme.of(context).textTheme.tsBlackMedium14,
-            ),
-            TextSpan(
-              text: ' Payouts are based on individual performance (Net P&L).',
-              style: Get.isDarkMode
-                  ? Theme.of(context).textTheme.tsWhiteRegular14
-                  : Theme.of(context).textTheme.tsBlackRegular14,
-            ),
-          ]),
-        ),
+        if (payoutType != 'Reward') ...[
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: 'Payout Criteria:',
+                style: Get.isDarkMode
+                    ? Theme.of(context).textTheme.tsWhiteMedium14
+                    : Theme.of(context).textTheme.tsBlackMedium14,
+              ),
+              TextSpan(
+                text: ' Payouts are based on individual performance (Net P&L).',
+                style: Get.isDarkMode
+                    ? Theme.of(context).textTheme.tsWhiteRegular14
+                    : Theme.of(context).textTheme.tsBlackRegular14,
+              ),
+            ]),
+          ),
+        ],
+        if (payoutType == 'Reward') ...[
+          RichText(
+            text: TextSpan(children: [
+              TextSpan(
+                text: 'Reward Criteria:',
+                style: Get.isDarkMode
+                    ? Theme.of(context).textTheme.tsWhiteMedium14
+                    : Theme.of(context).textTheme.tsBlackMedium14,
+              ),
+              TextSpan(
+                text:
+                    ' Rewards are based on individual performance & Rank (Net P&L).',
+                style: Get.isDarkMode
+                    ? Theme.of(context).textTheme.tsWhiteRegular14
+                    : Theme.of(context).textTheme.tsBlackRegular14,
+              ),
+            ]),
+          ),
+        ],
         if (payoutType != 'Reward') ...[
           SizedBox(height: 8),
           RichText(
@@ -81,8 +102,8 @@ class ContestRules extends GetView<ContestController> {
             ),
           ]))
         ],
-        SizedBox(height: 8),
         if (payoutType != 'Reward') ...[
+          SizedBox(height: 8),
           RichText(
               text: TextSpan(children: [
             TextSpan(
@@ -101,39 +122,63 @@ class ContestRules extends GetView<ContestController> {
           ])),
         ],
         SizedBox(height: 8),
-        RichText(
-            text: TextSpan(children: [
-          TextSpan(
-            text: "Payout Processing:",
-            style: Get.isDarkMode
-                ? Theme.of(context).textTheme.tsWhiteMedium14
-                : Theme.of(context).textTheme.tsBlackMedium14,
-          ),
-          TextSpan(
-            text:
-                ' Payouts are calculated and processed after the TestZone ends on ${FormatHelper.formatDateTimeToIST(endTime)}, (based on cumulative Net P&L) / (daily based on daily P&L) post 03:20.',
-            style: Get.isDarkMode
-                ? Theme.of(context).textTheme.tsWhiteRegular14
-                : Theme.of(context).textTheme.tsBlackRegular14,
-          ),
-        ])),
-        SizedBox(height: 8),
-        RichText(
-            text: TextSpan(children: [
-          TextSpan(
-            text: "Daily Participation: ",
-            style: Get.isDarkMode
-                ? Theme.of(context).textTheme.tsWhiteMedium14
-                : Theme.of(context).textTheme.tsBlackMedium14,
-          ),
-          TextSpan(
-            text:
-                'For TestZones spanning multiple days, daily trading is required for payout eligibility.',
-            style: Get.isDarkMode
-                ? Theme.of(context).textTheme.tsWhiteRegular14
-                : Theme.of(context).textTheme.tsBlackRegular14,
-          ),
-        ])),
+        if (payoutType != 'Reward') ...[
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+              text: "Payout Processing:",
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteMedium14
+                  : Theme.of(context).textTheme.tsBlackMedium14,
+            ),
+            TextSpan(
+              text:
+                  ' Payouts are calculated and processed after the TestZone ends on ${FormatHelper.formatDateTimeToIST(endTime)}, (based on cumulative Net P&L) / (daily based on daily P&L) post 03:20.',
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteRegular14
+                  : Theme.of(context).textTheme.tsBlackRegular14,
+            ),
+          ])),
+        ],
+        if (payoutType == 'Reward') ...[
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+              text: "Reward Delivery: ",
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteMedium14
+                  : Theme.of(context).textTheme.tsBlackMedium14,
+            ),
+            TextSpan(
+              text:
+                  'After the completion of the testzone, our team will get in touch and get your reward delivered to your address',
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteRegular14
+                  : Theme.of(context).textTheme.tsBlackRegular14,
+            ),
+          ])),
+        ],
+        if (payoutType != 'Reward') ...[
+          SizedBox(height: 8),
+        ],
+        if (payoutType != 'Reward') ...[
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+              text: "Daily Participation: ",
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteMedium14
+                  : Theme.of(context).textTheme.tsBlackMedium14,
+            ),
+            TextSpan(
+              text:
+                  'For TestZones spanning multiple days, daily trading is required for payout eligibility.',
+              style: Get.isDarkMode
+                  ? Theme.of(context).textTheme.tsWhiteRegular14
+                  : Theme.of(context).textTheme.tsBlackRegular14,
+            ),
+          ])),
+        ],
         SizedBox(height: 12),
       ],
     );

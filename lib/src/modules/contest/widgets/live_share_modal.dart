@@ -119,12 +119,12 @@ class LiveShareModalContent extends GetView<ContestController> {
                                           "Goodies"
                                       ? Text(
                                           "& Earn upto ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)}",
-                                          style: AppStyles.tsSecondaryMedium16
+                                          style: AppStyles.tsSecondaryMedium14
                                               .copyWith(color: AppColors.white),
                                         )
                                       : Text(
                                           "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
-                                          style: AppStyles.tsSecondaryMedium16
+                                          style: AppStyles.tsSecondaryMedium14
                                               .copyWith(color: AppColors.white),
                                         )
                                 ],
@@ -253,13 +253,19 @@ class LiveShareModalContent extends GetView<ContestController> {
                                                       .copyWith(
                                                           color:
                                                               AppColors.white))
-                                              : Text(
-                                                  "${controller.calculateTotalReward(contest?.rewards)}",
-                                                  style: AppStyles
-                                                      .tsSecondaryMedium16
-                                                      .copyWith(
-                                                          color:
-                                                              AppColors.white))
+                                              : Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.5,
+                                                  child: Text(
+                                                      "${controller.calculateTotalReward(contest?.rewards)}",
+                                                      style: AppStyles
+                                                          .tsSecondaryMedium16
+                                                          .copyWith(
+                                                              color: AppColors
+                                                                  .white)),
+                                                )
                                         ],
                                       ),
                                     ),

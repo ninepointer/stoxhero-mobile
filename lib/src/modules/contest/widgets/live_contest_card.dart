@@ -145,48 +145,56 @@ class LiveContestCard extends GetView<ContestController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(padding: EdgeInsets.only(left: 5)),
-            Image.asset(
-              AppImages.contestTrophy,
-              width: 30,
-              height: 20,
-            ),
             GestureDetector(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (contest?.payoutType == 'Reward') ...[
-                    if (contest?.rewardType == "Goodies")
-                      Text(
-                        "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
-                        textAlign: TextAlign.center,
-                      )
-                    else
-                      Text(
-                        'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
-                        textAlign: TextAlign.center,
-                      )
-                  ],
-                  if (contest?.payoutType != 'Reward') ...[
-                    if (contest?.payoutCapPercentage != null &&
-                        contest?.payoutCapPercentage != 0)
-                      Column(
-                        children: [
-                          Text(
-                            ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
-                              contest?.entryFee == 0
-                                  ? contest?.portfolio?.portfolioValue ?? 0
-                                  : contest?.entryFee ?? 0,
-                              contest?.payoutCapPercentage ?? 0,
-                            )})',
+              child: Padding(
+                padding: EdgeInsets.only(right: 1),
+                child: Row(
+                  //  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      AppImages.contestTrophy,
+                      width: 30,
+                      height: 20,
+                    ),
+                    if (contest?.payoutType == 'Reward') ...[
+                      if (contest?.rewardType == "Goodies")
+                        Container(
+                          width: controller.liveContestList.length == 1
+                              ? MediaQuery.of(context).size.width * 0.6
+                              : MediaQuery.of(context).size.width * 0.6 - 55,
+                          child: Text(
+                            "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}",
                             style: Theme.of(context).textTheme.tsGreyRegular12,
+                            textAlign: TextAlign.center,
                           ),
-                        ],
-                      )
-                  ]
-                ],
+                        )
+                      else
+                        Text(
+                          'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
+                          style: Theme.of(context).textTheme.tsGreyRegular12,
+                          textAlign: TextAlign.center,
+                        )
+                    ],
+                    if (contest?.payoutType != 'Reward') ...[
+                      if (contest?.payoutCapPercentage != null &&
+                          contest?.payoutCapPercentage != 0)
+                        Column(
+                          children: [
+                            Text(
+                              ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
+                                contest?.entryFee == 0
+                                    ? contest?.portfolio?.portfolioValue ?? 0
+                                    : contest?.entryFee ?? 0,
+                                contest?.payoutCapPercentage ?? 0,
+                              )})',
+                              style:
+                                  Theme.of(context).textTheme.tsGreyRegular12,
+                            ),
+                          ],
+                        ),
+                    ]
+                  ],
+                ),
               ),
             )
           ],

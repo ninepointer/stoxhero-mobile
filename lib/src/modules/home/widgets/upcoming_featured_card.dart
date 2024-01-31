@@ -76,7 +76,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.only(left: 12, right: 12, top: 8),
+      margin: EdgeInsets.only(left: 8, right: 8, top: 8),
       padding: EdgeInsets.only(
         top: 0,
         right: 0,
@@ -166,22 +166,40 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "1st rank wins ${controller.calculateTotalReward(widget.upcomingFeatured?.rewards)}! ",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .tsGreyRegular12,
-                                        ),
-                                        Text(
-                                          "Know More",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .tsGreyRegular12
-                                              .copyWith(
-                                                // color: AppColors.primary,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                              ),
+                                        Container(
+                                          width: controller
+                                                      .upcomingFeaturedContest
+                                                      .length ==
+                                                  1
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.7
+                                              : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.7 -
+                                                  60,
+                                          child: Text.rich(
+                                            TextSpan(
+                                              text:
+                                                  "1st rank wins ${controller.calculateTotalReward(widget.upcomingFeatured?.rewards)} ",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .tsGreyRegular12,
+                                              children: [
+                                                TextSpan(
+                                                  text: "Know More",
+                                                  style: TextStyle(
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    color: AppColors
+                                                        .grey, // Set the color to blue
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     )
@@ -446,7 +464,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                             0) ==
                                     0
                                 ? 'TestZone Full'
-                                : 'Join Now',
+                                : 'Book Now',
                     style: AppStyles.tsWhiteMedium12.copyWith(
                       color: AppColors.success,
                     ),

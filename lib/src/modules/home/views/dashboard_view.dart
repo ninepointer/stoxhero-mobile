@@ -264,7 +264,9 @@ class _DashboardViewState extends State<DashboardView> {
                           showSeeAllButton: true,
                           onPressed: () {
                             contestController.loadData();
-                            contestController.selectedTabBarIndex(0);
+                            contestController.liveFeaturedContest.isEmpty
+                                ? contestController.selectedTabBarIndex(1)
+                                : contestController.selectedTabBarIndex(0);
                             Get.to(() => ContestListView());
                           },
                           margin: EdgeInsets.only(bottom: 0, top: 4),

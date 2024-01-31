@@ -70,23 +70,51 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)}! ",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .tsGreyRegular12,
+                                        Container(
+                                          width: controller.liveFeaturedContest
+                                                      .length ==
+                                                  1
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.7
+                                              : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.7 -
+                                                  55,
+                                          child: Text.rich(
+                                            TextSpan(
+                                              text:
+                                                  "1st rank wins ${controller.calculateTotalReward(liveFeatured?.rewards)} ",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .tsGreyRegular12,
+                                              children: [
+                                                TextSpan(
+                                                  text: "Know More",
+                                                  style: TextStyle(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      color: AppColors
+                                                          .grey // Set the color to blue
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                        Text(
-                                          "Know More",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .tsGreyRegular12
-                                              .copyWith(
-                                                // color: AppColors.primary,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                              ),
-                                        ),
+                                        // Text(
+                                        //   "",
+                                        //   style: Theme.of(context)
+                                        //       .textTheme
+                                        //       .tsGreyRegular12
+                                        //       .copyWith(
+                                        //         color: AppColors.primary,
+                                        //         decoration:
+                                        //             TextDecoration.underline,
+                                        //       ),
+                                        // ),
                                       ],
                                     )
                                   else

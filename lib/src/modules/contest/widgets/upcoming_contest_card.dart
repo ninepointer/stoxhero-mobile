@@ -213,45 +213,55 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
           SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(padding: EdgeInsets.only(left: 20)),
+              Padding(padding: EdgeInsets.only(left: 2)),
               Image.asset(
                 AppImages.contestTrophy,
                 width: 30,
                 height: 20,
               ),
               GestureDetector(
-                child: Row(children: [
-                  if (widget.contest?.payoutType == 'Reward') ...[
-                    if (widget.contest?.rewardType == "Goodies")
-                      Text(
-                        "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}!",
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
-                        textAlign: TextAlign.center,
-                      )
-                    else
-                      Text(
-                        'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
-                        textAlign: TextAlign.center,
-                      )
-                  ],
-                  if (widget.contest?.payoutType != 'Reward') ...[
-                    if (widget.contest?.payoutCapPercentage != null &&
-                        widget.contest?.payoutCapPercentage != 0)
-                      Text(
-                          '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L(upto ${controller.getPaidCapAmount(
-                            widget.contest?.entryFee == 0
-                                ? widget.contest?.portfolio?.portfolioValue ?? 0
-                                : widget.contest?.entryFee ?? 0,
-                            widget.contest?.payoutCapPercentage ?? 0,
-                          )})',
-                          style: Theme.of(context).textTheme.tsGreyRegular12),
-                    SizedBox(
-                      width: 20,
-                    ),
-                  ]
-                ]),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 1),
+                  child: Row(children: [
+                    if (widget.contest?.payoutType == 'Reward') ...[
+                      if (widget.contest?.rewardType == "Goodies")
+                        Container(
+                          width: controller.upComingContestList.length == 1
+                              ? MediaQuery.of(context).size.width * 0.6
+                              : MediaQuery.of(context).size.width * 0.65 - 60,
+                          child: Text(
+                            "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}",
+                            style: Theme.of(context).textTheme.tsGreyRegular12,
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      else
+                        Text(
+                          'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}',
+                          style: Theme.of(context).textTheme.tsGreyRegular12,
+                          textAlign: TextAlign.center,
+                        )
+                    ],
+                    if (widget.contest?.payoutType != 'Reward') ...[
+                      if (widget.contest?.payoutCapPercentage != null &&
+                          widget.contest?.payoutCapPercentage != 0)
+                        Text(
+                            '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L(upto ${controller.getPaidCapAmount(
+                              widget.contest?.entryFee == 0
+                                  ? widget.contest?.portfolio?.portfolioValue ??
+                                      0
+                                  : widget.contest?.entryFee ?? 0,
+                              widget.contest?.payoutCapPercentage ?? 0,
+                            )})',
+                            style: Theme.of(context).textTheme.tsGreyRegular12),
+                      // SizedBox(
+                      //   width: 20,
+                      // ),
+                    ]
+                  ]),
+                ),
               )
             ],
           ),
@@ -469,7 +479,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                                 0) ==
                                         0
                                     ? 'TestZone Full'
-                                    : 'Join Now',
+                                    : 'Book Now',
                         style: AppStyles.tsWhiteMedium12.copyWith(
                           color: AppColors.success,
                         ),

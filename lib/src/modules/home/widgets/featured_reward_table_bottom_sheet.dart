@@ -79,21 +79,22 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                           ),
                           TableCell(
                             child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 12),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 10),
                                 alignment: Alignment.center,
                                 child: reward.prize is String
                                     ? Text(
                                         reward.prize,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .tsMedium12,
+                                            .tsMedium10,
                                       )
                                     : Text(
                                         FormatHelper.formatNumbers(reward.prize,
                                             decimal: 0),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .tsMedium12,
+                                            .tsMedium10,
                                       )),
                           ),
                         ],
@@ -115,21 +116,22 @@ class FeaturedRewardTableBottomSheet extends StatelessWidget {
                           ),
                           TableCell(
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 12),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 10),
                               alignment: Alignment.center,
                               child: reward.prize is String
                                   ? Text(
                                       reward.prize,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .tsMedium12,
+                                          .tsMedium10,
                                     )
                                   : Text(
                                       FormatHelper.formatNumbers(reward.prize,
                                           decimal: 0),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .tsMedium12,
+                                          .tsMedium10,
                                     ),
                             ),
                           ),

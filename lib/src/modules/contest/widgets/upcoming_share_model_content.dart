@@ -32,7 +32,7 @@ class UpComingShareModalContent extends GetView<ContestController> {
   }
 
   String getShareMessage() {
-    return "Hey!! \n\nI just joined the ${contest?.contestName} TestZone on StoxHero.\n\nShow your trading skills and earn ${controller.upComingContest.value.rewardType != "Goodies" ? " upto  ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)} or ${contest?.payoutPercentage}% of your net p&l" : "${controller.calculateTotalReward(contest?.rewards)}"}.\n\nLet's see who can take winning trades!!\n\nUse this link to join me now!\n\nSignup now to get ${FormatHelper.formatNumbers("100", decimal: 0)} in your StoxHero wallet.\n\n http://stoxhero.page.link/testzone ";
+    return "Hey!! \n\nI just joined the ${contest?.contestName} TestZone on StoxHero.\n\nShow your trading skills and  ${controller.upComingContest.value.rewardType != "Goodies" ? "earn upto  ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)} or ${contest?.payoutPercentage}% of your net p&l" : "win ${controller.calculateTotalReward(contest?.rewards)}"}.\n\nLet's see who can take winning trades!!\n\nUse this link to join me now!\n\nSignup now to get ${FormatHelper.formatNumbers("100", decimal: 0)} in your StoxHero wallet.\n\n http://stoxhero.page.link/testzone ";
   }
 
   @override
@@ -120,12 +120,12 @@ class UpComingShareModalContent extends GetView<ContestController> {
                                           "Goodies"
                                       ? Text(
                                           "& Earn upto ${controller.getPaidCapAmount(contest?.entryFee == 0 ? contest?.portfolio?.portfolioValue ?? 0 : contest?.entryFee ?? 0, contest?.payoutCapPercentage ?? 0)}",
-                                          style: AppStyles.tsSecondaryMedium16
+                                          style: AppStyles.tsSecondaryMedium14
                                               .copyWith(color: AppColors.white),
                                         )
                                       : Text(
                                           "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
-                                          style: AppStyles.tsSecondaryMedium16
+                                          style: AppStyles.tsSecondaryMedium14
                                               .copyWith(color: AppColors.white),
                                         )
                                 ],
@@ -237,6 +237,8 @@ class UpComingShareModalContent extends GetView<ContestController> {
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Reward",
@@ -262,13 +264,21 @@ class UpComingShareModalContent extends GetView<ContestController> {
                                                               AppColors.white),
                                                   textAlign: TextAlign.end,
                                                 )
-                                              : Text(
-                                                  "${controller.calculateTotalReward(contest?.rewards)}",
-                                                  style: AppStyles
-                                                      .tsSecondaryMedium16
-                                                      .copyWith(
-                                                          color:
-                                                              AppColors.white))
+                                              : Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2.5,
+                                                  child: Text(
+                                                    "${controller.calculateTotalReward(contest?.rewards)}",
+                                                    style: AppStyles
+                                                        .tsSecondaryMedium16
+                                                        .copyWith(
+                                                            color: AppColors
+                                                                .white),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                )
                                         ],
                                       ),
                                     ),
