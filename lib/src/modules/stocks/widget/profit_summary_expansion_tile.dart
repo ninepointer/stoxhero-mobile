@@ -82,7 +82,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
     //         (controller.stockTotalPositionDetails.value.currentvalue ?? 0);
     // num CurrentValue =
     //     (controller.calculateTotalPortfolioPnl() - brokerage) + InvestedValue;
-    print('paisa brokerage inside ${brokerage}');
+    // print('paisa brokerage inside ${brokerage}');
     return Obx(
       () => Column(
         children: [
@@ -290,7 +290,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                   style: AppStyles.tsGreyRegular12,
                                 ),
                                 Text(
-                                  (InvestedValue == 0)
+                                  ((controller.calculateTotalHoldingInvested() +
+                                              controller
+                                                  .calculateTotalPositionInvested()) ==
+                                          0)
                                       ? "₹00.00"
                                       : FormatHelper.formatNumbers(
                                           (controller
@@ -313,7 +316,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                                       .calculateTotalHoldingCurrentValue() +
                                                   controller
                                                       .calculateTotalPositionCurrentValue()) <
-                                              InvestedValue)
+                                              (controller
+                                                      .calculateTotalHoldingInvested() +
+                                                  controller
+                                                      .calculateTotalPositionInvested()))
                                           ? AppColors.danger
                                           : AppColors.success),
                                 ),
@@ -323,7 +329,11 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                                   style: AppStyles.tsGreyRegular12,
                                 ),
                                 Text(
-                                  (OPenPositions > 0)
+                                  ((controller.getOpenPositionCount() +
+                                              controller
+                                                  .getOpenHoldingCount()) //open Positions
+                                          >
+                                          0)
                                       ? (FormatHelper.formatNumbers(
                                           controller
                                               .calculateMargin()

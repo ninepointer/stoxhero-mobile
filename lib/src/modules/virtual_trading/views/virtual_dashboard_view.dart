@@ -94,7 +94,7 @@ class FutureAndOptionDashBoard extends StatelessWidget {
     required BuildContext context,
     required String text,
   }) {
-    bool isComingSoonCard = title.toLowerCase() == 'stocks';
+    bool isComingSoonCard = title.toLowerCase() == '';
 
     return GestureDetector(
       onTap: onPressed,
@@ -158,7 +158,9 @@ class FutureAndOptionDashBoard extends StatelessWidget {
                     bottom: 0,
                     child: Container(
                       decoration: BoxDecoration(
-                        // border: Border.all(color: AppColors.grey, width: 1.0),
+                        border: Border.all(
+                            // color: Colors.grey,
+                            ),
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
