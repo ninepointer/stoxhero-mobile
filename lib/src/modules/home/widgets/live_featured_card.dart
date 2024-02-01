@@ -77,12 +77,15 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                               ? MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  0.7
+                                                  0.60
                                               : MediaQuery.of(context)
                                                           .size
                                                           .width *
-                                                      0.7 -
-                                                  55,
+                                                      0.60 -
+                                                  MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.14,
                                           child: Text.rich(
                                             TextSpan(
                                               text:
@@ -160,10 +163,10 @@ class LiveFeaturedCard extends GetView<ContestController> {
                 Visibility(
                   visible: liveFeatured?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 45),
+                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 48),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
-                      badgeSize: 62,
+                      badgeSize: 60,
                       textSpan: TextSpan(
                         text: 'Featured',
                         style: AppStyles.tsWhiteMedium12,
