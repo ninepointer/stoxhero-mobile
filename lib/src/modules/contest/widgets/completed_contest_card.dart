@@ -311,17 +311,13 @@ class CompletedContestCard extends GetView<ContestController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.0612),
-                          child: Text(
-                            'Completed',
-                            // style: Theme.of(context).textTheme.tsMedium12,
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
-                          ),
+                        Text(
+                          'Completed',
+                          // style: Theme.of(context).textTheme.tsMedium12,
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -350,47 +346,43 @@ class CompletedContestCard extends GetView<ContestController> {
                   ),
                 ],
               ),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
               Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Net P&L: ',
-                            style: AppStyles.tsGreyMedium12,
-                          ),
-                          // SizedBox(width: 2),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.0051,
-                          ),
-                          Text(
-                            (completedContestPnl?.npnl ?? 0) > 0
-                                ? '+${FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0)}'
-                                : '${FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0)}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .tsMedium12
-                                .copyWith(
-                                  color: (completedContestPnl?.npnl ?? 0) >= 0
-                                      ? AppColors.success
-                                      : AppColors.danger,
-                                ),
-                          ),
-                        ],
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Text(
+                              'Net P&L: ',
+                              style: AppStyles.tsGreyMedium12,
+                            ),
+                            // SizedBox(width: 2),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0051,
+                            ),
+                            Text(
+                              (completedContestPnl?.npnl ?? 0) > 0
+                                  ? '+${FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0)}'
+                                  : '${FormatHelper.formatNumbers(completedContestPnl?.npnl, decimal: 0)}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium12
+                                  .copyWith(
+                                    color: (completedContestPnl?.npnl ?? 0) >= 0
+                                        ? AppColors.success
+                                        : AppColors.danger,
+                                  ),
+                            ),
+                          ],
+                        ),
                       ),
                       if (contest?.rewardType != "Goodies")
-                        Container(
-                          margin: EdgeInsets.only(
-                              right:
-                                  MediaQuery.of(context).size.width * 0.0510),
+                        Expanded(
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 'Rank: ',
@@ -412,9 +404,9 @@ class CompletedContestCard extends GetView<ContestController> {
                           ),
                         )
                       else
-                        Container(
-                          // margin: EdgeInsets.only(right: 20),
+                        Expanded(
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 'Rank: ',
@@ -436,27 +428,32 @@ class CompletedContestCard extends GetView<ContestController> {
                           ),
                         ),
                       if (contest?.rewardType != "Goodies")
-                        Row(
-                          children: [
-                            Text(
-                              'TDS:',
-                              style: Theme.of(context).textTheme.tsGreyMedium12,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.0051,
-                            ),
-                            Text(
-                              FormatHelper.formatNumbers(
-                                  calculateContestTDS().toString(),
-                                  decimal: 2),
-                              // Text(
-                              //  (completedContestPnl?.payoutAmount??0)>0?((completedContestPnl?.payoutAmount??0)*30/100):,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .tsBlackMedium12
-                                  .copyWith(color: AppColors.success),
-                            )
-                          ],
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'TDS:',
+                                style:
+                                    Theme.of(context).textTheme.tsGreyMedium12,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0051,
+                              ),
+                              Text(
+                                FormatHelper.formatNumbers(
+                                    calculateContestTDS().toString(),
+                                    decimal: 2),
+                                // Text(
+                                //  (completedContestPnl?.payoutAmount??0)>0?((completedContestPnl?.payoutAmount??0)*30/100):,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsBlackMedium12
+                                    .copyWith(color: AppColors.success),
+                              )
+                            ],
+                          ),
                         ),
                     ],
                   ),
@@ -488,82 +485,96 @@ class CompletedContestCard extends GetView<ContestController> {
                           ],
                         )
                       else
-                        Row(
-                          children: [
-                            Text(
-                              'Reward:',
-                              style: Theme.of(context).textTheme.tsGreyMedium12,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.0051,
-                            ),
-                            Text(
-                              FormatHelper.formatNumbers(
-                                  calculateReward(
-                                    contest?.entryFee == 0
-                                        ? contest?.portfolio?.portfolioValue ??
-                                            0
-                                        : contest?.entryFee ?? 0,
-                                  ).toString(),
-                                  decimal: 2),
-                              // Text(
-                              //  (completedContestPnl?.payoutAmount??0)>0?((completedContestPnl?.payoutAmount??0)*30/100):,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .tsBlackMedium12
-                                  .copyWith(color: AppColors.success),
-                            )
-                          ],
-                        ),
-                      if (contest?.rewardType != "Goodies")
-                        Row(
-                          children: [
-                            Text(
-                              'HeroCash:',
-                              style: AppStyles.tsGreyMedium12,
-                            ),
-                            // SizedBox(width: 2),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.0051,
-                            ),
-                            Text(
-                              "${controller.herocashadd(contest, controller.userDetailsData.sId.toString()).toStringAsFixed(1)}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .tsMedium12
-                                  .copyWith(color: AppColors.success),
-                            ),
-                          ],
-                        ),
-                      if (contest?.rewardType != "Goodies")
-                        Row(
-                          children: [
-                            Text(
-                              'Payout:',
-                              style: AppStyles.tsGreyMedium12,
-                            ),
-                            // SizedBox(width: 2),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.0051,
-                            ),
-                            Text(
-                              FormatHelper.formatNumbers(
-                                (completedContestPnl?.payoutAmount ?? 0) >= 0
-                                    ? completedContestPnl?.payoutAmount
-                                    : 0,
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Text(
+                                'Reward:',
+                                style:
+                                    Theme.of(context).textTheme.tsGreyMedium12,
                               ),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .tsMedium12
-                                  .copyWith(
-                                    color: (completedContestPnl?.payoutAmount ??
-                                                0) >=
-                                            0
-                                        ? AppColors.success
-                                        : AppColors.danger,
-                                  ),
-                            )
-                          ],
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0051,
+                              ),
+                              Text(
+                                FormatHelper.formatNumbers(
+                                    calculateReward(
+                                      contest?.entryFee == 0
+                                          ? contest
+                                                  ?.portfolio?.portfolioValue ??
+                                              0
+                                          : contest?.entryFee ?? 0,
+                                    ).toString(),
+                                    decimal: 2),
+                                // Text(
+                                //  (completedContestPnl?.payoutAmount??0)>0?((completedContestPnl?.payoutAmount??0)*30/100):,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsBlackMedium12
+                                    .copyWith(color: AppColors.success),
+                              )
+                            ],
+                          ),
+                        ),
+                      if (contest?.rewardType != "Goodies")
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'HeroCash:',
+                                style: AppStyles.tsGreyMedium12,
+                              ),
+                              // SizedBox(width: 2),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0051,
+                              ),
+                              Text(
+                                "${controller.herocashadd(contest, controller.userDetailsData.sId.toString()).toStringAsFixed(1)}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsMedium12
+                                    .copyWith(color: AppColors.success),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if (contest?.rewardType != "Goodies")
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Payout:',
+                                style: AppStyles.tsGreyMedium12,
+                              ),
+                              // SizedBox(width: 2),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0051,
+                              ),
+                              Text(
+                                FormatHelper.formatNumbers(
+                                  (completedContestPnl?.payoutAmount ?? 0) >= 0
+                                      ? completedContestPnl?.payoutAmount
+                                      : 0,
+                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsMedium12
+                                    .copyWith(
+                                      color:
+                                          (completedContestPnl?.payoutAmount ??
+                                                      0) >=
+                                                  0
+                                              ? AppColors.success
+                                              : AppColors.danger,
+                                    ),
+                              )
+                            ],
+                          ),
                         )
                     ],
                   ),
