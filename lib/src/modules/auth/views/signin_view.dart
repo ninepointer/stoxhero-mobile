@@ -82,9 +82,12 @@ class _SigninViewState extends State<SigninView> {
                               ),
                               validator: (value) {
                                 RegExp regExp = RegExp(r'^[6-9]\d{9}$');
-                                if (value == null || value.isEmpty || value.length == 0) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.length == 0) {
                                   return 'This field is required!';
-                                } else if (value.length == 10) if (!regExp.hasMatch(value)) {
+                                } else if (value.length == 10) if (!regExp
+                                    .hasMatch(value)) {
                                   return 'Please enter valid mobile number!';
                                 }
                                 return null;
@@ -93,11 +96,14 @@ class _SigninViewState extends State<SigninView> {
                           ),
                           Obx(
                             () => CommonFilledButton(
-                              backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
                               isLoading: controller.isLoadingStatus,
                               label: 'Continue',
                               onPressed: () {
-                                bool isValid = formKey.currentState?.validate() ?? false;
+                                bool isValid =
+                                    formKey.currentState?.validate() ?? false;
                                 if (isValid) controller.userSignin();
                               },
                             ),
@@ -105,24 +111,28 @@ class _SigninViewState extends State<SigninView> {
                         ],
                       ),
                       Spacer(),
-                      SizedBox(height: 24),
-                      Center(
-                        child: Text(
-                          'Learn and earn from stock market trading.\nClaim your free account now!',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.tsRegular16,
-                        ),
-                      ),
-                      SizedBox(height: 24),
-                      CommonOutlinedButton(
-                        backgroundColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
-                        labelColor: Get.isDarkMode ? AppColors.darkGreen : AppColors.lightGreen,
-                        label: 'Create account',
-                        onPressed: () {
-                          controller.getDefaultInviteCode();
-                          Get.toNamed(AppRoutes.signup);
-                        },
-                      ),
+                      // SizedBox(height: 24),
+                      // Center(
+                      //   child: Text(
+                      //     'Learn and earn from stock market trading.\nClaim your free account now!',
+                      //     textAlign: TextAlign.center,
+                      //     style: Theme.of(context).textTheme.tsRegular16,
+                      //   ),
+                      // ),
+                      // SizedBox(height: 24),
+                      // CommonOutlinedButton(
+                      //   backgroundColor: Get.isDarkMode
+                      //       ? AppColors.darkGreen
+                      //       : AppColors.lightGreen,
+                      //   labelColor: Get.isDarkMode
+                      //       ? AppColors.darkGreen
+                      //       : AppColors.lightGreen,
+                      //   label: 'Create account',
+                      //   onPressed: () {
+                      //     controller.getDefaultInviteCode();
+                      //     Get.toNamed(AppRoutes.signup);
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

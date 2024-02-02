@@ -11,7 +11,8 @@ class AuthRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> addFcmTokenData(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> addFcmTokenData(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.addFcmToken;
     var response = await service.postAuth(path: apiURL, data: data);
     return response is APIException
@@ -27,7 +28,8 @@ class AuthRepository extends BaseRepository {
         : RepoResponse(data: CampaignCodeResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> phoneLogin(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> phoneLogin(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.phoneLogin;
     var response = await service.post(path: apiURL, data: data);
     return response is APIException
@@ -35,7 +37,8 @@ class AuthRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<VerifyPhoneLoginResponse>> verifySigninOtp(Map<String, dynamic> data) async {
+  Future<RepoResponse<VerifyPhoneLoginResponse>> verifySigninOtp(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.verifyPhoneLogin;
     var response = await service.post(path: apiURL, data: data);
     return response is APIException
@@ -43,7 +46,8 @@ class AuthRepository extends BaseRepository {
         : RepoResponse(data: VerifyPhoneLoginResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> verifySignupOtp(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> verifySignupOtp(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.verifyOtp;
     var response = await service.patch(path: apiURL, data: data);
     return response is APIException
@@ -51,7 +55,8 @@ class AuthRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> resendSigninOtp(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> resendSigninOtp(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.resendSigninOtp;
     var response = await service.post(path: apiURL, data: data);
     return response is APIException
@@ -59,7 +64,8 @@ class AuthRepository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> resendSignupOtp(Map<String, dynamic> data) async {
+  Future<RepoResponse<GenericResponse>> resendSignupOtp(
+      Map<String, dynamic> data) async {
     String apiURL = AppUrls.resendSignupOtp;
     var response = await service.patch(path: apiURL, data: data);
     return response is APIException
@@ -75,11 +81,12 @@ class AuthRepository extends BaseRepository {
         : RepoResponse(data: LoginDetailsResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> userSignup(Map<String, dynamic> data) async {
-    String apiURL = AppUrls.signup;
+  Future<RepoResponse<NewUserCreateAccountResponse>> userSignup(
+      Map<String, dynamic> data) async {
+    String apiURL = AppUrls.createAccount;
     var response = await service.post(path: apiURL, data: data);
     return response is APIException
         ? RepoResponse(error: response)
-        : RepoResponse(data: GenericResponse.fromJson(response));
+        : RepoResponse(data: NewUserCreateAccountResponse.fromJson(response));
   }
 }

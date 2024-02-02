@@ -1,3 +1,5 @@
+import 'package:stoxhero/src/app/app.dart';
+
 class VerifySignupRequest {
   String? firstName;
   String? lastName;
@@ -7,6 +9,7 @@ class VerifySignupRequest {
   String? referrerCode;
   String? campaignCode;
   String? dob;
+  FcmTokenData? fcmTokenData;
 
   VerifySignupRequest({
     this.firstName,
@@ -17,6 +20,7 @@ class VerifySignupRequest {
     this.referrerCode,
     this.campaignCode,
     this.dob,
+    this.fcmTokenData,
   });
 
   VerifySignupRequest.fromJson(Map<String, dynamic> json) {
@@ -28,6 +32,9 @@ class VerifySignupRequest {
     referrerCode = json['referrerCode'];
     campaignCode = json['campaignCode'];
     dob = json['dob'];
+    fcmTokenData = json['fcmTokenData'] != null
+        ? new FcmTokenData.fromJson(json['fcmTokenData'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +47,9 @@ class VerifySignupRequest {
     data['referrerCode'] = this.referrerCode;
     data['campaignCode'] = this.campaignCode;
     data['dob'] = this.dob;
+    if (this.fcmTokenData != null) {
+      data['fcmTokenData'] = this.fcmTokenData!.toJson();
+    }
     return data;
   }
 }

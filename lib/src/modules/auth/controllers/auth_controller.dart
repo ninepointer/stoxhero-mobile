@@ -37,7 +37,8 @@ class AuthController extends BaseController<AuthRepository> {
 
   final campaignCode = ''.obs;
 
-  void verifyOtp() => isSignup.value ? verifySignupOtp() : verifySigninOtp();
+  // void verifyOtp() => isSignup.value ? verifySignupOtp() : verifySigninOtp();
+  void verifyOtp() => verifySigninOtp();
 
   void showDateRangePicker(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -63,7 +64,8 @@ class AuthController extends BaseController<AuthRepository> {
     );
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.phoneLogin(
+      final RepoResponse<GenericResponse> response =
+          await repository.phoneLogin(
         data.toJson(),
       );
       if (response.data != null) {
@@ -97,7 +99,51 @@ class AuthController extends BaseController<AuthRepository> {
     );
 
     try {
-      final RepoResponse<VerifyPhoneLoginResponse> response = await repository.verifySigninOtp(
+      final RepoResponse<VerifyPhoneLoginResponse> response =
+          await repository.verifySigninOtp(
+        data.toJson(),
+      );
+      if (response.data != null) {
+        if (response.data?.isLogin == true) {
+          if (response.data?.status?.toLowerCase() == "success") {
+            token(response.data?.token);
+            await AppStorage.setToken(response.data?.token);
+            log('AppStorage.getToken : ${AppStorage.getToken()}');
+            await getUserDetails();
+            clearForm();
+          } else {
+            SnackbarHelper.showSnackbar(response.error?.message);
+          }
+        } else {
+          getDefaultInviteCode();
+          Get.toNamed(AppRoutes.signup);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
+  }
+
+  Future createUserAccount() async {
+    isLoading(true);
+    DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
+    SignupRequest data = SignupRequest(
+      firstName: firstNameTextController.text,
+      lastName: lastNameTextController.text,
+      email: emailTextController.text,
+      mobile: mobileTextController.text,
+      dob: DateFormat('yyyy-MM-dd').format(date),
+      referrerCode: hasCampaignCode.value
+          ? campaignCode.value
+          : referralTextController.text,
+      campaignCode: campaignCode.value,
+    );
+
+    try {
+      final RepoResponse<NewUserCreateAccountResponse> response =
+          await repository.userSignup(
         data.toJson(),
       );
       if (response.data != null) {
@@ -115,6 +161,7 @@ class AuthController extends BaseController<AuthRepository> {
       log(e.toString());
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
+
     isLoading(false);
   }
 
@@ -122,6 +169,7 @@ class AuthController extends BaseController<AuthRepository> {
     isLoading(true);
 
     FocusScope.of(Get.context!).unfocus();
+    String deviceToken = await firebaseMessaging.getToken() ?? '-';
     DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
     VerifySignupRequest data = VerifySignupRequest(
       firstName: firstNameTextController.text,
@@ -129,13 +177,19 @@ class AuthController extends BaseController<AuthRepository> {
       email: emailTextController.text,
       mobile: mobileTextController.text,
       mobileOtp: otpTextController.text,
+      fcmTokenData: FcmTokenData(
+        token: deviceToken,
+      ),
       dob: DateFormat('yyyy-MM-dd').format(date),
-      referrerCode: hasCampaignCode.value ? campaignCode.value : referralTextController.text,
+      referrerCode: hasCampaignCode.value
+          ? campaignCode.value
+          : referralTextController.text,
       campaignCode: campaignCode.value,
     );
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.verifySignupOtp(
+      final RepoResponse<GenericResponse> response =
+          await repository.verifySignupOtp(
         data.toJson(),
       );
       if (response.data != null) {
@@ -155,45 +209,49 @@ class AuthController extends BaseController<AuthRepository> {
     isLoading(false);
   }
 
-  Future userSignup() async {
-    isLoading(true);
-    DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
-    SignupRequest data = SignupRequest(
-      firstName: firstNameTextController.text,
-      lastName: lastNameTextController.text,
-      email: emailTextController.text,
-      mobile: mobileTextController.text,
-      dob: DateFormat('yyyy-MM-dd').format(date),
-      referrerCode: hasCampaignCode.value ? campaignCode.value : referralTextController.text,
-      campaignCode: campaignCode.value,
-    );
+  // Future userSignup() async {
+  //   isLoading(true);
+  //   DateTime date = DateFormat('dd-MM-yyyy').parse(dobTextController.text);
+  //   SignupRequest data = SignupRequest(
+  //     firstName: firstNameTextController.text,
+  //     lastName: lastNameTextController.text,
+  //     email: emailTextController.text,
+  //     mobile: mobileTextController.text,
+  //     dob: DateFormat('yyyy-MM-dd').format(date),
+  //     referrerCode: hasCampaignCode.value
+  //         ? campaignCode.value
+  //         : referralTextController.text,
+  //     campaignCode: campaignCode.value,
+  //   );
 
-    try {
-      final RepoResponse<GenericResponse> response = await repository.userSignup(
-        data.toJson(),
-      );
-      if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {
-          isSignup(true);
-          Get.toNamed(AppRoutes.otp);
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
+  //   try {
+  //     final RepoResponse<GenericResponse> response =
+  //         await repository.userSignup(
+  //       data.toJson(),
+  //     );
+  //     if (response.data != null) {
+  //       if (response.data?.status?.toLowerCase() == "success") {
+  //         isSignup(true);
+  //         Get.toNamed(AppRoutes.otp);
+  //       }
+  //     } else {
+  //       SnackbarHelper.showSnackbar(response.error?.message);
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //     SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+  //   }
 
-    isLoading(false);
-  }
+  //   isLoading(false);
+  // }
 
   Future getUserDetails({bool navigate = true}) async {
     isLoading(true);
     try {
       final response = await repository.loginDetails();
       if (response.data != null) {
-        await AppStorage.setUserDetails(response.data ?? LoginDetailsResponse());
+        await AppStorage.setUserDetails(
+            response.data ?? LoginDetailsResponse());
 
         String deviceToken = await firebaseMessaging.getToken() ?? '-';
         print('DeviceToken addFcmTokenData : $deviceToken');
@@ -233,7 +291,8 @@ class AuthController extends BaseController<AuthRepository> {
     );
 
     try {
-      final RepoResponse<GenericResponse> response = await repository.resendSigninOtp(
+      final RepoResponse<GenericResponse> response =
+          await repository.resendSigninOtp(
         data.toJson(),
       );
       if (response.data != null) {
@@ -253,7 +312,8 @@ class AuthController extends BaseController<AuthRepository> {
   Future getDefaultInviteCode() async {
     isLoading(true);
     try {
-      final RepoResponse<CampaignCodeResponse> response = await repository.getDefaultInviteCode();
+      final RepoResponse<CampaignCodeResponse> response =
+          await repository.getDefaultInviteCode();
       if (response.data != null) {
         inviteCode(response.data?.data);
       }
