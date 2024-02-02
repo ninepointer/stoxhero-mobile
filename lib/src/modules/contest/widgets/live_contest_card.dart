@@ -177,6 +177,7 @@ class LiveContestCard extends GetView<ContestController> {
                                 ? MediaQuery.of(context).size.width * 0.9
                                 : MediaQuery.of(context).size.width * 0.9 - 55,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
                                   AppImages.contestTrophy,
@@ -220,6 +221,7 @@ class LiveContestCard extends GetView<ContestController> {
                         if (contest?.payoutCapPercentage != null &&
                             contest?.payoutCapPercentage != 0)
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.asset(
                                 AppImages.contestTrophy,
