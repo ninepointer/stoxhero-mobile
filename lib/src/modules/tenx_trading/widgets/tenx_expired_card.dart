@@ -15,6 +15,9 @@ class TenxExpiredCard extends GetView<TenxTradingController> {
   Widget build(BuildContext context) {
     return CommonCard(
       padding: EdgeInsets.zero,
+      margin: EdgeInsets.all(
+        MediaQuery.of(context).size.width * 0.0306,
+      ),
       children: [
         TenxTradingCardHeader(
           label: subscription.planName ?? '-',

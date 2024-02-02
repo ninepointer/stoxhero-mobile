@@ -663,7 +663,7 @@ class _DashboardViewState extends State<DashboardView> {
                           ],
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.0306,
+                          height: MediaQuery.of(context).size.width * 0.0204,
                         ),
                         Row(
                           children: [
@@ -827,7 +827,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                             SizedBox(
                               height:
-                                  MediaQuery.of(context).size.width * 0.0306,
+                                  MediaQuery.of(context).size.width * 0.0204,
                             ),
                             Row(
                               children: [
@@ -864,7 +864,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                             SizedBox(
                               height:
-                                  MediaQuery.of(context).size.width * 0.0306,
+                                  MediaQuery.of(context).size.width * 0.0204,
                             ),
                             Row(
                               children: [
@@ -898,7 +898,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                             SizedBox(
                               height:
-                                  MediaQuery.of(context).size.width * 0.0306,
+                                  MediaQuery.of(context).size.width * 0.0204,
                             ),
                             Row(
                               children: [
@@ -933,7 +933,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                             SizedBox(
                               height:
-                                  MediaQuery.of(context).size.width * 0.0306,
+                                  MediaQuery.of(context).size.width * 0.0204,
                             ),
                             Row(
                               children: [
@@ -968,7 +968,7 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                             SizedBox(
                               height:
-                                  MediaQuery.of(context).size.width * 0.0306,
+                                  MediaQuery.of(context).size.width * 0.0204,
                             ),
                             Row(
                               children: [

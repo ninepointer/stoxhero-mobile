@@ -31,14 +31,31 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                   itemBuilder: (context, index) {
                     var order = controller.contestOrdersList[index];
                     return CommonCard(
-                      margin:
-                          EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
+                      margin: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.0306,
+                          right: MediaQuery.of(context).size.width * 0.0306,
+                          top: MediaQuery.of(context).size.width * 0.0204,
+                          bottom: MediaQuery.of(context).size.width * 0.0102),
                       children: [
-                        OrderCardTile(
-                          label: 'Contract',
-                          value: order.symbol,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OrderCardTile(
+                              label: 'Contract',
+                              value: order.symbol,
+                            ),
+                            OrderCardTile(
+                              isRightAlign: true,
+                              label: 'Status',
+                              value: order.status,
+                              valueColor: order.status == AppConstants.complete
+                                  ? AppColors.success
+                                  : AppColors.danger,
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.0102),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -54,7 +71,8 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.0102),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -75,7 +93,8 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 4),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.0102),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -85,27 +104,15 @@ class CompletedContestOrdersListView extends GetView<ContestController> {
                                 value: order.orderId,
                               ),
                             ),
+                            //dgdg
                             OrderCardTile(
                               isRightAlign: true,
-                              label: 'Status',
-                              value: order.status,
-                              valueColor: order.status == AppConstants.complete
-                                  ? AppColors.success
-                                  : AppColors.danger,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            OrderCardTile(
                               label: 'Timestamp',
                               value:
                                   FormatHelper.formatDateTime(order.tradeTime),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     );
                   },

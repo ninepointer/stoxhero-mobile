@@ -27,11 +27,24 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
             itemBuilder: (context, index) {
               var order = controller.completedMarginXOrdersList[index];
               return CommonCard(
-                margin: EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
+                margin: EdgeInsets.only(left: 12, right: 12, top: 8, bottom: 4),
                 children: [
-                  OrderCardTile(
-                    label: 'Symbol',
-                    value: order.symbol,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OrderCardTile(
+                        label: 'Symbol',
+                        value: order.symbol,
+                      ),
+                      OrderCardTile(
+                        isRightAlign: true,
+                        label: 'Status',
+                        value: order.status,
+                        valueColor: order.status == AppConstants.complete
+                            ? AppColors.success
+                            : AppColors.danger,
+                      ),
+                    ],
                   ),
                   SizedBox(height: 4),
                   Row(
@@ -82,18 +95,11 @@ class CompletedMarginXOrdersListView extends GetView<MarginXController> {
                       ),
                       OrderCardTile(
                         isRightAlign: true,
-                        label: 'Status',
-                        value: order.status,
-                        valueColor: order.status == AppConstants.complete
-                            ? AppColors.success
-                            : AppColors.danger,
+                        label: 'Timestamp',
+                        value: FormatHelper.formatDateTime(order.tradeTime),
                       ),
+                      //ijj
                     ],
-                  ),
-                  SizedBox(height: 4),
-                  OrderCardTile(
-                    label: 'Timestamp',
-                    value: FormatHelper.formatDateTime(order.tradeTime),
                   ),
                 ],
               );

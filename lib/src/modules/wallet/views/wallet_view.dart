@@ -42,12 +42,16 @@ class _WalletViewState extends State<WalletView> {
                     shimmerCard: SmallCardShimmer(),
                   ),
                   replacement: Container(
-                    margin: EdgeInsets.all(16),
+                    margin: EdgeInsets.all(
+                      MediaQuery.of(context).size.width * 0.0306,
+                    ),
                     child: Column(
                       children: [
                         CommonCard(
                           margin: EdgeInsets.zero,
-                          padding: EdgeInsets.all(16),
+                          padding: EdgeInsets.all(
+                            MediaQuery.of(context).size.width * 0.0306,
+                          ),
                           children: [
                             Row(
                               children: [
@@ -66,7 +70,10 @@ class _WalletViewState extends State<WalletView> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 16),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0306,
+                            ),
                             Row(
                               children: [
                                 Expanded(
@@ -109,7 +116,9 @@ class _WalletViewState extends State<WalletView> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0306,
+                        ),
                         Row(
                           children: [
                             Expanded(
@@ -121,7 +130,9 @@ class _WalletViewState extends State<WalletView> {
                                 buttonLabel: 'Withdraw',
                               ),
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0306,
+                            ),
                             Expanded(
                               child: WalletCard(
                                 label: 'HeroCash',
@@ -136,7 +147,9 @@ class _WalletViewState extends State<WalletView> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0306,
+                        ),
                         Row(
                           children: [
                             Expanded(
@@ -153,7 +166,9 @@ class _WalletViewState extends State<WalletView> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0306,
+                            ),
                             Expanded(
                               child: CommonFilledButton(
                                 backgroundColor: Get.isDarkMode
@@ -179,7 +194,9 @@ class _WalletViewState extends State<WalletView> {
                           ],
                         ),
                         CommonCard(
-                          margin: EdgeInsets.only(top: 18),
+                          margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.width * 0.0306,
+                          ),
                           padding: EdgeInsets.zero,
                           children: [
                             Column(
@@ -187,7 +204,11 @@ class _WalletViewState extends State<WalletView> {
                                 Container(
                                   width: double.infinity,
                                   alignment: Alignment.center,
-                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical:
+                                        MediaQuery.of(context).size.width *
+                                            0.0306,
+                                  ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(8),
@@ -203,8 +224,14 @@ class _WalletViewState extends State<WalletView> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 12),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.0306,
+                                    vertical:
+                                        MediaQuery.of(context).size.width *
+                                            0.0306,
+                                  ),
                                   child: Text(
                                     '''1. Please ensure you have filled your bank details and completed your KYC before proceeding with your withdrawal.
 

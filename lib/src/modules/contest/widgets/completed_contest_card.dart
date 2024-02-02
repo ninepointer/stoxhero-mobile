@@ -62,7 +62,10 @@ class CompletedContestCard extends GetView<ContestController> {
               Expanded(
                 child: Padding(
                   // padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  padding: EdgeInsets.only(left: 12, right: 12, top: 8),
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.0306,
+                      right: MediaQuery.of(context).size.width * 0.0306,
+                      top: MediaQuery.of(context).size.width * 0.0204),
                   child: Text(
                     contest?.contestName ?? '-',
                     style: AppStyles.tsSecondaryMedium14,
@@ -82,7 +85,8 @@ class CompletedContestCard extends GetView<ContestController> {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: EdgeInsets.only(
+                        right: MediaQuery.of(context).size.width * 0.0306),
                     child: Icon(
                       Icons.info,
                       size: 20.0,
@@ -94,7 +98,8 @@ class CompletedContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.featured == true,
                 child: Container(
-                  padding: EdgeInsets.all(18),
+                  padding: EdgeInsets.all(
+                      MediaQuery.of(context).size.width * 0.0408),
                   foregroundDecoration: CommonTriangleCard(
                     badgeColor: AppColors.success,
                     badgeSize: 62,
@@ -109,13 +114,16 @@ class CompletedContestCard extends GetView<ContestController> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.0204),
           child: Row(
             children: [
               Visibility(
                 visible: contest?.isNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0102,
+                      vertical: MediaQuery.of(context).size.width * 0.0051),
                   child: Text(
                     "Nifty",
                     style: AppStyles.tsGreyMedium12,
@@ -125,7 +133,9 @@ class CompletedContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.isBankNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0102,
+                      vertical: MediaQuery.of(context).size.width * 0.0051),
                   child: Text(
                     "Bank Nifty",
                     style: AppStyles.tsGreyMedium12,
@@ -135,7 +145,9 @@ class CompletedContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.isFinNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0102,
+                      vertical: MediaQuery.of(context).size.width * 0.0051),
                   child: Text(
                     "Finnifty",
                     style: AppStyles.tsGreyMedium12,
@@ -143,7 +155,9 @@ class CompletedContestCard extends GetView<ContestController> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.0102,
+                    vertical: MediaQuery.of(context).size.width * 0.0051),
                 child: Text(
                   contest?.contestExpiry ?? '',
                   style: AppStyles.tsGreyMedium12,
@@ -152,11 +166,13 @@ class CompletedContestCard extends GetView<ContestController> {
             ],
           ),
         ),
-        SizedBox(height: 2),
+        SizedBox(height: MediaQuery.of(context).size.width * 0.0051),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(padding: EdgeInsets.only(left: 3)),
+            Padding(
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.0102)),
             Image.asset(
               AppImages.contestTrophy,
               width: 30,
@@ -213,7 +229,7 @@ class CompletedContestCard extends GetView<ContestController> {
             )
           ],
         ),
-        SizedBox(height: 4),
+        SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
@@ -226,7 +242,7 @@ class CompletedContestCard extends GetView<ContestController> {
                     style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
                   SizedBox(
-                    width: 2,
+                    width: MediaQuery.of(context).size.width * 0.0051,
                   ),
                   Text(
                     FormatHelper.formatDateTimeWithoutYearToIST(
@@ -245,7 +261,7 @@ class CompletedContestCard extends GetView<ContestController> {
                     style: Theme.of(context).textTheme.tsGreyMedium12,
                   ),
                   SizedBox(
-                    width: 2,
+                    width: MediaQuery.of(context).size.width * 0.0051,
                   ),
                   Text(
                     FormatHelper.formatDateTimeWithoutYearToIST(
@@ -261,10 +277,11 @@ class CompletedContestCard extends GetView<ContestController> {
           ),
         ),
         SizedBox(
-          height: 4,
+          height: MediaQuery.of(context).size.width * 0.0102,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.0306),
           child: Column(
             children: [
               Row(
@@ -277,7 +294,8 @@ class CompletedContestCard extends GetView<ContestController> {
                         'Virtual Margin',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0051),
                       Text(
                         FormatHelper.formatNumbers(
                           completedContestPnl?.portfolioValue,
@@ -307,7 +325,8 @@ class CompletedContestCard extends GetView<ContestController> {
                         'Entry Fee',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0051),
                       Text(
                         contest?.entryFee == 0
                             ? 'Free'
@@ -327,7 +346,7 @@ class CompletedContestCard extends GetView<ContestController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -339,7 +358,7 @@ class CompletedContestCard extends GetView<ContestController> {
                           ),
                           // SizedBox(width: 2),
                           SizedBox(
-                            width: 2,
+                            width: MediaQuery.of(context).size.width * 0.0051,
                           ),
                           Text(
                             (completedContestPnl?.npnl ?? 0) > 0
@@ -358,7 +377,9 @@ class CompletedContestCard extends GetView<ContestController> {
                       ),
                       if (contest?.rewardType != "Goodies")
                         Container(
-                          margin: EdgeInsets.only(right: 20),
+                          margin: EdgeInsets.only(
+                              right:
+                                  MediaQuery.of(context).size.width * 0.0510),
                           child: Row(
                             children: [
                               Text(
@@ -367,7 +388,8 @@ class CompletedContestCard extends GetView<ContestController> {
                               ),
                               // SizedBox(width: 2),
                               SizedBox(
-                                width: 2,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0051,
                               ),
                               Text(
                                 completedContestPnl?.rank?.toString() ?? '',
@@ -390,7 +412,8 @@ class CompletedContestCard extends GetView<ContestController> {
                               ),
                               // SizedBox(width: 2),
                               SizedBox(
-                                width: 2,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0051,
                               ),
                               Text(
                                 completedContestPnl?.rank?.toString() ?? '',
@@ -410,7 +433,7 @@ class CompletedContestCard extends GetView<ContestController> {
                               style: Theme.of(context).textTheme.tsGreyMedium12,
                             ),
                             SizedBox(
-                              width: 2,
+                              width: MediaQuery.of(context).size.width * 0.0051,
                             ),
                             Text(
                               FormatHelper.formatNumbers(
@@ -427,7 +450,7 @@ class CompletedContestCard extends GetView<ContestController> {
                         ),
                     ],
                   ),
-                  SizedBox(height: 4),
+                  SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -443,7 +466,7 @@ class CompletedContestCard extends GetView<ContestController> {
                               style: Theme.of(context).textTheme.tsGreyMedium12,
                             ),
                             SizedBox(
-                              width: 2,
+                              width: MediaQuery.of(context).size.width * 0.0051,
                             ),
                             Text(
                               getContestReward(),
@@ -462,7 +485,7 @@ class CompletedContestCard extends GetView<ContestController> {
                               style: Theme.of(context).textTheme.tsGreyMedium12,
                             ),
                             SizedBox(
-                              width: 2,
+                              width: MediaQuery.of(context).size.width * 0.0051,
                             ),
                             Text(
                               FormatHelper.formatNumbers(
@@ -491,7 +514,7 @@ class CompletedContestCard extends GetView<ContestController> {
                             ),
                             // SizedBox(width: 2),
                             SizedBox(
-                              width: 2,
+                              width: MediaQuery.of(context).size.width * 0.0051,
                             ),
                             Text(
                               "${controller.herocashadd(contest, controller.userDetailsData.sId.toString()).toStringAsFixed(1)}",
@@ -511,7 +534,7 @@ class CompletedContestCard extends GetView<ContestController> {
                             ),
                             // SizedBox(width: 2),
                             SizedBox(
-                              width: 2,
+                              width: MediaQuery.of(context).size.width * 0.0051,
                             ),
                             Text(
                               FormatHelper.formatNumbers(
@@ -537,7 +560,7 @@ class CompletedContestCard extends GetView<ContestController> {
 
                   ///hrhrhr
                   ///hrhhr
-                  SizedBox(height: 4),
+                  SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
                 ],
               ),
             ],

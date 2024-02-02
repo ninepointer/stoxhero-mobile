@@ -41,6 +41,9 @@ class _ViewCardState extends State<ViewCard> {
         child: Column(
           children: [
             CommonCard(
+              margin: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.0306,
+                  vertical: MediaQuery.of(context).size.width * 0.0204),
               onTap: () => setState(() => isExpanded = !isExpanded),
               children: [
                 Row(
@@ -115,6 +118,9 @@ class _ViewCardState extends State<ViewCard> {
             ),
             CommonCard(
               padding: EdgeInsets.zero,
+              margin: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.0306,
+                  vertical: MediaQuery.of(context).size.width * 0.0204),
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
