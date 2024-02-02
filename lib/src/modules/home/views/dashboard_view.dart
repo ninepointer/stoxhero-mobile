@@ -574,166 +574,128 @@ class _DashboardViewState extends State<DashboardView> {
                     margin: EdgeInsets.only(bottom: 4, top: 4),
                     padding: EdgeInsets.only(left: 15, top: 0),
                   ),
-
-                  CommonCard(
-                    // margin: EdgeInsets.all(16).copyWith(
-                    //   bottom: 0,
-                    //   top: 8,
-                    // ),
-
-                    // margin: EdgeInsets.only(
-                    //     left: 10, right: 10, top: 10, bottom: 6),
-                    padding: EdgeInsets.all(20),
-                    children: [
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Stack(
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Colors.black.withOpacity(.25),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: ClipOval(
-                                        child:
-                                            // leaderboard?.profilePic == null ||
-                                            //         leaderboard!.profilePic!.isEmpty
-                                            // ?
-                                            Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Image.asset(
-                                        // Get.isDarkMode
-                                        // ? AppImages.darkAppLogo
-                                        AppImages.lightAppLogo,
-                                        width: 70,
-                                        height: 70,
-                                      ),
-                                    )
-                                        //     : Image.network(
-                                        //   leaderboard?.profilePic ?? '',
-                                        //   width: 48,
-                                        //   height: 48,
-                                        //   errorBuilder: (context, error, stackTrace) {
-                                        //     return Padding(
-                                        //       padding: EdgeInsets.all(2),
-                                        //       child: Image.asset(
-                                        //         Get.isDarkMode
-                                        //             ? AppImages.darkAppLogo
-                                        //             : AppImages.lightAppLogo,
-                                        //         width: 48,
-                                        //         height: 48,
-                                        //       ),
-                                        //     );
-                                        //   },
-                                        // ),
-                                        ),
-                                  ),
-                                  Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                      height: 20,
-                                      width: 20,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.primary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Align(
-                                        child: Text(
-                                          // index.toString(),
-                                          "1",
-                                          style: AppStyles.tsWhiteMedium10,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black.withOpacity(.25),
+                                  width: 1,
+                                ),
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                              child: ClipOval(
+                                child: Image.asset(
+                                  AppImages.lightAppLogo,
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                height: 18,
+                                width: 18,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "1",
+                                    style: AppStyles.tsWhiteMedium10,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  // 'TenX Advance - 20 Trading Days Plan',
-                                  'Rahul Kumar Gupta',
-                                  style: AppStyles.tsGreyMedium16
-                                  // .copyWith(color: AppColors.lightGreen),
-                                  ),
-                            ],
-                          ),
-                          SizedBox(height: 2),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('TenX Advance - 20 Trading Days Plan',
-                                  style: AppStyles.tsGreyRegular12
-                                  // .copyWith(color: AppColors.lightGreen),
-                                  ),
-                            ],
-                          ),
-                          SizedBox(height: 12),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Date',
-                                    style: AppStyles.tsGreyMedium12,
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    // '${FormatHelper.formatNumbers(
-                                    //   leaderboard?.subscriptions,
-                                    //   showSymbol: false,
-                                    //   decimal: 0,
-                                    // )}',
-                                    "01 Feb 2024",
-                                    style:
-                                        Theme.of(context).textTheme.tsMedium12,
-                                  ),
-                                ],
+                                'Rahul Kumar Gupta',
+                                style: AppStyles.tsGreyMedium16,
                               ),
-                              // SizedBox(
-                              //   width: 30,
-                              // ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                              SizedBox(height: 4),
+                              Text(
+                                'TenX Advance - 20 Trading Days Plan',
+                                style: AppStyles.tsGreyRegular12,
+                              ),
+                              SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Reward',
-                                    style: AppStyles.tsGreyMedium12,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Date',
+                                        style: AppStyles.tsGreyMedium12,
+                                      ),
+                                      SizedBox(height: 2),
+                                      Text(
+                                        "01 Feb 2024",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsMedium12,
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    '${FormatHelper.formatNumbers(
-                                      1000,
-                                      decimal: 0,
-                                    )}',
-                                    style:
-                                        Theme.of(context).textTheme.tsMedium12,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Reward',
+                                        style: AppStyles.tsGreyMedium12,
+                                      ),
+                                      SizedBox(height: 2),
+                                      Text(
+                                        '${FormatHelper.formatNumbers(
+                                          1000,
+                                          decimal: 0,
+                                        )}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsMedium12,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
 
                   CommonTile(
