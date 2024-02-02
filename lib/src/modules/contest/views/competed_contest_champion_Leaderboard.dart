@@ -52,7 +52,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
       width: cardWidth,
 
       child: CommonCard(
-        margin: EdgeInsets.only(top: 8, right: 8, left: 12, bottom: 8),
+        margin: EdgeInsets.only(right: 16),
         padding: EdgeInsets.all(8.0),
         children: [
           Row(

@@ -16,7 +16,7 @@ class CollegeContestCard extends GetView<CollegeContestController> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.only(left: 12, right: 12, top: 8),
+      margin: EdgeInsets.only(left: 0, right: 16, top: 0),
       padding: EdgeInsets.only(top: 0),
       children: [
         Column(

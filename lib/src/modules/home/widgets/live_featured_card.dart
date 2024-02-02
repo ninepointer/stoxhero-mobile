@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/modules/home/widgets/featured_reward_table_bottom_sheet.dart';
-
 import '../../../app/app.dart';
 
 class LiveFeaturedCard extends GetView<ContestController> {
   final LiveFeatured? liveFeatured;
   final String userId;
+  final ContestController contestController;
   const LiveFeaturedCard({
     Key? key,
     this.liveFeatured,
     required this.userId,
+    required this.contestController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.only(left: 12, right: 12, top: 8),
-      padding: EdgeInsets.only(top: 0, right: 0),
+      margin: contestController.liveFeaturedContest.length == 1
+          ? EdgeInsets.zero
+          : EdgeInsets.only(left: 0, right: 16, top: 0),
+      padding: EdgeInsets.zero,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +29,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 16, right: 13, bottom: 16, top: 8),
+                      left: 8, right: 0, bottom: 8, top: 8),
                   child: Row(
                     children: [
                       Container(
@@ -43,13 +46,15 @@ class LiveFeaturedCard extends GetView<ContestController> {
                           height: 25,
                         ),
                       ),
-                      SizedBox(width: 8),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.0204,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             '${liveFeatured?.contestName}',
-                            style: Theme.of(context).textTheme.tsRegular14,
+                            style: AppStyles.tsSecondaryMedium14,
                           ),
                           SizedBox(height: 2),
                           GestureDetector(
@@ -71,6 +76,10 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.1224,
                                           width: controller.liveFeaturedContest
                                                       .length ==
                                                   1
@@ -82,7 +91,10 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                                           .size
                                                           .width *
                                                       0.7 -
-                                                  55,
+                                                  MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.1403,
                                           child: Text.rich(
                                             TextSpan(
                                               text:
@@ -104,17 +116,6 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                             ),
                                           ),
                                         ),
-                                        // Text(
-                                        //   "",
-                                        //   style: Theme.of(context)
-                                        //       .textTheme
-                                        //       .tsGreyRegular12
-                                        //       .copyWith(
-                                        //         color: AppColors.primary,
-                                        //         decoration:
-                                        //             TextDecoration.underline,
-                                        //       ),
-                                        // ),
                                       ],
                                     )
                                   else
@@ -160,10 +161,10 @@ class LiveFeaturedCard extends GetView<ContestController> {
                 Visibility(
                   visible: liveFeatured?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 45),
+                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 63),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
-                      badgeSize: 62,
+                      badgeSize: 68,
                       textSpan: TextSpan(
                         text: 'Featured',
                         style: AppStyles.tsWhiteMedium12,

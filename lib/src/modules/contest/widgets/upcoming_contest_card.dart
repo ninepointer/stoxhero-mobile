@@ -108,14 +108,16 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            width: double.infinity,
+            width: MediaQuery.of(context).size.width,
             alignment: Alignment.center,
             child: Row(
               children: [
                 Expanded(
                   child: Padding(
-                    // padding: EdgeInsets.symmetric(horizontal: 12),
-                    padding: EdgeInsets.only(left: 12, right: 12, top: 8),
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.031,
+                        right: MediaQuery.of(context).size.width * 0.031,
+                        top: MediaQuery.of(context).size.width * 0.0204),
                     child: Text(
                       widget.contest?.contestName ?? '-',
                       style: AppStyles.tsSecondaryMedium14,
@@ -123,7 +125,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                   ),
                 ),
                 Container(
-                  height: 15, // Adjust the height as needed
+                  height: 15,
                   child: InkWell(
                     onTap: () {
                       BottomSheetHelper.openBottomSheet(
@@ -134,10 +136,13 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                       );
                     },
                     child: Container(
-                      // padding: EdgeInsets.only(right: 25),
                       padding: widget.contest?.featured == true
-                          ? const EdgeInsets.only(right: 25)
-                          : const EdgeInsets.only(right: 5),
+                          ? EdgeInsets.only(
+                              right:
+                                  MediaQuery.of(context).size.width * 0.06337)
+                          : EdgeInsets.only(
+                              right:
+                                  MediaQuery.of(context).size.width * 0.0127),
                       child: Icon(
                         Icons.info,
                         size: 20.0,
@@ -149,7 +154,8 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 Visibility(
                   visible: widget.contest?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(
+                        MediaQuery.of(context).size.width * 0.0306),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
                       badgeSize: 55,
@@ -164,13 +170,16 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.0204),
             child: Row(
               children: [
                 Visibility(
                   visible: widget.contest?.isNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0102,
+                        vertical: MediaQuery.of(context).size.width * 0.0051),
                     child: Text(
                       'Nifty',
                       style: AppStyles.tsGreyMedium12,
@@ -181,7 +190,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 Visibility(
                   visible: widget.contest?.isBankNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0102,
+                        vertical: MediaQuery.of(context).size.width * 0.0051),
                     child: Text(
                       'Bank Nifty',
                       style: AppStyles.tsGreyMedium12,
@@ -192,7 +203,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 Visibility(
                   visible: widget.contest?.isFinNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0102,
+                        vertical: MediaQuery.of(context).size.width * 0.0051),
                     child: Text(
                       'FinNifty',
                       style: AppStyles.tsGreyMedium12,
@@ -201,7 +214,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 ),
                 // SizedBox(width: 4),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0102,
+                      vertical: 0),
                   child: Text(
                     widget.contest?.contestExpiry ?? '',
                     style: AppStyles.tsGreyMedium12,
@@ -210,65 +225,107 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
               ],
             ),
           ),
-          SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(padding: EdgeInsets.only(left: 2)),
-              Image.asset(
-                AppImages.contestTrophy,
-                width: 30,
-                height: 20,
-              ),
-              GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 1),
-                  child: Row(children: [
-                    if (widget.contest?.payoutType == 'Reward') ...[
-                      if (widget.contest?.rewardType == "Goodies")
-                        Container(
-                          width: controller.upComingContestList.length == 1
-                              ? MediaQuery.of(context).size.width * 0.6
-                              : MediaQuery.of(context).size.width * 0.65 - 60,
-                          child: Text(
-                            "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}",
-                            style: Theme.of(context).textTheme.tsGreyRegular12,
-                            textAlign: TextAlign.center,
+          SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
+          Container(
+            height: MediaQuery.of(context).size.width * 0.08928,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Padding(padding: EdgeInsets.only(left: 2)),
+
+                GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 1),
+                    child: Row(children: [
+                      if (widget.contest?.payoutType == 'Reward') ...[
+                        if (widget.contest?.rewardType == "Goodies")
+                          Container(
+                            width: controller.liveContestList.length == 1
+                                ? MediaQuery.of(context).size.width * 0.9
+                                : MediaQuery.of(context).size.width * 0.9 - 55,
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  AppImages.contestTrophy,
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0765,
+                                  height: MediaQuery.of(context).size.width *
+                                      0.0510,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .tsGreyRegular12,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          Row(
+                            children: [
+                              Image.asset(
+                                AppImages.contestTrophy,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0765,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.0510,
+                              ),
+                              Text(
+                                'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}',
+                                style:
+                                    Theme.of(context).textTheme.tsGreyRegular12,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )
+                      ],
+                      if (widget.contest?.payoutType != 'Reward') ...[
+                        if (widget.contest?.payoutCapPercentage != null &&
+                            widget.contest?.payoutCapPercentage != 0)
+                          Row(
+                            children: [
+                              Image.asset(
+                                AppImages.contestTrophy,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0765,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.0510,
+                              ),
+                              Text(
+                                  '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L(upto ${controller.getPaidCapAmount(
+                                    widget.contest?.entryFee == 0
+                                        ? widget.contest?.portfolio
+                                                ?.portfolioValue ??
+                                            0
+                                        : widget.contest?.entryFee ?? 0,
+                                    widget.contest?.payoutCapPercentage ?? 0,
+                                  )})',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .tsGreyRegular12),
+                            ],
                           ),
-                        )
-                      else
-                        Text(
-                          'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}',
-                          style: Theme.of(context).textTheme.tsGreyRegular12,
-                          textAlign: TextAlign.center,
-                        )
-                    ],
-                    if (widget.contest?.payoutType != 'Reward') ...[
-                      if (widget.contest?.payoutCapPercentage != null &&
-                          widget.contest?.payoutCapPercentage != 0)
-                        Text(
-                            '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L(upto ${controller.getPaidCapAmount(
-                              widget.contest?.entryFee == 0
-                                  ? widget.contest?.portfolio?.portfolioValue ??
-                                      0
-                                  : widget.contest?.entryFee ?? 0,
-                              widget.contest?.payoutCapPercentage ?? 0,
-                            )})',
-                            style: Theme.of(context).textTheme.tsGreyRegular12),
-                      // SizedBox(
-                      //   width: 20,
-                      // ),
-                    ]
-                  ]),
-                ),
-              )
-            ],
+                        // SizedBox(
+                        //   width: 20,
+                        // ),
+                      ]
+                    ]),
+                  ),
+                )
+              ],
+            ),
           ),
-          SizedBox(height: 4),
+          SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
           // Divider(thickness: 1, height: 0),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.0306,
+            ),
             child: Column(
               children: [
                 Row(
@@ -325,7 +382,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -363,7 +420,9 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                     ),
                   ],
                 ),
-                SizedBox(height: 6),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.0204,
+                ),
               ],
             ),
           ),

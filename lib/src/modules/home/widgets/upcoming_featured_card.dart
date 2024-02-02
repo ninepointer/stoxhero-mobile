@@ -8,6 +8,7 @@ import '../../../app/app.dart';
 class UpcomingFeaturedCard extends StatefulWidget {
   final UpcomingFeatured? upcomingFeatured;
   final String userId;
+
   const UpcomingFeaturedCard({
     Key? key,
     this.upcomingFeatured,
@@ -76,11 +77,10 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.only(left: 8, right: 8, top: 8),
-      padding: EdgeInsets.only(
-        top: 0,
-        right: 0,
-      ),
+      margin: controller.upcomingFeaturedContest.length == 1
+          ? EdgeInsets.zero
+          : EdgeInsets.only(left: 0, right: 16, top: 0),
+      padding: EdgeInsets.zero,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +90,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 16, right: 13, bottom: 16, top: 8),
+                      left: 8, right: 0, bottom: 16, top: 8),
                   child: Row(
                     children: [
                       Container(
@@ -107,44 +107,17 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                           height: 25,
                         ),
                       ),
-                      SizedBox(width: 8),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.0204,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             '${widget.upcomingFeatured?.contestName}',
-                            style: Theme.of(context).textTheme.tsRegular14,
+                            style: AppStyles.tsSecondaryMedium14,
                           ),
                           SizedBox(height: 2),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: [
-                          //     Text(
-                          //       '${widget.upcomingFeatured?.payoutPercentage != null ? widget.upcomingFeatured?.payoutPercentage : '0'}% of the Net P&L',
-                          //       style: Theme.of(context).textTheme.tsMedium12,
-                          //     ),
-                          //     if (widget.upcomingFeatured
-                          //                 ?.payoutCapPercentage !=
-                          //             null &&
-                          //         widget.upcomingFeatured
-                          //                 ?.payoutCapPercentage !=
-                          //             0)
-                          //       Text(
-                          //         ' (Upto ${controller.getPaidCapAmount(
-                          //           widget.upcomingFeatured?.entryFee == 0
-                          //               ? widget.upcomingFeatured?.portfolio
-                          //                       ?.portfolioValue ??
-                          //                   0
-                          //               : widget.upcomingFeatured?.entryFee ??
-                          //                   0,
-                          //           widget.upcomingFeatured
-                          //                   ?.payoutCapPercentage ??
-                          //               0,
-                          //         )})',
-                          //         style: Theme.of(context).textTheme.tsMedium10,
-                          //       ),
-                          //   ],
-                          // ),
                           GestureDetector(
                             onTap: () {
                               if (widget.upcomingFeatured?.payoutType ==
@@ -167,6 +140,10 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.1224,
                                           width: controller
                                                       .upcomingFeaturedContest
                                                       .length ==
@@ -179,7 +156,10 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                                           .size
                                                           .width *
                                                       0.7 -
-                                                  60,
+                                                  MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.1403,
                                           child: Text.rich(
                                             TextSpan(
                                               text:
@@ -254,10 +234,10 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                 Visibility(
                   visible: widget.upcomingFeatured?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 45),
+                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 72),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
-                      badgeSize: 62,
+                      badgeSize: 68,
                       textSpan: TextSpan(
                         text: 'Featured',
                         style: AppStyles.tsWhiteMedium12,
