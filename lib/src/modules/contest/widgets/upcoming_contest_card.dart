@@ -245,6 +245,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                                 ? MediaQuery.of(context).size.width * 0.9
                                 : MediaQuery.of(context).size.width * 0.9 - 55,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
                                   AppImages.contestTrophy,
@@ -267,6 +268,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                           )
                         else
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.asset(
                                 AppImages.contestTrophy,
@@ -288,6 +290,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         if (widget.contest?.payoutCapPercentage != null &&
                             widget.contest?.payoutCapPercentage != 0)
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.asset(
                                 AppImages.contestTrophy,
