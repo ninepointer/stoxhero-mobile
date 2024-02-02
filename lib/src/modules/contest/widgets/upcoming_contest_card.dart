@@ -331,54 +331,57 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Virtual Margin',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          FormatHelper.formatNumbers(
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Virtual Margin',
+                            style: AppStyles.tsGreyMedium12,
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            FormatHelper.formatNumbers(
                               widget.contest?.portfolio?.portfolioValue,
-                              decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
+                              decimal: 0,
+                            ),
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                        ],
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
-                          // style: Theme.of(context).textTheme.tsMedium12,
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
+                    Expanded(
+                      child: Text(
+                        '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
                         ),
-                      ],
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Entry Fee',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          widget.contest?.entryFee == 0
-                              ? 'Free'
-                              : FormatHelper.formatNumbers(
-                                  widget.contest?.entryFee,
-                                  decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                          textAlign: TextAlign.end,
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Entry Fee',
+                            style: AppStyles.tsGreyMedium12,
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            widget.contest?.entryFee == 0
+                                ? 'Free'
+                                : FormatHelper.formatNumbers(
+                                    widget.contest?.entryFee,
+                                    decimal: 0,
+                                  ),
+                            style: Theme.of(context).textTheme.tsMedium12,
+                            textAlign: TextAlign.end,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -386,37 +389,53 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Starts:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestStartTime)}',
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Rubik'),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Text(
+                            'Starts:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestStartTime)}',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Rubik'),
+                          ),
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          'Spots left:',
-                          style: Theme.of(context).textTheme.tsRegular12,
-                        ),
-                        Text(
-                          '${controller.calculateSeatsLeft(
-                                widget.contest?.maxParticipants ?? 0,
-                                widget.contest?.participants?.length ?? 0,
-                              ).toString()}',
-                          style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Rubik'),
-                        )
-                      ],
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Spots left:',
+                            style: Theme.of(context).textTheme.tsRegular12,
+                          ),
+                          Text(
+                            '${controller.calculateSeatsLeft(
+                                  widget.contest?.maxParticipants ?? 0,
+                                  widget.contest?.participants?.length ?? 0,
+                                ).toString()}',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Rubik'),
+                          )
+                        ],
+                      ),
                     ),
-                    Text(
-                      'Ends:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestEndTime)}',
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Rubik'),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Ends:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestEndTime)}',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Rubik'),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

@@ -287,56 +287,66 @@ class CompletedContestCard extends GetView<ContestController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Virtual Margin',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.0051),
-                      Text(
-                        FormatHelper.formatNumbers(
-                          completedContestPnl?.portfolioValue,
-                          decimal: 0,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Virtual Margin',
+                          style: AppStyles.tsGreyMedium12,
                         ),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.0051),
+                        Text(
+                          FormatHelper.formatNumbers(
+                            completedContestPnl?.portfolioValue,
+                            decimal: 0,
+                          ),
+                          style: Theme.of(context).textTheme.tsMedium12,
+                        ),
+                      ],
+                    ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Completed',
-                        // style: Theme.of(context).textTheme.tsMedium12,
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.0612),
+                          child: Text(
+                            'Completed',
+                            // style: Theme.of(context).textTheme.tsMedium12,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Entry Fee',
-                        style: AppStyles.tsGreyMedium12,
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.0051),
-                      Text(
-                        contest?.entryFee == 0
-                            ? 'Free'
-                            : FormatHelper.formatNumbers(
-                                contest?.entryFee,
-                                decimal: 0,
-                              ),
-                        style: Theme.of(context).textTheme.tsMedium12,
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Entry Fee',
+                          style: AppStyles.tsGreyMedium12,
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.0051),
+                        Text(
+                          contest?.entryFee == 0
+                              ? 'Free'
+                              : FormatHelper.formatNumbers(
+                                  contest?.entryFee,
+                                  decimal: 0,
+                                ),
+                          style: Theme.of(context).textTheme.tsMedium12,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
