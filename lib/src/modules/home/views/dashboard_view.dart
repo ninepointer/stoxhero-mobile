@@ -449,7 +449,7 @@ class _DashboardViewState extends State<DashboardView> {
                                                     MediaQuery.of(context)
                                                             .size
                                                             .width *
-                                                        0.1403,
+                                                        0.13200,
                                             child: UpComingContestCard(
                                               userId: userId,
                                               contest: contest,

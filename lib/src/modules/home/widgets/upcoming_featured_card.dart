@@ -92,6 +92,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                   padding: const EdgeInsets.only(
                       left: 8, right: 0, bottom: 16, top: 8),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: 35,
@@ -184,44 +185,64 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                       ],
                                     )
                                   else
-                                    Text(
-                                      'Rewards worth ${FormatHelper.formatNumbers(controller.calculateTotalReward(widget.upcomingFeatured?.rewards), decimal: 0)},Click to know more',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .tsGreyRegular12,
-                                      textAlign: TextAlign.left,
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.1224,
+                                      child: Text(
+                                        'Rewards worth ${FormatHelper.formatNumbers(controller.calculateTotalReward(widget.upcomingFeatured?.rewards), decimal: 0)},Click to know more',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsGreyRegular12,
+                                        textAlign: TextAlign.left,
+                                      ),
                                     )
                                 ],
                                 if (widget.upcomingFeatured?.payoutType !=
                                     'Reward') ...[
-                                  Text(
-                                    '${widget.upcomingFeatured?.payoutPercentage != null ? widget.upcomingFeatured?.payoutPercentage : '0'}% of the Net P&L',
-                                    style:
-                                        Theme.of(context).textTheme.tsMedium10,
-                                  ),
-                                  if (widget.upcomingFeatured
-                                              ?.payoutCapPercentage !=
-                                          null &&
-                                      widget.upcomingFeatured
-                                              ?.payoutCapPercentage !=
-                                          0)
-                                    Text(
-                                      ' (Upto ${controller.getPaidCapAmount(
-                                        widget.upcomingFeatured?.entryFee == 0
-                                            ? widget.upcomingFeatured?.portfolio
-                                                    ?.portfolioValue ??
-                                                0
-                                            : widget.upcomingFeatured
-                                                    ?.entryFee ??
-                                                0,
-                                        widget.upcomingFeatured
-                                                ?.payoutCapPercentage ??
-                                            0,
-                                      )})',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .tsMedium10,
+                                  Container(
+                                    height: MediaQuery.of(context).size.width *
+                                        0.1224,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${widget.upcomingFeatured?.payoutPercentage != null ? widget.upcomingFeatured?.payoutPercentage : '0'}% of the Net P&L',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12,
+                                        ),
+                                        if (widget.upcomingFeatured
+                                                    ?.payoutCapPercentage !=
+                                                null &&
+                                            widget.upcomingFeatured
+                                                    ?.payoutCapPercentage !=
+                                                0)
+                                          Text(
+                                            ' (Upto ${controller.getPaidCapAmount(
+                                              widget.upcomingFeatured
+                                                          ?.entryFee ==
+                                                      0
+                                                  ? widget
+                                                          .upcomingFeatured
+                                                          ?.portfolio
+                                                          ?.portfolioValue ??
+                                                      0
+                                                  : widget.upcomingFeatured
+                                                          ?.entryFee ??
+                                                      0,
+                                              widget.upcomingFeatured
+                                                      ?.payoutCapPercentage ??
+                                                  0,
+                                            )})',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .tsGreyRegular12,
+                                          ),
+                                      ],
                                     ),
+                                  )
                                 ]
                               ],
                             ),
@@ -234,7 +255,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                 Visibility(
                   visible: widget.upcomingFeatured?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 72),
+                    padding: EdgeInsets.only(left: 0, bottom: 18, top: 63),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
                       badgeSize: 68,

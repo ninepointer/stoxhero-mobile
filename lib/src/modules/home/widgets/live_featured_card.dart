@@ -31,6 +31,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                   padding: const EdgeInsets.only(
                       left: 8, right: 0, bottom: 8, top: 8),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         width: 35,
@@ -119,36 +120,55 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                       ],
                                     )
                                   else
-                                    Text(
-                                      'Rewards worth ${FormatHelper.formatNumbers(controller.calculateTotalReward(liveFeatured?.rewards), decimal: 0)},Click to know more',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .tsGreyRegular12,
-                                      textAlign: TextAlign.left,
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.1224,
+                                      child: Text(
+                                        'Rewards worth ${FormatHelper.formatNumbers(controller.calculateTotalReward(liveFeatured?.rewards), decimal: 0)},Click to know more',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsGreyRegular12,
+                                        textAlign: TextAlign.left,
+                                      ),
                                     )
                                 ],
                                 if (liveFeatured?.payoutType != 'Reward') ...[
-                                  Text(
-                                    '${liveFeatured?.payoutPercentage != null ? liveFeatured?.payoutPercentage : '0'}% of the Net P&L',
-                                    style:
-                                        Theme.of(context).textTheme.tsMedium10,
-                                  ),
-                                  if (liveFeatured?.payoutCapPercentage !=
-                                          null &&
-                                      liveFeatured?.payoutCapPercentage != 0)
-                                    Text(
-                                      ' (Upto ${controller.getPaidCapAmount(
-                                        liveFeatured?.entryFee == 0
-                                            ? liveFeatured?.portfolio
-                                                    ?.portfolioValue ??
-                                                0
-                                            : liveFeatured?.entryFee ?? 0,
-                                        liveFeatured?.payoutCapPercentage ?? 0,
-                                      )})',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .tsMedium10,
+                                  Container(
+                                    height: MediaQuery.of(context).size.width *
+                                        0.1224,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${liveFeatured?.payoutPercentage != null ? liveFeatured?.payoutPercentage : '0'}% of the Net P&L',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .tsGreyRegular12,
+                                        ),
+                                        if (liveFeatured?.payoutCapPercentage !=
+                                                null &&
+                                            liveFeatured?.payoutCapPercentage !=
+                                                0)
+                                          Text(
+                                            ' (Upto ${controller.getPaidCapAmount(
+                                              liveFeatured?.entryFee == 0
+                                                  ? liveFeatured?.portfolio
+                                                          ?.portfolioValue ??
+                                                      0
+                                                  : liveFeatured?.entryFee ?? 0,
+                                              liveFeatured
+                                                      ?.payoutCapPercentage ??
+                                                  0,
+                                            )})',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .tsGreyRegular12,
+                                          ),
+                                      ],
                                     ),
+                                  )
                                 ]
                               ],
                             ),
@@ -161,7 +181,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                 Visibility(
                   visible: liveFeatured?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.only(left: 18, bottom: 18, top: 63),
+                    padding: EdgeInsets.only(left: 0, bottom: 18, top: 63),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
                       badgeSize: 68,
