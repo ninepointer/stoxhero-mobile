@@ -567,6 +567,9 @@ class _DashboardViewState extends State<DashboardView> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 6,
+                  ),
                   CommonTile(
                     label: 'TenX Leaderboard',
                     showSeeAllButton: true,
@@ -574,120 +577,182 @@ class _DashboardViewState extends State<DashboardView> {
                     margin: EdgeInsets.only(bottom: 4, top: 4),
                     padding: EdgeInsets.only(left: 15, top: 0),
                   ),
+
+                  SizedBox(
+                    height: 6,
+                  ),
                   Container(
-                    padding: EdgeInsets.all(12),
+                    margin: EdgeInsets.only(right: 24, left: 24),
+                    height: MediaQuery.of(context).size.width * 0.6377,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
+                          color: Colors.grey.withOpacity(0.1),
                           spreadRadius: 2,
-                          blurRadius: 5,
+                          blurRadius: 2,
                           offset: Offset(0, 3),
                         ),
                       ],
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    child: Stack(
                       children: [
-                        Stack(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.black.withOpacity(.25),
-                                  width: 1,
-                                ),
-                              ),
-                              child: ClipOval(
-                                child: Image.asset(
-                                  AppImages.lightAppLogo,
-                                  width: 60,
-                                  height: 60,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                        Positioned(
+                          top: 0,
+                          bottom: MediaQuery.of(context).size.width * 0.3826,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              // color: Color(0xFF818BF8),
+                              color: AppColors.lightGreen,
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(30)),
                             ),
-                            Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: Container(
-                                height: 18,
-                                width: 18,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    "1",
-                                    style: AppStyles.tsWhiteMedium10,
-                                    textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Positioned(
+                          top: MediaQuery.of(context).size.width * 0.2551,
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.vertical(
+                                  bottom: Radius.circular(30)),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              bottom:
+                                  MediaQuery.of(context).size.width * 0.1785),
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.2551,
+                                  height: MediaQuery.of(context).size.width *
+                                      0.2551,
+                                  decoration: BoxDecoration(
+                                    // color: Color(0xFFC7D2FF),
+                                    color: AppColors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.black.withOpacity(.25),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      AppImages.lightAppLogo,
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "1",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                        SizedBox(width: 12),
-                        Expanded(
+                        Positioned(
+                          bottom: MediaQuery.of(context).size.width * 0.102,
+                          left: MediaQuery.of(context).size.width * 0.0408,
+                          right: MediaQuery.of(context).size.width * 0.0408,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 'Rahul Kumar Gupta',
-                                style: AppStyles.tsGreyMedium16,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.lightGreen),
                               ),
-                              SizedBox(height: 4),
+                              SizedBox(
+                                  height: MediaQuery.of(context).size.width *
+                                      0.0102),
                               Text(
                                 'TenX Advance - 20 Trading Days Plan',
-                                style: AppStyles.tsGreyRegular12,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                ),
                               ),
-                              SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          bottom: MediaQuery.of(context).size.width * 0.2351,
+                          left: MediaQuery.of(context).size.width * 0.0306,
+                          right: MediaQuery.of(context).size.width * 0.0306,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Date',
-                                        style: AppStyles.tsGreyMedium12,
-                                      ),
-                                      SizedBox(height: 2),
-                                      Text(
-                                        "01 Feb 2024",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .tsMedium12,
-                                      ),
-                                    ],
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Subscribed',
+                                          style: AppStyles.tsBlackMedium14,
+                                        ),
+                                        SizedBox(height: 2),
+                                        Text("01 Feb 24",
+                                            style: AppStyles.tsGreyRegular14),
+                                      ],
+                                    ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Reward',
-                                        style: AppStyles.tsGreyMedium12,
-                                      ),
-                                      SizedBox(height: 2),
-                                      Text(
-                                        '${FormatHelper.formatNumbers(
-                                          1000,
-                                          decimal: 0,
-                                        )}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .tsMedium12,
-                                      ),
-                                    ],
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text('Reward',
+                                            style: AppStyles.tsBlackMedium14),
+                                        SizedBox(height: 2),
+                                        Text(
+                                            '${FormatHelper.formatNumbers(1000, decimal: 0)}',
+                                            style: AppStyles.tsBlackMedium14
+                                                .copyWith(
+                                                    color: AppColors.success)),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -696,6 +761,10 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                       ],
                     ),
+                  ),
+
+                  SizedBox(
+                    height: 12,
                   ),
 
                   CommonTile(
