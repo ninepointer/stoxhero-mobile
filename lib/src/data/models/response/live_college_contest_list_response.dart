@@ -55,6 +55,7 @@ class LiveCollegeContest {
   String? product;
   num? payoutCapPercentage;
   List<LiveCollegeRewards>? rewards;
+  String? rewardType;
   List<CollegeParticipants>? participants;
   String? createdOn;
   String? lastModifiedOn;
@@ -88,6 +89,7 @@ class LiveCollegeContest {
     this.product,
     this.payoutCapPercentage,
     this.rewards,
+    this.rewardType,
     this.participants,
     this.createdOn,
     this.lastModifiedOn,
@@ -101,10 +103,12 @@ class LiveCollegeContest {
     contestEndTime = json['contestEndTime'];
     description = json['description'];
     contestType = json['contestType'];
+
     currentLiveStatus = json['currentLiveStatus'];
     contestFor = json['contestFor'];
     collegeCode = json['collegeCode'];
     entryFee = json['entryFee'];
+    rewardType = json["rewardType"];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     payoutType = json['payoutType'];
@@ -152,6 +156,7 @@ class LiveCollegeContest {
     data['contestFor'] = this.contestFor;
     data['collegeCode'] = this.collegeCode;
     data['entryFee'] = this.entryFee;
+    data['rewardType'] = this.rewardType;
     data['payoutPercentage'] = this.payoutPercentage;
     data['featured'] = this.featured;
     data['payoutType'] = this.payoutType;

@@ -260,8 +260,24 @@ class _DashboardViewState extends State<DashboardView> {
                                       String userId =
                                           controller.userDetailsData.sId ?? '';
                                       return Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        width: contestController
+                                                    .featuredCollegeContest
+                                                    .length ==
+                                                1
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.0637
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.1403,
                                         child: CollegeContestCard(
                                           userId: userId,
                                           featuredCollegeContest: contest,

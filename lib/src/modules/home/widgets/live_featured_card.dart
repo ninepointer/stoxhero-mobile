@@ -80,7 +80,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.1224,
+                                              0.1024,
                                           width: controller.liveFeaturedContest
                                                       .length ==
                                                   1
@@ -123,7 +123,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                     Container(
                                       height:
                                           MediaQuery.of(context).size.width *
-                                              0.1224,
+                                              0.1024,
                                       child: Text(
                                         'Rewards worth ${FormatHelper.formatNumbers(controller.calculateTotalReward(liveFeatured?.rewards), decimal: 0)},Click to know more',
                                         style: Theme.of(context)
@@ -136,7 +136,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                                 if (liveFeatured?.payoutType != 'Reward') ...[
                                   Container(
                                     height: MediaQuery.of(context).size.width *
-                                        0.1224,
+                                        0.1024,
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -181,7 +181,10 @@ class LiveFeaturedCard extends GetView<ContestController> {
                 Visibility(
                   visible: liveFeatured?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.only(left: 0, bottom: 18, top: 63),
+                    padding: EdgeInsets.only(
+                        left: 0,
+                        bottom: MediaQuery.of(context).size.width * 0.0637,
+                        top: MediaQuery.of(context).size.width * 0.1607),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
                       badgeSize: 68,
@@ -233,7 +236,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
                 ],
               ),
             ),
-            SizedBox(height: 6),
+            SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
@@ -295,7 +298,7 @@ class LiveFeaturedCard extends GetView<ContestController> {
             )
           ],
         ),
-        SizedBox(height: 10),
+        SizedBox(height: MediaQuery.of(context).size.width * 0.0306),
         GestureDetector(
           onTap: () {
             controller.userDetails.value = AppStorage.getUserDetails();

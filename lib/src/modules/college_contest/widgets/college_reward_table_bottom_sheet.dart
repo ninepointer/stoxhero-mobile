@@ -19,7 +19,11 @@ class CollegeRewardTableBottomSheet extends GetView<CollegeContestController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 2,
+      height: (upcomingContest?.payoutType != "Reward" &&
+              liveContest?.payoutType != "Reward" &&
+              completedContest?.payoutType != "Reward")
+          ? MediaQuery.of(context).size.height / 2
+          : MediaQuery.of(context).size.height / 1.6,
       child: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(),
         child: Container(
@@ -149,7 +153,7 @@ class CollegeRewardTableBottomSheet extends GetView<CollegeContestController> {
               reward.rankStart == reward.rankEnd
                   ? '${reward.rankStart}'
                   : '${reward.rankStart}-${reward.rankEnd}',
-              style: Theme.of(context).textTheme.tsMedium12,
+              style: Theme.of(context).textTheme.tsMedium10,
             ),
           ),
         ),
@@ -158,8 +162,10 @@ class CollegeRewardTableBottomSheet extends GetView<CollegeContestController> {
             padding: EdgeInsets.symmetric(vertical: 12),
             alignment: Alignment.center,
             child: Text(
-              FormatHelper.formatNumbers(reward.prize, decimal: 0),
-              style: Theme.of(context).textTheme.tsMedium12,
+              reward.prize is num
+                  ? FormatHelper.formatNumbers(reward.prize, decimal: 0)
+                  : "${reward.prize}",
+              style: Theme.of(context).textTheme.tsMedium10,
             ),
           ),
         ),
