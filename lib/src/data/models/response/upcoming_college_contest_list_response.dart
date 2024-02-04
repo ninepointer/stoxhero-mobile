@@ -59,6 +59,7 @@ class UpComingCollegeContest {
   int? iV;
   String? payoutType;
   String? payoutPercentageType;
+  String? rewardType;
 
   UpComingCollegeContest(
       {this.id,
@@ -91,6 +92,7 @@ class UpComingCollegeContest {
       this.lastModifiedOn,
       this.iV,
       this.payoutType,
+      this.rewardType,
       this.payoutPercentageType});
 
   UpComingCollegeContest.fromJson(Map<String, dynamic> json) {
@@ -103,6 +105,7 @@ class UpComingCollegeContest {
     currentLiveStatus = json['currentLiveStatus'];
     contestFor = json['contestFor'];
     entryFee = json['entryFee'];
+    rewardType = json['rewardType'];
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     portfolio = json['portfolio'] != null
@@ -155,6 +158,7 @@ class UpComingCollegeContest {
     data['currentLiveStatus'] = this.currentLiveStatus;
     data['contestFor'] = this.contestFor;
     data['entryFee'] = this.entryFee;
+    data['rewardType'] = this.rewardType;
     data['payoutPercentage'] = this.payoutPercentage;
     data['featured'] = this.featured;
     if (this.portfolio != null) {

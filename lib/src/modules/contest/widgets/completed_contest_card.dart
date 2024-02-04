@@ -404,28 +404,25 @@ class CompletedContestCard extends GetView<ContestController> {
                           ),
                         )
                       else
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Rank: ',
-                                style: AppStyles.tsGreyMedium12,
-                              ),
-                              // SizedBox(width: 2),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.0051,
-                              ),
-                              Text(
-                                completedContestPnl?.rank?.toString() ?? '',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .tsMedium12
-                                    .copyWith(color: AppColors.success),
-                              ),
-                            ],
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Rank: ',
+                              style: AppStyles.tsGreyMedium12,
+                            ),
+                            // SizedBox(width: 2),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0051,
+                            ),
+                            Text(
+                              completedContestPnl?.rank?.toString() ?? '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .tsMedium12
+                                  .copyWith(color: AppColors.success),
+                            ),
+                          ],
                         ),
                       if (contest?.rewardType != "Goodies")
                         Expanded(

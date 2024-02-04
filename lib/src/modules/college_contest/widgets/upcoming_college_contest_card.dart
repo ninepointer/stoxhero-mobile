@@ -92,27 +92,57 @@ class _UpComingCollegeContestCardState
         padding: EdgeInsets.zero,
         children: [
           Container(
-            width: double.infinity,
+            width: MediaQuery.of(context).size.width,
             alignment: Alignment.center,
             child: Row(
               children: [
                 Expanded(
                   child: Padding(
-                    // padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    padding: EdgeInsets.only(left: 12, right: 12, top: 8),
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.031,
+                        right: MediaQuery.of(context).size.width * 0.031,
+                        top: MediaQuery.of(context).size.width * 0.0204),
                     child: Text(
                       widget.contest?.contestName ?? '-',
                       style: AppStyles.tsSecondaryMedium14,
                     ),
                   ),
                 ),
+                Container(
+                  height: 15,
+                  child: InkWell(
+                    onTap: () {
+                      BottomSheetHelper.openBottomSheet(
+                        context: context,
+                        child: CollegeRewardTableBottomSheet(
+                          upcomingContest: widget.contest,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: widget.contest?.featured == true
+                          ? EdgeInsets.only(
+                              right:
+                                  MediaQuery.of(context).size.width * 0.06337)
+                          : EdgeInsets.only(
+                              right:
+                                  MediaQuery.of(context).size.width * 0.0127),
+                      child: Icon(
+                        Icons.info,
+                        size: 20.0,
+                        color: Colors.grey, // Icon color
+                      ),
+                    ),
+                  ),
+                ),
                 Visibility(
                   visible: widget.contest?.featured == true,
                   child: Container(
-                    padding: EdgeInsets.all(18),
+                    padding: EdgeInsets.all(
+                        MediaQuery.of(context).size.width * 0.0306),
                     foregroundDecoration: CommonTriangleCard(
                       badgeColor: AppColors.success,
-                      badgeSize: 62,
+                      badgeSize: 55,
                       textSpan: TextSpan(
                         text: 'Featured',
                         style: AppStyles.tsWhiteMedium12,
@@ -120,69 +150,57 @@ class _UpComingCollegeContestCardState
                     ),
                   ),
                 ),
-                //                 Container(
-                //   height: 15, // Adjust the height as needed
-                //   child: InkWell(
-                //     onTap: () {
-                //       BottomSheetHelper.openBottomSheet(
-                //         context: context,
-                //         child: RewardTableBottomSheet(
-                //           upcomingContest: widget.contest,
-                //         ),
-                //       );
-                //     },
-                //     child: Container(
-                //       padding: EdgeInsets.only(right: 10),
-                //       child: Icon(
-                //         Icons.info,
-                //         size: 20.0,
-                //         color: Colors.grey, // Icon color
-                //       ),
-                //     ),
-                //   ),
-                // )
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.0204),
             child: Row(
               children: [
                 Visibility(
                   visible: widget.contest?.isNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0102,
+                        vertical: MediaQuery.of(context).size.width * 0.0051),
                     child: Text(
                       'Nifty',
                       style: AppStyles.tsGreyMedium12,
                     ),
                   ),
                 ),
-                SizedBox(width: 2),
+                // SizedBox(width: 2),
                 Visibility(
                   visible: widget.contest?.isBankNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0102,
+                        vertical: MediaQuery.of(context).size.width * 0.0051),
                     child: Text(
                       'Bank Nifty',
                       style: AppStyles.tsGreyMedium12,
                     ),
                   ),
                 ),
-                SizedBox(width: 2),
+                // SizedBox(width: 4),
                 Visibility(
                   visible: widget.contest?.isFinNifty == true,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0102,
+                        vertical: MediaQuery.of(context).size.width * 0.0051),
                     child: Text(
                       'FinNifty',
                       style: AppStyles.tsGreyMedium12,
                     ),
                   ),
                 ),
-                SizedBox(width: 2),
+                // SizedBox(width: 4),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0102,
+                      vertical: 0),
                   child: Text(
                     widget.contest?.contestExpiry ?? '',
                     style: AppStyles.tsGreyMedium12,
@@ -191,135 +209,226 @@ class _UpComingCollegeContestCardState
               ],
             ),
           ),
-          SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                AppImages.contestTrophy,
-                width: 30,
-                height: 20,
-              ),
-              GestureDetector(
-                child: Row(children: [
-                  Row(children: [
-                    Text(
-                      '${widget.contest?.payoutPercentage}% of the Net P&L',
-                      style: Theme.of(context).textTheme.tsGreyRegular12,
-                    ),
-                    if (widget.contest?.payoutCapPercentage != null)
-                      Text(
-                        ' (Upto ${controller.getPaidCapAmount(
-                          widget.contest?.entryFee == 0
-                              ? widget.contest?.portfolio?.portfolioValue ?? 0
-                              : widget.contest?.entryFee ?? 0,
-                          widget.contest?.payoutCapPercentage ?? 0,
-                        )})',
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
-                      ),
-                  ])
-                ]),
-              )
-            ],
+          SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
+          Container(
+            height: MediaQuery.of(context).size.width * 0.08928,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Padding(padding: EdgeInsets.only(left: 2)),
+
+                GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 1),
+                    child: Row(children: [
+                      if (widget.contest?.payoutType == 'Reward') ...[
+                        if (widget.contest?.rewardType == "Goodies")
+                          Container(
+                            width: controller.liveCollegeContestList.length == 1
+                                ? MediaQuery.of(context).size.width * 0.9
+                                : MediaQuery.of(context).size.width * 0.9 - 55,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  AppImages.contestTrophy,
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0765,
+                                  height: MediaQuery.of(context).size.width *
+                                      0.0510,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    "1st rank wins ${controller.calculateTotalReward(widget.contest?.rewards)}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .tsGreyRegular12,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                AppImages.contestTrophy,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0765,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.0510,
+                              ),
+                              Text(
+                                'Rewards worth ${controller.calculateTotalReward(widget.contest?.rewards)}',
+                                style:
+                                    Theme.of(context).textTheme.tsGreyRegular12,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )
+                      ],
+                      if (widget.contest?.payoutType != 'Reward') ...[
+                        if (widget.contest?.payoutCapPercentage != null &&
+                            widget.contest?.payoutCapPercentage != 0)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                AppImages.contestTrophy,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0765,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.0510,
+                              ),
+                              Text(
+                                  '${widget.contest?.payoutPercentage != null ? widget.contest?.payoutPercentage : '0'}% of the Net P&L(upto ${controller.getPaidCapAmount(
+                                    widget.contest?.entryFee == 0
+                                        ? widget.contest?.portfolio
+                                                ?.portfolioValue ??
+                                            0
+                                        : widget.contest?.entryFee ?? 0,
+                                    widget.contest?.payoutCapPercentage ?? 0,
+                                  )})',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .tsGreyRegular12),
+                            ],
+                          ),
+                        // SizedBox(
+                        //   width: 20,
+                        // ),
+                      ]
+                    ]),
+                  ),
+                )
+              ],
+            ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
+          // Divider(thickness: 1, height: 0),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.0306,
+            ),
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Virtual Margin',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          FormatHelper.formatNumbers(
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Virtual Margin',
+                            style: AppStyles.tsGreyMedium12,
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            FormatHelper.formatNumbers(
                               widget.contest?.portfolio?.portfolioValue,
-                              decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                        ),
-                      ],
+                              decimal: 0,
+                            ),
+                            style: Theme.of(context).textTheme.tsMedium12,
+                          ),
+                        ],
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
-                          // style: Theme.of(context).textTheme.tsMedium12,
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
+                    Expanded(
+                      child: Text(
+                        '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
                         ),
-                      ],
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Entry Fee',
-                          style: AppStyles.tsGreyMedium12,
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          widget.contest?.entryFee == 0
-                              ? 'Free'
-                              : FormatHelper.formatNumbers(
-                                  widget.contest?.entryFee,
-                                  decimal: 0),
-                          style: Theme.of(context).textTheme.tsMedium12,
-                          textAlign: TextAlign.end,
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Entry Fee',
+                            style: AppStyles.tsGreyMedium12,
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            widget.contest?.entryFee == 0
+                                ? 'Free'
+                                : FormatHelper.formatNumbers(
+                                    widget.contest?.entryFee,
+                                    decimal: 0,
+                                  ),
+                            style: Theme.of(context).textTheme.tsMedium12,
+                            textAlign: TextAlign.end,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Starts:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestStartTime)}',
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Rubik'),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Text(
+                            'Starts:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestStartTime)}',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Rubik'),
+                          ),
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          'Spots left:',
-                          style: Theme.of(context).textTheme.tsRegular12,
-                        ),
-                        Text(
-                          '${controller.calculateSeatsLeft(
-                                widget.contest?.maxParticipants ?? 0,
-                                widget.contest?.participants?.length ?? 0,
-                              ).toString()}',
-                          style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Rubik'),
-                        )
-                      ],
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Spots left:',
+                            style: Theme.of(context).textTheme.tsRegular12,
+                          ),
+                          Text(
+                            '${controller.calculateSeatsLeft(
+                                  widget.contest?.maxParticipants ?? 0,
+                                  widget.contest?.participants?.length ?? 0,
+                                ).toString()}',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Rubik'),
+                          )
+                        ],
+                      ),
                     ),
-                    Text(
-                      'Ends:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestEndTime)}',
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Rubik'),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Ends:${FormatHelper.formatDateTimeWithoutYearToIST(widget.contest?.contestEndTime)}',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Rubik'),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(height: 12),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.0204,
+                ),
               ],
             ),
           ),
@@ -440,11 +549,16 @@ class _UpComingCollegeContestCardState
                   child: GestureDetector(
                     onTap: () {
                       controller.upComingCollegeContest(widget.contest);
-                      controller.getShareContest(true);
-                      String url = 'https://stoxhero.com/testzone';
-                      Clipboard.setData(ClipboardData(text: url));
-                      SnackbarHelper.showSnackbar(
-                          'Link Copied, Share with your friends.');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Center(
+                            child: CollegeUpComingShareModalContent(
+                              contest: widget.contest,
+                            ),
+                          );
+                        },
+                      );
                     },
                     child: Container(
                       alignment: Alignment.center,
