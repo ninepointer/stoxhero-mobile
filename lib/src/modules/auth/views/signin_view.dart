@@ -39,13 +39,15 @@ class _SigninViewState extends State<SigninView> {
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      SizedBox(height: 24),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.103),
                       Image.asset(
                         'assets/images/signin.png',
-                        width: 120,
-                        height: 120,
+                        width: 150,
+                        height: 150,
                       ),
-                      SizedBox(height: 36),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.143),
                       CommonCard(
                         padding: EdgeInsets.all(16),
                         margin: EdgeInsets.zero,
@@ -60,7 +62,7 @@ class _SigninViewState extends State<SigninView> {
                           SizedBox(height: 24),
                           Align(
                             child: Text(
-                              'Please provide your mobile number, a six digit OTP will be send for verification.',
+                              'Please provide your mobile number, a six digit OTP will be sent for verification.',
                               textAlign: TextAlign.center,
                               style: AppStyles.tsGreyRegular16,
                             ),
