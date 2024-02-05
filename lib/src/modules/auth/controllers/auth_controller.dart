@@ -151,6 +151,8 @@ class AuthController extends BaseController<AuthRepository> {
           token(response.data?.token);
           await AppStorage.setToken(response.data?.token);
           log('AppStorage.getToken : ${AppStorage.getToken()}');
+
+          await Future.delayed(Duration(seconds: 3));
           await getUserDetails();
           clearForm();
         }

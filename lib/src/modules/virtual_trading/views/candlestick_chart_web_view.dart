@@ -25,16 +25,27 @@ class _VirtualCandleStickChartViewState
   void initState() {
     super.initState();
 
-    String credentials = base64Encode(utf8.encode('${AppStorage.getToken()}'));
+    String credentials = base64Encode(utf8.encode('${
+        // AppStorage.getToken()
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4OGYzOTkxZmM0YmY2MjlkZTZkZjAiLCJpYXQiOjE2OTc4MTA1NDJ9.lpBZfpq_KSamwjowT59KnuZbAxTnqOCPWnMC3GGpfuY"}'));
 
-    Map<String, String> headers = {'Authorization': 'Basic $credentials'};
+    Map<String, String> headers = {
+      'Authorization': 'Basic $credentials',
+    };
+    WebViewCookie cookie = WebViewCookie(
+        name: "jwtoken",
+        value: "${
+            // AppStorage.getToken()
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4OGYzOTkxZmM0YmY2MjlkZTZkZjAiLCJpYXQiOjE2OTc4MTA1NDJ9.lpBZfpq_KSamwjowT59KnuZbAxTnqOCPWnMC3GGpfuY"}",
+        domain: "${isProd ? 'https://stoxhero.com' : 'https://43.204.7.180'}");
+    WebViewCookieManager().setCookie(cookie);
 
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.white)
       ..loadRequest(
           Uri.parse(
-            "${isProd ? 'https://stoxhero.com' : 'https://43.204.7.180'}/chart?instrument=${widget.chartName}",
+            "${isProd ? 'https://stoxhero.com' : 'http://43.204.7.180'}/chart?instrument=${widget.chartName}",
           ),
           headers: headers)
       ..setNavigationDelegate(NavigationDelegate(
