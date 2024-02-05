@@ -179,11 +179,32 @@ class _VirtualWatchListCardState extends State<VirtualWatchListCard> {
                         decoration: BoxDecoration(
                           color: AppColors.info.withOpacity(.25),
                           borderRadius: BorderRadius.only(
+                              // bottomRight: Radius.circular(8),
+                              ),
+                        ),
+                        child: Text(
+                          'REMOVE',
+                          style: AppStyles.tsWhiteMedium12
+                              .copyWith(color: AppColors.info),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => Get.to(() => VirtualCandleStickChartView(
+                          chartName: widget.tradingWatchlist.chartInstrument)),
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.info.withOpacity(.25),
+                          borderRadius: BorderRadius.only(
                             bottomRight: Radius.circular(8),
                           ),
                         ),
                         child: Text(
-                          'REMOVE',
+                          'Chart',
                           style: AppStyles.tsWhiteMedium12
                               .copyWith(color: AppColors.info),
                         ),
