@@ -101,9 +101,7 @@ class _StocksDashboardViewState extends State<StocksDashboardView>
                   SizedBox(
                     height: 5,
                   ),
-                  Container(
-                    child: CustomExpansionTile(),
-                  ),
+                  CustomExpansionTile(),
                   Container(
                     margin: EdgeInsets.all(10),
                     width: MediaQuery.of(context).size.width,

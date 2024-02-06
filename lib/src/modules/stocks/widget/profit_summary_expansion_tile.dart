@@ -99,14 +99,19 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
               clipBehavior: Clip.antiAlias,
               margin: EdgeInsets.zero,
               child: ExpansionTile(
+                tilePadding: EdgeInsets.symmetric(horizontal: 8),
                 shape: const ContinuousRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25)),
                 ),
+
                 backgroundColor:
                     Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
                 collapsedIconColor: Colors.black,
                 //     tilePadding: EdgeInsets.symmetric( horizontal: 10), // Adjust the padding here
-                title: const Text("Portfolio Summary"),
+                title: Text(
+                  "Portfolio Summary",
+                  style: AppStyles.tsBlackRegular16,
+                ),
                 trailing: Icon(
                   _customIcon
                       ? Icons.arrow_drop_down_circle
@@ -120,7 +125,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
                     tileColor: Colors.white,
                     title: Padding(
                         padding: const EdgeInsets.only(
-                            top: 8, left: 8, right: 8, bottom: 7),
+                            top: 0, left: 8, right: 8, bottom: 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
