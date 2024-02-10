@@ -126,6 +126,7 @@ class ContestTradingView extends GetView<ContestController> {
                             },
                           ),
                         ),
+                  daysContestNetPNLCard(),
                   CommonTile(
                     label: 'My Rank',
                     showSeeAllButton: true,
@@ -529,5 +530,20 @@ class ContestTradingView extends GetView<ContestController> {
         ),
       ),
     );
+  }
+
+  Widget daysContestNetPNLCard() {
+    int days = controller.getDurationInDays(
+      controller.liveContest.value.contestStartTime,
+      controller.liveContest.value.contestEndTime,
+    );
+    return days > 0
+        ? Column(
+            children: [
+              SizedBox(height: 8),
+              ContestPnlDropdownCard(),
+            ],
+          )
+        : Container();
   }
 }

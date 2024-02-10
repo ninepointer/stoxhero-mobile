@@ -20,3 +20,4 @@ export 'widgets/contest_watchlist_card.dart';
 export 'widgets/live_contest_card.dart';
 export 'widgets/upcoming_contest_card.dart';
 export 'widgets/reward_table_bottom_sheet.dart';
+export 'widgets/contest_grid_dropdown.dart';

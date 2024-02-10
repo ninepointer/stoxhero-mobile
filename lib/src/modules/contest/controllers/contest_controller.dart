@@ -101,7 +101,7 @@ class ContestController extends BaseController<ContestRepository> {
   final contestLeaderboardList = <ContestLeaderboard>[].obs;
   final contestChampionList = <ContestData>[].obs;
   final contestOrdersList = <ContestOrderDetails>[].obs;
-
+  final dayWiseContestPnlList = <DayWiseContestPnl>[].obs;
   final liveContestList = <LiveContest>[].obs;
   final liveContest = LiveContest().obs;
   final livePremiumContestList = <LiveContest>[].obs;
@@ -188,6 +188,7 @@ class ContestController extends BaseController<ContestRepository> {
     await getStockIndexInstrumentsList();
     await getContestWatchList();
     await getContestPositions();
+    await getDayWiseContestPnl();
     await getStopLossPendingOrder();
     await getStopLossExecutedOrder();
     await getContestTodaysOrderList();
@@ -243,6 +244,80 @@ class ContestController extends BaseController<ContestRepository> {
   void handleRadioValueChanged(int newValue, String labelText) {
     selectedGroupValue.value = newValue;
     selectedType.value = labelText;
+  }
+
+  List<num> calculateTotalDayPNLList() {
+    num gpnl = 0;
+    num npnl = 0;
+    num brokerage = 0;
+    num trades = 0;
+    for (var i = 0; i < dayWiseContestPnlList.length; i++) {
+      gpnl += dayWiseContestPnlList[i].gpnl ?? 0;
+      brokerage += dayWiseContestPnlList[i].brokerage ?? 0;
+      npnl += dayWiseContestPnlList[i].npnl ?? 0;
+      trades += dayWiseContestPnlList[i].trades ?? 0;
+    }
+    gpnl += calculateContestGrossPNL();
+    brokerage += calculateContestBrokerage();
+    npnl += calculateContestNetPNL();
+    trades += calculateContestTrades();
+    return [gpnl, brokerage, npnl, trades];
+  }
+
+  num calculateContestGrossPNL() {
+    num gross = 0;
+    for (var pnl in dayWiseContestPnlList) {
+      gross += pnl.gpnl ?? 0;
+    }
+    num finalGross = calculateTotalGrossPNL() - gross;
+    return finalGross;
+  }
+
+  num calculateContestBrokerage() {
+    num totalBrokerage = 0;
+    for (var pnl in dayWiseContestPnlList) {
+      totalBrokerage += pnl.brokerage ?? 0;
+    }
+    num finalBrokerage =
+        (tenxTotalPositionDetails.value.brokerage ?? 0) - totalBrokerage;
+    return finalBrokerage;
+  }
+
+  num calculateContestNetPNL() {
+    num totalNetPNL = 0;
+    for (var pnl in dayWiseContestPnlList) {
+      totalNetPNL += pnl.npnl ?? 0;
+    }
+    num finalNetPnl = calculateTotalNetPNL() - totalNetPNL;
+    return finalNetPnl;
+  }
+
+  num calculateContestTrades() {
+    num totalTrades = 0;
+    for (var pnl in dayWiseContestPnlList) {
+      totalTrades += pnl.trades ?? 0;
+    }
+    num finalTrades = contestOrdersList.length - totalTrades;
+    return finalTrades;
+  }
+
+  Future getDayWiseContestPnl() async {
+    isLoading(true);
+    try {
+      final RepoResponse<DayWiseContestPnlResponse> response =
+          await repository.getDayWiseContestPnl(
+        featuredLiveCollegeContest.value.id ?? liveContest.value.id,
+      );
+      if (response.data?.status?.toLowerCase() == "success") {
+        dayWiseContestPnlList(response.data?.data ?? []);
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      // SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+    isLoading(false);
   }
 
   bool isUpcomingContestVisible(UpComingContest? contest) {
@@ -728,6 +803,17 @@ class ContestController extends BaseController<ContestRepository> {
         net: totalNet,
       ),
     );
+  }
+
+  int getDurationInDays(String? startTime, String? endTime) {
+    if (startTime != null && endTime != null) {
+      DateTime startDateTimeUTC = DateTime.parse(startTime);
+      DateTime endDateTimeUTC = DateTime.parse(endTime);
+      Duration difference = endDateTimeUTC.difference(startDateTimeUTC);
+      return difference.inDays + 1;
+    } else {
+      return 0;
+    }
   }
 
   num calculateTotalGrossPNL() {

@@ -113,7 +113,7 @@ class _SigninViewState extends State<SigninView> {
                         ],
                       ),
                       Spacer(),
-                      // SizedBox(height: 24),
+                      SizedBox(height: 24),
                       // Center(
                       //   child: Text(
                       //     'Learn and earn from stock market trading.\nClaim your free account now!',
@@ -122,19 +122,6 @@ class _SigninViewState extends State<SigninView> {
                       //   ),
                       // ),
                       // SizedBox(height: 24),
-                      // CommonOutlinedButton(
-                      //   backgroundColor: Get.isDarkMode
-                      //       ? AppColors.darkGreen
-                      //       : AppColors.lightGreen,
-                      //   labelColor: Get.isDarkMode
-                      //       ? AppColors.darkGreen
-                      //       : AppColors.lightGreen,
-                      //   label: 'Create account',
-                      //   onPressed: () {
-                      //     controller.getDefaultInviteCode();
-                      //     Get.toNamed(AppRoutes.signup);
-                      //   },
-                      // ),
                     ],
                   ),
                 ),

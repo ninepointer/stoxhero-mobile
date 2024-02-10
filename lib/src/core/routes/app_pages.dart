@@ -190,7 +190,6 @@ class AppPages {
       name: AppRoutes.stocks,
       page: () => StocksDashboardView(),
       binding: ContestProfileBinding(),
-      
     ),
     GetPage(
       name: AppRoutes.affiliate,
