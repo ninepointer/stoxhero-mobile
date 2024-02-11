@@ -71,9 +71,9 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
             );
           },
           child: Container(
-            margin: EdgeInsets.only(left: 15, right: 15),
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            height: 60,
+            margin: EdgeInsets.only(left: 12, right: 12),
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            height: 42,
             decoration: BoxDecoration(
               color: Get.isDarkMode ? Color(0xFF1B2937) : Colors.white,
               borderRadius: BorderRadius.circular(25),
@@ -95,7 +95,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
                   color: Colors.grey,
                   onPressed: () {},
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 4),
                 Text(
                   "Search and add... ",
                   style: TextStyle(

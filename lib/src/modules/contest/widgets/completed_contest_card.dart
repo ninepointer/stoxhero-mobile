@@ -173,59 +173,92 @@ class CompletedContestCard extends GetView<ContestController> {
             Padding(
                 padding: EdgeInsets.only(
                     left: MediaQuery.of(context).size.width * 0.0102)),
-            Image.asset(
-              AppImages.contestTrophy,
-              width: 30,
-              height: 20,
-            ),
+            // Image.asset(
+            //   AppImages.contestTrophy,
+            //   width: 30,
+            //   height: 20,
+            // ),
             GestureDetector(
-              onTap: () {
-                BottomSheetHelper.openBottomSheet(
-                  context: context,
-                  child: RewardTableBottomSheet(
-                    completedContest: contest,
-                    completedContestPnl: completedContestPnl,
-                  ),
-                );
-              },
-              child: Row(children: [
-                // if (contest?.payoutType == 'Reward') ...[
-                //   Text(
-                //       'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
-                //       style: Theme.of(context).textTheme.tsMedium12,
-                //       textAlign: TextAlign.center),
-                // ],
-                if (contest?.payoutType == 'Reward') ...[
-                  if (contest?.rewardType == "Goodies")
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.67,
-                      child: Text(
-                        "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
-                        style: Theme.of(context).textTheme.tsGreyRegular12,
-                        textAlign: TextAlign.center,
+              // onTap: () {
+              //   BottomSheetHelper.openBottomSheet(
+              //     context: context,
+              //     child: RewardTableBottomSheet(
+              //       completedContest: contest,
+              //       completedContestPnl: completedContestPnl,
+              //     ),
+              //   );
+              // },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (contest?.payoutType == 'Reward') ...[
+                    if (contest?.rewardType == "Goodies")
+                      Container(
+                        width: controller.completedContestList.length == 1
+                            ? MediaQuery.of(context).size.width * 0.9
+                            : MediaQuery.of(context).size.width * 0.9 - 55,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              AppImages.contestTrophy,
+                              width: MediaQuery.of(context).size.width * 0.0765,
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0510,
+                            ),
+                            Flexible(
+                              child: Text(
+                                "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}",
+                                style:
+                                    Theme.of(context).textTheme.tsGreyRegular12,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            AppImages.contestTrophy,
+                            width: MediaQuery.of(context).size.width * 0.0765,
+                            height: MediaQuery.of(context).size.width * 0.0510,
+                          ),
+                          Text(
+                            'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
+                            style: Theme.of(context).textTheme.tsGreyRegular12,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      )
+                  ],
+                  if (contest?.payoutType != 'Reward') ...[
+                    if (contest?.payoutCapPercentage != null &&
+                        contest?.payoutCapPercentage != 0)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            AppImages.contestTrophy,
+                            width: MediaQuery.of(context).size.width * 0.0765,
+                            height: MediaQuery.of(context).size.width * 0.0510,
+                          ),
+                          Text(
+                            ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
+                              contest?.entryFee == 0
+                                  ? contest?.portfolio?.portfolioValue ?? 0
+                                  : contest?.entryFee ?? 0,
+                              contest?.payoutCapPercentage ?? 0,
+                            )})',
+                            style: Theme.of(context).textTheme.tsGreyRegular12,
+                          ),
+                        ],
                       ),
-                    )
-                  else
-                    Text(
-                      'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
-                      style: Theme.of(context).textTheme.tsGreyRegular12,
-                      textAlign: TextAlign.center,
-                    )
+                  ]
                 ],
-                if (contest?.payoutType != 'Reward') ...[
-                  if (contest?.payoutCapPercentage != null &&
-                      contest?.payoutCapPercentage != 0)
-                    Text(
-                      '${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
-                        contest?.entryFee == 0
-                            ? completedContestPnl?.portfolioValue ?? 0
-                            : contest?.entryFee ?? 0,
-                        contest?.payoutCapPercentage ?? 0,
-                      )})',
-                      style: Theme.of(context).textTheme.tsGreyRegular12,
-                    ),
-                ]
-              ]),
+              ),
             )
           ],
         ),

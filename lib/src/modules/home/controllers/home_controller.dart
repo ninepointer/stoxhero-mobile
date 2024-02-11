@@ -12,9 +12,10 @@ class HomeController extends BaseController<DashboardRepository> {
   LoginDetailsResponse get userDetailsData => userDetails.value;
 
   final isLoading = false.obs;
-  final isPerformanceLoading = false.obs;
+
   bool get isLoadingStatus => isLoading.value;
 
+  final isPerformanceLoading = false.obs;
   final selectedIndex = 0.obs;
 
   final firstTimeshow = true.obs;
