@@ -11,7 +11,9 @@ class FutureAndOptionDashBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(
+        MediaQuery.of(context).size.width * 0.0306,
+      ),
       child: Column(
         children: [
           Row(
@@ -26,11 +28,11 @@ class FutureAndOptionDashBoard extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 5,
+            height: MediaQuery.of(context).size.width * 0.0102,
           ),
           Container(
             alignment: Alignment.center,
-            width: 250,
+            width: MediaQuery.of(context).size.width * 0.6377,
             child: Text(
               "Master finance in simple way. Choose one to get started. You can switch anytime.",
               style: Get.isDarkMode
@@ -41,7 +43,7 @@ class FutureAndOptionDashBoard extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 16,
+            height: MediaQuery.of(context).size.width * 0.0306,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +57,7 @@ class FutureAndOptionDashBoard extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 16,
+            height: MediaQuery.of(context).size.width * 0.0306,
           ),
           customCard(
             context: context,
@@ -69,7 +71,7 @@ class FutureAndOptionDashBoard extends StatelessWidget {
             },
           ),
           SizedBox(
-            height: 20,
+            height: MediaQuery.of(context).size.width * 0.0306,
           ),
           customCard(
             context: context,

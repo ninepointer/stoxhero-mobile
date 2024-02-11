@@ -13,19 +13,22 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.only(top: 8, right: 8, left: 12, bottom: 8),
+      // margin: EdgeInsets.only(top: 8, right: 8, left: 12, bottom: 8),
+      margin: EdgeInsets.only(top: 0, right: 16, left: 0, bottom: 0),
       padding: EdgeInsets.zero,
-      width: 190,
+      width: MediaQuery.of(context).size.width * 0.4846,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.0408,
+              vertical: MediaQuery.of(context).size.width * 0.0306),
           child: Column(
             children: [
               Row(
                 children: [
                   Container(
-                    height: 56,
-                    width: 56,
+                    height: MediaQuery.of(context).size.width * 0.1428,
+                    width: MediaQuery.of(context).size.width * 0.1428,
                     decoration: BoxDecoration(
                       // color: AppColors.white,
                       shape: BoxShape.circle,
@@ -51,11 +54,13 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0204,
+                        vertical: MediaQuery.of(context).size.width * 0.0102),
                     decoration: BoxDecoration(
                       color: AppColors.secondary.withOpacity(.25),
                       borderRadius: BorderRadius.circular(4),
@@ -65,14 +70,14 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                       style: AppStyles.tsSecondarySemiBold14,
                     ),
                   ),
-                  SizedBox(width: 6),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.0153),
                   Text(
                     '${performer?.firstName ?? ''}'.capitalize ?? '',
                     style: Theme.of(context).textTheme.tsMedium14,
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -86,7 +91,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -100,7 +105,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -118,7 +123,9 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.0204,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -138,7 +145,7 @@ class ContestPortfolioWeekCard extends GetView<ContestProfileController> {
             ],
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
         GestureDetector(
           onTap: () {
             controller.getContestProfileData(performer?.trader);

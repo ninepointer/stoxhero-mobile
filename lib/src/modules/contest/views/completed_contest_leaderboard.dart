@@ -29,8 +29,13 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
             itemBuilder: (context, index) {
               var contest = controller.completedContestLeaderboardList[index];
               return CommonCard(
-                margin: EdgeInsets.only(top: 4, left: 8, right: 8),
-                padding: EdgeInsets.only(top: 8, right: 16, left: 8, bottom: 8),
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width * 0.0102,
+                    left: MediaQuery.of(context).size.width * 0.0306,
+                    right: MediaQuery.of(context).size.width * 0.0306),
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.0306,
+                    vertical: MediaQuery.of(context).size.width * 0.0204),
                 children: [
                   Column(
                     children: [
@@ -40,8 +45,10 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                           Stack(
                             children: [
                               Container(
-                                width: 48,
-                                height: 48,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.122,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.122,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
@@ -56,21 +63,39 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                                           Get.isDarkMode
                                               ? AppImages.darkAppLogo
                                               : AppImages.lightAppLogo,
-                                          width: 48,
-                                          height: 48,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.122,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.122,
                                         )
                                       : Image.network(
                                           contest.image ?? '',
-                                          width: 48,
-                                          height: 48,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.122,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.122,
                                           errorBuilder:
                                               (context, error, stackTrace) {
                                             return Image.asset(
                                               Get.isDarkMode
                                                   ? AppImages.darkAppLogo
                                                   : AppImages.lightAppLogo,
-                                              width: 48,
-                                              height: 48,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.122,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.122,
                                             );
                                           },
                                         ),
@@ -97,7 +122,9 @@ class CompletedContestLeaderboard extends GetView<ContestController> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(
+                              width:
+                                  MediaQuery.of(context).size.width * 0.0204),
                           Expanded(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -20,3 +20,5 @@ export 'widgets/completed_college_contest_card.dart';
 export 'widgets/live_college_contest_card.dart';
 export 'widgets/upcoming_college_contest_card.dart';
 export 'widgets/college_reward_table_bottom_sheet.dart';
+export 'widgets/college_live_share_modal.dart';
+export 'widgets/college_upcoming_share_model_content.dart';

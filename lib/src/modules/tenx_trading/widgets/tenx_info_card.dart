@@ -15,7 +15,9 @@ class _TenxInfoCardState extends State<TenxInfoCard> {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.0306,
+      ),
       onTap: () => setState(() => isExpanded = !isExpanded),
       children: [
         Row(
@@ -26,7 +28,9 @@ class _TenxInfoCardState extends State<TenxInfoCard> {
               style: AppStyles.tsSecondaryRegular14,
             ),
             Icon(
-              isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+              isExpanded
+                  ? Icons.expand_less_rounded
+                  : Icons.expand_more_rounded,
               color: AppColors.grey,
             ),
           ],

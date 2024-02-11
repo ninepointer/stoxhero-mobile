@@ -89,17 +89,15 @@ class _DashboardViewState extends State<DashboardView> {
             visible: !controller.isLoadingStatus,
             replacement: DashboardShimmer(),
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 4,
-                  ),
-                  if (controller.stockIndexDetailsList.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
-                      child: Row(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.0306,
+                    vertical: MediaQuery.of(context).size.width * 0.0306),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (controller.stockIndexDetailsList.isNotEmpty)
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // SizedBox(
@@ -129,508 +127,529 @@ class _DashboardViewState extends State<DashboardView> {
                               ),
                             ),
                             if (item != controller.stockIndexDetailsList.last)
-                              SizedBox(width: 4),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0306,
+                              ),
                           ]
                         ],
                       ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
                     ),
-
-                  Container(
-                    height: 225,
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: CarouselSlider.builder(
-                      itemCount: controller.dashboardCarouselList.length,
-                      itemBuilder: (context, int index, _) {
-                        return GestureDetector(
-                          onTap: () => controller.navigateToCarousel(
-                            controller.dashboardCarouselList[index]
-                                    .linkToCarousel ??
-                                '',
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              color: AppColors.grey.withOpacity(.1),
-                              borderRadius: BorderRadius.circular(8),
+                    Container(
+                      height: MediaQuery.of(context).size.width * 0.5739,
+                      width: MediaQuery.of(context).size.width,
+                      // padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: CarouselSlider.builder(
+                        itemCount: controller.dashboardCarouselList.length,
+                        itemBuilder: (context, int index, _) {
+                          return GestureDetector(
+                            onTap: () => controller.navigateToCarousel(
+                              controller.dashboardCarouselList[index]
+                                      .linkToCarousel ??
+                                  '',
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                "${controller.dashboardCarouselList[index].carouselImage}",
-                                fit: BoxFit.fill,
-                                height: 150,
-                                width: double.infinity,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width * 0.382,
+                              decoration: BoxDecoration(
+                                color: AppColors.grey.withOpacity(.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  "${controller.dashboardCarouselList[index].carouselImage}",
+                                  fit: BoxFit.fill,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.382,
+                                  width: MediaQuery.of(context).size.width,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                      options: CarouselOptions(
-                        viewportFraction: 1,
-                        autoPlay: true,
-                        enlargeCenterPage: true,
-                        autoPlayInterval: const Duration(seconds: 6),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  if ((contestProfileController.startOfWeek.value != "" &&
-                          contestProfileController.endOfWeek.value != "") ||
-                      contestProfileController.weeklyTopPerformer.isNotEmpty)
-                    CommonTile(
-                      label: 'Weekly TestZone Leaderboard',
-                      showSeeAllButton: true,
-                      isValue: true,
-                      seeAllLabel: 'View All',
-                      value: '${[
-                        '${FormatHelper.formatDateMonth(contestProfileController.startOfWeek.toString())} - ${FormatHelper.formatDateMonth(contestProfileController.endOfWeek.toString())}'
-                      ]}',
-                      onPressed: () {
-                        contestProfileController.weeklyTopPerformer();
-                        contestProfileController
-                            .getWeeklyTopPerformerFullList();
-                        Get.to(() => ContestTopPerformerCard());
-                      },
-                      margin: EdgeInsets.only(bottom: 0, top: 8),
-                    ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Obx(
-                      () => Container(
-                        child: Row(
-                          children: contestProfileController.weeklyTopPerformer
-                              .asMap()
-                              .entries
-                              .map((entry) {
-                            int index = entry.key;
-                            return ContestPortfolioWeekCard(
-                              index: index + 1,
-                              performer: entry.value,
-                            );
-                          }).toList(),
+                          );
+                        },
+                        options: CarouselOptions(
+                          viewportFraction: 1,
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          autoPlayInterval: const Duration(seconds: 6),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Get.to(StoryView());
-                  //   },
-                  //   child: CommonCard(
-                  //     padding: EdgeInsets.zero,
-                  //     margin: EdgeInsets.only(
-                  //         left: 10, right: 10, top: 10, bottom: 6),
-                  //     hasBorder: true,
-                  //     children: [
-                  //       Container(
-                  //         height: 80,
-                  //         width: double.infinity,
-                  //         decoration: BoxDecoration(
-                  //           borderRadius: BorderRadius.circular(10),
-                  //           image: DecorationImage(
-                  //             image: AssetImage(
-                  //               AppImages.shstory,
-                  //             ),
-                  //             fit: BoxFit.fill,
-                  //             // colorFilter: ColorFilter.mode(
-                  //             //   Color(0xFFFFF5E1).withOpacity(0.5),
-                  //             //   BlendMode.srcOver,
-                  //             // ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-
-                  // SizedBox(
-                  //   height: 4,
-                  // ),
-                  contestController.liveFeaturedContest.isEmpty &&
-                          contestController.upcomingFeaturedContest.isEmpty
-                      ? Container()
-                      : CommonTile(
-                          label: 'Featured TestZones',
-                          showSeeAllButton: true,
-                          onPressed: () {
-                            contestController.loadData();
-                            contestController.liveFeaturedContest.isEmpty
-                                ? contestController.selectedTabBarIndex(1)
-                                : contestController.selectedTabBarIndex(0);
-                            Get.to(() => ContestListView());
-                          },
-                          margin: EdgeInsets.only(bottom: 0, top: 4),
-                        ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        contestController.featuredCollegeContest.isEmpty
-                            ? Container()
-                            : Obx(
-                                () => Row(
-                                  children: contestController
-                                      .featuredCollegeContest
-                                      .map((contest) {
-                                    String userId =
-                                        controller.userDetailsData.sId ?? '';
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: CollegeContestCard(
-                                        userId: userId,
-                                        featuredCollegeContest: contest,
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                        contestController.liveFeaturedContest.isEmpty
-                            ? Container()
-                            : Obx(
-                                () => Row(
-                                  children: contestController
-                                      .liveFeaturedContest
-                                      .map((contest) {
-                                    String userId =
-                                        controller.userDetailsData.sId ?? '';
-                                    return Container(
-                                      width: contestController
-                                                  .liveFeaturedContest.length ==
-                                              1
-                                          ? MediaQuery.of(context).size.width
-                                          : MediaQuery.of(context).size.width -
-                                              55,
-                                      child: LiveFeaturedCard(
-                                        userId: userId,
-                                        liveFeatured: contest,
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                        if (contestController.liveFeaturedContest.isEmpty &&
-                            contestController
-                                .upcomingFeaturedContest.isNotEmpty)
-                          Obx(
-                            () => Row(
-                              children: contestController
-                                  .upcomingFeaturedContest
-                                  .map((contest) {
-                                String userId =
-                                    controller.userDetailsData.sId ?? '';
-                                return Container(
-                                  width: contestController
-                                              .upcomingFeaturedContest.length ==
-                                          1
-                                      ? MediaQuery.of(context).size.width
-                                      : MediaQuery.of(context).size.width - 55,
-                                  child: UpcomingFeaturedCard(
-                                    userId: userId,
-                                    upcomingFeatured: contest,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                      ],
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
                     ),
-                  ),
-
-                  // collegeContestController.liveCollegeContestList.isEmpty
-                  //     ? Container()
-                  //     : Obx(
-                  //         () => SingleChildScrollView(
-                  //           scrollDirection: Axis.horizontal,
-                  //           child: Row(
-                  //             children: collegeContestController.liveCollegeContestList.map((contest) {
-                  //               String userId = controller.userDetailsData.sId ?? '';
-                  //               return Container(
-                  //                 width: MediaQuery.of(context).size.width,
-                  //                 child: CollegeContestCard(
-                  //                   userId: userId,
-                  //                   featuredCollegeContest: contest,
-                  //                 ),
-                  //               );
-                  //             }).toList(),
-                  //           ),
-                  //         ),
-                  //       ),
-                  contestController.liveContestList.isEmpty
-                      ? Container()
-                      : CommonTile(
-                          label: 'Open TestZones',
-                          showSeeAllButton: true,
-                          onPressed: () {
-                            contestController.loadData();
-                            contestController.selectedTabBarIndex(0);
-                            Get.to(() => ContestListView());
-                          },
-                          margin: EdgeInsets.only(bottom: 0, top: 8),
-                        ),
-                  contestController.liveContestList.isEmpty
-                      ? Container()
-                      : Obx(
-                          () => SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: contestController.liveContestList
-                                  .map((contest) {
-                                String userId =
-                                    controller.userDetailsData.sId ?? '';
-                                return Container(
-                                  width: contestController
-                                              .liveContestList.length ==
-                                          1
-                                      ? MediaQuery.of(context).size.width
-                                      : MediaQuery.of(context).size.width - 55,
-                                  child: LiveContestCard(
-                                    userId: userId,
-                                    contest: contest,
-                                    margin: EdgeInsets.all(8)
-                                        .copyWith(bottom: 0, left: 11),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+                    if ((contestProfileController.startOfWeek.value != "" &&
+                            contestProfileController.endOfWeek.value != "") ||
+                        contestProfileController.weeklyTopPerformer.isNotEmpty)
+                      CommonTile(
+                        label: 'Weekly TestZone Leaderboard',
+                        showSeeAllButton: true,
+                        isValue: true,
+                        seeAllLabel: 'View All',
+                        value: '${[
+                          '${FormatHelper.formatDateMonth(contestProfileController.startOfWeek.toString())} - ${FormatHelper.formatDateMonth(contestProfileController.endOfWeek.toString())}'
+                        ]}',
+                        onPressed: () {
+                          contestProfileController.weeklyTopPerformer();
+                          contestProfileController
+                              .getWeeklyTopPerformerFullList();
+                          Get.to(() => ContestTopPerformerCard());
+                        },
+                        margin: EdgeInsets.zero,
+                        padding: EdgeInsets.zero,
+                      ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Obx(
+                        () => Container(
+                          child: Row(
+                            children: contestProfileController
+                                .weeklyTopPerformer
+                                .asMap()
+                                .entries
+                                .map((entry) {
+                              int index = entry.key;
+                              return ContestPortfolioWeekCard(
+                                index: index + 1,
+                                performer: entry.value,
+                              );
+                            }).toList(),
                           ),
                         ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  if (contestController.liveContestList.isEmpty)
-                    contestController.upComingContestList.isEmpty
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    contestController.liveFeaturedContest.isEmpty &&
+                            contestController.upcomingFeaturedContest.isEmpty
                         ? Container()
                         : CommonTile(
-                            label: 'Upcoming TestZones',
+                            label: 'Featured TestZones',
                             showSeeAllButton: true,
                             onPressed: () {
                               contestController.loadData();
-                              contestController.selectedTabBarIndex(1);
+                              contestController.liveFeaturedContest.isEmpty
+                                  ? contestController.selectedTabBarIndex(1)
+                                  : contestController.selectedTabBarIndex(0);
                               Get.to(() => ContestListView());
                             },
-                            margin: EdgeInsets.only(bottom: 0, top: 6),
+                            margin: EdgeInsets.zero,
+                            padding: EdgeInsets.zero,
                           ),
-                  if (contestController.liveContestList.isEmpty)
-                    contestController.upComingContestList.isEmpty
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          contestController.featuredCollegeContest.isEmpty
+                              ? Container()
+                              : Obx(
+                                  () => Row(
+                                    children: contestController
+                                        .featuredCollegeContest
+                                        .map((contest) {
+                                      String userId =
+                                          controller.userDetailsData.sId ?? '';
+                                      return Container(
+                                        width: contestController
+                                                    .featuredCollegeContest
+                                                    .length ==
+                                                1
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.0637
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.1403,
+                                        child: CollegeContestCard(
+                                          userId: userId,
+                                          featuredCollegeContest: contest,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                          contestController.liveFeaturedContest.isEmpty
+                              ? Container()
+                              : Obx(
+                                  () => Row(
+                                    children: contestController
+                                        .liveFeaturedContest
+                                        .map((contest) {
+                                      String userId =
+                                          controller.userDetailsData.sId ?? '';
+                                      return Container(
+                                        width: contestController
+                                                    .liveFeaturedContest
+                                                    .length ==
+                                                1
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.0637
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.1403,
+                                        child: LiveFeaturedCard(
+                                          userId: userId,
+                                          liveFeatured: contest,
+                                          contestController: contestController,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                          if (contestController.liveFeaturedContest.isEmpty &&
+                              contestController
+                                  .upcomingFeaturedContest.isNotEmpty)
+                            Obx(
+                              () => Row(
+                                children: contestController
+                                    .upcomingFeaturedContest
+                                    .map((contest) {
+                                  String userId =
+                                      controller.userDetailsData.sId ?? '';
+                                  return Container(
+                                    width: contestController
+                                                .upcomingFeaturedContest
+                                                .length ==
+                                            1
+                                        ? MediaQuery.of(context).size.width -
+                                            MediaQuery.of(context).size.width *
+                                                0.0637
+                                        : MediaQuery.of(context).size.width -
+                                            MediaQuery.of(context).size.width *
+                                                0.1403,
+                                    child: UpcomingFeaturedCard(
+                                      userId: userId,
+                                      upcomingFeatured: contest,
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    contestController.liveContestList.isEmpty
+                        ? Container()
+                        : CommonTile(
+                            label: 'Open TestZones',
+                            showSeeAllButton: true,
+                            onPressed: () {
+                              contestController.loadData();
+                              contestController.selectedTabBarIndex(0);
+                              Get.to(() => ContestListView());
+                            },
+                            margin: EdgeInsets.zero,
+                            padding: EdgeInsets.zero,
+                          ),
+                    contestController.liveContestList.isEmpty
+                        ? Container()
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.0306,
+                          ),
+                    contestController.liveContestList.isEmpty
                         ? Container()
                         : Obx(
                             () => SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: contestController.upComingContestList
+                                children: contestController.liveContestList
                                     .map((contest) {
-                                  bool isVisible = contestController
-                                      .isUpcomingContestVisible(contest);
                                   String userId =
                                       controller.userDetailsData.sId ?? '';
-                                  return isVisible
-                                      ? SizedBox()
-                                      : Container(
-                                          width: contestController
-                                                      .upComingContestList
-                                                      .length ==
-                                                  1
-                                              ? MediaQuery.of(context)
-                                                  .size
-                                                  .width
-                                              : MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  55,
-                                          child: UpComingContestCard(
-                                            userId: userId,
-                                            contest: contest,
-                                            margin: EdgeInsets.all(8)
-                                                .copyWith(bottom: 0),
-                                          ),
-                                        );
+                                  return Container(
+                                    width: contestController
+                                                .liveContestList.length ==
+                                            1
+                                        ? MediaQuery.of(context).size.width -
+                                            MediaQuery.of(context).size.width *
+                                                0.0637
+                                        : MediaQuery.of(context).size.width -
+                                            MediaQuery.of(context).size.width *
+                                                0.1403,
+                                    child: LiveContestCard(
+                                      userId: userId,
+                                      contest: contest,
+                                      margin: contestController
+                                                  .liveContestList.length ==
+                                              1
+                                          ? EdgeInsets.zero
+                                          : EdgeInsets.only(right: 16),
+                                    ),
+                                  );
                                 }).toList(),
                               ),
                             ),
                           ),
-                  SizedBox(
-                    height: 6,
-                  ),
-
-                  CommonTile(
-                    label: 'Try TenX Subscription',
-                    showSeeAllButton: true,
-                    seeAllLabel: '',
-                    margin: EdgeInsets.only(bottom: 4, top: 8),
-                    padding: EdgeInsets.only(left: 15, top: 4),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.selectedIndex(2);
-                      Get.find<TenxTradingController>().loadData();
-                    },
-                    child: CommonCard(
-                      padding: EdgeInsets.zero,
-                      margin: EdgeInsets.only(
-                          left: 10, right: 10, top: 10, bottom: 6),
-                      hasBorder: true,
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    AppImages.testZoneShareBackground,
-                                  ),
-                                  fit: BoxFit.cover,
-                                  colorFilter: ColorFilter.mode(
-                                    Color(0xFFFFF5E1).withOpacity(0.5),
-                                    BlendMode.srcOver,
-                                  ),
+                    if (contestController.liveContestList.isEmpty)
+                      contestController.upComingContestList.isEmpty
+                          ? Container()
+                          : CommonTile(
+                              label: 'Upcoming TestZones',
+                              showSeeAllButton: true,
+                              onPressed: () {
+                                contestController.loadData();
+                                contestController.selectedTabBarIndex(1);
+                                Get.to(() => ContestListView());
+                              },
+                              margin: EdgeInsets.zero,
+                              padding: EdgeInsets.zero,
+                            ),
+                    if (contestController.liveContestList.isEmpty)
+                      contestController.upComingContestList.isEmpty
+                          ? Container()
+                          : SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0306,
+                            ),
+                    if (contestController.liveContestList.isEmpty)
+                      contestController.upComingContestList.isEmpty
+                          ? Container()
+                          : Obx(
+                              () => SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: contestController
+                                      .upComingContestList
+                                      .map((contest) {
+                                    bool isVisible = contestController
+                                        .isUpcomingContestVisible(contest);
+                                    String userId =
+                                        controller.userDetailsData.sId ?? '';
+                                    return isVisible
+                                        ? SizedBox()
+                                        : Container(
+                                            width: contestController
+                                                        .upComingContestList
+                                                        .length ==
+                                                    1
+                                                ? MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.0637
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.13200,
+                                            child: UpComingContestCard(
+                                              userId: userId,
+                                              contest: contest,
+                                              margin: contestController
+                                                          .upComingContestList
+                                                          .length ==
+                                                      1
+                                                  ? EdgeInsets.zero
+                                                  : EdgeInsets.only(right: 16),
+                                            ),
+                                          );
+                                  }).toList(),
                                 ),
                               ),
-                              padding: EdgeInsets.all(14),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        AppImages.dartAppName,
-                                        height: 20,
-                                        width: 80,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Introducing",
-                                        style: AppStyles.tsBlackMedium18
-                                            .copyWith(color: AppColors.white),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "TenX Subscription",
-                                        style: AppStyles.tsBlackMedium18
-                                            .copyWith(color: AppColors.white),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 6),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "Subscribe Now",
-                                            style: AppStyles.tsBlackRegular14
-                                                .copyWith(
-                                                    color: AppColors.white),
-                                          ),
-                                          Icon(
-                                            Icons.arrow_circle_right,
-                                            color: Colors.green,
-                                            size: 20.0,
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
                             ),
-                            Positioned(
-                                top: 0, // Adjust the position as needed
-                                right: 15, // Adjust the position as needed
-                                child: Container(
-                                  height: 130,
-                                  width: 150,
-                                  child: Image.asset(
-                                    AppImages.tenxLogo,
-                                    fit: BoxFit.contain,
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ],
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
                     ),
-                  ),
-
-                  CommonTile(
-                    label: 'Meet Our Champions',
-                    showSeeAllButton: true,
-                    seeAllLabel: 'Join TestZone',
-                    onPressed: () {
-                      contestController.loadData();
-                      contestController.selectedTabBarIndex(0);
-                      Get.to(() => ContestListView());
-                    },
-                    margin: EdgeInsets.only(bottom: 0, top: 6),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Obx(
-                      () => Container(
-                        child: Row(
-                          children: contestController.contestChampionList
-                              .asMap()
-                              .entries
-                              .map((entry) {
-                            int index = entry.key;
-                            return CompletedContestChampionLeaderBoard(
-                              index: index + 1,
-                              contestdata: entry.value,
-                              cardWidth: MediaQuery.of(context).size.width - 40,
-                            );
-                          }).toList(),
+                    CommonTile(
+                      label: 'Try TenX Subscription',
+                      showSeeAllButton: true,
+                      seeAllLabel: '',
+                      margin: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        controller.selectedIndex(2);
+                        Get.find<TenxTradingController>().loadData();
+                      },
+                      child: CommonCard(
+                        padding: EdgeInsets.zero,
+                        margin: EdgeInsets.zero,
+                        hasBorder: true,
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      AppImages.testZoneShareBackground,
+                                    ),
+                                    fit: BoxFit.cover,
+                                    colorFilter: ColorFilter.mode(
+                                      Color(0xFFFFF5E1).withOpacity(0.5),
+                                      BlendMode.srcOver,
+                                    ),
+                                  ),
+                                ),
+                                padding: EdgeInsets.all(14),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                          AppImages.dartAppName,
+                                          height: 20,
+                                          width: 80,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Introducing",
+                                          style: AppStyles.tsBlackMedium18
+                                              .copyWith(color: AppColors.white),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "TenX Subscription",
+                                          style: AppStyles.tsBlackMedium18
+                                              .copyWith(color: AppColors.white),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 6),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Subscribe Now",
+                                              style: AppStyles.tsBlackRegular14
+                                                  .copyWith(
+                                                      color: AppColors.white),
+                                            ),
+                                            Icon(
+                                              Icons.arrow_circle_right,
+                                              color: Colors.green,
+                                              size: 20.0,
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                  top: 0, // Adjust the position as needed
+                                  right: 15, // Adjust the position as needed
+                                  child: Container(
+                                    height: 130,
+                                    width: 150,
+                                    child: Image.asset(
+                                      AppImages.tenxLogo,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    CommonTile(
+                      label: 'Meet Our Champions',
+                      showSeeAllButton: true,
+                      seeAllLabel: 'Join TestZone',
+                      onPressed: () {
+                        contestController.loadData();
+                        contestController.selectedTabBarIndex(0);
+                        Get.to(() => ContestListView());
+                      },
+                      margin: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Obx(
+                        () => Container(
+                          child: Row(
+                            children: contestController.contestChampionList
+                                .asMap()
+                                .entries
+                                .map((entry) {
+                              int index = entry.key;
+                              return CompletedContestChampionLeaderBoard(
+                                index: index + 1,
+                                contestdata: entry.value,
+                                cardWidth: contestController
+                                            .contestChampionList.length ==
+                                        1
+                                    ? MediaQuery.of(context).size.width -
+                                        MediaQuery.of(context).size.width *
+                                            0.0637
+                                    : MediaQuery.of(context).size.width -
+                                        MediaQuery.of(context).size.width *
+                                            0.1403,
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-
-                  // SingleChildScrollView(
-                  //   scrollDirection: Axis.horizontal,
-                  //   child: Container(
-                  //     margin: EdgeInsets.zero,
-                  //     child: Row(
-                  //       children: contestController.contestChampionList
-                  //           .asMap()
-                  //           .entries
-                  //           .map((entry) {
-                  //         int index = entry.key;
-                  //         return CompletedContestChampionLeaderBoard(
-                  //           index: index + 1,
-                  //           contestdata: entry.value,
-                  //           cardWidth: MediaQuery.of(context).size.width - 40,
-                  //         );
-                  //       }).toList(),
-                  //     ),
-                  //   ),
-                  // ),
-
-                  SizedBox(height: 4),
-                  CommonTile(
-                    label: 'Return Summary',
-                    margin: EdgeInsets.only(bottom: 10, top: 0),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    CommonTile(
+                      label: 'Return Summary',
+                      margin: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    Column(
                       children: [
                         Row(
                           children: [
@@ -644,7 +663,9 @@ class _DashboardViewState extends State<DashboardView> {
                                     : '${(controller.userDashboardReturnSummary.value.virtualData!.npnl! / 10000).toStringAsFixed(2)} %',
                               ),
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0306,
+                            ),
                             Expanded(
                               child: customCard(
                                 label: 'TestZones Trading',
@@ -657,7 +678,9 @@ class _DashboardViewState extends State<DashboardView> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0204,
+                        ),
                         Row(
                           children: [
                             Expanded(
@@ -670,7 +693,9 @@ class _DashboardViewState extends State<DashboardView> {
                                     : '${(controller.userDashboardReturnSummary.value.tenxReturn! * 100).toStringAsFixed(2)} %',
                               ),
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0306,
+                            ),
                             Expanded(
                               child: customCard(
                                 label: 'Trading',
@@ -681,15 +706,18 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                       ],
                     ),
-                  ),
-
-                  CommonTile(
-                    label: 'Performance',
-                    margin: EdgeInsets.symmetric(vertical: 8),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    CommonTile(
+                      label: 'Performance',
+                      margin: EdgeInsets.zero,
+                      padding: EdgeInsets.zero,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    Row(
                       children: [
                         Expanded(
                           child: CommonDropdown(
@@ -711,7 +739,9 @@ class _DashboardViewState extends State<DashboardView> {
                                 );
                               }),
                         ),
-                        SizedBox(width: 4),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.0306,
+                        ),
                         Expanded(
                           child: CommonDropdown(
                             useSeptValue: true,
@@ -735,14 +765,12 @@ class _DashboardViewState extends State<DashboardView> {
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 8),
-
-                  Obx(
-                    () {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Column(
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0306,
+                    ),
+                    Obx(
+                      () {
+                        return Column(
                           children: [
                             Row(
                               children: [
@@ -775,7 +803,10 @@ class _DashboardViewState extends State<DashboardView> {
                                               : '0',
                                         ),
                                 ),
-                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0306,
+                                ),
                                 Expanded(
                                   child: controller.selectedTradeType ==
                                               'virtual' ||
@@ -810,7 +841,10 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0204,
+                            ),
                             Row(
                               children: [
                                 Expanded(
@@ -825,7 +859,10 @@ class _DashboardViewState extends State<DashboardView> {
                                         : '0',
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0306,
+                                ),
                                 Expanded(
                                   child: customCard(
                                     label: 'Loss Days',
@@ -841,7 +878,10 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0204,
+                            ),
                             Row(
                               children: [
                                 Expanded(
@@ -855,7 +895,10 @@ class _DashboardViewState extends State<DashboardView> {
                                         : '0',
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0306,
+                                ),
                                 Expanded(
                                   child: customCard(
                                     label: 'Virtual Margin Money',
@@ -869,7 +912,10 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0204,
+                            ),
                             Row(
                               children: [
                                 Expanded(
@@ -883,7 +929,10 @@ class _DashboardViewState extends State<DashboardView> {
                                         : '0',
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0306,
+                                ),
                                 Expanded(
                                   child: customCard(
                                     label: 'Max Loss',
@@ -898,7 +947,10 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0204,
+                            ),
                             Row(
                               children: [
                                 Expanded(
@@ -912,7 +964,10 @@ class _DashboardViewState extends State<DashboardView> {
                                         : '0',
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0306,
+                                ),
                                 Expanded(
                                   child: customCard(
                                     label: 'Avg. Loss',
@@ -927,7 +982,10 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0204,
+                            ),
                             Row(
                               children: [
                                 Expanded(
@@ -944,7 +1002,10 @@ class _DashboardViewState extends State<DashboardView> {
                                     valueColor: AppColors.success,
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0306,
+                                ),
                                 Expanded(
                                   child: customCard(
                                     label: 'Max Loss Streak',
@@ -961,11 +1022,11 @@ class _DashboardViewState extends State<DashboardView> {
                               ],
                             ),
                             SizedBox(
-                              height: 16,
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0306,
                             ),
                             Container(
                               alignment: Alignment.centerLeft,
-                              padding: EdgeInsets.only(left: 16.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -976,7 +1037,8 @@ class _DashboardViewState extends State<DashboardView> {
                                           fontWeight: FontWeight.w500,
                                           fontFamily: "Rubik")),
                                   SizedBox(
-                                    height: 4,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.0102,
                                   ),
                                   Text('Bring your friends on StoxHero',
                                       style: TextStyle(
@@ -986,7 +1048,8 @@ class _DashboardViewState extends State<DashboardView> {
                                         color: Colors.grey,
                                       )),
                                   SizedBox(
-                                    height: 8,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.0306,
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
@@ -1019,13 +1082,15 @@ class _DashboardViewState extends State<DashboardView> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 60),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.width * 0.153,
+                            ),
                           ],
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

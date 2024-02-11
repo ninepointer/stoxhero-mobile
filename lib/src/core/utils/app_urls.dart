@@ -42,9 +42,10 @@ class AppUrls {
 
   static const String addFcmToken = "$apiURL/addfcmtoken";
 
-  static const String signup = "$apiURL/signup";
-  static const String phoneLogin = "$apiURL/phonelogin";
-  static const String verifyPhoneLogin = "$apiURL/verifyphonelogin";
+  // static const String signup = "$apiURL/signup";
+  static const String createAccount = "$apiURL/createusermobile";
+  static const String phoneLogin = "$apiURL/phoneloginmobile";
+  static const String verifyPhoneLogin = "$apiURL/verifyphoneloginmobile";
   static const String verifyOtp = "$apiURL/verifyotp";
   static const String resendSigninOtp = "$apiURL/resendmobileotp";
   static const String resendSignupOtp = "$apiURL/resendotp";

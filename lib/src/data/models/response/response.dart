@@ -109,3 +109,4 @@ export 'stock_funds_margin.dart';
 export "stocks_excuated_order_response.dart";
 export "stocks_pending_order_response.dart";
 export "stocks_all_order_response.dart";
+export 'create_new_user_account_response.dart';

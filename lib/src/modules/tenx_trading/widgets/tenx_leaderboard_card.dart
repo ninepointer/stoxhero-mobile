@@ -14,9 +14,11 @@ class TenxLeaderboardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: CommonCard(
-        margin: EdgeInsets.all(16).copyWith(
+        margin: EdgeInsets.all(
+          MediaQuery.of(context).size.width * 0.0306,
+        ).copyWith(
           bottom: 0,
-          top: 8,
+          top: MediaQuery.of(context).size.width * 0.0204,
         ),
         children: [
           Column(
@@ -89,7 +91,7 @@ class TenxLeaderboardCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.0204),
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,7 +115,7 @@ class TenxLeaderboardCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -125,7 +127,8 @@ class TenxLeaderboardCard extends StatelessWidget {
                           'Subscriptions Total',
                           style: AppStyles.tsGreyMedium12,
                         ),
-                        SizedBox(height: 2),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.0051),
                         Text(
                           '${FormatHelper.formatNumbers(
                             leaderboard?.subscriptions,
@@ -144,7 +147,8 @@ class TenxLeaderboardCard extends StatelessWidget {
                         'Subscriptions Won',
                         style: AppStyles.tsGreyMedium12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0051),
                       Text(
                         '${FormatHelper.formatNumbers(
                           leaderboard?.subscriptionsWithPayout,
@@ -157,7 +161,7 @@ class TenxLeaderboardCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 4),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

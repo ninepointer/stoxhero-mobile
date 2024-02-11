@@ -26,10 +26,12 @@ class InviteView extends GetView<ReferralsController> {
             children: [
               Image.asset(
                 AppImages.referral,
-                height: 200,
+                height: MediaQuery.of(context).size.width * 0.510,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.width * 0.0306,
+                ),
                 child: Text(
                   "StoxHero Referral Program\n${controller.activeReferrals.value?.referralProgramName ?? ''}",
                   textAlign: TextAlign.center,
@@ -37,7 +39,9 @@ class InviteView extends GetView<ReferralsController> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.0306,
+                ),
                 child: Card(
                   margin: EdgeInsets.zero,
                   elevation: 0,
@@ -48,7 +52,9 @@ class InviteView extends GetView<ReferralsController> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Container(
-                    margin: EdgeInsets.all(14),
+                    margin: EdgeInsets.all(
+                      MediaQuery.of(context).size.width * 0.0306,
+                    ),
                     width: double.infinity,
                     child: Column(
                       children: [
@@ -63,7 +69,9 @@ class InviteView extends GetView<ReferralsController> {
                             textAlign: TextAlign.center,
                           ),
                         if (controller.activeReferrals.value != null)
-                          SizedBox(height: 8),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0204),
                         ReferralDetailsCardTile(
                           label: 'Invite Your Friends using your referral code',
                           iconData: Icons.share,
@@ -83,7 +91,9 @@ class InviteView extends GetView<ReferralsController> {
                               'You get ${FormatHelper.formatNumbers(controller.activeReferrals.value?.rewardPerReferral, decimal: 0)} for each referral in your StoxHero Wallet.',
                           iconData: Icons.share,
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0306,
+                        ),
                         ReferralCodeCard(),
                       ],
                     ),
@@ -91,7 +101,9 @@ class InviteView extends GetView<ReferralsController> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(
+                  MediaQuery.of(context).size.width * 0.0306,
+                ),
                 child: Card(
                   margin: EdgeInsets.zero,
                   elevation: 0,
@@ -102,7 +114,9 @@ class InviteView extends GetView<ReferralsController> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Container(
-                    margin: EdgeInsets.all(14),
+                    margin: EdgeInsets.all(
+                      MediaQuery.of(context).size.width * 0.0306,
+                    ),
                     width: double.infinity,
                     child: Column(
                       children: [
@@ -130,7 +144,9 @@ class InviteView extends GetView<ReferralsController> {
                             )
                           ],
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0306,
+                        ),
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -145,7 +161,7 @@ class InviteView extends GetView<ReferralsController> {
                             eyeStyle: QrEyeStyle(
                               color: AppColors.lightGreen,
                             ),
-                            size: 200,
+                            size: MediaQuery.of(context).size.width * 0.510,
                           ),
                         ),
                       ],

@@ -24,21 +24,30 @@ class _FaqViewState extends State<FaqView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.width * 0.0204,
+              ),
               child: Image.asset(
                 AppImages.faq,
-                width: 200,
-                height: 200,
+                width: MediaQuery.of(context).size.width * 0.510,
+                height: MediaQuery.of(context).size.width * 0.510,
               ),
             ),
-            SizedBox(height: 12),
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.0306,
+            ),
             Text(
               'How does this work ?',
               style: Theme.of(context).textTheme.tsMedium18,
             ),
-            SizedBox(height: 12),
-            for (int i = 0; i < faqItems.length; i++) buildExpandableCard(i, faqItems[i]),
-            SizedBox(height: 24),
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.0306,
+            ),
+            for (int i = 0; i < faqItems.length; i++)
+              buildExpandableCard(i, faqItems[i]),
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.0612,
+            ),
             Text(
               'For any additional queries,\n drop us an email: team@stoxhero.com',
               textAlign: TextAlign.center,
@@ -52,7 +61,12 @@ class _FaqViewState extends State<FaqView> {
 
   Widget buildExpandableCard(int index, FaqItem item) {
     return CommonCard(
-      margin: EdgeInsets.all(16).copyWith(bottom: 0, top: 8),
+      margin: EdgeInsets.all(
+        MediaQuery.of(context).size.width * 0.0306,
+      ).copyWith(
+        bottom: 0,
+        top: MediaQuery.of(context).size.width * 0.0204,
+      ),
       onTap: () {
         setState(() {
           expandedIndex = expandedIndex == index ? -1 : index;
@@ -67,7 +81,9 @@ class _FaqViewState extends State<FaqView> {
               style: AppStyles.tsSecondaryRegular16,
             ),
             Icon(
-              expandedIndex == index ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+              expandedIndex == index
+                  ? Icons.expand_less_rounded
+                  : Icons.expand_more_rounded,
               color: AppColors.grey,
             ),
           ],
@@ -75,7 +91,7 @@ class _FaqViewState extends State<FaqView> {
         if (expandedIndex == index)
           Column(
             children: [
-              SizedBox(height: 16),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0408),
               Text(
                 item.content,
                 style: Theme.of(context).textTheme.tsRegular14,

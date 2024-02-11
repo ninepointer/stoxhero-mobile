@@ -10,6 +10,9 @@ class LiveMarginxCard extends GetView<MarginXController> {
   Widget build(BuildContext context) {
     return CommonCard(
       padding: EdgeInsets.zero,
+      margin: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.0306,
+          vertical: MediaQuery.of(context).size.width * 0.0204),
       children: [
         Container(
           child: Row(

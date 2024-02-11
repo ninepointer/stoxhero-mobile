@@ -82,8 +82,9 @@ class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
                 replacement: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16)
-                          .copyWith(top: 12),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0306,
+                      ),
                       child: Row(
                         children: [
                           Expanded(
@@ -95,7 +96,9 @@ class _ReferralsLeaderboardViewState extends State<ReferralsLeaderboardView> {
                                   '0',
                             ),
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.0306,
+                          ),
                           Expanded(
                             child: customCard(
                               context,

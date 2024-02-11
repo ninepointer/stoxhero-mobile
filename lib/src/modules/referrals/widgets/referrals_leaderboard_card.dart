@@ -17,7 +17,9 @@ class ReferralsLeaderboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonCard(
-      margin: EdgeInsets.all(16).copyWith(bottom: 0, top: 8),
+      margin: EdgeInsets.all(
+        MediaQuery.of(context).size.width * 0.0306,
+      ).copyWith(bottom: 0, top: MediaQuery.of(context).size.width * 0.0204),
       children: [
         Row(
           children: [
@@ -34,7 +36,9 @@ class ReferralsLeaderboardCard extends StatelessWidget {
                 style: AppStyles.tsSecondaryMedium16,
               ),
             ),
-            SizedBox(width: 16),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.0408,
+            ),
             Expanded(
               child: Column(
                 children: [

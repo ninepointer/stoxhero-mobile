@@ -41,13 +41,17 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                 if (controller.tenxAvailableValidityList.isNotEmpty)
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0306,
+                    ),
                     child: Row(
                       children: [
                         for (PlanValidity item
                             in controller.tenxAvailableValidityList)
                           CommonChip(
-                            margin: EdgeInsets.only(right: 8),
+                            margin: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.0204),
                             label: item.label,
                             isSelected: item.label ==
                                 controller
@@ -60,7 +64,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                       ],
                     ),
                   ),
-                SizedBox(height: 8),
+                SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
                 TenxInfoCard(),
                 Expanded(
                   child: SingleChildScrollView(
@@ -106,13 +110,17 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                 if (controller.tenxSubscribedValidityList.isNotEmpty)
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0408,
+                    ),
                     child: Row(
                       children: [
                         for (PlanValidity item
                             in controller.tenxSubscribedValidityList)
                           CommonChip(
-                            margin: EdgeInsets.only(right: 8),
+                            margin: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.0204),
                             label: item.label,
                             isSelected: item.label ==
                                 controller
@@ -125,7 +133,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                       ],
                     ),
                   ),
-                SizedBox(height: 8),
+                SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
                 TenxInfoCard(),
                 Expanded(
                   child: SingleChildScrollView(
@@ -171,13 +179,16 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                 if (controller.tenxExpiredValidityList.isNotEmpty)
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.0408),
                     child: Row(
                       children: [
                         for (PlanValidity item
                             in controller.tenxExpiredValidityList)
                           CommonChip(
-                            margin: EdgeInsets.only(right: 8),
+                            margin: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.0204),
                             label: item.label,
                             isSelected: item.label ==
                                 controller
@@ -190,7 +201,7 @@ class _TenxTradingViewState extends State<TenxTradingView> {
                       ],
                     ),
                   ),
-                SizedBox(height: 8),
+                SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
                 TenxInfoCard(),
                 Expanded(
                   child: SingleChildScrollView(

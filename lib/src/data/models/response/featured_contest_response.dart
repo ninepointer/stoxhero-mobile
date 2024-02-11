@@ -607,6 +607,7 @@ class FeaturedCollegeContest {
   String? product;
   num? payoutCapPercentage;
   List<FeaturedParticipants>? participants;
+  List<FeaturedUpcomingRewards>? rewards;
   String? createdOn;
   String? lastModifiedOn;
   int? iV;
@@ -627,6 +628,7 @@ class FeaturedCollegeContest {
       this.featured,
       this.payoutType,
       this.portfolio,
+      this.rewards,
       this.college,
       this.maxParticipants,
       this.contestStatus,
@@ -659,6 +661,13 @@ class FeaturedCollegeContest {
     payoutPercentage = json['payoutPercentage'];
     featured = json['featured'];
     payoutType = json['payoutType'];
+    if (json['rewards'] != null) {
+      rewards = (json['rewards'] as List<dynamic>)
+          .map((v) => FeaturedUpcomingRewards.fromJson(v))
+          .toList();
+    } else {
+      rewards = [];
+    }
     portfolio = json['portfolio'] != null
         ? new FeaturedPortfolio.fromJson(json['portfolio'])
         : null;
@@ -720,6 +729,10 @@ class FeaturedCollegeContest {
     if (this.participants != null) {
       data['participants'] = this.participants!.map((v) => v.toJson()).toList();
     }
+    if (this.rewards != null) {
+      data['rewards'] = this.rewards!.map((v) => v.toJson()).toList();
+    }
+
     data['createdOn'] = this.createdOn;
     data['lastModifiedOn'] = this.lastModifiedOn;
     data['__v'] = this.iV;

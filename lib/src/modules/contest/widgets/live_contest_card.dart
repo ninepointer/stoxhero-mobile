@@ -25,14 +25,17 @@ class LiveContestCard extends GetView<ContestController> {
       padding: EdgeInsets.zero,
       children: [
         Container(
-          width: double.infinity,
+          width: MediaQuery.of(context).size.width,
           alignment: Alignment.center,
           child: Row(
             children: [
               Expanded(
                 child: Padding(
                   // padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  padding: EdgeInsets.only(left: 12, right: 12, top: 8),
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.0306,
+                      right: MediaQuery.of(context).size.width * 0.0306,
+                      top: MediaQuery.of(context).size.width * 0.0204),
                   child: Text(
                     contest?.contestName ?? '-',
                     style: AppStyles.tsSecondaryMedium14,
@@ -41,7 +44,8 @@ class LiveContestCard extends GetView<ContestController> {
                 ),
               ),
               Container(
-                height: 15, // Adjust the height as needed
+                height: MediaQuery.of(context).size.width *
+                    0.0382, // Adjust the height as needed
                 child: InkWell(
                   onTap: () {
                     BottomSheetHelper.openBottomSheet(
@@ -66,8 +70,11 @@ class LiveContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.featured == true,
                 child: Container(
-                  padding:
-                      EdgeInsets.only(left: 18, right: 25, bottom: 18, top: 6),
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.0412,
+                      right: MediaQuery.of(context).size.width * 0.0620,
+                      bottom: MediaQuery.of(context).size.width * 0.0620,
+                      top: MediaQuery.of(context).size.width * 0.0153),
                   foregroundDecoration: CommonTriangleCard(
                     badgeColor: AppColors.success,
                     badgeSize: 55,
@@ -88,7 +95,9 @@ class LiveContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.isNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0102,
+                      vertical: 0.0051),
                   child: Text(
                     'Nifty',
                     style: AppStyles.tsGreyMedium12,
@@ -99,7 +108,9 @@ class LiveContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.isBankNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0102,
+                      vertical: MediaQuery.of(context).size.width * 0.0051),
                   child: Text(
                     'Bank Nifty',
                     style: AppStyles.tsGreyMedium12,
@@ -110,7 +121,9 @@ class LiveContestCard extends GetView<ContestController> {
               Visibility(
                 visible: contest?.isFinNifty == true,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.0102,
+                      vertical: MediaQuery.of(context).size.width * 0.0051),
                   child: Text(
                     'FinNifty',
                     style: AppStyles.tsGreyMedium12,
@@ -119,7 +132,9 @@ class LiveContestCard extends GetView<ContestController> {
               ),
 
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.0102,
+                    vertical: MediaQuery.of(context).size.width * 0.0051),
                 child: Text(
                   contest?.contestExpiry ?? '',
                   style: AppStyles.tsGreyMedium12,
@@ -127,7 +142,9 @@ class LiveContestCard extends GetView<ContestController> {
               ),
               // SizedBox(width: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.0102,
+                    vertical: MediaQuery.of(context).size.width * 0.0051),
                 // decoration: BoxDecoration(
                 //   color: AppColors.primary,
                 //   borderRadius: BorderRadius.circular(100),
@@ -140,68 +157,104 @@ class LiveContestCard extends GetView<ContestController> {
             ],
           ),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
         // Divider(thickness: 1, height: 0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              child: Padding(
-                padding: EdgeInsets.only(right: 1),
-                child: Row(
-                  //  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      AppImages.contestTrophy,
-                      width: 30,
-                      height: 20,
-                    ),
-                    if (contest?.payoutType == 'Reward') ...[
-                      if (contest?.rewardType == "Goodies")
-                        Container(
-                          width: controller.liveContestList.length == 1
-                              ? MediaQuery.of(context).size.width * 0.6
-                              : MediaQuery.of(context).size.width * 0.6 - 55,
-                          child: Text(
-                            "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}",
-                            style: Theme.of(context).textTheme.tsGreyRegular12,
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      else
-                        Text(
-                          'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
-                          style: Theme.of(context).textTheme.tsGreyRegular12,
-                          textAlign: TextAlign.center,
-                        )
-                    ],
-                    if (contest?.payoutType != 'Reward') ...[
-                      if (contest?.payoutCapPercentage != null &&
-                          contest?.payoutCapPercentage != 0)
-                        Column(
-                          children: [
-                            Text(
-                              ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
-                                contest?.entryFee == 0
-                                    ? contest?.portfolio?.portfolioValue ?? 0
-                                    : contest?.entryFee ?? 0,
-                                contest?.payoutCapPercentage ?? 0,
-                              )})',
-                              style:
-                                  Theme.of(context).textTheme.tsGreyRegular12,
+        Container(
+          height: MediaQuery.of(context).size.width * 0.08928,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 1),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (contest?.payoutType == 'Reward') ...[
+                        if (contest?.rewardType == "Goodies")
+                          Container(
+                            width: controller.liveContestList.length == 1
+                                ? MediaQuery.of(context).size.width * 0.9
+                                : MediaQuery.of(context).size.width * 0.9 - 55,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  AppImages.contestTrophy,
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0765,
+                                  height: MediaQuery.of(context).size.width *
+                                      0.0510,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                    "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .tsGreyRegular12,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                    ]
-                  ],
+                          )
+                        else
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                AppImages.contestTrophy,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0765,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.0510,
+                              ),
+                              Text(
+                                'Rewards worth ${controller.calculateTotalReward(contest?.rewards)}',
+                                style:
+                                    Theme.of(context).textTheme.tsGreyRegular12,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          )
+                      ],
+                      if (contest?.payoutType != 'Reward') ...[
+                        if (contest?.payoutCapPercentage != null &&
+                            contest?.payoutCapPercentage != 0)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                AppImages.contestTrophy,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0765,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.0510,
+                              ),
+                              Text(
+                                ' ${contest?.payoutPercentage != null ? contest?.payoutPercentage : '0'}% of the Net P&L (Upto ${controller.getPaidCapAmount(
+                                  contest?.entryFee == 0
+                                      ? contest?.portfolio?.portfolioValue ?? 0
+                                      : contest?.entryFee ?? 0,
+                                  contest?.payoutCapPercentage ?? 0,
+                                )})',
+                                style:
+                                    Theme.of(context).textTheme.tsGreyRegular12,
+                              ),
+                            ],
+                          ),
+                      ]
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.0306),
           child: Column(
             children: [
               Row(
@@ -243,7 +296,8 @@ class LiveContestCard extends GetView<ContestController> {
                         'Entry Fee',
                         style: Theme.of(context).textTheme.tsGreyMedium12,
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0051),
                       Text(
                         contest?.entryFee == 0
                             ? 'Free'
@@ -255,7 +309,7 @@ class LiveContestCard extends GetView<ContestController> {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0204),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -268,7 +322,7 @@ class LiveContestCard extends GetView<ContestController> {
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Rubik')),
                       SizedBox(
-                        width: 2,
+                        width: MediaQuery.of(context).size.width * 0.0051,
                       ),
                       Text(
                           FormatHelper.formatDateTimeWithoutYearToIST(
@@ -288,7 +342,7 @@ class LiveContestCard extends GetView<ContestController> {
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Rubik')),
                       SizedBox(
-                        width: 2,
+                        width: MediaQuery.of(context).size.width * 0.0051,
                       ),
                       Text(
                           controller
@@ -312,7 +366,7 @@ class LiveContestCard extends GetView<ContestController> {
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Rubik')),
                       SizedBox(
-                        width: 2,
+                        width: MediaQuery.of(context).size.width * 0.0051,
                       ),
                       Text(
                           FormatHelper.formatDateTimeWithoutYearToIST(
@@ -325,7 +379,7 @@ class LiveContestCard extends GetView<ContestController> {
                   )
                 ],
               ),
-              SizedBox(height: 4),
+              SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
             ],
           ),
         ),
