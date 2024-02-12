@@ -537,7 +537,7 @@ class ContestTradingView extends GetView<ContestController> {
       controller.liveContest.value.contestStartTime,
       controller.liveContest.value.contestEndTime,
     );
-    return days > 0
+    return days > 1
         ? Column(
             children: [
               SizedBox(height: 8),
