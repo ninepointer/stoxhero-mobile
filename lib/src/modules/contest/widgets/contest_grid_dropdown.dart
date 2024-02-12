@@ -74,10 +74,10 @@ class _ContestPnlDropdownGridWidgetState
                   label: Text('Gross P&L'),
                 ),
                 DataColumn(
-                  label: Text('Brokerage'),
+                  label: Text(' Brokerage'),
                 ),
                 DataColumn(
-                  label: Text('Net P&L'),
+                  label: Text('   Net P&L'),
                 ),
                 DataColumn(
                   label: Text('# Trades'),
