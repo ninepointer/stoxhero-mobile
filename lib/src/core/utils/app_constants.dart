@@ -16,6 +16,7 @@ class AppConstants {
   // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGUwYWM3Mjk3YjVkNjFlODVjMjYwZjAiLCJpYXQiOjE3MDAwNDE2MDR9.rNhYuZ3Km8LPLbmRJ6QoycWOw_OZlqPuR7Ublx-vDvk"; //Ritik
   // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY4NGEzOGE3NzAwYjg0NTllZjJkYmUiLCJpYXQiOjE3MDI4ODUxMjR9.5pqrOfzoLbXMaUs5JtpG95Iq1K6W6tHNoE_pZg_F_fg"; //Harpreet prod
   // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTg1NjEzMDNiNjJiM2Y3N2IzOWQ3ZDIiLCJpYXQiOjE3MDM0OTQ1Njl9.C_whxd94fPNJTQsOFWv8HB0PWUUS254Xopfm2-6pvuc";
+  // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTY0ODU2NWEwNjExNzExNmJiN2MwZTUiLCJpYXQiOjE3MDc4MDczNDB9.9wEHOofNMXHrOHmsOGazdolJKiaSQMsjedugcOEN0S8";
   static const String equityTraderType = "Equity Trader";
   static const String buy = "BUY";
   static const String sell = "SELL";

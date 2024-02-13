@@ -1170,7 +1170,7 @@ class TenxTradingController extends BaseController<TenxTradingRepository> {
         tenxAvailablePlans(response.data?.data ?? []);
         tenxAvailablePlansUnFiltered(response.data?.data ?? []);
         for (var userSub in userDetails.value.subscription!) {
-          if (userSub.subscriptionId != null) {
+          if (userSub.subscriptionId != null && userSub.status != "Expired") {
             userSubscriptionsIds.add(userSub.subscriptionId!.id!);
           }
         }
