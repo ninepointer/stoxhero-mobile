@@ -306,7 +306,7 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       final RepoResponse<DayWiseContestPnlResponse> response =
           await repository.getDayWiseContestPnl(
-        featuredLiveCollegeContest.value.id ?? liveContest.value.id,
+        liveFeatured.value.id ?? liveContest.value.id,
       );
       if (response.data?.status?.toLowerCase() == "success") {
         dayWiseContestPnlList(response.data?.data ?? []);

@@ -534,14 +534,18 @@ class ContestTradingView extends GetView<ContestController> {
 
   Widget daysContestNetPNLCard() {
     int days = controller.getDurationInDays(
-      controller.liveContest.value.contestStartTime,
-      controller.liveContest.value.contestEndTime,
+      isLiveContest
+          ? controller.liveContest.value.contestStartTime
+          : controller.liveFeatured.value.contestStartTime,
+      isLiveContest
+          ? controller.liveContest.value.contestEndTime
+          : controller.liveFeatured.value.contestEndTime,
     );
     return days > 1
         ? Column(
             children: [
               SizedBox(height: 8),
-              ContestPnlDropdownCard(),
+              ContestPnlDropdownGridWidget(),
             ],
           )
         : Container();
