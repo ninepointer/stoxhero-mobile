@@ -159,7 +159,7 @@ class CompletedContestChampionLeaderBoard extends GetView<ContestController> {
                           alignment: Alignment.center,
                           width: 60,
                           child: Text(
-                            '${FormatHelper.formatNumbers((participant.payout ?? 0).round() + (participant.tds ?? 0).round(), showDecimal: false)}',
+                            '${FormatHelper.formatNumbers(((participant.payout ?? 0) + (participant.tds ?? 0)).round(), showDecimal: false)}',
                             style: Theme.of(context).textTheme.tsRegular14,
                           )),
                     ],
