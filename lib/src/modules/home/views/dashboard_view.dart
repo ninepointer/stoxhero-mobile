@@ -582,7 +582,7 @@ class _DashboardViewState extends State<DashboardView> {
                     height: 6,
                   ),
                   Container(
-                    margin: EdgeInsets.only(right: 24, left: 24),
+                    margin: EdgeInsets.only(right: 12, left: 12),
                     height: MediaQuery.of(context).size.width * 0.6377,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -794,7 +794,12 @@ class _DashboardViewState extends State<DashboardView> {
                             return CompletedContestChampionLeaderBoard(
                               index: index + 1,
                               contestdata: entry.value,
-                              cardWidth: MediaQuery.of(context).size.width - 40,
+                              //  cardWidth: MediaQuery.of(context).size.width - 40,
+                              cardWidth: contestController
+                                          .contestChampionList.length ==
+                                      1
+                                  ? MediaQuery.of(context).size.width
+                                  : MediaQuery.of(context).size.width - 40,
                             );
                           }).toList(),
                         ),
