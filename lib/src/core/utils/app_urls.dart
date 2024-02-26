@@ -154,7 +154,6 @@ class AppUrls {
       "$apiURL/dailycontest/collegecontests/userupcoming";
   static const String completedCollegeContests =
       "$apiURL/dailycontest/contests/collegecompleted";
-
   static const String collegeContestLeaderboard =
       "$apiURL/contestscoreboard/collegescoreboard";
   static const String generateCollegeContestOtp =
@@ -163,7 +162,6 @@ class AppUrls {
       "$apiURL/dailycontest/confirmotp";
 
   static const String tutorial = "$apiURL/tutorialcategory/";
-
   static const String liveMarginx = "$apiURL/marginx/userlive";
   static const String upComingMarginX = "$apiURL/marginx/userupcoming";
   static const String completedMarginx = "$apiURL/marginx/usercompleted";
