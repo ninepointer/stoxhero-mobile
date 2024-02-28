@@ -212,5 +212,10 @@ class AppPages {
       page: () => KYCViewSelector(),
       // binding: AffiliateBinding(),
     ),
+    GetPage(
+      name: AppRoutes.courseHome,
+      page: () => CoursesHomeView(),
+      binding: CourseBinding(),
+    ),
   ];
 }

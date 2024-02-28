@@ -1,0 +1,15 @@
+export 'controller/course_controller.dart';
+export 'views/course_home_view.dart';
+export 'views/create_new_batch_view.dart';
+export 'views/batch_details_view.dart';
+export 'views/batch_overview_view.dart';
+export 'views/batch_study_material_view.dart';
+export 'views/batch_live_classes_view.dart';
+export 'views/batch_fee_view.dart';
+export 'views/batch_student_view.dart';
+export 'views/batch_all_courses_view.dart';
+export 'views/my_library_view.dart';
+export 'views/batch_video_player.dart';
+export 'views/batch_all_course_topic_view.dart';
+export 'widgets/course_batch_name.dart';
+export 'widgets/star_rating_widget.dart';

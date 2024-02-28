@@ -360,4 +360,13 @@ class AppUrls {
 
   static String stocksstopLossEditOrder(String? id) =>
       "$apiURL/pendingorder/editprice/$id";
+
+  //api/v1/courses/influencer/published?skip=0&limit=9
+
+  static String publishCourse = "$apiURL/courses/influencer/published";
+  static String unpublishCourse = "$apiURL/courses/influencer/unpublished";
+  static String pendingadminapprovalCourse =
+      "$apiURL/courses/influencer/pendingadminapproval";
+  static String awaitingapprovalCourse =
+      "$apiURL/courses/influencer/awaitingapproval";
 }

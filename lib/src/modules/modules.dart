@@ -23,3 +23,4 @@ export 'contest_profile/contest_profile_index.dart';
 export "stocks/stocks_index.dart";
 export 'affiliate/affilate_index.dart';
 export "story/story_index.dart";
+export 'courses/courses_index.dart';
