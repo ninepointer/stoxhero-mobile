@@ -20,6 +20,10 @@ class CourseController extends BaseController<CourseRespository> {
   final unPublishInflunceCourseList = <InfluencerCourseData>[].obs;
   final pendingadminapprovalInflunceCourseList = <InfluencerCourseData>[].obs;
   final awaitingapprovalInflunceCourseList = <InfluencerCourseData>[].obs;
+  final courseOverview = CourseOverViewData().obs;
+  final userCourseOverview = CourseOverViewData().obs;
+  final suggestionTextController = TextEditingController();
+  final userAllCourses = <InfluencerCourseData>[].obs;
 
   final selectedTabIndex = 0.obs;
 
@@ -38,10 +42,10 @@ class CourseController extends BaseController<CourseRespository> {
 
   void loadData() async {
     loadUserDetails();
-    await getInfluencerPublishCourseDetails();
-    await getInfluencerUnpublishCourseDetails();
-    await getInfluencerPendingadminapprovalCourseDetails();
-    await getInfluencerAwaitingapprovalCourseDetails();
+    // await getInfluencerPublishCourseDetails();
+    // await getInfluencerUnpublishCourseDetails();
+    // await getInfluencerPendingadminapprovalCourseDetails();
+    // await getInfluencerAwaitingapprovalCourseDetails();
   }
 
   void showDateRangePicker(BuildContext context,
@@ -202,6 +206,98 @@ class CourseController extends BaseController<CourseRespository> {
           if (remainingItem < itemsPerPage.value) {
             itemsPerPage(remainingItem);
           }
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isLoadingMore.value = false;
+    }
+  }
+
+  Future getInfluncerApprovalDetails(String id) async {
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.getAdminApproval(id);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          SnackbarHelper.showSnackbar(response.data?.message);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
+  Future patchsuggestchangeDetails(String id, BuildContext context) async {
+    Map<String, dynamic> data = {
+      "change": suggestionTextController.text,
+    };
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.suggestChanges(id, data);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          SnackbarHelper.showSnackbar(response.data?.message);
+          Navigator.of(context).pop();
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
+  Future getCourseOverviewDetails(String id) async {
+    try {
+      final RepoResponse<CourseOverviewResponse> response =
+          await repository.getCourseOverview(id);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          courseOverview(response.data?.data);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    } finally {
+      isLoadingMore.value = false;
+    }
+  }
+
+  Future getUserAllCourses() async {
+    try {
+      final RepoResponse<InfluencerCourseResponse> response =
+          await repository.getUserAllCourses();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          userAllCourses(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
+  Future getUserCourseOverviewDetails(String id) async {
+    try {
+      final RepoResponse<CourseOverviewResponse> response =
+          await repository.getUserCourseOverview(id);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          userCourseOverview(response.data?.data);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

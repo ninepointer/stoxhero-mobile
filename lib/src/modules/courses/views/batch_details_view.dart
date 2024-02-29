@@ -12,6 +12,7 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   late CourseController controller;
+
   @override
   void initState() {
     super.initState();
@@ -32,7 +33,9 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("What is equity"),
+        title: Obx(() => isStudent
+            ? Text("${controller.userCourseOverview.value.courseName}")
+            : Text("${controller.courseOverview.value.courseName}")),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -43,81 +46,84 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
           //   visible: !controller.isLoadingStatus,
           //  replacement: DashboardShimmer(),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.0408,
-                vertical: MediaQuery.of(context).size.width * 0.0204),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  color: Get.isDarkMode
-                      ? AppColors.darkScaffoldBackgroundColor
-                      : AppColors.lightScaffoldBackgroundColor,
-                  child: TabBar(
-                    onTap: (index) {
-                      controller.loadData();
-                      controller.selectedTabIndex.value = index;
-                    },
-                    indicatorColor: AppColors.lightGreen,
-                    controller: tabController,
-                    padding: EdgeInsets.zero,
-                    // isScrollable: true,
-
-                    // indicatorColor:
-                    //     Get.isDarkMode ? AppColors.black : AppColors.white,
-                    // labelColor: AppColors.white,
-                    // unselectedLabelColor:
-                    //     Get.isDarkMode ? AppColors.white : AppColors.black,
-                    // indicator: BoxDecoration(
-                    //   color: AppColors.lightGreen,
-                    //   borderRadius: BorderRadius.circular(40), // Border radius
-                    // ),
-                    tabs: [
-                      Tab(
-                        child: Text(
-                          "OverView",
-                          style: Theme.of(context).textTheme.tsRegular14,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      // Tab(
-                      //   child: Text(
-                      //     "Study Material",
-                      //     style:
-                      //         Theme.of(context).textTheme.tsRegular14,
-                      //     textAlign: TextAlign.center,
-                      //   ),
-                      // ),
-                      Tab(
-                        child: Text(
-                          "Live Classes",
-                          style: Theme.of(context).textTheme.tsRegular14,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      // Tab(
-                      //   child: Text(
-                      //     "Students",
-                      //     style:
-                      //         Theme.of(context).textTheme.tsRegular14,
-                      //     textAlign: TextAlign.center,
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: TabBarView(
-                      controller: tabController,
-                      physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.0408,
+                  vertical: MediaQuery.of(context).size.width * 0.0204),
+              child: isStudent
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        BatchOverViewDetailsView(),
-                        BatchLiveClassesView()
-                      ]),
-                ),
-              ],
-            ),
-          ),
+                        Container(
+                          color: Get.isDarkMode
+                              ? AppColors.darkScaffoldBackgroundColor
+                              : AppColors.lightScaffoldBackgroundColor,
+                          child: TabBar(
+                            onTap: (index) {
+                              controller.loadData();
+                              controller.selectedTabIndex.value = index;
+                            },
+                            indicatorColor: AppColors.lightGreen,
+                            controller: tabController,
+                            padding: EdgeInsets.zero,
+                            // isScrollable: true,
+
+                            // indicatorColor:
+                            //     Get.isDarkMode ? AppColors.black : AppColors.white,
+                            // labelColor: AppColors.white,
+                            // unselectedLabelColor:
+                            //     Get.isDarkMode ? AppColors.white : AppColors.black,
+                            // indicator: BoxDecoration(
+                            //   color: AppColors.lightGreen,
+                            //   borderRadius: BorderRadius.circular(40), // Border radius
+                            // ),
+                            tabs: [
+                              Tab(
+                                child: Text(
+                                  "OverView",
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular14,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              // Tab(
+                              //   child: Text(
+                              //     "Study Material",
+                              //     style:
+                              //         Theme.of(context).textTheme.tsRegular14,
+                              //     textAlign: TextAlign.center,
+                              //   ),
+                              // ),
+                              Tab(
+                                child: Text(
+                                  "Live Classes",
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular14,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              // Tab(
+                              //   child: Text(
+                              //     "Students",
+                              //     style:
+                              //         Theme.of(context).textTheme.tsRegular14,
+                              //     textAlign: TextAlign.center,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                              controller: tabController,
+                              physics: NeverScrollableScrollPhysics(),
+                              children: [
+                                BatchOverViewDetailsView(),
+                                BatchLiveClassesView()
+                              ]),
+                        ),
+                      ],
+                    )
+                  : BatchOverViewDetailsView()),
         ),
       ),
     );

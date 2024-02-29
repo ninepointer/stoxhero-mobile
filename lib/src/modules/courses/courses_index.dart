@@ -13,3 +13,4 @@ export 'views/batch_video_player.dart';
 export 'views/batch_all_course_topic_view.dart';
 export 'widgets/course_batch_name.dart';
 export 'widgets/star_rating_widget.dart';
+export 'widgets/course_topics_and_subtopics.dart';

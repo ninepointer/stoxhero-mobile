@@ -1,16 +1,16 @@
-class InfluencerCourseResponse {
+class UserAllCoursesResponse {
   String? status;
-  List<InfluencerCourseData>? data;
+  List<UserAllCoursesData>? data;
   int? count;
 
-  InfluencerCourseResponse({this.status, this.data, this.count});
+  UserAllCoursesResponse({this.status, this.data, this.count});
 
-  InfluencerCourseResponse.fromJson(Map<String, dynamic> json) {
+  UserAllCoursesResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
-      data = <InfluencerCourseData>[];
+      data = <UserAllCoursesData>[];
       json['data'].forEach((v) {
-        data!.add(new InfluencerCourseData.fromJson(v));
+        data!.add(new UserAllCoursesData.fromJson(v));
       });
     }
     count = json['count'];
@@ -27,41 +27,38 @@ class InfluencerCourseResponse {
   }
 }
 
-class InfluencerCourseData {
+class UserAllCoursesData {
   String? sId;
   String? courseName;
   String? courseStartTime;
   int? maxEnrolments;
+  int? coursePrice;
+  int? discountedPrice;
   String? courseImage;
   int? userEnrolled;
-  num? coursePrice;
-  num? discountedPrice;
   List<String>? instructorName;
 
-  InfluencerCourseData(
+  UserAllCoursesData(
       {this.sId,
       this.courseName,
       this.courseStartTime,
       this.maxEnrolments,
-      this.courseImage,
-      this.userEnrolled,
       this.coursePrice,
       this.discountedPrice,
+      this.courseImage,
+      this.userEnrolled,
       this.instructorName});
 
-  InfluencerCourseData.fromJson(Map<String, dynamic> json) {
+  UserAllCoursesData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     courseName = json['courseName'];
     courseStartTime = json['courseStartTime'];
     maxEnrolments = json['maxEnrolments'];
+    coursePrice = json['coursePrice'];
+    discountedPrice = json['discountedPrice'];
     courseImage = json['courseImage'];
     userEnrolled = json['userEnrolled'];
-    coursePrice = json['coursePrice'] != null ? json['coursePrice'] : null;
-    discountedPrice =
-        json['discountedPrice'] != null ? json['discountedPrice'] : null;
-    instructorName = json['instructorName'] != null
-        ? List<String>.from(json["instructorName"].map((x) => x))
-        : null;
+    instructorName = json['instructorName'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +67,8 @@ class InfluencerCourseData {
     data['courseName'] = this.courseName;
     data['courseStartTime'] = this.courseStartTime;
     data['maxEnrolments'] = this.maxEnrolments;
+    data['coursePrice'] = this.coursePrice;
+    data['discountedPrice'] = this.discountedPrice;
     data['courseImage'] = this.courseImage;
     data['userEnrolled'] = this.userEnrolled;
     data['instructorName'] = this.instructorName;

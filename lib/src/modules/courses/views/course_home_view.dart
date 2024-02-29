@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
-bool isStudent = false;
+bool isStudent = true;
 
 class CoursesHomeView extends StatefulWidget {
   const CoursesHomeView({super.key});
@@ -20,6 +20,9 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
   void initState() {
     super.initState();
     controller = Get.find<CourseController>();
+    if (isStudent) {
+      controller.getUserAllCourses();
+    }
     //controller.loadData();
     tabController = isStudent
         ? TabController(length: 2, vsync: this)
@@ -37,13 +40,11 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
     return Scaffold(
       appBar: AppBar(
         title: Text('Courses'),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //         Get.to(() => HomeView());
-        //       },
-        //       icon: Icon(Icons.arrow_back)),
-        // ],
+        leading: IconButton(
+            onPressed: () {
+              Get.to(() => HomeView());
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: RefreshIndicator(
         onRefresh: () {
@@ -59,53 +60,56 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: MediaQuery.of(context).size.width * 0.309,
-                      width: MediaQuery.of(context).size.width,
-                      child: CarouselSlider.builder(
-                          itemCount: 1,
-                          itemBuilder: (context, int index, _) {
-                            return GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.309,
-                                decoration: BoxDecoration(
-                                  color: AppColors.grey.withOpacity(.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child:
-                                      //  Image.network(
-                                      //   "${controller.dashboardCarouselList[index].carouselImage}",
-                                      //   fit: BoxFit.fill,
-                                      //   height:
-                                      //       MediaQuery.of(context).size.width * 0.382,
-                                      //   width: MediaQuery.of(context).size.width,
-                                      // ),
-                                      Image.asset(
-                                    AppImages.love,
-                                    width: MediaQuery.of(context).size.width,
-                                    height: MediaQuery.of(context).size.width *
-                                        0.309,
-                                    fit: BoxFit.fill,
+                    if (isStudent)
+                      Container(
+                        height: MediaQuery.of(context).size.width * 0.309,
+                        width: MediaQuery.of(context).size.width,
+                        child: CarouselSlider.builder(
+                            itemCount: 1,
+                            itemBuilder: (context, int index, _) {
+                              return GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.309,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.grey.withOpacity(.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child:
+                                        //  Image.network(
+                                        //   "${controller.dashboardCarouselList[index].carouselImage}",
+                                        //   fit: BoxFit.fill,
+                                        //   height:
+                                        //       MediaQuery.of(context).size.width * 0.382,
+                                        //   width: MediaQuery.of(context).size.width,
+                                        // ),
+                                        Image.asset(
+                                      AppImages.love,
+                                      width: MediaQuery.of(context).size.width,
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.309,
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                          options: CarouselOptions(
-                            viewportFraction: 1,
-                            autoPlay: true,
-                            enlargeCenterPage: true,
-                            autoPlayInterval: const Duration(seconds: 6),
-                          )),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.0306,
-                    ),
+                              );
+                            },
+                            options: CarouselOptions(
+                              viewportFraction: 1,
+                              autoPlay: true,
+                              enlargeCenterPage: true,
+                              autoPlayInterval: const Duration(seconds: 6),
+                            )),
+                      ),
+                    if (isStudent)
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.0306,
+                      ),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     //   children: [
@@ -161,7 +165,7 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                     controller: tabController,
                                     children: [
                                       BatchAllCoursesView(
-                                          controller.publishInflunceCourseList),
+                                          controller.userAllCourses),
                                       // Center(
                                       //     child: Text(
                                       //         "You haven\'t bought any courses yet. "),

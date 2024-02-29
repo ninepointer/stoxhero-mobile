@@ -18,14 +18,21 @@ class CourseBatchNameWidget extends GetView<CourseController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 70,
-                    width: 70,
-                    child: Image.asset(
+                  if (courseData?.courseImage == null) ...{
+                    Image.asset(
                       AppImages.contest,
-                      // fit: BoxFit.cover,
+                      height: 70,
+                      width: 70,
+                      //   fit: BoxFit.cover,
                     ),
-                  ),
+                  } else ...{
+                    Image.network(
+                      courseData?.courseImage ?? '',
+                      //  fit: BoxFit.fill,
+                      height: 70,
+                      width: 70,
+                    ),
+                  },
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.0204,
                   ),
@@ -35,7 +42,7 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                       children: [
                         Container(
                           child: Text(
-                            "What is equity ?",
+                            "${courseData?.courseName}",
                             style: AppStyles.tsBlackRegular16,
                           ),
                         ),
@@ -63,7 +70,7 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                                         0.0102,
                                   ),
                                   Text(
-                                      "${FormatHelper.categoryFormatter(1000)}"),
+                                      "${FormatHelper.categoryFormatter(courseData?.userEnrolled)}"),
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width *
                                         0.0204,
@@ -82,19 +89,77 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                 height: MediaQuery.of(context).size.width * 0.0204,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Text(
-                      "By - Rakesh kumar, Rakesh kumar, Rakesh kumar",
-                      style: AppStyles.tsBlackRegular14
-                          .copyWith(color: AppColors.grey),
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "Seat Left:",
+                        style: AppStyles.tsBlackMedium12,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.0102,
+                      ),
+                      Text(
+                        "${FormatHelper.categoryFormatter(courseData?.maxEnrolments != null ? courseData?.maxEnrolments : 0)}",
+                        style: AppStyles.tsBlackMedium14,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.0204,
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Course Fee:",
+                        style: AppStyles.tsBlackMedium12,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.0102,
+                      ),
+                      Text(
+                        "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
+                        style: TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: Colors.black,
+                            decorationThickness: 3),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.0102,
+                      ),
+                      Text(
+                          "${FormatHelper.formatNumbers(courseData?.discountedPrice, decimal: 0)}"),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.0204,
+                      )
+                    ],
                   ),
                 ],
-              )
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.0204,
+              ),
+              if ((courseData?.instructorName?.length ?? 0) > 0) ...{
+                Row(
+                  children:
+                      courseData!.instructorName!.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final value = entry.value;
+                    final isLast =
+                        index == courseData!.instructorName!.length - 1;
+
+                    return Text(
+                      isLast ? value : '$value, ',
+                      style: AppStyles.tsBlackMedium14,
+                    );
+                  }).toList(),
+                ),
+              }
             } else ...{
               GestureDetector(
                 onTap: () {
+                  controller.getCourseOverviewDetails(courseData?.sId ?? '');
                   Get.to(() => BatchDetailsView());
                 },
                 child: Row(
@@ -118,8 +183,26 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.0204,
                     ),
-                    Text("${courseData?.courseName}",
-                        style: AppStyles.tsBlackRegular16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${courseData?.courseName}",
+                            style: AppStyles.tsBlackRegular16),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.people,
+                              size: 15,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0102,
+                            ),
+                            Text(
+                                "${FormatHelper.categoryFormatter(courseData?.userEnrolled)}"),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

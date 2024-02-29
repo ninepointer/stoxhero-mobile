@@ -27,6 +27,8 @@ class BatchAllCoursesView extends GetView<CourseController> {
                   return isStudent
                       ? GestureDetector(
                           onTap: () {
+                            controller.getUserCourseOverviewDetails(
+                                courseDetails?.sId ?? '');
                             Get.to(() => BatchDetailsView());
                           },
                           child: Container(

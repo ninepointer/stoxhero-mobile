@@ -369,4 +369,16 @@ class AppUrls {
       "$apiURL/courses/influencer/pendingadminapproval";
   static String awaitingapprovalCourse =
       "$apiURL/courses/influencer/awaitingapproval";
+
+  static String adminapproval(String? id) =>
+      "$apiURL/courses/$id/adminapproval";
+
+  static String suggestchange(String? id) =>
+      "$apiURL/courses/influencer/$id/suggestchange";
+
+  static String courseOverView(String? id) => "$apiURL/courses/$id";
+
+  static String usercourses = "$apiURL/courses/user/mycourses";
+
+  static String userCoursesOverView(String? id) => "$apiURL/courses/user/$id";
 }
