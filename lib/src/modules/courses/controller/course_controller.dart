@@ -24,6 +24,7 @@ class CourseController extends BaseController<CourseRespository> {
   final userCourseOverview = CourseOverViewData().obs;
   final suggestionTextController = TextEditingController();
   final userAllCourses = <InfluencerCourseData>[].obs;
+  final currentRating = 0.obs;
 
   final selectedTabIndex = 0.obs;
 
@@ -33,7 +34,7 @@ class CourseController extends BaseController<CourseRespository> {
 
   final currentPage = 0.obs;
   final totalItems = 0.obs;
-  final itemsPerPage = 4.obs;
+  final itemsPerPage = 0.obs;
   final isLoadingMore = false.obs;
 
   void loadUserDetails() {
@@ -76,28 +77,33 @@ class CourseController extends BaseController<CourseRespository> {
       if (currentPage.value >= lastPage) {
         isLoadingMore.value = true;
       } else {
-        getInfluencerAwaitingapprovalCourseDetails();
+        getInfluencerAwaitingapprovalCourseDetails(isPagination: true);
+        getInfluencerPublishCourseDetails(isPagination: true);
+        getInfluencerUnpublishCourseDetails(isPagination: true);
+        getInfluencerPendingadminapprovalCourseDetails(isPagination: true);
       }
     }
   }
 
-  Future getInfluencerPublishCourseDetails() async {
+  Future getInfluencerPublishCourseDetails({bool isPagination = false}) async {
     try {
       isLoadingMore.value = true;
       int skip = currentPage.value * itemsPerPage.value;
       Map<String, dynamic> query = {
         "skip": skip,
-        "limit": 10,
-        // "limit": itemsPerPage.value,
+        // "limit": 10,
+        "limit": itemsPerPage.value,
       };
       final RepoResponse<InfluencerCourseResponse> response =
           await repository.getInfluencerPublishCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          publishInflunceCourseList.clear();
+          if (isPagination == false) {
+            publishInflunceCourseList.clear();
+          }
           publishInflunceCourseList.addAll(response.data?.data ?? []);
           totalItems(response.data?.count);
-          itemsPerPage(20);
+          itemsPerPage(10);
           int remainingItem =
               (response.data?.count ?? 0) - (publishInflunceCourseList.length);
           if (remainingItem < itemsPerPage.value) {
@@ -115,23 +121,26 @@ class CourseController extends BaseController<CourseRespository> {
     }
   }
 
-  Future getInfluencerUnpublishCourseDetails() async {
+  Future getInfluencerUnpublishCourseDetails(
+      {bool isPagination = false}) async {
     try {
       isLoadingMore.value = true;
       int skip = currentPage.value * itemsPerPage.value;
       Map<String, dynamic> query = {
         "skip": skip,
-        // "limit": itemsPerPage.value,
-        "limit": 10,
+        "limit": itemsPerPage.value,
+        // "limit": 10,
       };
       final RepoResponse<InfluencerCourseResponse> response =
           await repository.getInfluencerUnpublishCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          unPublishInflunceCourseList.clear();
+          if (isPagination == false) {
+            unPublishInflunceCourseList.clear();
+          }
           unPublishInflunceCourseList.addAll(response.data?.data ?? []);
           totalItems(response.data?.count);
-          itemsPerPage(20);
+          itemsPerPage(10);
           int remainingItem = (response.data?.count ?? 0) -
               (unPublishInflunceCourseList.length);
           if (remainingItem < itemsPerPage.value) {
@@ -149,24 +158,27 @@ class CourseController extends BaseController<CourseRespository> {
     }
   }
 
-  Future getInfluencerPendingadminapprovalCourseDetails() async {
+  Future getInfluencerPendingadminapprovalCourseDetails(
+      {bool isPagination = false}) async {
     try {
       isLoadingMore.value = true;
       int skip = currentPage.value * itemsPerPage.value;
       Map<String, dynamic> query = {
         "skip": skip,
-        // "limit": itemsPerPage.value,
-        "limit": 10,
+        "limit": itemsPerPage.value,
+        // "limit": 10,
       };
       final RepoResponse<InfluencerCourseResponse> response =
           await repository.getInfluencerPendingAdminApprovalCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          pendingadminapprovalInflunceCourseList.clear();
+          if (isPagination == false) {
+            pendingadminapprovalInflunceCourseList.clear();
+          }
           pendingadminapprovalInflunceCourseList
               .addAll(response.data?.data ?? []);
           totalItems(response.data?.count);
-          itemsPerPage(20);
+          itemsPerPage(10);
           int remainingItem = (response.data?.count ?? 0) -
               (pendingadminapprovalInflunceCourseList.length);
           if (remainingItem < itemsPerPage.value) {
@@ -184,10 +196,12 @@ class CourseController extends BaseController<CourseRespository> {
     }
   }
 
-  Future getInfluencerAwaitingapprovalCourseDetails() async {
+  Future getInfluencerAwaitingapprovalCourseDetails(
+      {bool isPagination = false}) async {
     try {
       isLoadingMore.value = true;
       int skip = currentPage.value * itemsPerPage.value;
+      print("cuuu ${currentPage.value} ${itemsPerPage.value}");
       Map<String, dynamic> query = {
         "skip": skip,
         "limit": itemsPerPage.value,
@@ -197,10 +211,13 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getInfluencerAwaitingApprovalCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          awaitingapprovalInflunceCourseList.clear();
+          if (isPagination == false) {
+            awaitingapprovalInflunceCourseList.clear();
+          }
+
           awaitingapprovalInflunceCourseList.addAll(response.data?.data ?? []);
           totalItems(response.data?.count);
-          itemsPerPage(3);
+          itemsPerPage(10);
           int remainingItem = (response.data?.count ?? 0) -
               (awaitingapprovalInflunceCourseList.length);
           if (remainingItem < itemsPerPage.value) {

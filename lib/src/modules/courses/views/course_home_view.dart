@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
-bool isStudent = false;
+bool isStudent = true;
 
 class CoursesHomeView extends StatefulWidget {
   const CoursesHomeView({super.key});
@@ -190,15 +190,23 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                 child: TabBar(
                                   onTap: (index) {
                                     if (index == 0) {
+                                      controller.currentPage(0);
+                                      controller.itemsPerPage(0);
                                       controller
                                           .getInfluencerAwaitingapprovalCourseDetails();
                                     } else if (index == 1) {
+                                      controller.currentPage(0);
+                                      controller.itemsPerPage(0);
                                       controller
                                           .getInfluencerPendingadminapprovalCourseDetails();
                                     } else if (index == 2) {
+                                      controller.currentPage(0);
+                                      controller.itemsPerPage(0);
                                       controller
                                           .getInfluencerUnpublishCourseDetails();
                                     } else {
+                                      controller.currentPage(0);
+                                      controller.itemsPerPage(0);
                                       controller
                                           .getInfluencerPublishCourseDetails();
                                     }

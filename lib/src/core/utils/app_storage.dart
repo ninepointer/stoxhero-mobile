@@ -38,6 +38,14 @@ class AppStorage {
     return LoginDetailsResponse.fromJson(_box.read(AppStorageKeys.userDetails));
   }
 
+  static Future setCourseUserStarRating(int count) async {
+    await _box.write(AppStorageKeys.courseStarCount, count);
+  }
+
+  static int getCourseUserStarRating() {
+    return _box.read(AppStorageKeys.courseStarCount) ?? 0;
+  }
+
   static void clearLoginDetails() {
     _box.remove(AppStorageKeys.token);
   }
@@ -52,4 +60,5 @@ class AppStorageKeys {
   static const String token = 'token';
   static const String userDetails = 'userDetails';
   static const String newUser = 'newUser';
+  static const String courseStarCount = "starCount";
 }

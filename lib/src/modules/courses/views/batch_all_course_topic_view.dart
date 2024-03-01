@@ -25,7 +25,9 @@ class _CourseAllTopicViewState extends State<CourseAllTopicView> {
             },
             child: Container(
               width: double.infinity,
-              color: AppColors.white,
+              color: Get.isDarkMode
+                  ? AppColors.darkCardBackgroundColor
+                  : AppColors.lightCardBackgroundColor,
               margin: EdgeInsets.only(bottom: 8, top: 8),
               child: Padding(
                 padding:
@@ -39,7 +41,7 @@ class _CourseAllTopicViewState extends State<CourseAllTopicView> {
                           height: 70,
                           width: 70,
                           child: Image.asset(
-                            AppImages.contest,
+                            AppImages.lightAppLogo,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -53,7 +55,9 @@ class _CourseAllTopicViewState extends State<CourseAllTopicView> {
                               Container(
                                 child: Text(
                                   "What is equity ?",
-                                  style: AppStyles.tsBlackRegular16,
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular16
+                                      : AppStyles.tsBlackRegular16,
                                 ),
                               ),
                               SizedBox(

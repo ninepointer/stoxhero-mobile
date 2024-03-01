@@ -23,23 +23,38 @@ class BatchAllCoursesView extends GetView<CourseController> {
                 physics: AlwaysScrollableScrollPhysics(),
                 itemCount: data?.length,
                 itemBuilder: (context, index) {
-                  var courseDetails = data?[index];
-                  return isStudent
-                      ? GestureDetector(
-                          onTap: () {
-                            controller.getUserCourseOverviewDetails(
-                                courseDetails?.sId ?? '');
-                            Get.to(() => BatchDetailsView());
-                          },
-                          child: Container(
-                              margin: EdgeInsets.only(bottom: 8, top: 8),
-                              child: CourseBatchNameWidget(courseDetails)),
-                        )
-                      : Container(
-                          margin: EdgeInsets.only(bottom: 8, top: 8),
-                          child: CourseBatchNameWidget(courseDetails));
-                },
-              )
+                  if (index < (data?.length ?? 0)) {
+                    var courseDetails = data?[index];
+                    return isStudent
+                        ? GestureDetector(
+                            onTap: () {
+                              controller.getUserCourseOverviewDetails(
+                                  courseDetails?.sId ?? '');
+                              Get.to(() => BatchDetailsView());
+                            },
+                            child: Container(
+                                margin: EdgeInsets.only(bottom: 8, top: 8),
+                                child: CourseBatchNameWidget(courseDetails)),
+                          )
+                        : Container(
+                            margin: EdgeInsets.only(bottom: 8, top: 8),
+                            child: CourseBatchNameWidget(courseDetails));
+                  } else if (!controller.isLoadingMore.value &&
+                      (data?.length ?? 0) > 4 &&
+                      controller.itemsPerPage.value > 0) {
+                    return Container(
+                      height: 60,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                })
             : NoDataFound();
       },
     );

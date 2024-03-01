@@ -12,12 +12,14 @@ class CourseVideoView extends StatefulWidget {
 }
 
 class _CourseVideoViewState extends State<CourseVideoView> {
+  late CourseController controller;
   late VideoPlayerController _controller;
   late CustomVideoPlayerController _customVideoPlayerController;
 
   @override
   void initState() {
     super.initState();
+    controller = Get.find<CourseController>();
 
     _controller = VideoPlayerController.networkUrl(Uri.parse(
         'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'))
@@ -39,6 +41,72 @@ class _CourseVideoViewState extends State<CourseVideoView> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Video Player"),
+        leading: IconButton(
+          onPressed: () {
+            AppStorage.getCourseUserStarRating() == 0
+                ? showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Obx(
+                        () => AlertDialog(
+                          title: Text("Rate this video"),
+                          content: Row(
+                            children: List.generate(
+                              5,
+                              (index) {
+                                return IconButton(
+                                  icon: Icon(
+                                    index < controller.currentRating.value
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: Colors.amber,
+                                  ),
+                                  onPressed: () {
+                                    controller.currentRating(index + 1);
+                                    // Navigator.pop(context,
+                                    //     index + 1); // Pass the selected rating back
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(color: AppColors.lightGreen),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                AppStorage.setCourseUserStarRating(1);
+                                Navigator.of(context).pop();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.lightGreen,
+                                onPrimary: Colors.white,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 4,
+                                    horizontal: 8), // Button padding
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8), // Button border radius
+                                ),
+                              ),
+                              child: Text('Send'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                : Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

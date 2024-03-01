@@ -74,7 +74,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       children: [
                         Text(
                           "${isStudent ? controller.userCourseOverview.value.courseName : controller.courseOverview.value.courseName}",
-                          style: AppStyles.tsBlackMedium16,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteMedium16
+                              : AppStyles.tsBlackMedium16,
                         ),
                         // Text(
                         //   "By - Rakesh Kumar",
@@ -82,24 +84,38 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         // ),
                         Text(
                           "Language - ${isStudent ? controller.userCourseOverview.value.courseLanguages : controller.courseOverview.value.courseLanguages}",
-                          style: AppStyles.tsBlackRegular14,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteRegular14
+                              : AppStyles.tsBlackRegular14,
                         ),
                         Text(
                           "Course category - ${isStudent ? controller.userCourseOverview.value.category : controller.courseOverview.value.category}",
-                          style: AppStyles.tsBlackRegular14,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteRegular14
+                              : AppStyles.tsBlackRegular14,
                         ),
                         Text(
                           "Course duration - ${formatDuration(isStudent ? controller.userCourseOverview.value.courseDurationInMinutes ?? 0 : controller.courseOverview.value.courseDurationInMinutes ?? 0)} ",
-                          style: AppStyles.tsBlackRegular14,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteRegular14
+                              : AppStyles.tsBlackRegular14,
                         ),
-                        Text(
-                          "Course Price - ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
-                          style: AppStyles.tsBlackRegular14,
-                        ),
-                        Text(
-                          "Discounted Price -  ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.discountedPrice ?? 0 : controller.courseOverview.value.discountedPrice ?? 0, decimal: 0)}",
-                          style: AppStyles.tsBlackRegular14,
-                        ),
+                        isStudent == false
+                            ? Text(
+                                "Course Price - ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              )
+                            : Container(),
+                        isStudent == false
+                            ? Text(
+                                "Discounted Price -  ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.discountedPrice ?? 0 : controller.courseOverview.value.discountedPrice ?? 0, decimal: 0)}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -120,7 +136,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       children: [
                         Text(
                           "Benefits of course:-",
-                          style: AppStyles.tsBlackMedium14,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteMedium14
+                              : AppStyles.tsBlackMedium14,
                         ),
                       ],
                     ),
@@ -165,7 +183,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       children: [
                         Text(
                           "Course Instructor:-",
-                          style: AppStyles.tsBlackMedium14,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteMedium14
+                              : AppStyles.tsBlackMedium14,
                         ),
                       ],
                     ),
@@ -193,7 +213,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                           children: [
                                             if (value.image == null) ...{
                                               Image.asset(
-                                                AppImages.appLogo,
+                                                AppImages.lightAppLogo,
                                                 height: 70,
                                                 width: 70,
                                                 //   fit: BoxFit.cover,
@@ -204,6 +224,15 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                 //  fit: BoxFit.fill,
                                                 height: 70,
                                                 width: 70,
+                                                errorBuilder: (context,
+                                                    exception, stackTrace) {
+                                                  return Image.asset(
+                                                    AppImages.lightAppLogo,
+                                                    height: 70,
+                                                    width: 70,
+                                                    //   fit: BoxFit.cover,
+                                                  );
+                                                },
                                               ),
                                             },
                                             SizedBox(
@@ -218,9 +247,13 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                      "${value.id?.firstName ?? ''} ${value.id?.lastName ?? ''}",
-                                                      style: AppStyles
-                                                          .tsBlackRegular16),
+                                                    "${value.id?.firstName ?? ''} ${value.id?.lastName ?? ''}",
+                                                    style: Get.isDarkMode
+                                                        ? AppStyles
+                                                            .tsWhiteRegular16
+                                                        : AppStyles
+                                                            .tsBlackRegular16,
+                                                  ),
                                                   Text("${value.about}"),
                                                 ],
                                               ),
@@ -250,18 +283,25 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                           children: [
                                             if (value.image == null) ...{
                                               Image.asset(
-                                                AppImages.contest,
+                                                AppImages.lightAppLogo,
                                                 height: 70,
                                                 width: 70,
                                                 //   fit: BoxFit.cover,
                                               ),
                                             } else ...{
-                                              Image.network(
-                                                value.image ?? '',
-                                                //  fit: BoxFit.fill,
-                                                height: 70,
-                                                width: 70,
-                                              ),
+                                              Image.network(value.image ?? '',
+                                                  //  fit: BoxFit.fill,
+                                                  height: 70,
+                                                  width: 70, errorBuilder:
+                                                      (context, exception,
+                                                          stackTrace) {
+                                                return Image.asset(
+                                                  AppImages.lightAppLogo,
+                                                  height: 70,
+                                                  width: 70,
+                                                  //   fit: BoxFit.cover,
+                                                );
+                                              }),
                                             },
                                             SizedBox(
                                               width: MediaQuery.of(context)
@@ -275,9 +315,13 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                      "${value.id?.firstName ?? ''} ${value.id?.lastName ?? ''}",
-                                                      style: AppStyles
-                                                          .tsBlackRegular16),
+                                                    "${value.id?.firstName ?? ''} ${value.id?.lastName ?? ''}",
+                                                    style: Get.isDarkMode
+                                                        ? AppStyles
+                                                            .tsWhiteRegular16
+                                                        : AppStyles
+                                                            .tsBlackRegular16,
+                                                  ),
                                                   Text("${value.about}"),
                                                 ],
                                               ),
@@ -304,9 +348,14 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     children: [
                       Text(
                         "Course overview:-",
-                        style: AppStyles.tsBlackMedium14,
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium14
+                            : AppStyles.tsBlackMedium14,
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.0204,
                   ),
                   Container(
                       padding:
@@ -320,7 +369,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                           Flexible(
                             child: Text(
                               "${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
-                              style: AppStyles.tsBlackRegular14,
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular14
+                                  : AppStyles.tsBlackRegular14,
                             ),
                           )
                         ],
@@ -333,7 +384,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     children: [
                       Text(
                         "Course description:-",
-                        style: AppStyles.tsBlackMedium14,
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium14
+                            : AppStyles.tsBlackMedium14,
                       ),
                     ],
                   ),
@@ -347,8 +400,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             ? AppColors.darkCardBackgroundColor
                             : AppColors.lightCardBackgroundColor),
                     child: Html(
-                        data:
-                            """${isStudent ? controller.userCourseOverview.value.courseDescription : controller.courseOverview.value.courseDescription}"""),
+                      data:
+                          """${isStudent ? controller.userCourseOverview.value.courseDescription : controller.courseOverview.value.courseDescription}""",
+                    ),
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0204,
@@ -358,7 +412,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     children: [
                       Text(
                         "Course topics:-",
-                        style: AppStyles.tsBlackMedium14,
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium14
+                            : AppStyles.tsBlackMedium14,
                       ),
                     ],
                   ),
@@ -402,15 +458,27 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                 width: double.infinity,
                 child: ElevatedButton(
                     onPressed: () {
+                      num price;
+                      if ((controller.userCourseOverview.value.coursePrice ??
+                              0) !=
+                          (controller
+                                  .userCourseOverview.value.discountedPrice ??
+                              0)) {
+                        price = (controller
+                                .userCourseOverview.value.discountedPrice ??
+                            0);
+                      } else {
+                        price =
+                            (controller.userCourseOverview.value.coursePrice ??
+                                0);
+                      }
                       BottomSheetHelper.openBottomSheet(
                         context: context,
                         child: PaymentBottomSheet(
                           productType: ProductType.course,
                           productId:
                               controller.userCourseOverview.value.sId ?? '',
-                          buyItemPrice: controller
-                                  .userCourseOverview.value.discountedPrice ??
-                              0,
+                          buyItemPrice: price,
                           onPaymentSuccess: () {},
                           onSubmit: () {
                             Get.back();
@@ -445,148 +513,174 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Buy @ "),
-                        Text(
-                          "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}",
-                          style: TextStyle(
-                              decoration: TextDecoration.lineThrough,
-                              decorationColor: Colors.white,
-                              decorationThickness: 3),
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                            "${FormatHelper.formatNumbers(controller.userCourseOverview.value.discountedPrice ?? 0, decimal: 0)}")
+                        if (controller.userCourseOverview.value.coursePrice !=
+                            controller
+                                .userCourseOverview.value.discountedPrice) ...{
+                          Text(
+                            "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}",
+                            style: TextStyle(
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Colors.white,
+                                decorationThickness: 3),
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                              "${FormatHelper.formatNumbers(controller.userCourseOverview.value.discountedPrice ?? 0, decimal: 0)}")
+                        } else ...{
+                          Text(
+                              "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}")
+                        }
                       ],
                     )),
               ),
             )
           } else ...{
-            SafeArea(
-                child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      controller.getInfluncerApprovalDetails(
-                          controller.courseOverview.value.sId ?? '');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lightGreen,
-                      onPrimary: Colors.white,
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 24), // Button padding
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), // Button border radius
-                      ),
-                    ),
+            controller.courseOverview.value.status == "Sent To Creator"
+                ? SafeArea(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Approve"),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.0204,
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      controller.suggestionTextController.clear();
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Suggest Change'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.3,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: TextField(
-                                    controller:
-                                        controller.suggestionTextController,
-                                    textInputAction: TextInputAction.newline,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter Suggestions',
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-
-                                  // Allow multiple lines for feedback
-                                ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              controller.getInfluncerApprovalDetails(
+                                  controller.courseOverview.value.sId ?? '');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.lightGreen,
+                              onPrimary: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16,
+                                  horizontal: 24), // Button padding
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    8), // Button border radius
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Approve"),
                               ],
                             ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.0204,
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              controller.suggestionTextController.clear();
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Get.isDarkMode
+                                        ? AppColors.darkCardBackgroundColor
+                                        : AppColors.lightCardBackgroundColor,
+                                    title: Text('Suggest Change'),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.8,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.3,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: Get.isDarkMode
+                                                ? AppColors.black.shade200
+                                                : AppColors.grey.shade200,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)),
+                                          ),
+                                          child: TextField(
+                                            controller: controller
+                                                .suggestionTextController,
+                                            textInputAction:
+                                                TextInputAction.newline,
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            maxLines: null,
+                                            decoration: InputDecoration(
+                                              hintText: 'Enter Suggestions',
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+
+                                          // Allow multiple lines for feedback
+                                        ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                              color: AppColors.lightGreen),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          controller.patchsuggestchangeDetails(
+                                              controller.courseOverview.value
+                                                      .sId ??
+                                                  '',
+                                              context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColors.lightGreen,
+                                          onPrimary: Colors.white,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 4,
+                                              horizontal: 8), // Button padding
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                8), // Button border radius
+                                          ),
+                                        ),
+                                        child: Text('Send'),
+                                      ),
+                                    ],
+                                  );
                                 },
-                                child: Text(
-                                  'Cancel',
-                                  style: TextStyle(color: AppColors.lightGreen),
-                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.lightGreen,
+                              onPrimary: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16,
+                                  horizontal: 24), // Button padding
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    8), // Button border radius
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  controller.patchsuggestchangeDetails(
-                                      controller.courseOverview.value.sId ?? '',
-                                      context);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.lightGreen,
-                                  onPrimary: Colors.white,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 4,
-                                      horizontal: 8), // Button padding
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        8), // Button border radius
-                                  ),
-                                ),
-                                child: Text('Send'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lightGreen,
-                      onPrimary: Colors.white,
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 24), // Button padding
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), // Button border radius
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Suggestion"),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Suggestion"),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ),
-              ],
-            ))
+                  )
+                : SizedBox()
           }
         ],
       ),
@@ -616,7 +710,9 @@ Widget textItemWidget(String str) {
       Flexible(
         child: Text(
           str,
-          style: AppStyles.tsBlackRegular14,
+          style: Get.isDarkMode
+              ? AppStyles.tsWhiteRegular14
+              : AppStyles.tsBlackRegular14,
         ),
       ),
     ],

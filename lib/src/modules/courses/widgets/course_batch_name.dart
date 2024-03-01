@@ -9,7 +9,9 @@ class CourseBatchNameWidget extends GetView<CourseController> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.white,
+      color: Get.isDarkMode
+          ? AppColors.darkCardBackgroundColor
+          : AppColors.lightCardBackgroundColor,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
         child: Column(
@@ -20,7 +22,7 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                 children: [
                   if (courseData?.courseImage == null) ...{
                     Image.asset(
-                      AppImages.contest,
+                      AppImages.lightAppLogo,
                       height: 70,
                       width: 70,
                       //   fit: BoxFit.cover,
@@ -31,6 +33,14 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                       //  fit: BoxFit.fill,
                       height: 70,
                       width: 70,
+                      errorBuilder: (context, exception, stackTrace) {
+                        return Image.asset(
+                          AppImages.contest,
+                          height: 70,
+                          width: 70,
+                          //   fit: BoxFit.cover,
+                        );
+                      },
                     ),
                   },
                   SizedBox(
@@ -43,7 +53,9 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                         Container(
                           child: Text(
                             "${courseData?.courseName}",
-                            style: AppStyles.tsBlackRegular16,
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteRegular16
+                                : AppStyles.tsBlackRegular16,
                           ),
                         ),
                         SizedBox(
@@ -95,14 +107,18 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                     children: [
                       Text(
                         "Seat Left:",
-                        style: AppStyles.tsBlackMedium12,
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium12
+                            : AppStyles.tsBlackMedium12,
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0102,
                       ),
                       Text(
                         "${FormatHelper.categoryFormatter(courseData?.maxEnrolments != null ? ((courseData?.maxEnrolments ?? 0) - (courseData?.userEnrolled ?? 0)) : 0)}",
-                        style: AppStyles.tsBlackMedium14,
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium12
+                            : AppStyles.tsBlackMedium12,
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0204,
@@ -113,23 +129,31 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                     children: [
                       Text(
                         "Course Fee:",
-                        style: AppStyles.tsBlackMedium12,
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium12
+                            : AppStyles.tsBlackMedium12,
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0102,
                       ),
-                      Text(
-                        "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
-                        style: TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: Colors.black,
-                            decorationThickness: 3),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.0102,
-                      ),
-                      Text(
-                          "${FormatHelper.formatNumbers(courseData?.discountedPrice, decimal: 0)}"),
+                      if ((courseData?.coursePrice ?? 0) !=
+                          (courseData?.discountedPrice ?? 0)) ...{
+                        Text(
+                          "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
+                          style: TextStyle(
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Colors.black,
+                              decorationThickness: 3),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.0102,
+                        ),
+                        Text(
+                            "${FormatHelper.formatNumbers(courseData?.discountedPrice, decimal: 0)}"),
+                      } else ...{
+                        Text(
+                            "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}"),
+                      },
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0204,
                       )
@@ -145,7 +169,9 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                   children: [
                     Text(
                       "Instructors - ",
-                      style: AppStyles.tsBlackMedium14,
+                      style: Get.isDarkMode
+                          ? AppStyles.tsWhiteMedium12
+                          : AppStyles.tsBlackMedium12,
                     ),
                     Row(
                       children: courseData!.instructorName!
@@ -159,7 +185,9 @@ class CourseBatchNameWidget extends GetView<CourseController> {
 
                         return Text(
                           isLast ? value : '$value, ',
-                          style: AppStyles.tsBlackMedium14,
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteMedium12
+                              : AppStyles.tsBlackMedium12,
                         );
                       }).toList(),
                     ),
@@ -177,7 +205,7 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                   children: [
                     if (courseData?.courseImage == null) ...{
                       Image.asset(
-                        AppImages.contest,
+                        AppImages.lightAppLogo,
                         height: 70,
                         width: 70,
                         //   fit: BoxFit.cover,
@@ -185,9 +213,17 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                     } else ...{
                       Image.network(
                         courseData?.courseImage ?? '',
-                        //  fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                         height: 70,
                         width: 70,
+                        errorBuilder: (context, exception, stackTrace) {
+                          return Image.asset(
+                            AppImages.lightAppLogo,
+                            height: 70,
+                            width: 70,
+                            //   fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     },
                     SizedBox(
@@ -196,8 +232,12 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${courseData?.courseName}",
-                            style: AppStyles.tsBlackRegular16),
+                        Text(
+                          "${courseData?.courseName}",
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteRegular16
+                              : AppStyles.tsBlackRegular16,
+                        ),
                         Row(
                           children: [
                             Icon(
