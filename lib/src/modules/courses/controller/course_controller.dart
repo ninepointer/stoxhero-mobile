@@ -33,7 +33,7 @@ class CourseController extends BaseController<CourseRespository> {
 
   final currentPage = 0.obs;
   final totalItems = 0.obs;
-  final itemsPerPage = 0.obs;
+  final itemsPerPage = 4.obs;
   final isLoadingMore = false.obs;
 
   void loadUserDetails() {
@@ -73,11 +73,10 @@ class CourseController extends BaseController<CourseRespository> {
         return;
       }
       final lastPage = (totalItems.value / itemsPerPage.value).ceil();
-      print("lastpage ${lastPage} ${totalItems.value} ${itemsPerPage.value}");
       if (currentPage.value >= lastPage) {
         isLoadingMore.value = true;
       } else {
-        getInfluencerPublishCourseDetails();
+        getInfluencerAwaitingapprovalCourseDetails();
       }
     }
   }
@@ -89,6 +88,7 @@ class CourseController extends BaseController<CourseRespository> {
       Map<String, dynamic> query = {
         "skip": skip,
         "limit": 10,
+        // "limit": itemsPerPage.value,
       };
       final RepoResponse<InfluencerCourseResponse> response =
           await repository.getInfluencerPublishCourse(query);
@@ -190,8 +190,8 @@ class CourseController extends BaseController<CourseRespository> {
       int skip = currentPage.value * itemsPerPage.value;
       Map<String, dynamic> query = {
         "skip": skip,
-        // "limit": itemsPerPage.value,
-        "limit": 10,
+        "limit": itemsPerPage.value,
+        //"limit": 10,
       };
       final RepoResponse<InfluencerCourseResponse> response =
           await repository.getInfluencerAwaitingApprovalCourse(query);
@@ -200,7 +200,7 @@ class CourseController extends BaseController<CourseRespository> {
           awaitingapprovalInflunceCourseList.clear();
           awaitingapprovalInflunceCourseList.addAll(response.data?.data ?? []);
           totalItems(response.data?.count);
-          itemsPerPage(20);
+          itemsPerPage(3);
           int remainingItem = (response.data?.count ?? 0) -
               (awaitingapprovalInflunceCourseList.length);
           if (remainingItem < itemsPerPage.value) {

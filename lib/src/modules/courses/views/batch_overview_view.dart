@@ -51,9 +51,14 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
-                  CustomVideoPlayer(
-                      customVideoPlayerController:
-                          _customVideoPlayerController),
+                  _customVideoPlayerController
+                          .videoPlayerController.value.isInitialized
+                      ? CustomVideoPlayer(
+                          customVideoPlayerController:
+                              _customVideoPlayerController)
+                      : AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Center(child: CircularProgressIndicator())),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
@@ -188,7 +193,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                           children: [
                                             if (value.image == null) ...{
                                               Image.asset(
-                                                AppImages.contest,
+                                                AppImages.appLogo,
                                                 height: 70,
                                                 width: 70,
                                                 //   fit: BoxFit.cover,
@@ -400,9 +405,12 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       BottomSheetHelper.openBottomSheet(
                         context: context,
                         child: PaymentBottomSheet(
-                          productType: ProductType.contest,
-                          productId: '',
-                          buyItemPrice: 0,
+                          productType: ProductType.course,
+                          productId:
+                              controller.userCourseOverview.value.sId ?? '',
+                          buyItemPrice: controller
+                                  .userCourseOverview.value.discountedPrice ??
+                              0,
                           onPaymentSuccess: () {},
                           onSubmit: () {
                             Get.back();

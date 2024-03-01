@@ -110,6 +110,9 @@ class WalletController extends BaseController<WalletRepository> {
       case ProductType.battle:
         productType = 'Battle';
         break;
+      case ProductType.course:
+        productType = 'Course';
+        break;
       default:
     }
     return productType;

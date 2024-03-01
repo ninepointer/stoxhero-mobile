@@ -43,4 +43,5 @@ enum ProductType {
   collegeContest,
   internship,
   wallet,
+  course,
 }

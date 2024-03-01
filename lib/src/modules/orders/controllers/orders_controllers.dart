@@ -200,7 +200,7 @@ class OrdersController extends BaseController<OrdersRepository> {
     try {
       isLoadingMore.value = true;
       int skip = currentPage.value * itemsPerPage.value;
-      print("skipskip ${skip} ${itemsPerPage.value} ${currentPage.value}");
+      //   print("skipskip ${skip} ${itemsPerPage.value} ${currentPage.value}");
       Map<String, dynamic> query = {
         "skip": skip,
         "limit": itemsPerPage.value,

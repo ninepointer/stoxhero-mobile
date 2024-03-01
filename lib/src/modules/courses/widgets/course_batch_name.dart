@@ -101,7 +101,7 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                         width: MediaQuery.of(context).size.width * 0.0102,
                       ),
                       Text(
-                        "${FormatHelper.categoryFormatter(courseData?.maxEnrolments != null ? courseData?.maxEnrolments : 0)}",
+                        "${FormatHelper.categoryFormatter(courseData?.maxEnrolments != null ? ((courseData?.maxEnrolments ?? 0) - (courseData?.userEnrolled ?? 0)) : 0)}",
                         style: AppStyles.tsBlackMedium14,
                       ),
                       SizedBox(
@@ -142,19 +142,29 @@ class CourseBatchNameWidget extends GetView<CourseController> {
               ),
               if ((courseData?.instructorName?.length ?? 0) > 0) ...{
                 Row(
-                  children:
-                      courseData!.instructorName!.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final value = entry.value;
-                    final isLast =
-                        index == courseData!.instructorName!.length - 1;
-
-                    return Text(
-                      isLast ? value : '$value, ',
+                  children: [
+                    Text(
+                      "Instructors - ",
                       style: AppStyles.tsBlackMedium14,
-                    );
-                  }).toList(),
-                ),
+                    ),
+                    Row(
+                      children: courseData!.instructorName!
+                          .asMap()
+                          .entries
+                          .map((entry) {
+                        final index = entry.key;
+                        final value = entry.value;
+                        final isLast =
+                            index == courseData!.instructorName!.length - 1;
+
+                        return Text(
+                          isLast ? value : '$value, ',
+                          style: AppStyles.tsBlackMedium14,
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                )
               }
             } else ...{
               GestureDetector(

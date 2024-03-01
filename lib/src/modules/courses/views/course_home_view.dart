@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
-bool isStudent = true;
+bool isStudent = false;
 
 class CoursesHomeView extends StatefulWidget {
   const CoursesHomeView({super.key});
@@ -22,8 +22,9 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
     controller = Get.find<CourseController>();
     if (isStudent) {
       controller.getUserAllCourses();
+    } else {
+      controller.getInfluencerAwaitingapprovalCourseDetails();
     }
-    //controller.loadData();
     tabController = isStudent
         ? TabController(length: 2, vsync: this)
         : TabController(length: 4, vsync: this);
