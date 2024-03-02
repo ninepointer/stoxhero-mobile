@@ -87,4 +87,12 @@ class CourseRespository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: CourseOverviewResponse.fromJson(response));
   }
+
+  Future<RepoResponse<UserMyCoursesResponse>> getUserMyCourses() async {
+    String apiURL = AppUrls.userMycourses;
+    var response = await service.getAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: UserMyCoursesResponse.fromJson(response));
+  }
 }

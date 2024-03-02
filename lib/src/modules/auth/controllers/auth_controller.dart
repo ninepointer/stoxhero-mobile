@@ -266,6 +266,7 @@ class AuthController extends BaseController<AuthRepository> {
         Get.find<HomeController>().loadUserDetails();
         if (navigate) {
           await SocketService().initSocket();
+          Get.find<ContestController>().getReadSetting();
           Get.offAllNamed(AppRoutes.home);
         }
         log('App ${AppStorage.getToken()}');

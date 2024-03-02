@@ -378,7 +378,8 @@ class AppUrls {
 
   static String courseOverView(String? id) => "$apiURL/courses/$id";
 
-  static String usercourses = "$apiURL/courses/user/mycourses";
+  static String usercourses = "$apiURL/courses/user/courses";
+  static String userMycourses = "$apiURL/courses/user/mycourses";
 
   static String userCoursesOverView(String? id) => "$apiURL/courses/user/$id";
 }

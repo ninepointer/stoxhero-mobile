@@ -142,7 +142,9 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                           "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
                           style: TextStyle(
                               decoration: TextDecoration.lineThrough,
-                              decorationColor: Colors.black,
+                              decorationColor: Get.isDarkMode
+                                  ? AppColors.white
+                                  : AppColors.black,
                               decorationThickness: 3),
                         ),
                         SizedBox(

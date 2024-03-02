@@ -2,7 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
-bool isStudent = true;
+bool isStudent =
+    AppStorage.getUserDetails().role?.roleName == "Influencer" ? true : false;
 
 class CoursesHomeView extends StatefulWidget {
   const CoursesHomeView({super.key});
@@ -22,6 +23,7 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
     controller = Get.find<CourseController>();
     if (isStudent) {
       controller.getUserAllCourses();
+      controller.getUserMyCoursesDetails();
     } else {
       controller.getInfluencerAwaitingapprovalCourseDetails();
     }
@@ -171,7 +173,7 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                       //     child: Text(
                                       //         "You haven\'t bought any courses yet. "),
                                       //         ),
-                                      MyLibraryView()
+                                      MyLibraryView(controller.userMyCourses)
                                     ],
                                   ),
                                 ),

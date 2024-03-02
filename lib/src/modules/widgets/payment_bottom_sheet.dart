@@ -9,6 +9,7 @@ import 'package:crypto/crypto.dart';
 import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 class PaymentBottomSheet extends StatefulWidget {
+  final bool? isGstInclude;
   final ProductType productType;
   final String productId;
   final num buyItemPrice;
@@ -17,6 +18,7 @@ class PaymentBottomSheet extends StatefulWidget {
   final PaymentTransactionType paymentTransactionType;
 
   PaymentBottomSheet({
+    this.isGstInclude = false,
     required this.productType,
     required this.productId,
     required this.buyItemPrice,
@@ -144,6 +146,12 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     if (isWalletPayment) {
       num amount =
           num.parse(controller.addMoneyAmountTextController.text) * 100;
+
+      if (widget.isGstInclude == true) {
+        amount = amount +
+            (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0)) /
+                100;
+      }
       paymentData = PaymentRequest(
         bonusRedemption:
             controller.isHeroCashAdded.value ? calculateHeroCash : 0,
@@ -158,7 +166,13 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       num amount = controller.couponCodeSuccessText.isNotEmpty
           ? controller.subscriptionAmount.value
           : widget.buyItemPrice;
+      if (widget.isGstInclude == true) {
+        amount = amount +
+            (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0)) /
+                100;
+      }
       amount = amount * 100;
+
       paymentData = PaymentRequest(
         bonusRedemption:
             controller.isHeroCashAdded.value ? calculateHeroCash : 0,
@@ -194,10 +208,20 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     num amount = 1000;
     if (isWalletPayment) {
       amount = num.parse(controller.addMoneyAmountTextController.text) * 100;
+      if (widget.isGstInclude == true) {
+        amount = amount +
+            (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0)) /
+                100;
+      }
     } else {
       amount = controller.couponCodeSuccessText.isNotEmpty
           ? controller.subscriptionAmount.value
           : widget.buyItemPrice;
+      if (widget.isGstInclude == true) {
+        amount = amount +
+            (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0)) /
+                100;
+      }
       amount = amount * 100;
     }
 
@@ -361,8 +385,24 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                               FormatHelper.formatNumbers((controller
                                           .couponCodeSuccessText.isNotEmpty ||
                                       controller.isHeroCashAdded.value)
-                                  ? controller.subscriptionAmount.value
-                                  : widget.buyItemPrice),
+                                  ? widget.isGstInclude == true
+                                      ? (controller
+                                          .subscriptionAmount.value = controller
+                                              .subscriptionAmount.value +
+                                          (controller.subscriptionAmount.value *
+                                              (AppStorage.getReadSetting()
+                                                      .courseGstPercentage ??
+                                                  0) /
+                                              100))
+                                      : controller.subscriptionAmount.value
+                                  : widget.isGstInclude == true
+                                      ? (widget.buyItemPrice +
+                                          (widget.buyItemPrice *
+                                              (AppStorage.getReadSetting()
+                                                      .courseGstPercentage ??
+                                                  0) /
+                                              100))
+                                      : widget.buyItemPrice),
                               style: Theme.of(context)
                                   .textTheme
                                   .tsMedium18
@@ -594,8 +634,16 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                                                     .isNotEmpty ||
                                                 controller
                                                     .isHeroCashAdded.value)
-                                            ? controller
-                                                .subscriptionAmount.value
+                                            ? widget.isGstInclude == true
+                                                ? controller.subscriptionAmount(
+                                                    controller
+                                                            .subscriptionAmount *
+                                                        (AppStorage.getReadSetting()
+                                                                .courseGstPercentage ??
+                                                            0) /
+                                                        100)
+                                                : controller
+                                                    .subscriptionAmount.value
                                             : widget.buyItemPrice) >
                                         walletBalance!
                                 ? () {

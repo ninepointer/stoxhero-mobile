@@ -75,8 +75,8 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         Text(
                           "${isStudent ? controller.userCourseOverview.value.courseName : controller.courseOverview.value.courseName}",
                           style: Get.isDarkMode
-                              ? AppStyles.tsWhiteMedium16
-                              : AppStyles.tsBlackMedium16,
+                              ? AppStyles.tsWhiteMedium18
+                              : AppStyles.tsBlackMedium18,
                         ),
                         // Text(
                         //   "By - Rakesh Kumar",
@@ -119,9 +119,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0204,
-                  ),
                   if (isStudent
                       ? (controller.userCourseOverview.value.courseBenefits
                                   ?.length ??
@@ -131,6 +128,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                   ?.length ??
                               0) >
                           0) ...{
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0204,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -143,7 +143,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       ],
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.0102,
+                      height: MediaQuery.of(context).size.width * 0.0204,
                     ),
                     Container(
                       padding:
@@ -383,6 +383,50 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
+                        "Course topics:-",
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium14
+                            : AppStyles.tsBlackMedium14,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.0204,
+                  ),
+                  if (isStudent) ...{
+                    for (int i = 0;
+                        i <
+                            (controller.userCourseOverview.value.courseContent
+                                    ?.length ??
+                                0);
+                        i++)
+                      CourseTopicsAndSubTopicsWidget(
+                          i,
+                          controller
+                              .userCourseOverview.value.courseContent?[i]),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.width * 0.0204,
+                    // ),
+                  } else ...{
+                    for (int i = 0;
+                        i <
+                            (controller.courseOverview.value.courseContent
+                                    ?.length ??
+                                0);
+                        i++)
+                      CourseTopicsAndSubTopicsWidget(
+                          i, controller.courseOverview.value.courseContent?[i]),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.width * 0.0204,
+                    // ),
+                  },
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.0204,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
                         "Course description:-",
                         style: Get.isDarkMode
                             ? AppStyles.tsWhiteMedium14
@@ -407,47 +451,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0204,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Course topics:-",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteMedium14
-                            : AppStyles.tsBlackMedium14,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0204,
-                  ),
-                  if (isStudent) ...{
-                    for (int i = 0;
-                        i <
-                            (controller.userCourseOverview.value.courseContent
-                                    ?.length ??
-                                0);
-                        i++)
-                      CourseTopicsAndSubTopicsWidget(
-                          i,
-                          controller
-                              .userCourseOverview.value.courseContent?[i]),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.0612,
-                    ),
-                  } else ...{
-                    for (int i = 0;
-                        i <
-                            (controller.courseOverview.value.courseContent
-                                    ?.length ??
-                                0);
-                        i++)
-                      CourseTopicsAndSubTopicsWidget(
-                          i, controller.courseOverview.value.courseContent?[i]),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.0612,
-                    ),
-                  }
                 ],
               ),
             ),
@@ -472,9 +475,11 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             (controller.userCourseOverview.value.coursePrice ??
                                 0);
                       }
+
                       BottomSheetHelper.openBottomSheet(
                         context: context,
                         child: PaymentBottomSheet(
+                          isGstInclude: true,
                           productType: ProductType.course,
                           productId:
                               controller.userCourseOverview.value.sId ?? '',

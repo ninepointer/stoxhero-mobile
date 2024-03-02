@@ -51,6 +51,7 @@ class LoginDetailsResponse {
   String? upiId;
   String? mobileOtp;
   bool? isAlgoTrader;
+  Role? role;
   List<String>? watchlistInstruments;
   List<String>? contests;
   List<ProfilePortfolio>? portfolio;
@@ -72,6 +73,7 @@ class LoginDetailsResponse {
     this.address,
     this.city,
     this.cohort,
+    this.role,
     this.country,
     this.createdBy,
     this.degree,
@@ -151,6 +153,8 @@ class LoginDetailsResponse {
     profilePhoto = json['profilePhoto'] != null
         ? new UserImageDetails.fromJson(json['profilePhoto'])
         : null;
+
+    role = json['role'] != null ? new Role.fromJson(json['role']) : null;
     sId = json['_id'];
     kYCStatus = json['KYCStatus'];
     iV = json['__v'];
@@ -246,6 +250,9 @@ class LoginDetailsResponse {
     }
     if (this.profilePhoto != null) {
       data['profilePhoto'] = this.profilePhoto!.toJson();
+    }
+    if (this.role != null) {
+      data['role'] = this.role!.toJson();
     }
     data['_id'] = this.sId;
     data['KYCStatus'] = this.kYCStatus;
@@ -366,6 +373,7 @@ class LoginDetailsResponse {
     String? payTMNumber,
     String? phonePeNumber,
     String? upiId,
+    Role? role,
     String? mobileOtp,
     bool? isAlgoTrader,
     List<String>? watchlistInstruments,
@@ -387,6 +395,7 @@ class LoginDetailsResponse {
       sId: sId ?? this.sId,
       kYCStatus: kYCStatus ?? this.kYCStatus,
       iV: iV ?? this.iV,
+      role: role ?? this.role,
       address: address ?? this.address,
       city: city ?? this.city,
       cohort: cohort ?? this.cohort,
@@ -459,6 +468,28 @@ class UserImageDetails {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['url'] = this.url;
     data['name'] = this.name;
+    return data;
+  }
+}
+
+class Role {
+  String? id;
+  String? roleName;
+
+  Role({
+    this.id,
+    this.roleName,
+  });
+
+  Role.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
+    roleName = json['roleName'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.id;
+    data['roleName'] = this.roleName;
     return data;
   }
 }

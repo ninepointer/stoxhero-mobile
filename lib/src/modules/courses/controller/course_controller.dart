@@ -24,6 +24,7 @@ class CourseController extends BaseController<CourseRespository> {
   final userCourseOverview = CourseOverViewData().obs;
   final suggestionTextController = TextEditingController();
   final userAllCourses = <InfluencerCourseData>[].obs;
+  final userMyCourses = <UserMyCoursesData>[].obs;
   final currentRating = 0.obs;
 
   final selectedTabIndex = 0.obs;
@@ -43,10 +44,6 @@ class CourseController extends BaseController<CourseRespository> {
 
   void loadData() async {
     loadUserDetails();
-    // await getInfluencerPublishCourseDetails();
-    // await getInfluencerUnpublishCourseDetails();
-    // await getInfluencerPendingadminapprovalCourseDetails();
-    // await getInfluencerAwaitingapprovalCourseDetails();
   }
 
   void showDateRangePicker(BuildContext context,
@@ -324,6 +321,23 @@ class CourseController extends BaseController<CourseRespository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     } finally {
       isLoadingMore.value = false;
+    }
+  }
+
+  Future getUserMyCoursesDetails() async {
+    try {
+      final RepoResponse<UserMyCoursesResponse> response =
+          await repository.getUserMyCourses();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          userMyCourses(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
 }

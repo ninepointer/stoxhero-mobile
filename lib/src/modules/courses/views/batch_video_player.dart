@@ -123,7 +123,9 @@ class _CourseVideoViewState extends State<CourseVideoView> {
                 children: [
                   Text(
                     "What is equity",
-                    style: AppStyles.tsBlackMedium18,
+                    style: Get.isDarkMode
+                        ? AppStyles.tsWhiteMedium18
+                        : AppStyles.tsBlackMedium18,
                   ),
                 ],
               ),

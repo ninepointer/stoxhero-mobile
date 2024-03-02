@@ -23,6 +23,7 @@ class ReadSettingResponse {
   num? bonusToUnitCashRatio;
   num? maxBonusRedemptionPercentage;
   num? minWalletBalance;
+  num? courseGstPercentage;
 
   ReadSettingResponse(
       {this.toggle,
@@ -48,7 +49,8 @@ class ReadSettingResponse {
       this.mobileAppVersion,
       this.bonusToUnitCashRatio,
       this.maxBonusRedemptionPercentage,
-      this.minWalletBalance});
+      this.minWalletBalance,
+      this.courseGstPercentage});
 
   ReadSettingResponse.fromJson(Map<String, dynamic> json) {
     toggle =
@@ -77,6 +79,7 @@ class ReadSettingResponse {
     bonusToUnitCashRatio = json['bonusToUnitCashRatio'];
     maxBonusRedemptionPercentage = json['maxBonusRedemptionPercentage'];
     minWalletBalance = json['minWalletBalance'];
+    courseGstPercentage = json['courseGstPercentage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +114,7 @@ class ReadSettingResponse {
     data['bonusToUnitCashRatio'] = this.bonusToUnitCashRatio;
     data['maxBonusRedemptionPercentage'] = this.maxBonusRedemptionPercentage;
     data['minWalletBalance'] = this.minWalletBalance;
+    data['courseGstPercentage'] = this.courseGstPercentage;
     return data;
   }
 }

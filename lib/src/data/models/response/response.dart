@@ -113,3 +113,4 @@ export 'create_new_user_account_response.dart';
 export 'influencer_course_response.dart';
 export 'courses_overview_response.dart';
 export 'course_user_all_courses_response.dart';
+export 'course_user_my_courses_response.dart';

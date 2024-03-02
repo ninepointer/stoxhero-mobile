@@ -1964,6 +1964,7 @@ class ContestController extends BaseController<ContestRepository> {
     try {
       final RepoResponse<ReadSettingResponse> response =
           await repository.readSetting();
+      AppStorage.setReadSetting(response.data);
       readSetting(response.data);
     } catch (e) {
       log(e.toString());
