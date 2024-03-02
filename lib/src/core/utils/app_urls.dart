@@ -27,16 +27,22 @@ class AppUrls {
   static const String stockIndex = "$apiURL/stockindex";
   static const String getIndexLivePrice = "$apiURL/getIndexliveprice";
   static const String collegeList = "$apiURL/college/collegeList";
+
   static String virtualPendingStopLoss(String id) =>
       "$apiURL/pendingorder/my/todaysPending/$id/paperTrade";
+
   static String contestPendingStopLoss(String id) =>
       "$apiURL/pendingorder/my/todaysPending/$id/Daily%20Contest";
+
   static String collegeContestPendingStopLoss(String id) =>
       "$apiURL/pendingorder/my/todaysPending/$id/Daily%20Contest";
+
   static String marginXPendingStopLoss(String id) =>
       "$apiURL/pendingorder/my/todaysPending/$id/MarginX";
+
   static String tenXPendingStopLoss(String id) =>
       "$apiURL/pendingorder/my/todaysPending/$id/TenX%20Trader";
+
   static String internshipPendingStopLoss(String id) =>
       "$apiURL/pendingorder/my/todaysPending/$id/Internship%20Trader";
 
@@ -187,20 +193,26 @@ class AppUrls {
 
   static String internshipCertificateDownload(String? id) =>
       "$apiURL/internbatch/download/$id";
+
   static String tenxPortfolio(String? id) =>
       "$apiURL/tenX/$id/trade/marginDetail";
+
   static String tenxTradeTodaysOrders(String? subscriptionId) =>
       "$apiURL/tenX/my/todayorders/$subscriptionId";
+
   static String tenxTradeAllOrders(
           String? subId, String? subscribedOn, String? expiredOn) =>
       "$apiURL/tenX/my/historyorders/$subId/$subscribedOn/$expiredOn";
 
   static String completedContestLeaderboard(String? id) =>
       "$apiURL/dailycontest/contestleaderboard/$id";
+
   static String completedContestOrders(String? id) =>
       '$apiURL/dailycontest/trade/$id/my/todayorders';
+
   static String completedCollegeContestCertificate(String? id) =>
       "$apiURL/dailycontest/download/$id";
+
   static String tenXSubscribePNL(
           String? subscriptionId, String? subscribedOnTime) =>
       "$apiURL/tenX/$subscriptionId/trade/livesubscriptionpnl/$subscribedOnTime";
@@ -211,97 +223,128 @@ class AppUrls {
 
   static String contestCreditData(String? id) =>
       "$apiURL/dailycontest/trade/$id/myPnlandCreditData";
+
   static String contestPosition(String? id) =>
       "$apiURL/dailycontest/trade/$id/pnl";
+
   static String contestsTradingInstruments(
           bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/tradableInstruments?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=Daily Contest";
 
   static String shareContest(String? id) =>
       "$apiURL/dailycontest/contest/$id/share";
+
   static String getNotified(String? id) =>
       "$apiURL/dailycontest/contest/$id/register";
+
   static String participate(String? id) =>
       "$apiURL/dailycontest/contest/$id/participate";
+
   static String featuredParticipate(String? id) =>
       "$apiURL/dailycontest/contest/$id/participate";
 
   static String marginXPosition(String? id) => "$apiURL/marginxtrade/$id/pnl";
+
   static String marginXCreditData(String? id) =>
       "$apiURL/marginxtrade/$id/myPnlandCreditData";
+
   static String marginXInstrumentWatchList(
           bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/instrumentDetails?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
+
   static String marginXTradingInstruments(
           bool? isNifty, bool? isBankNifty, bool? isFinNifty) =>
       "$apiURL/tradableInstruments?isNifty=$isNifty&isBankNifty=$isBankNifty&isFinNifty=$isFinNifty&dailyContest=true";
+
   static String completedMarginXOrders(String? id) =>
       "$apiURL/marginxtrade/$id/my/allorders";
 
   static String virtualperformance(String? tradeType, String? timeFrame) =>
       "$apiURL/userdashboard/stats?tradeType=$tradeType&timeframe=$timeFrame";
+
   static String performance(String? tradeType, String? timeFrame) =>
       "$apiURL/userdashboard/${tradeType}stats?timeframe=$timeFrame";
 
   static String careers(String? type) => "$apiURL/career/live?type=$type";
 
   static String internshipPosition(String? id) => "$apiURL/internship/pnl/$id";
+
   static String internshipOverview(String? id) =>
       "$apiURL/analytics/internship/myoverview/$id";
+
   static String internshipMonthlyPNL(String? id) =>
       "$apiURL/analytics/internship/mymonthlypnl/$id";
+
   static String internshipDateWisePNL(String? id) =>
       "$apiURL/analytics/internship/mystats/$id";
+
   static String internshipBatchPortfolio(String? id) =>
       "$apiURL/internship/marginDetail/$id";
+
   static String internshipBatchLeaderBoard(String? id) =>
       "$apiURL/internship/leaderboard/$id";
 
   static String tenxCountTradingDays(String? id) =>
       "$apiURL/tenX/$id/trade/countTradingDays";
+
   static String shareMarginX(String? id) => "$apiURL/marginx/share/$id";
+
   static String tenxSubscriberCount(String? id) =>
       "$apiURL/tenX/subscribercount/$id";
+
   static String verifyAndParticipate(String? id) =>
       "$apiURL/dailycontest/contest/$id/varifycodeandparticipate";
 
   static const String pendingOrder = "$apiURL/pendingorder/my";
+
   static String tenxStopLossExecutedOrder(String? id) =>
       "$pendingOrder/todaysProcessed/$id/TenX%20Trader";
+
   static String tenxStopLossPendingOrder(String? id) =>
       "$pendingOrder/todaysPending/$id/TenX%20Trader";
+
   static String tenxStopLossPendingCancelOrder(String? id) =>
       "$apiURL/pendingorder/$id/TenX%20Trader";
+
   static String stopLossEditOrder(String? id) =>
       "$apiURL/pendingorder/editprice/$id";
 
   static String virtualStopLossExecutedOrder(String? id) =>
       "$pendingOrder/todaysProcessed/$id/paperTrade";
+
   static String virtualStopLossPendingOrder(String? id) =>
       "$pendingOrder/todaysPending/$id/paperTrade";
+
   static String virtualStopLossPendingCancelOrder(String? id) =>
       "$apiURL/pendingorder/$id/paperTrade";
 
   static String contestStopLossExecutedOrder(String? id) =>
       "$pendingOrder/todaysProcessed/$id/Daily%20Contest";
+
   static String contestStopLossPendingOrder(String? id) =>
       "$pendingOrder/todaysPending/$id/Daily%20Contest";
+
   static String contestStopLossPendingCancelOrder(String? id) =>
       "$apiURL/pendingorder/$id/Daily%20Contest";
 
   static String internshipStopLossExecutedOrder(String? id) =>
       "$pendingOrder/todaysProcessed/$id/Internship%20Trader";
+
   static String internshipStopLossPendingOrder(String? id) =>
       "$pendingOrder/todaysPending/$id/Internship%20Trader";
+
   static String internshipStopLossPendingCancelOrder(String? id) =>
       "$apiURL/pendingorder/$id/Internship%20Trader";
 
   static String marginXStopLossExecutedOrder(String? id) =>
       "$pendingOrder/todaysProcessed/$id/MarginX";
+
   static String marginXStopLossPendingOrder(String? id) =>
       "$pendingOrder/todaysPending/$id/MarginX";
+
   static String marginXStopLossPendingCancelOrder(String? id) =>
       "$apiURL/pendingorder/$id/MarginX";
+
   static String marginXTodayOrders(String? id) =>
       "$apiURL/marginxtrade/$id/my/todayorders";
 
@@ -310,12 +353,14 @@ class AppUrls {
 
   static String dayWiseContestPnl(String? id) =>
       "$apiURL/dailycontest/trade/$id/mydaywisepnl";
+
   static String contestProfile(String? id) =>
       "$apiURL/dailycontest/contestprofile/$id";
   static const String weeklyTopPerformersFullList =
       "$apiURL/dailycontest/weeklytopperformerfulllist";
   static const String weeklyTopPerformersFullListCarouseal =
       "$apiURL/toptestzoneportfolios";
+
   static String StocksDashboardView_watchlist(String? searchQuery) =>
       "$apiURL/equityInstrument?search=$searchQuery";
 
@@ -323,6 +368,7 @@ class AppUrls {
   static const String getEquityInstrumentDetails =
       "$apiURL/equityinstrumentDetails";
   static const String getStockLivePrice = "$apiURL/getstockliveprice";
+
   static String RemoveStockCard(int instrumentToken) =>
       "$apiURL/removestock/$instrumentToken";
   static const String stockOrderPlace = "$apiURL/stockorderplace";
@@ -333,6 +379,7 @@ class AppUrls {
   static const String stockTradeHolding = "$apiURL/stock/pnlholding";
   static const String stockTradeTodaysOrders = "$apiURL/stock/my/todayorders";
   static const String stockFundsMargin = "$apiURL/stock/margin";
+
   // static String stockTradeExececutedOrders(String? id) =>
   //     "$apiURL/pendingorder/my/todaysProcessed/$id/Stock";
   static String contestResultPage(String? id) =>
@@ -348,6 +395,7 @@ class AppUrls {
 
   static String kycVerificationGenrateOtp = "$apiURL/KYC/generateotp";
   static String kycVerificationVerifyOtp = "$apiURL/KYC/verifyotp";
+
   static String stocksExcuatedOrder(String? id) =>
       "$apiURL/pendingorder/my/todaysProcessed/$id/Stock";
 
@@ -380,6 +428,9 @@ class AppUrls {
 
   static String usercourses = "$apiURL/courses/user/courses";
   static String userMycourses = "$apiURL/courses/user/mycourses";
+  static String deductCourseFee = "$apiURL/courses/user/deductcoursefee";
+  static String courseRating(String? courseId) =>
+      "$apiURL/courses/user/rating/$courseId";
 
   static String userCoursesOverView(String? id) => "$apiURL/courses/user/$id";
 }

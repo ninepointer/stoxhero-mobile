@@ -4,6 +4,7 @@ import 'package:stoxhero/src/app/app.dart';
 
 class CourseAllTopicView extends StatefulWidget {
   final UserMyCoursesData? data;
+
   CourseAllTopicView(this.data);
 
   @override
@@ -11,12 +12,95 @@ class CourseAllTopicView extends StatefulWidget {
 }
 
 class _CourseAllTopicViewState extends State<CourseAllTopicView> {
+  late CourseController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<CourseController>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.data?.courseName ?? ''}"),
-      ),
+          title: Text("${widget.data?.courseName ?? ''}"),
+          leading: IconButton(
+            onPressed: () {
+              (AppStorage.getCourseUserStarRating() == 0 &&
+                          AppStorage.getCourseSidForStarRating().isEmpty ||
+                      AppStorage.getCourseSidForStarRating() !=
+                          widget.data?.sId)
+                  ? showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Obx(
+                          () => AlertDialog(
+                            title: Text("Rate this video"),
+                            content: Row(
+                              children: List.generate(
+                                5,
+                                (index) {
+                                  return IconButton(
+                                    icon: Icon(
+                                      index < controller.currentRating.value
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                      color: Colors.amber,
+                                    ),
+                                    onPressed: () {
+                                      controller.currentRating(index + 1);
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(color: AppColors.lightGreen),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Map<String, dynamic> data = {
+                                    "rating": controller.currentRating.value
+                                  };
+                                  controller.courseRatingApi(
+                                      data, widget.data?.sId, () {
+                                    AppStorage.setCourseUserStarRating(1);
+                                    AppStorage.setCourseSidForStarRating(
+                                        widget.data?.sId);
+                                    Navigator.of(context).pop();
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.lightGreen,
+                                  onPrimary: Colors.white,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 4,
+                                      horizontal: 8), // Button padding
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        8), // Button border radius
+                                  ),
+                                ),
+                                child: Text('Send'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                  : Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.arrow_back),
+          )),
       body: ListView.builder(
         physics: AlwaysScrollableScrollPhysics(),
         itemCount: widget.data?.topics?.length,
@@ -50,18 +134,6 @@ class _CourseAllTopicViewState extends State<CourseAllTopicView> {
                     ),
                   ],
                 ),
-
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: Text(
-                //         "By - Rakesh kumar, Rakesh kumar, Rakesh kumar",
-                //         style: AppStyles.tsBlackRegular14
-                //             .copyWith(color: AppColors.grey),
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ),
             ),
           );

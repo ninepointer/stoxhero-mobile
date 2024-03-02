@@ -3,6 +3,7 @@ import '../../../app/app.dart';
 
 class CourseBatchNameWidget extends GetView<CourseController> {
   final InfluencerCourseData? courseData;
+
   CourseBatchNameWidget(this.courseData);
 
   @override
@@ -25,12 +26,10 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                       AppImages.lightAppLogo,
                       height: 70,
                       width: 70,
-                      //   fit: BoxFit.cover,
                     ),
                   } else ...{
                     Image.network(
                       courseData?.courseImage ?? '',
-                      //  fit: BoxFit.fill,
                       height: 70,
                       width: 70,
                       errorBuilder: (context, exception, stackTrace) {
@@ -38,7 +37,6 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                           AppImages.contest,
                           height: 70,
                           width: 70,
-                          //   fit: BoxFit.cover,
                         );
                       },
                     ),
@@ -67,7 +65,8 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                             children: [
                               StarRatingWidget(
                                 starCount: 5,
-                                rating: 3.5,
+                                rating:
+                                    courseData?.averageRating?.toDouble() ?? 0,
                                 color: AppColors.lightGreen,
                                 size: 15.0,
                               ),

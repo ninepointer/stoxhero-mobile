@@ -4,6 +4,7 @@ import '../../../app/app.dart';
 
 class MyLibraryView extends StatefulWidget {
   final List<UserMyCoursesData>? data;
+
   const MyLibraryView(this.data);
 
   @override
@@ -35,94 +36,6 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
                 child: Column(
                   children: [
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.start,
-                    //   children: [
-                    //     Text("${data?.courseName}",
-                    //         style: Get.isDarkMode
-                    //             ? AppStyles.tsWhiteRegular16
-                    //             : AppStyles.tsBlackRegular16),
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: MediaQuery.of(context).size.width * 0.0204,
-                    // ),
-
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     StarRatingWidget(
-                    //       starCount: 5,
-                    //       rating: 3.5,
-                    //       color: AppColors.lightGreen,
-                    //       size: 15.0,
-                    //     ),
-                    //     Row(
-                    //       children: [
-                    //         Icon(
-                    //           Icons.people,
-                    //           size: 15,
-                    //         ),
-                    //         SizedBox(
-                    //           width: MediaQuery.of(context).size.width * 0.0102,
-                    //         ),
-                    //         Text(
-                    //             "${FormatHelper.categoryFormatter(data?.userEnrolled)}"),
-                    //         SizedBox(
-                    //           width: MediaQuery.of(context).size.width * 0.0204,
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: MediaQuery.of(context).size.width * 0.0306,
-                    // ),
-
-                    // // for instructor
-
-                    // if ((data?.instructorName?.length ?? 0) > 0) ...{
-                    //   Row(
-                    //     children: [
-                    //       Text(
-                    //         "Instructors - ",
-                    //         style: Get.isDarkMode
-                    //             ? AppStyles.tsWhiteMedium12
-                    //             : AppStyles.tsBlackMedium12,
-                    //       ),
-                    //       Row(
-                    //         children: data!.instructorName!
-                    //             .asMap()
-                    //             .entries
-                    //             .map((entry) {
-                    //           final index = entry.key;
-                    //           final value = entry.value;
-                    //           final isLast =
-                    //               index == data!.instructorName!.length - 1;
-
-                    //           return Text(
-                    //             isLast ? value : '$value, ',
-                    //             style: Get.isDarkMode
-                    //                 ? AppStyles.tsWhiteMedium12
-                    //                 : AppStyles.tsBlackMedium12,
-                    //           );
-                    //         }).toList(),
-                    //       ),
-                    //     ],
-                    //   )
-                    // },
-                    // SizedBox(
-                    //   height: MediaQuery.of(context).size.width * 0.0306,
-                    // ),
-                    // LinearPercentIndicator(
-                    //   padding: EdgeInsets.zero,
-                    //   lineHeight: MediaQuery.of(context).size.width * 0.0156,
-                    //   percent: data?.coursePrgress ?? 0,
-                    //   progressColor: AppColors.lightGreen,
-                    //   backgroundColor: AppColors.grey.withOpacity(0.3),
-                    //   barRadius: Radius.circular(10),
-                    // ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -131,12 +44,10 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                             AppImages.lightAppLogo,
                             height: 70,
                             width: 70,
-                            //   fit: BoxFit.cover,
                           ),
                         } else ...{
                           Image.network(
                             data?.courseImage ?? '',
-                            //  fit: BoxFit.fill,
                             height: 70,
                             width: 70,
                             errorBuilder: (context, exception, stackTrace) {
@@ -144,7 +55,6 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                 AppImages.lightAppLogo,
                                 height: 70,
                                 width: 70,
-                                //   fit: BoxFit.cover,
                               );
                             },
                           ),
@@ -175,7 +85,7 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                   children: [
                                     StarRatingWidget(
                                       starCount: 5,
-                                      rating: 3.5,
+                                      rating: data?.rating?.toDouble() ?? 0,
                                       color: AppColors.lightGreen,
                                       size: 15.0,
                                     ),
@@ -209,7 +119,6 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                         ),
                       ],
                     ),
-
                     SizedBox(
                       height: MediaQuery.of(context).size.width * 0.0204,
                     ),
@@ -230,7 +139,7 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                               final index = entry.key;
                               final value = entry.value;
                               final isLast =
-                                  index == data!.instructorName!.length - 1;
+                                  index == data.instructorName!.length - 1;
 
                               return Text(
                                 isLast ? value : '$value, ',

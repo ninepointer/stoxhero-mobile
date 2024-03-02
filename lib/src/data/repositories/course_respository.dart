@@ -95,4 +95,21 @@ class CourseRespository extends BaseRepository {
         ? RepoResponse(error: response)
         : RepoResponse(data: UserMyCoursesResponse.fromJson(response));
   }
+
+  Future<RepoResponse<GenericResponse>> purchaseCourse(
+      Map<String, dynamic> data) async {
+    String apiURL = AppUrls.deductCourseFee;
+    var response = await service.patchAuth(path: apiURL, data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
+  Future<RepoResponse<GenericResponse>> ratingCourse(Map<String, dynamic> data,String? courseId) async {
+    String apiURL = AppUrls.courseRating(courseId);
+    var response = await service.postAuth(path: apiURL,data: data);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
 }

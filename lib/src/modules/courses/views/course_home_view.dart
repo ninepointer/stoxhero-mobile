@@ -83,13 +83,6 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
                                     child:
-                                        //  Image.network(
-                                        //   "${controller.dashboardCarouselList[index].carouselImage}",
-                                        //   fit: BoxFit.fill,
-                                        //   height:
-                                        //       MediaQuery.of(context).size.width * 0.382,
-                                        //   width: MediaQuery.of(context).size.width,
-                                        // ),
                                         Image.asset(
                                       AppImages.love,
                                       width: MediaQuery.of(context).size.width,
@@ -113,19 +106,6 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                       SizedBox(
                         height: MediaQuery.of(context).size.width * 0.0306,
                       ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Text(
-                    //       "10 Courses",
-                    //       style: AppStyles.tsBlackMedium12,
-                    //     ),
-                    //     Icon(Icons.sort)
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: MediaQuery.of(context).size.width * 0.0306,
-                    // ),
                     if (isStudent) ...{
                       Expanded(
                         child: DefaultTabController(
@@ -158,9 +138,6 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                   ],
                                 ),
                               ),
-                              // SizedBox(
-                              //   height: 12,
-                              // ),
                               Expanded(
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
@@ -169,10 +146,6 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                     children: [
                                       BatchAllCoursesView(
                                           controller.userAllCourses),
-                                      // Center(
-                                      //     child: Text(
-                                      //         "You haven\'t bought any courses yet. "),
-                                      //         ),
                                       MyLibraryView(controller.userMyCourses)
                                     ],
                                   ),
@@ -268,9 +241,6 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                   ],
                                 ),
                               ),
-                              // SizedBox(
-                              //   height: 12,
-                              // ),
                               Expanded(
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
@@ -296,27 +266,6 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                     }
                   ],
                 ),
-
-                // for instructor only
-                // if (isStudent == false) ...{
-                //   Positioned(
-                //     right: 0,
-                //     bottom: 0,
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(8.0),
-                //       child: FloatingActionButton(
-                //         onPressed: () {
-                //           Get.to(() => CreateNewBatchView());
-                //         },
-                //         child: Icon(
-                //           Icons.add,
-                //           color: AppColors.white,
-                //         ),
-                //         backgroundColor: AppColors.lightGreen,
-                //       ),
-                //     ),
-                //   )
-                //}
               ],
             ),
           ),

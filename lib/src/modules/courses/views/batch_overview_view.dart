@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:stoxhero/src/app/app.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -404,9 +403,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                           i,
                           controller
                               .userCourseOverview.value.courseContent?[i]),
-                    // SizedBox(
-                    //   height: MediaQuery.of(context).size.width * 0.0204,
-                    // ),
                   } else ...{
                     for (int i = 0;
                         i <
@@ -416,9 +412,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         i++)
                       CourseTopicsAndSubTopicsWidget(
                           i, controller.courseOverview.value.courseContent?[i]),
-                    // SizedBox(
-                    //   height: MediaQuery.of(context).size.width * 0.0204,
-                    // ),
                   },
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0204,
@@ -487,19 +480,21 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                           onPaymentSuccess: () {},
                           onSubmit: () {
                             Get.back();
-                            // var walletController = Get.find<WalletController>();
-                            // var data = {
-                            //   "bonusRedemption":
-                            //       walletController.isHeroCashAdded.value
-                            //           ? walletController.heroCashAmount.value
-                            //           : 0,
-                            //   "coupon":
-                            //       walletController.couponCodeTextController.text,
-                            //   "contestFee": walletController.subscriptionAmount.value,
-                            //   "contestId": liveFeatured?.id,
-                            //   "contestName": liveFeatured?.contestName,
-                            // };
-                            // controller.purchaseContest(data);
+                            var walletController = Get.find<WalletController>();
+                            var data = {
+                              "bonusRedemption":
+                                  walletController.isHeroCashAdded.value
+                                      ? walletController.heroCashAmount.value
+                                      : 0,
+                              "coupon": walletController
+                                  .couponCodeTextController.text,
+                              "courseFee":
+                                  walletController.subscriptionAmount.value,
+                              "courseId": controller.courseOverview.value.sId,
+                              "courseName":
+                                  controller.courseOverview.value.courseName,
+                            };
+                            controller.purchaseCourseApi(data);
                           },
                         ),
                       );

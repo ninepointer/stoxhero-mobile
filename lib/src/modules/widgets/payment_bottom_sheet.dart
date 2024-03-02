@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'dart:math' as math;
 
@@ -155,10 +154,9 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       paymentData = PaymentRequest(
         bonusRedemption:
             controller.isHeroCashAdded.value ? calculateHeroCash : 0,
-        coupon: controller.isCouponCodeAdded == true
+        coupon: controller.isCouponCodeAdded.value == true
             ? controller.couponCodeTextController.text
             : '',
-        // paymentFor: '',
         merchantTransactionId: mtId,
         amount: amount,
       );
@@ -176,7 +174,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       paymentData = PaymentRequest(
         bonusRedemption:
             controller.isHeroCashAdded.value ? calculateHeroCash : 0,
-        coupon: controller.isCouponCodeAdded == true
+        coupon: controller.isCouponCodeAdded.value == true
             ? controller.couponCodeTextController.text
             : '',
         productId: widget.productId,

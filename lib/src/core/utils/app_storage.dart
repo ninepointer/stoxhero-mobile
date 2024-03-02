@@ -54,6 +54,14 @@ class AppStorage {
     return _box.read(AppStorageKeys.courseStarCount) ?? 0;
   }
 
+  static Future setCourseSidForStarRating(String? sId) async {
+    await _box.write(AppStorageKeys.courseSid, sId);
+  }
+
+  static String getCourseSidForStarRating() {
+    return _box.read(AppStorageKeys.courseSid) ?? "";
+  }
+
   static void clearLoginDetails() {
     _box.remove(AppStorageKeys.token);
   }
@@ -70,4 +78,5 @@ class AppStorageKeys {
   static const String newUser = 'newUser';
   static const String courseStarCount = "starCount";
   static const String readSetting = "readSetting";
+  static const String courseSid = "courseSid";
 }

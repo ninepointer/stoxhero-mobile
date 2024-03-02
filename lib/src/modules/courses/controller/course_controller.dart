@@ -12,6 +12,7 @@ class CourseBinding implements Bindings {
 
 class CourseController extends BaseController<CourseRespository> {
   final userDetails = LoginDetailsResponse().obs;
+
   LoginDetailsResponse get userDetailsData => userDetails.value;
   final batchNameTextController = TextEditingController();
   final batchStartDateTextController = TextEditingController();
@@ -30,6 +31,7 @@ class CourseController extends BaseController<CourseRespository> {
   final selectedTabIndex = 0.obs;
 
   final isLoading = false.obs;
+
   bool get isLoadingStatus => isLoading.value;
   final selectedDOBDateTime = ''.obs;
 
@@ -331,6 +333,38 @@ class CourseController extends BaseController<CourseRespository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userMyCourses(response.data?.data ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
+  Future purchaseCourseApi(Map<String, dynamic> data) async {
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.purchaseCourse(data);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {}
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
+  Future courseRatingApi(Map<String,dynamic> data,String? courseId,Function onSuccess) async {
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.ratingCourse(data,courseId);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          onSuccess.call();
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

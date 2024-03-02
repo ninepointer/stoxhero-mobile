@@ -39,12 +39,9 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          // controller.loadData();
           return Future.value();
         },
         child: Visibility(
-          //   visible: !controller.isLoadingStatus,
-          //  replacement: DashboardShimmer(),
           child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.0408,
@@ -65,17 +62,6 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
                             indicatorColor: AppColors.lightGreen,
                             controller: tabController,
                             padding: EdgeInsets.zero,
-                            // isScrollable: true,
-
-                            // indicatorColor:
-                            //     Get.isDarkMode ? AppColors.black : AppColors.white,
-                            // labelColor: AppColors.white,
-                            // unselectedLabelColor:
-                            //     Get.isDarkMode ? AppColors.white : AppColors.black,
-                            // indicator: BoxDecoration(
-                            //   color: AppColors.lightGreen,
-                            //   borderRadius: BorderRadius.circular(40), // Border radius
-                            // ),
                             tabs: [
                               Tab(
                                 child: Text(
@@ -85,14 +71,6 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              // Tab(
-                              //   child: Text(
-                              //     "Study Material",
-                              //     style:
-                              //         Theme.of(context).textTheme.tsRegular14,
-                              //     textAlign: TextAlign.center,
-                              //   ),
-                              // ),
                               Tab(
                                 child: Text(
                                   "Live Classes",
@@ -101,14 +79,6 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              // Tab(
-                              //   child: Text(
-                              //     "Students",
-                              //     style:
-                              //         Theme.of(context).textTheme.tsRegular14,
-                              //     textAlign: TextAlign.center,
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
