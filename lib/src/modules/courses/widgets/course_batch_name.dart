@@ -20,21 +20,23 @@ class CourseBatchNameWidget extends GetView<CourseController> {
             if (isStudent) ...{
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (courseData?.courseImage == null) ...{
                     Image.asset(
                       AppImages.lightAppLogo,
-                      height: 70,
-                      width: 70,
+                      height: 80,
+                      width: 80,
                     ),
                   } else ...{
                     Image.network(
                       courseData?.courseImage ?? '',
-                      height: 70,
-                      width: 70,
+                      height: 80,
+                      width: 80,
+                      fit: BoxFit.cover,
                       errorBuilder: (context, exception, stackTrace) {
                         return Image.asset(
-                          AppImages.contest,
+                          AppImages.lightAppName,
                           height: 70,
                           width: 70,
                         );
@@ -52,10 +54,37 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                           child: Text(
                             "${courseData?.courseName}",
                             style: Get.isDarkMode
-                                ? AppStyles.tsWhiteRegular16
-                                : AppStyles.tsBlackRegular16,
+                                ? AppStyles.tsWhiteMedium18
+                                : AppStyles.tsBlackMedium18,
                           ),
                         ),
+                        // SizedBox(
+                        //   height: MediaQuery.of(context).size.width * 0.0204,
+                        // ),
+                        if ((courseData?.instructorName?.length ?? 0) > 0) ...{
+                          Row(
+                            children: [
+                              Row(
+                                children: courseData!.instructorName!
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                  final index = entry.key;
+                                  final value = entry.value;
+                                  final isLast = index ==
+                                      courseData!.instructorName!.length - 1;
+
+                                  return Text(
+                                    isLast ? value : '$value, ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          )
+                        },
                         SizedBox(
                           height: MediaQuery.of(context).size.width * 0.0204,
                         ),
@@ -105,7 +134,7 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                   Row(
                     children: [
                       Text(
-                        "Seat Left:",
+                        "Seats Left:",
                         style: Get.isDarkMode
                             ? AppStyles.tsWhiteMedium12
                             : AppStyles.tsBlackMedium12,
@@ -162,39 +191,6 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.0204,
-              ),
-              if ((courseData?.instructorName?.length ?? 0) > 0) ...{
-                Row(
-                  children: [
-                    Text(
-                      "Instructors - ",
-                      style: Get.isDarkMode
-                          ? AppStyles.tsWhiteMedium12
-                          : AppStyles.tsBlackMedium12,
-                    ),
-                    Row(
-                      children: courseData!.instructorName!
-                          .asMap()
-                          .entries
-                          .map((entry) {
-                        final index = entry.key;
-                        final value = entry.value;
-                        final isLast =
-                            index == courseData!.instructorName!.length - 1;
-
-                        return Text(
-                          isLast ? value : '$value, ',
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteMedium12
-                              : AppStyles.tsBlackMedium12,
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                )
-              }
             } else ...{
               GestureDetector(
                 onTap: () {
@@ -207,22 +203,22 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                     if (courseData?.courseImage == null) ...{
                       Image.asset(
                         AppImages.lightAppLogo,
-                        height: 70,
-                        width: 70,
-                        //   fit: BoxFit.cover,
+                        height: 80,
+                        width: 80,
+                        fit: BoxFit.cover,
                       ),
                     } else ...{
                       Image.network(
                         courseData?.courseImage ?? '',
                         fit: BoxFit.cover,
-                        height: 70,
-                        width: 70,
+                        height: 80,
+                        width: 80,
                         errorBuilder: (context, exception, stackTrace) {
                           return Image.asset(
                             AppImages.lightAppLogo,
-                            height: 70,
-                            width: 70,
-                            //   fit: BoxFit.cover,
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
                           );
                         },
                       ),
@@ -236,8 +232,8 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                         Text(
                           "${courseData?.courseName}",
                           style: Get.isDarkMode
-                              ? AppStyles.tsWhiteRegular16
-                              : AppStyles.tsBlackRegular16,
+                              ? AppStyles.tsWhiteMedium18
+                              : AppStyles.tsBlackMedium18,
                         ),
                         Row(
                           children: [

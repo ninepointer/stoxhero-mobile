@@ -52,9 +52,15 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   ),
                   _customVideoPlayerController
                           .videoPlayerController.value.isInitialized
-                      ? CustomVideoPlayer(
-                          customVideoPlayerController:
-                              _customVideoPlayerController)
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(6.0),
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: CustomVideoPlayer(
+                                customVideoPlayerController:
+                                    _customVideoPlayerController),
+                          ),
+                        )
                       : AspectRatio(
                           aspectRatio: 16 / 9,
                           child: Center(child: CircularProgressIndicator())),
@@ -77,10 +83,90 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               ? AppStyles.tsWhiteMedium18
                               : AppStyles.tsBlackMedium18,
                         ),
+                        Row(
+                          children: [
+                            StarRatingWidget(
+                              starCount: 5,
+                              rating: controller
+                                      .userCourseOverview.value.averageRating
+                                      ?.toDouble() ??
+                                  0.0,
+                              color: AppColors.lightGreen,
+                              size: 15.0,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0102,
+                            ),
+                            Text(
+                              "(${controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0})",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular14
+                                  : AppStyles.tsBlackRegular14,
+                            )
+                          ],
+                        ),
                         // Text(
                         //   "By - Rakesh Kumar",
                         //   style: AppStyles.tsBlackRegular14,
                         // ),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                "${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              ),
+                            )
+                          ],
+                        ),
+
+                        if ((isStudent
+                                ? controller.userCourseOverview.value
+                                        .courseInstructors?.length ??
+                                    0
+                                : controller.courseOverview.value
+                                        .courseInstructors?.length ??
+                                    0) >
+                            0) ...{
+                          Row(
+                            children: [
+                              Text("Created by "),
+                              Row(
+                                children: (isStudent
+                                        ? controller.userCourseOverview.value
+                                            .courseInstructors
+                                        : controller.courseOverview.value
+                                            .courseInstructors)!
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                  final index = entry.key;
+                                  final value =
+                                      "${entry.value.id?.firstName} ${entry.value.id?.lastName}";
+                                  final isLast = index ==
+                                      (isStudent
+                                          ? controller.userCourseOverview.value
+                                                  .courseInstructors?.length ??
+                                              0 - 1
+                                          : controller.courseOverview.value
+                                                  .courseInstructors?.length ??
+                                              0 - 1);
+
+                                  return Text(
+                                    isLast ? value : '$value, ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14.copyWith(
+                                            color: AppColors.lightGreen)
+                                        : AppStyles.tsBlackRegular14.copyWith(
+                                            color: AppColors.lightGreen),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          )
+                        },
                         Text(
                           "Language - ${isStudent ? controller.userCourseOverview.value.courseLanguages : controller.courseOverview.value.courseLanguages}",
                           style: Get.isDarkMode
@@ -209,36 +295,45 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             if (value.image == null) ...{
-                                              Image.asset(
-                                                AppImages.lightAppLogo,
-                                                height: 70,
-                                                width: 70,
-                                                //   fit: BoxFit.cover,
-                                              ),
+                                              ClipRRect(
+                                                child: Image.asset(
+                                                  AppImages.lightAppLogo,
+                                                  height: 70,
+                                                  width: 70,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
                                             } else ...{
-                                              Image.network(
-                                                value.image ?? '',
-                                                //  fit: BoxFit.fill,
-                                                height: 70,
-                                                width: 70,
-                                                errorBuilder: (context,
-                                                    exception, stackTrace) {
-                                                  return Image.asset(
-                                                    AppImages.lightAppLogo,
-                                                    height: 70,
-                                                    width: 70,
-                                                    //   fit: BoxFit.cover,
-                                                  );
-                                                },
-                                              ),
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: Image.network(
+                                                  value.image ?? '',
+                                                  //  fit: BoxFit.fill,
+                                                  height: 70,
+                                                  width: 70,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context,
+                                                      exception, stackTrace) {
+                                                    return Image.asset(
+                                                      AppImages.lightAppLogo,
+                                                      height: 70,
+                                                      width: 70,
+                                                      fit: BoxFit.cover,
+                                                    );
+                                                  },
+                                                ),
+                                              )
                                             },
                                             SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  0.0204,
+                                                  0.0306,
                                             ),
                                             Expanded(
                                               child: Column(
@@ -249,9 +344,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                     "${value.id?.firstName ?? ''} ${value.id?.lastName ?? ''}",
                                                     style: Get.isDarkMode
                                                         ? AppStyles
-                                                            .tsWhiteRegular16
+                                                            .tsWhiteMedium16
                                                         : AppStyles
-                                                            .tsBlackRegular16,
+                                                            .tsBlackMedium16,
                                                   ),
                                                   Text("${value.about}"),
                                                 ],
@@ -268,7 +363,8 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                       ],
                                     ),
                                   )
-                                  .toList())
+                                  .toList(),
+                            )
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: controller
@@ -281,26 +377,45 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                               MainAxisAlignment.start,
                                           children: [
                                             if (value.image == null) ...{
-                                              Image.asset(
-                                                AppImages.lightAppLogo,
-                                                height: 70,
-                                                width: 70,
-                                                //   fit: BoxFit.cover,
-                                              ),
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100),
+                                                  child: Image.asset(
+                                                    AppImages.lightAppLogo,
+                                                    height: 70,
+                                                    width: 70,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              )
                                             } else ...{
-                                              Image.network(value.image ?? '',
-                                                  //  fit: BoxFit.fill,
-                                                  height: 70,
-                                                  width: 70, errorBuilder:
-                                                      (context, exception,
-                                                          stackTrace) {
-                                                return Image.asset(
-                                                  AppImages.lightAppLogo,
-                                                  height: 70,
-                                                  width: 70,
-                                                  //   fit: BoxFit.cover,
-                                                );
-                                              }),
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                child: Image.network(
+                                                    value.image ?? '',
+                                                    fit: BoxFit.fill,
+                                                    height: 70,
+                                                    width: 70, errorBuilder:
+                                                        (context, exception,
+                                                            stackTrace) {
+                                                  return ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                    child: Image.asset(
+                                                      AppImages.lightAppLogo,
+                                                      height: 70,
+                                                      width: 70,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  );
+                                                }),
+                                              )
                                             },
                                             SizedBox(
                                               width: MediaQuery.of(context)
@@ -317,11 +432,18 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                     "${value.id?.firstName ?? ''} ${value.id?.lastName ?? ''}",
                                                     style: Get.isDarkMode
                                                         ? AppStyles
-                                                            .tsWhiteRegular16
+                                                            .tsWhiteMedium16
                                                         : AppStyles
-                                                            .tsBlackRegular16,
+                                                            .tsBlackMedium16,
                                                   ),
-                                                  Text("${value.about}"),
+                                                  Text(
+                                                    "${value.about}",
+                                                    style: Get.isDarkMode
+                                                        ? AppStyles
+                                                            .tsWhiteRegular14
+                                                        : AppStyles
+                                                            .tsBlackRegular14,
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -339,42 +461,42 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                   .toList()),
                     ),
                   },
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0204,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Course overview:-",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteMedium14
-                            : AppStyles.tsBlackMedium14,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0204,
-                  ),
-                  Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                      decoration: BoxDecoration(
-                          color: Get.isDarkMode
-                              ? AppColors.darkCardBackgroundColor
-                              : AppColors.lightCardBackgroundColor),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
-                            ),
-                          )
-                        ],
-                      )),
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.width * 0.0204,
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  //     Text(
+                  //       "Course overview:-",
+                  //       style: Get.isDarkMode
+                  //           ? AppStyles.tsWhiteMedium14
+                  //           : AppStyles.tsBlackMedium14,
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.width * 0.0204,
+                  // ),
+                  // Container(
+                  //     padding:
+                  //         EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+                  //     decoration: BoxDecoration(
+                  //         color: Get.isDarkMode
+                  //             ? AppColors.darkCardBackgroundColor
+                  //             : AppColors.lightCardBackgroundColor),
+                  //     child: Row(
+                  //       children: [
+                  //         Flexible(
+                  //           child: Text(
+                  //             "${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
+                  //             style: Get.isDarkMode
+                  //                 ? AppStyles.tsWhiteRegular14
+                  //                 : AppStyles.tsBlackRegular14,
+                  //           ),
+                  //         )
+                  //       ],
+                  //     )),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0204,
                   ),
@@ -468,6 +590,8 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             (controller.userCourseOverview.value.coursePrice ??
                                 0);
                       }
+                      print(
+                          "ddddd ${controller.userCourseOverview.value.sId} ${controller.userCourseOverview.value.courseName}");
 
                       BottomSheetHelper.openBottomSheet(
                         context: context,
@@ -488,11 +612,18 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                       : 0,
                               "coupon": walletController
                                   .couponCodeTextController.text,
-                              "courseFee":
-                                  walletController.subscriptionAmount.value,
-                              "courseId": controller.courseOverview.value.sId,
-                              "courseName":
-                                  controller.courseOverview.value.courseName,
+                              "courseFee": (walletController
+                                      .subscriptionAmount.value +
+                                  (walletController.subscriptionAmount.value *
+                                      (AppStorage.getReadSetting()
+                                              .courseGstPercentage ??
+                                          0) /
+                                      100)),
+                              "courseId":
+                                  controller.userCourseOverview.value.sId ?? '',
+                              "courseName": controller
+                                      .userCourseOverview.value.courseName ??
+                                  '',
                             };
                             controller.purchaseCourseApi(data);
                           },

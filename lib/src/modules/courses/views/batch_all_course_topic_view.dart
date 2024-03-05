@@ -13,6 +13,7 @@ class CourseAllTopicView extends StatefulWidget {
 
 class _CourseAllTopicViewState extends State<CourseAllTopicView> {
   late CourseController controller;
+  int expandedIndex = -1;
 
   @override
   void initState() {
@@ -58,8 +59,8 @@ class _CourseAllTopicViewState extends State<CourseAllTopicView> {
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                 },
                                 child: Text(
                                   'Cancel',
@@ -106,37 +107,114 @@ class _CourseAllTopicViewState extends State<CourseAllTopicView> {
         itemCount: widget.data?.topics?.length,
         itemBuilder: (context, index) {
           var data = widget.data?.topics?[index];
-          return GestureDetector(
+
+          return CommonCard(
+            margin: EdgeInsets.only(bottom: 8),
             onTap: () {
-              Get.to(() => CourseVideoView());
+              setState(() {
+                expandedIndex = expandedIndex == index ? -1 : index;
+              });
             },
-            child: Container(
-              width: double.infinity,
-              color: Get.isDarkMode
-                  ? AppColors.darkCardBackgroundColor
-                  : AppColors.lightCardBackgroundColor,
-              margin: EdgeInsets.only(bottom: 8, top: 8),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: Text(
-                          "${data?.topic ?? ''}",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteRegular16
-                              : AppStyles.tsBlackRegular16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${index + 1}. ${data?.topic ?? ''}",
+                    style: AppStyles.tsSecondaryRegular16
+                        .copyWith(color: AppColors.lightGreen),
+                  ),
+                  (data?.subtopics?.length ?? 0) > 0
+                      ? Icon(
+                          expandedIndex == index
+                              ? Icons.expand_less_rounded
+                              : Icons.expand_more_rounded,
+                          color: AppColors.grey,
+                        )
+                      : SizedBox()
+                ],
               ),
-            ),
+              if (expandedIndex == index)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: data!.subtopics!
+                      .asMap()
+                      .entries
+                      .map((entry) => GestureDetector(
+                            onTap: () {
+                              Get.to(() => CourseVideoView());
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              margin: EdgeInsets.only(
+                                  bottom: MediaQuery.of(context).size.width *
+                                      0.0204),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${entry.key + 1}. ",
+                                    style:
+                                        Theme.of(context).textTheme.tsRegular14,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.0306,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${entry.value.topic}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsRegular16,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Text("Video - 00:51 min ")
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                )
+            ],
           );
+          // GestureDetector(
+          //   onTap: () {
+          //     //  Get.to(() => CourseVideoView());
+          //   },
+          //   child: Container(
+          //     width: double.infinity,
+          //     color: Get.isDarkMode
+          //         ? AppColors.darkCardBackgroundColor
+          //         : AppColors.lightCardBackgroundColor,
+          //     margin: EdgeInsets.only(bottom: 8, top: 8),
+          //     child: Padding(
+          //       padding:
+          //           const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          //       child: Row(
+          //         mainAxisAlignment: MainAxisAlignment.start,
+          //         children: [
+          //           Expanded(
+          //             child: Container(
+          //               child: Text(
+          //                 "${index + 1}. ${data?.topic ?? ''}",
+          //                 style: Get.isDarkMode
+          //                     ? AppStyles.tsWhiteRegular16
+          //                     : AppStyles.tsBlackRegular16,
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // );
         },
       ),
     );

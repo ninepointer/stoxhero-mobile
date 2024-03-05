@@ -82,8 +82,7 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child:
-                                        Image.asset(
+                                    child: Image.asset(
                                       AppImages.love,
                                       width: MediaQuery.of(context).size.width,
                                       height:
@@ -114,6 +113,14 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                             children: [
                               Container(
                                 child: TabBar(
+                                  onTap: (index) {
+                                    if (index == 1) {
+                                      controller.getUserMyCoursesDetails();
+                                    }
+                                    if (index == 0) {
+                                      controller.getUserAllCourses();
+                                    }
+                                  },
                                   controller: tabController,
                                   indicatorColor: AppColors.lightGreen,
                                   tabs: [
@@ -128,7 +135,7 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                     ),
                                     Tab(
                                       child: Text(
-                                        'My Library',
+                                        'My Courses',
                                         style: Theme.of(context)
                                             .textTheme
                                             .tsRegular16,

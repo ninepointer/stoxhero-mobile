@@ -51,6 +51,8 @@ class CourseOverViewData {
   int? coursePrice;
   int? discountedPrice;
   List<String>? suggestChanges;
+  List<Ratings>? ratings;
+  num? averageRating;
 
   CourseOverViewData(
       {this.sId,
@@ -81,6 +83,8 @@ class CourseOverViewData {
       this.commissionPercentage,
       this.coursePrice,
       this.discountedPrice,
+      this.ratings,
+      this.averageRating,
       this.suggestChanges});
 
   CourseOverViewData.fromJson(Map<String, dynamic> json) {
@@ -96,6 +100,9 @@ class CourseOverViewData {
     registrationStartTime = json['registrationStartTime'];
     registrationEndTime = json['registrationEndTime'];
     maxEnrolments = json['maxEnrolments'];
+    if (json['averageRating'] != null) {
+      averageRating = json['averageRating'];
+    }
     status = json['status'];
     type = json['type'];
     courseType = json['courseType'];
@@ -133,6 +140,15 @@ class CourseOverViewData {
         faqs!.add(new Faqs.fromJson(v));
       });
     }
+    if (json['ratings'] != null && json['ratings'] is List) {
+      ratings = <Ratings>[];
+      (json['ratings'] as List).forEach((v) {
+        if (v is Map<String, dynamic>) {
+          ratings!.add(new Ratings.fromJson(v));
+        }
+      });
+    }
+
     iV = json['__v'];
     commissionPercentage = json['commissionPercentage'];
     coursePrice = json['coursePrice'];
@@ -161,6 +177,7 @@ class CourseOverViewData {
     data['tags'] = this.tags;
     data['level'] = this.level;
     data['salesVideo'] = this.salesVideo;
+    data['averageRating'] = this.averageRating;
     if (this.courseInstructors != null) {
       data['courseInstructors'] =
           this.courseInstructors!.map((v) => v.toJson()).toList();
@@ -178,6 +195,9 @@ class CourseOverViewData {
     }
     if (this.faqs != null) {
       data['faqs'] = this.faqs!.map((v) => v.toJson()).toList();
+    }
+    if (this.ratings != null) {
+      data['ratings'] = this.ratings!.map((v) => v.toJson()).toList();
     }
     data['__v'] = this.iV;
     data['commissionPercentage'] = this.commissionPercentage;
@@ -399,6 +419,31 @@ class Faqs {
     data['question'] = this.question;
     data['answer'] = this.answer;
     data['_id'] = this.sId;
+    return data;
+  }
+}
+
+class Ratings {
+  String? sId;
+  num? rating;
+  String? userId;
+  String? ratingDate;
+
+  Ratings({this.sId, this.rating, this.userId, this.ratingDate});
+
+  Ratings.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    rating = json['rating'];
+    userId = json['userId'];
+    ratingDate = json['ratingDate'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['rating'] = this.rating;
+    data['userId'] = this.userId;
+    data['ratingDate'] = this.ratingDate;
     return data;
   }
 }

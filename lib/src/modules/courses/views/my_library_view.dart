@@ -12,6 +12,14 @@ class MyLibraryView extends StatefulWidget {
 }
 
 class _MyLibraryViewState extends State<MyLibraryView> {
+  late CourseController controller;
+
+  void initState() {
+    super.initState();
+    controller = Get.find<CourseController>();
+    controller.getUserMyCoursesDetails();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -22,7 +30,6 @@ class _MyLibraryViewState extends State<MyLibraryView> {
 
           return GestureDetector(
             onTap: () {
-              // Get.to(() => CourseVideoView());
               Get.to(() => CourseAllTopicView(data));
             },
             child: Container(
@@ -74,6 +81,30 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                       : AppStyles.tsBlackRegular16,
                                 ),
                               ),
+                              if ((data?.instructorName?.length ?? 0) > 0) ...{
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: data!.instructorName!
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
+                                        final index = entry.key;
+                                        final value = entry.value;
+                                        final isLast = index ==
+                                            data.instructorName!.length - 1;
+
+                                        return Text(
+                                          isLast ? value : '$value, ',
+                                          style: Get.isDarkMode
+                                              ? AppStyles.tsWhiteRegular14
+                                              : AppStyles.tsBlackRegular14,
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
+                                ),
+                              },
                               SizedBox(
                                 height:
                                     MediaQuery.of(context).size.width * 0.0204,
@@ -122,43 +153,10 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                     SizedBox(
                       height: MediaQuery.of(context).size.width * 0.0204,
                     ),
-                    if ((data?.instructorName?.length ?? 0) > 0) ...{
-                      Row(
-                        children: [
-                          Text(
-                            "Instructors - ",
-                            style: Get.isDarkMode
-                                ? AppStyles.tsWhiteMedium12
-                                : AppStyles.tsBlackMedium12,
-                          ),
-                          Row(
-                            children: data!.instructorName!
-                                .asMap()
-                                .entries
-                                .map((entry) {
-                              final index = entry.key;
-                              final value = entry.value;
-                              final isLast =
-                                  index == data.instructorName!.length - 1;
-
-                              return Text(
-                                isLast ? value : '$value, ',
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteMedium12
-                                    : AppStyles.tsBlackMedium12,
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    },
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.0204,
-                    ),
                     LinearPercentIndicator(
                       padding: EdgeInsets.zero,
                       lineHeight: MediaQuery.of(context).size.width * 0.0156,
-                      percent: data?.coursePrgress ?? 0,
+                      percent: (data?.coursePrgress?.toDouble() ?? 0.0),
                       progressColor: AppColors.lightGreen,
                       backgroundColor: AppColors.grey.withOpacity(0.3),
                       barRadius: Radius.circular(10),

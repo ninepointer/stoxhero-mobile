@@ -36,7 +36,7 @@ class UserMyCoursesData {
   String? courseImage;
   int? userEnrolled;
   List<UserCoursesTopics>? topics;
-  double? coursePrgress;
+  num? coursePrgress;
   List<String>? instructorName;
   int? rating;
 
