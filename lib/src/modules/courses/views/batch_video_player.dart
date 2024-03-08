@@ -15,7 +15,7 @@ class CourseVideoView extends StatefulWidget {
 
 class _CourseVideoViewState extends State<CourseVideoView> {
   late CourseController controller;
-  late VideoPlayerController _controller;
+  late CachedVideoPlayerController _controller;
   late CustomVideoPlayerController _customVideoPlayerController;
 
   @override
@@ -23,8 +23,8 @@ class _CourseVideoViewState extends State<CourseVideoView> {
     super.initState();
     controller = Get.find<CourseController>();
 
-    _controller = VideoPlayerController.networkUrl(
-        Uri.parse('${widget.subtopics.videoUrl ?? ''}'))
+    _controller = CachedVideoPlayerController.network(
+        '${widget.subtopics.videoUrl ?? ''}')
       ..initialize().then((value) => setState(() {}));
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,

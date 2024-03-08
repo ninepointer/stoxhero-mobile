@@ -14,7 +14,7 @@ class BatchOverViewDetailsView extends StatefulWidget {
 }
 
 class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
-  late VideoPlayerController _controller;
+  late CachedVideoPlayerController _controller;
   late CustomVideoPlayerController _customVideoPlayerController;
   late CourseController controller;
 
@@ -23,8 +23,8 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
     super.initState();
     controller = Get.find<CourseController>();
 
-    _controller = VideoPlayerController.networkUrl(Uri.parse(
-        '${isStudent ? controller.userCourseOverview.value.salesVideo : controller.courseOverview.value.salesVideo}'))
+    _controller = CachedVideoPlayerController.network(
+        '${isStudent ? controller.userCourseOverview.value.salesVideo : controller.courseOverview.value.salesVideo}')
       ..initialize().then((value) => setState(() {}));
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,
@@ -302,8 +302,14 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                               ClipRRect(
                                                 child: Image.asset(
                                                   AppImages.lightAppLogo,
-                                                  height: 70,
-                                                  width: 70,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.148,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.148,
                                                   fit: BoxFit.cover,
                                                 ),
                                               )
@@ -314,15 +320,29 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                 child: Image.network(
                                                   value.image ?? '',
                                                   //  fit: BoxFit.fill,
-                                                  height: 70,
-                                                  width: 70,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.148,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.148,
                                                   fit: BoxFit.cover,
                                                   errorBuilder: (context,
                                                       exception, stackTrace) {
                                                     return Image.asset(
                                                       AppImages.lightAppLogo,
-                                                      height: 70,
-                                                      width: 70,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.148,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.148,
                                                       fit: BoxFit.cover,
                                                     );
                                                   },
@@ -386,8 +406,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                           100),
                                                   child: Image.asset(
                                                     AppImages.lightAppLogo,
-                                                    height: 70,
-                                                    width: 70,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.148,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.148,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -399,8 +427,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                 child: Image.network(
                                                     value.image ?? '',
                                                     fit: BoxFit.fill,
-                                                    height: 70,
-                                                    width: 70, errorBuilder:
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.148,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.148, errorBuilder:
                                                         (context, exception,
                                                             stackTrace) {
                                                   return ClipRRect(
@@ -409,8 +445,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                             100),
                                                     child: Image.asset(
                                                       AppImages.lightAppLogo,
-                                                      height: 70,
-                                                      width: 70,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.148,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.148,
                                                       fit: BoxFit.cover,
                                                     ),
                                                   );

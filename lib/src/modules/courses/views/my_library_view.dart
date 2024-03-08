@@ -49,19 +49,24 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                         if (data?.courseImage == null) ...{
                           Image.asset(
                             AppImages.lightAppLogo,
-                            height: 70,
-                            width: 70,
+                            height: MediaQuery.of(context).size.width * 0.178,
+                            width: MediaQuery.of(context).size.width * 0.178,
+                            fit: BoxFit.cover,
                           ),
                         } else ...{
                           Image.network(
                             data?.courseImage ?? '',
-                            height: 70,
-                            width: 70,
+                            height: MediaQuery.of(context).size.width * 0.178,
+                            width: MediaQuery.of(context).size.width * 0.178,
+                            fit: BoxFit.cover,
                             errorBuilder: (context, exception, stackTrace) {
                               return Image.asset(
                                 AppImages.lightAppLogo,
-                                height: 70,
-                                width: 70,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.178,
+                                width:
+                                    MediaQuery.of(context).size.width * 0.178,
+                                fit: BoxFit.cover,
                               );
                             },
                           ),

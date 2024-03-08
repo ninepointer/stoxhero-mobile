@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
 import 'package:stoxhero/src/core/themes/theme.dart';
 
 class BatchLiveClassesView extends StatefulWidget {
@@ -19,7 +20,9 @@ class _BatchLiveClassesViewState extends State<BatchLiveClassesView> {
           children: [
             Text(
               "Join the live class on cliking the below button",
-              style: AppStyles.tsBlackMedium14,
+              style: Get.isDarkMode
+                  ? AppStyles.tsWhiteMedium14
+                  : AppStyles.tsBlackMedium14,
             ),
             SizedBox(
               height: MediaQuery.of(context).size.width * 0.0306,

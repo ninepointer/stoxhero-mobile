@@ -25,26 +25,27 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                   if (courseData?.courseImage == null) ...{
                     Image.asset(
                       AppImages.lightAppLogo,
-                      height: 80,
-                      width: 80,
+                      height: MediaQuery.of(context).size.width * 0.178,
+                      width: MediaQuery.of(context).size.width * 0.178,
+                      fit: BoxFit.cover,
                     ),
                   } else ...{
                     Image.network(
                       courseData?.courseImage ?? '',
-                      height: 80,
-                      width: 80,
+                      height: MediaQuery.of(context).size.width * 0.178,
+                      width: MediaQuery.of(context).size.width * 0.178,
                       fit: BoxFit.cover,
                       errorBuilder: (context, exception, stackTrace) {
                         return Image.asset(
                           AppImages.lightAppName,
-                          height: 70,
-                          width: 70,
+                          height: MediaQuery.of(context).size.width * 0.178,
+                          width: MediaQuery.of(context).size.width * 0.178,
                         );
                       },
                     ),
                   },
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.0204,
+                    width: MediaQuery.of(context).size.width * 0.0306,
                   ),
                   Expanded(
                     child: Column(
@@ -199,56 +200,66 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (courseData?.courseImage == null) ...{
                       Image.asset(
                         AppImages.lightAppLogo,
-                        height: 80,
-                        width: 80,
+                        height: MediaQuery.of(context).size.width * 0.178,
+                        width: MediaQuery.of(context).size.width * 0.178,
                         fit: BoxFit.cover,
                       ),
                     } else ...{
-                      Image.network(
-                        courseData?.courseImage ?? '',
-                        fit: BoxFit.cover,
-                        height: 80,
-                        width: 80,
-                        errorBuilder: (context, exception, stackTrace) {
-                          return Image.asset(
-                            AppImages.lightAppLogo,
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: Image.network(
+                          courseData?.courseImage ?? '',
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.width * 0.178,
+                          width: MediaQuery.of(context).size.width * 0.178,
+                          errorBuilder: (context, exception, stackTrace) {
+                            return Image.asset(
+                              AppImages.lightAppLogo,
+                              height: MediaQuery.of(context).size.width * 0.178,
+                              width: MediaQuery.of(context).size.width * 0.178,
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
+                      )
                     },
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.0204,
+                      width: MediaQuery.of(context).size.width * 0.0306,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${courseData?.courseName}",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteMedium18
-                              : AppStyles.tsBlackMedium18,
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.people,
-                              size: 15,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              "${courseData?.courseName}",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium18
+                                  : AppStyles.tsBlackMedium18,
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.0102,
-                            ),
-                            Text(
-                                "${FormatHelper.categoryFormatter(courseData?.userEnrolled)}"),
-                          ],
-                        ),
-                      ],
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.people,
+                                size: 15,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0102,
+                              ),
+                              Text(
+                                  "${FormatHelper.categoryFormatter(courseData?.userEnrolled)}"),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
