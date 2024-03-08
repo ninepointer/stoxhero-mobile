@@ -77,8 +77,8 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                 child: Text(
                                   "${data?.courseName}",
                                   style: Get.isDarkMode
-                                      ? AppStyles.tsWhiteRegular16
-                                      : AppStyles.tsBlackRegular16,
+                                      ? AppStyles.tsWhiteMedium18
+                                      : AppStyles.tsBlackMedium18,
                                 ),
                               ),
                               if ((data?.instructorName?.length ?? 0) > 0) ...{

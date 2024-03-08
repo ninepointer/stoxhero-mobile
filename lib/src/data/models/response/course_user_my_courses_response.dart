@@ -126,6 +126,8 @@ class UserCoursesTopics {
 class UserCoursesSubtopics {
   int? order;
   String? topic;
+  String? videoUrl;
+  String? videoKey;
   String? sId;
 
   UserCoursesSubtopics({this.order, this.topic, this.sId});
@@ -133,6 +135,8 @@ class UserCoursesSubtopics {
   UserCoursesSubtopics.fromJson(Map<String, dynamic> json) {
     order = json['order'];
     topic = json['topic'];
+    videoUrl = json['videoUrl'];
+    videoKey = json['videoKey'];
     sId = json['_id'];
   }
 
@@ -140,6 +144,8 @@ class UserCoursesSubtopics {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['order'] = this.order;
     data['topic'] = this.topic;
+    data['videoUrl'] = this.videoUrl;
+    data['videoKey'] = this.videoKey;
     data['_id'] = this.sId;
     return data;
   }

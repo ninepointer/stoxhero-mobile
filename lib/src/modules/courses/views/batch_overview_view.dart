@@ -561,6 +561,61 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     child: Html(
                       data:
                           """${isStudent ? controller.userCourseOverview.value.courseDescription : controller.courseOverview.value.courseDescription}""",
+                      style: {
+                        "body": Style(
+                          backgroundColor: Get.isDarkMode
+                              ? AppColors.darkCardBackgroundColor
+                              : AppColors.lightCardBackgroundColor,
+                          color: Get.isDarkMode
+                              ? AppColors.white
+                              : AppColors.black,
+                        ),
+                        "p": Style(
+                          backgroundColor: Get.isDarkMode
+                              ? AppColors.darkCardBackgroundColor
+                              : AppColors.lightCardBackgroundColor,
+                          color: Get.isDarkMode
+                              ? AppColors.white
+                              : AppColors.black,
+                        ),
+                        "div": Style(
+                          backgroundColor: Get.isDarkMode
+                              ? AppColors.darkCardBackgroundColor
+                              : AppColors.lightCardBackgroundColor,
+                          color: Get.isDarkMode
+                              ? AppColors.white
+                              : AppColors.black,
+                        ),
+                        "span": Style(
+                          backgroundColor: Get.isDarkMode
+                              ? AppColors.darkCardBackgroundColor
+                              : AppColors.lightCardBackgroundColor,
+                          color: Get.isDarkMode
+                              ? AppColors.white
+                              : AppColors.black,
+                        ),
+                        "a": Style(
+                          backgroundColor: Get.isDarkMode
+                              ? AppColors.darkCardBackgroundColor
+                              : AppColors.lightCardBackgroundColor,
+                        ),
+                        "b": Style(
+                          backgroundColor: Get.isDarkMode
+                              ? AppColors.darkCardBackgroundColor
+                              : AppColors.lightCardBackgroundColor,
+                          color: Get.isDarkMode
+                              ? AppColors.white
+                              : AppColors.black,
+                        ),
+                        "strong": Style(
+                          backgroundColor: Get.isDarkMode
+                              ? AppColors.darkCardBackgroundColor
+                              : AppColors.lightCardBackgroundColor,
+                          color: Get.isDarkMode
+                              ? AppColors.white
+                              : AppColors.black,
+                        ),
+                      },
                     ),
                   ),
                   SizedBox(

@@ -37,6 +37,7 @@ class UserAllCoursesData {
   String? courseImage;
   int? userEnrolled;
   List<String>? instructorName;
+  bool? isPaid;
 
   UserAllCoursesData(
       {this.sId,
@@ -47,7 +48,8 @@ class UserAllCoursesData {
       this.discountedPrice,
       this.courseImage,
       this.userEnrolled,
-      this.instructorName});
+      this.instructorName,
+      this.isPaid});
 
   UserAllCoursesData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -58,6 +60,7 @@ class UserAllCoursesData {
     discountedPrice = json['discountedPrice'];
     courseImage = json['courseImage'];
     userEnrolled = json['userEnrolled'];
+    isPaid = json['isPaid'];
     instructorName = json['instructorName'].cast<String>();
   }
 
@@ -70,6 +73,7 @@ class UserAllCoursesData {
     data['coursePrice'] = this.coursePrice;
     data['discountedPrice'] = this.discountedPrice;
     data['courseImage'] = this.courseImage;
+    data['isPaid'] = this.isPaid;
     data['userEnrolled'] = this.userEnrolled;
     data['instructorName'] = this.instructorName;
     return data;
