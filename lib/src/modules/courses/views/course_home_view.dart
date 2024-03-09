@@ -171,6 +171,8 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                               Container(
                                 child: TabBar(
                                   onTap: (index) {
+                                    //controller.selectedTabIndex.value = index;
+
                                     if (index == 0) {
                                       controller.currentPage(0);
                                       controller.itemsPerPage(0);
@@ -185,12 +187,12 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                       controller.currentPage(0);
                                       controller.itemsPerPage(0);
                                       controller
-                                          .getInfluencerUnpublishCourseDetails();
+                                          .getInfluencerPublishCourseDetails();
                                     } else {
                                       controller.currentPage(0);
                                       controller.itemsPerPage(0);
                                       controller
-                                          .getInfluencerPublishCourseDetails();
+                                          .getInfluencerUnpublishCourseDetails();
                                     }
                                   },
                                   padding: EdgeInsets.all(8),
@@ -229,7 +231,7 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                     ),
                                     Tab(
                                       child: Text(
-                                        'Live\nCourses',
+                                        'Published\nCourses',
                                         style: Theme.of(context)
                                             .textTheme
                                             .tsRegular16,
@@ -238,7 +240,7 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                     ),
                                     Tab(
                                       child: Text(
-                                        'Completed\nCourses',
+                                        'Unpublished\nCourses',
                                         style: Theme.of(context)
                                             .textTheme
                                             .tsRegular16,
@@ -248,6 +250,27 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                   ],
                                 ),
                               ),
+                              // Expanded(
+                              //   child: Obx(() {
+                              //     if (controller.selectedTabIndex.value == 0) {
+                              //       return BatchAllCoursesView(controller
+                              //           .awaitingapprovalInflunceCourseList);
+                              //     } else if (controller
+                              //             .selectedTabIndex.value ==
+                              //         1) {
+                              //       return BatchAllCoursesView(controller
+                              //           .pendingadminapprovalInflunceCourseList);
+                              //     } else if (controller
+                              //             .selectedTabIndex.value ==
+                              //         2) {
+                              //       return BatchAllCoursesView(
+                              //           controller.publishInflunceCourseList);
+                              //     } else {
+                              //       return BatchAllCoursesView(
+                              //           controller.unPublishInflunceCourseList);
+                              //     }
+                              //   }),
+                              // ),
                               Expanded(
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
@@ -258,10 +281,10 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                           .awaitingapprovalInflunceCourseList),
                                       BatchAllCoursesView(controller
                                           .pendingadminapprovalInflunceCourseList),
-                                      BatchAllCoursesView(controller
-                                          .unPublishInflunceCourseList),
                                       BatchAllCoursesView(
                                           controller.publishInflunceCourseList),
+                                      BatchAllCoursesView(controller
+                                          .unPublishInflunceCourseList),
                                     ],
                                   ),
                                 ),

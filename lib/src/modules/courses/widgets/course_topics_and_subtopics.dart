@@ -48,10 +48,23 @@ class _CourseTopicsAndSubTopicsWidgetState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: widget.courseContent!.subtopics!
                   .map(
-                    (value) => Text(
-                      "- ${value.topic}",
-                      style: Theme.of(context).textTheme.tsRegular14,
-                      textAlign: TextAlign.start,
+                    (value) => Row(
+                      children: [
+                        Icon(
+                          Icons.circle,
+                          size: 6,
+                          color: Get.isDarkMode
+                              ? AppColors.white
+                              : AppColors.black,
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.0204),
+                        Text(
+                          "${value.topic}",
+                          style: Theme.of(context).textTheme.tsRegular14,
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
                     ),
                   )
                   .toList()),

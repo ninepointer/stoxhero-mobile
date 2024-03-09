@@ -113,7 +113,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                           children: [
                             Flexible(
                               child: Text(
-                                "${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
+                                "Course Overview: ${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
                                 style: Get.isDarkMode
                                     ? AppStyles.tsWhiteRegular14
                                     : AppStyles.tsBlackRegular14,
@@ -132,7 +132,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             0) ...{
                           Row(
                             children: [
-                              Text("Created by "),
+                              Text("Created by: "),
                               Row(
                                 children: (isStudent
                                         ? controller.userCourseOverview.value
@@ -168,26 +168,91 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                           )
                         },
                         Text(
-                          "Language - ${isStudent ? controller.userCourseOverview.value.courseLanguages : controller.courseOverview.value.courseLanguages}",
+                          "Language: ${isStudent ? controller.userCourseOverview.value.courseLanguages : controller.courseOverview.value.courseLanguages}",
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteRegular14
+                              : AppStyles.tsBlackRegular14,
+                        ),
+                        (controller.userCourseOverview.value.courseType ==
+                                    "Live" ||
+                                controller.courseOverview.value.courseType ==
+                                    "Live")
+                            ? Text(
+                                "Max Enrolments: ${isStudent ? controller.userCourseOverview.value.maxEnrolments ?? 0 : controller.courseOverview.value.maxEnrolments ?? 0}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              )
+                            : Container(),
+                        Text(
+                          "Level: ${isStudent ? controller.userCourseOverview.value.level ?? "" : controller.courseOverview.value.level ?? ''}",
                           style: Get.isDarkMode
                               ? AppStyles.tsWhiteRegular14
                               : AppStyles.tsBlackRegular14,
                         ),
                         Text(
-                          "Course category - ${isStudent ? controller.userCourseOverview.value.category : controller.courseOverview.value.category}",
+                          "Course Category: ${isStudent ? controller.userCourseOverview.value.category ?? '' : controller.courseOverview.value.category ?? ''}",
                           style: Get.isDarkMode
                               ? AppStyles.tsWhiteRegular14
                               : AppStyles.tsBlackRegular14,
                         ),
                         Text(
-                          "Course duration - ${formatDuration(isStudent ? controller.userCourseOverview.value.courseDurationInMinutes ?? 0 : controller.courseOverview.value.courseDurationInMinutes ?? 0)} ",
+                          "Type: ${isStudent ? controller.userCourseOverview.value.type ?? '' : controller.courseOverview.value.type ?? ''}",
                           style: Get.isDarkMode
                               ? AppStyles.tsWhiteRegular14
                               : AppStyles.tsBlackRegular14,
                         ),
+                        Text(
+                          "Course Type: ${isStudent ? controller.userCourseOverview.value.courseType : controller.courseOverview.value.courseType}",
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteRegular14
+                              : AppStyles.tsBlackRegular14,
+                        ),
+                        Text(
+                          "Course duration: ${formatDuration(isStudent ? controller.userCourseOverview.value.courseDurationInMinutes ?? 0 : controller.courseOverview.value.courseDurationInMinutes ?? 0)} ",
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteRegular14
+                              : AppStyles.tsBlackRegular14,
+                        ),
+
+                        if (isStudent
+                            ? controller.userCourseOverview.value.courseType ==
+                                "Live"
+                            : controller.courseOverview.value.courseType ==
+                                "Live") ...{
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Registration Starts: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationStartTime : controller.courseOverview.value.registrationStartTime)}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              ),
+                              Text(
+                                "Registration End: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationEndTime : controller.courseOverview.value.registrationEndTime)}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              ),
+                              Text(
+                                "Course Starts: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseStartTime : controller.courseOverview.value.courseStartTime)}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              ),
+                              Text(
+                                "Course End: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseEndTime : controller.courseOverview.value.courseEndTime)}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              ),
+                            ],
+                          )
+                        },
                         isStudent == false
                             ? Text(
-                                "Course Price - ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
+                                "Course Price: ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
                                 style: Get.isDarkMode
                                     ? AppStyles.tsWhiteRegular14
                                     : AppStyles.tsBlackRegular14,
@@ -195,7 +260,15 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             : Container(),
                         isStudent == false
                             ? Text(
-                                "Discounted Price -  ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.discountedPrice ?? 0 : controller.courseOverview.value.discountedPrice ?? 0, decimal: 0)}",
+                                "Discounted Price:  ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.discountedPrice ?? 0 : controller.courseOverview.value.discountedPrice ?? 0, decimal: 0)}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              )
+                            : Container(),
+                        isStudent == false
+                            ? Text(
+                                "Commission:  ${controller.courseOverview.value.commissionPercentage ?? 0}%",
                                 style: Get.isDarkMode
                                     ? AppStyles.tsWhiteRegular14
                                     : AppStyles.tsBlackRegular14,
@@ -665,6 +738,89 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0204,
                   ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "FAQ\'s:-",
+                        style: Get.isDarkMode
+                            ? AppStyles.tsWhiteMedium14
+                            : AppStyles.tsBlackMedium14,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.0204,
+                  ),
+                  if (isStudent) ...{
+                    for (int i = 0;
+                        i <
+                            (controller.userCourseOverview.value.faqs?.length ??
+                                0);
+                        i++)
+                      CourseFAQSWidget(
+                          i, controller.userCourseOverview.value.faqs?[i]),
+                  } else ...{
+                    for (int i = 0;
+                        i < (controller.courseOverview.value.faqs?.length ?? 0);
+                        i++)
+                      CourseFAQSWidget(
+                          i, controller.courseOverview.value.faqs?[i]),
+                  },
+
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.0204,
+                  ),
+                  if (isStudent == false) ...{
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Changes:-",
+                          style: Get.isDarkMode
+                              ? AppStyles.tsWhiteMedium14
+                              : AppStyles.tsBlackMedium14,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0204,
+                    ),
+                    if (((controller
+                                .courseOverview.value.suggestChanges?.length ??
+                            0) >
+                        0)) ...{
+                      Row(
+                        children: [
+                          Row(
+                            children: controller
+                                .courseOverview.value.suggestChanges!
+                                .asMap()
+                                .entries
+                                .map((entry) {
+                              final index = entry.key;
+                              final value = entry.value;
+                              // final isLast = index ==
+                              //     controller.courseOverview.value
+                              //             .suggestChanges!.length -
+                              //         1;
+
+                              return Text(
+                                value,
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      )
+                    },
+                  },
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.0408,
+                  ),
                 ],
               ),
             ),
@@ -689,8 +845,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             (controller.userCourseOverview.value.coursePrice ??
                                 0);
                       }
-                      print(
-                          "ddddd ${controller.userCourseOverview.value.sId} ${controller.userCourseOverview.value.courseName}");
 
                       BottomSheetHelper.openBottomSheet(
                         context: context,

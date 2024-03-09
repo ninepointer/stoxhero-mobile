@@ -13,16 +13,18 @@ class CourseVideoView extends StatefulWidget {
   State<CourseVideoView> createState() => _CourseVideoViewState();
 }
 
-class _CourseVideoViewState extends State<CourseVideoView> {
+class _CourseVideoViewState extends State<CourseVideoView>
+    with SingleTickerProviderStateMixin {
   late CourseController controller;
   late CachedVideoPlayerController _controller;
   late CustomVideoPlayerController _customVideoPlayerController;
+  late TabController tabController;
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<CourseController>();
-
+    tabController = TabController(length: 2, vsync: this);
     _controller = CachedVideoPlayerController.network(
         '${widget.subtopics.videoUrl ?? ''}')
       ..initialize().then((value) => setState(() {}));
@@ -34,6 +36,8 @@ class _CourseVideoViewState extends State<CourseVideoView> {
 
   @override
   void dispose() {
+    tabController.dispose();
+
     _controller.dispose();
     super.dispose();
   }
@@ -119,51 +123,95 @@ class _CourseVideoViewState extends State<CourseVideoView> {
             },
             icon: Icon(Icons.arrow_back),
           )),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              _customVideoPlayerController
-                      .videoPlayerController.value.isInitialized
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(6.0),
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: CustomVideoPlayer(
-                            customVideoPlayerController:
-                                _customVideoPlayerController),
-                      ),
-                    )
-                  : AspectRatio(
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            _customVideoPlayerController
+                    .videoPlayerController.value.isInitialized
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(6.0),
+                    child: AspectRatio(
                       aspectRatio: 16 / 9,
-                      child: Center(child: CircularProgressIndicator())),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.0306,
+                      child: CustomVideoPlayer(
+                          customVideoPlayerController:
+                              _customVideoPlayerController),
+                    ),
+                  )
+                : AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Center(child: CircularProgressIndicator())),
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.0306,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "${widget.subtopics.topic ?? ''}",
+                  style: Get.isDarkMode
+                      ? AppStyles.tsWhiteMedium18
+                      : AppStyles.tsBlackMedium18,
+                ),
+              ],
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   children: [
+            //     Text("By - Rakesh kumar"),
+            //   ],
+            // ),
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.0306,
+            ),
+            Expanded(
+              child: DefaultTabController(
+                length: 2,
+                child: Column(
+                  children: [
+                    Container(
+                      // padding: AppConstants.getAppPadding(context),
+                      child: TabBar(
+                        controller: tabController,
+                        indicatorColor: AppColors.lightGreen,
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              'Leactures',
+                              style: Theme.of(context).textTheme.tsRegular16,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'Overview',
+                              style: Theme.of(context).textTheme.tsRegular16,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // SizedBox(
+                    //   height: 12,
+                    // ),
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TabBarView(
+                          controller: tabController,
+                          children: [
+                            UserCoursesLactures(),
+                            UserCoursesOverView(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "${widget.subtopics.topic ?? ''}",
-                    style: Get.isDarkMode
-                        ? AppStyles.tsWhiteMedium18
-                        : AppStyles.tsBlackMedium18,
-                  ),
-                ],
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: [
-              //     Text("By - Rakesh kumar"),
-              //   ],
-              // ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.0306,
-              ),
-              Text(""),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

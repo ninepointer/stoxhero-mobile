@@ -19,7 +19,7 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
 
     tabController = TabController(length: 2, vsync: this);
     controller = Get.find<CourseController>();
-    controller.selectedTabIndex.value = 0;
+    controller.selectedUserTabIndex.value = 0;
   }
 
   @override
@@ -57,7 +57,7 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
                           child: TabBar(
                             onTap: (index) {
                               controller.loadData();
-                              controller.selectedTabIndex.value = index;
+                              controller.selectedUserTabIndex.value = index;
                             },
                             indicatorColor: AppColors.lightGreen,
                             controller: tabController,

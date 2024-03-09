@@ -29,6 +29,7 @@ class CourseController extends BaseController<CourseRespository> {
   final currentRating = 0.obs;
 
   final selectedTabIndex = 0.obs;
+  final selectedUserTabIndex = 0.obs;
 
   final isLoading = false.obs;
 
@@ -358,10 +359,11 @@ class CourseController extends BaseController<CourseRespository> {
     }
   }
 
-  Future courseRatingApi(Map<String,dynamic> data,String? courseId,Function onSuccess) async {
+  Future courseRatingApi(
+      Map<String, dynamic> data, String? courseId, Function onSuccess) async {
     try {
       final RepoResponse<GenericResponse> response =
-          await repository.ratingCourse(data,courseId);
+          await repository.ratingCourse(data, courseId);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           onSuccess.call();

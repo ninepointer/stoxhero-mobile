@@ -31,6 +31,7 @@ class CourseOverViewData {
   String? courseOverview;
   String? courseDescription;
   String? courseEndTime;
+  String? courseStartTime;
   String? registrationStartTime;
   String? registrationEndTime;
   int? maxEnrolments;
@@ -63,6 +64,7 @@ class CourseOverViewData {
       this.courseDurationInMinutes,
       this.courseOverview,
       this.courseDescription,
+      this.courseStartTime,
       this.courseEndTime,
       this.registrationStartTime,
       this.registrationEndTime,
@@ -97,6 +99,7 @@ class CourseOverViewData {
     courseOverview = json['courseOverview'];
     courseDescription = json['courseDescription'];
     courseEndTime = json['courseEndTime'];
+    courseStartTime = json['courseStartTime'];
     registrationStartTime = json['registrationStartTime'];
     registrationEndTime = json['registrationEndTime'];
     maxEnrolments = json['maxEnrolments'];
@@ -166,6 +169,7 @@ class CourseOverViewData {
     data['courseDurationInMinutes'] = this.courseDurationInMinutes;
     data['courseOverview'] = this.courseOverview;
     data['courseDescription'] = this.courseDescription;
+    data['courseStartTime'] = this.courseStartTime;
     data['courseEndTime'] = this.courseEndTime;
     data['registrationStartTime'] = this.registrationStartTime;
     data['registrationEndTime'] = this.registrationEndTime;
