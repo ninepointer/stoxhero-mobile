@@ -358,7 +358,7 @@ class _UpComingContestCardState extends State<UpComingContestCard> {
                         '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
                         style: TextStyle(
                           color: Colors.red,
-                          fontSize: 12,
+                          fontSize: 11,
                           fontWeight: FontWeight.w500,
                         ),
                         textAlign: TextAlign.center,
