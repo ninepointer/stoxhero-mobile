@@ -123,10 +123,14 @@ class UpComingShareModalContent extends GetView<ContestController> {
                                           style: AppStyles.tsSecondaryMedium14
                                               .copyWith(color: AppColors.white),
                                         )
-                                      : Text(
-                                          "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
-                                          style: AppStyles.tsSecondaryMedium14
-                                              .copyWith(color: AppColors.white),
+                                      : Flexible(
+                                          child: Text(
+                                            "1st rank wins ${controller.calculateTotalReward(contest?.rewards)}!",
+                                            style: AppStyles.tsSecondaryMedium14
+                                                .copyWith(
+                                                    color: AppColors.white),
+                                            textAlign: TextAlign.center,
+                                          ),
                                         )
                                 ],
                               ),
