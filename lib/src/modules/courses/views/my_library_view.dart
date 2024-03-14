@@ -42,31 +42,33 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (data?.courseImage == null) ...{
                           Image.asset(
                             AppImages.lightAppLogo,
-                            height: MediaQuery.of(context).size.width * 0.178,
-                            width: MediaQuery.of(context).size.width * 0.178,
+                            height: MediaQuery.of(context).size.width * 0.250,
+                            width: MediaQuery.of(context).size.width * 0.250,
                             fit: BoxFit.cover,
                           ),
                         } else ...{
                           Image.network(
                             data?.courseImage ?? '',
-                            height: MediaQuery.of(context).size.width * 0.178,
-                            width: MediaQuery.of(context).size.width * 0.178,
+                            height: MediaQuery.of(context).size.width * 0.250,
+                            width: MediaQuery.of(context).size.width * 0.250,
                             fit: BoxFit.cover,
                             errorBuilder: (context, exception, stackTrace) {
                               return Image.asset(
-                                AppImages.lightAppLogo,
+                                AppImages.lightAppName,
                                 height:
-                                    MediaQuery.of(context).size.width * 0.178,
+                                    MediaQuery.of(context).size.width * 0.250,
                                 width:
-                                    MediaQuery.of(context).size.width * 0.178,
-                                fit: BoxFit.cover,
+                                    MediaQuery.of(context).size.width * 0.250,
                               );
                             },
                           ),
@@ -89,23 +91,26 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                               if ((data?.instructorName?.length ?? 0) > 0) ...{
                                 Row(
                                   children: [
-                                    Row(
-                                      children: data!.instructorName!
-                                          .asMap()
-                                          .entries
-                                          .map((entry) {
-                                        final index = entry.key;
-                                        final value = entry.value;
-                                        final isLast = index ==
-                                            data.instructorName!.length - 1;
+                                    Text("By: "),
+                                    Expanded(
+                                      child: Wrap(
+                                        children: data!.instructorName!
+                                            .asMap()
+                                            .entries
+                                            .map((entry) {
+                                          final index = entry.key;
+                                          final value = entry.value;
+                                          final isLast = index ==
+                                              data.instructorName!.length - 1;
 
-                                        return Text(
-                                          isLast ? value : '$value, ',
-                                          style: Get.isDarkMode
-                                              ? AppStyles.tsWhiteRegular14
-                                              : AppStyles.tsBlackRegular14,
-                                        );
-                                      }).toList(),
+                                          return Text(
+                                            isLast ? value : '$value,',
+                                            style: Get.isDarkMode
+                                                ? AppStyles.tsWhiteRegular14
+                                                : AppStyles.tsBlackRegular14,
+                                          );
+                                        }).toList(),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -119,17 +124,17 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    StarRatingWidget(
-                                      starCount: 5,
-                                      rating: data?.rating?.toDouble() ?? 0,
-                                      color: AppColors.lightGreen,
-                                      size: 15.0,
-                                    ),
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.people,
-                                          size: 15,
+                                        StarRatingWidget(
+                                          starCount: 5,
+                                          rating: (data?.rating?.toDouble() ??
+                                                      0) >
+                                                  0
+                                              ? data?.rating?.toDouble() ?? 0
+                                              : 4,
+                                          color: AppColors.lightGreen,
+                                          size: 15.0,
                                         ),
                                         SizedBox(
                                           width: MediaQuery.of(context)
@@ -138,7 +143,17 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                               0.0102,
                                         ),
                                         Text(
-                                            "${FormatHelper.categoryFormatter(data?.userEnrolled)}"),
+                                            "(${((data?.rating ?? 0) > 0) ? data?.rating ?? 0 : 4})")
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "For ${data?.level ?? ''}",
+                                          style: Get.isDarkMode
+                                              ? AppStyles.tsWhiteRegular14
+                                              : AppStyles.tsBlackRegular14,
+                                        ),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
@@ -152,6 +167,89 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                               )
                             ],
                           ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0204,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "${data?.courseDuration ?? ''} Min",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular12
+                                      : AppStyles.tsBlackRegular12,
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0204,
+                            ),
+                            Icon(
+                              Icons.circle,
+                              size: 10,
+                              color: Get.isDarkMode
+                                  ? AppColors.white
+                                  : AppColors.black,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0204,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "${data?.lactures ?? ''} Lectures",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular12
+                                      : AppStyles.tsBlackRegular12,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Price:",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium12
+                                  : AppStyles.tsBlackMedium12,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0102,
+                            ),
+                            if ((data?.coursePrice ?? 0) !=
+                                (data?.discountedPrice ?? 0)) ...{
+                              Text(
+                                "${FormatHelper.formatNumbers(data?.coursePrice, decimal: 0)}",
+                                style: TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationColor: Get.isDarkMode
+                                        ? AppColors.white
+                                        : AppColors.black,
+                                    decorationThickness: 3),
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0102,
+                              ),
+                              Text(
+                                  "${FormatHelper.formatNumbers(data?.discountedPrice, decimal: 0)}"),
+                            } else ...{
+                              Text(
+                                  "${FormatHelper.formatNumbers(data?.coursePrice, decimal: 0)}"),
+                            },
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.0204,
+                            )
+                          ],
                         ),
                       ],
                     ),

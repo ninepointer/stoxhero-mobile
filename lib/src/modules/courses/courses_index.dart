@@ -17,3 +17,6 @@ export 'widgets/course_topics_and_subtopics.dart';
 export 'widgets/course_faqs.dart';
 export 'widgets/user_course_lactures.dart';
 export 'widgets/user_courses_overview.dart';
+export 'views/my_course_overview_details.dart';
+export 'views/user_course_resources_view.dart';
+export 'views/user_course_notes_view.dart';

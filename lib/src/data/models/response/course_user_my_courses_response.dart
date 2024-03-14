@@ -39,6 +39,12 @@ class UserMyCoursesData {
   num? coursePrgress;
   List<String>? instructorName;
   int? rating;
+  int? courseDuration;
+  String? type;
+  String? courseType;
+  String? level;
+  int? lactures;
+  List<String>? notes;
 
   UserMyCoursesData(
       {this.sId,
@@ -51,7 +57,13 @@ class UserMyCoursesData {
       this.topics,
       this.coursePrgress,
       this.instructorName,
-      this.rating});
+      this.rating,
+      this.courseDuration,
+      this.courseType,
+      this.type,
+      this.level,
+      this.lactures,
+      this.notes});
 
   UserMyCoursesData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -67,9 +79,15 @@ class UserMyCoursesData {
         topics!.add(new UserCoursesTopics.fromJson(v));
       });
     }
+    notes = json['notes']?.cast<String>() ?? [];
     coursePrgress = json['coursePrgress'];
     instructorName = json['instructorName'].cast<String>();
     rating = json['rating'];
+    courseDuration = json['courseDurationInMinutes'];
+    type = json['type'];
+    courseType = json['courseType'];
+    level = json['level'];
+    lactures = json['lectures'];
   }
 
   Map<String, dynamic> toJson() {
@@ -86,7 +104,13 @@ class UserMyCoursesData {
     }
     data['coursePrgress'] = this.coursePrgress;
     data['instructorName'] = this.instructorName;
+    data['notes'] = this.notes;
     data['rating'] = this.rating;
+    data['courseDurationInMinutes'] = this.courseDuration;
+    data['type'] = this.type;
+    data['courseType'] = this.courseType;
+    data['level'] = this.level;
+    data['lectures'] = this.lactures;
     return data;
   }
 }
@@ -129,8 +153,9 @@ class UserCoursesSubtopics {
   String? videoUrl;
   String? videoKey;
   String? sId;
+  List<String>? notes;
 
-  UserCoursesSubtopics({this.order, this.topic, this.sId});
+  UserCoursesSubtopics({this.order, this.topic, this.sId, this.notes});
 
   UserCoursesSubtopics.fromJson(Map<String, dynamic> json) {
     order = json['order'];
@@ -138,6 +163,7 @@ class UserCoursesSubtopics {
     videoUrl = json['videoUrl'];
     videoKey = json['videoKey'];
     sId = json['_id'];
+    notes = json['notes']?.cast<String>() ?? [];
   }
 
   Map<String, dynamic> toJson() {
@@ -147,6 +173,7 @@ class UserCoursesSubtopics {
     data['videoUrl'] = this.videoUrl;
     data['videoKey'] = this.videoKey;
     data['_id'] = this.sId;
+    data['notes'] = this.notes;
     return data;
   }
 }

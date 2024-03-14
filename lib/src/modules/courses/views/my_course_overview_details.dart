@@ -1,69 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:stoxhero/src/app/app.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:stoxhero/src/app/app.dart';
 
-import 'package:video_player/video_player.dart';
-import 'package:appinio_video_player/appinio_video_player.dart';
-
-class BatchOverViewDetailsView extends StatefulWidget {
-  const BatchOverViewDetailsView({super.key});
+class MyCoursesOverViewDetailsView extends StatefulWidget {
+  MyCoursesOverViewDetailsView();
 
   @override
-  State<BatchOverViewDetailsView> createState() =>
-      _BatchOverViewDetailsViewState();
+  State<MyCoursesOverViewDetailsView> createState() =>
+      _MyCoursesOverViewDetailsViewState();
 }
 
-class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
-  late CachedVideoPlayerController _controller;
-  late CustomVideoPlayerController _customVideoPlayerController;
+class _MyCoursesOverViewDetailsViewState
+    extends State<MyCoursesOverViewDetailsView> {
   late CourseController controller;
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<CourseController>();
-
-    _controller = CachedVideoPlayerController.network(
-        '${isStudent ? controller.userCourseOverview.value.salesVideo : controller.courseOverview.value.salesVideo}')
-      ..initialize().then((value) => setState(() {}));
-    _customVideoPlayerController = CustomVideoPlayerController(
-      context: context,
-      videoPlayerController: _controller,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        children: [
-          Expanded(
+      () => Scaffold(
+        appBar: AppBar(
+          title: Text("About this Course"),
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.0204),
+          child: Expanded(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0306,
-                  ),
-                  _customVideoPlayerController
-                          .videoPlayerController.value.isInitialized
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(6.0),
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: CustomVideoPlayer(
-                                customVideoPlayerController:
-                                    _customVideoPlayerController),
-                          ),
-                        )
-                      : AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: Center(child: CircularProgressIndicator())),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
@@ -78,120 +47,114 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${isStudent ? controller.userCourseOverview.value.courseName : controller.courseOverview.value.courseName}",
+                          "${controller.userCourseOverview.value.courseName}",
                           style: Get.isDarkMode
                               ? AppStyles.tsWhiteMedium18
                               : AppStyles.tsBlackMedium18,
                         ),
-                        Row(
-                          children: [
-                            StarRatingWidget(
-                              starCount: 5,
-                              rating: (controller.userCourseOverview.value
-                                              .averageRating
-                                              ?.toDouble() ??
-                                          0.0) >
-                                      0
-                                  ? controller.userCourseOverview.value
-                                          .averageRating
-                                          ?.toDouble() ??
-                                      0.0
-                                  : 4.0,
-                              color: AppColors.lightGreen,
-                              size: 15.0,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.0102,
-                            ),
-                            Text(
-                              "(${((controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0) > 0) ? controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0 : 4.0})",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
-                            )
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     StarRatingWidget(
+                        //       starCount: 5,
+                        //       rating: (controller.userCourseOverview.value
+                        //                       .averageRating
+                        //                       ?.toDouble() ??
+                        //                   0.0) >
+                        //               0
+                        //           ? controller
+                        //                   .userCourseOverview.value.averageRating
+                        //                   ?.toDouble() ??
+                        //               0.0
+                        //           : 4.0,
+                        //       color: AppColors.lightGreen,
+                        //       size: 15.0,
+                        //     ),
+                        //     SizedBox(
+                        //       width: MediaQuery.of(context).size.width * 0.0102,
+                        //     ),
+                        //     Text(
+                        //       "(${((controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0) > 0) ? controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0 : 4.0})",
+                        //       style: Get.isDarkMode
+                        //           ? AppStyles.tsWhiteRegular14
+                        //           : AppStyles.tsBlackRegular14,
+                        //     )
+                        //   ],
+                        // ),
                         // Text(
                         //   "By - Rakesh Kumar",
                         //   style: AppStyles.tsBlackRegular14,
                         // ),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "Course Overview: ${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
-                              ),
-                            )
-                          ],
-                        ),
 
-                        if ((isStudent
-                                ? controller.userCourseOverview.value
-                                        .courseInstructors?.length ??
-                                    0
-                                : controller.courseOverview.value
-                                        .courseInstructors?.length ??
-                                    0) >
-                            0) ...{
-                          Row(
-                            children: [
-                              Text("Created by: "),
-                              Row(
-                                children: (isStudent
-                                        ? controller.userCourseOverview.value
-                                            .courseInstructors
-                                        : controller.courseOverview.value
-                                            .courseInstructors)!
-                                    .asMap()
-                                    .entries
-                                    .map((entry) {
-                                  final index = entry.key;
-                                  final value =
-                                      "${entry.value.id?.firstName} ${entry.value.id?.lastName}";
-                                  final isLast = index ==
-                                      (isStudent
-                                          ? controller.userCourseOverview.value
-                                                  .courseInstructors?.length ??
-                                              0 - 1
-                                          : controller.courseOverview.value
-                                                  .courseInstructors?.length ??
-                                              0 - 1);
+                        ////fgd/////
+                        // Row(
+                        //   children: [
+                        //     Flexible(
+                        //       child: Text(
+                        //         "Course Overview: ${ widget.data?.courseOverview}",
+                        //         style: Get.isDarkMode
+                        //             ? AppStyles.tsWhiteRegular14
+                        //             : AppStyles.tsBlackRegular14,
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
 
-                                  return Text(
-                                    isLast ? value : '$value, ',
-                                    style: Get.isDarkMode
-                                        ? AppStyles.tsWhiteRegular14.copyWith(
-                                            color: AppColors.lightGreen)
-                                        : AppStyles.tsBlackRegular14.copyWith(
-                                            color: AppColors.lightGreen),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          )
-                        },
+                        // if ((
+                        //       widget.data?.instructorName
+                        //                 ?.length ??
+                        //             0) >
+                        //     0) ...{
+                        // Row(
+                        //   children: [
+                        //     Text("Created by: "),
+                        //     Row(
+                        //       children: (
+                        //                widget.data?.instructorName)!
+                        //           .asMap()
+                        //           .entries
+                        //           .map((entry) {
+                        //         final index = entry.key;
+                        //         final value =
+                        //             "${entry.value.} ${entry.value.id?.lastName}";
+                        //         final isLast = index ==
+                        //             (isStudent
+                        //                 ? controller.userCourseOverview.value
+                        //                         .courseInstructors?.length ??
+                        //                     0 - 1
+                        //                 : controller.courseOverview.value
+                        //                         .courseInstructors?.length ??
+                        //                     0 - 1);
+
+                        //         return Text(
+                        //           isLast ? value : '$value, ',
+                        //           style: Get.isDarkMode
+                        //               ? AppStyles.tsWhiteRegular14
+                        //                   .copyWith(color: AppColors.lightGreen)
+                        //               : AppStyles.tsBlackRegular14
+                        //                   .copyWith(color: AppColors.lightGreen),
+                        //         );
+                        //       }).toList(),
+                        //     ),
+                        //   ],
+                        // )
+                        //},
                         Text(
-                          "Language: ${isStudent ? controller.userCourseOverview.value.courseLanguages : controller.courseOverview.value.courseLanguages}",
+                          "Language: ${controller.userCourseOverview.value.courseLanguages}",
                           style: Get.isDarkMode
                               ? AppStyles.tsWhiteRegular14
                               : AppStyles.tsBlackRegular14,
                         ),
                         (controller.userCourseOverview.value.courseType ==
-                                    "Live" ||
-                                controller.courseOverview.value.courseType ==
-                                    "Live")
+                                "Live")
                             ? Text(
-                                "Max Enrolments: ${isStudent ? controller.userCourseOverview.value.maxEnrolments ?? 0 : controller.courseOverview.value.maxEnrolments ?? 0}",
+                                "Max Enrolments: ${controller.userCourseOverview.value.maxEnrolments ?? 0}",
                                 style: Get.isDarkMode
                                     ? AppStyles.tsWhiteRegular14
                                     : AppStyles.tsBlackRegular14,
                               )
                             : Container(),
                         Text(
-                          "Level: ${isStudent ? controller.userCourseOverview.value.level ?? "" : controller.courseOverview.value.level ?? ''}",
+                          "Level: ${controller.userCourseOverview.value.level ?? ''}",
                           style: Get.isDarkMode
                               ? AppStyles.tsWhiteRegular14
                               : AppStyles.tsBlackRegular14,
@@ -584,83 +547,45 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                   .toList()),
                     ),
                   },
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.width * 0.0204,
-                  // ),
+
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.start,
                   //   children: [
                   //     Text(
-                  //       "Course overview:-",
+                  //       "Course topics:-",
                   //       style: Get.isDarkMode
                   //           ? AppStyles.tsWhiteMedium14
                   //           : AppStyles.tsBlackMedium14,
                   //     ),
                   //   ],
                   // ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.0204,
+                  ),
+                  // if (isStudent) ...{
+                  //   for (int i = 0;
+                  //       i <
+                  //           (controller.userCourseOverview.value.courseContent
+                  //                   ?.length ??
+                  //               0);
+                  //       i++)
+                  //     CourseTopicsAndSubTopicsWidget(
+                  //         i,
+                  //         controller
+                  //             .userCourseOverview.value.courseContent?[i]),
+                  // } else ...{
+                  //   for (int i = 0;
+                  //       i <
+                  //           (controller.courseOverview.value.courseContent
+                  //                   ?.length ??
+                  //               0);
+                  //       i++)
+                  //     CourseTopicsAndSubTopicsWidget(
+                  //         i, controller.courseOverview.value.courseContent?[i]),
+                  // },
                   // SizedBox(
                   //   height: MediaQuery.of(context).size.width * 0.0204,
                   // ),
-                  // Container(
-                  //     padding:
-                  //         EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                  //     decoration: BoxDecoration(
-                  //         color: Get.isDarkMode
-                  //             ? AppColors.darkCardBackgroundColor
-                  //             : AppColors.lightCardBackgroundColor),
-                  //     child: Row(
-                  //       children: [
-                  //         Flexible(
-                  //           child: Text(
-                  //             "${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
-                  //             style: Get.isDarkMode
-                  //                 ? AppStyles.tsWhiteRegular14
-                  //                 : AppStyles.tsBlackRegular14,
-                  //           ),
-                  //         )
-                  //       ],
-                  //     )),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0204,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Course topics:-",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteMedium14
-                            : AppStyles.tsBlackMedium14,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0204,
-                  ),
-                  if (isStudent) ...{
-                    for (int i = 0;
-                        i <
-                            (controller.userCourseOverview.value.courseContent
-                                    ?.length ??
-                                0);
-                        i++)
-                      CourseTopicsAndSubTopicsWidget(
-                          i,
-                          controller
-                              .userCourseOverview.value.courseContent?[i]),
-                  } else ...{
-                    for (int i = 0;
-                        i <
-                            (controller.courseOverview.value.courseContent
-                                    ?.length ??
-                                0);
-                        i++)
-                      CourseTopicsAndSubTopicsWidget(
-                          i, controller.courseOverview.value.courseContent?[i]),
-                  },
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0204,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -827,290 +752,8 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
               ),
             ),
           ),
-          if (isStudent) ...{
-            SafeArea(
-              child: Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {
-                      num price;
-                      if ((controller.userCourseOverview.value.coursePrice ??
-                              0) !=
-                          (controller
-                                  .userCourseOverview.value.discountedPrice ??
-                              0)) {
-                        price = (controller
-                                .userCourseOverview.value.discountedPrice ??
-                            0);
-                      } else {
-                        price =
-                            (controller.userCourseOverview.value.coursePrice ??
-                                0);
-                      }
-
-                      BottomSheetHelper.openBottomSheet(
-                        context: context,
-                        child: PaymentBottomSheet(
-                          isGstInclude: true,
-                          productType: ProductType.course,
-                          productId:
-                              controller.userCourseOverview.value.sId ?? '',
-                          buyItemPrice: price,
-                          onPaymentSuccess: () {},
-                          onSubmit: () {
-                            Get.back();
-                            var walletController = Get.find<WalletController>();
-                            var data = {
-                              "bonusRedemption":
-                                  walletController.isHeroCashAdded.value
-                                      ? walletController.heroCashAmount.value
-                                      : 0,
-                              "coupon": walletController
-                                  .couponCodeTextController.text,
-                              "courseFee": (walletController
-                                      .subscriptionAmount.value +
-                                  (walletController.subscriptionAmount.value *
-                                      (AppStorage.getReadSetting()
-                                              .courseGstPercentage ??
-                                          0) /
-                                      100)),
-                              "courseId":
-                                  controller.userCourseOverview.value.sId ?? '',
-                              "courseName": controller
-                                      .userCourseOverview.value.courseName ??
-                                  '',
-                            };
-                            controller.purchaseCourseApi(data);
-                          },
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lightGreen,
-                      onPrimary: Colors.white,
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 24), // Button padding
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), // Button border radius
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Buy @ "),
-                        if (controller.userCourseOverview.value.coursePrice !=
-                            controller
-                                .userCourseOverview.value.discountedPrice) ...{
-                          Text(
-                            "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}",
-                            style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor: Colors.white,
-                                decorationThickness: 3),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                              "${FormatHelper.formatNumbers(controller.userCourseOverview.value.discountedPrice ?? 0, decimal: 0)}")
-                        } else ...{
-                          Text(
-                              "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}")
-                        }
-                      ],
-                    )),
-              ),
-            )
-          } else ...{
-            controller.courseOverview.value.status == "Sent To Creator"
-                ? SafeArea(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              controller.getInfluncerApprovalDetails(
-                                  controller.courseOverview.value.sId ?? '');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.lightGreen,
-                              onPrimary: Colors.white,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 16,
-                                  horizontal: 24), // Button padding
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    8), // Button border radius
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Approve"),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.0204,
-                        ),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              controller.suggestionTextController.clear();
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    backgroundColor: Get.isDarkMode
-                                        ? AppColors.darkCardBackgroundColor
-                                        : AppColors.lightCardBackgroundColor,
-                                    title: Text('Suggest Change'),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.8,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.3,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 4),
-                                          decoration: BoxDecoration(
-                                            color: Get.isDarkMode
-                                                ? AppColors.black.shade200
-                                                : AppColors.grey.shade200,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10)),
-                                          ),
-                                          child: TextField(
-                                            controller: controller
-                                                .suggestionTextController,
-                                            textInputAction:
-                                                TextInputAction.newline,
-                                            keyboardType:
-                                                TextInputType.multiline,
-                                            maxLines: null,
-                                            decoration: InputDecoration(
-                                              hintText: 'Enter Suggestions',
-                                              border: InputBorder.none,
-                                            ),
-                                          ),
-
-                                          // Allow multiple lines for feedback
-                                        ),
-                                      ],
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
-                                        },
-                                        child: Text(
-                                          'Cancel',
-                                          style: TextStyle(
-                                              color: AppColors.lightGreen),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          controller.patchsuggestchangeDetails(
-                                              controller.courseOverview.value
-                                                      .sId ??
-                                                  '',
-                                              context);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppColors.lightGreen,
-                                          onPrimary: Colors.white,
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 4,
-                                              horizontal: 8), // Button padding
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                8), // Button border radius
-                                          ),
-                                        ),
-                                        child: Text('Send'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.lightGreen,
-                              onPrimary: Colors.white,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 16,
-                                  horizontal: 24), // Button padding
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    8), // Button border radius
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("Suggestion"),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : SizedBox()
-          }
-        ],
-      ),
-    );
-  }
-}
-
-Widget textItemWidget(String str) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Column(
-        children: [
-          SizedBox(
-            height: 5,
-          ),
-          Icon(
-            Icons.circle,
-            size: 8,
-            color: AppColors.grey,
-          ),
-        ],
-      ),
-      SizedBox(
-        width: 4,
-      ),
-      Flexible(
-        child: Text(
-          str,
-          style: Get.isDarkMode
-              ? AppStyles.tsWhiteRegular14
-              : AppStyles.tsBlackRegular14,
         ),
       ),
-    ],
-  );
-}
-
-String formatDuration(int minutes) {
-  if (minutes >= 60) {
-    int hours = minutes ~/ 60;
-    int remainingMinutes = minutes % 60;
-    return '$hours hr : $remainingMinutes min';
-  } else {
-    return '$minutes min';
+    );
   }
 }

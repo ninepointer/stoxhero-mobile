@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
-
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:appinio_video_player/appinio_video_player.dart';
 
@@ -16,6 +16,7 @@ class CourseVideoView extends StatefulWidget {
 class _CourseVideoViewState extends State<CourseVideoView>
     with SingleTickerProviderStateMixin {
   late CourseController controller;
+
   late CachedVideoPlayerController _controller;
   late CustomVideoPlayerController _customVideoPlayerController;
   late TabController tabController;
@@ -39,6 +40,7 @@ class _CourseVideoViewState extends State<CourseVideoView>
     tabController.dispose();
 
     _controller.dispose();
+
     super.dispose();
   }
 
@@ -155,12 +157,6 @@ class _CourseVideoViewState extends State<CourseVideoView>
                 ),
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: [
-            //     Text("By - Rakesh kumar"),
-            //   ],
-            // ),
             SizedBox(
               height: MediaQuery.of(context).size.width * 0.0306,
             ),
@@ -177,14 +173,14 @@ class _CourseVideoViewState extends State<CourseVideoView>
                         tabs: [
                           Tab(
                             child: Text(
-                              'Leactures',
+                              'Lectures',
                               style: Theme.of(context).textTheme.tsRegular16,
                               textAlign: TextAlign.center,
                             ),
                           ),
                           Tab(
                             child: Text(
-                              'Overview',
+                              'More',
                               style: Theme.of(context).textTheme.tsRegular16,
                               textAlign: TextAlign.center,
                             ),
@@ -201,8 +197,8 @@ class _CourseVideoViewState extends State<CourseVideoView>
                         child: TabBarView(
                           controller: tabController,
                           children: [
-                            UserCoursesLactures(),
-                            UserCoursesOverView(),
+                            UserCoursesLactures(widget.data),
+                            UserCoursesOverView(widget.data),
                           ],
                         ),
                       ),

@@ -65,33 +65,26 @@ class CourseBatchNameWidget extends GetView<CourseController> {
                         if ((courseData?.instructorName?.length ?? 0) > 0) ...{
                           Row(
                             children: [
-                              Row(
-                                children: courseData!.instructorName!
-                                    .asMap()
-                                    .entries
-                                    .map((entry) {
-                                  final index = entry.key;
-                                  final value = entry.value;
-                                  final isLast = index ==
-                                      courseData!.instructorName!.length - 1;
+                              //Text("By: "),
+                              Expanded(
+                                child: Wrap(
+                                  children: courseData!.instructorName!
+                                      .asMap()
+                                      .entries
+                                      .map((entry) {
+                                    final index = entry.key;
+                                    final value = entry.value;
+                                    final isLast = index ==
+                                        courseData!.instructorName!.length - 1;
 
-                                  return Row(
-                                    children: [
-                                      Text(
-                                        "By: ",
-                                        style: Get.isDarkMode
-                                            ? AppStyles.tsWhiteRegular14
-                                            : AppStyles.tsBlackRegular14,
-                                      ),
-                                      Text(
-                                        isLast ? value : '$value, ',
-                                        style: Get.isDarkMode
-                                            ? AppStyles.tsWhiteRegular14
-                                            : AppStyles.tsBlackRegular14,
-                                      ),
-                                    ],
-                                  );
-                                }).toList(),
+                                    return Text(
+                                      isLast ? value : '$value, ',
+                                      style: Get.isDarkMode
+                                          ? AppStyles.tsWhiteRegular14
+                                          : AppStyles.tsBlackRegular14,
+                                    );
+                                  }).toList(),
+                                ),
                               ),
                             ],
                           )
