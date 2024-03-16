@@ -756,4 +756,35 @@ class _MyCoursesOverViewDetailsViewState
       ),
     );
   }
+
+  Widget textItemWidget(String str) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            SizedBox(
+              height: 5,
+            ),
+            Icon(
+              Icons.circle,
+              size: 8,
+              color: AppColors.grey,
+            ),
+          ],
+        ),
+        SizedBox(
+          width: 4,
+        ),
+        Flexible(
+          child: Text(
+            str,
+            style: Get.isDarkMode
+                ? AppStyles.tsWhiteRegular14
+                : AppStyles.tsBlackRegular14,
+          ),
+        ),
+      ],
+    );
+  }
 }

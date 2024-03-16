@@ -50,28 +50,35 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (data?.courseImage == null) ...{
-                          Image.asset(
-                            AppImages.lightAppLogo,
-                            height: MediaQuery.of(context).size.width * 0.250,
-                            width: MediaQuery.of(context).size.width * 0.250,
-                            fit: BoxFit.cover,
-                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              AppImages.lightAppLogo,
+                              height: MediaQuery.of(context).size.width * 0.225,
+                              width: MediaQuery.of(context).size.width * 0.450,
+                            ),
+                          )
                         } else ...{
-                          Image.network(
-                            data?.courseImage ?? '',
-                            height: MediaQuery.of(context).size.width * 0.250,
-                            width: MediaQuery.of(context).size.width * 0.250,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, exception, stackTrace) {
-                              return Image.asset(
-                                AppImages.lightAppName,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.250,
-                                width:
-                                    MediaQuery.of(context).size.width * 0.250,
-                              );
-                            },
-                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              data?.courseImage ?? '',
+                              height: MediaQuery.of(context).size.width * 0.225,
+                              width: MediaQuery.of(context).size.width * 0.450,
+                              errorBuilder: (context, exception, stackTrace) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.asset(
+                                    AppImages.lightAppName,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.225,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.450,
+                                  ),
+                                );
+                              },
+                            ),
+                          )
                         },
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.0204,
@@ -84,94 +91,100 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                 child: Text(
                                   "${data?.courseName}",
                                   style: Get.isDarkMode
-                                      ? AppStyles.tsWhiteMedium18
-                                      : AppStyles.tsBlackMedium18,
+                                      ? AppStyles.tsWhiteMedium16
+                                      : AppStyles.tsBlackMedium16,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              if ((data?.instructorName?.length ?? 0) > 0) ...{
-                                Row(
-                                  children: [
-                                    Text("By: "),
-                                    Expanded(
-                                      child: Wrap(
-                                        children: data!.instructorName!
-                                            .asMap()
-                                            .entries
-                                            .map((entry) {
-                                          final index = entry.key;
-                                          final value = entry.value;
-                                          final isLast = index ==
-                                              data.instructorName!.length - 1;
-
-                                          return Text(
-                                            isLast ? value : '$value,',
-                                            style: Get.isDarkMode
-                                                ? AppStyles.tsWhiteRegular14
-                                                : AppStyles.tsBlackRegular14,
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              },
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.width * 0.0204,
+                                    MediaQuery.of(context).size.width * 0.0102,
                               ),
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        StarRatingWidget(
-                                          starCount: 5,
-                                          rating: (data?.rating?.toDouble() ??
-                                                      0) >
-                                                  0
-                                              ? data?.rating?.toDouble() ?? 0
-                                              : 4,
-                                          color: AppColors.lightGreen,
-                                          size: 15.0,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.0102,
-                                        ),
-                                        Text(
-                                            "(${((data?.rating ?? 0) > 0) ? data?.rating ?? 0 : 4})")
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "For ${data?.level ?? ''}",
-                                          style: Get.isDarkMode
-                                              ? AppStyles.tsWhiteRegular14
-                                              : AppStyles.tsBlackRegular14,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.0204,
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      StarRatingWidget(
+                                        starCount: 5,
+                                        rating:
+                                            (data?.rating?.toDouble() ?? 0) > 0
+                                                ? data?.rating?.toDouble() ?? 0
+                                                : 4,
+                                        color: AppColors.lightGreen,
+                                        size: 15.0,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.0102,
+                                      ),
+                                      Text(
+                                          "(${((data?.rating ?? 0) > 0) ? data?.rating ?? 0 : 4})")
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.width * 0.0102,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "For ${data?.level ?? ''}",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsGreyRegular14,
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.0204,
+                      height: MediaQuery.of(context).size.width * 0.0102,
+                    ),
+                    Row(
+                      children: [
+                        if ((data?.instructorName?.length ?? 0) > 0) ...{
+                          Row(
+                            children: [
+                              Text(
+                                "By: ",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium12
+                                    : AppStyles.tsBlackMedium12,
+                              ),
+                              Wrap(
+                                children: data!.instructorName!
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                  final index = entry.key;
+                                  final value = entry.value;
+                                  final isLast =
+                                      index == data.instructorName!.length - 1;
+
+                                  return Text(
+                                    isLast ? value : '$value,',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                        },
+                      ],
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.0102,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -231,9 +244,9 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                 "${FormatHelper.formatNumbers(data?.coursePrice, decimal: 0)}",
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
-                                    decorationColor: Get.isDarkMode
-                                        ? AppColors.white
-                                        : AppColors.black,
+                                    decorationColor: AppColors.lightGreen,
+                                    fontSize: 18,
+                                    color: AppColors.lightGreen,
                                     decorationThickness: 3),
                               ),
                               SizedBox(
@@ -241,10 +254,16 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                     MediaQuery.of(context).size.width * 0.0102,
                               ),
                               Text(
-                                  "${FormatHelper.formatNumbers(data?.discountedPrice, decimal: 0)}"),
+                                "${FormatHelper.formatNumbers(data?.discountedPrice, decimal: 0)}",
+                                style: TextStyle(
+                                    fontSize: 18, color: AppColors.lightGreen),
+                              ),
                             } else ...{
                               Text(
-                                  "${FormatHelper.formatNumbers(data?.coursePrice, decimal: 0)}"),
+                                "${FormatHelper.formatNumbers(data?.coursePrice, decimal: 0)}",
+                                style: TextStyle(
+                                    fontSize: 18, color: AppColors.lightGreen),
+                              ),
                             },
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.0204,
@@ -253,17 +272,17 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.0204,
-                    ),
-                    LinearPercentIndicator(
-                      padding: EdgeInsets.zero,
-                      lineHeight: MediaQuery.of(context).size.width * 0.0156,
-                      percent: (data?.coursePrgress?.toDouble() ?? 0.0),
-                      progressColor: AppColors.lightGreen,
-                      backgroundColor: AppColors.grey.withOpacity(0.3),
-                      barRadius: Radius.circular(10),
-                    ),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).size.width * 0.0102,
+                    // ),
+                    // LinearPercentIndicator(
+                    //   padding: EdgeInsets.zero,
+                    //   lineHeight: MediaQuery.of(context).size.width * 0.0156,
+                    //   percent: (data?.coursePrgress?.toDouble() ?? 0.0),
+                    //   progressColor: AppColors.lightGreen,
+                    //   backgroundColor: AppColors.grey.withOpacity(0.3),
+                    //   barRadius: Radius.circular(10),
+                    // ),
                   ],
                 ),
               ),

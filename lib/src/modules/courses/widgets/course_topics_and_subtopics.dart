@@ -28,10 +28,12 @@ class _CourseTopicsAndSubTopicsWidgetState
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              widget.courseContent?.topic ?? '',
-              style: AppStyles.tsSecondaryRegular16
-                  .copyWith(color: AppColors.lightGreen),
+            Flexible(
+              child: Text(
+                widget.courseContent?.topic ?? '',
+                style: AppStyles.tsSecondaryRegular14
+                    .copyWith(color: AppColors.lightGreen),
+              ),
             ),
             (widget.courseContent?.subtopics?.length ?? 0) > 0
                 ? Icon(
@@ -59,10 +61,12 @@ class _CourseTopicsAndSubTopicsWidgetState
                         ),
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.0204),
-                        Text(
-                          "${value.topic}",
-                          style: Theme.of(context).textTheme.tsRegular14,
-                          textAlign: TextAlign.start,
+                        Flexible(
+                          child: Text(
+                            "${value.topic}",
+                            style: Theme.of(context).textTheme.tsRegular14,
+                            textAlign: TextAlign.start,
+                          ),
                         ),
                       ],
                     ),

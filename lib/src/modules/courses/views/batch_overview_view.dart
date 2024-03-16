@@ -17,6 +17,12 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
   late CachedVideoPlayerController _controller;
   late CustomVideoPlayerController _customVideoPlayerController;
   late CourseController controller;
+  int maxLinesToShow = 70;
+  int maxWordsToShow = 100;
+
+  bool showFullContent = false;
+
+  bool showFullContentForInstructor = false;
 
   @override
   void initState() {
@@ -30,6 +36,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
       context: context,
       videoPlayerController: _controller,
     );
+  }
+
+  int _countWords(String text) {
+    return text.split(' ').length;
   }
 
   @override
@@ -111,23 +121,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             )
                           ],
                         ),
-                        // Text(
-                        //   "By - Rakesh Kumar",
-                        //   style: AppStyles.tsBlackRegular14,
-                        // ),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                "Course Overview: ${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
-                              ),
-                            )
-                          ],
-                        ),
-
                         if ((isStudent
                                 ? controller.userCourseOverview.value
                                         .courseInstructors?.length ??
@@ -138,7 +131,12 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             0) ...{
                           Row(
                             children: [
-                              Text("Created by: "),
+                              Text(
+                                "Created by: ",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium12
+                                    : AppStyles.tsBlackMedium12,
+                              ),
                               Row(
                                 children: (isStudent
                                         ? controller.userCourseOverview.value
@@ -173,54 +171,115 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             ],
                           )
                         },
-                        Text(
-                          "Language: ${isStudent ? controller.userCourseOverview.value.courseLanguages : controller.courseOverview.value.courseLanguages}",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteRegular14
-                              : AppStyles.tsBlackRegular14,
+                        Row(
+                          children: [
+                            Text(
+                              "Language: ",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium12
+                                  : AppStyles.tsBlackMedium12,
+                            ),
+                            Text(
+                              "${isStudent ? controller.userCourseOverview.value.courseLanguages : controller.courseOverview.value.courseLanguages}",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular14
+                                  : AppStyles.tsBlackRegular14,
+                            ),
+                          ],
                         ),
                         (controller.userCourseOverview.value.courseType ==
                                     "Live" ||
                                 controller.courseOverview.value.courseType ==
                                     "Live")
-                            ? Text(
-                                "Max Enrolments: ${isStudent ? controller.userCourseOverview.value.maxEnrolments ?? 0 : controller.courseOverview.value.maxEnrolments ?? 0}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
+                            ? Row(
+                                children: [
+                                  Text(
+                                    "Max Enrolments: ",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12,
+                                  ),
+                                  Text(
+                                    "${isStudent ? controller.userCourseOverview.value.maxEnrolments ?? 0 : controller.courseOverview.value.maxEnrolments ?? 0}",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  ),
+                                ],
                               )
                             : Container(),
-                        Text(
-                          "Level: ${isStudent ? controller.userCourseOverview.value.level ?? "" : controller.courseOverview.value.level ?? ''}",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteRegular14
-                              : AppStyles.tsBlackRegular14,
+                        Row(
+                          children: [
+                            Text(
+                              "Level: ",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium12
+                                  : AppStyles.tsBlackMedium12,
+                            ),
+                            Text(
+                              "${isStudent ? controller.userCourseOverview.value.level ?? "" : controller.courseOverview.value.level ?? ''}",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular14
+                                  : AppStyles.tsBlackRegular14,
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Course Category: ${isStudent ? controller.userCourseOverview.value.category ?? '' : controller.courseOverview.value.category ?? ''}",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteRegular14
-                              : AppStyles.tsBlackRegular14,
+                        Row(
+                          children: [
+                            Text('Course Category: ',
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium12
+                                    : AppStyles.tsBlackMedium12),
+                            Text(
+                              "${isStudent ? controller.userCourseOverview.value.category ?? '' : controller.courseOverview.value.category ?? ''}",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular14
+                                  : AppStyles.tsBlackRegular14,
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Type: ${isStudent ? controller.userCourseOverview.value.type ?? '' : controller.courseOverview.value.type ?? ''}",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteRegular14
-                              : AppStyles.tsBlackRegular14,
+                        Row(
+                          children: [
+                            Text("Type: ",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium12
+                                    : AppStyles.tsBlackMedium12),
+                            Text(
+                              "${isStudent ? controller.userCourseOverview.value.type ?? '' : controller.courseOverview.value.type ?? ''}",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular14
+                                  : AppStyles.tsBlackRegular14,
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Course Type: ${isStudent ? controller.userCourseOverview.value.courseType : controller.courseOverview.value.courseType}",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteRegular14
-                              : AppStyles.tsBlackRegular14,
+                        Row(
+                          children: [
+                            Text('Course Type: ',
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium12
+                                    : AppStyles.tsBlackMedium12),
+                            Text(
+                              "${isStudent ? controller.userCourseOverview.value.courseType : controller.courseOverview.value.courseType}",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular14
+                                  : AppStyles.tsBlackRegular14,
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Course duration: ${formatDuration(isStudent ? controller.userCourseOverview.value.courseDurationInMinutes ?? 0 : controller.courseOverview.value.courseDurationInMinutes ?? 0)} ",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteRegular14
-                              : AppStyles.tsBlackRegular14,
+                        Row(
+                          children: [
+                            Text('Course duration:',
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium12
+                                    : AppStyles.tsBlackMedium12),
+                            Text(
+                              " ${formatDuration(isStudent ? controller.userCourseOverview.value.courseDurationInMinutes ?? 0 : controller.courseOverview.value.courseDurationInMinutes ?? 0)} ",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular14
+                                  : AppStyles.tsBlackRegular14,
+                            ),
+                          ],
                         ),
-
                         if (isStudent
                             ? controller.userCourseOverview.value.courseType ==
                                 "Live"
@@ -229,57 +288,145 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Registration Starts: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationStartTime : controller.courseOverview.value.registrationStartTime)}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
+                              Row(
+                                children: [
+                                  Text('Registration Starts: ',
+                                      style: Get.isDarkMode
+                                          ? AppStyles.tsWhiteMedium12
+                                          : AppStyles.tsBlackMedium12),
+                                  Text(
+                                    "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationStartTime : controller.courseOverview.value.registrationStartTime)}",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Registration End: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationEndTime : controller.courseOverview.value.registrationEndTime)}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
+                              Row(
+                                children: [
+                                  Text("Registration End: ",
+                                      style: Get.isDarkMode
+                                          ? AppStyles.tsWhiteMedium12
+                                          : AppStyles.tsBlackMedium12),
+                                  Text(
+                                    "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationEndTime : controller.courseOverview.value.registrationEndTime)}",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Course Starts: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseStartTime : controller.courseOverview.value.courseStartTime)}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
+                              Row(
+                                children: [
+                                  Text('Course Starts: ',
+                                      style: Get.isDarkMode
+                                          ? AppStyles.tsWhiteMedium12
+                                          : AppStyles.tsBlackMedium12),
+                                  Text(
+                                    "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseStartTime : controller.courseOverview.value.courseStartTime)}",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "Course End: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseEndTime : controller.courseOverview.value.courseEndTime)}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
+                              Row(
+                                children: [
+                                  Text("Course End: ",
+                                      style: Get.isDarkMode
+                                          ? AppStyles.tsWhiteMedium12
+                                          : AppStyles.tsBlackMedium12),
+                                  Text(
+                                    "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseEndTime : controller.courseOverview.value.courseEndTime)}",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  ),
+                                ],
                               ),
                             ],
                           )
                         },
                         isStudent == false
-                            ? Text(
-                                "Course Price: ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
+                            ? Row(
+                                children: [
+                                  Text('Course Price: ',
+                                      style: Get.isDarkMode
+                                          ? AppStyles.tsWhiteMedium12
+                                          : AppStyles.tsBlackMedium12),
+                                  Text(
+                                    "${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  ),
+                                ],
                               )
                             : Container(),
                         isStudent == false
-                            ? Text(
-                                "Discounted Price:  ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.discountedPrice ?? 0 : controller.courseOverview.value.discountedPrice ?? 0, decimal: 0)}",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
+                            ? Row(
+                                children: [
+                                  Text(
+                                    'Discounted Price:  ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12,
+                                  ),
+                                  Text(
+                                    "${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.discountedPrice ?? 0 : controller.courseOverview.value.discountedPrice ?? 0, decimal: 0)}",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  ),
+                                ],
                               )
                             : Container(),
                         isStudent == false
-                            ? Text(
-                                "Commission:  ${controller.courseOverview.value.commissionPercentage ?? 0}%",
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteRegular14
-                                    : AppStyles.tsBlackRegular14,
+                            ? Row(
+                                children: [
+                                  Text(
+                                    'Commission:  ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12,
+                                  ),
+                                  Text(
+                                    "${controller.courseOverview.value.commissionPercentage ?? 0}%",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                  ),
+                                ],
                               )
                             : Container(),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Course Overview: ",
+                                      style: Get.isDarkMode
+                                          ? AppStyles.tsWhiteMedium12
+                                          : AppStyles.tsBlackMedium12,
+                                    ),
+                                    TextSpan(
+                                      text: isStudent
+                                          ? controller.userCourseOverview.value
+                                              .courseOverview
+                                          : controller.courseOverview.value
+                                              .courseOverview,
+                                      style: Get.isDarkMode
+                                          ? AppStyles.tsWhiteRegular14
+                                          : AppStyles.tsBlackRegular14,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -317,8 +464,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               ? AppColors.darkCardBackgroundColor
                               : AppColors.lightCardBackgroundColor),
                       child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: isStudent
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ...isStudent
                               ? controller
                                   .userCourseOverview.value.courseBenefits!
                                   .map((value) =>
@@ -327,7 +475,38 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               : controller.courseOverview.value.courseBenefits!
                                   .map((value) =>
                                       textItemWidget(value.benefits ?? ''))
-                                  .toList()),
+                                  .toList(),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.0204,
+                          ),
+                          if ((_countWords(isStudent
+                                      ? controller.userCourseOverview.value
+                                          .courseBenefits!
+                                          .map((value) => value.benefits ?? '')
+                                          .toList()
+                                          .join(' ')
+                                      : controller
+                                          .courseOverview.value.courseBenefits!
+                                          .map((value) => value.benefits ?? '')
+                                          .toList()
+                                          .join(' ')) >
+                                  maxWordsToShow) ||
+                              showFullContent)
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showFullContent = !showFullContent;
+                                });
+                              },
+                              child: Text(
+                                showFullContent ? "Show less" : "Show more",
+                                style: TextStyle(
+                                    color: Colors
+                                        .blue), // Customize button text color
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   },
                   SizedBox(
@@ -447,7 +626,55 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                         : AppStyles
                                                             .tsBlackMedium16,
                                                   ),
-                                                  Text("${value.about}"),
+                                                  Column(
+                                                    children: [
+                                                      // Other widgets if any
+
+                                                      if ((value.about
+                                                                  ?.length ??
+                                                              0) >
+                                                          100) // Add condition to display "Show more" button
+                                                        Column(
+                                                          children: [
+                                                            Text(
+                                                              showFullContentForInstructor
+                                                                  ? value.about ??
+                                                                      ''
+                                                                  : '${value.about?.substring(0, 100)}...', // Display truncated or full text
+                                                            ),
+                                                            SizedBox(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.0204,
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  showFullContentForInstructor =
+                                                                      !showFullContentForInstructor; // Toggle showFullContent flag
+                                                                });
+                                                              },
+                                                              child: Text(
+                                                                showFullContentForInstructor
+                                                                    ? "Show less"
+                                                                    : "Show more",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .blue),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      if ((value.about
+                                                                  ?.length ??
+                                                              0) <=
+                                                          100) // If text length is less than or equal to 100, display full text
+                                                        Text("${value.about}"),
+                                                    ],
+                                                  ),
+                                                  //    Text("${value.about}"),
                                                 ],
                                               ),
                                             ),
@@ -584,42 +811,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                   .toList()),
                     ),
                   },
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.width * 0.0204,
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: [
-                  //     Text(
-                  //       "Course overview:-",
-                  //       style: Get.isDarkMode
-                  //           ? AppStyles.tsWhiteMedium14
-                  //           : AppStyles.tsBlackMedium14,
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.width * 0.0204,
-                  // ),
-                  // Container(
-                  //     padding:
-                  //         EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                  //     decoration: BoxDecoration(
-                  //         color: Get.isDarkMode
-                  //             ? AppColors.darkCardBackgroundColor
-                  //             : AppColors.lightCardBackgroundColor),
-                  //     child: Row(
-                  //       children: [
-                  //         Flexible(
-                  //           child: Text(
-                  //             "${isStudent ? controller.userCourseOverview.value.courseOverview : controller.courseOverview.value.courseOverview}",
-                  //             style: Get.isDarkMode
-                  //                 ? AppStyles.tsWhiteRegular14
-                  //                 : AppStyles.tsBlackRegular14,
-                  //           ),
-                  //         )
-                  //       ],
-                  //     )),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0204,
                   ),
@@ -744,7 +935,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0204,
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -774,7 +964,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       CourseFAQSWidget(
                           i, controller.courseOverview.value.faqs?[i]),
                   },
-
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0204,
                   ),
@@ -1072,37 +1261,43 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
       ),
     );
   }
-}
 
-Widget textItemWidget(String str) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Column(
-        children: [
-          SizedBox(
-            height: 5,
-          ),
-          Icon(
-            Icons.circle,
-            size: 8,
-            color: AppColors.grey,
-          ),
-        ],
-      ),
-      SizedBox(
-        width: 4,
-      ),
-      Flexible(
-        child: Text(
-          str,
-          style: Get.isDarkMode
-              ? AppStyles.tsWhiteRegular14
-              : AppStyles.tsBlackRegular14,
+  Widget textItemWidget(String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            SizedBox(
+              height: 5,
+            ),
+            Icon(
+              Icons.circle,
+              size: 8,
+              color: AppColors.grey,
+            ),
+          ],
         ),
-      ),
-    ],
-  );
+        SizedBox(
+          width: 4,
+        ),
+        Flexible(
+          child: Text(
+            showFullContent ? _truncateText(text) : text,
+            maxLines: showFullContent ? maxLinesToShow : null,
+            overflow: TextOverflow.ellipsis,
+            style: Get.isDarkMode
+                ? AppStyles.tsWhiteRegular14
+                : AppStyles.tsBlackRegular14,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _truncateText(String text) {
+    return text.length > 1000 ? text.substring(0, 1000) + "..." : text;
+  }
 }
 
 String formatDuration(int minutes) {

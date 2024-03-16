@@ -29,7 +29,7 @@ class _CourseFAQSWidgetState extends State<CourseFAQSWidget> {
             Flexible(
               child: Text(
                 widget.faqs?.question ?? '',
-                style: AppStyles.tsSecondaryRegular16,
+                style: AppStyles.tsSecondaryRegular14,
               ),
             ),
             Icon(
