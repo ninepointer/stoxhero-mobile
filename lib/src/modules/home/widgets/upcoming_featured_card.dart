@@ -76,6 +76,8 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        "aaaa ${controller.calculateTotalReward(widget.upcomingFeatured?.rewards)}");
     return CommonCard(
       margin: controller.upcomingFeaturedContest.length == 1
           ? EdgeInsets.zero
@@ -144,7 +146,7 @@ class _UpcomingFeaturedCardState extends State<UpcomingFeaturedCard> {
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.1024,
+                                              0.1244,
                                           width: controller
                                                       .upcomingFeaturedContest
                                                       .length ==
