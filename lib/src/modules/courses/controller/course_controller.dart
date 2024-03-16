@@ -27,6 +27,7 @@ class CourseController extends BaseController<CourseRespository> {
   final userAllCourses = <InfluencerCourseData>[].obs;
   final userMyCourses = <UserMyCoursesData>[].obs;
   final currentRating = 0.obs;
+  final videoapi = ''.obs;
 
   final selectedTabIndex = 0.obs;
   final selectedUserTabIndex = 0.obs;

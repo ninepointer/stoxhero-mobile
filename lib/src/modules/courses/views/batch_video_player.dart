@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
-import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 
 class CourseVideoView extends StatefulWidget {
   final UserMyCoursesData? data;
-  final UserCoursesSubtopics subtopics;
-  CourseVideoView(this.data, this.subtopics);
+//  final UserCoursesSubtopics subtopics;
+  //final String initialVideoUrl;
+  CourseVideoView({
+    this.data,
+  }
+      // this.subtopics,
+      );
 
   @override
   State<CourseVideoView> createState() => _CourseVideoViewState();
@@ -17,29 +22,38 @@ class _CourseVideoViewState extends State<CourseVideoView>
     with SingleTickerProviderStateMixin {
   late CourseController controller;
 
-  late CachedVideoPlayerController _controller;
-  late CustomVideoPlayerController _customVideoPlayerController;
+  late VideoPlayerController _controller;
+  late FlickManager flickManager;
   late TabController tabController;
+  String title = "";
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<CourseController>();
+    title = widget.data?.topics?.first.subtopics?.first.topic ?? '';
     tabController = TabController(length: 2, vsync: this);
-    _controller = CachedVideoPlayerController.network(
-        '${widget.subtopics.videoUrl ?? ''}')
-      ..initialize().then((value) => setState(() {}));
-    _customVideoPlayerController = CustomVideoPlayerController(
-      context: context,
-      videoPlayerController: _controller,
+    flickManager = FlickManager(
+      videoPlayerController: VideoPlayerController.networkUrl(
+        Uri.parse(widget.data?.topics?.first.subtopics?.first.videoUrl ?? ''),
+      ),
     );
   }
 
   @override
   void dispose() {
     tabController.dispose();
-    _controller.dispose();
+    flickManager.dispose();
     super.dispose();
+  }
+
+  void updateVideoUrl(String url, String newTitle) {
+    flickManager.handleChangeVideo(VideoPlayerController.networkUrl(
+      Uri.parse(url),
+    ));
+    setState(() {
+      title = newTitle; // Update video title
+    });
   }
 
   Future<bool> _onWillPop() async {
@@ -123,31 +137,36 @@ class _CourseVideoViewState extends State<CourseVideoView>
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              _customVideoPlayerController
-                      .videoPlayerController.value.isInitialized
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(6.0),
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: CustomVideoPlayer(
-                            customVideoPlayerController:
-                                _customVideoPlayerController),
-                      ),
-                    )
-                  : AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Center(child: CircularProgressIndicator())),
+              // _customVideoPlayerController
+              //         .videoPlayerController.value.isInitialized
+              //     ? ClipRRect(
+              //         borderRadius: BorderRadius.circular(6.0),
+              //         child: AspectRatio(
+              //           aspectRatio: 16 / 9,
+              //           child: CustomVideoPlayer(
+              //               customVideoPlayerController:
+              //                   _customVideoPlayerController),
+              //         ),
+              //       )
+              //     : AspectRatio(
+              //         aspectRatio: 16 / 9,
+              //         child: Center(child: CircularProgressIndicator())),
+              AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: FlickVideoPlayer(flickManager: flickManager)),
               SizedBox(
                 height: MediaQuery.of(context).size.width * 0.0306,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    "${widget.subtopics.topic ?? ''}",
-                    style: Get.isDarkMode
-                        ? AppStyles.tsWhiteMedium18
-                        : AppStyles.tsBlackMedium18,
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: Get.isDarkMode
+                          ? AppStyles.tsWhiteMedium18
+                          : AppStyles.tsBlackMedium18,
+                    ),
                   ),
                 ],
               ),
@@ -187,7 +206,13 @@ class _CourseVideoViewState extends State<CourseVideoView>
                           child: TabBarView(
                             controller: tabController,
                             children: [
-                              UserCoursesLactures(widget.data),
+                              UserCoursesLactures(
+                                widget.data,
+                                (url, title) {
+                                  updateVideoUrl(url,
+                                      title); // Call updateVideoUrl function with selected URL
+                                },
+                              ),
                               UserCoursesOverView(widget.data),
                             ],
                           ),

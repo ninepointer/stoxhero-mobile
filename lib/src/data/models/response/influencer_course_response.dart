@@ -41,7 +41,7 @@ class InfluencerCourseData {
   num? lectures;
   String? level;
   num? courseDurationInMinutes;
-
+  bool? isPaid;
   InfluencerCourseData(
       {this.sId,
       this.courseName,
@@ -55,7 +55,8 @@ class InfluencerCourseData {
       this.averageRating,
       this.lectures,
       this.level,
-      this.courseDurationInMinutes});
+      this.courseDurationInMinutes,
+      this.isPaid});
 
   InfluencerCourseData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -74,6 +75,7 @@ class InfluencerCourseData {
     lectures = json["lectures"];
     level = json['level'];
     courseDurationInMinutes = json['courseDurationInMinutes'];
+    isPaid = json['isPaid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -89,6 +91,7 @@ class InfluencerCourseData {
     data['lectures'] = this.lectures;
     data['level'] = this.level;
     data['courseDurationInMinutes'] = this.courseDurationInMinutes;
+    data['isPaid'] = this.isPaid;
     return data;
   }
 }

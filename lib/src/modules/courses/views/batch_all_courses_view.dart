@@ -30,7 +30,7 @@ class BatchAllCoursesView extends GetView<CourseController> {
                             onTap: () {
                               controller.getUserCourseOverviewDetails(
                                   courseDetails?.sId ?? '');
-                              Get.to(() => BatchDetailsView());
+                              Get.to(() => BatchDetailsView(courseDetails));
                             },
                             child: Container(
                                 margin: EdgeInsets.only(bottom: 8, top: 8),

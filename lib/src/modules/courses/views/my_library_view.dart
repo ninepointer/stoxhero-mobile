@@ -30,7 +30,7 @@ class _MyLibraryViewState extends State<MyLibraryView> {
 
           return GestureDetector(
             onTap: () {
-              Get.to(() => CourseAllTopicView(data));
+              Get.to(() => CourseVideoView(data: data));
             },
             child: Container(
               width: double.infinity,

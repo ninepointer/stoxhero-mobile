@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
 class BatchDetailsView extends StatefulWidget {
-  const BatchDetailsView({super.key});
+  final InfluencerCourseData? courseData;
+  BatchDetailsView(this.courseData);
 
   @override
   State<BatchDetailsView> createState() => _BatchDetailsViewState();
@@ -93,7 +94,7 @@ class _BatchDetailsViewState extends State<BatchDetailsView>
                   //       ),
                   //     ],
                   //   )
-                  BatchOverViewDetailsView()),
+                  BatchOverViewDetailsView(widget.courseData)),
         ),
       ),
     );

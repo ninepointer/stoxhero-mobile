@@ -3,9 +3,10 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
-class UserCoursesLactures extends StatelessWidget {
+class UserCoursesLactures extends GetView<CourseController> {
   final UserMyCoursesData? data;
-  UserCoursesLactures(this.data);
+  final Function(String, String)? onVideoSelected;
+  UserCoursesLactures(this.data, this.onVideoSelected);
 
   @override
   Widget build(BuildContext context) {
@@ -43,50 +44,50 @@ class UserCoursesLactures extends StatelessWidget {
                               //     CourseVideoView(widget.data, entry.value));
                             },
                             child: Container(
-                              // padding: EdgeInsets.all(10),
-                              // margin: EdgeInsets.only(
-                              //     bottom: MediaQuery.of(context).size.width *
-                              //         0.0204),
+                              //  padding: EdgeInsets.all(10),
+                              margin: EdgeInsets.only(
+                                  bottom: MediaQuery.of(context).size.width *
+                                      0.0204),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "${entry.key + 1} ",
-                                    style:
-                                        Theme.of(context).textTheme.tsRegular14,
-                                    textAlign: TextAlign.start,
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "${entry.key + 1}. ",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .tsRegular14,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ],
                                   ),
-                                  // Image.network(
-                                  //   entry.value.videoKey ?? '',
-                                  //   width: 50,
-                                  //   height: 50,
-                                  //   fit: BoxFit.cover,
-                                  //   errorBuilder:
-                                  //       (context, exception, stackTrace) {
-                                  //     return Image.asset(
-                                  //       AppImages.lightAppLogo,
-                                  //       height: 50,
-                                  //       width: 50,
-                                  //     );
-                                  //   },
-                                  // ),
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width *
                                         0.0306,
                                   ),
                                   Expanded(
-                                    child: Row(
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            "${entry.value.topic}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .tsRegular18,
-                                            textAlign: TextAlign.start,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        if (onVideoSelected != null) {
+                                          onVideoSelected!(
+                                              entry.value.videoUrl ?? '',
+                                              entry.value.topic ?? '');
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              "${entry.value.topic}",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .tsRegular18,
+                                              textAlign: TextAlign.start,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],

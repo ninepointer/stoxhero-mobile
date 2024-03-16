@@ -249,7 +249,7 @@ class CourseBatchNameWidget extends GetView<CourseController> {
               GestureDetector(
                 onTap: () {
                   controller.getCourseOverviewDetails(courseData?.sId ?? '');
-                  Get.to(() => BatchDetailsView());
+                  Get.to(() => BatchDetailsView(courseData));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,

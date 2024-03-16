@@ -3,10 +3,12 @@ import 'package:stoxhero/src/app/app.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import 'package:video_player/video_player.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:appinio_video_player/appinio_video_player.dart';
 
 class BatchOverViewDetailsView extends StatefulWidget {
-  const BatchOverViewDetailsView({super.key});
+  final InfluencerCourseData? courseData;
+  BatchOverViewDetailsView(this.courseData);
 
   @override
   State<BatchOverViewDetailsView> createState() =>
@@ -14,9 +16,9 @@ class BatchOverViewDetailsView extends StatefulWidget {
 }
 
 class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
-  late CachedVideoPlayerController _controller;
-  late CustomVideoPlayerController _customVideoPlayerController;
+  late VideoPlayerController _controller;
   late CourseController controller;
+  late FlickManager flickManager;
   int maxLinesToShow = 70;
   int maxWordsToShow = 100;
 
@@ -29,13 +31,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
     super.initState();
     controller = Get.find<CourseController>();
 
-    _controller = CachedVideoPlayerController.network(
-        '${isStudent ? controller.userCourseOverview.value.salesVideo : controller.courseOverview.value.salesVideo}')
-      ..initialize().then((value) => setState(() {}));
-    _customVideoPlayerController = CustomVideoPlayerController(
-      context: context,
-      videoPlayerController: _controller,
-    );
+    flickManager = FlickManager(
+        videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(
+            "${isStudent ? controller.userCourseOverview.value.salesVideo : controller.courseOverview.value.salesVideo}")));
   }
 
   int _countWords(String text) {
@@ -44,12 +42,13 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    flickManager.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("hhhhh ${widget.courseData?.isPaid}");
     return Obx(
       () => Column(
         children: [
@@ -60,20 +59,25 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
-                  _customVideoPlayerController
-                          .videoPlayerController.value.isInitialized
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(6.0),
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: CustomVideoPlayer(
-                                customVideoPlayerController:
-                                    _customVideoPlayerController),
-                          ),
-                        )
-                      : AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: Center(child: CircularProgressIndicator())),
+
+                  FlickVideoPlayer(flickManager: flickManager),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.0306,
+                  ),
+                  // _customVideoPlayerController
+                  //         .videoPlayerController.value.isInitialized
+                  //     ? ClipRRect(
+                  //         borderRadius: BorderRadius.circular(6.0),
+                  //         child: AspectRatio(
+                  //           aspectRatio: 16 / 9,
+                  //           child: CustomVideoPlayer(
+                  //               customVideoPlayerController:
+                  //                   _customVideoPlayerController),
+                  //         ),
+                  //       )
+                  //     : AspectRatio(
+                  //         aspectRatio: 16 / 9,
+                  //         child: Center(child: CircularProgressIndicator())),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
@@ -1017,100 +1021,130 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
             ),
           ),
           if (isStudent) ...{
-            SafeArea(
-              child: Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {
-                      num price;
-                      if ((controller.userCourseOverview.value.coursePrice ??
-                              0) !=
-                          (controller
-                                  .userCourseOverview.value.discountedPrice ??
-                              0)) {
-                        price = (controller
-                                .userCourseOverview.value.discountedPrice ??
-                            0);
-                      } else {
-                        price =
-                            (controller.userCourseOverview.value.coursePrice ??
-                                0);
-                      }
+            widget.courseData?.isPaid == false
+                ? SafeArea(
+                    child: Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            num price;
+                            if ((controller
+                                        .userCourseOverview.value.coursePrice ??
+                                    0) !=
+                                (controller.userCourseOverview.value
+                                        .discountedPrice ??
+                                    0)) {
+                              price = (controller.userCourseOverview.value
+                                      .discountedPrice ??
+                                  0);
+                            } else {
+                              price = (controller
+                                      .userCourseOverview.value.coursePrice ??
+                                  0);
+                            }
 
-                      BottomSheetHelper.openBottomSheet(
-                        context: context,
-                        child: PaymentBottomSheet(
-                          isGstInclude: true,
-                          productType: ProductType.course,
-                          productId:
-                              controller.userCourseOverview.value.sId ?? '',
-                          buyItemPrice: price,
-                          onPaymentSuccess: () {},
-                          onSubmit: () {
-                            Get.back();
-                            var walletController = Get.find<WalletController>();
-                            var data = {
-                              "bonusRedemption":
-                                  walletController.isHeroCashAdded.value
-                                      ? walletController.heroCashAmount.value
-                                      : 0,
-                              "coupon": walletController
-                                  .couponCodeTextController.text,
-                              "courseFee": (walletController
-                                      .subscriptionAmount.value +
-                                  (walletController.subscriptionAmount.value *
-                                      (AppStorage.getReadSetting()
-                                              .courseGstPercentage ??
-                                          0) /
-                                      100)),
-                              "courseId":
-                                  controller.userCourseOverview.value.sId ?? '',
-                              "courseName": controller
-                                      .userCourseOverview.value.courseName ??
-                                  '',
-                            };
-                            controller.purchaseCourseApi(data);
+                            BottomSheetHelper.openBottomSheet(
+                              context: context,
+                              child: PaymentBottomSheet(
+                                isGstInclude: true,
+                                productType: ProductType.course,
+                                productId:
+                                    controller.userCourseOverview.value.sId ??
+                                        '',
+                                buyItemPrice: price,
+                                onPaymentSuccess: () {},
+                                onSubmit: () {
+                                  Get.back();
+                                  var walletController =
+                                      Get.find<WalletController>();
+                                  var data = {
+                                    "bonusRedemption": walletController
+                                            .isHeroCashAdded.value
+                                        ? walletController.heroCashAmount.value
+                                        : 0,
+                                    "coupon": walletController
+                                        .couponCodeTextController.text,
+                                    "courseFee": (walletController
+                                            .subscriptionAmount.value +
+                                        (walletController
+                                                .subscriptionAmount.value *
+                                            (AppStorage.getReadSetting()
+                                                    .courseGstPercentage ??
+                                                0) /
+                                            100)),
+                                    "courseId": controller
+                                            .userCourseOverview.value.sId ??
+                                        '',
+                                    "courseName": controller.userCourseOverview
+                                            .value.courseName ??
+                                        '',
+                                  };
+                                  controller.purchaseCourseApi(data);
+                                },
+                              ),
+                            );
                           },
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lightGreen,
-                      onPrimary: Colors.white,
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 24), // Button padding
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), // Button border radius
-                      ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.lightGreen,
+                            onPrimary: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 24), // Button padding
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8), // Button border radius
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Buy @ "),
+                              if (controller
+                                      .userCourseOverview.value.coursePrice !=
+                                  controller.userCourseOverview.value
+                                      .discountedPrice) ...{
+                                Text(
+                                  "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      decorationColor: Colors.white,
+                                      decorationThickness: 3),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                    "${FormatHelper.formatNumbers(controller.userCourseOverview.value.discountedPrice ?? 0, decimal: 0)}")
+                              } else ...{
+                                Text(
+                                    "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}")
+                              }
+                            ],
+                          )),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Buy @ "),
-                        if (controller.userCourseOverview.value.coursePrice !=
-                            controller
-                                .userCourseOverview.value.discountedPrice) ...{
-                          Text(
-                            "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}",
-                            style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor: Colors.white,
-                                decorationThickness: 3),
+                  )
+                : SafeArea(
+                    child: Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            // Get.to(
+                            //     () => MyLibraryView(controller.userMyCourses));
+                            SnackbarHelper.showSnackbar(
+                                "I'm working on navigating to the course when it's clicked.");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.lightGreen,
+                            onPrimary: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 24), // Button padding
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8), // Button border radius
+                            ),
                           ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                              "${FormatHelper.formatNumbers(controller.userCourseOverview.value.discountedPrice ?? 0, decimal: 0)}")
-                        } else ...{
-                          Text(
-                              "${FormatHelper.formatNumbers(controller.userCourseOverview.value.coursePrice ?? 0, decimal: 0)}")
-                        }
-                      ],
-                    )),
-              ),
-            )
+                          child: Text("View Course")),
+                    ),
+                  )
           } else ...{
             controller.courseOverview.value.status == "Sent To Creator"
                 ? SafeArea(
