@@ -86,8 +86,13 @@ class _UserResourcesViewState extends State<UserResourcesView> {
                                     Expanded(
                                       child: GestureDetector(
                                         onTap: () {
-                                          Get.to(() =>
-                                              UserCourseNotesView(entry.value));
+                                          if (entry.value.notes!.isNotEmpty) {
+                                            Get.to(() => UserCourseNotesView(
+                                                entry.value));
+                                          } else {
+                                            SnackbarHelper.showSnackbar(
+                                                "This topic does not have a corresponding resource available");
+                                          }
                                         },
                                         child: Row(
                                           children: [

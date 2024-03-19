@@ -79,6 +79,14 @@ class CourseRespository extends BaseRepository {
         : RepoResponse(data: InfluencerCourseResponse.fromJson(response));
   }
 
+  Future<RepoResponse<GenericResponse>> getUserIntent(String id) async {
+    String apiURL = AppUrls.getUserIntent(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
   Future<RepoResponse<CourseOverviewResponse>> getUserCourseOverview(
       String id) async {
     String apiURL = AppUrls.userCoursesOverView(id);
@@ -105,9 +113,10 @@ class CourseRespository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
-  Future<RepoResponse<GenericResponse>> ratingCourse(Map<String, dynamic> data,String? courseId) async {
+  Future<RepoResponse<GenericResponse>> ratingCourse(
+      Map<String, dynamic> data, String? courseId) async {
     String apiURL = AppUrls.courseRating(courseId);
-    var response = await service.postAuth(path: apiURL,data: data);
+    var response = await service.postAuth(path: apiURL, data: data);
     return response is APIException
         ? RepoResponse(error: response)
         : RepoResponse(data: GenericResponse.fromJson(response));

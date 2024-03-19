@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
 bool isStudent =
-    AppStorage.getUserDetails().role?.roleName == "Influencer" ? false : true;
+    AppStorage.getUserDetails().role?.roleName == "Influencer" ? true : false;
 
 class CoursesHomeView extends StatefulWidget {
   const CoursesHomeView({super.key});
@@ -114,19 +114,22 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                               Container(
                                 child: TabBar(
                                   onTap: (index) {
-                                    if (index == 1) {
-                                      controller.getUserMyCoursesDetails();
-                                    }
                                     if (index == 0) {
                                       controller.getUserAllCourses();
                                     }
+                                    if (index == 1) {
+                                      controller.getUserMyCoursesDetails();
+                                    }
+                                    // if (index == 2) {
+                                    //   controller.getUserAllWorkshops();
+                                    // }
                                   },
                                   controller: tabController,
                                   indicatorColor: AppColors.lightGreen,
                                   tabs: [
                                     Tab(
                                       child: Text(
-                                        'Courses',
+                                        'StoxHero\nLibrary',
                                         style: Theme.of(context)
                                             .textTheme
                                             .tsRegular16,
@@ -135,13 +138,22 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                     ),
                                     Tab(
                                       child: Text(
-                                        'My Courses',
+                                        'My\nLibrary',
                                         style: Theme.of(context)
                                             .textTheme
                                             .tsRegular16,
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
+                                    // Tab(
+                                    //   child: Text(
+                                    //     'Workshop',
+                                    //     style: Theme.of(context)
+                                    //         .textTheme
+                                    //         .tsRegular16,
+                                    //     textAlign: TextAlign.center,
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -153,7 +165,9 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                                     children: [
                                       BatchAllCoursesView(
                                           controller.userAllCourses),
-                                      MyLibraryView(controller.userMyCourses)
+                                      MyLibraryView(controller.userMyCourses),
+                                      // UserWorkshopView(
+                                      //     controller.userAllWorkshops)
                                     ],
                                   ),
                                 ),

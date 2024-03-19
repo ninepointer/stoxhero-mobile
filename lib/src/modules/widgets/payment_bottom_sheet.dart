@@ -32,6 +32,7 @@ class PaymentBottomSheet extends StatefulWidget {
 
 class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   late WalletController controller;
+  late CourseController courseController;
   num? walletBalance;
 
   bool isLoading = false;
@@ -55,6 +56,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   void initState() {
     super.initState();
     controller = Get.find<WalletController>();
+    courseController = Get.find<CourseController>();
     controller.removeCouponCode(calculateHeroCash);
     controller.getReadSetting();
     controller.isHeroCashAdded(false);
@@ -376,7 +378,44 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     style: AppStyles.tsGreyRegular14,
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 24),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  if (widget.isGstInclude == true)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Fee Amount:"),
+                            Text(
+                                "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? (amount - (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : (widget.buyItemPrice))}"),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('GST(18%) on Fee: '),
+                            Text(
+                                "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? ((amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : ((widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
+                          ],
+                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text("Net Transaction Amount:"),
+                        //     Text(
+                        //         "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? amount : (widget.buyItemPrice + (widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
+                        //   ],
+                        // ),
+                      ],
+                    ),
+                  SizedBox(height: 4),
                   if (!isWalletPayment)
                     CommonCard(
                       margin: EdgeInsets.only(top: 8),
@@ -617,31 +656,61 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   Column(
                     children: [
                       SizedBox(height: 16),
-                      CommonFilledButton(
-                        backgroundColor: Get.isDarkMode
-                            ? AppColors.darkGreen
-                            : AppColors.lightGreen,
-                        isLoading: controller.isLoadingStatus,
-                        height: 42,
-                        label: 'Proceed',
-                        onPressed: isWalletPayment ||
-                                controller.selectedPaymentValue.value ==
-                                    'gateway'
-                            ? () => startPaymentTransaction(context)
-                            : walletBalance != null &&
+                      widget.isGstInclude == true
+                          ? CommonFilledButton(
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
+                              isLoading: controller.isLoadingStatus,
+                              height: 42,
+                              label: 'Proceed',
+                              onPressed: () {
+                                if (isWalletPayment ||
+                                    controller.selectedPaymentValue.value ==
+                                        'gateway') {
+                                  startPaymentTransaction(context);
+                                } else if (walletBalance != null &&
                                     ((controller.couponCodeSuccessText
                                                     .isNotEmpty ||
                                                 controller
                                                     .isHeroCashAdded.value)
                                             ? amount
                                             : widget.buyItemPrice) >
-                                        walletBalance!
-                                ? () {
-                                    SnackbarHelper.showSnackbar(
-                                        'Low wallet balance!');
-                                  }
-                                : widget.onSubmit,
-                      ),
+                                        walletBalance!) {
+                                  SnackbarHelper.showSnackbar(
+                                      'Low wallet balance!');
+                                } else {
+                                  // If none of the conditions above met, and user is to proceed, then pop the current screen
+                                  courseController.getUserAllCourses();
+                                  Navigator.pop(context);
+                                }
+                              },
+                            )
+                          : CommonFilledButton(
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
+                              isLoading: controller.isLoadingStatus,
+                              height: 42,
+                              label: 'Proceed',
+                              onPressed: isWalletPayment ||
+                                      controller.selectedPaymentValue.value ==
+                                          'gateway'
+                                  ? () => startPaymentTransaction(context)
+                                  : walletBalance != null &&
+                                          ((controller.couponCodeSuccessText
+                                                          .isNotEmpty ||
+                                                      controller.isHeroCashAdded
+                                                          .value)
+                                                  ? amount
+                                                  : widget.buyItemPrice) >
+                                              walletBalance!
+                                      ? () {
+                                          SnackbarHelper.showSnackbar(
+                                              'Low wallet balance!');
+                                        }
+                                      : widget.onSubmit,
+                            ),
                     ],
                   ),
                 ],

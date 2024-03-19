@@ -20,3 +20,5 @@ export 'widgets/user_courses_overview.dart';
 export 'views/my_course_overview_details.dart';
 export 'views/user_course_resources_view.dart';
 export 'views/user_course_notes_view.dart';
+export 'views/workshop_view.dart';
+export 'widgets/course_workshop_widget.dart';

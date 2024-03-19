@@ -25,6 +25,7 @@ class CourseController extends BaseController<CourseRespository> {
   final userCourseOverview = CourseOverViewData().obs;
   final suggestionTextController = TextEditingController();
   final userAllCourses = <InfluencerCourseData>[].obs;
+  final userAllWorkshops = <InfluencerCourseData>[].obs;
   final userMyCourses = <UserMyCoursesData>[].obs;
   final currentRating = 0.obs;
   final videoapi = ''.obs;
@@ -41,6 +42,12 @@ class CourseController extends BaseController<CourseRespository> {
   final totalItems = 0.obs;
   final itemsPerPage = 0.obs;
   final isLoadingMore = false.obs;
+
+  final userRating = 0.obs;
+
+  void updateUserRating(int rating) {
+    userRating.value = rating;
+  }
 
   void loadUserDetails() {
     userDetails(AppStorage.getUserDetails());
@@ -309,6 +316,23 @@ class CourseController extends BaseController<CourseRespository> {
     }
   }
 
+  Future getUserAllWorkshops() async {
+    try {
+      final RepoResponse<InfluencerCourseResponse> response =
+          await repository.getUserAllCourses();
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          userAllWorkshops(response.data?.workshop ?? []);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
   Future getUserCourseOverviewDetails(String id) async {
     try {
       final RepoResponse<CourseOverviewResponse> response =
@@ -368,6 +392,24 @@ class CourseController extends BaseController<CourseRespository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           onSuccess.call();
+          SnackbarHelper.showSnackbar(response.data?.message);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
+
+  Future getUserIntentCourseApi(String id) async {
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.getUserIntent(id);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          //   SnackbarHelper.showSnackbar(response.data?.message);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);

@@ -8,7 +8,8 @@ import 'package:appinio_video_player/appinio_video_player.dart';
 
 class BatchOverViewDetailsView extends StatefulWidget {
   final InfluencerCourseData? courseData;
-  BatchOverViewDetailsView(this.courseData);
+  final UserMyCoursesData? data;
+  BatchOverViewDetailsView(this.courseData, {this.data});
 
   @override
   State<BatchOverViewDetailsView> createState() =>
@@ -32,8 +33,12 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
     controller = Get.find<CourseController>();
 
     flickManager = FlickManager(
-        videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(
-            "${isStudent ? controller.userCourseOverview.value.salesVideo : controller.courseOverview.value.salesVideo}")));
+      videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(
+          "${isStudent ? controller.userCourseOverview.value.salesVideo : controller.courseOverview.value.salesVideo}"))
+        ..initialize().then((_) {
+          setState(() {});
+        }),
+    );
   }
 
   int _countWords(String text) {
@@ -48,7 +53,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    print("hhhhh ${widget.courseData?.isPaid}");
     return Obx(
       () => Column(
         children: [
@@ -97,34 +101,67 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               ? AppStyles.tsWhiteMedium18
                               : AppStyles.tsBlackMedium18,
                         ),
-                        Row(
-                          children: [
-                            StarRatingWidget(
-                              starCount: 5,
-                              rating: (controller.userCourseOverview.value
-                                              .averageRating
-                                              ?.toDouble() ??
-                                          0.0) >
-                                      0
-                                  ? controller.userCourseOverview.value
-                                          .averageRating
-                                          ?.toDouble() ??
-                                      0.0
-                                  : 4.0,
-                              color: AppColors.lightGreen,
-                              size: 15.0,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.0102,
-                            ),
-                            Text(
-                              "(${((controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0) > 0) ? controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0 : 4.0})",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
-                            )
-                          ],
-                        ),
+                        if (isStudent == true) ...{
+                          Row(
+                            children: [
+                              StarRatingWidget(
+                                starCount: 5,
+                                rating: (controller.userCourseOverview.value
+                                                .averageRating
+                                                ?.toDouble() ??
+                                            0.0) >
+                                        0
+                                    ? controller.userCourseOverview.value
+                                            .averageRating
+                                            ?.toDouble() ??
+                                        0.0
+                                    : 4.0,
+                                color: AppColors.lightGreen,
+                                size: 15.0,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0102,
+                              ),
+                              Text(
+                                "(${((controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0) > 0) ? controller.userCourseOverview.value.averageRating?.toDouble() ?? 0.0 : 4.0})",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              )
+                            ],
+                          ),
+                        } else ...{
+                          Row(
+                            children: [
+                              StarRatingWidget(
+                                starCount: 5,
+                                rating: (controller.courseOverview.value
+                                                .averageRating
+                                                ?.toDouble() ??
+                                            0.0) >
+                                        0
+                                    ? controller
+                                            .courseOverview.value.averageRating
+                                            ?.toDouble() ??
+                                        0.0
+                                    : 4.0,
+                                color: AppColors.lightGreen,
+                                size: 15.0,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0102,
+                              ),
+                              Text(
+                                "(${((controller.courseOverview.value.averageRating?.toDouble() ?? 0.0) > 0) ? controller.courseOverview.value.averageRating?.toDouble() ?? 0.0 : 4.0})",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsBlackRegular14,
+                              )
+                            ],
+                          ),
+                        },
                         if ((isStudent
                                 ? controller.userCourseOverview.value
                                         .courseInstructors?.length ??
@@ -638,37 +675,39 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                                   ?.length ??
                                                               0) >
                                                           100) // Add condition to display "Show more" button
-                                                        Column(
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
                                                           children: [
-                                                            Text(
-                                                              showFullContentForInstructor
-                                                                  ? value.about ??
-                                                                      ''
-                                                                  : '${value.about?.substring(0, 100)}...', // Display truncated or full text
-                                                            ),
-                                                            SizedBox(
-                                                              height: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.0204,
-                                                            ),
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  showFullContentForInstructor =
-                                                                      !showFullContentForInstructor; // Toggle showFullContent flag
-                                                                });
-                                                              },
+                                                            Expanded(
                                                               child: Text(
                                                                 showFullContentForInstructor
-                                                                    ? "Show less"
-                                                                    : "Show more",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .blue),
+                                                                    ? value.about ??
+                                                                        ''
+                                                                    : '${value.about?.substring(0, 100)}...', // Display truncated or full text
                                                               ),
                                                             ),
+                                                            if ((value.about
+                                                                        ?.length ??
+                                                                    0) >
+                                                                100) // Add condition to display "Show more" button
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    showFullContentForInstructor =
+                                                                        !showFullContentForInstructor; // Toggle showFullContent flag
+                                                                  });
+                                                                },
+                                                                child: Text(
+                                                                  showFullContentForInstructor
+                                                                      ? "Show less"
+                                                                      : "Show more",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .blue),
+                                                                ),
+                                                              ),
                                                           ],
                                                         ),
                                                       if ((value.about
@@ -790,13 +829,55 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                                         : AppStyles
                                                             .tsBlackMedium16,
                                                   ),
-                                                  Text(
-                                                    "${value.about}",
-                                                    style: Get.isDarkMode
-                                                        ? AppStyles
-                                                            .tsWhiteRegular14
-                                                        : AppStyles
-                                                            .tsBlackRegular14,
+                                                  Column(
+                                                    children: [
+                                                      // Other widgets if any
+
+                                                      if ((value.about
+                                                                  ?.length ??
+                                                              0) >
+                                                          100) // Add condition to display "Show more" button
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Expanded(
+                                                              child: Text(
+                                                                showFullContentForInstructor
+                                                                    ? value.about ??
+                                                                        ''
+                                                                    : '${value.about?.substring(0, 100)}...', // Display truncated or full text
+                                                              ),
+                                                            ),
+                                                            if ((value.about
+                                                                        ?.length ??
+                                                                    0) >
+                                                                100) // Add condition to display "Show more" button
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    showFullContentForInstructor =
+                                                                        !showFullContentForInstructor; // Toggle showFullContent flag
+                                                                  });
+                                                                },
+                                                                child: Text(
+                                                                  showFullContentForInstructor
+                                                                      ? "Show less"
+                                                                      : "Show more",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .blue),
+                                                                ),
+                                                              ),
+                                                          ],
+                                                        ),
+                                                      if ((value.about
+                                                                  ?.length ??
+                                                              0) <=
+                                                          100) // If text length is less than or equal to 100, display full text
+                                                        Text("${value.about}"),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
@@ -878,7 +959,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             : AppColors.lightCardBackgroundColor),
                     child: Html(
                       data:
-                          """${isStudent ? controller.userCourseOverview.value.courseDescription : controller.courseOverview.value.courseDescription}""",
+                          """<p style="white-space: pre-wrap;">${isStudent ? controller.userCourseOverview.value.courseDescription : controller.courseOverview.value.courseDescription}</p>""",
                       style: {
                         "body": Style(
                           backgroundColor: Get.isDarkMode
@@ -889,6 +970,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               : AppColors.black,
                         ),
                         "p": Style(
+                          whiteSpace: WhiteSpace.pre,
+                          padding: HtmlPaddings.zero,
+                          lineHeight: LineHeight.number(1),
+                          margin: Margins.zero,
                           backgroundColor: Get.isDarkMode
                               ? AppColors.darkCardBackgroundColor
                               : AppColors.lightCardBackgroundColor,
@@ -897,6 +982,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               : AppColors.black,
                         ),
                         "div": Style(
+                          whiteSpace: WhiteSpace.pre,
+                          lineHeight: LineHeight.number(1),
+                          padding: HtmlPaddings.zero,
+                          margin: Margins.zero,
                           backgroundColor: Get.isDarkMode
                               ? AppColors.darkCardBackgroundColor
                               : AppColors.lightCardBackgroundColor,
@@ -905,6 +994,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               : AppColors.black,
                         ),
                         "span": Style(
+                          whiteSpace: WhiteSpace.pre,
+                          lineHeight: LineHeight.number(1),
+                          padding: HtmlPaddings.zero,
+                          margin: Margins.zero,
                           backgroundColor: Get.isDarkMode
                               ? AppColors.darkCardBackgroundColor
                               : AppColors.lightCardBackgroundColor,
@@ -1027,6 +1120,8 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       width: double.infinity,
                       child: ElevatedButton(
                           onPressed: () {
+                            controller.getUserIntentCourseApi(
+                                controller.userCourseOverview.value.sId ?? '');
                             num price;
                             if ((controller
                                         .userCourseOverview.value.coursePrice ??
@@ -1079,6 +1174,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                                             .value.courseName ??
                                         '',
                                   };
+
                                   controller.purchaseCourseApi(data);
                                 },
                               ),
@@ -1126,11 +1222,13 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     child: Container(
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () {
-                            // Get.to(
-                            //     () => MyLibraryView(controller.userMyCourses));
-                            SnackbarHelper.showSnackbar(
-                                "I'm working on navigating to the course when it's clicked.");
+                          onPressed: () async {
+                            await controller.getUserMyCoursesDetails();
+                            var data = controller.userMyCourses.firstWhere(
+                                (element) =>
+                                    element.sId ==
+                                    controller.userCourseOverview.value.sId);
+                            Get.to(() => CourseVideoView(data: data));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.lightGreen,

@@ -10,8 +10,8 @@ class CourseBatchNameWidget extends GetView<CourseController> {
   Future<void> share() async {
     await FlutterShare.share(
         title: 'Course share',
-        text: 'Share this course',
-        linkUrl: 'https://flutter.dev/',
+        text: 'To learn about the Share Market, you must visit this course.',
+        linkUrl: 'https://stoxhero.com/coursefulldata?id=${courseData?.sId}',
         chooserTitle: 'Example Chooser Title');
   }
 

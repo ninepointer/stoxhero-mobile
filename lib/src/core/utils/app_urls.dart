@@ -433,4 +433,7 @@ class AppUrls {
       "$apiURL/courses/user/rating/$courseId";
 
   static String userCoursesOverView(String? id) => "$apiURL/courses/user/$id";
+
+  static String getUserIntent(String? id) =>
+      "$apiURL/courses/user/$id/purchaseintent";
 }

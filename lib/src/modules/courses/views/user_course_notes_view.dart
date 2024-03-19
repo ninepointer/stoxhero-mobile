@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:stoxhero/src/app/app.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserCourseNotesView extends StatefulWidget {
   final UserCoursesSubtopics subtopics;
@@ -24,31 +26,62 @@ class _UserCourseNotesViewState extends State<UserCourseNotesView> {
         itemBuilder: (BuildContext context, int index) {
           var note = widget.subtopics.notes?[index] ?? '';
           return ListTile(
-            title: Text("Note ${index + 1}"),
-            onTap: () {
-              _downloadPDF(note);
-            },
+            title: Text("Resource ${index + 1}"),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.visibility),
+                  onPressed: () {
+                    _downloadAndOpenPDF(note, view: true);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.download),
+                  onPressed: () {
+                    _downloadAndOpenPDF(note, view: false);
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),
     );
   }
 
-  Future<void> _downloadPDF(String url) async {
+  Future<void> _downloadAndOpenPDF(String url, {required bool view}) async {
     try {
       Dio dio = Dio();
-      //  Directory appDocumentsDirectory = Directory('downloads/');
       Directory appDocumentsDirectory =
           await getApplicationDocumentsDirectory();
       if (!appDocumentsDirectory.existsSync()) {
         appDocumentsDirectory.createSync(recursive: true);
       }
-      String filePath = 'note_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      String filePath =
+          '${appDocumentsDirectory.path}/note_${DateTime.now().millisecondsSinceEpoch}.pdf';
       await dio.download(url, filePath);
       print('File downloaded to: $filePath');
-      // Handle further actions here, such as opening the downloaded file
+
+      if (view) {
+        // Open the PDF file using PDFView widget
+        _openPDF(filePath);
+      } else {
+        // Launch the URL to download the PDF file in the default web browser
+        await launch(url);
+      }
     } catch (e) {
-      print('Error downloading PDF: $e');
+      print('Error downloading or opening PDF: $e');
     }
+  }
+
+  void _openPDF(String filePath) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PDFView(
+          filePath: filePath,
+        ),
+      ),
+    );
   }
 }

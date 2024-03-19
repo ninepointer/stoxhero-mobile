@@ -1,18 +1,24 @@
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 import 'package:flutter_share/flutter_share.dart';
 
 class UserCoursesOverView extends GetView<CourseController> {
   final UserMyCoursesData? data;
-
-  UserCoursesOverView(this.data);
+  final FlickManager flickManager;
+  UserCoursesOverView(this.data, this.flickManager);
 
   Future<void> share() async {
     await FlutterShare.share(
         title: 'Course share',
-        text: 'Share this course',
-        linkUrl: 'https://flutter.dev/',
+        text: 'To learn about the Share Market, you must visit this course.',
+        linkUrl: 'https://stoxhero.com/coursefulldata?id=${data?.sId}',
         chooserTitle: 'Example Chooser Title');
+  }
+
+  void _navigateToScreenAndPauseVideo() {
+    flickManager.flickControlManager?.pause(); // Pause the video
+    // Navigate to the desired screen
   }
 
   @override
@@ -29,8 +35,10 @@ class UserCoursesOverView extends GetView<CourseController> {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: () {
-                    controller.getUserCourseOverviewDetails(data?.sId ?? '');
+                  onTap: () async {
+                    _navigateToScreenAndPauseVideo();
+                    await controller
+                        .getUserCourseOverviewDetails(data?.sId ?? '');
                     Get.to(() => MyCoursesOverViewDetailsView());
                   },
                   child: Row(
@@ -53,6 +61,7 @@ class UserCoursesOverView extends GetView<CourseController> {
                 ),
                 GestureDetector(
                   onTap: () async {
+                    _navigateToScreenAndPauseVideo();
                     share();
                   },
                   child: Row(
@@ -75,7 +84,9 @@ class UserCoursesOverView extends GetView<CourseController> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    _navigateToScreenAndPauseVideo();
                     Get.to(() => UserResourcesView(data));
+                    //  SnackbarHelper.showSnackbar("In Working");
                   },
                   child: Row(
                     children: [
@@ -97,6 +108,7 @@ class UserCoursesOverView extends GetView<CourseController> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    _navigateToScreenAndPauseVideo();
                     showDialog(
                       context: context,
                       builder: (context) {

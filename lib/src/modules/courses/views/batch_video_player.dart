@@ -6,13 +6,10 @@ import 'package:flick_video_player/flick_video_player.dart';
 
 class CourseVideoView extends StatefulWidget {
   final UserMyCoursesData? data;
-//  final UserCoursesSubtopics subtopics;
-  //final String initialVideoUrl;
+
   CourseVideoView({
     this.data,
-  }
-      // this.subtopics,
-      );
+  });
 
   @override
   State<CourseVideoView> createState() => _CourseVideoViewState();
@@ -26,6 +23,7 @@ class _CourseVideoViewState extends State<CourseVideoView>
   late FlickManager flickManager;
   late TabController tabController;
   String title = "";
+  double _playbackSpeed = 1.0;
 
   @override
   void initState() {
@@ -36,7 +34,9 @@ class _CourseVideoViewState extends State<CourseVideoView>
     flickManager = FlickManager(
       videoPlayerController: VideoPlayerController.networkUrl(
         Uri.parse(widget.data?.topics?.first.subtopics?.first.videoUrl ?? ''),
-      ),
+      )..initialize().then((_) {
+          setState(() {});
+        }),
     );
   }
 
@@ -54,6 +54,13 @@ class _CourseVideoViewState extends State<CourseVideoView>
     setState(() {
       title = newTitle; // Update video title
     });
+  }
+
+  void _changePlaybackSpeed(double speed) {
+    setState(() {
+      _playbackSpeed = speed;
+    });
+    flickManager.flickControlManager?.setPlaybackSpeed(speed);
   }
 
   Future<bool> _onWillPop() async {
@@ -137,23 +144,28 @@ class _CourseVideoViewState extends State<CourseVideoView>
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              // _customVideoPlayerController
-              //         .videoPlayerController.value.isInitialized
-              //     ? ClipRRect(
-              //         borderRadius: BorderRadius.circular(6.0),
-              //         child: AspectRatio(
-              //           aspectRatio: 16 / 9,
-              //           child: CustomVideoPlayer(
-              //               customVideoPlayerController:
-              //                   _customVideoPlayerController),
-              //         ),
-              //       )
-              //     : AspectRatio(
-              //         aspectRatio: 16 / 9,
-              //         child: Center(child: CircularProgressIndicator())),
               AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: FlickVideoPlayer(flickManager: flickManager)),
+                aspectRatio: 16 / 9,
+                child: ClipRect(
+                  child: OverflowBox(
+                    alignment: Alignment.center,
+                    child: FlickVideoPlayer(flickManager: flickManager),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.0306,
+              ),
+              Slider(
+                value: _playbackSpeed,
+                min: 0.5,
+                max: 2.0,
+                divisions: 15,
+                label: _playbackSpeed.toStringAsFixed(2),
+                onChanged: (double value) {
+                  _changePlaybackSpeed(value);
+                },
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.width * 0.0306,
               ),
@@ -213,7 +225,7 @@ class _CourseVideoViewState extends State<CourseVideoView>
                                       title); // Call updateVideoUrl function with selected URL
                                 },
                               ),
-                              UserCoursesOverView(widget.data),
+                              UserCoursesOverView(widget.data, flickManager),
                             ],
                           ),
                         ),

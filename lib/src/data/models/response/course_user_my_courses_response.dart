@@ -30,6 +30,7 @@ class UserMyCoursesResponse {
 class UserMyCoursesData {
   String? sId;
   String? courseName;
+  String? slug;
   int? maxEnrolments;
   int? coursePrice;
   int? discountedPrice;
@@ -49,6 +50,7 @@ class UserMyCoursesData {
   UserMyCoursesData(
       {this.sId,
       this.courseName,
+      this.slug,
       this.maxEnrolments,
       this.coursePrice,
       this.discountedPrice,
@@ -68,6 +70,7 @@ class UserMyCoursesData {
   UserMyCoursesData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     courseName = json['courseName'];
+    courseName = json['courseSlug'];
     maxEnrolments = json['maxEnrolments'];
     coursePrice = json['coursePrice'];
     discountedPrice = json['discountedPrice'];
@@ -94,6 +97,7 @@ class UserMyCoursesData {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
     data['courseName'] = this.courseName;
+    data['courseSlug'] = this.slug;
     data['maxEnrolments'] = this.maxEnrolments;
     data['coursePrice'] = this.coursePrice;
     data['discountedPrice'] = this.discountedPrice;
