@@ -63,8 +63,29 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
-
-                  FlickVideoPlayer(flickManager: flickManager),
+                  if (flickManager != null &&
+                      flickManager.flickVideoManager != null &&
+                      flickManager.flickVideoManager!.isVideoInitialized) ...{
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: ClipRect(
+                        child: OverflowBox(
+                          alignment: Alignment.center,
+                          child: FlickVideoPlayer(flickManager: flickManager),
+                        ),
+                      ),
+                    ),
+                  } else ...{
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: ClipRect(
+                        child: OverflowBox(
+                          alignment: Alignment.center,
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                      ),
+                    ),
+                  },
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),

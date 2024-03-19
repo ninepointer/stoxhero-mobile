@@ -13,11 +13,20 @@ class MyCoursesOverViewDetailsView extends StatefulWidget {
 class _MyCoursesOverViewDetailsViewState
     extends State<MyCoursesOverViewDetailsView> {
   late CourseController controller;
+  int maxLinesToShow = 70;
+  int maxWordsToShow = 100;
 
+  bool showFullContent = false;
+
+  bool showFullContentForInstructor = false;
   @override
   void initState() {
     super.initState();
     controller = Get.find<CourseController>();
+  }
+
+  int _countWords(String text) {
+    return text.split(' ').length;
   }
 
   @override
@@ -189,8 +198,9 @@ class _MyCoursesOverViewDetailsViewState
                             ? AppColors.darkCardBackgroundColor
                             : AppColors.lightCardBackgroundColor),
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: isStudent
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ...isStudent
                             ? controller
                                 .userCourseOverview.value.courseBenefits!
                                 .map((value) =>
@@ -199,7 +209,38 @@ class _MyCoursesOverViewDetailsViewState
                             : controller.courseOverview.value.courseBenefits!
                                 .map((value) =>
                                     textItemWidget(value.benefits ?? ''))
-                                .toList()),
+                                .toList(),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.0204,
+                        ),
+                        if ((_countWords(isStudent
+                                    ? controller.userCourseOverview.value
+                                        .courseBenefits!
+                                        .map((value) => value.benefits ?? '')
+                                        .toList()
+                                        .join(' ')
+                                    : controller
+                                        .courseOverview.value.courseBenefits!
+                                        .map((value) => value.benefits ?? '')
+                                        .toList()
+                                        .join(' ')) >
+                                maxWordsToShow) ||
+                            showFullContent)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                showFullContent = !showFullContent;
+                              });
+                            },
+                            child: Text(
+                              showFullContent ? "Show less" : "Show more",
+                              style: TextStyle(
+                                  color: Colors
+                                      .blue), // Customize button text color
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 },
                 SizedBox(
@@ -224,9 +265,6 @@ class _MyCoursesOverViewDetailsViewState
                             : AppStyles.tsBlackMedium14,
                       ),
                     ],
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.0204,
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 12, horizontal: 6),
@@ -318,7 +356,55 @@ class _MyCoursesOverViewDetailsViewState
                                                       : AppStyles
                                                           .tsBlackMedium16,
                                                 ),
-                                                Text("${value.about}"),
+                                                Column(
+                                                  children: [
+                                                    // Other widgets if any
+
+                                                    if ((value.about?.length ??
+                                                            0) >
+                                                        100) // Add condition to display "Show more" button
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Text(
+                                                              showFullContentForInstructor
+                                                                  ? value.about ??
+                                                                      ''
+                                                                  : '${value.about?.substring(0, 100)}...', // Display truncated or full text
+                                                            ),
+                                                          ),
+                                                          if ((value.about
+                                                                      ?.length ??
+                                                                  0) >
+                                                              100) // Add condition to display "Show more" button
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  showFullContentForInstructor =
+                                                                      !showFullContentForInstructor; // Toggle showFullContent flag
+                                                                });
+                                                              },
+                                                              child: Text(
+                                                                showFullContentForInstructor
+                                                                    ? "Show less"
+                                                                    : "Show more",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .blue),
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      ),
+                                                    if ((value.about?.length ??
+                                                            0) <=
+                                                        100) // If text length is less than or equal to 100, display full text
+                                                      Text("${value.about}"),
+                                                  ],
+                                                ),
+                                                //    Text("${value.about}"),
                                               ],
                                             ),
                                           ),
@@ -424,13 +510,53 @@ class _MyCoursesOverViewDetailsViewState
                                                       : AppStyles
                                                           .tsBlackMedium16,
                                                 ),
-                                                Text(
-                                                  "${value.about}",
-                                                  style: Get.isDarkMode
-                                                      ? AppStyles
-                                                          .tsWhiteRegular14
-                                                      : AppStyles
-                                                          .tsBlackRegular14,
+                                                Column(
+                                                  children: [
+                                                    // Other widgets if any
+
+                                                    if ((value.about?.length ??
+                                                            0) >
+                                                        100) // Add condition to display "Show more" button
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Text(
+                                                              showFullContentForInstructor
+                                                                  ? value.about ??
+                                                                      ''
+                                                                  : '${value.about?.substring(0, 100)}...', // Display truncated or full text
+                                                            ),
+                                                          ),
+                                                          if ((value.about
+                                                                      ?.length ??
+                                                                  0) >
+                                                              100) // Add condition to display "Show more" button
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  showFullContentForInstructor =
+                                                                      !showFullContentForInstructor; // Toggle showFullContent flag
+                                                                });
+                                                              },
+                                                              child: Text(
+                                                                showFullContentForInstructor
+                                                                    ? "Show less"
+                                                                    : "Show more",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .blue),
+                                                              ),
+                                                            ),
+                                                        ],
+                                                      ),
+                                                    if ((value.about?.length ??
+                                                            0) <=
+                                                        100) // If text length is less than or equal to 100, display full text
+                                                      Text("${value.about}"),
+                                                  ],
                                                 ),
                                               ],
                                             ),
@@ -448,34 +574,9 @@ class _MyCoursesOverViewDetailsViewState
                                 .toList()),
                   ),
                 },
-
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.0204,
                 ),
-                // if (isStudent) ...{
-                //   for (int i = 0;
-                //       i <
-                //           (controller.userCourseOverview.value.courseContent
-                //                   ?.length ??
-                //               0);
-                //       i++)
-                //     CourseTopicsAndSubTopicsWidget(
-                //         i,
-                //         controller
-                //             .userCourseOverview.value.courseContent?[i]),
-                // } else ...{
-                //   for (int i = 0;
-                //       i <
-                //           (controller.courseOverview.value.courseContent
-                //                   ?.length ??
-                //               0);
-                //       i++)
-                //     CourseTopicsAndSubTopicsWidget(
-                //         i, controller.courseOverview.value.courseContent?[i]),
-                // },
-                // SizedBox(
-                //   height: MediaQuery.of(context).size.width * 0.0204,
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -508,6 +609,10 @@ class _MyCoursesOverViewDetailsViewState
                             Get.isDarkMode ? AppColors.white : AppColors.black,
                       ),
                       "p": Style(
+                        whiteSpace: WhiteSpace.pre,
+                        padding: HtmlPaddings.zero,
+                        lineHeight: LineHeight.number(1),
+                        margin: Margins.zero,
                         backgroundColor: Get.isDarkMode
                             ? AppColors.darkCardBackgroundColor
                             : AppColors.lightCardBackgroundColor,
@@ -515,6 +620,10 @@ class _MyCoursesOverViewDetailsViewState
                             Get.isDarkMode ? AppColors.white : AppColors.black,
                       ),
                       "div": Style(
+                        whiteSpace: WhiteSpace.pre,
+                        padding: HtmlPaddings.zero,
+                        lineHeight: LineHeight.number(1),
+                        margin: Margins.zero,
                         backgroundColor: Get.isDarkMode
                             ? AppColors.darkCardBackgroundColor
                             : AppColors.lightCardBackgroundColor,
@@ -522,6 +631,10 @@ class _MyCoursesOverViewDetailsViewState
                             Get.isDarkMode ? AppColors.white : AppColors.black,
                       ),
                       "span": Style(
+                        whiteSpace: WhiteSpace.pre,
+                        padding: HtmlPaddings.zero,
+                        lineHeight: LineHeight.number(1),
+                        margin: Margins.zero,
                         backgroundColor: Get.isDarkMode
                             ? AppColors.darkCardBackgroundColor
                             : AppColors.lightCardBackgroundColor,
@@ -553,7 +666,6 @@ class _MyCoursesOverViewDetailsViewState
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.0204,
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -583,7 +695,6 @@ class _MyCoursesOverViewDetailsViewState
                     CourseFAQSWidget(
                         i, controller.courseOverview.value.faqs?[i]),
                 },
-
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.0204,
                 ),
@@ -640,7 +751,7 @@ class _MyCoursesOverViewDetailsViewState
     );
   }
 
-  Widget textItemWidget(String str) {
+  Widget textItemWidget(String text) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -661,7 +772,9 @@ class _MyCoursesOverViewDetailsViewState
         ),
         Flexible(
           child: Text(
-            str,
+            showFullContent ? _truncateText(text) : text,
+            maxLines: showFullContent ? maxLinesToShow : null,
+            overflow: TextOverflow.ellipsis,
             style: Get.isDarkMode
                 ? AppStyles.tsWhiteRegular14
                 : AppStyles.tsBlackRegular14,
@@ -669,5 +782,9 @@ class _MyCoursesOverViewDetailsViewState
         ),
       ],
     );
+  }
+
+  String _truncateText(String text) {
+    return text.length > 1000 ? text.substring(0, 1000) + "..." : text;
   }
 }

@@ -144,28 +144,43 @@ class _CourseVideoViewState extends State<CourseVideoView>
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: ClipRect(
-                  child: OverflowBox(
-                    alignment: Alignment.center,
-                    child: FlickVideoPlayer(flickManager: flickManager),
+              if (flickManager != null &&
+                  flickManager.flickVideoManager != null &&
+                  flickManager.flickVideoManager!.isVideoInitialized) ...{
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ClipRect(
+                    child: OverflowBox(
+                      alignment: Alignment.center,
+                      child: FlickVideoPlayer(flickManager: flickManager),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.0306,
-              ),
-              Slider(
-                value: _playbackSpeed,
-                min: 0.5,
-                max: 2.0,
-                divisions: 15,
-                label: _playbackSpeed.toStringAsFixed(2),
-                onChanged: (double value) {
-                  _changePlaybackSpeed(value);
-                },
-              ),
+              } else ...{
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ClipRect(
+                    child: OverflowBox(
+                      alignment: Alignment.center,
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  ),
+                ),
+              },
+
+              // SizedBox(
+              //   height: MediaQuery.of(context).size.width * 0.0306,
+              // ),
+              // Slider(
+              //   value: _playbackSpeed,
+              //   min: 0.5,
+              //   max: 2.0,
+              //   divisions: 15,
+              //   label: _playbackSpeed.toStringAsFixed(2),
+              //   onChanged: (double value) {
+              //     _changePlaybackSpeed(value);
+              //   },
+              // ),
               SizedBox(
                 height: MediaQuery.of(context).size.width * 0.0306,
               ),

@@ -86,7 +86,7 @@ class UserCoursesOverView extends GetView<CourseController> {
                   onTap: () {
                     _navigateToScreenAndPauseVideo();
                     Get.to(() => UserResourcesView(data));
-                    //  SnackbarHelper.showSnackbar("In Working");
+                    //SnackbarHelper.showSnackbar("In Working");
                   },
                   child: Row(
                     children: [

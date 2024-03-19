@@ -21,12 +21,13 @@ class UserCoursesLactures extends GetView<CourseController> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Section ${index + 1} -  ${item?.topic ?? ''}",
-                      style: AppStyles.tsSecondaryMedium14
-                          .copyWith(color: AppColors.lightGreen),
+                    Flexible(
+                      child: Text(
+                        "Section ${index + 1} -  ${item?.topic ?? ''}",
+                        style: AppStyles.tsSecondaryMedium14
+                            .copyWith(color: AppColors.lightGreen),
+                      ),
                     ),
                   ],
                 ),
@@ -57,8 +58,8 @@ class UserCoursesLactures extends GetView<CourseController> {
                                         "${entry.key + 1}. ",
                                         style: Theme.of(context)
                                             .textTheme
-                                            .tsRegular14,
-                                        textAlign: TextAlign.start,
+                                            .tsRegular18,
+                                        textAlign: TextAlign.center,
                                       ),
                                     ],
                                   ),
