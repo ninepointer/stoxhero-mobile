@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -21,7 +23,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
   late CourseController controller;
   late FlickManager flickManager;
   int maxLinesToShow = 70;
-  int maxWordsToShow = 100;
+  int maxWordsToShow = 199;
 
   bool showFullContent = false;
 
@@ -522,51 +524,65 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       padding:
                           EdgeInsets.symmetric(vertical: 12, horizontal: 6),
                       decoration: BoxDecoration(
-                          color: Get.isDarkMode
-                              ? AppColors.darkCardBackgroundColor
-                              : AppColors.lightCardBackgroundColor),
+                        color: Get.isDarkMode
+                            ? AppColors.darkCardBackgroundColor
+                            : AppColors.lightCardBackgroundColor,
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          ...isStudent
-                              ? controller
-                                  .userCourseOverview.value.courseBenefits!
-                                  .map((value) =>
-                                      textItemWidget(value.benefits ?? ''))
-                                  .toList()
-                              : controller.courseOverview.value.courseBenefits!
-                                  .map((value) =>
-                                      textItemWidget(value.benefits ?? ''))
-                                  .toList(),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.width * 0.0204,
+                          // Concatenate all benefits into a single string
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final content = (isStudent
+                                      ? controller.userCourseOverview?.value
+                                          ?.courseBenefits
+                                      : controller.courseOverview?.value
+                                          ?.courseBenefits)
+                                  ?.map((value) => value.benefits ?? '')
+                                  .join(' ');
+
+                              final words = _countWords(content ?? '');
+                              final isLongContent = words > maxWordsToShow;
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    showFullContent
+                                        ? content ?? ''
+                                        : (isLongContent
+                                            ? '${content?.substring(0, maxWordsToShow)}...'
+                                            : content ?? ''),
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteRegular14
+                                        : AppStyles.tsBlackRegular14,
+                                    overflow: showFullContent
+                                        ? null
+                                        : isLongContent
+                                            ? TextOverflow.fade
+                                            : TextOverflow.visible,
+                                  ),
+                                  if (isLongContent)
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          showFullContent = !showFullContent;
+                                        });
+                                      },
+                                      child: Text(
+                                        showFullContent
+                                            ? "Show less"
+                                            : "Show more",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              );
+                            },
                           ),
-                          if ((_countWords(isStudent
-                                      ? controller.userCourseOverview.value
-                                          .courseBenefits!
-                                          .map((value) => value.benefits ?? '')
-                                          .toList()
-                                          .join(' ')
-                                      : controller
-                                          .courseOverview.value.courseBenefits!
-                                          .map((value) => value.benefits ?? '')
-                                          .toList()
-                                          .join(' ')) >
-                                  maxWordsToShow) ||
-                              showFullContent)
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  showFullContent = !showFullContent;
-                                });
-                              },
-                              child: Text(
-                                showFullContent ? "Show less" : "Show more",
-                                style: TextStyle(
-                                    color: Colors
-                                        .blue), // Customize button text color
-                              ),
-                            ),
                         ],
                       ),
                     ),
