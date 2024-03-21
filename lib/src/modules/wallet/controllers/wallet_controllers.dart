@@ -126,7 +126,7 @@ class WalletController extends BaseController<WalletRepository> {
 
   void addHeroCash(num heroCash) {
     if (isCouponCodeAdded.value) {
-      subscriptionAmount(amountAfterCouponAdded.value - heroCash);
+      subscriptionAmount(subscriptionAmount.value - heroCash);
     } else {
       subscriptionAmount(subscriptionAmount.value - heroCash);
     }
@@ -134,7 +134,11 @@ class WalletController extends BaseController<WalletRepository> {
 
   void removeHeroCash(num herocash) {
     heroCashAmount(0.0);
-    subscriptionAmount(subscriptionAmount.value + herocash);
+    if (isCouponCodeAdded.value) {
+      subscriptionAmount(subscriptionAmount.value + herocash);
+    } else {
+      subscriptionAmount(subscriptionAmount.value + herocash);
+    }
   }
 
   num get calculateHeroCash {

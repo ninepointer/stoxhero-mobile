@@ -57,6 +57,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     controller.getReadSetting();
     controller.isHeroCashAdded(false);
     controller.heroCashAmount(0.0);
+
     controller.isLoading(false);
     controller.addMoneyAmountTextController.clear();
     controller.subscriptionAmount(widget.buyItemPrice.toDouble());
