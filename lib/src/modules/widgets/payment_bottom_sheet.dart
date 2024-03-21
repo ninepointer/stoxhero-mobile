@@ -381,88 +381,128 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   SizedBox(
                     height: 24,
                   ),
-                  if (widget.isGstInclude == true)
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Fee Amount:"),
-                            Text(
-                                "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? (amount - (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : (widget.buyItemPrice))}"),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('GST(18%) on Fee: '),
-                            Text(
-                                "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? ((amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : ((widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
-                          ],
-                        ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: [
-                        //     Text("Net Transaction Amount:"),
-                        //     Text(
-                        //         "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? amount : (widget.buyItemPrice + (widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
-                        //   ],
-                        // ),
-                      ],
-                    ),
-                  SizedBox(height: 4),
-                  if (!isWalletPayment)
+                  if (widget.isGstInclude == true) ...{
                     CommonCard(
                       margin: EdgeInsets.only(top: 8),
                       padding: EdgeInsets.all(12),
                       children: [
-                        Row(
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Transaction Amount',
-                              style: Theme.of(context).textTheme.tsRegular16,
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Fee Amount:",
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular16,
+                                ),
+                                Spacer(),
+                                Text(
+                                    "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? (amount - (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : (widget.buyItemPrice))}"),
+                              ],
                             ),
-                            Spacer(),
-                            Text(
-                              FormatHelper.formatNumbers((controller
-                                          .couponCodeSuccessText.isNotEmpty ||
-                                      controller.isHeroCashAdded.value)
-                                  ? amount
-                                  : widget.isGstInclude == true
-                                      ? (widget.buyItemPrice +
-                                          (widget.buyItemPrice *
-                                              (AppStorage.getReadSetting()
-                                                      .courseGstPercentage ??
-                                                  0) /
-                                              100))
-                                      : widget.buyItemPrice),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .tsMedium18
-                                  .copyWith(
-                                    color: AppColors.success,
-                                  ),
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'GST(18%) on Fee: ',
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular16,
+                                ),
+                                Spacer(),
+                                Text(
+                                    "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? ((amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : ((widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Transaction Amount',
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular16,
+                                ),
+                                Spacer(),
+                                Text(
+                                  FormatHelper.formatNumbers((controller
+                                              .couponCodeSuccessText
+                                              .isNotEmpty ||
+                                          controller.isHeroCashAdded.value)
+                                      ? amount
+                                      : widget.isGstInclude == true
+                                          ? (widget.buyItemPrice +
+                                              (widget.buyItemPrice *
+                                                  (AppStorage.getReadSetting()
+                                                          .courseGstPercentage ??
+                                                      0) /
+                                                  100))
+                                          : widget.buyItemPrice),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .tsMedium18
+                                      .copyWith(
+                                        color: AppColors.success,
+                                      ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ],
-                    )
-                  else
-                    CommonTextField(
-                      controller: controller.addMoneyAmountTextController,
-                      padding: EdgeInsets.only(top: 16),
-                      hintText: 'Enter amount',
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
                     ),
+                  } else ...{
+                    if (!isWalletPayment)
+                      CommonCard(
+                        margin: EdgeInsets.only(top: 8),
+                        padding: EdgeInsets.all(12),
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Transaction Amount',
+                                style: Theme.of(context).textTheme.tsRegular16,
+                              ),
+                              Spacer(),
+                              Text(
+                                FormatHelper.formatNumbers((controller
+                                            .couponCodeSuccessText.isNotEmpty ||
+                                        controller.isHeroCashAdded.value)
+                                    ? amount
+                                    : widget.isGstInclude == true
+                                        ? (widget.buyItemPrice +
+                                            (widget.buyItemPrice *
+                                                (AppStorage.getReadSetting()
+                                                        .courseGstPercentage ??
+                                                    0) /
+                                                100))
+                                        : widget.buyItemPrice),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsMedium18
+                                    .copyWith(
+                                      color: AppColors.success,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    else
+                      CommonTextField(
+                        controller: controller.addMoneyAmountTextController,
+                        padding: EdgeInsets.only(top: 16),
+                        hintText: 'Enter amount',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                  },
+
                   if (controller.couponCodeSuccessText.isNotEmpty)
                     GestureDetector(
                       onTap: () =>

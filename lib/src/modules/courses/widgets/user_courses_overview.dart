@@ -112,76 +112,76 @@ class UserCoursesOverView extends GetView<CourseController> {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return Obx(
-                          () => AlertDialog(
-                            title: Text("Rate this Course"),
-                            content: Row(
-                              children: List.generate(
-                                5,
-                                (index) {
-                                  return IconButton(
-                                    icon: Icon(
-                                      index < controller.currentRating.value
-                                          ? Icons.star
-                                          : Icons.star_border,
-                                      color: Colors.amber,
-                                    ),
-                                    onPressed: () {
-                                      controller.currentRating(index + 1);
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(
-                                  'Cancel',
-                                  style: TextStyle(color: AppColors.lightGreen),
+                        String courseId = data?.sId ?? '';
+                        int initialRating =
+                            AppStorage.getCourseUserStarRating(courseId);
+
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return AlertDialog(
+                              title: Text("Rate this Course"),
+                              content: Row(
+                                children: List.generate(
+                                  5,
+                                  (index) {
+                                    return IconButton(
+                                      icon: Icon(
+                                        index < initialRating
+                                            ? Icons.star
+                                            : Icons.star_border,
+                                        color: Colors.amber,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          initialRating = index + 1;
+                                          controller.currentRating.value =
+                                              initialRating;
+                                        });
+                                      },
+                                    );
+                                  },
                                 ),
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (AppStorage.getCourseUserStarRating() ==
-                                              0 &&
-                                          AppStorage.getCourseSidForStarRating()
-                                              .isEmpty ||
-                                      AppStorage.getCourseSidForStarRating() !=
-                                          data?.sId) {
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    'Cancel',
+                                    style:
+                                        TextStyle(color: AppColors.lightGreen),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
                                     Map<String, dynamic> ratingData = {
                                       "rating": controller.currentRating.value
                                     };
 
                                     controller.courseRatingApi(
-                                        ratingData, data?.sId, () {
-                                      AppStorage.setCourseUserStarRating(1);
-                                      AppStorage.setCourseSidForStarRating(
-                                          data?.sId);
+                                        ratingData, courseId, () {
+                                      AppStorage.setCourseUserStarRating(
+                                          courseId, initialRating);
                                       Navigator.of(context).pop();
                                     });
-                                  } else {
-                                    SnackbarHelper.showSnackbar(
-                                        "You have already rated this course.");
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.lightGreen,
-                                  onPrimary: Colors.white,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 4,
-                                      horizontal: 8), // Button padding
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        8), // Button border radius
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.lightGreen,
+                                    onPrimary: Colors.white,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 4,
+                                        horizontal: 8), // Button padding
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          8), // Button border radius
+                                    ),
                                   ),
+                                  child: Text('Rate'),
                                 ),
-                                child: Text('Rate'),
-                              ),
-                            ],
-                          ),
+                              ],
+                            );
+                          },
                         );
                       },
                     );

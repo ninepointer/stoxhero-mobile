@@ -46,12 +46,13 @@ class AppStorage {
     return ReadSettingResponse.fromJson(_box.read(AppStorageKeys.readSetting));
   }
 
-  static Future setCourseUserStarRating(int count) async {
-    await _box.write(AppStorageKeys.courseStarCount, count);
+  static Future<void> setCourseUserStarRating(
+      String courseId, int count) async {
+    await _box.write('${AppStorageKeys.courseStarCount}_$courseId', count);
   }
 
-  static int getCourseUserStarRating() {
-    return _box.read(AppStorageKeys.courseStarCount) ?? 0;
+  static int getCourseUserStarRating(String courseId) {
+    return _box.read('${AppStorageKeys.courseStarCount}_$courseId') ?? 0;
   }
 
   static Future setCourseSidForStarRating(String? sId) async {

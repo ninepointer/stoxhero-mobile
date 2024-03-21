@@ -36,7 +36,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
 
     flickManager = FlickManager(
       videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(
-          "${isStudent ? controller.userCourseOverview.value.salesVideo : controller.courseOverview.value.salesVideo}"))
+          "${isStudent ? controller.userCourseOverview.value.salesVideo ?? '' : controller.courseOverview.value.salesVideo ?? ""}"))
         ..initialize().then((_) {
           setState(() {});
         }),
@@ -65,46 +65,18 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
-                  if (flickManager != null &&
-                      flickManager.flickVideoManager != null &&
-                      flickManager.flickVideoManager!.isVideoInitialized) ...{
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: ClipRect(
-                        child: OverflowBox(
-                          alignment: Alignment.center,
-                          child: FlickVideoPlayer(flickManager: flickManager),
-                        ),
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: ClipRect(
+                      child: OverflowBox(
+                        alignment: Alignment.center,
+                        child: FlickVideoPlayer(flickManager: flickManager),
                       ),
                     ),
-                  } else ...{
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: ClipRect(
-                        child: OverflowBox(
-                          alignment: Alignment.center,
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                      ),
-                    ),
-                  },
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
-                  // _customVideoPlayerController
-                  //         .videoPlayerController.value.isInitialized
-                  //     ? ClipRRect(
-                  //         borderRadius: BorderRadius.circular(6.0),
-                  //         child: AspectRatio(
-                  //           aspectRatio: 16 / 9,
-                  //           child: CustomVideoPlayer(
-                  //               customVideoPlayerController:
-                  //                   _customVideoPlayerController),
-                  //         ),
-                  //       )
-                  //     : AspectRatio(
-                  //         aspectRatio: 16 / 9,
-                  //         child: Center(child: CircularProgressIndicator())),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
@@ -524,67 +496,21 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       padding:
                           EdgeInsets.symmetric(vertical: 12, horizontal: 6),
                       decoration: BoxDecoration(
-                        color: Get.isDarkMode
-                            ? AppColors.darkCardBackgroundColor
-                            : AppColors.lightCardBackgroundColor,
-                      ),
+                          color: Get.isDarkMode
+                              ? AppColors.darkCardBackgroundColor
+                              : AppColors.lightCardBackgroundColor),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          // Concatenate all benefits into a single string
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              final content = (isStudent
-                                      ? controller.userCourseOverview?.value
-                                          ?.courseBenefits
-                                      : controller.courseOverview?.value
-                                          ?.courseBenefits)
-                                  ?.map((value) => value.benefits ?? '')
-                                  .join(' ');
-
-                              final words = _countWords(content ?? '');
-                              final isLongContent = words > maxWordsToShow;
-
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    showFullContent
-                                        ? content ?? ''
-                                        : (isLongContent
-                                            ? '${content?.substring(0, maxWordsToShow)}...'
-                                            : content ?? ''),
-                                    style: Get.isDarkMode
-                                        ? AppStyles.tsWhiteRegular14
-                                        : AppStyles.tsBlackRegular14,
-                                    overflow: showFullContent
-                                        ? null
-                                        : isLongContent
-                                            ? TextOverflow.fade
-                                            : TextOverflow.visible,
-                                  ),
-                                  if (isLongContent)
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          showFullContent = !showFullContent;
-                                        });
-                                      },
-                                      child: Text(
-                                        showFullContent
-                                            ? "Show less"
-                                            : "Show more",
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: isStudent
+                              ? controller
+                                  .userCourseOverview.value.courseBenefits!
+                                  .map((value) =>
+                                      textItemWidget(value.benefits ?? ''))
+                                  .toList()
+                              : controller.courseOverview.value.courseBenefits!
+                                  .map((value) =>
+                                      textItemWidget(value.benefits ?? ''))
+                                  .toList()),
                     ),
                   },
                   SizedBox(
@@ -1431,7 +1357,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
     );
   }
 
-  Widget textItemWidget(String text) {
+  Widget textItemWidget(String str) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1452,9 +1378,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
         ),
         Flexible(
           child: Text(
-            showFullContent ? _truncateText(text) : text,
-            maxLines: showFullContent ? maxLinesToShow : null,
-            overflow: TextOverflow.ellipsis,
+            str,
             style: Get.isDarkMode
                 ? AppStyles.tsWhiteRegular14
                 : AppStyles.tsBlackRegular14,
@@ -1462,10 +1386,6 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
         ),
       ],
     );
-  }
-
-  String _truncateText(String text) {
-    return text.length > 1000 ? text.substring(0, 1000) + "..." : text;
   }
 }
 

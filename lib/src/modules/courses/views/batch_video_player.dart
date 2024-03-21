@@ -63,194 +63,177 @@ class _CourseVideoViewState extends State<CourseVideoView>
     flickManager.flickControlManager?.setPlaybackSpeed(speed);
   }
 
-  Future<bool> _onWillPop() async {
-    (AppStorage.getCourseUserStarRating() == 0 &&
-                AppStorage.getCourseSidForStarRating().isEmpty ||
-            AppStorage.getCourseSidForStarRating() != widget.data?.sId)
-        ? showDialog(
-            context: context,
-            builder: (context) {
-              return Obx(
-                () => AlertDialog(
-                  title: Text("Rate this Course"),
-                  content: Row(
-                    children: List.generate(
-                      5,
-                      (index) {
-                        return IconButton(
-                          icon: Icon(
-                            index < controller.currentRating.value
-                                ? Icons.star
-                                : Icons.star_border,
-                            color: Colors.amber,
-                          ),
-                          onPressed: () {
-                            controller.currentRating(index + 1);
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(color: AppColors.lightGreen),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Map<String, dynamic> data = {
-                          "rating": controller.currentRating.value
-                        };
-                        controller.courseRatingApi(data, widget.data?.sId, () {
-                          AppStorage.setCourseUserStarRating(1);
-                          AppStorage.setCourseSidForStarRating(
-                              widget.data?.sId);
-                          Navigator.of(context).pop();
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.lightGreen,
-                        onPrimary: Colors.white,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 8), // Button padding
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(8), // Button border radius
-                        ),
-                      ),
-                      child: Text('Rate'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          )
-        : Navigator.of(context).pop();
-    return false;
-  }
+  // Future<bool> _onWillPop() async {
+  //   (AppStorage.getCourseUserStarRating() == 0 &&
+  //               AppStorage.getCourseSidForStarRating().isEmpty ||
+  //           AppStorage.getCourseSidForStarRating() != widget.data?.sId)
+  //       ? showDialog(
+  //           context: context,
+  //           builder: (context) {
+  //             return Obx(
+  //               () => AlertDialog(
+  //                 title: Text("Rate this Course"),
+  //                 content: Row(
+  //                   children: List.generate(
+  //                     5,
+  //                     (index) {
+  //                       return IconButton(
+  //                         icon: Icon(
+  //                           index < controller.currentRating.value
+  //                               ? Icons.star
+  //                               : Icons.star_border,
+  //                           color: Colors.amber,
+  //                         ),
+  //                         onPressed: () {
+  //                           controller.currentRating(index + 1);
+  //                         },
+  //                       );
+  //                     },
+  //                   ),
+  //                 ),
+  //                 actions: <Widget>[
+  //                   TextButton(
+  //                     onPressed: () {
+  //                       Navigator.of(context).pop();
+  //                       Navigator.of(context).pop();
+  //                     },
+  //                     child: Text(
+  //                       'Cancel',
+  //                       style: TextStyle(color: AppColors.lightGreen),
+  //                     ),
+  //                   ),
+  //                   ElevatedButton(
+  //                     onPressed: () {
+  //                       Map<String, dynamic> data = {
+  //                         "rating": controller.currentRating.value
+  //                       };
+  //                       controller.courseRatingApi(data, widget.data?.sId, () {
+  //                         AppStorage.setCourseUserStarRating(1);
+  //                         AppStorage.setCourseSidForStarRating(
+  //                             widget.data?.sId);
+  //                         Navigator.of(context).pop();
+  //                       });
+  //                     },
+  //                     style: ElevatedButton.styleFrom(
+  //                       backgroundColor: AppColors.lightGreen,
+  //                       onPrimary: Colors.white,
+  //                       padding: EdgeInsets.symmetric(
+  //                           vertical: 4, horizontal: 8), // Button padding
+  //                       shape: RoundedRectangleBorder(
+  //                         borderRadius:
+  //                             BorderRadius.circular(8), // Button border radius
+  //                       ),
+  //                     ),
+  //                     child: Text('Rate'),
+  //                   ),
+  //                 ],
+  //               ),
+  //             );
+  //           },
+  //         )
+  //       : Navigator.of(context).pop();
+  //   return false;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              if (flickManager != null &&
-                  flickManager.flickVideoManager != null &&
-                  flickManager.flickVideoManager!.isVideoInitialized) ...{
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: ClipRect(
-                    child: OverflowBox(
-                      alignment: Alignment.center,
-                      child: FlickVideoPlayer(flickManager: flickManager),
-                    ),
-                  ),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: ClipRect(
+                child: OverflowBox(
+                  alignment: Alignment.center,
+                  child: FlickVideoPlayer(flickManager: flickManager),
                 ),
-              } else ...{
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: ClipRect(
-                    child: OverflowBox(
-                      alignment: Alignment.center,
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                  ),
-                ),
-              },
+              ),
+            ),
 
-              // SizedBox(
-              //   height: MediaQuery.of(context).size.width * 0.0306,
-              // ),
-              // Slider(
-              //   value: _playbackSpeed,
-              //   min: 0.5,
-              //   max: 2.0,
-              //   divisions: 15,
-              //   label: _playbackSpeed.toStringAsFixed(2),
-              //   onChanged: (double value) {
-              //     _changePlaybackSpeed(value);
-              //   },
-              // ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.0306,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: Get.isDarkMode
-                          ? AppStyles.tsWhiteMedium18
-                          : AppStyles.tsBlackMedium18,
-                    ),
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.width * 0.0306,
+            // ),
+            // Slider(
+            //   value: _playbackSpeed,
+            //   min: 0.5,
+            //   max: 2.0,
+            //   divisions: 15,
+            //   label: _playbackSpeed.toStringAsFixed(2),
+            //   onChanged: (double value) {
+            //     _changePlaybackSpeed(value);
+            //   },
+            // ),
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.0306,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: Get.isDarkMode
+                        ? AppStyles.tsWhiteMedium18
+                        : AppStyles.tsBlackMedium18,
                   ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.0306,
-              ),
-              Expanded(
-                child: DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    children: [
-                      Container(
-                        child: TabBar(
+                ),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.0306,
+            ),
+            Expanded(
+              child: DefaultTabController(
+                length: 2,
+                child: Column(
+                  children: [
+                    Container(
+                      child: TabBar(
+                        controller: tabController,
+                        indicatorColor: AppColors.lightGreen,
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              'Lectures',
+                              style: Theme.of(context).textTheme.tsRegular16,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'More',
+                              style: Theme.of(context).textTheme.tsRegular16,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TabBarView(
                           controller: tabController,
-                          indicatorColor: AppColors.lightGreen,
-                          tabs: [
-                            Tab(
-                              child: Text(
-                                'Lectures',
-                                style: Theme.of(context).textTheme.tsRegular16,
-                                textAlign: TextAlign.center,
-                              ),
+                          children: [
+                            UserCoursesLactures(
+                              widget.data,
+                              (url, title) {
+                                updateVideoUrl(url,
+                                    title); // Call updateVideoUrl function with selected URL
+                              },
                             ),
-                            Tab(
-                              child: Text(
-                                'More',
-                                style: Theme.of(context).textTheme.tsRegular16,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                            UserCoursesOverView(widget.data, flickManager),
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: TabBarView(
-                            controller: tabController,
-                            children: [
-                              UserCoursesLactures(
-                                widget.data,
-                                (url, title) {
-                                  updateVideoUrl(url,
-                                      title); // Call updateVideoUrl function with selected URL
-                                },
-                              ),
-                              UserCoursesOverView(widget.data, flickManager),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

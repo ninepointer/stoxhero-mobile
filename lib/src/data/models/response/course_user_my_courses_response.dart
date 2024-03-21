@@ -46,6 +46,7 @@ class UserMyCoursesData {
   String? level;
   int? lactures;
   List<String>? notes;
+  int? averageRating;
 
   UserMyCoursesData(
       {this.sId,
@@ -62,6 +63,7 @@ class UserMyCoursesData {
       this.rating,
       this.courseDuration,
       this.courseType,
+      this.averageRating,
       this.type,
       this.level,
       this.lactures,
@@ -76,6 +78,7 @@ class UserMyCoursesData {
     discountedPrice = json['discountedPrice'];
     courseImage = json['courseImage'];
     userEnrolled = json['userEnrolled'];
+    averageRating = json['averageRating'];
     if (json['topics'] != null) {
       topics = <UserCoursesTopics>[];
       json['topics'].forEach((v) {
@@ -98,6 +101,7 @@ class UserMyCoursesData {
     data['_id'] = this.sId;
     data['courseName'] = this.courseName;
     data['courseSlug'] = this.slug;
+    data['averageRating'] = this.averageRating;
     data['maxEnrolments'] = this.maxEnrolments;
     data['coursePrice'] = this.coursePrice;
     data['discountedPrice'] = this.discountedPrice;

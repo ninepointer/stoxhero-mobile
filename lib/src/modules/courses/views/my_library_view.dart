@@ -109,10 +109,13 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                     children: [
                                       StarRatingWidget(
                                         starCount: 5,
-                                        rating:
-                                            (data?.rating?.toDouble() ?? 0) > 0
-                                                ? data?.rating?.toDouble() ?? 0
-                                                : 4,
+                                        rating: (data?.averageRating
+                                                        ?.toDouble() ??
+                                                    0) >
+                                                0
+                                            ? data?.averageRating?.toDouble() ??
+                                                0
+                                            : 4,
                                         color: AppColors.lightGreen,
                                         size: 15.0,
                                       ),
@@ -122,7 +125,7 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                                 0.0102,
                                       ),
                                       Text(
-                                          "(${((data?.rating ?? 0) > 0) ? data?.rating ?? 0 : 4})")
+                                          "(${((data?.averageRating ?? 0) > 0) ? data?.averageRating ?? 0 : 4})")
                                     ],
                                   ),
                                 ],

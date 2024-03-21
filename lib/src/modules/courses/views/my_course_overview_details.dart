@@ -198,9 +198,8 @@ class _MyCoursesOverViewDetailsViewState
                             ? AppColors.darkCardBackgroundColor
                             : AppColors.lightCardBackgroundColor),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ...isStudent
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: isStudent
                             ? controller
                                 .userCourseOverview.value.courseBenefits!
                                 .map((value) =>
@@ -209,38 +208,7 @@ class _MyCoursesOverViewDetailsViewState
                             : controller.courseOverview.value.courseBenefits!
                                 .map((value) =>
                                     textItemWidget(value.benefits ?? ''))
-                                .toList(),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.0204,
-                        ),
-                        if ((_countWords(isStudent
-                                    ? controller.userCourseOverview.value
-                                        .courseBenefits!
-                                        .map((value) => value.benefits ?? '')
-                                        .toList()
-                                        .join(' ')
-                                    : controller
-                                        .courseOverview.value.courseBenefits!
-                                        .map((value) => value.benefits ?? '')
-                                        .toList()
-                                        .join(' ')) >
-                                maxWordsToShow) ||
-                            showFullContent)
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                showFullContent = !showFullContent;
-                              });
-                            },
-                            child: Text(
-                              showFullContent ? "Show less" : "Show more",
-                              style: TextStyle(
-                                  color: Colors
-                                      .blue), // Customize button text color
-                            ),
-                          ),
-                      ],
-                    ),
+                                .toList()),
                   ),
                 },
                 SizedBox(
@@ -751,7 +719,7 @@ class _MyCoursesOverViewDetailsViewState
     );
   }
 
-  Widget textItemWidget(String text) {
+  Widget textItemWidget(String str) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -772,9 +740,7 @@ class _MyCoursesOverViewDetailsViewState
         ),
         Flexible(
           child: Text(
-            showFullContent ? _truncateText(text) : text,
-            maxLines: showFullContent ? maxLinesToShow : null,
-            overflow: TextOverflow.ellipsis,
+            str,
             style: Get.isDarkMode
                 ? AppStyles.tsWhiteRegular14
                 : AppStyles.tsBlackRegular14,
@@ -782,9 +748,5 @@ class _MyCoursesOverViewDetailsViewState
         ),
       ],
     );
-  }
-
-  String _truncateText(String text) {
-    return text.length > 1000 ? text.substring(0, 1000) + "..." : text;
   }
 }
