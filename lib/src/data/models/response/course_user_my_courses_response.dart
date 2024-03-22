@@ -2,12 +2,23 @@ class UserMyCoursesResponse {
   String? status;
   String? message;
   List<UserMyCoursesData>? data;
-
-  UserMyCoursesResponse({this.status, this.message, this.data});
+  List<UserMyCoursesData>? workshop;
+  UserMyCoursesResponse({
+    this.status,
+    this.message,
+    this.workshop,
+    this.data,
+  });
 
   UserMyCoursesResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
+    if (json['workshop'] != null) {
+      workshop = <UserMyCoursesData>[];
+      json['workshop'].forEach((v) {
+        workshop!.add(new UserMyCoursesData.fromJson(v));
+      });
+    }
     if (json['data'] != null) {
       data = <UserMyCoursesData>[];
       json['data'].forEach((v) {
@@ -20,6 +31,9 @@ class UserMyCoursesResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
     data['message'] = this.message;
+    if (this.workshop != null) {
+      data['workshop'] = this.workshop!.map((v) => v.toJson()).toList();
+    }
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -47,27 +61,40 @@ class UserMyCoursesData {
   int? lactures;
   List<String>? notes;
   num? averageRating;
+  String? courseOverview;
+  String? courseStartTime;
+  String? courseEndTime;
+  String? registrationStartTime;
+  String? registrationEndTime;
+  String? category;
 
-  UserMyCoursesData(
-      {this.sId,
-      this.courseName,
-      this.slug,
-      this.maxEnrolments,
-      this.coursePrice,
-      this.discountedPrice,
-      this.courseImage,
-      this.userEnrolled,
-      this.topics,
-      this.coursePrgress,
-      this.instructorName,
-      this.rating,
-      this.courseDuration,
-      this.courseType,
-      this.averageRating,
-      this.type,
-      this.level,
-      this.lactures,
-      this.notes});
+  UserMyCoursesData({
+    this.sId,
+    this.courseName,
+    this.slug,
+    this.maxEnrolments,
+    this.coursePrice,
+    this.discountedPrice,
+    this.courseImage,
+    this.userEnrolled,
+    this.topics,
+    this.coursePrgress,
+    this.instructorName,
+    this.rating,
+    this.courseDuration,
+    this.courseType,
+    this.averageRating,
+    this.type,
+    this.level,
+    this.lactures,
+    this.notes,
+    this.courseOverview,
+    this.courseStartTime,
+    this.courseEndTime,
+    this.registrationStartTime,
+    this.category,
+    this.registrationEndTime,
+  });
 
   UserMyCoursesData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -79,6 +106,12 @@ class UserMyCoursesData {
     courseImage = json['courseImage'];
     userEnrolled = json['userEnrolled'];
     averageRating = json['averageRating'];
+    courseOverview = json['courseOverview'];
+    courseStartTime = json['courseStartTime'];
+    courseEndTime = json['courseEndTime'];
+    registrationStartTime = json['registrationStartTime'];
+    registrationEndTime = json['registrationEndTime'];
+    category = json['category'];
     if (json['topics'] != null) {
       topics = <UserCoursesTopics>[];
       json['topics'].forEach((v) {
@@ -107,6 +140,12 @@ class UserMyCoursesData {
     data['discountedPrice'] = this.discountedPrice;
     data['courseImage'] = this.courseImage;
     data['userEnrolled'] = this.userEnrolled;
+    data['courseOverview'] = this.courseOverview;
+    data['courseStartTime'] = this.courseStartTime;
+    data['courseEndTime'] = this.courseEndTime;
+    data['registrationStartTime'] = this.registrationStartTime;
+    data['registrationEndTime'] = this.registrationEndTime;
+    data['category'] = this.category;
     if (this.topics != null) {
       data['topics'] = this.topics!.map((v) => v.toJson()).toList();
     }

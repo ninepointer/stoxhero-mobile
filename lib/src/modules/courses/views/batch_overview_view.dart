@@ -39,6 +39,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
           "${isStudent ? controller.userCourseOverview.value.salesVideo ?? '' : controller.courseOverview.value.salesVideo ?? ""}"))
         ..initialize().then((_) {
           setState(() {});
+          flickManager.flickVideoManager?.videoPlayerController?.pause();
         }),
     );
   }
@@ -1342,7 +1343,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Suggestion"),
+                                Text("Suggest"),
                               ],
                             ),
                           ),
@@ -1392,8 +1393,12 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
 String formatDuration(int minutes) {
   if (minutes >= 60) {
     int hours = minutes ~/ 60;
-    int remainingMinutes = minutes % 60;
-    return '$hours hr : $remainingMinutes min';
+    if (minutes % 60 == 0) {
+      return '$hours hr';
+    } else {
+      int remainingMinutes = minutes % 60;
+      return '$hours hr : $remainingMinutes min';
+    }
   } else {
     return '$minutes min';
   }

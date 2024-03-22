@@ -696,61 +696,31 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   Column(
                     children: [
                       SizedBox(height: 16),
-                      widget.isGstInclude == true
-                          ? CommonFilledButton(
-                              backgroundColor: Get.isDarkMode
-                                  ? AppColors.darkGreen
-                                  : AppColors.lightGreen,
-                              isLoading: controller.isLoadingStatus,
-                              height: 42,
-                              label: 'Proceed',
-                              onPressed: () {
-                                if (isWalletPayment ||
-                                    controller.selectedPaymentValue.value ==
-                                        'gateway') {
-                                  startPaymentTransaction(context);
-                                } else if (walletBalance != null &&
+                      CommonFilledButton(
+                        backgroundColor: Get.isDarkMode
+                            ? AppColors.darkGreen
+                            : AppColors.lightGreen,
+                        isLoading: controller.isLoadingStatus,
+                        height: 42,
+                        label: 'Proceed',
+                        onPressed: isWalletPayment ||
+                                controller.selectedPaymentValue.value ==
+                                    'gateway'
+                            ? () => startPaymentTransaction(context)
+                            : walletBalance != null &&
                                     ((controller.couponCodeSuccessText
                                                     .isNotEmpty ||
                                                 controller
                                                     .isHeroCashAdded.value)
                                             ? amount
                                             : widget.buyItemPrice) >
-                                        walletBalance!) {
-                                  SnackbarHelper.showSnackbar(
-                                      'Low wallet balance!');
-                                } else {
-                                  // If none of the conditions above met, and user is to proceed, then pop the current screen
-                                  courseController.getUserAllCourses();
-                                  Navigator.pop(context);
-                                }
-                              },
-                            )
-                          : CommonFilledButton(
-                              backgroundColor: Get.isDarkMode
-                                  ? AppColors.darkGreen
-                                  : AppColors.lightGreen,
-                              isLoading: controller.isLoadingStatus,
-                              height: 42,
-                              label: 'Proceed',
-                              onPressed: isWalletPayment ||
-                                      controller.selectedPaymentValue.value ==
-                                          'gateway'
-                                  ? () => startPaymentTransaction(context)
-                                  : walletBalance != null &&
-                                          ((controller.couponCodeSuccessText
-                                                          .isNotEmpty ||
-                                                      controller.isHeroCashAdded
-                                                          .value)
-                                                  ? amount
-                                                  : widget.buyItemPrice) >
-                                              walletBalance!
-                                      ? () {
-                                          SnackbarHelper.showSnackbar(
-                                              'Low wallet balance!');
-                                        }
-                                      : widget.onSubmit,
-                            ),
+                                        walletBalance!
+                                ? () {
+                                    SnackbarHelper.showSnackbar(
+                                        'Low wallet balance!');
+                                  }
+                                : widget.onSubmit,
+                      ),
                     ],
                   ),
                 ],

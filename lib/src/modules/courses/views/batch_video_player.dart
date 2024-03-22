@@ -36,6 +36,7 @@ class _CourseVideoViewState extends State<CourseVideoView>
         Uri.parse(widget.data?.topics?.first.subtopics?.first.videoUrl ?? ''),
       )..initialize().then((_) {
           setState(() {});
+          flickManager.flickVideoManager?.videoPlayerController?.pause();
         }),
     );
   }

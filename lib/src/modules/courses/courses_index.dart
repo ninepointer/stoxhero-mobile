@@ -22,3 +22,4 @@ export 'views/user_course_resources_view.dart';
 export 'views/user_course_notes_view.dart';
 export 'views/workshop_view.dart';
 export 'widgets/course_workshop_widget.dart';
+export 'widgets/workshop_batch_name_widget.dart';

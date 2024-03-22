@@ -148,6 +148,7 @@ class InfluencerCourseData {
   String? level;
   num? courseDurationInMinutes;
   bool? isPaid;
+
   InfluencerCourseData(
       {this.sId,
       this.courseName,

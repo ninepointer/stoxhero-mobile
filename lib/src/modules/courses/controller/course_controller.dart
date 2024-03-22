@@ -18,15 +18,20 @@ class CourseController extends BaseController<CourseRespository> {
   final batchStartDateTextController = TextEditingController();
 
   final publishInflunceCourseList = <InfluencerCourseData>[].obs;
+  final publishInflunceWorkshopList = <InfluencerCourseData>[].obs;
   final unPublishInflunceCourseList = <InfluencerCourseData>[].obs;
+  final unPublishInflunceWorkshopList = <InfluencerCourseData>[].obs;
   final pendingadminapprovalInflunceCourseList = <InfluencerCourseData>[].obs;
+  final pendingadminapprovalInflunceWorkshopList = <InfluencerCourseData>[].obs;
   final awaitingapprovalInflunceCourseList = <InfluencerCourseData>[].obs;
+  final awaitingapprovalInflunceWorkshopList = <InfluencerCourseData>[].obs;
   final courseOverview = CourseOverViewData().obs;
   final userCourseOverview = CourseOverViewData().obs;
   final suggestionTextController = TextEditingController();
   final userAllCourses = <InfluencerCourseData>[].obs;
   final userAllWorkshops = <InfluencerCourseData>[].obs;
   final userMyCourses = <UserMyCoursesData>[].obs;
+  final userMyWorkshops = <UserMyCoursesData>[].obs;
   final currentRating = 0.obs;
   final videoapi = ''.obs;
 
@@ -55,6 +60,12 @@ class CourseController extends BaseController<CourseRespository> {
 
   void loadData() async {
     loadUserDetails();
+    // await getInfluencerAwaitingapprovalCourseDetails();
+    // await getInfluencerPublishCourseDetails();
+    // await getInfluencerUnpublishCourseDetails();
+    // await getInfluencerPendingadminapprovalCourseDetails();
+    // await getUserAllCourses();
+    // await getUserMyCoursesDetails();
   }
 
   void showDateRangePicker(BuildContext context,
@@ -106,10 +117,12 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getInfluencerPublishCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          if (isPagination == false) {
-            publishInflunceCourseList.clear();
-          }
+          // if (isPagination == true) {
+          publishInflunceCourseList.clear();
+          publishInflunceWorkshopList.clear();
+          //  }
           publishInflunceCourseList.addAll(response.data?.data ?? []);
+          publishInflunceWorkshopList.addAll(response.data?.workshop ?? []);
           totalItems(response.data?.count);
           itemsPerPage(10);
           int remainingItem =
@@ -143,10 +156,12 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getInfluencerUnpublishCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          if (isPagination == false) {
-            unPublishInflunceCourseList.clear();
-          }
+          //      if (isPagination == false) {
+          unPublishInflunceCourseList.clear();
+          unPublishInflunceWorkshopList.clear();
+          //     }
           unPublishInflunceCourseList.addAll(response.data?.data ?? []);
+          unPublishInflunceWorkshopList.addAll(response.data?.workshop ?? []);
           totalItems(response.data?.count);
           itemsPerPage(10);
           int remainingItem = (response.data?.count ?? 0) -
@@ -180,11 +195,14 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getInfluencerPendingAdminApprovalCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          if (isPagination == false) {
-            pendingadminapprovalInflunceCourseList.clear();
-          }
+          //    if (isPagination == false) {
+          pendingadminapprovalInflunceCourseList.clear();
+          pendingadminapprovalInflunceWorkshopList.clear();
+          //   }
           pendingadminapprovalInflunceCourseList
               .addAll(response.data?.data ?? []);
+          pendingadminapprovalInflunceWorkshopList
+              .addAll(response.data?.workshop ?? []);
           totalItems(response.data?.count);
           itemsPerPage(10);
           int remainingItem = (response.data?.count ?? 0) -
@@ -219,11 +237,15 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getInfluencerAwaitingApprovalCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          if (isPagination == false) {
-            awaitingapprovalInflunceCourseList.clear();
-          }
+          //   if (isPagination == false) {
+          awaitingapprovalInflunceCourseList.clear();
+          awaitingapprovalInflunceWorkshopList.clear();
+          //  }
 
           awaitingapprovalInflunceCourseList.addAll(response.data?.data ?? []);
+          awaitingapprovalInflunceWorkshopList
+              .addAll(response.data?.workshop ?? []);
+
           totalItems(response.data?.count);
           itemsPerPage(10);
           int remainingItem = (response.data?.count ?? 0) -
@@ -306,22 +328,6 @@ class CourseController extends BaseController<CourseRespository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userAllCourses(response.data?.data ?? []);
-        }
-      } else {
-        SnackbarHelper.showSnackbar(response.error?.message);
-      }
-    } catch (e) {
-      log(e.toString());
-      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
-    }
-  }
-
-  Future getUserAllWorkshops() async {
-    try {
-      final RepoResponse<InfluencerCourseResponse> response =
-          await repository.getUserAllCourses();
-      if (response.data != null) {
-        if (response.data?.status?.toLowerCase() == "success") {
           userAllWorkshops(response.data?.workshop ?? []);
         }
       } else {
@@ -359,6 +365,7 @@ class CourseController extends BaseController<CourseRespository> {
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
           userMyCourses(response.data?.data ?? []);
+          userMyWorkshops(response.data?.workshop ?? []);
         }
       } else {
         SnackbarHelper.showSnackbar(response.error?.message);
