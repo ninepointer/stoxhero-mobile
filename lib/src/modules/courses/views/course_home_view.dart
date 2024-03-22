@@ -1,9 +1,9 @@
-import 'package:carousel_slider/carousel_slider.dart';
+//import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
 bool isStudent =
-    AppStorage.getUserDetails().role?.roleName == "Influencer" ? false : true;
+    AppStorage.getUserDetails().role?.roleName == "Influencer" ? true : false;
 
 class CoursesHomeView extends StatefulWidget {
   const CoursesHomeView({super.key});
