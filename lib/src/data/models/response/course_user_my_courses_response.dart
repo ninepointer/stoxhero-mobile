@@ -46,7 +46,7 @@ class UserMyCoursesData {
   String? level;
   int? lactures;
   List<String>? notes;
-  int? averageRating;
+  num? averageRating;
 
   UserMyCoursesData(
       {this.sId,

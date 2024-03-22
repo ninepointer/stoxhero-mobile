@@ -52,7 +52,7 @@ class _CourseVideoViewState extends State<CourseVideoView>
       Uri.parse(url),
     ));
     setState(() {
-      title = newTitle; // Update video title
+      title = newTitle;
     });
   }
 
@@ -142,6 +142,9 @@ class _CourseVideoViewState extends State<CourseVideoView>
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.0408,
+            ),
             AspectRatio(
               aspectRatio: 16 / 9,
               child: ClipRect(

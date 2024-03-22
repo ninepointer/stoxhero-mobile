@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stoxhero/src/app/app.dart';
 
 bool isStudent =
-    AppStorage.getUserDetails().role?.roleName == "Influencer" ? true : false;
+    AppStorage.getUserDetails().role?.roleName == "Influencer" ? false : true;
 
 class CoursesHomeView extends StatefulWidget {
   const CoursesHomeView({super.key});
@@ -63,48 +63,48 @@ class _CoursesHomeViewState extends State<CoursesHomeView>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (isStudent)
-                      Container(
-                        height: MediaQuery.of(context).size.width * 0.309,
-                        width: MediaQuery.of(context).size.width,
-                        child: CarouselSlider.builder(
-                            itemCount: 1,
-                            itemBuilder: (context, int index, _) {
-                              return GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.309,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.grey.withOpacity(.1),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.asset(
-                                      AppImages.love,
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.309,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            options: CarouselOptions(
-                              viewportFraction: 1,
-                              autoPlay: true,
-                              enlargeCenterPage: true,
-                              autoPlayInterval: const Duration(seconds: 6),
-                            )),
-                      ),
-                    if (isStudent)
-                      SizedBox(
-                        height: MediaQuery.of(context).size.width * 0.0306,
-                      ),
+                    // if (isStudent)
+                    //   Container(
+                    //     height: MediaQuery.of(context).size.width * 0.309,
+                    //     width: MediaQuery.of(context).size.width,
+                    //     child: CarouselSlider.builder(
+                    //         itemCount: 1,
+                    //         itemBuilder: (context, int index, _) {
+                    //           return GestureDetector(
+                    //             onTap: () {},
+                    //             child: Container(
+                    //               width: MediaQuery.of(context).size.width,
+                    //               height:
+                    //                   MediaQuery.of(context).size.width * 0.309,
+                    //               decoration: BoxDecoration(
+                    //                 color: AppColors.grey.withOpacity(.1),
+                    //                 borderRadius: BorderRadius.circular(8),
+                    //               ),
+                    //               child: ClipRRect(
+                    //                 borderRadius: BorderRadius.circular(8),
+                    //                 child: Image.asset(
+                    //                   AppImages.love,
+                    //                   width: MediaQuery.of(context).size.width,
+                    //                   height:
+                    //                       MediaQuery.of(context).size.width *
+                    //                           0.309,
+                    //                   fit: BoxFit.fill,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           );
+                    //         },
+                    //         options: CarouselOptions(
+                    //           viewportFraction: 1,
+                    //           autoPlay: true,
+                    //           enlargeCenterPage: true,
+                    //           autoPlayInterval: const Duration(seconds: 6),
+                    //         )),
+                    //   ),
+                    // if (isStudent)
+                    //   SizedBox(
+                    //     height: MediaQuery.of(context).size.width * 0.0306,
+                    //   ),
                     if (isStudent) ...{
                       Expanded(
                         child: DefaultTabController(
