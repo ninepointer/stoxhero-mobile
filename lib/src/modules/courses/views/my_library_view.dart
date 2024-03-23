@@ -24,9 +24,15 @@ class _MyLibraryViewState extends State<MyLibraryView> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        if (widget.workshopData != null && widget.workshopData!.isNotEmpty)
-          _buildSection("Workshops", widget.workshopData),
-        _buildCourseSection("Courses", widget.data),
+        if ((widget.workshopData == null || widget.workshopData!.isEmpty) &&
+            (widget.data == null || widget.data!.isEmpty))
+          NoDataFound()
+        else ...{
+          if (widget.workshopData != null && widget.workshopData!.isNotEmpty)
+            _buildSection("Workshops", widget.workshopData),
+          if (widget.data != null && widget.data!.isNotEmpty)
+            _buildCourseSection("Courses", widget.data),
+        }
       ],
     );
   }
