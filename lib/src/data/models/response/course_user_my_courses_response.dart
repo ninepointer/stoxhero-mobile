@@ -67,7 +67,8 @@ class UserMyCoursesData {
   String? registrationStartTime;
   String? registrationEndTime;
   String? category;
-
+  String? meetLink;
+  String? instructorImage;
   UserMyCoursesData({
     this.sId,
     this.courseName,
@@ -83,8 +84,10 @@ class UserMyCoursesData {
     this.rating,
     this.courseDuration,
     this.courseType,
+    this.instructorImage,
     this.averageRating,
     this.type,
+    this.meetLink,
     this.level,
     this.lactures,
     this.notes,
@@ -103,12 +106,14 @@ class UserMyCoursesData {
     maxEnrolments = json['maxEnrolments'];
     coursePrice = json['coursePrice'];
     discountedPrice = json['discountedPrice'];
+    meetLink = json['meetLink'];
     courseImage = json['courseImage'];
     userEnrolled = json['userEnrolled'];
     averageRating = json['averageRating'];
     courseOverview = json['courseOverview'];
     courseStartTime = json['courseStartTime'];
     courseEndTime = json['courseEndTime'];
+    instructorImage = json['instructorImage'];
     registrationStartTime = json['registrationStartTime'];
     registrationEndTime = json['registrationEndTime'];
     category = json['category'];
@@ -136,7 +141,9 @@ class UserMyCoursesData {
     data['courseSlug'] = this.slug;
     data['averageRating'] = this.averageRating;
     data['maxEnrolments'] = this.maxEnrolments;
+    data['meetLink'] = this.meetLink;
     data['coursePrice'] = this.coursePrice;
+    data['instructorImage'] = this.instructorImage;
     data['discountedPrice'] = this.discountedPrice;
     data['courseImage'] = this.courseImage;
     data['userEnrolled'] = this.userEnrolled;

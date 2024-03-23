@@ -208,37 +208,45 @@ class WorkshopBatchNameWidget extends GetView<CourseController> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0102,
                       ),
-                      (courseData?.coursePrice ?? 0) !=
-                              (courseData?.discountedPrice ?? 0)
-                          ? Row(
-                              children: [
-                                Text(
-                                  "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
-                                  style: TextStyle(
-                                      decoration: TextDecoration.lineThrough,
-                                      decorationColor: AppColors.lightGreen,
-                                      decorationThickness: 3,
-                                      fontSize: 18,
-                                      color: AppColors.lightGreen),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.0102,
-                                ),
-                                Text(
-                                  "${FormatHelper.formatNumbers(courseData?.discountedPrice, decimal: 0)}",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: AppColors
-                                          .lightGreen), // Adjust the font size as needed
-                                ),
-                              ],
-                            )
-                          : Text(
-                              "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
-                              style: TextStyle(
-                                  fontSize: 18, color: AppColors.lightGreen),
-                            ),
+                      if (courseData?.discountedPrice == 0) ...{
+                        Text(
+                          "Free",
+                          style: TextStyle(
+                              fontSize: 18, color: AppColors.lightGreen),
+                        ),
+                      } else ...{
+                        (courseData?.coursePrice ?? 0) !=
+                                (courseData?.discountedPrice ?? 0)
+                            ? Row(
+                                children: [
+                                  Text(
+                                    "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
+                                    style: TextStyle(
+                                        decoration: TextDecoration.lineThrough,
+                                        decorationColor: AppColors.lightGreen,
+                                        decorationThickness: 3,
+                                        fontSize: 18,
+                                        color: AppColors.lightGreen),
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.0102,
+                                  ),
+                                  Text(
+                                    "${FormatHelper.formatNumbers(courseData?.discountedPrice, decimal: 0)}",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: AppColors
+                                            .lightGreen), // Adjust the font size as needed
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
+                                style: TextStyle(
+                                    fontSize: 18, color: AppColors.lightGreen),
+                              ),
+                      }
                     ],
                   ),
                 ],

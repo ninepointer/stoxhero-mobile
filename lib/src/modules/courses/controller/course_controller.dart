@@ -117,10 +117,10 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getInfluencerPublishCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          // if (isPagination == true) {
-          publishInflunceCourseList.clear();
-          publishInflunceWorkshopList.clear();
-          //  }
+          if (isPagination == false) {
+            publishInflunceCourseList.clear();
+            publishInflunceWorkshopList.clear();
+          }
           publishInflunceCourseList.addAll(response.data?.data ?? []);
           publishInflunceWorkshopList.addAll(response.data?.workshop ?? []);
           totalItems(response.data?.count);
@@ -156,10 +156,10 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getInfluencerUnpublishCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          //      if (isPagination == false) {
-          unPublishInflunceCourseList.clear();
-          unPublishInflunceWorkshopList.clear();
-          //     }
+          if (isPagination == false) {
+            unPublishInflunceCourseList.clear();
+            unPublishInflunceWorkshopList.clear();
+          }
           unPublishInflunceCourseList.addAll(response.data?.data ?? []);
           unPublishInflunceWorkshopList.addAll(response.data?.workshop ?? []);
           totalItems(response.data?.count);
@@ -195,10 +195,10 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getInfluencerPendingAdminApprovalCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          //    if (isPagination == false) {
-          pendingadminapprovalInflunceCourseList.clear();
-          pendingadminapprovalInflunceWorkshopList.clear();
-          //   }
+          if (isPagination == false) {
+            pendingadminapprovalInflunceCourseList.clear();
+            pendingadminapprovalInflunceWorkshopList.clear();
+          }
           pendingadminapprovalInflunceCourseList
               .addAll(response.data?.data ?? []);
           pendingadminapprovalInflunceWorkshopList
@@ -230,17 +230,17 @@ class CourseController extends BaseController<CourseRespository> {
       print("cuuu ${currentPage.value} ${itemsPerPage.value}");
       Map<String, dynamic> query = {
         "skip": skip,
-        "limit": itemsPerPage.value,
+        "limit": 10,
         //"limit": 10,
       };
       final RepoResponse<InfluencerCourseResponse> response =
           await repository.getInfluencerAwaitingApprovalCourse(query);
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
-          //   if (isPagination == false) {
-          awaitingapprovalInflunceCourseList.clear();
-          awaitingapprovalInflunceWorkshopList.clear();
-          //  }
+          if (isPagination == false) {
+            awaitingapprovalInflunceCourseList.clear();
+            awaitingapprovalInflunceWorkshopList.clear();
+          }
 
           awaitingapprovalInflunceCourseList.addAll(response.data?.data ?? []);
           awaitingapprovalInflunceWorkshopList
@@ -364,6 +364,8 @@ class CourseController extends BaseController<CourseRespository> {
           await repository.getUserMyCourses();
       if (response.data != null) {
         if (response.data?.status?.toLowerCase() == "success") {
+          userMyCourses.clear();
+          userMyWorkshops.clear();
           userMyCourses(response.data?.data ?? []);
           userMyWorkshops(response.data?.workshop ?? []);
         }

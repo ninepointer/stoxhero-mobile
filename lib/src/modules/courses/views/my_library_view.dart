@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../../app/app.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyLibraryView extends StatefulWidget {
   final List<UserMyCoursesData>? data;
@@ -18,22 +19,25 @@ class _MyLibraryViewState extends State<MyLibraryView> {
     super.initState();
     controller = Get.find<CourseController>();
     controller.getUserMyCoursesDetails();
+    controller.getUserMyCoursesDetails();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        if ((widget.workshopData == null || widget.workshopData!.isEmpty) &&
-            (widget.data == null || widget.data!.isEmpty))
-          NoDataFound()
-        else ...{
-          if (widget.workshopData != null && widget.workshopData!.isNotEmpty)
-            _buildSection("Workshops", widget.workshopData),
-          if (widget.data != null && widget.data!.isNotEmpty)
-            _buildCourseSection("Courses", widget.data),
-        }
-      ],
+    return Obx(
+      () => ListView(
+        children: [
+          if ((widget.workshopData == null || widget.workshopData!.isEmpty) &&
+              (widget.data == null || widget.data!.isEmpty))
+            NoDataFound()
+          else ...{
+            if (widget.workshopData != null && widget.workshopData!.isNotEmpty)
+              _buildSection("Workshops", widget.workshopData),
+            if (widget.data != null && widget.data!.isNotEmpty)
+              _buildCourseSection("Courses", widget.data),
+          }
+        ],
+      ),
     );
   }
 
@@ -61,14 +65,23 @@ class _MyLibraryViewState extends State<MyLibraryView> {
             DateTime courseStartTime =
                 DateTime.parse((courseData.courseStartTime ?? ''));
             return GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (DateTime.now().isBefore(courseStartTime)) {
                     SnackbarHelper.showSnackbar(
                       "Workshop will start on ${FormatHelper.formatDateTimeOnlyToIST(courseData.courseStartTime)}",
                     );
                   } else {
-                    // Navigate to CourseVideoView page
-                    Get.to(() => CourseVideoView(data: courseData));
+                    final googleMeetUrl = '${courseData.meetLink ?? ''}';
+
+                    // Check if the URL can be launched
+                    if (await canLaunch(googleMeetUrl)) {
+                      // Launch the URL
+                      await launch(googleMeetUrl);
+                    } else {
+                      // Handle error if URL cannot be launched
+                      SnackbarHelper.showSnackbar(
+                          'Could not launch Google Meet');
+                    }
                   }
                 },
                 child: Container(
@@ -151,28 +164,6 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                           MediaQuery.of(context).size.width *
                                               0.0102,
                                     ),
-                                    // Row(
-                                    //   children: [
-                                    //     StarRatingWidget(
-                                    //       starCount: 5,
-                                    //       rating: (courseData?.averageRating?.toDouble() ??
-                                    //                   0) >
-                                    //               0
-                                    //           ? courseData?.averageRating?.toDouble() ?? 0
-                                    //           : 4,
-                                    //       color: AppColors.lightGreen,
-                                    //       size: 15.0,
-                                    //     ),
-                                    //     SizedBox(
-                                    //       width: MediaQuery.of(context).size.width * 0.0102,
-                                    //     ),
-                                    //     Text(
-                                    //         "(${((courseData?.averageRating ?? 0) > 0) ? courseData?.averageRating ?? 0 : 4})")
-                                    //   ],
-                                    // ),
-                                    // SizedBox(
-                                    //   height: MediaQuery.of(context).size.width * 0.0102,
-                                    // ),
                                     Row(
                                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
@@ -282,42 +273,52 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                                     width: MediaQuery.of(context).size.width *
                                         0.0102,
                                   ),
-                                  (courseData?.coursePrice ?? 0) !=
-                                          (courseData?.discountedPrice ?? 0)
-                                      ? Row(
-                                          children: [
-                                            Text(
-                                              "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
-                                              style: TextStyle(
-                                                  decoration: TextDecoration
-                                                      .lineThrough,
-                                                  decorationColor:
-                                                      AppColors.lightGreen,
-                                                  decorationThickness: 3,
-                                                  fontSize: 18,
-                                                  color: AppColors.lightGreen),
-                                            ),
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.0102,
-                                            ),
-                                            Text(
-                                              "${FormatHelper.formatNumbers(courseData?.discountedPrice, decimal: 0)}",
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  color: AppColors
-                                                      .lightGreen), // Adjust the font size as needed
-                                            ),
-                                          ],
-                                        )
-                                      : Text(
-                                          "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: AppColors.lightGreen),
-                                        ),
+                                  if (courseData?.discountedPrice == 0) ...{
+                                    Text(
+                                      "Free",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: AppColors.lightGreen),
+                                    ),
+                                  } else ...{
+                                    (courseData?.coursePrice ?? 0) !=
+                                            (courseData?.discountedPrice ?? 0)
+                                        ? Row(
+                                            children: [
+                                              Text(
+                                                "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
+                                                style: TextStyle(
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    decorationColor:
+                                                        AppColors.lightGreen,
+                                                    decorationThickness: 3,
+                                                    fontSize: 18,
+                                                    color:
+                                                        AppColors.lightGreen),
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.0102,
+                                              ),
+                                              Text(
+                                                "${FormatHelper.formatNumbers(courseData?.discountedPrice, decimal: 0)}",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: AppColors
+                                                        .lightGreen), // Adjust the font size as needed
+                                              ),
+                                            ],
+                                          )
+                                        : Text(
+                                            "${FormatHelper.formatNumbers(courseData?.coursePrice, decimal: 0)}",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: AppColors.lightGreen),
+                                          ),
+                                  }
                                 ],
                               ),
                             ],

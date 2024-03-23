@@ -1214,9 +1214,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              controller.getInfluncerApprovalDetails(
+                            onPressed: () async {
+                              await controller.getInfluncerApprovalDetails(
                                   controller.courseOverview.value.sId ?? '');
+                              Get.to(() => CoursesHomeView());
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.lightGreen,

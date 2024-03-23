@@ -138,6 +138,7 @@ class InfluencerCourseData {
   String? courseStartTime;
   int? maxEnrolments;
   String? courseImage;
+  String? instructorImage;
   int? userEnrolled;
   num? coursePrice;
   num? discountedPrice;
@@ -148,7 +149,8 @@ class InfluencerCourseData {
   String? level;
   num? courseDurationInMinutes;
   bool? isPaid;
-
+  String? meetLink;
+  String? courseLanguages;
   InfluencerCourseData(
       {this.sId,
       this.courseName,
@@ -156,23 +158,29 @@ class InfluencerCourseData {
       this.maxEnrolments,
       this.courseImage,
       this.userEnrolled,
+      this.instructorImage,
       this.coursePrice,
       this.discountedPrice,
+      this.meetLink,
       this.instructorName,
       this.averageRating,
       this.topics,
       this.lectures,
+      this.courseLanguages,
       this.level,
       this.courseDurationInMinutes,
       this.isPaid});
 
   InfluencerCourseData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
+    meetLink = json['meetLink'];
     courseName = json['courseName'];
     courseStartTime = json['courseStartTime'];
     maxEnrolments = json['maxEnrolments'];
     courseImage = json['courseImage'];
+    instructorImage = json['instructorImage'];
     userEnrolled = json['userEnrolled'];
+    courseLanguages = json['courseLanguages'];
     coursePrice = json['coursePrice'] != null ? json['coursePrice'] : null;
     discountedPrice =
         json['discountedPrice'] != null ? json['discountedPrice'] : null;
@@ -199,9 +207,12 @@ class InfluencerCourseData {
     data['courseStartTime'] = this.courseStartTime;
     data['maxEnrolments'] = this.maxEnrolments;
     data['courseImage'] = this.courseImage;
+    data['meetLink'] = meetLink;
     data['userEnrolled'] = this.userEnrolled;
     data['instructorName'] = this.instructorName;
+    data['instructorImage'] = this.instructorImage;
     data['averageRating'] = this.averageRating;
+    data['courseLanguages'] = this.courseLanguages;
     data['lectures'] = this.lectures;
     data['level'] = this.level;
     data['courseDurationInMinutes'] = this.courseDurationInMinutes;

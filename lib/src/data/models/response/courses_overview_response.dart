@@ -345,7 +345,7 @@ class Enrollments {
   int? fee;
   int? actualPrice;
   String? enrolledOn;
-  int? bonusRedemption;
+  num? bonusRedemption;
 
   Enrollments(
       {this.userId,
