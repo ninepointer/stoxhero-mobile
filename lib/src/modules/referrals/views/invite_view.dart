@@ -88,7 +88,7 @@ class InviteView extends GetView<ReferralsController> {
                         ),
                         ReferralDetailsCardTile(
                           label:
-                              'You get ${FormatHelper.formatNumbers(controller.activeReferrals.value?.rewardPerReferral, decimal: 0)} for each referral in your StoxHero Wallet.',
+                              'You get ${FormatHelper.formatNumbers(controller.activeReferrals.value?.rewardPerReferral, decimal: 0)} for each referral in your StoxHero Wallet upto ${controller.activeReferrals.value?.maxReferralsPayoutCap} referrals.',
                           iconData: Icons.share,
                         ),
                         SizedBox(

@@ -58,6 +58,7 @@ class ActiveReferral {
   String? description;
   String? referrralProgramId;
   refrralSignupBonus? referralSignupBonus;
+  num? maxReferralsPayoutCap;
 
   ActiveReferral({
     this.sId,
@@ -67,6 +68,7 @@ class ActiveReferral {
     this.currency,
     this.description,
     this.referrralProgramId,
+    this.maxReferralsPayoutCap
   });
 
   ActiveReferral.fromJson(Map<String, dynamic> json) {
@@ -79,6 +81,7 @@ class ActiveReferral {
     currency = json['currency'];
     description = json['description'];
     referrralProgramId = json['referrralProgramId'];
+    maxReferralsPayoutCap = json['maxReferralsPayoutCap'];
     // referralSignupBonus = json['referralSignupBonus'];
   }
 
@@ -93,6 +96,7 @@ class ActiveReferral {
     data['currency'] = this.currency;
     data['description'] = this.description;
     data['referrralProgramId'] = this.referrralProgramId;
+    data['maxReferralsPayoutCap'] = this.maxReferralsPayoutCap;
     // data['referralSignupBonus'] = this.referralSignupBonus;
     return data;
   }
