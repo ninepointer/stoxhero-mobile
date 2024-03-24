@@ -27,6 +27,9 @@ class BatchAllCoursesView extends GetView<CourseController> {
           child: ListView(
             controller: _scrollController,
             children: [
+              if ((workshopData == null || workshopData!.isEmpty) &&
+                  (courseData == null || courseData!.isEmpty))
+                NoDataFound(),
               if (workshopData != null && workshopData!.isNotEmpty) ...[
                 // Display Workshop title
                 Padding(
@@ -81,32 +84,31 @@ class BatchAllCoursesView extends GetView<CourseController> {
                     )
                   : Container(),
               // Display list of courses
-              courseData!.length == 0
-                  ? NoDataFound()
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: courseData!.length,
-                      itemBuilder: (context, index) {
-                        var courseDetails = courseData![index];
-                        return isStudent
-                            ? GestureDetector(
-                                onTap: () {
-                                  controller.getUserCourseOverviewDetails(
-                                      courseDetails.sId ?? '');
-                                  Get.to(() => BatchDetailsView(courseDetails));
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(bottom: 8, top: 8),
-                                  child: CourseBatchNameWidget(courseDetails),
-                                ),
-                              )
-                            : Container(
-                                margin: EdgeInsets.only(bottom: 8, top: 8),
-                                child: CourseBatchNameWidget(courseDetails),
-                              );
-                      },
-                    ),
+
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: courseData!.length,
+                itemBuilder: (context, index) {
+                  var courseDetails = courseData![index];
+                  return isStudent
+                      ? GestureDetector(
+                          onTap: () {
+                            controller.getUserCourseOverviewDetails(
+                                courseDetails.sId ?? '');
+                            Get.to(() => BatchDetailsView(courseDetails));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 8, top: 8),
+                            child: CourseBatchNameWidget(courseDetails),
+                          ),
+                        )
+                      : Container(
+                          margin: EdgeInsets.only(bottom: 8, top: 8),
+                          child: CourseBatchNameWidget(courseDetails),
+                        );
+                },
+              ),
             ],
           ),
         );

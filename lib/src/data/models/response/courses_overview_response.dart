@@ -54,6 +54,7 @@ class CourseOverViewData {
   List<String>? suggestChanges;
   List<Ratings>? ratings;
   num? averageRating;
+  String? meetLink;
 
   CourseOverViewData(
       {this.sId,
@@ -66,6 +67,7 @@ class CourseOverViewData {
       this.courseDescription,
       this.courseStartTime,
       this.courseEndTime,
+      this.meetLink,
       this.registrationStartTime,
       this.registrationEndTime,
       this.maxEnrolments,
@@ -98,6 +100,7 @@ class CourseOverViewData {
     courseDurationInMinutes = json['courseDurationInMinutes'];
     courseOverview = json['courseOverview'];
     courseDescription = json['courseDescription'];
+    meetLink = json['meetLink'];
     courseEndTime = json['courseEndTime'];
     courseStartTime = json['courseStartTime'];
     registrationStartTime = json['registrationStartTime'];
@@ -168,6 +171,7 @@ class CourseOverViewData {
     data['courseLanguages'] = this.courseLanguages;
     data['courseDurationInMinutes'] = this.courseDurationInMinutes;
     data['courseOverview'] = this.courseOverview;
+    data['meetLink'] = this.meetLink;
     data['courseDescription'] = this.courseDescription;
     data['courseStartTime'] = this.courseStartTime;
     data['courseEndTime'] = this.courseEndTime;

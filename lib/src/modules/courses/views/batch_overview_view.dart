@@ -7,6 +7,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BatchOverViewDetailsView extends StatefulWidget {
   final InfluencerCourseData? courseData;
@@ -263,10 +264,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         ),
                         Row(
                           children: [
-                            Text('Course Category: ',
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteMedium12
-                                    : AppStyles.tsBlackMedium12),
+                            controller.userCourseOverview.value.type ==
+                                    "Workshop"
+                                ? Text('Workshop Category: ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12)
+                                : Text('Course Category: ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12),
                             Text(
                               "${isStudent ? controller.userCourseOverview.value.category ?? '' : controller.courseOverview.value.category ?? ''}",
                               style: Get.isDarkMode
@@ -291,10 +298,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         ),
                         Row(
                           children: [
-                            Text('Course Type: ',
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteMedium12
-                                    : AppStyles.tsBlackMedium12),
+                            controller.userCourseOverview.value.type ==
+                                    "Workshop"
+                                ? Text('Workshop Type: ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12)
+                                : Text('Course Type: ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12),
                             Text(
                               "${isStudent ? controller.userCourseOverview.value.courseType : controller.courseOverview.value.courseType}",
                               style: Get.isDarkMode
@@ -305,10 +318,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         ),
                         Row(
                           children: [
-                            Text('Course duration:',
-                                style: Get.isDarkMode
-                                    ? AppStyles.tsWhiteMedium12
-                                    : AppStyles.tsBlackMedium12),
+                            controller.userCourseOverview.value.type ==
+                                    "Workshop"
+                                ? Text('Workshop duration:',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12)
+                                : Text('Course duration:',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12),
                             Text(
                               " ${formatDuration(isStudent ? controller.userCourseOverview.value.courseDurationInMinutes ?? 0 : controller.courseOverview.value.courseDurationInMinutes ?? 0)} ",
                               style: Get.isDarkMode
@@ -355,10 +374,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               ),
                               Row(
                                 children: [
-                                  Text('Course Starts: ',
-                                      style: Get.isDarkMode
-                                          ? AppStyles.tsWhiteMedium12
-                                          : AppStyles.tsBlackMedium12),
+                                  controller.userCourseOverview.value.type ==
+                                          "Workshop"
+                                      ? Text('Workshop Starts: ',
+                                          style: Get.isDarkMode
+                                              ? AppStyles.tsWhiteMedium12
+                                              : AppStyles.tsBlackMedium12)
+                                      : Text('Course Starts: ',
+                                          style: Get.isDarkMode
+                                              ? AppStyles.tsWhiteMedium12
+                                              : AppStyles.tsBlackMedium12),
                                   Text(
                                     "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseStartTime : controller.courseOverview.value.courseStartTime)}",
                                     style: Get.isDarkMode
@@ -369,10 +394,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               ),
                               Row(
                                 children: [
-                                  Text("Course End: ",
-                                      style: Get.isDarkMode
-                                          ? AppStyles.tsWhiteMedium12
-                                          : AppStyles.tsBlackMedium12),
+                                  controller.userCourseOverview.value.type ==
+                                          "Workshop"
+                                      ? Text("Workshop End: ",
+                                          style: Get.isDarkMode
+                                              ? AppStyles.tsWhiteMedium12
+                                              : AppStyles.tsBlackMedium12)
+                                      : Text("Course End: ",
+                                          style: Get.isDarkMode
+                                              ? AppStyles.tsWhiteMedium12
+                                              : AppStyles.tsBlackMedium12),
                                   Text(
                                     "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseEndTime : controller.courseOverview.value.courseEndTime)}",
                                     style: Get.isDarkMode
@@ -387,10 +418,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         isStudent == false
                             ? Row(
                                 children: [
-                                  Text('Course Price: ',
-                                      style: Get.isDarkMode
-                                          ? AppStyles.tsWhiteMedium12
-                                          : AppStyles.tsBlackMedium12),
+                                  controller.userCourseOverview.value.type ==
+                                          "Workshop"
+                                      ? Text('Workshop Price: ',
+                                          style: Get.isDarkMode
+                                              ? AppStyles.tsWhiteMedium12
+                                              : AppStyles.tsBlackMedium12)
+                                      : Text('Course Price: ',
+                                          style: Get.isDarkMode
+                                              ? AppStyles.tsWhiteMedium12
+                                              : AppStyles.tsBlackMedium12),
                                   Text(
                                     "${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
                                     style: Get.isDarkMode
@@ -442,12 +479,20 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               child: RichText(
                                 text: TextSpan(
                                   children: [
-                                    TextSpan(
-                                      text: "Course Overview: ",
-                                      style: Get.isDarkMode
-                                          ? AppStyles.tsWhiteMedium12
-                                          : AppStyles.tsBlackMedium12,
-                                    ),
+                                    controller.userCourseOverview.value.type ==
+                                            "Workshop"
+                                        ? TextSpan(
+                                            text: "Workshop Overview: ",
+                                            style: Get.isDarkMode
+                                                ? AppStyles.tsWhiteMedium12
+                                                : AppStyles.tsBlackMedium12,
+                                          )
+                                        : TextSpan(
+                                            text: "Course Overview: ",
+                                            style: Get.isDarkMode
+                                                ? AppStyles.tsWhiteMedium12
+                                                : AppStyles.tsBlackMedium12,
+                                          ),
                                     TextSpan(
                                       text: isStudent
                                           ? controller.userCourseOverview.value
@@ -482,12 +527,19 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "Benefits of course:-",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteMedium14
-                              : AppStyles.tsBlackMedium14,
-                        ),
+                        controller.userCourseOverview.value.type == "Workshop"
+                            ? Text(
+                                "Benefits of Workshop:-",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium14
+                                    : AppStyles.tsBlackMedium14,
+                              )
+                            : Text(
+                                "Benefits of course:-",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium14
+                                    : AppStyles.tsBlackMedium14,
+                              ),
                       ],
                     ),
                     SizedBox(
@@ -529,12 +581,19 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "Course Instructor:-",
-                          style: Get.isDarkMode
-                              ? AppStyles.tsWhiteMedium14
-                              : AppStyles.tsBlackMedium14,
-                        ),
+                        controller.userCourseOverview.value.type == "Workshop"
+                            ? Text(
+                                "Workshop Instructor:-",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium14
+                                    : AppStyles.tsBlackMedium14,
+                              )
+                            : Text(
+                                "Course Instructor:-",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium14
+                                    : AppStyles.tsBlackMedium14,
+                              ),
                       ],
                     ),
                     SizedBox(
@@ -866,12 +925,19 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        "Course topics:-",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteMedium14
-                            : AppStyles.tsBlackMedium14,
-                      ),
+                      controller.userCourseOverview.value.type == "Workshop"
+                          ? Text(
+                              "Workshop topics:-",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium14
+                                  : AppStyles.tsBlackMedium14,
+                            )
+                          : Text(
+                              "Course topics:-",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium14
+                                  : AppStyles.tsBlackMedium14,
+                            ),
                     ],
                   ),
                   SizedBox(
@@ -904,12 +970,19 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        "Course description:-",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteMedium14
-                            : AppStyles.tsBlackMedium14,
-                      ),
+                      controller.userCourseOverview.value.type == "Workshop"
+                          ? Text(
+                              "Workshop description:-",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium14
+                                  : AppStyles.tsBlackMedium14,
+                            )
+                          : Text(
+                              "Course description:-",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium14
+                                  : AppStyles.tsBlackMedium14,
+                            ),
                     ],
                   ),
                   SizedBox(
@@ -1187,12 +1260,40 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                       width: double.infinity,
                       child: ElevatedButton(
                           onPressed: () async {
-                            await controller.getUserMyCoursesDetails();
-                            var data = controller.userMyCourses.firstWhere(
+                            if (controller.userCourseOverview.value.type ==
+                                "Workshop") {
+                              if (DateTime.now().isBefore(DateTime.parse(
+                                  controller.userCourseOverview.value
+                                          ?.courseStartTime ??
+                                      ''))) {
+                                SnackbarHelper.showSnackbar(
+                                  "Workshop will start on ${FormatHelper.formatDateTimeOnlyToIST(controller.userCourseOverview.value?.courseStartTime)}",
+                                );
+                              } else {
+                                final googleMeetUrl =
+                                    '${controller.userCourseOverview.value?.meetLink ?? ''}';
+
+                                // Check if the URL can be launched
+                                if (await canLaunch(googleMeetUrl)) {
+                                  // Launch the URL
+                                  await launch(googleMeetUrl);
+                                } else {
+                                  // Handle error if URL cannot be launched
+                                  SnackbarHelper.showSnackbar(
+                                    'Could not launch Google Meet',
+                                  );
+                                }
+                              }
+                            } else {
+                              // If it's not a workshop, navigate to the course video view
+                              await controller.getUserMyCoursesDetails();
+                              var data = controller.userMyCourses.firstWhere(
                                 (element) =>
                                     element.sId ==
-                                    controller.userCourseOverview.value.sId);
-                            Get.to(() => CourseVideoView(data: data));
+                                    controller.userCourseOverview.value.sId,
+                              );
+                              Get.to(() => CourseVideoView(data: data));
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.lightGreen,
