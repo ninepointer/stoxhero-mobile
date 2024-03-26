@@ -38,6 +38,31 @@ class AppStorage {
     return LoginDetailsResponse.fromJson(_box.read(AppStorageKeys.userDetails));
   }
 
+  static Future setReadSetting(ReadSettingResponse? data) async {
+    await _box.write(AppStorageKeys.readSetting, data?.toJson());
+  }
+
+  static ReadSettingResponse getReadSetting() {
+    return ReadSettingResponse.fromJson(_box.read(AppStorageKeys.readSetting));
+  }
+
+  static Future<void> setCourseUserStarRating(
+      String courseId, int count) async {
+    await _box.write('${AppStorageKeys.courseStarCount}_$courseId', count);
+  }
+
+  static int getCourseUserStarRating(String courseId) {
+    return _box.read('${AppStorageKeys.courseStarCount}_$courseId') ?? 0;
+  }
+
+  static Future setCourseSidForStarRating(String? sId) async {
+    await _box.write(AppStorageKeys.courseSid, sId);
+  }
+
+  static String getCourseSidForStarRating() {
+    return _box.read(AppStorageKeys.courseSid) ?? "";
+  }
+
   static void clearLoginDetails() {
     _box.remove(AppStorageKeys.token);
   }
@@ -52,4 +77,7 @@ class AppStorageKeys {
   static const String token = 'token';
   static const String userDetails = 'userDetails';
   static const String newUser = 'newUser';
+  static const String courseStarCount = "starCount";
+  static const String readSetting = "readSetting";
+  static const String courseSid = "courseSid";
 }

@@ -11,19 +11,24 @@ class WalletBinding implements Bindings {
 
 class WalletController extends BaseController<WalletRepository> {
   final userDetails = LoginDetailsResponse().obs;
+
   LoginDetailsResponse get userDetailsData => userDetails.value;
   final token = ''.obs;
 
   final isLoading = false.obs;
+
   bool get isLoadingStatus => isLoading.value;
 
   final isRecentLoading = false.obs;
+
   bool get isRecentLoadingStatus => isRecentLoading.value;
 
   final isSuccessLoading = false.obs;
+
   bool get isSuccessLoadingStatus => isSuccessLoading.value;
 
   final isCouponCodeLoading = false.obs;
+
   bool get isCouponCodeLoadingStatus => isCouponCodeLoading.value;
 
   final totalCashAmount = RxNum(0);
@@ -52,6 +57,7 @@ class WalletController extends BaseController<WalletRepository> {
   final isHeroCashAdded = false.obs;
 
   void changeTabBarIndex(int val) => selectedTabBarIndex.value = val;
+
   void changeSecondTabBarIndex(int val) =>
       selectedSecondTabBarIndex.value = val;
 
@@ -110,12 +116,15 @@ class WalletController extends BaseController<WalletRepository> {
       case ProductType.battle:
         productType = 'Battle';
         break;
+      case ProductType.course:
+        productType = 'Course';
+        break;
       default:
     }
     return productType;
   }
 
-  void removeCouponCode(num herocash) {
+  void removeCouponCode(num heroCash) {
     couponCodeSuccessText("");
     isCouponCodeAdded(false);
     subscriptionAmount(isHeroCashAdded.value
@@ -124,7 +133,7 @@ class WalletController extends BaseController<WalletRepository> {
     couponCodeTextController.clear();
   }
 
-  void addHeroCash(num heroCash) {
+  void addHeroCash(num heroCash, {bool? isSecondTimeClick = false}) {
     if (isCouponCodeAdded.value) {
       subscriptionAmount(subscriptionAmount.value - heroCash);
     } else {
@@ -132,13 +141,9 @@ class WalletController extends BaseController<WalletRepository> {
     }
   }
 
-  void removeHeroCash(num herocash) {
+  void removeHeroCash(num heroCash) {
     heroCashAmount(0.0);
-    if (isCouponCodeAdded.value) {
-      subscriptionAmount(subscriptionAmount.value + herocash);
-    } else {
-      subscriptionAmount(subscriptionAmount.value + herocash);
-    }
+    subscriptionAmount(subscriptionAmount.value + heroCash);
   }
 
   num get calculateHeroCash {
@@ -303,14 +308,14 @@ class WalletController extends BaseController<WalletRepository> {
       product = '651bdbc8da68770e8f1b8e09';
     }
 
-    print("productType${product}");
+    print("productType$product");
     var data = VerifyCouponCodeRequest(
       code: couponCodeTextController.text.trim(),
       product: product,
       orderValue: amount,
-      paymentMode: selectedPaymentValue == "wallet"
+      paymentMode: selectedPaymentValue.value == "wallet"
           ? "wallet"
-          : selectedPaymentValue == "gateway"
+          : selectedPaymentValue.value == "gateway"
               ? "bank"
               : "addition",
       platform: Platform.isAndroid ? 'Android' : 'iOS',

@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+import 'package:stoxhero/src/app/app.dart';
+
+class CourseTopicsAndSubTopicsWidget extends StatefulWidget {
+  final index;
+  final CourseContent? courseContent;
+
+  CourseTopicsAndSubTopicsWidget(this.index, this.courseContent);
+
+  @override
+  State<CourseTopicsAndSubTopicsWidget> createState() =>
+      _CourseTopicsAndSubTopicsWidgetState();
+}
+
+class _CourseTopicsAndSubTopicsWidgetState
+    extends State<CourseTopicsAndSubTopicsWidget> {
+  int expandedIndex = -1;
+  @override
+  Widget build(BuildContext context) {
+    return CommonCard(
+      margin: EdgeInsets.only(bottom: 8),
+      onTap: () {
+        setState(() {
+          expandedIndex = expandedIndex == widget.index ? -1 : widget.index;
+        });
+      },
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Text(
+                widget.courseContent?.topic ?? '',
+                style: AppStyles.tsSecondaryRegular14
+                    .copyWith(color: AppColors.lightGreen),
+              ),
+            ),
+            (widget.courseContent?.subtopics?.length ?? 0) > 0
+                ? Icon(
+                    expandedIndex == widget.index
+                        ? Icons.expand_less_rounded
+                        : Icons.expand_more_rounded,
+                    color: AppColors.grey,
+                  )
+                : SizedBox()
+          ],
+        ),
+        if (expandedIndex == widget.index)
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.courseContent!.subtopics!
+                  .map(
+                    (value) => Row(
+                      children: [
+                        Icon(
+                          Icons.circle,
+                          size: 6,
+                          color: Get.isDarkMode
+                              ? AppColors.white
+                              : AppColors.black,
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.0204),
+                        Flexible(
+                          child: Text(
+                            "${value.topic}",
+                            style: Theme.of(context).textTheme.tsRegular14,
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                  .toList()),
+      ],
+    );
+  }
+}

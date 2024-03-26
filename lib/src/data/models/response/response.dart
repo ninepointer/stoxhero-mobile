@@ -110,3 +110,7 @@ export "stocks_excuated_order_response.dart";
 export "stocks_pending_order_response.dart";
 export "stocks_all_order_response.dart";
 export 'create_new_user_account_response.dart';
+export 'influencer_course_response.dart';
+export 'courses_overview_response.dart';
+export 'course_user_all_courses_response.dart';
+export 'course_user_my_courses_response.dart';

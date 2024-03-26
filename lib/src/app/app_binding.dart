@@ -26,6 +26,7 @@ class AppBinding extends Bindings {
     Get.put(ContestProfileRepository(), permanent: true);
     Get.put(StocksTradingRepository(), permanent: true);
     Get.put(AffiliateRespository(), permanent: true);
+    Get.put(CourseRespository(), permanent: true);
 
     Get.put(AppController(), permanent: true);
     Get.put(AuthController(), permanent: true);
@@ -48,5 +49,6 @@ class AppBinding extends Bindings {
     Get.put(ContestProfileController(), permanent: true);
     Get.put(StocksTradingController(), permanent: true);
     Get.put(AffiliateController(), permanent: true);
+    Get.put(CourseController(), permanent: true);
   }
 }

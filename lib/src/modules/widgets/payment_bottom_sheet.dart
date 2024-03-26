@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'dart:math' as math;
 
@@ -9,6 +8,7 @@ import 'package:crypto/crypto.dart';
 import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 class PaymentBottomSheet extends StatefulWidget {
+  final bool? isGstInclude;
   final ProductType productType;
   final String productId;
   final num buyItemPrice;
@@ -17,6 +17,7 @@ class PaymentBottomSheet extends StatefulWidget {
   final PaymentTransactionType paymentTransactionType;
 
   PaymentBottomSheet({
+    this.isGstInclude = false,
     required this.productType,
     required this.productId,
     required this.buyItemPrice,
@@ -31,6 +32,7 @@ class PaymentBottomSheet extends StatefulWidget {
 
 class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   late WalletController controller;
+  late CourseController courseController;
   num? walletBalance;
 
   bool isLoading = false;
@@ -42,6 +44,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   String apiEndpoint = "/pg/v1/pay";
   String environment = "PRODUCTION";
   String appId = "dcc929b3b7904f93997b89d23de36df3";
+
   // String appId = "63dff75c930b42a9af0f216bb6af6e16";
   String saltKey = "92333ad2-4277-4e69-86f1-b86a83161b74";
   String merchantId = "STOXONLINE";
@@ -53,6 +56,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
   void initState() {
     super.initState();
     controller = Get.find<WalletController>();
+    courseController = Get.find<CourseController>();
     controller.removeCouponCode(calculateHeroCash);
     controller.getReadSetting();
     controller.isHeroCashAdded(false);
@@ -145,13 +149,18 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     if (isWalletPayment) {
       num amount =
           num.parse(controller.addMoneyAmountTextController.text) * 100;
+
+      if (widget.isGstInclude == true) {
+        amount = amount +
+            (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0)) /
+                100;
+      }
       paymentData = PaymentRequest(
         bonusRedemption:
             controller.isHeroCashAdded.value ? calculateHeroCash : 0,
-        coupon: controller.isCouponCodeAdded == true
+        coupon: controller.isCouponCodeAdded.value == true
             ? controller.couponCodeTextController.text
             : '',
-        // paymentFor: '',
         merchantTransactionId: mtId,
         amount: amount,
       );
@@ -159,11 +168,17 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
       num amount = controller.couponCodeSuccessText.isNotEmpty
           ? controller.subscriptionAmount.value
           : widget.buyItemPrice;
+      if (widget.isGstInclude == true) {
+        amount = amount +
+            (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0)) /
+                100;
+      }
       amount = amount * 100;
+
       paymentData = PaymentRequest(
         bonusRedemption:
             controller.isHeroCashAdded.value ? calculateHeroCash : 0,
-        coupon: controller.isCouponCodeAdded == true
+        coupon: controller.isCouponCodeAdded.value == true
             ? controller.couponCodeTextController.text
             : '',
         productId: widget.productId,
@@ -195,10 +210,21 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
     num amount = 1000;
     if (isWalletPayment) {
       amount = num.parse(controller.addMoneyAmountTextController.text) * 100;
+      if (widget.isGstInclude == true) {
+        amount = amount +
+            (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0)) /
+                100;
+      }
     } else {
-      amount = controller.couponCodeSuccessText.isNotEmpty
+      amount = controller.couponCodeSuccessText.isNotEmpty ||
+              controller.isHeroCashAdded.value
           ? controller.subscriptionAmount.value
           : widget.buyItemPrice;
+      if (widget.isGstInclude == true) {
+        amount = amount +
+            (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0)) /
+                100;
+      }
       amount = amount * 100;
     }
 
@@ -298,8 +324,17 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Wrap(
+    return Obx(() {
+      num amount;
+      if (widget.isGstInclude == true) {
+        amount = controller.subscriptionAmount.value +
+            (controller.subscriptionAmount.value *
+                (AppStorage.getReadSetting().courseGstPercentage ?? 0) /
+                100);
+      } else {
+        amount = (controller.subscriptionAmount.value);
+      }
+      return Wrap(
         children: [
           Container(
             width: double.infinity,
@@ -345,47 +380,145 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                     style: AppStyles.tsGreyRegular14,
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 24),
-                  if (!isWalletPayment)
+                  SizedBox(
+                    height: 24,
+                  ),
+                  if (widget.isGstInclude == true) ...{
                     CommonCard(
                       margin: EdgeInsets.only(top: 8),
                       padding: EdgeInsets.all(12),
                       children: [
-                        Row(
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Transaction Amount',
-                              style: Theme.of(context).textTheme.tsRegular16,
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Fee Amount:",
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular16,
+                                ),
+                                Spacer(),
+                                if (controller.calculateHeroCash == 0 &&
+                                    controller
+                                        .couponCodeSuccessText.isEmpty) ...{
+                                  Text(
+                                      "${FormatHelper.formatNumbers((widget.buyItemPrice + (widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))}"),
+                                } else ...{
+                                  Text(
+                                      "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? (amount - (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : (widget.buyItemPrice + (widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))}"),
+                                }
+                              ],
                             ),
-                            Spacer(),
-                            Text(
-                              FormatHelper.formatNumbers((controller
-                                          .couponCodeSuccessText.isNotEmpty ||
-                                      controller.isHeroCashAdded.value)
-                                  ? controller.subscriptionAmount.value
-                                  : widget.buyItemPrice),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .tsMedium18
-                                  .copyWith(
-                                    color: AppColors.success,
-                                  ),
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'GST(18%) on Fee: ',
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular16,
+                                ),
+                                Spacer(),
+                                if (controller.calculateHeroCash == 0 &&
+                                    controller
+                                        .couponCodeSuccessText.isEmpty) ...{
+                                  Text(
+                                      "${FormatHelper.formatNumbers(((widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
+                                } else ...{
+                                  Text(
+                                      "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? ((amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : ((widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
+                                }
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Transaction Amount',
+                                  style:
+                                      Theme.of(context).textTheme.tsRegular16,
+                                ),
+                                Spacer(),
+                                Text(
+                                  FormatHelper.formatNumbers((controller
+                                              .couponCodeSuccessText
+                                              .isNotEmpty ||
+                                          controller.isHeroCashAdded.value)
+                                      ? amount
+                                      : widget.isGstInclude == true
+                                          ? (widget.buyItemPrice +
+                                              (widget.buyItemPrice *
+                                                  (AppStorage.getReadSetting()
+                                                          .courseGstPercentage ??
+                                                      0) /
+                                                  100))
+                                          : widget.buyItemPrice),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .tsMedium18
+                                      .copyWith(
+                                        color: AppColors.success,
+                                      ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ],
-                    )
-                  else
-                    CommonTextField(
-                      controller: controller.addMoneyAmountTextController,
-                      padding: EdgeInsets.only(top: 16),
-                      hintText: 'Enter amount',
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
                     ),
+                  } else ...{
+                    if (!isWalletPayment)
+                      CommonCard(
+                        margin: EdgeInsets.only(top: 8),
+                        padding: EdgeInsets.all(12),
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Transaction Amount',
+                                style: Theme.of(context).textTheme.tsRegular16,
+                              ),
+                              Spacer(),
+                              Text(
+                                FormatHelper.formatNumbers((controller
+                                            .couponCodeSuccessText.isNotEmpty ||
+                                        controller.isHeroCashAdded.value)
+                                    ? amount
+                                    : widget.isGstInclude == true
+                                        ? (widget.buyItemPrice +
+                                            (widget.buyItemPrice *
+                                                (AppStorage.getReadSetting()
+                                                        .courseGstPercentage ??
+                                                    0) /
+                                                100))
+                                        : widget.buyItemPrice),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .tsMedium18
+                                    .copyWith(
+                                      color: AppColors.success,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    else
+                      CommonTextField(
+                        controller: controller.addMoneyAmountTextController,
+                        padding: EdgeInsets.only(top: 16),
+                        hintText: 'Enter amount',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                      ),
+                  },
+
                   if (controller.couponCodeSuccessText.isNotEmpty)
                     GestureDetector(
                       onTap: () =>
@@ -579,32 +712,65 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                   Column(
                     children: [
                       SizedBox(height: 16),
-                      CommonFilledButton(
-                        backgroundColor: Get.isDarkMode
-                            ? AppColors.darkGreen
-                            : AppColors.lightGreen,
-                        isLoading: controller.isLoadingStatus,
-                        height: 42,
-                        label: 'Proceed',
-                        onPressed: isWalletPayment ||
-                                controller.selectedPaymentValue.value ==
-                                    'gateway'
-                            ? () => startPaymentTransaction(context)
-                            : walletBalance != null &&
-                                    ((controller.couponCodeSuccessText
-                                                    .isNotEmpty ||
-                                                controller
-                                                    .isHeroCashAdded.value)
-                                            ? controller
-                                                .subscriptionAmount.value
-                                            : widget.buyItemPrice) >
-                                        walletBalance!
-                                ? () {
+                      widget.isGstInclude == true
+                          ? CommonFilledButton(
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
+                              isLoading: controller.isLoadingStatus,
+                              height: 42,
+                              label: 'Proceed',
+                              onPressed: () {
+                                if (isWalletPayment ||
+                                    controller.selectedPaymentValue.value ==
+                                        'gateway') {
+                                  startPaymentTransaction(context);
+                                } else {
+                                  if (walletBalance != null &&
+                                      ((controller.couponCodeSuccessText
+                                                      .isNotEmpty ||
+                                                  controller
+                                                      .isHeroCashAdded.value)
+                                              ? amount
+                                              : widget.buyItemPrice) >
+                                          walletBalance!) {
                                     SnackbarHelper.showSnackbar(
                                         'Low wallet balance!');
+                                  } else {
+                                    widget.onSubmit();
                                   }
-                                : widget.onSubmit,
-                      ),
+                                }
+                                courseController.getUserMyCoursesDetails();
+                                Get.to(
+                                  () => CoursesHomeView(),
+                                );
+                              },
+                            )
+                          : CommonFilledButton(
+                              backgroundColor: Get.isDarkMode
+                                  ? AppColors.darkGreen
+                                  : AppColors.lightGreen,
+                              isLoading: controller.isLoadingStatus,
+                              height: 42,
+                              label: 'Proceed',
+                              onPressed: isWalletPayment ||
+                                      controller.selectedPaymentValue.value ==
+                                          'gateway'
+                                  ? () => startPaymentTransaction(context)
+                                  : walletBalance != null &&
+                                          ((controller.couponCodeSuccessText
+                                                          .isNotEmpty ||
+                                                      controller.isHeroCashAdded
+                                                          .value)
+                                                  ? amount
+                                                  : widget.buyItemPrice) >
+                                              walletBalance!
+                                      ? () {
+                                          SnackbarHelper.showSnackbar(
+                                              'Low wallet balance!');
+                                        }
+                                      : widget.onSubmit,
+                            ),
                     ],
                   ),
                 ],
@@ -612,7 +778,7 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
             ),
           ),
         ],
-      ),
-    );
+      );
+    });
   }
 }

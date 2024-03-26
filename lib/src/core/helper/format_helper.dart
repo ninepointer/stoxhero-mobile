@@ -38,6 +38,36 @@ class FormatHelper {
     }
   }
 
+  static categoryFormatter(dynamic value) {
+    try {
+      var finalValue = '';
+      if (value > 999) {
+        String currency = NumberFormat.compactCurrency(
+          name: "INR",
+          locale: 'en_IN',
+          decimalDigits: 2, // change it to get decimal places
+          symbol: '',
+        ).format(value);
+        if (currency.contains('T')) {
+          currency = currency.replaceAll('T', 'K');
+        } else if (currency.contains('Lac')) {
+          currency = currency.replaceAll('Lac', ' Lacs');
+        } else if (currency.contains('Cr')) {
+          currency = currency.replaceAll('Cr', ' Crore');
+        }
+        finalValue = currency.trim();
+      } else if (value is double) {
+        finalValue = '${(value).toStringAsFixed(2).replaceAll('.00', '')}';
+      } else {
+        finalValue = '$value';
+      }
+      finalValue.replaceAll('.00', '').replaceAll('.0', '');
+      return finalValue;
+    } catch (e) {
+      return '${value.replaceAll('.00', '')}';
+    }
+  }
+
   static String formatDate(String? value) {
     if (value != null) {
       DateTime dateTime = DateTime.parse(value);

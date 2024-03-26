@@ -48,4 +48,5 @@ class AppRoutes {
   static const String finowledgeOtp = '/finowledgeOtp';
   static const String finowledgeSignup = '/finowledgeSignup';
   static const String finowledgeLobby = '/finowledgeLobby';
+  static const String courseHome = '/courseHome';
 }
