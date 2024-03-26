@@ -21,7 +21,7 @@ class BatchAllCoursesView extends GetView<CourseController> {
 
         return RefreshIndicator(
           onRefresh: () {
-            controller.loadData();
+            controller.getUserAllCourses();
             return Future.value();
           },
           child: ListView(

@@ -19,24 +19,31 @@ class _MyLibraryViewState extends State<MyLibraryView> {
     super.initState();
     controller = Get.find<CourseController>();
     controller.getUserMyCoursesDetails();
-    controller.getUserMyCoursesDetails();
+    //controller.getUserMyCoursesDetails();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => ListView(
-        children: [
-          if ((widget.workshopData == null || widget.workshopData!.isEmpty) &&
-              (widget.data == null || widget.data!.isEmpty))
-            NoDataFound()
-          else ...{
-            if (widget.workshopData != null && widget.workshopData!.isNotEmpty)
-              _buildSection("Workshops", widget.workshopData),
-            if (widget.data != null && widget.data!.isNotEmpty)
-              _buildCourseSection("Courses", widget.data),
-          }
-        ],
+    return RefreshIndicator(
+      onRefresh: () {
+        controller.getUserMyCoursesDetails();
+        return Future.value();
+      },
+      child: Obx(
+        () => ListView(
+          children: [
+            if ((widget.workshopData == null || widget.workshopData!.isEmpty) &&
+                (widget.data == null || widget.data!.isEmpty))
+              NoDataFound()
+            else ...{
+              if (widget.workshopData != null &&
+                  widget.workshopData!.isNotEmpty)
+                _buildSection("Workshops", widget.workshopData),
+              if (widget.data != null && widget.data!.isNotEmpty)
+                _buildCourseSection("Courses", widget.data),
+            }
+          ],
+        ),
       ),
     );
   }

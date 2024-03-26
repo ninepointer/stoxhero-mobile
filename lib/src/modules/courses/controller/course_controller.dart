@@ -109,9 +109,9 @@ class CourseController extends BaseController<CourseRespository> {
       isLoadingMore.value = true;
       int skip = currentPage.value * itemsPerPage.value;
       Map<String, dynamic> query = {
-        "skip": skip,
+        "skip": 0,
         // "limit": 10,
-        "limit": itemsPerPage.value,
+        "limit": 50,
       };
       final RepoResponse<InfluencerCourseResponse> response =
           await repository.getInfluencerPublishCourse(query);
@@ -230,7 +230,7 @@ class CourseController extends BaseController<CourseRespository> {
       print("cuuu ${currentPage.value} ${itemsPerPage.value}");
       Map<String, dynamic> query = {
         "skip": skip,
-        "limit": 10,
+        "limit": 50,
         //"limit": 10,
       };
       final RepoResponse<InfluencerCourseResponse> response =

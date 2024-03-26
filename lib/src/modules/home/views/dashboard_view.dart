@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get_storage/get_storage.dart';
@@ -36,6 +38,7 @@ class _DashboardViewState extends State<DashboardView> {
     contestProfileController.loadData();
     contestController.getPaidContestChampionList();
     courseController.getUserAllCourses();
+    courseController.getInfluencerPublishCourseDetails();
 
     referralsController = Get.find<ReferralsController>();
     referralsController.loadData();
@@ -203,6 +206,12 @@ class _DashboardViewState extends State<DashboardView> {
                             child: Obx(
                               () => Row(
                                 children: courseController.userAllWorkshops
+                                    .where((contest) => (DateTime.now()
+                                                .isBefore(DateTime.parse(contest
+                                                        ?.registrationEndTime ??
+                                                    '')) ==
+                                            true ||
+                                        (contest?.isPaid ?? false) == true))
                                     .map((contest) {
                                   return Container(
                                       margin: EdgeInsets.only(
@@ -245,7 +254,8 @@ class _DashboardViewState extends State<DashboardView> {
                                                   .width *
                                               0.0408),
                                       width: courseController
-                                                  .userAllWorkshops.length ==
+                                                  .publishInflunceWorkshopList
+                                                  .length ==
                                               1
                                           ? MediaQuery.of(context).size.width -
                                               MediaQuery.of(context)
@@ -1240,13 +1250,80 @@ class _DashboardViewState extends State<DashboardView> {
   }
 }
 
-class WorkshopCard extends GetView<CourseController> {
+class WorkshopCard extends StatefulWidget {
   final InfluencerCourseData? courseData;
 
   const WorkshopCard({this.courseData});
 
   @override
+  _WorkshopCardState createState() => _WorkshopCardState();
+}
+
+class _WorkshopCardState extends State<WorkshopCard> {
+  late CourseController controller;
+  late DateTime startTimeDateTime;
+  late Duration remainingTime;
+  late Timer timer;
+  bool isVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<CourseController>();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    updateRemainingTime();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  void updateRemainingTime() {
+    DateTime currentTime = DateTime.now();
+    startTimeDateTime =
+        DateTime.parse(widget.courseData?.courseStartTime ?? '');
+
+    setState(() {
+      remainingTime = startTimeDateTime.isAfter(currentTime)
+          ? startTimeDateTime.difference(currentTime)
+          : Duration.zero;
+      isVisible = remainingTime == Duration.zero;
+    });
+
+    timer = Timer.periodic(
+      Duration(seconds: 1),
+      (_) {
+        if (mounted) {
+          setState(
+            () {
+              remainingTime = startTimeDateTime.isAfter(DateTime.now())
+                  ? startTimeDateTime.difference(DateTime.now())
+                  : Duration.zero;
+              // if (remainingTime == Duration.zero) {
+              //   controller.getUserAllCourses();
+              //    controller.getInfluencerPublishCourseDetails();
+              // }
+            },
+          );
+        }
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // if (DateTime.now().isAfter(
+    //             DateTime.parse(widget.courseData?.courseStartTime ?? '')) ==
+    //         true ||
+    //     (widget.courseData?.isPaid ?? false) == false) {
+    //   return SizedBox(); // Return an empty SizedBox if the conditions are not met
+    // }
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -1268,203 +1345,265 @@ class WorkshopCard extends GetView<CourseController> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.0204,
-                right: MediaQuery.of(context).size.width * 0.0204,
-                top: MediaQuery.of(context).size.width * 0.0306,
-                bottom: 0),
-            child: Row(
+              left: MediaQuery.of(context).size.width * 0.0714,
+              right: MediaQuery.of(context).size.width * 0.0102,
+              top: MediaQuery.of(context).size.width * 0.0510,
+              bottom: 0,
+            ),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.width * 0.170,
-                          child: Text(
-                            "${courseData?.courseName ?? ''}",
-                            style: Get.isDarkMode
-                                ? AppStyles.tsWhiteMedium16
-                                : AppStyles.tsBlackMedium16,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                          ),
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.width * 0.0204),
-                        Row(
-                          children: [
-                            Text(
-                              "On",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteMedium12
-                                  : AppStyles.tsGreyMedium12,
-                            ),
-                            Text(
-                              " ${FormatHelper.formatDateTimeToIST(courseData?.courseStartTime ?? '')}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsGreyRegular14,
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "${(courseData?.maxEnrolments ?? 0) - (courseData?.userEnrolled ?? 0)} ",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsGreyRegular14,
-                            ),
-                            Text(
-                              "Seats Left,",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteMedium12
-                                  : AppStyles.tsGreyMedium12,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.0102,
-                            ),
-                            Text(
-                              " ${courseData?.courseLanguages ?? ''}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsGreyRegular14,
-                            )
-                          ],
-                        ),
-                        // Row(
-                        //   children: [
-                        //     Text(
-                        //       "Language:",
-                        //       style: Get.isDarkMode
-                        //           ? AppStyles.tsWhiteMedium12
-                        //           : AppStyles.tsBlackMedium12,
-                        //     ),
-                        //     Text(
-                        //       " ${courseData?.courseLanguages ?? ''}",
-                        //       style: Get.isDarkMode
-                        //           ? AppStyles.tsWhiteRegular14
-                        //           : AppStyles.tsBlackRegular14,
-                        //     )
-                        //   ],
-                        // ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.width * 0.0306),
-
-                        if (DateTime.now().isBefore(DateTime.parse(
-                            courseData?.courseStartTime ?? ''))) ...{
-                          GestureDetector(
-                            onTap: () {
-                              controller.getUserCourseOverviewDetails(
-                                  courseData?.sId ?? '');
-                              Get.to(() => BatchDetailsView(courseData));
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Register Now",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      letterSpacing: 1.5,
-                                      //    color: Color.fromARGB(255, 81, 14, 239),
-                                      color: AppColors.lightGreen),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.0102,
-                                ),
-                                Icon(
-                                  Icons.arrow_circle_right,
-                                  color: AppColors.lightGreen,
-                                  size: 20.0,
-                                )
-                              ],
-                            ),
-                          ),
-                        } else ...{
-                          GestureDetector(
-                            onTap: () async {
-                              final googleMeetUrl =
-                                  '${courseData?.meetLink ?? ''}';
-
-                              // Check if the URL can be launched
-                              if (await canLaunch(googleMeetUrl)) {
-                                // Launch the URL
-                                await launch(googleMeetUrl);
-                              } else {
-                                // Handle error if URL cannot be launched
-                                SnackbarHelper.showSnackbar(
-                                    'Could not launch Google Meet');
-                              }
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Join Now",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      letterSpacing: 1.5,
-                                      //    color: Color.fromARGB(255, 81, 14, 239),
-                                      color: AppColors.lightGreen),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.0102,
-                                ),
-                                Icon(
-                                  Icons.arrow_circle_right,
-                                  color: AppColors.lightGreen,
-                                  size: 20.0,
-                                )
-                              ],
-                            ),
-                          ),
-                        },
-
-                        SizedBox(
-                            height: MediaQuery.of(context).size.width * 0.0204),
-                      ],
-                    ),
+                Container(
+                  // height: MediaQuery.of(context).size.width * 0.100,
+                  child: Text(
+                    "${widget.courseData?.courseName ?? ''}",
+                    style: Get.isDarkMode
+                        ? AppStyles.tsWhiteMedium14
+                        : AppStyles.tsBlackMedium14,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.0204),
-                Column(
+                SizedBox(height: MediaQuery.of(context).size.width * 0.0102),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //  SizedBox(height: 20),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.346,
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.0204),
-                      child: ClipRRect(
-                        clipBehavior: Clip.none,
-                        borderRadius: BorderRadius.circular(
-                            10), // Adjust the radius as needed
-                        child: courseData?.instructorImage == null
-                            ? Image.asset(
-                                AppImages.workshopInst,
-                                width:
-                                    MediaQuery.of(context).size.width * 0.346,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.396,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.network(
-                                // "https://dmt-trade.s3.amazonaws.com/courses/1711196289629-grih.jpeg",
-                                '${courseData?.instructorImage ?? ''}',
-                                fit: BoxFit.cover,
-                                width:
-                                    MediaQuery.of(context).size.width * 0.346,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.396,
-                              ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "${FormatHelper.formatDateTimeToIST(widget.courseData?.courseStartTime ?? '')}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsGreyRegular14,
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "${(widget.courseData?.maxEnrolments ?? 0) - (widget.courseData?.userEnrolled ?? 0)} ",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsGreyRegular14,
+                              ),
+                              Text(
+                                "Seats Left,",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteMedium12
+                                    : AppStyles.tsGreyMedium12,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.0102,
+                              ),
+                              Text(
+                                "${widget.courseData?.courseLanguages ?? ''}",
+                                style: Get.isDarkMode
+                                    ? AppStyles.tsWhiteRegular14
+                                    : AppStyles.tsGreyRegular14,
+                              )
+                            ],
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.47,
+                            child: DateTime.now().isBefore(DateTime.parse(
+                                    widget.courseData?.courseStartTime ?? ''))
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${remainingTime.inDays}D ${remainingTime.inHours.remainder(24)}H ${remainingTime.inMinutes.remainder(60)}M ${remainingTime.inSeconds.remainder(60)}S',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : (widget.courseData?.isPaid == true
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Happening Now, Please Join",
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              "Happening Now, Please Register",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                          ),
+
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.width * 0.0306),
+                          if (widget.courseData?.isPaid == false) ...{
+                            GestureDetector(
+                              onTap: () {
+                                controller.getUserCourseOverviewDetails(
+                                    widget.courseData?.sId ?? '');
+                                Get.to(
+                                    () => BatchDetailsView(widget.courseData));
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Register Now",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        letterSpacing: 1.5,
+                                        color: AppColors.lightGreen),
+                                  ),
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.0102,
+                                  ),
+                                  Icon(
+                                    Icons.arrow_circle_right,
+                                    color: AppColors.lightGreen,
+                                    size: 20.0,
+                                  )
+                                ],
+                              ),
+                            ),
+                          } else ...{
+                            if (DateTime.now().isAfter(DateTime.parse(
+                                widget.courseData?.courseStartTime ?? ''))) ...{
+                              GestureDetector(
+                                onTap: () async {
+                                  final googleMeetUrl =
+                                      '${widget.courseData?.meetLink ?? ''}';
+
+                                  // Check if the URL can be launched
+                                  if (await canLaunch(googleMeetUrl)) {
+                                    // Launch the URL
+                                    await launch(googleMeetUrl);
+                                  } else {
+                                    // Handle error if URL cannot be launched
+                                    SnackbarHelper.showSnackbar(
+                                        'Could not launch Google Meet');
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Join Now",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          letterSpacing: 1.5,
+                                          color: AppColors.lightGreen),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.0102,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_circle_right,
+                                      color: AppColors.lightGreen,
+                                      size: 20.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            } else ...{
+                              GestureDetector(
+                                onTap: () {
+                                  SnackbarHelper.showSnackbar(
+                                      "Workshop will start on ${FormatHelper.formatDateTimeOnlyToIST(widget.courseData?.courseStartTime ?? "")}");
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Join Now",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          letterSpacing: 1.5,
+                                          color: AppColors.lightGreen),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.0102,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_circle_right,
+                                      color: AppColors.lightGreen,
+                                      size: 20.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            }
+                          },
+                          // SizedBox(
+                          //     height:
+                          //         MediaQuery.of(context).size.width * 0.0510),
+                        ],
+                      ),
+                    ),
+                    //  SizedBox(width: MediaQuery.of(context).size.width * 0.0204),
+                    Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.286,
+                          height: MediaQuery.of(context).size.width * 0.276,
+                          // padding: EdgeInsets.only(
+                          //     right:
+                          //         MediaQuery.of(context).size.width * 0.0102),
+                          child: ClipRRect(
+                            clipBehavior: Clip.none,
+                            borderRadius: BorderRadius.circular(
+                                10), // Adjust the radius as needed
+                            child: widget.courseData?.instructorImage == null
+                                ? Image.asset(
+                                    AppImages.workshopInst,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.286,
+                                    // height: MediaQuery.of(context).size.width *
+                                    //     0.448,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.network(
+                                    '${widget.courseData?.instructorImage ?? ''}',
+                                    fit: BoxFit.cover,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.286,
+                                    // height: MediaQuery.of(context).size.width *
+                                    //     0.448,
+                                  ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -232,7 +232,7 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                             ? Row(
                                 children: [
                                   Text(
-                                    "Max Enrolments: ",
+                                    "Max Enrollments: ",
                                     style: Get.isDarkMode
                                         ? AppStyles.tsWhiteMedium12
                                         : AppStyles.tsBlackMedium12,
@@ -264,8 +264,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         ),
                         Row(
                           children: [
-                            controller.userCourseOverview.value.type ==
-                                    "Workshop"
+                            (controller.userCourseOverview.value.type ==
+                                        'Workshop' ||
+                                    controller.courseOverview.value.type ==
+                                        'Workshop')
                                 ? Text('Workshop Category: ',
                                     style: Get.isDarkMode
                                         ? AppStyles.tsWhiteMedium12
@@ -298,8 +300,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         ),
                         Row(
                           children: [
-                            controller.userCourseOverview.value.type ==
-                                    "Workshop"
+                            (controller.userCourseOverview.value.type ==
+                                        'Workshop' ||
+                                    controller.courseOverview.value.type ==
+                                        'Workshop')
                                 ? Text('Workshop Type: ',
                                     style: Get.isDarkMode
                                         ? AppStyles.tsWhiteMedium12
@@ -318,8 +322,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         ),
                         Row(
                           children: [
-                            controller.userCourseOverview.value.type ==
-                                    "Workshop"
+                            (controller.userCourseOverview.value.type ==
+                                        'Workshop' ||
+                                    controller.courseOverview.value.type ==
+                                        'Workshop')
                                 ? Text('Workshop duration:',
                                     style: Get.isDarkMode
                                         ? AppStyles.tsWhiteMedium12
@@ -374,8 +380,11 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               ),
                               Row(
                                 children: [
-                                  controller.userCourseOverview.value.type ==
-                                          "Workshop"
+                                  (controller.userCourseOverview.value.type ==
+                                              'Workshop' ||
+                                          controller
+                                                  .courseOverview.value.type ==
+                                              'Workshop')
                                       ? Text('Workshop Starts: ',
                                           style: Get.isDarkMode
                                               ? AppStyles.tsWhiteMedium12
@@ -394,8 +403,11 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               ),
                               Row(
                                 children: [
-                                  controller.userCourseOverview.value.type ==
-                                          "Workshop"
+                                  (controller.userCourseOverview.value.type ==
+                                              'Workshop' ||
+                                          controller
+                                                  .courseOverview.value.type ==
+                                              'Workshop')
                                       ? Text("Workshop End: ",
                                           style: Get.isDarkMode
                                               ? AppStyles.tsWhiteMedium12
@@ -418,8 +430,11 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                         isStudent == false
                             ? Row(
                                 children: [
-                                  controller.userCourseOverview.value.type ==
-                                          "Workshop"
+                                  (controller.userCourseOverview.value.type ==
+                                              'Workshop' ||
+                                          controller
+                                                  .courseOverview.value.type ==
+                                              'Workshop')
                                       ? Text('Workshop Price: ',
                                           style: Get.isDarkMode
                                               ? AppStyles.tsWhiteMedium12
@@ -479,8 +494,11 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                               child: RichText(
                                 text: TextSpan(
                                   children: [
-                                    controller.userCourseOverview.value.type ==
-                                            "Workshop"
+                                    (controller.userCourseOverview.value.type ==
+                                                'Workshop' ||
+                                            controller.courseOverview.value
+                                                    .type ==
+                                                'Workshop')
                                         ? TextSpan(
                                             text: "Workshop Overview: ",
                                             style: Get.isDarkMode
@@ -527,7 +545,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        controller.userCourseOverview.value.type == "Workshop"
+                        (controller.userCourseOverview.value.type ==
+                                    'Workshop' ||
+                                controller.courseOverview.value.type ==
+                                    'Workshop')
                             ? Text(
                                 "Benefits of Workshop:-",
                                 style: Get.isDarkMode
@@ -581,7 +602,10 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        controller.userCourseOverview.value.type == "Workshop"
+                        (controller.userCourseOverview.value.type ==
+                                    'Workshop' ||
+                                controller.courseOverview.value.type ==
+                                    'Workshop')
                             ? Text(
                                 "Workshop Instructor:-",
                                 style: Get.isDarkMode
@@ -925,7 +949,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      controller.userCourseOverview.value.type == "Workshop"
+                      (controller.userCourseOverview.value.type == 'Workshop' ||
+                              controller.courseOverview.value.type ==
+                                  'Workshop')
                           ? Text(
                               "Workshop topics:-",
                               style: Get.isDarkMode
@@ -970,7 +996,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      controller.userCourseOverview.value.type == "Workshop"
+                      (controller.userCourseOverview.value.type == 'Workshop' ||
+                              controller.courseOverview.value.type ==
+                                  'Workshop')
                           ? Text(
                               "Workshop description:-",
                               style: Get.isDarkMode
@@ -1259,53 +1287,59 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                     child: Container(
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () async {
-                            if (controller.userCourseOverview.value.type ==
-                                "Workshop") {
-                              if (DateTime.now().isBefore(DateTime.parse(
-                                  controller.userCourseOverview.value
-                                          ?.courseStartTime ??
-                                      ''))) {
-                                SnackbarHelper.showSnackbar(
-                                  "Workshop will start on ${FormatHelper.formatDateTimeOnlyToIST(controller.userCourseOverview.value?.courseStartTime)}",
-                                );
-                              } else {
-                                final googleMeetUrl =
-                                    '${controller.userCourseOverview.value?.meetLink ?? ''}';
-
-                                // Check if the URL can be launched
-                                if (await canLaunch(googleMeetUrl)) {
-                                  // Launch the URL
-                                  await launch(googleMeetUrl);
-                                } else {
-                                  // Handle error if URL cannot be launched
-                                  SnackbarHelper.showSnackbar(
-                                    'Could not launch Google Meet',
-                                  );
-                                }
-                              }
-                            } else {
-                              // If it's not a workshop, navigate to the course video view
-                              await controller.getUserMyCoursesDetails();
-                              var data = controller.userMyCourses.firstWhere(
-                                (element) =>
-                                    element.sId ==
-                                    controller.userCourseOverview.value.sId,
+                        onPressed: () async {
+                          if (controller.userCourseOverview.value.type ==
+                              "Workshop") {
+                            if (DateTime.now().isBefore(DateTime.parse(
+                                controller.userCourseOverview.value
+                                        ?.courseStartTime ??
+                                    ''))) {
+                              SnackbarHelper.showSnackbar(
+                                "Workshop will start on ${FormatHelper.formatDateTimeOnlyToIST(controller.userCourseOverview.value?.courseStartTime)}",
                               );
-                              Get.to(() => CourseVideoView(data: data));
+                            } else {
+                              final googleMeetUrl =
+                                  '${controller.userCourseOverview.value?.meetLink ?? ''}';
+
+                              // Check if the URL can be launched
+                              if (await canLaunch(googleMeetUrl)) {
+                                // Launch the URL
+                                await launch(googleMeetUrl);
+                              } else {
+                                // Handle error if URL cannot be launched
+                                SnackbarHelper.showSnackbar(
+                                  'Could not launch Google Meet',
+                                );
+                              }
                             }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.lightGreen,
-                            onPrimary: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 24), // Button padding
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  8), // Button border radius
-                            ),
+                          } else {
+                            // If it's not a workshop, navigate to the course video view
+                            await controller.getUserMyCoursesDetails();
+                            var data = controller.userMyCourses.firstWhere(
+                              (element) =>
+                                  element.sId ==
+                                  controller.userCourseOverview.value.sId,
+                            );
+                            Get.to(() => CourseVideoView(data: data));
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.lightGreen,
+                          onPrimary: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24), // Button padding
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8), // Button border radius
                           ),
-                          child: Text("View Course")),
+                        ),
+                        child: (controller.userCourseOverview.value.type ==
+                                    'Workshop' ||
+                                controller.courseOverview.value.type ==
+                                    'Workshop')
+                            ? Text("View Workshop")
+                            : Text("View Course"),
+                      ),
                     ),
                   )
           } else ...{

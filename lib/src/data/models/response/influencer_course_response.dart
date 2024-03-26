@@ -136,6 +136,7 @@ class InfluencerCourseData {
   String? sId;
   String? courseName;
   String? courseStartTime;
+  String? registrationEndTime;
   int? maxEnrolments;
   String? courseImage;
   String? instructorImage;
@@ -167,6 +168,7 @@ class InfluencerCourseData {
       this.topics,
       this.lectures,
       this.courseLanguages,
+      this.registrationEndTime,
       this.level,
       this.courseDurationInMinutes,
       this.isPaid});
@@ -180,6 +182,7 @@ class InfluencerCourseData {
     courseImage = json['courseImage'];
     instructorImage = json['instructorImage'];
     userEnrolled = json['userEnrolled'];
+    registrationEndTime = json['registrationEndTime'];
     courseLanguages = json['courseLanguages'];
     coursePrice = json['coursePrice'] != null ? json['coursePrice'] : null;
     discountedPrice =
@@ -208,6 +211,7 @@ class InfluencerCourseData {
     data['maxEnrolments'] = this.maxEnrolments;
     data['courseImage'] = this.courseImage;
     data['meetLink'] = meetLink;
+    data['registrationEndTime'] = registrationEndTime;
     data['userEnrolled'] = this.userEnrolled;
     data['instructorName'] = this.instructorName;
     data['instructorImage'] = this.instructorImage;

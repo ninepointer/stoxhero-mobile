@@ -215,7 +215,8 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                 100;
       }
     } else {
-      amount = controller.couponCodeSuccessText.isNotEmpty
+      amount = controller.couponCodeSuccessText.isNotEmpty ||
+              controller.isHeroCashAdded.value
           ? controller.subscriptionAmount.value
           : widget.buyItemPrice;
       if (widget.isGstInclude == true) {
@@ -400,8 +401,15 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                                       Theme.of(context).textTheme.tsRegular16,
                                 ),
                                 Spacer(),
-                                Text(
-                                    "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? (amount - (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : (widget.buyItemPrice))}"),
+                                if (controller.calculateHeroCash == 0 &&
+                                    controller
+                                        .couponCodeSuccessText.isEmpty) ...{
+                                  Text(
+                                      "${FormatHelper.formatNumbers((widget.buyItemPrice + (widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))}"),
+                                } else ...{
+                                  Text(
+                                      "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? (amount - (amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : (widget.buyItemPrice + (widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))}"),
+                                }
                               ],
                             ),
                             Row(
@@ -414,8 +422,15 @@ class _PaymentBottomSheetState extends State<PaymentBottomSheet> {
                                       Theme.of(context).textTheme.tsRegular16,
                                 ),
                                 Spacer(),
-                                Text(
-                                    "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? ((amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : ((widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
+                                if (controller.calculateHeroCash == 0 &&
+                                    controller
+                                        .couponCodeSuccessText.isEmpty) ...{
+                                  Text(
+                                      "${FormatHelper.formatNumbers(((widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
+                                } else ...{
+                                  Text(
+                                      "${FormatHelper.formatNumbers((controller.couponCodeSuccessText.isNotEmpty || controller.isHeroCashAdded.value) ? ((amount * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)) : ((widget.buyItemPrice * (AppStorage.getReadSetting().courseGstPercentage ?? 0) / 100)))} "),
+                                }
                               ],
                             ),
                             Row(
