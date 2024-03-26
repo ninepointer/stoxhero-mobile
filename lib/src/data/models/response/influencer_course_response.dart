@@ -55,6 +55,7 @@ class Workshop {
   int? userEnrolled;
   int? lectures;
   List<WorkshopTopics>? topics;
+  String? courseEndTime;
 
   int? courseProgress;
   List<String>? instructorName;
@@ -70,6 +71,7 @@ class Workshop {
       this.courseType,
       this.category,
       this.level,
+      this.courseEndTime,
       this.discountedPrice,
       this.coursePrice,
       this.maxEnrolments,
@@ -90,6 +92,7 @@ class Workshop {
     courseType = json['courseType'];
     category = json['category'];
     level = json['level'];
+    courseEndTime = json['courseEndTime'];
     discountedPrice = json['discountedPrice'];
     coursePrice = json['coursePrice'];
     maxEnrolments = json['maxEnrolments'];
@@ -117,6 +120,7 @@ class Workshop {
     data['courseType'] = this.courseType;
     data['category'] = this.category;
     data['level'] = this.level;
+    data['courseEndTime'] = this.courseEndTime;
     data['discountedPrice'] = this.discountedPrice;
     data['coursePrice'] = this.coursePrice;
     data['maxEnrolments'] = this.maxEnrolments;
@@ -152,6 +156,7 @@ class InfluencerCourseData {
   bool? isPaid;
   String? meetLink;
   String? courseLanguages;
+  String? courseEndTime;
   InfluencerCourseData(
       {this.sId,
       this.courseName,
@@ -163,6 +168,7 @@ class InfluencerCourseData {
       this.coursePrice,
       this.discountedPrice,
       this.meetLink,
+      this.courseEndTime,
       this.instructorName,
       this.averageRating,
       this.topics,
@@ -180,6 +186,7 @@ class InfluencerCourseData {
     courseStartTime = json['courseStartTime'];
     maxEnrolments = json['maxEnrolments'];
     courseImage = json['courseImage'];
+    courseEndTime = json['courseEndTime'];
     instructorImage = json['instructorImage'];
     userEnrolled = json['userEnrolled'];
     registrationEndTime = json['registrationEndTime'];
@@ -211,6 +218,7 @@ class InfluencerCourseData {
     data['maxEnrolments'] = this.maxEnrolments;
     data['courseImage'] = this.courseImage;
     data['meetLink'] = meetLink;
+    data['courseEndTime'] = courseEndTime;
     data['registrationEndTime'] = registrationEndTime;
     data['userEnrolled'] = this.userEnrolled;
     data['instructorName'] = this.instructorName;

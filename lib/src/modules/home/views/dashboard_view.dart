@@ -1535,6 +1535,35 @@ class _WorkshopCardState extends State<WorkshopCard> {
                                   ],
                                 ),
                               ),
+                            } else if (DateTime.now().isAfter(DateTime.parse(
+                                widget.courseData?.courseEndTime ?? ''))) ...{
+                              GestureDetector(
+                                onTap: () async {
+                                  SnackbarHelper.showSnackbar(
+                                      'The workshop has ended. The recorded content will be made available soon');
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Join Now",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          letterSpacing: 1.5,
+                                          color: AppColors.lightGreen),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.0102,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_circle_right,
+                                      color: AppColors.lightGreen,
+                                      size: 20.0,
+                                    )
+                                  ],
+                                ),
+                              ),
                             } else ...{
                               GestureDetector(
                                 onTap: () {

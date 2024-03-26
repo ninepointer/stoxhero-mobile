@@ -71,11 +71,18 @@ class _MyLibraryViewState extends State<MyLibraryView> {
             var courseData = courses![index];
             DateTime courseStartTime =
                 DateTime.parse((courseData.courseStartTime ?? ''));
+            DateTime courseEndTime =
+                DateTime.parse((courseData.courseEndTime ?? ''));
             return GestureDetector(
                 onTap: () async {
                   if (DateTime.now().isBefore(courseStartTime)) {
                     SnackbarHelper.showSnackbar(
                       "Workshop will start on ${FormatHelper.formatDateTimeOnlyToIST(courseData.courseStartTime)}",
+                    );
+                  }
+                  if (DateTime.now().isAfter(courseEndTime)) {
+                    SnackbarHelper.showSnackbar(
+                      "The workshop has ended. The recorded content will be made available soon",
                     );
                   } else {
                     final googleMeetUrl = '${courseData.meetLink ?? ''}';

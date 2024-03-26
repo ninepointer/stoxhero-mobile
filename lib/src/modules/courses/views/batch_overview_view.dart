@@ -35,13 +35,16 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
     super.initState();
     controller = Get.find<CourseController>();
 
+    String videoUrl =
+        "${isStudent ? controller.userCourseOverview.value.salesVideo ?? '' : controller.courseOverview.value.salesVideo ?? ""}";
+
     flickManager = FlickManager(
-      videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(
-          "${isStudent ? controller.userCourseOverview.value.salesVideo ?? '' : controller.courseOverview.value.salesVideo ?? ""}"))
-        ..initialize().then((_) {
-          setState(() {});
-          flickManager.flickVideoManager?.videoPlayerController?.pause();
-        }),
+      videoPlayerController:
+          VideoPlayerController.networkUrl(Uri.parse(videoUrl))
+            ..initialize().then((_) {
+              setState(() {});
+              flickManager.flickVideoManager?.videoPlayerController?.pause();
+            }),
     );
   }
 
