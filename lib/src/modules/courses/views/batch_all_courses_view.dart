@@ -50,9 +50,10 @@ class BatchAllCoursesView extends GetView<CourseController> {
                   itemBuilder: (context, index) {
                     return isStudent
                         ? GestureDetector(
-                            onTap: () {
-                              controller.getUserCourseOverviewDetails(
+                            onTap: () async {
+                              await controller.getUserCourseOverviewDetails(
                                   workshopData![index].sId ?? '');
+
                               Get.to(
                                   () => BatchDetailsView(workshopData![index]));
                             },
@@ -71,7 +72,9 @@ class BatchAllCoursesView extends GetView<CourseController> {
                 ),
               ],
               // Display Course Title title
-              courseData!.length != 0
+              courseData!.length != 0 &&
+                      workshopData != null &&
+                      workshopData!.isNotEmpty
                   ? Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
@@ -93,9 +96,10 @@ class BatchAllCoursesView extends GetView<CourseController> {
                   var courseDetails = courseData![index];
                   return isStudent
                       ? GestureDetector(
-                          onTap: () {
-                            controller.getUserCourseOverviewDetails(
+                          onTap: () async {
+                            await controller.getUserCourseOverviewDetails(
                                 courseDetails.sId ?? '');
+
                             Get.to(() => BatchDetailsView(courseDetails));
                           },
                           child: Container(

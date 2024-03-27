@@ -214,11 +214,12 @@ class _DashboardViewState extends State<DashboardView> {
                                         (contest?.isPaid ?? false) == true))
                                     .map((contest) {
                                   return Container(
-                                      margin: EdgeInsets.only(
-                                          right: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.0408),
+                                      margin: courseController
+                                                  .userAllWorkshops.length ==
+                                              1
+                                          ? EdgeInsets.zero
+                                          : EdgeInsets.only(
+                                              left: 0, right: 16, top: 0),
                                       width: courseController
                                                   .userAllWorkshops.length ==
                                               1
@@ -226,8 +227,9 @@ class _DashboardViewState extends State<DashboardView> {
                                               MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  //  0.0637
-                                                  0.1603
+                                                  0.0637
+
+                                          /// 0.1603
                                           : MediaQuery.of(context).size.width -
                                               MediaQuery.of(context)
                                                       .size
@@ -249,10 +251,15 @@ class _DashboardViewState extends State<DashboardView> {
                                     .map((contest) {
                                   return Container(
                                       margin: EdgeInsets.only(
-                                          right: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.0408),
+                                          right: courseController
+                                                      .publishInflunceWorkshopList
+                                                      .length ==
+                                                  1
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.0408
+                                              : 0),
                                       width: courseController
                                                   .publishInflunceWorkshopList
                                                   .length ==
@@ -1318,12 +1325,6 @@ class _WorkshopCardState extends State<WorkshopCard> {
 
   @override
   Widget build(BuildContext context) {
-    // if (DateTime.now().isAfter(
-    //             DateTime.parse(widget.courseData?.courseStartTime ?? '')) ==
-    //         true ||
-    //     (widget.courseData?.isPaid ?? false) == false) {
-    //   return SizedBox(); // Return an empty SizedBox if the conditions are not met
-    // }
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -1356,6 +1357,13 @@ class _WorkshopCardState extends State<WorkshopCard> {
               children: [
                 Container(
                   // height: MediaQuery.of(context).size.width * 0.100,
+
+                  padding: EdgeInsets.only(
+                      right: controller.userAllWorkshops.length == 1 ||
+                              controller.publishInflunceCourseList.length == 1
+                          ? MediaQuery.of(context).size.width * 0.100
+                          : 0),
+
                   child: Text(
                     "${widget.courseData?.courseName ?? ''}",
                     style: Get.isDarkMode
@@ -1600,7 +1608,11 @@ class _WorkshopCardState extends State<WorkshopCard> {
                         ],
                       ),
                     ),
-                    //  SizedBox(width: MediaQuery.of(context).size.width * 0.0204),
+                    SizedBox(
+                        width: controller.userAllWorkshops.length == 1 ||
+                                controller.publishInflunceCourseList.length == 1
+                            ? MediaQuery.of(context).size.width * 0.060
+                            : 0),
                     Column(
                       children: [
                         Container(

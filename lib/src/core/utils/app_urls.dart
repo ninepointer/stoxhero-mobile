@@ -436,4 +436,7 @@ class AppUrls {
 
   static String getUserIntent(String? id) =>
       "$apiURL/courses/user/$id/purchaseintent";
+
+  static String getWorkshopUserIntent(String? id) =>
+      "$apiURL/courses/user/$id/recordedvideointent";
 }

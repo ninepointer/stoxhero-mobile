@@ -81,9 +81,15 @@ class _MyLibraryViewState extends State<MyLibraryView> {
                     );
                   }
                   if (DateTime.now().isAfter(courseEndTime)) {
-                    SnackbarHelper.showSnackbar(
-                      "The workshop has ended. The recorded content will be made available soon",
-                    );
+                    // Get.to(() => CourseVideoView(data: courseData));
+                    if (courseData.lactures != 0) {
+                      await controller
+                          .getUserWorkshopIntentApi(courseData.sId ?? '');
+                      Get.to(() => CourseVideoView(data: courseData));
+                    } else {
+                      SnackbarHelper.showSnackbar(
+                          "No lectures are available for this Workshop.");
+                    }
                   } else {
                     final googleMeetUrl = '${courseData.meetLink ?? ''}';
 
@@ -352,16 +358,17 @@ class _MyLibraryViewState extends State<MyLibraryView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        if (widget.workshopData != null && widget.workshopData!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
         ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),

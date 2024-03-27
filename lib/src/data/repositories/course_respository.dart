@@ -87,6 +87,14 @@ class CourseRespository extends BaseRepository {
         : RepoResponse(data: GenericResponse.fromJson(response));
   }
 
+  Future<RepoResponse<GenericResponse>> getWorkshopUserIntent(String id) async {
+    String apiURL = AppUrls.getWorkshopUserIntent(id);
+    var response = await service.putAuth(path: apiURL);
+    return response is APIException
+        ? RepoResponse(error: response)
+        : RepoResponse(data: GenericResponse.fromJson(response));
+  }
+
   Future<RepoResponse<CourseOverviewResponse>> getUserCourseOverview(
       String id) async {
     String apiURL = AppUrls.userCoursesOverView(id);

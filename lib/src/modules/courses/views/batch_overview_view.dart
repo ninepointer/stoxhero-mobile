@@ -8,6 +8,7 @@ import 'package:video_player/video_player.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:chewie/chewie.dart';
 
 class BatchOverViewDetailsView extends StatefulWidget {
   final InfluencerCourseData? courseData;
@@ -22,12 +23,13 @@ class BatchOverViewDetailsView extends StatefulWidget {
 class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
   late VideoPlayerController _controller;
   late CourseController controller;
-  late FlickManager flickManager;
+  //late FlickManager flickManager;
+  late Future<void> _initializeVideoPlayerFuture;
+  bool _isInitialized = false;
+  late ChewieController? _chewieController;
   int maxLinesToShow = 70;
   int maxWordsToShow = 199;
-
   bool showFullContent = false;
-
   bool showFullContentForInstructor = false;
 
   @override
@@ -38,14 +40,71 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
     String videoUrl =
         "${isStudent ? controller.userCourseOverview.value.salesVideo ?? '' : controller.courseOverview.value.salesVideo ?? ""}";
 
-    flickManager = FlickManager(
-      videoPlayerController:
-          VideoPlayerController.networkUrl(Uri.parse(videoUrl))
-            ..initialize().then((_) {
-              setState(() {});
-              flickManager.flickVideoManager?.videoPlayerController?.pause();
-            }),
-    );
+    // flickManager = FlickManager(
+    //   videoPlayerController:
+    //       VideoPlayerController.networkUrl(Uri.parse(videoUrl))
+    //         ..initialize().then((_) {
+    //           setState(() {});
+    //           flickManager.flickVideoManager?.videoPlayerController?.pause();
+    //         }),
+    // );
+    _initializeVideoPlayer(videoUrl);
+  }
+
+  void _initializeVideoPlayer(String videoUrl) async {
+    _controller = VideoPlayerController.contentUri(Uri.parse(videoUrl));
+    _initializeVideoPlayerFuture = _controller.initialize();
+    try {
+      await _initializeVideoPlayerFuture;
+      setState(() {
+        _chewieController = ChewieController(
+          videoPlayerController: _controller,
+          aspectRatio: 16 / 9,
+        );
+        _isInitialized = true;
+      });
+    } catch (e) {
+      print("Error initializing video player: $e");
+      // Handle error
+    }
+  }
+
+  void _onDoubleTapDown(TapDownDetails details) {
+    final screenSize = MediaQuery.of(context).size;
+    final tapPosition = details.globalPosition;
+    final screenWidth = screenSize.width;
+    if (tapPosition.dx < screenWidth / 2) {
+      // Double tap on the left side
+      _fastBackward();
+    } else {
+      // Double tap on the right side
+      _fastForward();
+    }
+  }
+
+  void _fastForward() {
+    if (_controller.value.isPlaying) {
+      final currentPosition = _controller.value.position;
+      final duration = _controller.value.duration;
+      final newPosition = currentPosition + const Duration(seconds: 10);
+      if (newPosition < duration) {
+        _controller.seekTo(newPosition);
+      } else {
+        _controller.seekTo(duration);
+      }
+    }
+  }
+
+  void _fastBackward() {
+    if (_controller.value.isPlaying) {
+      final currentPosition = _controller.value.position;
+      final newPosition = currentPosition - const Duration(seconds: 10);
+      if (newPosition > Duration.zero) {
+        _controller.seekTo(newPosition);
+      } else {
+        _controller.seekTo(Duration.zero);
+      }
+    }
   }
 
   int _countWords(String text) {
@@ -54,7 +113,9 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
 
   @override
   void dispose() {
-    flickManager.dispose();
+    // flickManager.dispose();
+    _controller.dispose();
+    _chewieController?.dispose();
     super.dispose();
   }
 
@@ -70,13 +131,34 @@ class _BatchOverViewDetailsViewState extends State<BatchOverViewDetailsView> {
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.0306,
                   ),
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: ClipRect(
-                      child: OverflowBox(
-                        alignment: Alignment.center,
-                        child: FlickVideoPlayer(flickManager: flickManager),
-                      ),
+                  // AspectRatio(
+                  //   aspectRatio: 16 / 9,
+                  //   child: ClipRect(
+                  //     child: OverflowBox(
+                  //       alignment: Alignment.center,
+                  //       child: FlickVideoPlayer(flickManager: flickManager),
+                  //     ),
+                  //   ),
+                  // ),
+                  GestureDetector(
+                    onDoubleTapDown: _onDoubleTapDown,
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: _isInitialized
+                          ? Chewie(controller: _chewieController!)
+                          : FutureBuilder(
+                              future: _initializeVideoPlayerFuture,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  return SizedBox.shrink();
+                                } else {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              },
+                            ),
                     ),
                   ),
                   SizedBox(

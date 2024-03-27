@@ -428,4 +428,21 @@ class CourseController extends BaseController<CourseRespository> {
       SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
     }
   }
+
+  Future getUserWorkshopIntentApi(String id) async {
+    try {
+      final RepoResponse<GenericResponse> response =
+          await repository.getWorkshopUserIntent(id);
+      if (response.data != null) {
+        if (response.data?.status?.toLowerCase() == "success") {
+          //   SnackbarHelper.showSnackbar(response.data?.message);
+        }
+      } else {
+        SnackbarHelper.showSnackbar(response.error?.message);
+      }
+    } catch (e) {
+      log(e.toString());
+      SnackbarHelper.showSnackbar(ErrorMessages.somethingWentWrong);
+    }
+  }
 }
