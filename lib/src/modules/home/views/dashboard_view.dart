@@ -250,16 +250,13 @@ class _DashboardViewState extends State<DashboardView> {
                                     .publishInflunceWorkshopList
                                     .map((contest) {
                                   return Container(
-                                      margin: EdgeInsets.only(
-                                          right: courseController
-                                                      .publishInflunceWorkshopList
-                                                      .length ==
-                                                  1
-                                              ? MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.0408
-                                              : 0),
+                                      margin: courseController
+                                                  .publishInflunceWorkshopList
+                                                  .length ==
+                                              1
+                                          ? EdgeInsets.zero
+                                          : EdgeInsets.only(
+                                              left: 0, right: 16, top: 0),
                                       width: courseController
                                                   .publishInflunceWorkshopList
                                                   .length ==
@@ -268,8 +265,9 @@ class _DashboardViewState extends State<DashboardView> {
                                               MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  //  0.0637
-                                                  0.1603
+                                                  0.0637
+
+                                          /// 0.1603
                                           : MediaQuery.of(context).size.width -
                                               MediaQuery.of(context)
                                                       .size
