@@ -16,6 +16,13 @@ class UserResourcesView extends StatefulWidget {
 }
 
 class _UserResourcesViewState extends State<UserResourcesView> {
+  late CourseController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<CourseController>();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Check if there are any subtopics with notes
@@ -36,7 +43,10 @@ class _UserResourcesViewState extends State<UserResourcesView> {
     if (!hasSubtopicsWithNotes) {
       return Scaffold(
         appBar: AppBar(
-          title: Text("Course Resources"),
+          title: (controller.userCourseOverview.value.type == 'Workshop' ||
+                  controller.courseOverview.value.type == 'Workshop')
+              ? Text("Workshop Resources")
+              : Text("Course Resources"),
         ),
         body: Center(
           child: Text(
@@ -50,7 +60,10 @@ class _UserResourcesViewState extends State<UserResourcesView> {
     // If there are subtopics with notes, display the list
     return Scaffold(
       appBar: AppBar(
-        title: Text("Course Resources"),
+        title: (controller.userCourseOverview.value.type == 'Workshop' ||
+                controller.courseOverview.value.type == 'Workshop')
+            ? Text("Workshop Resources")
+            : Text("Course Resources"),
       ),
       body: ListView.builder(
         physics: AlwaysScrollableScrollPhysics(),

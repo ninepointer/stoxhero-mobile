@@ -29,6 +29,7 @@ class _CourseVideoViewState extends State<CourseVideoView>
   void initState() {
     super.initState();
     controller = Get.find<CourseController>();
+    controller.getUserCourseOverviewDetails(widget.data?.sId ?? '');
     title = widget.data?.topics?.first.subtopics?.first.topic ?? '';
     tabController = TabController(length: 2, vsync: this);
     flickManager = FlickManager(
@@ -195,6 +196,12 @@ class _CourseVideoViewState extends State<CourseVideoView>
                   children: [
                     Container(
                       child: TabBar(
+                        onTap: (index) async {
+                          if (index == 1) {
+                            await controller.getUserCourseOverviewDetails(
+                                widget.data?.sId ?? '');
+                          }
+                        },
                         controller: tabController,
                         indicatorColor: AppColors.lightGreen,
                         tabs: [

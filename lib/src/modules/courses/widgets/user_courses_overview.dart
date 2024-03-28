@@ -47,12 +47,21 @@ class UserCoursesOverView extends GetView<CourseController> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0408,
                       ),
-                      Text(
-                        "About this Course",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular18
-                            : AppStyles.tsBlackRegular18,
-                      ),
+                      (controller.userCourseOverview.value.type == 'Workshop' ||
+                              controller.courseOverview.value.type ==
+                                  'Workshop')
+                          ? Text(
+                              "About this Workshop",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular18
+                                  : AppStyles.tsBlackRegular18,
+                            )
+                          : Text(
+                              "About this Course",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular18
+                                  : AppStyles.tsBlackRegular18,
+                            ),
                     ],
                   ),
                 ),
@@ -70,12 +79,21 @@ class UserCoursesOverView extends GetView<CourseController> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0408,
                       ),
-                      Text(
-                        "Share this Course",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular18
-                            : AppStyles.tsBlackRegular18,
-                      ),
+                      (controller.userCourseOverview.value.type == 'Workshop' ||
+                              controller.courseOverview.value.type ==
+                                  'Workshop')
+                          ? Text(
+                              "Share this Workshop",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular18
+                                  : AppStyles.tsBlackRegular18,
+                            )
+                          : Text(
+                              "Share this Course",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular18
+                                  : AppStyles.tsBlackRegular18,
+                            ),
                     ],
                   ),
                 ),
@@ -94,12 +112,21 @@ class UserCoursesOverView extends GetView<CourseController> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0408,
                       ),
-                      Text(
-                        "Course Resources",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular18
-                            : AppStyles.tsBlackRegular18,
-                      ),
+                      (controller.userCourseOverview.value.type == 'Workshop' ||
+                              controller.courseOverview.value.type ==
+                                  'Workshop')
+                          ? Text(
+                              "Workshop Resources",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular18
+                                  : AppStyles.tsBlackRegular18,
+                            )
+                          : Text(
+                              "Course Resources",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular18
+                                  : AppStyles.tsBlackRegular18,
+                            ),
                     ],
                   ),
                 ),
@@ -119,7 +146,13 @@ class UserCoursesOverView extends GetView<CourseController> {
                         return StatefulBuilder(
                           builder: (context, setState) {
                             return AlertDialog(
-                              title: Text("Rate this Course"),
+                              title: (controller
+                                              .userCourseOverview.value.type ==
+                                          'Workshop' ||
+                                      controller.courseOverview.value.type ==
+                                          'Workshop')
+                                  ? Text("Rate this Workshop")
+                                  : Text("Rate this Course"),
                               content: Row(
                                 children: List.generate(
                                   5,
@@ -192,12 +225,21 @@ class UserCoursesOverView extends GetView<CourseController> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.0408,
                       ),
-                      Text(
-                        "Rate this Course",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular18
-                            : AppStyles.tsBlackRegular18,
-                      ),
+                      (controller.userCourseOverview.value.type == 'Workshop' ||
+                              controller.courseOverview.value.type ==
+                                  'Workshop')
+                          ? Text(
+                              "Rate this Workshop",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular18
+                                  : AppStyles.tsBlackRegular18,
+                            )
+                          : Text(
+                              "Rate this Course",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteRegular18
+                                  : AppStyles.tsBlackRegular18,
+                            ),
                     ],
                   ),
                 ),

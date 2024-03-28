@@ -34,7 +34,10 @@ class _MyCoursesOverViewDetailsViewState
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          title: Text("About this Course"),
+          title: (controller.userCourseOverview.value.type == 'Workshop' ||
+                  controller.courseOverview.value.type == 'Workshop')
+              ? Text("About this Workshop")
+              : Text("About this Course"),
         ),
         body: Padding(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.0204),
@@ -60,49 +63,138 @@ class _MyCoursesOverViewDetailsViewState
                             ? AppStyles.tsWhiteMedium18
                             : AppStyles.tsBlackMedium18,
                       ),
-                      Text(
-                        "Language: ${controller.userCourseOverview.value.courseLanguages}",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular14
-                            : AppStyles.tsBlackRegular14,
+                      Row(
+                        children: [
+                          Text(
+                            "Language: ",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteMedium12
+                                : AppStyles.tsBlackMedium12,
+                          ),
+                          Text(
+                            "${isStudent ? controller.userCourseOverview.value.courseLanguages : controller.courseOverview.value.courseLanguages}",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteRegular14
+                                : AppStyles.tsBlackRegular14,
+                          ),
+                        ],
                       ),
-                      (controller.userCourseOverview.value.courseType == "Live")
-                          ? Text(
-                              "Max Enrolments: ${controller.userCourseOverview.value.maxEnrolments ?? 0}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
+                      (controller.userCourseOverview.value.courseType ==
+                                  "Live" ||
+                              controller.courseOverview.value.courseType ==
+                                  "Live")
+                          ? Row(
+                              children: [
+                                Text(
+                                  "Max Enrollments: ",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12,
+                                ),
+                                Text(
+                                  "${isStudent ? controller.userCourseOverview.value.maxEnrolments ?? 0 : controller.courseOverview.value.maxEnrolments ?? 0}",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular14
+                                      : AppStyles.tsBlackRegular14,
+                                ),
+                              ],
                             )
                           : Container(),
-                      Text(
-                        "Level: ${controller.userCourseOverview.value.level ?? ''}",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular14
-                            : AppStyles.tsBlackRegular14,
+                      Row(
+                        children: [
+                          Text(
+                            "Level: ",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteMedium12
+                                : AppStyles.tsBlackMedium12,
+                          ),
+                          Text(
+                            "${isStudent ? controller.userCourseOverview.value.level ?? "" : controller.courseOverview.value.level ?? ''}",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteRegular14
+                                : AppStyles.tsBlackRegular14,
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Course Category: ${isStudent ? controller.userCourseOverview.value.category ?? '' : controller.courseOverview.value.category ?? ''}",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular14
-                            : AppStyles.tsBlackRegular14,
+                      Row(
+                        children: [
+                          (controller.userCourseOverview.value.type ==
+                                      'Workshop' ||
+                                  controller.courseOverview.value.type ==
+                                      'Workshop')
+                              ? Text('Workshop Category: ',
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12)
+                              : Text('Course Category: ',
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12),
+                          Text(
+                            "${isStudent ? controller.userCourseOverview.value.category ?? '' : controller.courseOverview.value.category ?? ''}",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteRegular14
+                                : AppStyles.tsBlackRegular14,
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Type: ${isStudent ? controller.userCourseOverview.value.type ?? '' : controller.courseOverview.value.type ?? ''}",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular14
-                            : AppStyles.tsBlackRegular14,
+                      Row(
+                        children: [
+                          Text("Type: ",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium12
+                                  : AppStyles.tsBlackMedium12),
+                          Text(
+                            "${isStudent ? controller.userCourseOverview.value.type ?? '' : controller.courseOverview.value.type ?? ''}",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteRegular14
+                                : AppStyles.tsBlackRegular14,
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Course Type: ${isStudent ? controller.userCourseOverview.value.courseType : controller.courseOverview.value.courseType}",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular14
-                            : AppStyles.tsBlackRegular14,
+                      Row(
+                        children: [
+                          (controller.userCourseOverview.value.type ==
+                                      'Workshop' ||
+                                  controller.courseOverview.value.type ==
+                                      'Workshop')
+                              ? Text('Workshop Type: ',
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12)
+                              : Text('Course Type: ',
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12),
+                          Text(
+                            "${isStudent ? controller.userCourseOverview.value.courseType : controller.courseOverview.value.courseType}",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteRegular14
+                                : AppStyles.tsBlackRegular14,
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Course duration: ${formatDuration(isStudent ? controller.userCourseOverview.value.courseDurationInMinutes ?? 0 : controller.courseOverview.value.courseDurationInMinutes ?? 0)} ",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteRegular14
-                            : AppStyles.tsBlackRegular14,
+                      Row(
+                        children: [
+                          (controller.userCourseOverview.value.type ==
+                                      'Workshop' ||
+                                  controller.courseOverview.value.type ==
+                                      'Workshop')
+                              ? Text('Workshop duration:',
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12)
+                              : Text('Course duration:',
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12),
+                          Text(
+                            " ${formatDuration(isStudent ? controller.userCourseOverview.value.courseDurationInMinutes ?? 0 : controller.courseOverview.value.courseDurationInMinutes ?? 0)} ",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteRegular14
+                                : AppStyles.tsBlackRegular14,
+                          ),
+                        ],
                       ),
                       if (isStudent
                           ? controller.userCourseOverview.value.courseType ==
@@ -112,55 +204,139 @@ class _MyCoursesOverViewDetailsViewState
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Registration Starts: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationStartTime : controller.courseOverview.value.registrationStartTime)}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
+                            Row(
+                              children: [
+                                Text('Registration Starts: ',
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12),
+                                Text(
+                                  "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationStartTime : controller.courseOverview.value.registrationStartTime)}",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular14
+                                      : AppStyles.tsBlackRegular14,
+                                ),
+                              ],
                             ),
-                            Text(
-                              "Registration End: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationEndTime : controller.courseOverview.value.registrationEndTime)}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
+                            Row(
+                              children: [
+                                Text("Registration End: ",
+                                    style: Get.isDarkMode
+                                        ? AppStyles.tsWhiteMedium12
+                                        : AppStyles.tsBlackMedium12),
+                                Text(
+                                  "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.registrationEndTime : controller.courseOverview.value.registrationEndTime)}",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular14
+                                      : AppStyles.tsBlackRegular14,
+                                ),
+                              ],
                             ),
-                            Text(
-                              "Course Starts: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseStartTime : controller.courseOverview.value.courseStartTime)}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
+                            Row(
+                              children: [
+                                (controller.userCourseOverview.value.type ==
+                                            'Workshop' ||
+                                        controller.courseOverview.value.type ==
+                                            'Workshop')
+                                    ? Text('Workshop Starts: ',
+                                        style: Get.isDarkMode
+                                            ? AppStyles.tsWhiteMedium12
+                                            : AppStyles.tsBlackMedium12)
+                                    : Text('Course Starts: ',
+                                        style: Get.isDarkMode
+                                            ? AppStyles.tsWhiteMedium12
+                                            : AppStyles.tsBlackMedium12),
+                                Text(
+                                  "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseStartTime : controller.courseOverview.value.courseStartTime)}",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular14
+                                      : AppStyles.tsBlackRegular14,
+                                ),
+                              ],
                             ),
-                            Text(
-                              "Course End: ${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseEndTime : controller.courseOverview.value.courseEndTime)}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
+                            Row(
+                              children: [
+                                (controller.userCourseOverview.value.type ==
+                                            'Workshop' ||
+                                        controller.courseOverview.value.type ==
+                                            'Workshop')
+                                    ? Text("Workshop End: ",
+                                        style: Get.isDarkMode
+                                            ? AppStyles.tsWhiteMedium12
+                                            : AppStyles.tsBlackMedium12)
+                                    : Text("Course End: ",
+                                        style: Get.isDarkMode
+                                            ? AppStyles.tsWhiteMedium12
+                                            : AppStyles.tsBlackMedium12),
+                                Text(
+                                  "${FormatHelper.formatDateTimeToIST(isStudent ? controller.userCourseOverview.value.courseEndTime : controller.courseOverview.value.courseEndTime)}",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular14
+                                      : AppStyles.tsBlackRegular14,
+                                ),
+                              ],
                             ),
                           ],
                         )
                       },
                       isStudent == false
-                          ? Text(
-                              "Course Price: ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
+                          ? Row(
+                              children: [
+                                (controller.userCourseOverview.value.type ==
+                                            'Workshop' ||
+                                        controller.courseOverview.value.type ==
+                                            'Workshop')
+                                    ? Text('Workshop Price: ',
+                                        style: Get.isDarkMode
+                                            ? AppStyles.tsWhiteMedium12
+                                            : AppStyles.tsBlackMedium12)
+                                    : Text('Course Price: ',
+                                        style: Get.isDarkMode
+                                            ? AppStyles.tsWhiteMedium12
+                                            : AppStyles.tsBlackMedium12),
+                                Text(
+                                  "${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.coursePrice ?? 0 : controller.courseOverview.value.coursePrice ?? 0, decimal: 0)}",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular14
+                                      : AppStyles.tsBlackRegular14,
+                                ),
+                              ],
                             )
                           : Container(),
                       isStudent == false
-                          ? Text(
-                              "Discounted Price:  ${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.discountedPrice ?? 0 : controller.courseOverview.value.discountedPrice ?? 0, decimal: 0)}",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Discounted Price:  ',
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12,
+                                ),
+                                Text(
+                                  "${FormatHelper.formatNumbers(isStudent ? controller.userCourseOverview.value.discountedPrice ?? 0 : controller.courseOverview.value.discountedPrice ?? 0, decimal: 0)}",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular14
+                                      : AppStyles.tsBlackRegular14,
+                                ),
+                              ],
                             )
                           : Container(),
                       isStudent == false
-                          ? Text(
-                              "Commission:  ${controller.courseOverview.value.commissionPercentage ?? 0}%",
-                              style: Get.isDarkMode
-                                  ? AppStyles.tsWhiteRegular14
-                                  : AppStyles.tsBlackRegular14,
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Commission:  ',
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteMedium12
+                                      : AppStyles.tsBlackMedium12,
+                                ),
+                                Text(
+                                  "${controller.courseOverview.value.commissionPercentage ?? 0}%",
+                                  style: Get.isDarkMode
+                                      ? AppStyles.tsWhiteRegular14
+                                      : AppStyles.tsBlackRegular14,
+                                ),
+                              ],
                             )
                           : Container(),
                     ],
@@ -180,12 +356,21 @@ class _MyCoursesOverViewDetailsViewState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        "Benefits of course:-",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteMedium14
-                            : AppStyles.tsBlackMedium14,
-                      ),
+                      (controller.userCourseOverview.value.type == 'Workshop' ||
+                              controller.courseOverview.value.type ==
+                                  'Workshop')
+                          ? Text(
+                              "Benefits of Workshop:-",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium14
+                                  : AppStyles.tsBlackMedium14,
+                            )
+                          : Text(
+                              "Benefits of course:-",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium14
+                                  : AppStyles.tsBlackMedium14,
+                            ),
                     ],
                   ),
                   SizedBox(
@@ -226,12 +411,21 @@ class _MyCoursesOverViewDetailsViewState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        "Course Instructor:-",
-                        style: Get.isDarkMode
-                            ? AppStyles.tsWhiteMedium14
-                            : AppStyles.tsBlackMedium14,
-                      ),
+                      (controller.userCourseOverview.value.type == 'Workshop' ||
+                              controller.courseOverview.value.type ==
+                                  'Workshop')
+                          ? Text(
+                              "Workshop Instructor:-",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium14
+                                  : AppStyles.tsBlackMedium14,
+                            )
+                          : Text(
+                              "Course Instructor:-",
+                              style: Get.isDarkMode
+                                  ? AppStyles.tsWhiteMedium14
+                                  : AppStyles.tsBlackMedium14,
+                            ),
                     ],
                   ),
                   Container(
@@ -548,12 +742,20 @@ class _MyCoursesOverViewDetailsViewState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      "Course description:-",
-                      style: Get.isDarkMode
-                          ? AppStyles.tsWhiteMedium14
-                          : AppStyles.tsBlackMedium14,
-                    ),
+                    (controller.userCourseOverview.value.type == 'Workshop' ||
+                            controller.courseOverview.value.type == 'Workshop')
+                        ? Text(
+                            "Workshop description:-",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteMedium14
+                                : AppStyles.tsBlackMedium14,
+                          )
+                        : Text(
+                            "Course description:-",
+                            style: Get.isDarkMode
+                                ? AppStyles.tsWhiteMedium14
+                                : AppStyles.tsBlackMedium14,
+                          ),
                   ],
                 ),
                 SizedBox(
